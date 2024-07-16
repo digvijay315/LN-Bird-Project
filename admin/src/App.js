@@ -40,7 +40,7 @@ function App() {
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
     </Routes> */}
-   <Leadinfo_requirment/>
+   <Addcontact/>
    </div>
    </BrowserRouter>
   );

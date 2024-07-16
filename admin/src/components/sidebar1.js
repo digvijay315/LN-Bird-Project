@@ -48,7 +48,7 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle active">
+						<a href="javascript:;" class="dropdown-toggle">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiCurrencyUsd} size={1} /><span class="mtext">Leads</span>
 						</a>
 						<ul class="submenu">

@@ -10,19 +10,7 @@ const add_contact=async(req,res)=>
                     state,country,source,category,owner,team,gender,visible_to,maritial_status,
                     birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,
                     social_media,url,income,amount1,website,industry,descriptions}=req.body;
-            const user=await addcontact.findOne({email})
-            if(user)
-                {
-                    return res.status(400).send({message:"email id already taken"})
-                }
-                // if(!title || !first_name  || !last_name  || !country_code || !mobile_no || !mobile_type ||
-                //     !email || !email_type ||
-                //     !father_husband_name || !h_no || !street_address || !location || !city || !pincode ||
-                //     !state || !country ||   !gender || !visible_to || !maritial_status ||
-                //     !birth_date ||  !descriptions)
-                //     {
-                //         return res.status(400).send({message:"all fields are required"})
-                //     }
+      
                 const new_add_contact= new addcontact({title,first_name,last_name,country_code,mobile_no,mobile_type,
                 email,email_type,title_company,designation,company_name,tags,
                 father_husband_name,h_no,street_address,location,city,pincode,

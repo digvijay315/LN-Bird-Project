@@ -13,14 +13,20 @@ function Addcontact() {
         email:"",email_type:"",title_company:"",designation:"",company_name:"",tags:"",
         father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
         state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
-        birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],loan:"",bank:"",amount:"",
+        birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],loan:"",bank:"",amount:"",
         social_media:"",url:"",income:"",amount1:"",website:"",industry:"",descriptions:""});
     
+        const config = {
+            headers: {
+              'Content-Type': 'application/json' // Set the Content-Type here
+            }
+        }
+       
     const addcontact=async(e)=>
     {
         e.preventDefault();
         try {
-            const resp= await axios.post('http://localhost:5000/addcontact',contact)
+            const resp= await axios.post('http://localhost:5000/addcontact',contact,config)
         if(resp.status===200)
             {
                 toast.success(resp.data.message)

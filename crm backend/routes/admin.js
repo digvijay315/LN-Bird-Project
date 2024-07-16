@@ -6,6 +6,11 @@ const upload=require('../middlewares/file');
 const {add_developer,view_developer} = require('../controllers/add_developer');
 const { add_tower, view_tower } = require('../controllers/add_tower');
 const { add_project, view_project } = require('../controllers/add_project');
+const lead_info_requirment = require('../controllers/leadinfo_requirment');
+const mail_task_form = require('../controllers/mail_task_form');
+const call_task_form = require('../controllers/call_task_form');
+const meeting_task_form = require('../controllers/meeting_task_form');
+const site_visit_form = require('../controllers/site_visit_form');
 
 const router=express.Router()
 
@@ -18,6 +23,13 @@ router.post('/leadinfo',lead_info)
 router.get('/leadinfo',leadinfo_find)
 
 router.post('/leadinfopersonal',upload.single('file'),lead_info_personal)
+
+router.post('/leadinforequirment',lead_info_requirment)
+
+router.post('/mailtask',mail_task_form)
+router.post('/calltask',call_task_form)
+router.post('/meetingtask',meeting_task_form)
+router.post('/sitevisit',site_visit_form)
 
 router.post('/addproperty/adddeveloper',add_developer)
 router.get('/addproperty/viewdeveloper',view_developer)
