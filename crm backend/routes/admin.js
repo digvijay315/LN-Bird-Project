@@ -11,6 +11,8 @@ const mail_task_form = require('../controllers/mail_task_form');
 const call_task_form = require('../controllers/call_task_form');
 const meeting_task_form = require('../controllers/meeting_task_form');
 const site_visit_form = require('../controllers/site_visit_form');
+const booking_details = require('../controllers/booking_details');
+const addpayment_details = require('../controllers/addpayment_details');
 
 const router=express.Router()
 
@@ -30,6 +32,10 @@ router.post('/mailtask',mail_task_form)
 router.post('/calltask',call_task_form)
 router.post('/meetingtask',meeting_task_form)
 router.post('/sitevisit',site_visit_form)
+
+router.post('/bookingdetails',booking_details)
+
+router.post('/paymentdetails',upload.single('image'),addpayment_details)
 
 router.post('/addproperty/adddeveloper',add_developer)
 router.get('/addproperty/viewdeveloper',view_developer)

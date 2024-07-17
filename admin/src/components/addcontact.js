@@ -13,7 +13,7 @@ function Addcontact() {
         email:"",email_type:"",title_company:"",designation:"",company_name:"",tags:"",
         father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
         state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
-        birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],loan:"",bank:"",amount:"",
+        birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],loan:"",bank:"",amount:"",
         social_media:"",url:"",income:"",amount1:"",website:"",industry:"",descriptions:""});
     
         const config = {
@@ -21,7 +21,7 @@ function Addcontact() {
               'Content-Type': 'application/json' // Set the Content-Type here
             }
         }
-       
+      
     const addcontact=async(e)=>
     {
         e.preventDefault();
@@ -42,36 +42,63 @@ function Addcontact() {
 
 
 function addFn() {
-            const education_field1 = document.getElementById("addeducation1");
-            const education_field2 = document.getElementById("addeducation2");
-            const education_field3 = document.getElementById("addeducation3");
-            const removtbtn1=document.getElementById("removtbtn");
-            const efield1 = document.createElement("input");
-            const efield2 = document.createElement("input");
-            const efield3 = document.createElement("input");
-            const removebtn=document.createElement("button");
+     
+        setcontact({
+          ...contact,
+          education: [...contact.education, ''],
+          degree: [...contact.degree, ''],
+          school_college: [...contact.school_college, '']
+        });
+      };
+    
+      const handleeducationChange = (index, event) => {
+        const neweducation = [...contact.education];
+        neweducation[index] = event.target.value;
+        setcontact({
+          ...contact,
+          education: neweducation
+        });
+      };
+      const handledegreeChange = (index, event) => {
+        const newdegree = [...contact.degree];
+        newdegree[index] = event.target.value;
+        setcontact({
+          ...contact,
+          degree: newdegree
+        });
+      };
 
-            removebtn.textContent="x"
-            efield1.setAttribute("type", "text");
-            efield1.classList.add("form-control","educationstyle");
-            efield2.setAttribute("type", "text");
-            efield2.classList.add("form-control","educationstyle");
-            efield3.setAttribute("type", "text");
-            efield3.classList.add("form-control","educationstyle");
-            removebtn.classList.add("form-control","educationstyle")
+      const handleschool_collegeChange = (index, event) => {
+        const newschool = [...contact.school_college];
+        newschool[index] = event.target.value;
+        setcontact({
+          ...contact,
+          school_college: newschool
+        });
+      };
 
-            education_field1.appendChild(efield1);
-            education_field2.appendChild(efield2);
-            education_field3.appendChild(efield3);
-            removtbtn1.appendChild(removebtn);
-            removebtn.onclick=()=>
-            {
-                education_field1.removeChild(efield1);
-                education_field2.removeChild(efield2);
-                education_field3.removeChild(efield3);
-                removtbtn1.removeChild(removebtn);
-            }
-        }
+
+      const handleDeleteeducation = (index) => {
+        const neweducation = contact.education.filter((_, i) => i !== index);
+        setcontact({
+          ...contact,
+          education: neweducation
+        });
+      };
+      const handleDeletedegree = (index) => {
+        const newdegree = contact.degree.filter((_, i) => i !== index);
+        setcontact({
+          ...contact,
+          degree: newdegree
+        });
+      };
+      const handleDeleteschool = (index) => {
+        const newschool = contact.school_college.filter((_, i) => i !== index);
+        setcontact({
+          ...contact,
+          school_college: newschool
+        });
+      };
 
         const mousehover=()=>
             {
@@ -97,7 +124,7 @@ function addFn() {
                 </div><hr></hr>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                 <div class="form-group mb-0" style={{width:"220px"}}>
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&s"style={{height:"25px",position:"absolute",marginLeft:"33%",marginTop:"2%"}}/>
+						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&s" alt='' style={{height:"25px",position:"absolute",marginLeft:"33%",marginTop:"2%"}}/>
 						<input type="text" class="form-control search-input" placeholder="Search Here"/>
 					</div>
                     <div class="form-group mb-0" style={{width:"220px"}}>
@@ -482,16 +509,48 @@ function addFn() {
                     <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,birth_date:e.target.value})}/></div>
                     <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,anniversary_date:e.target.value})}/></div>
 
-                    <div className="col-md-3"><label className="labels">Education</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,education:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Degree</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,degree:e.target.value})}/></div>
-                    <div className="col-md-5"><label className="labels">School/College/University</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,school_college:e.target.value})}/></div>
+                    <div className="col-md-3"> <label className="labels">Education</label>
+                        
+                             {contact.education.map((name, index) => (
+                                <div key={index}>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={name}
+                                    onChange={(event) => handleeducationChange(index, event)}
+                                  />
+                                  <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDeleteeducation(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                </div>
+                              ))}
+                        </div>
+                    <div className="col-md-3"><label className="labels">Degree</label>
+                    {contact.degree.map((name, index) => (
+                                <div key={index}>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={name}
+                                    onChange={(event) => handledegreeChange(index, event)}
+                                  />
+                                  <div><img className='deletebtn' src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDeletedegree(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                </div>
+                              ))}
+                    </div>
+                    <div className="col-md-5"><label className="labels">School/College/University</label>
+                    {contact.school_college.map((name, index) => (
+                                <div key={index}>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    value={name}
+                                    onChange={(event) => handleschool_collegeChange(index, event)}
+                                  />
+                                  <div><img className='deletebtn' src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDeleteschool(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                </div>
+                              ))}                    
+                    </div>
                      <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn}>+</button></div>
-                    
-                    <div className="col-md-3" id='addeducation1' ></div>
-                    <div className="col-md-3" id='addeducation2' ></div>
-                    <div className="col-md-5" id='addeducation3' ></div>
-                    <div className="col-md-1" id='removtbtn'></div>
-
+                
                     <div className="col-md-4"><label className="labels">Loan</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,loan:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Bank</label><input type="text" className="form-control"onChange={(e)=>setcontact({...contact,bank:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Amount</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,amount:e.target.value})}/></div>
