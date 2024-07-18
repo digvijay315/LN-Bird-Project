@@ -14,9 +14,3 @@
 {
     color: green;
 }
-th, td {
-    width: 310px;
-    text-align:center;
-    border:1px solid black;
-    padding:5px
-}

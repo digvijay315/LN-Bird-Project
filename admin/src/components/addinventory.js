@@ -15,7 +15,6 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 function Addinventory() {
   
-    
     const emails = [
       'Oliver Hansen',
       'Van Henry',
@@ -300,6 +299,7 @@ const[projects,setprojects]=useState(
         setCoordinates(null);
         console.log('No results found');
       }
+      
     } catch (error) {
       console.error('Error fetching coordinates:', error);
     }
@@ -319,9 +319,7 @@ const[projects,setprojects]=useState(
   };
   const [rows1, setRows1] = useState([]);
 
-  const addRow1 = () => {
-    setRows1([...rows1, { id: rows1.length + 1}]);
-  };
+
 
   const handleImageChange = (e, index) => {
     const file = e.target.files[0];
@@ -380,20 +378,74 @@ const[projects,setprojects]=useState(
     ));
   };
 
-  const renderRows1 = () => {
-    return rows1.map((row, index) => (
-      <tr key={row.id}>
-        <td style={{width:"30px"}}>{index + 1}</td>
-        <td style={{width:"935px"}}>
-        <div className="col-md-12"><input type="text"className="form-control" required="true"/></div>
-        </td>
-      
-        <td style={{width:"20px",cursor:"pointer"}}>
-          <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={() => deleteRow1(index)}/>
-        </td>
-      </tr>
-    ));
-  };
+
+
+  
+
+  const[inventory,setinventory]=useState({developer:"",block_tower:"",project:"",unit_number:"",sub_category:"",size:"",
+    project1:"",facing:"",road:"",ownership:"",type:"",cluter_details:"",length:"",
+    breadth:"",total_area:"",in_metrics:"",occupation_date:"",age_of_construction:"",
+    furnish_details:"",furnished_item:"",aminities:"",location:"",lattitude:"",langitude:"",
+    s_no:[],preview:[],descriptions:[],category:[],s_no1:[],url:[],action:[],search_contact:"",
+    relation:"",document_name:"",number:"",date:"",linkded_contact:""})
+const add_inventory=async(e)=>
+{
+e.preventDefault();
+try {
+const resp= await axios.post('http://localhost:5000/inventorydetails',inventory)
+if(resp.status===200)
+{
+toast.success(resp.data.message)
+
+}
+} catch (error) {
+toast.error(error.response.data.message)
+}
+}
+
+function addFn() {
+     
+  setinventory({
+    ...inventory,
+    s_no1: [...inventory.s_no1, ''],
+    url: [...inventory.url, ''],
+    action: [...inventory.action, '']
+  });
+};
+const handleeducationChange = (index, event) => {
+  const neweducation = [...inventory.s_no1];
+  neweducation[index] = event.target.value;
+  setinventory({
+    ...inventory,
+    s_no1: neweducation
+  });
+};
+const handleurlChange = (index, event) => {
+  const neweducation = [...inventory.url];
+  neweducation[index] = event.target.value;
+  setinventory({
+    ...inventory,
+    url: neweducation
+  });
+};
+
+const handleDeletesno1 = (index) => {
+  return inventory.s_no1.filter((_, i) => i !== index);
+};
+const handleDeleteurl = (index) => {
+  return inventory.url.filter((_, i) => i !== index);
+};
+const handleDeleteaction = (index) => {
+  return inventory.action.filter((_, i) => i !== index);
+};
+const handleDelete = (index) => {
+  setinventory({
+    s_no1: handleDeletesno1(index),
+    url: handleDeleteurl(index),
+    action: handleDeleteaction(index)
+  });
+};
+
 
   /*-------------------------------------------------------------------map latitude and langitude code end----------------------------------------------------- */
 
@@ -419,7 +471,7 @@ const[projects,setprojects]=useState(
 {/*-------------------------------------------------------------------project form----------------------------------------------------- */}
                 <div id="projectform" style={{border:"1px solid gray",padding:"5px"}}>
                 <div className="row mt-2">
-                <div className="col-md-5"><label className="labels">Developer</label><select className="form-control" required="true" >
+                <div className="col-md-5"><label className="labels">Developer</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,developer:e.target.value})} >
                     <option>Select</option>
                         {
                           user.map(item=>
@@ -431,7 +483,7 @@ const[projects,setprojects]=useState(
                         </select>
                     </div>
                         <div className="col-md-1"  style={{marginTop:"30px"}}><button className="form-control" onClick={handleShow1}>+</button></div>
-                        <div className="col-md-5"><label className="labels">Block/Tower</label><select className="form-control" required="true" >
+                        <div className="col-md-5"><label className="labels">Block/Tower</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,block_tower:e.target.value})}>
                     <option>Select</option>
                        {
                         tower.map(item=>
@@ -443,7 +495,7 @@ const[projects,setprojects]=useState(
                         </select>
                         </div>
                         <div className="col-md-1"  style={{marginTop:"30px"}}><button className="form-control" onClick={handleShow2}>+</button></div>
-                        <div className="col-md-5"><label className="labels">Project</label><select className="form-control" required="true" >
+                        <div className="col-md-5"><label className="labels">Project</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,project:e.target.value})}>
                     <option>Select</option>
                     {
                         project.map(item=>
@@ -465,12 +517,12 @@ const[projects,setprojects]=useState(
 
                 <div id="basicform" style={{border:"1px solid gray",padding:"5px",marginTop:"-50px"}}>
                 <div className="row mt-2">
-                        <div className="col-md-3"><label className="labels">Unit number</label><input type="text" className="form-control" required="true"/></div>
-                        <div className="col-md-3"><label className="labels">Sub Category</label><input type="text" className="form-control" required="true"/></div>
+                        <div className="col-md-3"><label className="labels">Unit number</label><input type="text" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,unit_number:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels">Sub Category</label><input type="text" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,sub_category:e.target.value})}/></div>
                         <div className="col-md-6"></div>
                       
-                        <div className="col-md-3"><label className="labels">Size</label><input type="text"className="form-control" required="true"/></div>
-                        <div className="col-md-3"><label className="labels">Project</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                        <div className="col-md-3"><label className="labels">Size</label><input type="text"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,size:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels">Project</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,project1:e.target.value})}>
                         <option>Select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -483,7 +535,7 @@ const[projects,setprojects]=useState(
                     </div>
                     <div className="col-md-6"></div>
 
-                    <div className="col-md-3"><label className="labels">Facing</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Facing</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,facing:e.target.value})}>
                         <option>Select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -494,7 +546,7 @@ const[projects,setprojects]=useState(
                         <option>col</option>
                         </select>
                     </div>
-                    <div className="col-md-3"><label className="labels">Road</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Road</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,road:e.target.value})}>
                         <option>Select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -508,7 +560,7 @@ const[projects,setprojects]=useState(
                    
 
                     <div className="col-md-6"></div>
-                    <div className="col-md-3"><label className="labels">Ownership</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Ownership</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,ownership:e.target.value})}>
                         <option>Select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -537,10 +589,10 @@ const[projects,setprojects]=useState(
                         </LoadScript>
                        </div>
                        <div style={{height:"200px"}}>
-                        <div className="row" style={{marginTop:"22%"}}>
+                        <div className="row" style={{marginTop:"15%"}}>
                        
                        <div className="col-md-6"><label className="labels">Lattitude</label><input type="number"className="form-control" required="true" value={coordinates.lat} readOnly/></div>
-                       <div className="col-md-6"><label className="labels">Longitude</label><input type="number"className="form-control" required="true" value={coordinates.lng} readOnly/></div>
+                       <div className="col-md-6"><label className="labels">Langitude</label><input type="number"className="form-control" required="true" value={coordinates.lng} readOnly/></div>
                        
                        </div>
                        </div>
@@ -548,7 +600,7 @@ const[projects,setprojects]=useState(
 
                     <div className="col-md-12"><label className="labels" style={{fontWeight:"bold"}}>Builtup Details</label></div>
 
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,type:e.target.value})}>
                         <option>Duplex</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -559,7 +611,7 @@ const[projects,setprojects]=useState(
                         <option>col</option>
                         </select>
                     </div>
-                    <div className="col-md-3"><label className="labels">Cluter Details/Floor Plans</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Cluter Details/Floor Plans</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,cluter_details:e.target.value})}>
                         <option>select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -572,18 +624,18 @@ const[projects,setprojects]=useState(
                     </div>
                     <div className="col-md-6"></div>
 
-                        <div className="col-md-1"><label className="labels">Length</label><input type="number"className="form-control" required="true"/></div>
-                        <div className="col-md-1"><label className="labels">Breadth</label><input type="number"className="form-control" required="true"/></div>
-                        <div className="col-md-2"><label className="labels">Total Area</label><input type="number"className="form-control" required="true"/></div>
-                        <div className="col-md-2"><label className="labels">In Metrics</label><input type="text"className="form-control" required="true"/></div>
-                        <div className="col-md-4" style={{marginLeft:"6%",marginTop:"-8%"}}><label className="labels">Location</label><input  type="text" className="form-control" required="true" placeholder="Enter location" onChange={(e)=>setAddress(e.target.value)}/></div>
+                        <div className="col-md-1"><label className="labels">Length</label><input type="number"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,length:e.target.value})}/></div>
+                        <div className="col-md-1"><label className="labels">Breadth</label><input type="number"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,breadth:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">Total Area</label><input type="number"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,total_area:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">In Metrics</label><input type="text"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,in_metrics:e.target.value})}/></div>
+                        <div className="col-md-4" style={{marginLeft:"6%",marginTop:"-7%"}}><label className="labels">Location</label><input  type="text" className="form-control" required="true" placeholder="Enter location" onChange={(e)=>setAddress(e.target.value)}/></div>
                         <div className="col-md-1" style={{marginTop:"-5.3%"}}><button className="form-control" required="true" onClick={handleSubmit}>Get</button></div>
                         
 
-                        <div className="col-md-3"><label className="labels">Occupation Date</label><input type="text"className="form-control" required="true"/></div>
-                        <div className="col-md-3"><label className="labels">Age of Construction</label><input type="text"className="form-control" required="true"/></div>
+                        <div className="col-md-3"><label className="labels">Occupation Date</label><input type="text"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,occupation_date:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels">Age of Construction</label><input type="text"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,age_of_construction:e.target.value})}/></div>
                         <div className="col-md-6"></div>
-                        <div className="col-md-3"><label className="labels">Furnish Details</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                        <div className="col-md-3"><label className="labels">Furnish Details</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,furnish_details:e.target.value})}>
                         <option>select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -594,7 +646,7 @@ const[projects,setprojects]=useState(
                         <option>col</option>
                         </select>
                     </div>
-                    <div className="col-md-3"><label className="labels">Furnished Items</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Furnished Items</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,furnished_item:e.target.value})}>
                         <option>select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -607,7 +659,7 @@ const[projects,setprojects]=useState(
                     </div>
                     <div className="col-md-6"></div>
 
-                    <div className="col-md-6"><label className="labels">Aminities</label><select className="form-control" required="true" onChange={(e)=>settowers({...towers,project:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Aminities</label><select className="form-control" required="true" onChange={(e)=>setinventory({...inventory,aminities:e.target.value})}>
                         <option>select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -639,15 +691,15 @@ const[projects,setprojects]=useState(
                 <table style={{marginLeft:"25px"}}>
                  <thead >
                    <tr>
-                    <th style={{width:"30px"}}>#</th>
-                     <th >Preview</th>
-                     <th >Description</th>
-                     <th>Category</th>
-                     <th style={{width:"20px"}}>Action</th>
+                    <th style={{width:"50px"}}>#</th>
+                     <th style={{width:"400px",textAlign:"center"}}>Preview</th>
+                     <th style={{width:"300px",textAlign:"center"}}>Description</th>
+                     <th style={{width:"300px",textAlign:"center"}}>Category</th>
+                     <th style={{width:"150px",textAlign:"center"}}>Action</th>
                       </tr>
                       </thead>
                       <tbody>
-                      {renderRows()}
+                      
         
                     </tbody>
               </table>
@@ -662,18 +714,52 @@ const[projects,setprojects]=useState(
                 <table style={{marginLeft:"25px"}}>
                  <thead >
                    <tr>
-                    <th style={{width:"30px"}}>SR.NO.</th>
-                     <th style={{width:"890px"}}>URL</th>
-                     <th style={{width:"20px"}}>Action</th>
+                    <th style={{width:"100px",textAlign:"center"}}>SR.NO.</th>
+                     <th style={{width:"950px",textAlign:"center"}}>URL</th>
+                     <th style={{width:"150px",textAlign:"center"}}>Action</th>
                       </tr>
                       </thead>
                       <tbody>
-                        {renderRows1()}
+                      <tr>
+                       <td>
+                       {inventory.s_no1.map((name, index) => (
+                                <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                  <input 
+                                    type="text"
+                                    className="form-control"
+                                    value={name}
+                                    onChange={(event) => handleeducationChange(index, event)}
+                                  />
+                                  
+                                </div>
+                              ))}
+                       </td>
+                       <td>
+                       {inventory.url.map((name, index) => (
+                                <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                  <input 
+                                    type="text"
+                                    className="form-control"
+                                    value={name}
+                                    onChange={(event) => handleurlChange(index, event)}
+                                  />
+                                </div>
+                              ))}
+                       </td>
+                       <td>
+                       {inventory.action.map((name, index) => (
+                                <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                 <img className='deletebtn' src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDelete(index)} style={{height:"40px",cursor:"pointer"}}/>
+                                </div>
+                              ))}
+                       
+                       </td>
+                       </tr>
                     </tbody>
               </table>
               </div>
                 <div className="row mt-4">
-                <div className="col-md-2" style={{marginLeft:"80%"}} onClick={addRow1}><button className="form-control">Add Video Link</button></div>
+                <div className="col-md-2" style={{marginLeft:"80%"}} onClick={addFn}><button className="form-control">Add Video Link</button></div>
                 </div>
               </div>
               <div className="row mt-4">
@@ -686,23 +772,24 @@ const[projects,setprojects]=useState(
                 <div className="row mt-2" style={{borderBottom:"1px solid gray",padding:"5px"}}>
                 <div className="col-5" style={{marginLeft:"20px",padding:"10px"}}>
                 <div className="row">
-                        <div className="col-md-5"><label className="labels">Search Contact</label><i class="dw dw-search2 search-icon" style={{position:"absolute",marginTop:"45px",marginLeft:"70px"}}></i><input type="text" class="form-control search-input" placeholder="Search Here"/></div>
-                        <div className="col-md-3"><label className="labels">Relation</label><input type="text" className="form-control" required="true"/></div>
+                        <div className="col-md-5"><label className="labels">Search Contact</label><i class="dw dw-search2 search-icon" style={{position:"absolute",marginTop:"45px",marginLeft:"70px"}}></i><input type="text" class="form-control search-input" placeholder="Search Here" onChange={(e)=>setinventory({...inventory,search_contact:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels">Relation</label><input type="text" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,relation:e.target.value})}/></div>
                         <div className="col-md-4" style={{marginTop:"30px"}}><button className="form-control" >Add Contact </button></div>
                 </div>
                 </div>
                 <div className="col-6">
                 <div className="row" style={{border:"1px solid black",padding:"10px",height:"400px"}}>
-                        <div className="col-md-4"><label className="labels">Document Name</label><input type="text" className="form-control" required="true"/></div>
-                        <div className="col-md-4"><label className="labels">Number</label><input type="text" className="form-control" required="true"/></div>
-                        <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control" required="true"/></div>
-                        <div className="col-md-6"style={{marginTop:"-150px"}}><label className="labels">Linked Contact</label><input type="text" className="form-control" required="true"/></div>
+                        <div className="col-md-4"><label className="labels">Document Name</label><input type="text" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,document_name:e.target.value})}/></div>
+                        <div className="col-md-4"><label className="labels">Number</label><input type="text" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,number:e.target.value})}/></div>
+                        <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,date:e.target.value})}/></div>
+                        <div className="col-md-6"style={{marginTop:"-150px"}}><label className="labels">Linked Contact</label><input type="text" className="form-control" required="true" onChange={(e)=>setinventory({...inventory,linkded_contact:e.target.value})}/></div>
                         <div className="col-md-4" style={{marginTop:"-120px"}}><button className="form-control" >Add Contact </button></div>
                 </div>
+                <ToastContainer/>
                 </div>
                 </div>
                 <div className="row mt-4">
-                    <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="ownerbtn"><button className="form-control" >Save</button></div>
+                    <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="ownerbtn"><button className="form-control" onClick={add_inventory}>Save</button></div>
                     <div className="col-md-2" onClick={handler6} style={{marginLeft:"-90%",display:"none"}} id="prevbtn2"><button className="form-control" >Prev</button></div>
                 </div>  
       </div>

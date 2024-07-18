@@ -13,6 +13,7 @@ const meeting_task_form = require('../controllers/meeting_task_form');
 const site_visit_form = require('../controllers/site_visit_form');
 const booking_details = require('../controllers/booking_details');
 const addpayment_details = require('../controllers/addpayment_details');
+const inventory_details=require('../controllers/addinventory');
 
 const router=express.Router()
 
@@ -34,6 +35,8 @@ router.post('/meetingtask',meeting_task_form)
 router.post('/sitevisit',site_visit_form)
 
 router.post('/bookingdetails',booking_details)
+
+router.post('/inventorydetails',upload.array('preview'),inventory_details)
 
 router.post('/paymentdetails',upload.single('image'),addpayment_details)
 
