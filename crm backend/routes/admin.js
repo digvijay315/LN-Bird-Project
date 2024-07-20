@@ -36,7 +36,7 @@ router.post('/sitevisit',site_visit_form)
 
 router.post('/bookingdetails',booking_details)
 
-router.post('/inventorydetails',upload.array('preview',10),inventory_details)
+router.post('/inventorydetails',upload.any('preview',10),inventory_details)
 
 router.post('/paymentdetails',upload.single('image'),addpayment_details)
 

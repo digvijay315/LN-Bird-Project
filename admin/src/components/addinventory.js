@@ -282,13 +282,12 @@
 
         
         /*-------------------------------------------------------------------map latitude and langitude code start----------------------------------------------------- */
-        const [address, setAddress] = useState('');
         const [coordinates, setCoordinates] = useState('');
         const handleSubmit = async (e) => {
         try {
           const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
             params: {
-              address: address,
+              address: inventory.location,
               key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'  // Replace with your API key
             }
           });
@@ -296,6 +295,7 @@
           if (response.data.results.length > 0) {
             const { lat, lng } = response.data.results[0].geometry.location;
             setCoordinates({ lat, lng });
+            setinventory({...inventory,lattitude:lat,langitude:lng})
           } else {
             setCoordinates(null);
             console.log('No results found');
@@ -331,19 +331,19 @@
                 }
               const add_inventory=async(e)=>
               {
-              e.preventDefault();
-                
-              try {
-              const resp= await axios.post('http://localhost:5000/inventorydetails',inventory,config)
-              if(resp.status===200)
-              {
-              toast.success(resp.data.message)
+                  e.preventDefault();
+             
+                    try {
+                            const resp= await axios.post('http://localhost:5000/inventorydetails',inventory,config)
+                              if(resp.status===200)
+                                  {
+                                    toast.success(resp.data.message)
 
-              }
-              } catch (error) {
-              toast.error(error.response.data.message)
-              }
-              }
+                                   }
+                          } catch (error) {
+                                  toast.error(error.response.data.message)
+                          }
+                         }
 
     function addFn() {
         
@@ -381,12 +381,18 @@
     };
     const handlepreviewchange = (index, event) => {
       const neweducation = [...inventory.preview];
-      neweducation[index] = (event.target.files);
+      const files = Array.from(event.target.files);
+      const previewUrls = files.map(file => URL.createObjectURL(file));
+      neweducation[index] = {
+        files: files,
+        previewUrls: previewUrls
+      };
       setinventory({
         ...inventory,
         preview: neweducation
       });
     };
+    
 
     const handledescriptionchange = (index, event) => {
       const neweducation = [...inventory.descriptions];
@@ -674,8 +680,8 @@
                             <div className="col-md-1"><label className="labels">Breadth</label><input type="number"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,breadth:e.target.value})}/></div>
                             <div className="col-md-2"><label className="labels">Total Area</label><input type="number"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,total_area:e.target.value})}/></div>
                             <div className="col-md-2"><label className="labels">In Metrics</label><input type="text"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,in_metrics:e.target.value})}/></div>
-                            <div className="col-md-4" style={{marginLeft:"6%",marginTop:"-7%"}}><label className="labels">Location</label><input  type="text" className="form-control" required="true" placeholder="Enter location" onChange={(e)=>setAddress(e.target.value)}/></div>
-                            <div className="col-md-1" style={{marginTop:"-5.3%"}}><button className="form-control" required="true" onClick={handleSubmit}>Get</button></div>
+                            <div className="col-md-4" style={{marginLeft:"6%",marginTop:"-7%"}}><label className="labels">Location</label><input  type="text" className="form-control" required="true" placeholder="Enter location" onChange={(e)=>setinventory({...inventory,location:e.target.value})}/></div>
+                            <div className="col-md-1" style={{marginTop:"-4.8%"}}><button className="form-control" required="true" onClick={handleSubmit}>Get</button></div>
                             
 
                             <div className="col-md-3"><label className="labels">Occupation Date</label><input type="text"className="form-control" required="true" onChange={(e)=>setinventory({...inventory,occupation_date:e.target.value})}/></div>
@@ -765,10 +771,12 @@
                                       <input 
                                         type="file"
                                         className="form-control"
-                                        
+                                        multiple
                                         onChange={(event) => handlepreviewchange(index, event)}
                                       />
-                                      
+                                        {name.previewUrls && name.previewUrls.map((url, idx) => (
+          <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+        ))}
                                     </div>
                                   ))}
                           </td>

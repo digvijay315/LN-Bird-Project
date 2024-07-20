@@ -24,7 +24,7 @@ function App() {
   return (
     <BrowserRouter>
    <div>
-    {/* <Routes>
+    <Routes>
     <Route path='/' element={<Login/>}></Route>
       <Route path='/dashboard' element={<Dashboard/>}></Route>
       <Route path='/addcontact' element={<Addcontact/>}></Route>
@@ -39,8 +39,8 @@ function App() {
       <Route path='/addproject' element={<Addinventory/>}></Route>
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
-    </Routes> */}
-   <Addinventory/>
+    </Routes>
+  
    </div>
    </BrowserRouter>
   );
