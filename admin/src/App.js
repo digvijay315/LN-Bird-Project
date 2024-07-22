@@ -18,13 +18,14 @@ import Sale_lease from './components/sale_lease';
 import Booking_details from './components/booking_details';
 import Payment_details from './components/Payment_details';
 import Addinventory from './components/addinventory';
+import Fetchdata from './components/demo';
 
 
 function App() {
   return (
     <BrowserRouter>
    <div>
-    <Routes>
+    {/* <Routes>
     <Route path='/' element={<Login/>}></Route>
       <Route path='/dashboard' element={<Dashboard/>}></Route>
       <Route path='/addcontact' element={<Addcontact/>}></Route>
@@ -39,8 +40,8 @@ function App() {
       <Route path='/addproject' element={<Addinventory/>}></Route>
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
-    </Routes>
-  
+    </Routes> */}
+  <Fetchdata/>
    </div>
    </BrowserRouter>
   );

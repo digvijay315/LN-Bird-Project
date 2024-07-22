@@ -40,5 +40,19 @@ const lead_info=async(req,res)=>
                 console.log(error)
             }
         }
-    module.exports={lead_info,leadinfo_find}
+        const view_lead_Byleadtype=async(req,res)=>
+            {
+                try {
+                    const lead=req.params.lead_type;
+                    const resp= await leadinfo.find({lead_type:lead})
+                    if(!resp)
+                        {
+                           return res.send("lead info not available")
+                        }
+                    res.status(200).send({message:"lead found and here are lead details:",lead:resp})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+    module.exports={lead_info,leadinfo_find,view_lead_Byleadtype}
     

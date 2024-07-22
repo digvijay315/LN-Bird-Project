@@ -29,7 +29,7 @@ const add_contact=async(req,res)=>
         {
             try {
                 const resp=await addcontact.find()
-                res.status(200).send({message:"contact details fetch successfully",contact_details:resp})
+                res.status(200).send({message:"contact details fetch successfully",contact:resp})
             } catch (error) {
                 console.log(error)
             }
@@ -39,12 +39,12 @@ const add_contact=async(req,res)=>
         {
             try {
                 const name=req.params.first_name;
-                const user= await addcontact.findOne({first_name:name})
-                if(!user)
+                const resp= await addcontact.findOne({first_name:name})
+                if(!resp)
                     {
                        return res.send("contact details not available")
                     }
-                res.status(200).send({message:"name found and here are contact details:",contact:user})
+                res.status(200).send({message:"name found and here are contact details:",contact:resp})
             } catch (error) {
                 console.log(error)
             }
