@@ -54,5 +54,51 @@ const lead_info=async(req,res)=>
                     console.log(error)
                 }
             }
-    module.exports={lead_info,leadinfo_find,view_lead_Byleadtype}
+
+            const view_lead_Byid=async(req,res)=>
+                {
+                    try {
+                        const id=req.params._id;
+                        const resp= await leadinfo.find({_id:id})
+                        if(!resp)
+                            {
+                               return res.send("lead info not available")
+                            }
+                        res.status(200).send({message:"lead found and here are lead details:",lead:resp})
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+            const remove_lead=async(req,res)=>
+                {
+                    try {
+                        const id=req.params._id;
+                        const user=await leadinfo.findOne({_id:id})
+                        if(!user)
+                            {
+                                return res.send({message:"lead not found"})
+                            }
+                        const resp=await leadinfo.deleteOne({_id:id})
+                        res.status(200).send({message:"lead deleted successfully"})
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+                const update_lead=async(req,res)=>
+                    {
+                        try {
+                            const id=req.params._id;
+                            const user=await leadinfo.findOne({_id:id})
+                            if(!user)
+                                {
+                                    return res.send({message:"lead not found"})
+                                }
+                            const resp=await leadinfo.findByIdAndUpdate(id,req.body)
+                            res.status(200).send({message:"lead update successfully"})
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+
+    module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid}
     
