@@ -27,7 +27,7 @@ income:{type:String},
 amount1:{type:String},
 document:{type:String},
 number:{type:String},
-file:{type:String},
+file:{type:Array},
 },{timestamps:true})
 
 const leadinfo_personal=mongoose.model('leadinfo-personal',lead_infopersonal)

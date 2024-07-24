@@ -4,6 +4,7 @@ import Sidebar1 from "./sidebar1";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 function Leadinfo_requirment() {
@@ -16,7 +17,8 @@ function Leadinfo_requirment() {
     const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
     const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
 
-    
+    const navigate=useNavigate()
+
     const [leadinforequirment,setleadinforequirment]=useState({requirment:"",property_type:"",purpose:"",nri:"no",sub_type:"",unit_type:"",
         budget_min:"",budget_max:"",minimum_area:"",maximum_area:"",area_metric:"",search_location:"",street_address:"",city:"",area:"",
         country:"",pin_code:"",block:"",state:"",lattitude:"",longitude:"",specific_unit:"",measurement:"",funding:"",timeline:"",
@@ -31,7 +33,7 @@ function Leadinfo_requirment() {
                     {
                         toast.success(resp.data.message)
                         setTimeout(() => {
-                            window.location.reload();
+                            navigate('/lead')
                           }, 2000); // 2000 milliseconds = 2 seconds
                         
                     }

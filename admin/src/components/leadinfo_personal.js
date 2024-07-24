@@ -3,8 +3,10 @@ import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import axios from "axios";
 import { ToastContainer,toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function Leadinfo_personal() {
+    const navigate=useNavigate()
 
     const [leadinfopersonal,setleadinfopersonal]=useState({gender:"",maritial_status:"",birth_date:"",anniversary_date:"",father_husband_name:"",h_no:"",
         street_address:"",location:"",city:"",pincode:"",state:"",country:"",website:"",industry:"",education:"",
@@ -24,6 +26,9 @@ function Leadinfo_personal() {
                     if(resp.status===200)
                     {
                         toast.success(resp.data.message)
+                        setTimeout(() => {
+                            navigate('/lead')
+                        }, 2000);
                     }
                 } catch (error) {
                     

@@ -29,7 +29,7 @@ router.get('/viewbyid/:_id',view_lead_Byid)
 router.delete('/removelead/:_id',remove_lead)
 router.put('/updatelead/:_id',update_lead)
 
-router.post('/leadinfopersonal',upload.single('file'),lead_info_personal)
+router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 
 router.post('/leadinforequirment',lead_info_requirment)
 
@@ -42,7 +42,7 @@ router.post('/bookingdetails',booking_details)
 
 router.post('/inventorydetails',upload.any('preview',10),inventory_details)
 
-router.post('/paymentdetails',upload.single('image'),addpayment_details)
+router.post('/paymentdetails',upload.any('image'),addpayment_details)
 
 router.post('/addproperty/adddeveloper',add_developer)
 router.get('/addproperty/viewdeveloper',view_developer)

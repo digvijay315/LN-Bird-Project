@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import '../css/mystyle.css';
 import 'react-router-dom';
 import Icon from '@mdi/react';
-import { mdiNetworkStrength4 } from '@mdi/js';
+import { mdiNetworkStrength4, mdiPhone } from '@mdi/js';
 import { mdiStickerCheckOutline } from '@mdi/js';
 import { mdiAccountBox } from '@mdi/js';
 import { mdiCurrencyUsd } from '@mdi/js';
@@ -48,18 +48,10 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<Link to={'/lead'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiCurrencyUsd} size={1} /><span class="mtext">Leads</span>
-						</a>
-						<ul class="submenu">
-							<li><Link to={'/leadinfo'}>Add Leads</Link></li>
-						</ul>
-						<ul class="submenu">
-							<li><Link to={'/leadinfo-personal'}>Add Leads(Personal info)</Link></li>
-						</ul>
-						<ul class="submenu">
-							<li><Link to={'/leadinfo-requirment'}>Add Leads(Requirment)</Link></li>
-						</ul>
+						</Link>
+						
 					</li>
 				
 					<li class="dropdown">
@@ -103,7 +95,12 @@ function Sidebar1() {
 						
 						</ul>
 					</li>
-
+					<li class="dropdown">
+						<a href="javascript:;" class="dropdown-toggle no-arrow">
+						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiPhone} size={1} /><span class="mtext">Communication</span>
+						</a>
+						
+					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiNetworkStrength4} size={1}/><span class="mtext">Report</span>

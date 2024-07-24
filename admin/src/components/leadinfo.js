@@ -3,6 +3,7 @@ import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Leadinfo() {
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -52,7 +53,8 @@ function Leadinfo() {
         email:"",email_type:"",title_company:"",designation:"",company_name:"",tags:"",
         lead_type:"",descriptions:"",team:"",owner:"",campaign:"",source:"",sub_source:"",
         stage:"",channel_partner:"",intrested_project:""})
-
+        
+        const navigate=useNavigate()
         const leadinfodetails=async(e)=>
         {
             e.preventDefault();
@@ -61,6 +63,9 @@ function Leadinfo() {
                 if(resp.status==200)
                 {
                     toast.success(resp.data.message)
+                    setTimeout(() => {
+                        navigate('/lead')
+                    }, 2000);
                 }
             } catch (error) {
                 
