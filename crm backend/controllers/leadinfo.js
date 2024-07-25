@@ -69,6 +69,52 @@ const lead_info=async(req,res)=>
                         console.log(error)
                     }
                 }
+                const view_lead_Bystage=async(req,res)=>
+                    {
+                        try {
+                            const stage=req.params.stage;
+                            const resp= await leadinfo.find({stage:stage})
+                            if(!resp)
+                                {
+                                   return res.send("lead info not available")
+                                }
+                               
+                            res.status(200).send({message:"lead found and here are lead details:",lead:resp})
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    const view_lead_Byemail=async(req,res)=>
+                        {
+                            try {
+                                const email=req.params.email;
+                                const resp= await leadinfo.find({email:email})
+                                if(!resp)
+                                    {
+                                       return res.send("lead info not available")
+                                    }
+                                   
+                                res.status(200).send({message:"lead found and here are lead details:",lead:resp})
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        }
+                        const view_lead_Bymobile=async(req,res)=>
+                            {
+                                try {
+                                    const mobile_no=req.params.mobile_no;
+                                    const resp= await leadinfo.find({mobile_no:mobile_no})
+                                    if(!resp)
+                                        {
+                                           return res.send("lead info not available")
+                                        }
+                                       
+                                    res.status(200).send({message:"lead found and here are lead details:",lead:resp})
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                            }
+                    
             const remove_lead=async(req,res)=>
                 {
                     try {
@@ -100,5 +146,6 @@ const lead_info=async(req,res)=>
                         }
                     }
 
-    module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid}
+    module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid,view_lead_Bystage,
+                    view_lead_Byemail,view_lead_Bymobile }
     

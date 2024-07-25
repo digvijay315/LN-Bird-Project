@@ -7,6 +7,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Link, useNavigate } from "react-router-dom";
 import { utils, writeFile } from "xlsx";
+import '../css/hover.css';
+import { useRef } from "react";
 
 function Leadfetch() {
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -54,20 +56,33 @@ function Leadfetch() {
 
       const navigate=useNavigate();
 
+{/*-------------------lead crud operations start---------------------------lead crud operations start------------------------------------lead crud operations start*/}
+React.useEffect(()=>{fetchdata()},[])
+React.useEffect(()=>{fetchdatabystage_incomingcount()},[])  
+React.useEffect(()=>{fetchdatabystage_prospectcount()},[]) 
+React.useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
 
-  React.useEffect(()=>{fetchdata()},[])
+
+
+
+
+const[countall,setcountall]=useState('')
   const[data,setdata]=useState([]);
   const fetchdata=async(event)=>
   {
     
     try {
       const resp=await axios.get('http://localhost:5000/leadinfo')
-      setdata(resp.data.lead)
+      const all=(resp.data.lead)
+      setdata(all)
+      setcountall(all.length)
     } catch (error) {
       console.log(error);
     }
   
   }
+  React.useEffect(()=>{fetchdata()},[])
+  React.useEffect(()=>{fetchdatabystage_incomingcount()},[])
  
 
   const[leadtype,setleadtype]=useState('')
@@ -84,6 +99,115 @@ function Leadfetch() {
       }
     }
     
+    const[email,setemail]=useState('')
+
+    const fetchdatabyemail=async()=>
+      {
+        
+        try {
+          const resp=await axios.get(`http://localhost:5000/viewleadbyemail/${email}`);
+          console.log(resp);
+          setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      const handleKeyPressemail = (event) => {
+        if (event.key === 'Enter') {
+          fetchdatabyemail();
+        }
+      };
+      const[mobile,setmobile]=useState('')
+
+    const fetchdatabymobile=async()=>
+      {
+        
+        try {
+          const resp=await axios.get(`http://localhost:5000/viewleadbymobile/${mobile}`);
+          console.log(resp);
+          setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      const handleKeyPressemobile = (event) => {
+        if (event.key === 'Enter') {
+          fetchdatabymobile();
+        }
+      };
+
+
+    const fetchdatabystage_incoming=async()=>
+      {
+        
+        try {
+          const resp=await axios.get(`http://localhost:5000/viewleadbystage/Incoming`);
+          setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      const[countincoming,setcountincoming]=useState('')
+      const fetchdatabystage_incomingcount=async()=>
+        {
+          
+          try {
+            const resp=await axios.get(`http://localhost:5000/viewleadbystage/Incoming`);
+            const incoming=(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+            setcountincoming(incoming.length);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+       
+      const fetchdatabystage_prospect=async(e)=>
+        {
+          e.preventDefault()
+          try {
+            const resp=await axios.get(`http://localhost:5000/viewleadbystage/Prospect`);
+             setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        const[countprospect,setcountprospect]=useState('')
+        const fetchdatabystage_prospectcount=async()=>
+          {
+            
+            try {
+              const resp=await axios.get(`http://localhost:5000/viewleadbystage/Prospect`);
+              const prospect=(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+              setcountprospect(prospect.length);
+              
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        
+        const fetchdatabystage_Negotiation=async()=>
+          {
+            
+            try {
+              const resp=await axios.get(`http://localhost:5000/viewleadbystage/Negotiation`);
+              setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead])
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          const[countnegotiation,setcountnegotiation]=useState('')
+          const fetchdatabystage_Negotiationcount=async()=>
+            {
+              
+              try {
+                const resp=await axios.get(`http://localhost:5000/viewleadbystage/Negotiation`);
+                const negotiation=Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]
+                setcountnegotiation(negotiation.length)
+              } catch (error) {
+                console.log(error);
+              }
+            }
+        
+      
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
         fetchdata1();
@@ -103,6 +227,16 @@ function Leadfetch() {
         console.log(error);
       }
     }
+ 
+
+    {/*-------------------lead crud operations end---------------------------lead crud operations end------------------------------------lead crud operations end*/}
+
+
+
+
+
+
+
   {/*-------------------pagination code---------------------------pagination code------------------------------------pagination code*/}
   // const items=document.getElementById("viewitems").value;
   // if(!items)
@@ -160,6 +294,10 @@ function Leadfetch() {
       }
     }
     {/*-------------------model and update lead code end---------------------------model and update lead code end------------------------------------model and update lead code end*/}
+
+
+
+    {/*-------------------export to excel---------------------------export to excel------------------------------------export to excel*/}
     const exportToExcel = () => {
       const filteredData = data.map(({ first_name, last_name,mobile_no,email,source,channel_partner,team,owner,stage,lead_type,campaign }) => ({ first_name, last_name,mobile_no,email,source,channel_partner,team,owner,stage,lead_type,campaign}));
       // Create a new workbook
@@ -194,21 +332,25 @@ function Leadfetch() {
             </ul>
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
-        <div style={{width:"250px",padding:"10px",borderRadius:"0 25px 25px 0",}}>
+        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}} onClick={fetchdatabystage_incoming}>
           <h6>INCOMING</h6>
-          <p>100</p>
+          <p>{countincoming}</p>
         </div>
-        <div style={{width:"250px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}onClick={fetchdatabystage_prospect}>
           <h6>PROSPECT</h6>
-          <p>1</p>
+          <p>{countprospect}</p>
         </div>
-        <div style={{width:"250px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
           <h6>OPPORTUNITY</h6>
-          <p>50</p>
+          <p></p>
         </div>
-        <div style={{width:"250px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}onClick={fetchdatabystage_Negotiation}>
           <h6>NEGOTIATION</h6>
-          <p>15</p>
+          <p>{countnegotiation}</p>
+        </div>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}onClick={fetchdata}>
+          <h6>All</h6>
+          <p>{countall}</p>
         </div>
         <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent"}}>
@@ -223,15 +365,16 @@ function Leadfetch() {
             Filter
         </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">By Email</a></li>
-              <li><a class="dropdown-item" href="#">By Mobile No.</a></li>
+              <li>
+                <label className="labels">By Email id</label><input type="text" className="form-control form-control-sm" placeholder="filter from email id" onChange={(e)=>setemail(e.target.value)} onKeyDown={handleKeyPressemail}/></li>
+              <li><label className="labels">By Mobile no</label><input type="text" className="form-control form-control-sm" placeholder="filter from mobile no" onChange={(e)=>setmobile(e.target.value)} onKeyDown={handleKeyPressemobile}/></li>
             </ul>
         </div>  
         
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
           <input type="checkbox" style={{width:"20px"}}></input>
-          <input type="text" className="form-control" style={{width:"300px"}}placeholder="Type to filter by deal name" onChange={(e)=>setleadtype(e.target.value)} onKeyDown={handleKeyPress} ></input>
+          <input type="text" className="form-control" style={{width:"300px"}}placeholder="Type to filter by lead-type" onChange={(e)=>setleadtype(e.target.value)} onKeyDown={handleKeyPress} ></input>
           <img src="https://static.vecteezy.com/system/resources/previews/026/640/053/original/search-icon-isolated-on-white-background-creative-modern-logo-vector.jpg" style={{marginLeft:"-80px",height:"40px",marginTop:"4px"}}/>
           <button className="form-control" onClick={exportToExcel} style={{width:"150px",marginLeft:"800px"}}>Export Data</button>
           </div>
@@ -258,8 +401,8 @@ function Leadfetch() {
             currentItems.map((item,index)=>
             (
               <tr>
-              <td style={{border:"1px solid black",width:"30px"}}>{index+1}</td>
-              <td style={{border:"1px solid black",width:"200px"}}><span style={{color:"blue"}}>{item.title}{item.first_name}{item.last_name}</span><br></br>
+              <td  style={{border:"1px solid black",width:"30px"}}>{index+1}</td>
+              <td className="personaldetails" style={{border:"1px solid black",width:"200px"}}><span style={{color:"blue"}}>{item.title}{item.first_name}<span>{" "}</span>{item.last_name}</span><br></br>
               <span style={{color:"green"}}>Mobile:{item.mobile_no}<br></br></span>
               <span style={{color:"orange"}}>Email:{item.email}</span>
               </td>

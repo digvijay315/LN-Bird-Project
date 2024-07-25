@@ -1,6 +1,6 @@
 const express=require('express');
 const {add_contact,view_contact, view_contact_ByName, remove_contact} = require('../controllers/contact_details');
-const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid} = require('../controllers/leadinfo');
+const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bystage, view_lead_Byemail, view_lead_Bymobile} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
 const {add_developer,view_developer} = require('../controllers/add_developer');
@@ -28,6 +28,9 @@ router.get('/viewbyleadtype/:lead_type',view_lead_Byleadtype)
 router.get('/viewbyid/:_id',view_lead_Byid)
 router.delete('/removelead/:_id',remove_lead)
 router.put('/updatelead/:_id',update_lead)
+router.get('/viewleadbystage/:stage',view_lead_Bystage)
+router.get('/viewleadbyemail/:email',view_lead_Byemail)
+router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)
 
 router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 
