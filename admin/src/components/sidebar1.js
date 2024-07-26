@@ -39,15 +39,12 @@ function Sidebar1() {
 							
 						</ul>
 					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+					<li>
+						<Link to={'/contact'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiAccountBox} size={1} /><span class="mtext">Contacts</span>
-						</a>
-						<ul class="submenu">
-							<li><Link to={'/addcontact'}>Add Contacts</Link></li>
-						</ul>
+						</Link>
 					</li>
-					<li class="dropdown">
+					<li>
 						<Link to={'/lead'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiCurrencyUsd} size={1} /><span class="mtext">Leads</span>
 						</Link>

@@ -20,6 +20,7 @@ import Payment_details from './components/Payment_details';
 import Addinventory from './components/addinventory';
 import Fetchdata from './components/lead';
 import Leadfetch from './components/lead';
+import Fetchcontact from './components/contactdetails';
 
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
     <BrowserRouter>
    <div>
     <Routes>
-    <Route path='/' element={<Login/>}></Route>
+      <Route path='/' element={<Login/>}></Route>
       <Route path='/dashboard' element={<Dashboard/>}></Route>
       <Route path='/addcontact' element={<Addcontact/>}></Route>
       <Route path='/leadinfo' element={<Leadinfo/>}></Route>
@@ -42,6 +43,7 @@ function App() {
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
       <Route path='/lead' element={<Leadfetch/>}></Route>
+      <Route path='/contact' element={<Fetchcontact/>}></Route>
     </Routes>
   {/* <Fetchdata/> */}
    </div>

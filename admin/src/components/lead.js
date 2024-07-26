@@ -61,6 +61,8 @@ React.useEffect(()=>{fetchdata()},[])
 React.useEffect(()=>{fetchdatabystage_incomingcount()},[])  
 React.useEffect(()=>{fetchdatabystage_prospectcount()},[]) 
 React.useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
+React.useEffect(()=>{fetchdatabystage_woncount()},[]) 
+React.useEffect(()=>{fetchdatabystage_lostcount()},[])
 
 
 
@@ -206,6 +208,30 @@ const[countall,setcountall]=useState('')
                 console.log(error);
               }
             }
+            const[countwon,setcountwon]=useState('')
+            const fetchdatabystage_woncount=async()=>
+              {
+                
+                try {
+                  const resp=await axios.get(`http://localhost:5000/viewleadbystage/Won`);
+                  const Won=Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]
+                  setcountwon(Won.length)
+                } catch (error) {
+                  console.log(error);
+                }
+              }
+              const[countlost,setcountlost]=useState('')
+              const fetchdatabystage_lostcount=async()=>
+                {
+                  
+                  try {
+                    const resp=await axios.get(`http://localhost:5000/viewleadbystage/Lost`);
+                    const Lost=Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]
+                    setcountlost(Lost.length)
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
         
       
     const handleKeyPress = (event) => {
@@ -293,6 +319,16 @@ const[countall,setcountall]=useState('')
         console.log(error);
       }
     }
+
+    const [show2, setshow2] = useState(false);
+
+    const handleClose2 = () => setshow2(false);
+    const[data2,setdata2]=useState([])
+    const handleShow2=(item)=>
+    {
+      setshow2(true);
+      setdata2(item)
+    }
     {/*-------------------model and update lead code end---------------------------model and update lead code end------------------------------------model and update lead code end*/}
 
 
@@ -357,11 +393,10 @@ const[countall,setcountall]=useState('')
             CLOSED
         </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li className="form-control">Won <span style={{fontSize:"30px",color:"green",fontWeight:"bolder"}}><sup>{countwon}</sup></span></li>
+              <li className="form-control">Lost <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup>{countlost}</sup></span></li>
             </ul>
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"20px",color:"black",backgroundColor:"transparent",width:"150px"}}>
+            <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"20px",color:"black",backgroundColor:"transparent",width:"150px"}}>
             Filter
         </button>
             <ul class="dropdown-menu">
@@ -402,7 +437,7 @@ const[countall,setcountall]=useState('')
             (
               <tr>
               <td  style={{border:"1px solid black",width:"30px"}}>{index+1}</td>
-              <td className="personaldetails" style={{border:"1px solid black",width:"200px"}}><span style={{color:"blue"}}>{item.title}{item.first_name}<span>{" "}</span>{item.last_name}</span><br></br>
+              <td className="personaldetails" style={{border:"1px solid black",width:"200px"}}onClick={()=>handleShow2(item)}><span style={{color:"blue"}}>{item.title}{item.first_name}<span>{" "}</span>{item.last_name}</span><br></br>
               <span style={{color:"green"}}>Mobile:{item.mobile_no}<br></br></span>
               <span style={{color:"orange"}}>Email:{item.email}</span>
               </td>
@@ -434,6 +469,8 @@ const[countall,setcountall]=useState('')
       {renderPageNumbers()}</div>
       </div>
           <ToastContainer/>
+      
+  {/*-------------------edit model start---------------------------edit model start------------------------------------edit model start*/}
           <Modal show={show1} onHide={handleClose1} size='lg'>
             <Modal.Header>
               <Modal.Title>Update Lead</Modal.Title>
@@ -593,7 +630,44 @@ const[countall,setcountall]=useState('')
                 Close
               </Button>
             </Modal.Footer>
-            
+          </Modal>
+
+{/*-------------------edit model end---------------------------edit model end------------------------------------edit model end */}
+
+          <Modal show={show2} onHide={handleClose2} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Lead Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Personal Deatils:</h4><hr></hr>
+              <b>Full Name:</b> <span >{data2.title}</span> <span>{data2.first_name} </span><span>{data2.last_name}</span><br></br>
+              <b>Mobile no:</b> <span>{data2.country_code}</span> <span>{data2.mobile_no} </span><br></br>
+              <b>Email id:</b> <span>{data2.email}</span><br></br>
+              <b>Title & Company:</b> <span>{data2.title_company}</span><br></br>
+              <b>Designation:</b> <span>{data2.designation}</span><br></br>
+              <b>Company Name:</b> <span>{data2.company_name}</span><br></br>
+              <b>Tags:</b> <span>{data2.tags}</span><br></br>
+              <b>Lead Type:</b> <span>{data2.lead_type}</span><br></br>
+              <b>Descriptions:</b> <span>{data2.descriptions}</span><br></br>
+              </div>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px"}}>System Deatils:</h4><hr></hr>
+              <b>Team:</b> <span>{data2.team}</span><br></br>
+              <b>Owner:</b> <span>{data2.owner}</span><br></br>
+              <b>Campaign:</b> <span>{data2.campaign}</span><br></br>
+              <b>Source:</b> <span>{data2.source}</span><br></br>
+              <b>Sub Source:</b> <span>{data2.sub_source}</span><br></br>
+              <b>Stage:</b> <span>{data2.stage}</span><br></br>
+              <b>Channel Partner:</b> <span>{data2.channel_partner}</span><br></br>
+              <b>Intersted Project:</b> <span>{data2.intrested_project}</span><br></br>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose2}>
+                Close
+              </Button>
+            </Modal.Footer>
           </Modal>
    </div>
    
