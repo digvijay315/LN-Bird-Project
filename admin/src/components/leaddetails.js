@@ -310,7 +310,7 @@ const[countall,setcountall]=useState('')
         const resp=await axios.put(`http://localhost:5000/updatelead/${id}`,updatedata)
         toast.success("data updated")
         setTimeout(() => {
-          navigate('/lead')
+          navigate('/leaddetails')
         }, 2000);
         setTimeout(() => {
           handleClose1()

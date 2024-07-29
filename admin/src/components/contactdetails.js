@@ -8,6 +8,18 @@ import { ToastContainer,toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { event } from "jquery";
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import { SvgIcon } from "@mui/material";
+import EmailIcon from '@mui/icons-material/Email';
+import { utils, writeFile } from "xlsx";
 
 function Fetchcontact() {
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -212,7 +224,7 @@ function Fetchcontact() {
             const resp=await axios.put(`http://localhost:5000/updatecontact/${id}`,updatecontactdata)
             toast.success("contact updated")
             setTimeout(() => {
-              navigate('/contact')
+              navigate('/contactdetails')
             }, 2000);
             setTimeout(() => {
               handleClose1()
@@ -239,13 +251,61 @@ function Fetchcontact() {
         </button>
       ));
     };
+    const StyledTableCell = styled(TableCell)(({ theme }) => ({
+      [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+      },
+      [`&.${tableCellClasses.body}`]: {
+        fontSize: 14,
+      },
+    }));
+    
+    const StyledTableRow = styled(TableRow)(({ theme }) => ({
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+      // hide last border
+      '&:last-child td, &:last-child th': {
+        border: 0,
+      },
+    }));
+    const exportToExcel = () => {
+      const filteredData = data.map(({ title,first_name, last_name,mobile_no,email,h_no,street_address,city,source,team,owner,tags,designation,company_name }) => ({ title,first_name, last_name,mobile_no,email,h_no,street_address,city,source,team,owner,tags,designation,company_name }));
+      // Create a new workbook
+      const workbook = utils.book_new();
+  
+      // Convert data to a worksheet
+      const worksheet = utils.json_to_sheet(filteredData);
+  
+      // Append the worksheet to the workbook
+      utils.book_append_sheet(workbook, worksheet, "Sheet1");
+  
+      // Export the workbook to an Excel file
+      writeFile(workbook, "table_data.xlsx");
+    };
+    const [show2, setshow2] = useState(false);
+    const[data2,setdata2]=useState([])
+    const handleClose2 = () => setshow2(false);
+    const[educationdata,seteducationdata]=useState([])
+    const[degreedata,setdegreedata]=useState([])
+    const[schooldata,setschooldata]=useState([])
+    const handleShow2=(item)=>
+    {
+      setshow2(true);
+      setdata2(item)
+      seteducationdata(item.education)
+      setdegreedata(item.degree)
+      setschooldata(item.school_college)
+    }
+   
 
     return ( 
         <div>
             <Header1/>
             <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBAZLujfUSZGF-RIGxwm-s8day7ATTRPrrQ&s" style={{height:"30px"}}/>
+        
         <h3 style={{marginLeft:"10px"}}>Contact</h3>
         <button className="form-control" style={{width:"200px",marginLeft:"10px"}}>Select Team</button>
         <button className="form-control" style={{width:"300px",marginLeft:"10px"}}>Select Sales Manager</button>
@@ -277,7 +337,7 @@ function Fetchcontact() {
           <h6>All</h6>
         </div>
         <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-            <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"20px",color:"black",backgroundColor:"transparent",width:"150px"}}>
+            <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"5px",color:"black",backgroundColor:"transparent",width:"150px"}}>
             Filter
         </button>
             <ul class="dropdown-menu">
@@ -289,13 +349,10 @@ function Fetchcontact() {
         
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
-          <input type="checkbox" style={{width:"20px"}}></input>
-          <input type="text" className="form-control" style={{width:"300px"}}placeholder="Type to filter by lead-type"></input>
-          <img src="https://static.vecteezy.com/system/resources/previews/026/640/053/original/search-icon-isolated-on-white-background-creative-modern-logo-vector.jpg" style={{marginLeft:"-80px",height:"40px",marginTop:"4px"}}/>
-          <button className="form-control" style={{width:"150px",marginLeft:"800px"}}>Export Data</button>
+          <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} onClick={exportToExcel}>Export Data</button>
           </div>
           <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-    <table style={{textAlign:"center"}}>
+    {/* <table style={{textAlign:"center"}}>
       <thead style={{textAlign:"center",fontWeight:"bold",fontFamily:"sans-serif"}}>
         <tr >
           <td style={{border:"1px solid black",width:"30px"}}>#</td>
@@ -346,10 +403,59 @@ function Fetchcontact() {
           }
         
       </tbody>
-      </table>
+      </table> */}
+       <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>#</StyledTableCell>
+            <StyledTableCell align="left">Personal Details</StyledTableCell>
+            <StyledTableCell align="left">Address</StyledTableCell>
+            <StyledTableCell align="left">Source</StyledTableCell>
+            <StyledTableCell align="left">Team</StyledTableCell>
+            <StyledTableCell align="left">Owner</StyledTableCell>
+            <StyledTableCell align="left">Tags</StyledTableCell>
+            <StyledTableCell align="left">Designation</StyledTableCell>
+            <StyledTableCell align="left">Company Name</StyledTableCell>
+            <StyledTableCell align="left">Operations</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {currentItems.map((item,index) => (
+            <StyledTableRow key={item.title}>
+               <StyledTableCell align="left">{index+1}</StyledTableCell>
+              <StyledTableCell className="personaldetails" align="left" component="th" scope="row" onClick={()=>handleShow2(item)}>
+                {item.title} <span></span> {item.first_name} <span> </span> {item.last_name}<br></br>
+               <SvgIcon component={PhoneIphoneIcon}></SvgIcon><span>{item.mobile_no}</span><br></br>
+               <SvgIcon component={EmailIcon}></SvgIcon><span>{item.email}</span>
+              </StyledTableCell>
+              <StyledTableCell align="left">
+                {item.h_no} <span><br></br>{item.street_address}</span><br></br>{item.city}
+              </StyledTableCell>
+              <StyledTableCell align="left">{item.source}</StyledTableCell>
+              <StyledTableCell align="left">{item.team}</StyledTableCell>
+              <StyledTableCell align="left">{item.owner}</StyledTableCell>
+              <StyledTableCell align="left">{item.tags}</StyledTableCell>
+              <StyledTableCell align="left">{item.designation}</StyledTableCell>
+              <StyledTableCell align="left">{item.company_name}</StyledTableCell>
+              <StyledTableCell align="left">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{backgroundColor:"transparent",color:"black"}}>
+            Actions
+               </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item"  style={{cursor:"pointer"}} onClick={()=>handleShow1(item)}>Edit</a></li>
+              <li><a class="dropdown-item" onClick={()=>deletecontact(item)} style={{cursor:"pointer"}}>Delete</a></li>
+            </ul>
+
+              </StyledTableCell>
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
       </div>
-      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>
-      {renderPageNumbers()}</div>
+      <div style={{height:"100px"}}>
+      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>{renderPageNumbers()}</div></div>
       <ToastContainer/>
 
       <Modal show={show1} onHide={handleClose1} size='lg'>
@@ -551,6 +657,78 @@ function Fetchcontact() {
                 Update
               </Button>
               <Button variant="secondary" onClick={handleClose1}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={show2} onHide={handleClose2} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Contact Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Personal Deatils:</h4><hr></hr>
+              <b>Full Name:</b> <span >{data2.title}</span> <span>{data2.first_name} </span><span>{data2.last_name}</span><br></br>
+              <b>Mobile no:</b> <span>{data2.country_code}</span> <span>{data2.mobile_no}</span>,<span>{data2.mobile_type}</span><br></br>
+              <b>Email id:</b> <span>{data2.email}</span>,<span>{data2.email_type}</span><br></br>
+              <b>Title & Company:</b> <span>{data2.title_company}</span><br></br>
+              <b>Designation:</b> <span>{data2.designation}</span><br></br>
+              <b>Company Name:</b> <span>{data2.company_name}</span><br></br>
+              <b>Tags:</b> <span>{data2.tags}</span><br></br>
+              </div>
+
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px"}}>Address Deatils:</h4><hr></hr>
+              <b>Father/Husband Name:</b> <span>{data2.father_husband_name}</span><br></br>
+              <b>H No.:</b> <span>{data2.h_no}</span><br></br>
+              <b>Area:</b> <span>{data2.street_address}</span><br></br>
+              <b>Tags:</b> <span>{data2.tags}</span><br></br>
+              <b>Location:</b> <span>{data2.location}</span><br></br>
+              <b>City:</b> <span>{data2.city}</span><br></br>
+              <b>Pin Code:</b> <span>{data2.pincode}</span><br></br>
+              <b>State:</b> <span>{data2.state}</span><br></br>
+              <b>Country:</b> <span>{data2.country}</span><br></br>
+              </div>
+
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px"}}>System Deatils:</h4><hr></hr>
+              <b>Source:</b> <span>{data2.source}</span><br></br>
+              <b>Category.:</b> <span>{data2.category}</span><br></br>
+              <b>Owner:</b> <span>{data2.owner}</span><br></br>
+              <b>Team:</b> <span>{data2.team}</span><br></br>
+              <b>Visible to:</b> <span>{data2.visible_to}</span><br></br>
+              </div>
+
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px"}}>Other Deatils:</h4><hr></hr>
+              <b>Gender:</b> <span>{data2.gender}</span><br></br>
+              <b>Maritial Status.:</b> <span>{data2.maritial_status}</span><br></br>
+              <b>Birth Date:</b> <span>{data2.birth_date}</span><br></br>
+              <b>Anniversary Date:</b> <span>{data2.anniversary_date}</span><br></br>
+              <b>Education:</b> <span>
+                {educationdata.join(',')}
+                </span><br></br>
+              <b>Degree:</b> <span>
+                {degreedata.join(",")}
+                </span><br></br>
+              <b>School/College/University:</b> <span>
+                {schooldata.join(",")}
+                </span><br></br>
+              <b>Loan:</b> <span>{data2.loan}</span><br></br>
+              <b>Amount:</b> <span>{data2.amount}</span><br></br>
+              <b>Social Media:</b> <span>{data2.social_media}</span><br></br>
+              <b>Url:</b> <span>{data2.url}</span><br></br>
+              <b>Income:</b> <span>{data2.income}</span><br></br>
+              <b>Amount:</b> <span>{data2.amount1}</span><br></br>
+              <b>Website:</b> <span>{data2.website}</span><br></br>
+              <b>Industry:</b> <span>{data2.industry}</span><br></br>
+              <b>Descriptions:</b> <span>{data2.descriptions}</span><br></br>
+              </div>
+              
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose2}>
                 Close
               </Button>
             </Modal.Footer>

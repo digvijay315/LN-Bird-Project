@@ -18,9 +18,9 @@ import Sale_lease from './components/sale_lease';
 import Booking_details from './components/booking_details';
 import Payment_details from './components/Payment_details';
 import Addinventory from './components/addinventory';
-import Fetchdata from './components/lead';
-import Leadfetch from './components/lead';
+import Leadfetch from './components/leaddetails';
 import Fetchcontact from './components/contactdetails';
+import InventoryDetails from './components/inventorydetails';
 
 
 function App() {
@@ -39,13 +39,14 @@ function App() {
       <Route path='/mailtaskform' element={<Mail_task_form/>}></Route>
       <Route path='/meetingtaskform' element={<Meeting_task_form/>}></Route>
       <Route path='/sitevisitform' element={<Site_visit/>}></Route>
-      <Route path='/addproject' element={<Addinventory/>}></Route>
+      <Route path='/addinventory' element={<Addinventory/>}></Route>
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
-      <Route path='/lead' element={<Leadfetch/>}></Route>
-      <Route path='/contact' element={<Fetchcontact/>}></Route>
+      <Route path='/leaddetails' element={<Leadfetch/>}></Route>
+      <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
+      <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
     </Routes>
-  {/* <Fetchdata/> */}
+  
    </div>
    </BrowserRouter>
   );

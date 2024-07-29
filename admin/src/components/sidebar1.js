@@ -40,25 +40,21 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li>
-						<Link to={'/contact'} class="dropdown-toggle no-arrow">
+						<Link to={'/contactdetails'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiAccountBox} size={1} /><span class="mtext">Contacts</span>
 						</Link>
 					</li>
 					<li>
-						<Link to={'/lead'} class="dropdown-toggle no-arrow">
+						<Link to={'/leaddetails'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiCurrencyUsd} size={1} /><span class="mtext">Leads</span>
 						</Link>
 						
 					</li>
 				
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<Link to={'/inventorydetails'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiApplication} size={1} /><span class="mtext"> Properties/Inventory </span>
-						</a>
-						<ul class="submenu">
-							<li><Link to={'/addproject'}>Manage Property/Inventory</Link></li>
-						
-						</ul>
+						</Link>
 					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">

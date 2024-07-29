@@ -13,8 +13,10 @@
     import axios from "axios";
     import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
     import { render } from "@testing-library/react";
+import { useNavigate } from "react-router-dom";
 
     function Addinventory() {
+      const navigate=useNavigate()
       
         const emails = [
           'Oliver Hansen',
@@ -338,7 +340,10 @@
                               if(resp.status===200)
                                   {
                                     toast.success(resp.data.message)
-
+                                    setTimeout(() => {
+                                      navigate('/inventorydetails')
+                                    }, 2000);
+                                    
                                    }
                           } catch (error) {
                                   toast.error(error.response.data.message)
