@@ -76,7 +76,7 @@ function Addcontact() {
             {
                 toast.success(resp.data.message)
                 setTimeout(() => {
-                  navigate('/contact')
+                  navigate('/contactdetails')
                 }, 2000);
             }
             

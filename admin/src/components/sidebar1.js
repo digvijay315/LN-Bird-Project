@@ -31,14 +31,11 @@ function Sidebar1() {
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<Link to={'/dashboard'} class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-house-1"></span><span class="mtext">Dashboard</span>
-						</a>
-						<ul class="submenu">
-							<li><Link to={'/dashboard'}>Dashboard</Link></li>
-							
-						</ul>
+						</Link>
 					</li>
+				
 					<li>
 						<Link to={'/contactdetails'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiAccountBox} size={1} /><span class="mtext">Contacts</span>
