@@ -9,11 +9,11 @@ const inventory_details=async(req,res)=>
                     location,lattitude,langitude,s_no,descriptions,category,s_no1,url,search_contact,relation,document_name,
                     number,date,linkded_contact}=req.body;
 
-                    const preview=req.files
+                    const preview=req.files.map(file => file.path);
            
                 const new_inventory_details= new addinventory({developer,block_tower,project,unit_number,sub_category,size,project1,facing,road,ownership,type,cluter_details,length,
                     breadth,total_area,in_metrics,occupation_date,age_of_construction,furnish_details,furnished_item,aminities,
-                    location,lattitude,langitude,s_no,preview:preview,descriptions,category,s_no1,url,search_contact,relation,document_name,
+                    location,lattitude,langitude,s_no,preview,descriptions,category,s_no1,url,search_contact,relation,document_name,
                     number,date,linkded_contact})
             
             const resp=await new_inventory_details.save()
@@ -74,5 +74,20 @@ const inventory_details=async(req,res)=>
                             console.log(error)
                         }
                     }
+                    const update_inventory=async(req,res)=>
+                        {
+                            try {
+                                const id=req.params._id;
+                                const user=await addinventory.findOne({_id:id})
+                                if(!user)
+                                    {
+                                        return res.send({message:"inventory not found"})
+                                    }
+                                const resp=await addinventory.findByIdAndUpdate(id,req.body)
+                                res.status(200).send({message:"inventory update successfully"})
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        }
 
-    module.exports={inventory_details,view_inventory,remove_inventory,view_inventory_Bydeveloper,view_inventory_Bylocation};
+    module.exports={inventory_details,view_inventory,remove_inventory,view_inventory_Bydeveloper,view_inventory_Bylocation,update_inventory};

@@ -13,7 +13,7 @@ const meeting_task_form = require('../controllers/meeting_task_form');
 const site_visit_form = require('../controllers/site_visit_form');
 const booking_details = require('../controllers/booking_details');
 const addpayment_details = require('../controllers/addpayment_details');
-const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation}=require('../controllers/addinventory');
+const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 
 
 const router=express.Router()
@@ -55,6 +55,7 @@ router.get('/viewinventory',view_inventory)
 router.delete('/removeinventory/:_id',remove_inventory)
 router.get('/viewinventorybydeveloper/:developer',view_inventory_Bydeveloper)
 router.get('/viewinventorybylocation/:location',view_inventory_Bylocation)
+router.put('/updateinventory/:_id',upload.any('preview',10),update_inventory)
 
 
 router.post('/addproperty/adddeveloper',add_developer)

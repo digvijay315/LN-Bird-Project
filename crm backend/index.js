@@ -1,6 +1,7 @@
 
 const express=require('express')
 const cors=require('cors');
+const path = require('path');
 const connect = require('./connectdb');
 const bodyParser = require('body-parser');
 require('dotenv').config();
@@ -9,7 +10,7 @@ const app=express();
 
 app.use(bodyParser.json())
 app.use(express.json())
-app.use(express.static("images"));
+app.use('/images', express.static('images'));
 app.use(cors())
 connect();
 

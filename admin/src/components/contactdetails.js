@@ -226,8 +226,11 @@ function Fetchcontact() {
             setTimeout(() => {
               navigate('/contactdetails')
             }, 2000);
+            // setTimeout(() => {
+            //   handleClose1()
+            // }, 2000);
             setTimeout(() => {
-              handleClose1()
+              window.location.reload()
             }, 2000);
           } catch (error) {
             console.log(error);
