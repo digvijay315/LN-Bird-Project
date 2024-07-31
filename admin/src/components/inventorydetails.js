@@ -76,6 +76,8 @@ function InventoryDetails() {
 
 /*-------------------------------------------------------------------update inventory start---------------------------------------------------------------------------- */
 
+        
+                
         const [show1, setshow1] = useState(false);
         const[image,setimage]=useState([])
         const handleClose1 = () => setshow1(false);
@@ -213,19 +215,33 @@ function InventoryDetails() {
                                                         });
                                                       };
                                                       const handlepreviewchange = (index, event) => {
-                                                        const neweducation = [...updatecontactdata.preview];
-                                                        const files = Array.from(event.target.files);
-                                                        const previewUrls = files.map(file => URL.createObjectURL(file));
-                                                        neweducation[index] = {
-                                                          files: files,
-                                                          previewUrls: previewUrls
-                                                        };
-                                                        setupdatecontactdata(prevState => ({
-                                                          ...prevState,
-                                                          preview: neweducation
-                                                        }));
+                                                        const files = event.target.files;
+                                                    
+                                                        setupdatecontactdata((prevState) => {
+                                                          const newPreview = [...prevState.preview];
+                                                          if(!files)
+                                                          {
+                                                            setupdatecontactdata({
+                                                              ...updatecontactdata
+                                                            });
+                                                          }
+                                                          if (files && files.length > 0) {
+                                                            const previewUrls = Array.from(files).map((file) =>
+                                                              URL.createObjectURL(file)
+                                                            );
+                                                    
+                                                            newPreview[index] = {
+                                                              files: Array.from(files),
+                                                              previewUrls: previewUrls,
+                                                            };
+                                                          }
+                                                    
+                                                          return {
+                                                            ...prevState,
+                                                            preview: newPreview,
+                                                          };
+                                                        });
                                                       };
-                                                      
                                                   
                                                       const handledescriptionchange = (index, event) => {
                                                         const neweducation = [...updatecontactdata.descriptions];
@@ -384,7 +400,32 @@ function InventoryDetails() {
 
  /*-------------------------------------------------------------------update updatecontactdata end---------------------------------------------------------------------------- */                                                     
 
-        const deleteinventory=(item)=>
+ const [show2, setshow2] = useState(false);
+ const[data2,setdata2]=useState([])
+ const handleClose2 = () => setshow2(false);
+
+ const[sno,setsno]=useState([])
+ const[pic,setpic]=useState([])
+ const[description,setdescription]=useState([])
+ const[category,setcategory]=useState([])
+ const[sno1,setsno1]=useState([])
+ const[url,seturl]=useState([])
+ const handleShow2=(item)=>
+ {
+   setshow2(true);
+   setdata2(item)
+
+   setsno(item.s_no)
+    setpic(item.preview)
+  setdescription(item.descriptions)
+  setcategory(item.category)
+  setsno1(item.s_no1)
+  seturl(item.url)
+ } 
+ 
+ 
+ 
+      const deleteinventory=(item)=>
             {
               try {
                 const id=item._id
@@ -506,7 +547,7 @@ function InventoryDetails() {
           {currentItems.map((item,index) => (
             <StyledTableRow key={item.title}>
                <StyledTableCell align="left">{index+1}</StyledTableCell>
-              <StyledTableCell className="personaldetails" align="left" component="th" scope="row" >
+              <StyledTableCell className="personaldetails" align="left" component="th" scope="row" onClick={()=>handleShow2(item)}>
                 {item.developer}
               </StyledTableCell>
               <StyledTableCell align="left">
@@ -517,7 +558,13 @@ function InventoryDetails() {
               <StyledTableCell align="left">{item.location}</StyledTableCell>
               <StyledTableCell align="left">{item.linkded_contact}</StyledTableCell>
               <StyledTableCell align="left">{item.ownership}</StyledTableCell>
-              <StyledTableCell align="left">{item.facing}</StyledTableCell>
+              <StyledTableCell align="left">{item.facing}
+                {/* {
+                   item.preview && item.preview.map((imagePath, idx) => (
+                    <img key={idx} src={`http://localhost:5000/${imagePath}`} alt={`Preview ${idx + 1}`} style={{ width: '200px', margin: '10px' }} />
+                ))
+                } */}
+              </StyledTableCell>
               <StyledTableCell align="left">
               <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{backgroundColor:"transparent",color:"black"}}>
             Actions
@@ -799,6 +846,7 @@ function InventoryDetails() {
                                         type="text"
                                         className="form-control"
                                         placeholder={data1.s_no[index]}
+                                        value={name}
                                         onChange={(event) => handlesnochange(index, event)}
                                       />
                                       
@@ -808,34 +856,24 @@ function InventoryDetails() {
                           <td>
                           {updatecontactdata.preview.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
-                                      <img src={name}></img>
+                                      
                                       <input 
                                         type="file"
                                         className="form-control"
                                         multiple
-                                        value={name[index]}
+                                        
                                         onChange={(event) => handlepreviewchange(index, event)}
                                       
                                       />
-                                      <img src={name.previewUrls} alt={name.previewUrls}></img>
+                                      
                                         {name.previewUrls && name.previewUrls.map((url, idx) => (
           <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-        ))}
+        ))} 
                     
                                     </div>
                                   ))}
                           </td>
-                          <div className="image-gallery">
-      {image.map((image, index) => (
-          
-        <img
-          key={index}
-          src={image} 
-          alt={image.previewUrls}
-          style={{ width: '200px', margin: '10px' }}
-        />
-      ))}
-    </div>
+     
 
                           <td>
                           {updatecontactdata.descriptions.map((name, index) => (
@@ -843,6 +881,7 @@ function InventoryDetails() {
                                       <input 
                                         type="text"
                                         className="form-control"
+                                        value={name}
                                         placeholder={data1.descriptions[index]}
                                         onChange={(event) => handledescriptionchange(index, event)}
                                       />
@@ -983,8 +1022,115 @@ function InventoryDetails() {
                 Close
               </Button>
             </Modal.Footer>
-            
           </Modal>
+            
+          <Modal show={show2} onHide={handleClose2} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Inventory Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Project/Location Deatils:</h4><hr></hr>
+              <b>Developer Name:</b> <span >{data2.developer}</span> <br></br>
+              <b>Block/Tower:</b> <span>{data2.block_tower}</span> <br></br>
+              <b>Project:</b> <span>{data2.project}</span><br></br>
+              </div>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Basic Deatils:</h4><hr></hr>
+              <b>Unit Number:</b> <span >{data2.unit_number}</span> <br></br>
+              <b>Sub Category:</b> <span>{data2.sub_category}</span> <br></br>
+              <b>Size:</b> <span>{data2.size}</span><br></br>
+              <b>Project:</b> <span>{data2.project1}</span><br></br>
+              <b>Facing:</b> <span>{data2.facing}</span><br></br>
+              <b>Road:</b> <span>{data2.road}</span><br></br>
+              <b>Ownership:</b> <span>{data2.ownership}</span><br></br>
+              <b>Location:</b> <span>{data2.location}</span><br></br>
+              <b>Lattitude:</b> <span>{data2.lattitude}</span><br></br>
+              <b>Langitude:</b> <span>{data2.langitude}</span><br></br>
+              </div>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Built-Up Deatils:</h4><hr></hr>
+              <b>Type:</b> <span >{data2.type}</span> <br></br>
+              <b>Cluter Details/Floor Plans:</b> <span>{data2.cluter_details}</span> <br></br>
+              <b>Length:</b> <span>{data2.length}</span><br></br>
+              <b>Breadth:</b> <span>{data2.breadth}</span><br></br>
+              <b>Total Area:</b> <span>{data2.total_area}</span><br></br>
+              <b>In Metrics:</b> <span>{data2.in_metrics}</span><br></br>
+              <b>Occupation Date:</b> <span>{data2.occupation_date}</span><br></br>
+              <b>Age of Construction:</b> <span>{data2.age_of_construction}</span><br></br>
+              <b>Furnish Details:</b> <span>{data2.furnish_details}</span><br></br>
+              <b>Furnished Items:</b> <span>{data2.furnished_item}</span><br></br>
+              <b>Aminities:</b> <span>{data2.aminities}</span><br></br>
+              </div>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Photos And Videos:</h4><hr></hr>
+              <b>S.NO:<br></br></b>
+            
+              {sno.map(item1=>
+                  (
+                    <span>{item1} <br></br></span>
+                  )
+                )}
+               
+              <br></br>
+              <b>Images:<br></br></b>
+            
+                  {
+                   pic && pic.map((imagePath, idx) => (
+                    <img key={idx} src={`http://localhost:5000/${imagePath}`} alt={`Preview ${idx + 1}`} style={{ width: '200px', margin: '10px' }} />
+                ))
+                } 
+               
+              <br></br>
+              <b>Description:<br></br></b>
+              {description.map(item1=>
+                  (
+                    <span>{item1} <br></br></span>
+                  )
+                )}
+        <br></br>
+        <b>Category:<br></br></b>
+              {category.map(item1=>
+                  (
+                    <span>{item1} <br></br></span>
+                  )
+                )}
+        <br></br>
+        <b>S No:<br></br></b>
+              {sno1.map(item1=>
+                  (
+                    <span>{item1} <br></br></span>
+                  )
+                )}
+        <br></br>
+        <b>URL:<br></br></b>
+              {url.map(item1=>
+                  (
+                    <span>{item1} <br></br></span>
+                  )
+                )}
+        <br></br>
+              
+              <b>Cluter Details/Floor Plans:</b> <span>{data2.cluter_details}</span> <br></br>
+              <b>Length:</b> <span>{data2.length}</span><br></br>
+              <b>Breadth:</b> <span>{data2.breadth}</span><br></br>
+              <b>Total Area:</b> <span>{data2.total_area}</span><br></br>
+              <b>In Metrics:</b> <span>{data2.in_metrics}</span><br></br>
+              <b>Occupation Date:</b> <span>{data2.occupation_date}</span><br></br>
+              <b>Age of Construction:</b> <span>{data2.age_of_construction}</span><br></br>
+              <b>Furnish Details:</b> <span>{data2.furnish_details}</span><br></br>
+              <b>Furnished Items:</b> <span>{data2.furnished_item}</span><br></br>
+              <b>Aminities:</b> <span>{data2.aminities}</span><br></br>
+              </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose2}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          
           <ToastContainer/>
         </div>
      );
