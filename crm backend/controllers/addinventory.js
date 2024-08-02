@@ -84,11 +84,12 @@ const inventory_details=async(req,res)=>
                                         return res.send({message:"inventory not found"})
                                     }
                                 const preview = req.files ? req.files.map(file => file.path) : inventory.preview;
+                               
                                 const updatedFields = {
                                     ...req.body,
                                     preview // Update preview field with new images if provided
                                 };
-                                const resp=await addinventory.findByIdAndUpdate(id, updatedFields, { new: true })
+                                const resp=await addinventory.findByIdAndUpdate(id, updatedFields)
                                 res.status(200).send({message:"inventory update successfully"})
                             } catch (error) {
                                 console.log(error)

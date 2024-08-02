@@ -79,16 +79,17 @@ function InventoryDetails() {
         
                 
         const [show1, setshow1] = useState(false);
-        const[image,setimage]=useState([])
+        
         const handleClose1 = () => setshow1(false);
         const[data1,setdata1]=useState([])
         const handleShow1=(item)=>
         {
           setshow1(true);
           setdata1(item)
-          setimage(item.preview)
+          
         }
-        console.log(image);
+        
+      
       
        
         const[updatecontactdata,setupdatecontactdata]=useState({developer:data1.developer,block_tower:data1.block_tower,project:data1.project,
@@ -215,31 +216,16 @@ function InventoryDetails() {
                                                         });
                                                       };
                                                       const handlepreviewchange = (index, event) => {
-                                                        const files = event.target.files;
-                                                    
-                                                        setupdatecontactdata((prevState) => {
-                                                          const newPreview = [...prevState.preview];
-                                                          if(!files)
-                                                          {
-                                                            setupdatecontactdata({
-                                                              ...updatecontactdata
-                                                            });
-                                                          }
-                                                          if (files && files.length > 0) {
-                                                            const previewUrls = Array.from(files).map((file) =>
-                                                              URL.createObjectURL(file)
-                                                            );
-                                                    
-                                                            newPreview[index] = {
-                                                              files: Array.from(files),
-                                                              previewUrls: previewUrls,
-                                                            };
-                                                          }
-                                                    
-                                                          return {
-                                                            ...prevState,
-                                                            preview: newPreview,
-                                                          };
+                                                        const neweducation = [...updatecontactdata.preview];
+                                                        const files = Array.from(event.target.files);
+                                                        const previewUrls = files.map(file => URL.createObjectURL(file));
+                                                        neweducation[index] = {
+                                                          files: files,
+                                                          previewUrls: previewUrls
+                                                        };
+                                                        setupdatecontactdata({
+                                                          ...updatecontactdata,
+                                                          preview: neweducation
                                                         });
                                                       };
                                                   
@@ -381,9 +367,18 @@ function InventoryDetails() {
                                                         const updateinventory=async()=>
                                                           {
                                                             try {
+                                                              if(updatecontactdata.preview=="")
+                                                                {
+                                                                 return toast.error("must upload photos");
+                                                                }
                                                               const id=data1._id
                                                               const resp=await axios.put(`http://localhost:5000/updateinventory/${id}`,updatecontactdata,config)
-                                                              toast.success("inventory updated")
+                                                              if(resp.status==200)
+                                                              {
+                                                                toast.success("inventory updated")
+                                                              }
+                                                             
+                                                              
                                                               setTimeout(() => {
                                                                 navigate('/inventorydetails')
                                                               }, 2000);
@@ -545,7 +540,7 @@ function InventoryDetails() {
         </TableHead>
         <TableBody>
           {currentItems.map((item,index) => (
-            <StyledTableRow key={item.title}>
+            <StyledTableRow>
                <StyledTableCell align="left">{index+1}</StyledTableCell>
               <StyledTableCell className="personaldetails" align="left" component="th" scope="row" onClick={()=>handleShow2(item)}>
                 {item.developer}
@@ -583,7 +578,7 @@ function InventoryDetails() {
     </div>
     <div style={{height:"100px"}}>
       <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>{renderPageNumbers()}</div></div>
-      <ToastContainer/>
+      
 
       <Modal show={show1} onHide={handleClose1} size='xl'>
             <Modal.Header>
@@ -845,8 +840,7 @@ function InventoryDetails() {
                                       <input 
                                         type="text"
                                         className="form-control"
-                                        placeholder={data1.s_no[index]}
-                                        value={name}
+                                       
                                         onChange={(event) => handlesnochange(index, event)}
                                       />
                                       
@@ -881,8 +875,7 @@ function InventoryDetails() {
                                       <input 
                                         type="text"
                                         className="form-control"
-                                        value={name}
-                                        placeholder={data1.descriptions[index]}
+                                    
                                         onChange={(event) => handledescriptionchange(index, event)}
                                       />
                                       
@@ -893,7 +886,7 @@ function InventoryDetails() {
                           {updatecontactdata.category.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <select className="form-control" required="true" onChange={(event) => handlecategorychange(index, event)}>
-                                          <option>{data1.category[index]}</option>
+                                      <option>select</option>
                                           <option>Mr.</option>
                                           <option>Mrs.</option>
                                           <option>Smt.</option>
@@ -1110,7 +1103,8 @@ function InventoryDetails() {
                   )
                 )}
         <br></br>
-              
+        </div>
+        <div style={{border:"1px solid black",padding:"20px"}}>
               <b>Cluter Details/Floor Plans:</b> <span>{data2.cluter_details}</span> <br></br>
               <b>Length:</b> <span>{data2.length}</span><br></br>
               <b>Breadth:</b> <span>{data2.breadth}</span><br></br>
@@ -1122,6 +1116,14 @@ function InventoryDetails() {
               <b>Furnished Items:</b> <span>{data2.furnished_item}</span><br></br>
               <b>Aminities:</b> <span>{data2.aminities}</span><br></br>
               </div>
+              <div style={{border:"1px solid black",padding:"20px"}}>
+              <b>Search Contact:</b> <span>{data2.search_contact}</span> <br></br>
+              <b>Relation:</b> <span>{data2.relation}</span><br></br>
+              <b>Document Name:</b> <span>{data2.document_name}</span><br></br>
+              <b>Number:</b> <span>{data2.number}</span><br></br>
+              <b>Date:</b> <span>{data2.date}</span><br></br>
+              <b>Linked Contact:</b> <span>{data2.linkded_contact}</span><br></br>
+              </div>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose2}>
@@ -1131,7 +1133,7 @@ function InventoryDetails() {
           </Modal>
 
           
-          <ToastContainer/>
+        <ToastContainer/>
         </div>
      );
 }

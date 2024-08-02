@@ -75,13 +75,13 @@ function Fetchcontact() {
       
       try {
         const resp=await axios.get('http://localhost:5000/viewcontact')
-        const all=(resp.data.contact)
-        setdata(all)
+        setdata(resp.data.contact)
       } catch (error) {
         console.log(error);
       }
     
     }
+  
 
     const deletecontact=(item)=>
         {
@@ -97,27 +97,28 @@ function Fetchcontact() {
           }
         }
      
-        const [show1, setshow1] = useState(false);
+      
+        
+      // const arr=Array.isArray(data1.education)? data1.education :[data1.education]
+        const[updatecontactdata,setupdatecontactdata]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",
+                                        mobile_type:"",email:"",email_type:"",title_company:"",designation:"",company_name:"",
+                                        tags:"",father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
+                                        state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
+                                        birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],loan:"",bank:"",
+                                        amount:"",social_media:"",url:"",income:"",amount1:"",website:"",industry:"",descriptions:""})
 
-        const handleClose1 = () => setshow1(false);
-        const[data1,setdata1]=useState([])
-        const handleShow1=(item)=>
-        {
-          setshow1(true);
-          setdata1(item)
-        }
-       
-        const[updatecontactdata,setupdatecontactdata]=useState({title:data1.title,first_name:data1.first_name,last_name:data1.last_name,country_code:data1.country_code,
-                                        mobile_no:data1.mobile_no,mobile_type:data1.mobile_type,email:data1.email,email_type:data1.email_type,
-                                        title_company:data1.title_company,designation:data1.designation,company_name:data1.company_name,
-                                        tags:data1.tags,father_husband_name:data1.father_husband_name,h_no:data1.h_no,street_address:data1.street_address,
-                                        location:data1.location,city:data1.city,pincode:data1.pincode,state:data1.pincode,country:data1.country,
-                                        source:data1.source,category:data1.category,owner:data1.owner,team:data1.team,gender:data1.gender,
-                                        visible_to:data1.visible_to,maritial_status:data1.maritial_status,birth_date:data1.birth_date,
-                                        anniversary_date:data1.anniversary_date,education:[],degree:[],school_college:[],loan:data1.loan,bank:data1.bank,
-                                        amount:data1.amount,social_media:data1.social_media,url:data1.url,income:data1.income,amount1:data1.amount1,
-                                        website:data1.website,industry:data1.industry,descriptions:data1.descriptions})
-            
+
+                                        const [show1, setshow1] = useState(false);
+
+                                        const handleClose1 = () => setshow1(false);
+                                        const[data1,setdata1]=useState([])
+                                        const handleShow1=(item)=>
+                                        {
+                                          setshow1(true);
+                                          setdata1(item)
+                                          setupdatecontactdata(item)
+                                        }
+                                        
             function addFn() {
                  setupdatecontactdata({
                          ...updatecontactdata,
@@ -130,27 +131,27 @@ function Fetchcontact() {
                      const handleeducationChange = (index, event) => {
                         const neweducation = [...updatecontactdata.education];
                         neweducation[index] = event.target.value;
-                        setupdatecontactdata({
-                          ...updatecontactdata,
-                          education: neweducation
-                        });
+                        setupdatecontactdata((prevProfile) => ({
+                          ...prevProfile,
+                          education: neweducation,
+                        }));
                       };
                       const handledegreeChange = (index, event) => {
                         const newdegree = [...updatecontactdata.degree];
                         newdegree[index] = event.target.value;
-                        setupdatecontactdata({
-                          ...updatecontactdata,
-                          degree: newdegree
-                        });
+                        setupdatecontactdata((prevProfile) => ({
+                          ...prevProfile,
+                          degree: newdegree,
+                        }));
                       };
                 
                       const handleschool_collegeChange = (index, event) => {
                         const newschool = [...updatecontactdata.school_college];
                         newschool[index] = event.target.value;
-                        setupdatecontactdata({
-                          ...updatecontactdata,
-                          school_college: newschool
-                        });
+                        setupdatecontactdata((prevProfile) => ({
+                          ...prevProfile,
+                          school_college: newschool,
+                        }));
                       };
                 
                 
@@ -175,10 +176,10 @@ function Fetchcontact() {
                           school_college: newschool
                         });
                       };
-                      const[email,setemail]=useState('')
-                      const fetchdatabyemail=async()=>
+                      const[email,setemail]=useState()
+                      const fetchdatabyemail=async(e)=>
                         {
-                          
+                          // e.preventDefault()
                           try {
                             const resp=await axios.get(`http://localhost:5000/viewcontactbyemail/${email}`);
                             const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
@@ -189,7 +190,7 @@ function Fetchcontact() {
                         }
                         const handlekeypress1=(event)=>
                         {
-                            if(event.key=="Enter")
+                            if(event.key==="Enter")
                                 {
                                     fetchdatabyemail()
                                 }
@@ -210,7 +211,7 @@ function Fetchcontact() {
                           }
                           const handlekeypress2=(event)=>
                           {
-                              if(event.key=="Enter")
+                              if(event.key==="Enter")
                                   {
                                     fetchdatabymobile()
                                   }
@@ -238,22 +239,22 @@ function Fetchcontact() {
         }
     
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState('5');
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(data.length / itemsPerPage);
-    
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-    
-    const renderPageNumbers = () => {
-      return Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-        <button key={number} onClick={() => paginate(number)} style={{width:"30px",borderRadius:"5px"}}>
-          {number}
-        </button>
-      ));
-    };
+        const [currentPage, setCurrentPage] = useState(1);
+        const [itemsPerPage] = useState('5');
+        const indexOfLastItem = currentPage * itemsPerPage;
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+        const totalPages = Math.ceil(data.length / itemsPerPage);
+        
+        const paginate = (pageNumber) => setCurrentPage(pageNumber);
+        
+        const renderPageNumbers = () => {
+          return Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+            <button key={number} onClick={() => paginate(number)} style={{width:"30px",borderRadius:"5px"}}>
+              {number}
+            </button>
+          ));
+        };
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -336,7 +337,7 @@ function Fetchcontact() {
           <h6>NEGOTIATION</h6>
           <p>{}</p>
         </div> */}
-        <div className="lead" style={{width:"200px",borderRadius:"10px",padding:"10px",marginLeft:"70%",textAlign:"center"}} onClick={fetchdata}>
+        <div className="lead" style={{width:"200px",borderRadius:"10px",padding:"10px",marginLeft:"70%",textAlign:"center"}} onClick={()=>fetchdata()}>
           <h6>All</h6>
         </div>
         <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
@@ -425,7 +426,7 @@ function Fetchcontact() {
         </TableHead>
         <TableBody>
           {currentItems.map((item,index) => (
-            <StyledTableRow key={item.title}>
+            <StyledTableRow>
                <StyledTableCell align="left">{index+1}</StyledTableCell>
               <StyledTableCell className="personaldetails" align="left" component="th" scope="row" onClick={()=>handleShow2(item)}>
                 {item.title} <span></span> {item.first_name} <span> </span> {item.last_name}<br></br>
@@ -457,8 +458,10 @@ function Fetchcontact() {
       </Table>
     </TableContainer>
       </div>
-      <div style={{height:"100px"}}>
-      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>{renderPageNumbers()}</div></div>
+      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>
+      {renderPageNumbers()}
+      </div>
+      
       <ToastContainer/>
 
       <Modal show={show1} onHide={handleClose1} size='lg'>
@@ -471,7 +474,7 @@ function Fetchcontact() {
                 <div className="d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div><hr></hr>
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setupdatecontactdata({...updatecontactdata,title:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Title</label><select className="form-control" required="true" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, title: e.target.value }))} >
                         <option>{data1.title}</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -482,11 +485,11 @@ function Fetchcontact() {
                         <option>col</option>
                         </select>
                         </div>
-                    <div className="col-md-4"><label className="labels">Name</label><input type="text" required="true" className="form-control" placeholder={data1.first_name} onChange={(e)=>setupdatecontactdata({...updatecontactdata,first_name:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" className="form-control"  placeholder={data1.last_name} onChange={(e)=>setupdatecontactdata({...updatecontactdata,last_name:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Name</label><input type="text" required="true" className="form-control" placeholder={data1.first_name} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, first_name: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" className="form-control"  placeholder={data1.last_name} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, last_name: e.target.value }))}/></div>
                 </div>
                 <div className="row mt-3">
-                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control"onChange={(e)=>setupdatecontactdata({...updatecontactdata,country_code:e.target.value})} >
+                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, country_code: e.target.value }))} >
                     <option value="">{data1.country_code}</option>
                     {
                       countrycode.map((item)=>
@@ -495,51 +498,51 @@ function Fetchcontact() {
                       ))
                     }
                     </select></div>
-                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text" required="true" className="form-control" placeholder={data1.mobile_no} onChange={(e)=>setupdatecontactdata({...updatecontactdata,mobile_no:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,mobile_type:e.target.value})}>
+                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text" required="true" className="form-control" placeholder={data1.mobile_no} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, mobile_no: e.target.value }))}/></div>
+                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, mobile_type: e.target.value }))}>
                     <option>{data1.mobile_type}</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" className="form-control" placeholder={data1.email} onChange={(e)=>setupdatecontactdata({...updatecontactdata,email:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,email_type:e.target.value})}>
+                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" className="form-control" placeholder={data1.email} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, email: e.target.value }))}/></div>
+                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, email_type: e.target.value }))}>
                     <option>{data1.email_type}</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>
                         </select></div>
                     
-                    <div className="col-md-4"><label className="labels">Title & Company</label><input type="text" className="form-control" placeholder={data1.title_company} onChange={(e)=>setupdatecontactdata({...updatecontactdata,title_company:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Designation</label><input type="text" className="form-control" placeholder={data1.designation} onChange={(e)=>setupdatecontactdata({...updatecontactdata,designation:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Company Name</label><input type="text" className="form-control" placeholder={data1.company_name} onChange={(e)=>setupdatecontactdata({...updatecontactdata,company_name:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Title & Company</label><input type="text" className="form-control" placeholder={data1.title_company} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, title_company: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">Designation</label><input type="text" className="form-control" placeholder={data1.designation} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, designation: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">Company Name</label><input type="text" className="form-control" placeholder={data1.company_name} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, company_name: e.target.value }))}/></div>
                     
-                    <div className="col-md-12"><label className="labels">Tags</label><input type="text" className="form-control" placeholder={data1.tags} onChange={(e)=>setupdatecontactdata({...updatecontactdata,tags:e.target.value})}/></div>
+                    <div className="col-md-12"><label className="labels">Tags</label><input type="text" className="form-control" placeholder={data1.tags} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, tags: e.target.value }))}/></div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                    <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control" placeholder={data1.father_husband_name} onChange={(e)=>setupdatecontactdata({...updatecontactdata,father_husband_name:e.target.value})}/></div>
+                    <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control" placeholder={data1.father_husband_name} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, father_husband_name: e.target.value }))}/></div>
 
-                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control" placeholder={data1.h_no} onChange={(e)=>setupdatecontactdata({...updatecontactdata,h_no:e.target.value})}/></div>
-                    <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control"placeholder={data1.street_address} onChange={(e)=>setupdatecontactdata({...updatecontactdata,street_address:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control" placeholder={data1.h_no} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, h_no: e.target.value }))}/></div>
+                    <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control"placeholder={data1.street_address} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, street_address: e.target.value }))}/></div>
 
-                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control" placeholder={data1.location} onChange={(e)=>setupdatecontactdata({...updatecontactdata,location:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control" placeholder={data1.city} onChange={(e)=>setupdatecontactdata({...updatecontactdata,city:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control" placeholder={data1.pincode} onChange={(e)=>setupdatecontactdata({...updatecontactdata,pincode:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control" placeholder={data1.location} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, location: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control" placeholder={data1.city} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, city: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control" placeholder={data1.pincode} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, pincode: e.target.value }))}/></div>
 
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control" placeholder={data1.state} onChange={(e)=>setupdatecontactdata({...updatecontactdata,state:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control"  placeholder={data1.country} onChange={(e)=>setupdatecontactdata({...updatecontactdata,country:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control" placeholder={data1.state} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, state: e.target.value }))}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control"  placeholder={data1.country} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, country: e.target.value }))}/></div>
 
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,source:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, source: e.target.value }))}>
                     <option>{data1.source}</option>
                         <option>Walkin</option>
                         <option>99acre</option>
                         <option>Refrence</option>
                         <option>Old Client</option>
                         </select></div>
-                    <div className="col-md-6"><label className="labels">Category</label><select className="form-control"onChange={(e)=>setupdatecontactdata({...updatecontactdata,category:e.target.value})} >
+                    <div className="col-md-6"><label className="labels">Category</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, category: e.target.value }))} >
                     <option>{data1.category}</option>
                         <option>Investor</option>
                         <option>Banker</option>
@@ -548,13 +551,13 @@ function Fetchcontact() {
                         <option>Company Employee</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,owner:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, owner: e.target.value }))}>
                     <option>{data1.owner}</option>
                         <option>Suresh Kumar</option>
                         <option>Rajesh kumar</option>
                         <option>Rakesh kumar</option>
                         </select></div>
-                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,team:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, team: e.target.value }))}>
                     <option>{data1.team}</option>
                         <option>Suresh Kumar</option>
                         <option>Rajesh Kumar</option>
@@ -562,7 +565,7 @@ function Fetchcontact() {
                         <option>Yogesh Kumar</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,visible_to:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, visible_to: e.target.value }))}>
                     <option>{data1.visible_to}</option>
                         <option>All User</option>
                         <option>My Team</option>
@@ -576,22 +579,22 @@ function Fetchcontact() {
             
                 <div className="d-flex justify-content-between align-items-center experience"><span>Other Details</span></div><hr></hr>
                 <div className="row mt-2">
-                    <div className="col-md-5"><label className="labels">Gender</label><select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,gender:e.target.value})} >
+                    <div className="col-md-5"><label className="labels">Gender</label><select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, gender: e.target.value }))} >
                     <option>{data1.gender}</option>
                         <option>Male</option>
                         <option>Female</option>
                         <option>Others</option>
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control" onChange={(e)=>setupdatecontactdata({...updatecontactdata,maritial_status:e.target.value})}>
+                    <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control" onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, maritial_status: e.target.value }))}>
                     <option>{data1.maritial_status}</option>
                         <option>Married</option>
                         <option>Unmarried</option>
                     </select>
                     </div>
 
-                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control" placeholder={data1.birth_date} onChange={(e)=>setupdatecontactdata({...updatecontactdata,birth_date:e.target.value})}/></div>
-                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control" placeholder={data1.anniversary_date} onChange={(e)=>setupdatecontactdata({...updatecontactdata,anniversary_date:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control" placeholder={data1.birth_date} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, birth_date: e.target.value }))}/></div>
+                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control" placeholder={data1.anniversary_date} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, anniversary_date: e.target.value }))}/></div>
 
                     <div className="col-md-3"> <label className="labels">Education</label>
                         
@@ -638,19 +641,19 @@ function Fetchcontact() {
                     </div>
                      <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn}>+</button></div>
                 
-                    <div className="col-md-4"><label className="labels">Loan</label><input type="text" className="form-control" placeholder={data1.loan} onChange={(e)=>setupdatecontactdata({...updatecontactdata,loan:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Bank</label><input type="text" className="form-control" placeholder={data1.bank} onChange={(e)=>setupdatecontactdata({...updatecontactdata,bank:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Amount</label><input type="text" className="form-control" placeholder={data1.amount} onChange={(e)=>setupdatecontactdata({...updatecontactdata,amount:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Loan</label><input type="text" className="form-control" placeholder={data1.loan} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, loan: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">Bank</label><input type="text" className="form-control" placeholder={data1.bank} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, bank: e.target.value }))}/></div>
+                    <div className="col-md-4"><label className="labels">Amount</label><input type="text" className="form-control" placeholder={data1.amount} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, amount: e.target.value }))}/></div>
 
-                    <div className="col-md-4"><label className="labels">Social Media</label><input type="text" className="form-control" placeholder={data1.social_media} onChange={(e)=>setupdatecontactdata({...updatecontactdata,social_media:e.target.value})}/></div>
-                    <div className="col-md-8"><label className="labels">Url</label><input type="text" className="form-control" placeholder={data1.url} onChange={(e)=>setupdatecontactdata({...updatecontactdata,url:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Social Media</label><input type="text" className="form-control" placeholder={data1.social_media} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, social_media: e.target.value }))}/></div>
+                    <div className="col-md-8"><label className="labels">Url</label><input type="text" className="form-control" placeholder={data1.url} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, url: e.target.value }))}/></div>
 
-                    <div className="col-md-4"><label className="labels">Income</label><input type="text" className="form-control" placeholder={data1.income} onChange={(e)=>setupdatecontactdata({...updatecontactdata,income:e.target.value})}/></div>
-                    <div className="col-md-8"><label className="labels">Amount</label><input type="text" className="form-control" placeholder={data1.amount1} onChange={(e)=>setupdatecontactdata({...updatecontactdata,amount1:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Website</label><input type="text" className="form-control" placeholder={data1.website} onChange={(e)=>setupdatecontactdata({...updatecontactdata,website:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Industry</label><input type="text" className="form-control" placeholder={data1.industry} onChange={(e)=>setupdatecontactdata({...updatecontactdata,industry:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Income</label><input type="text" className="form-control" placeholder={data1.income} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, income: e.target.value }))}/></div>
+                    <div className="col-md-8"><label className="labels">Amount</label><input type="text" className="form-control" placeholder={data1.amount1} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, amount1: e.target.value }))}/></div>
+                    <div className="col-md-6"><label className="labels">Website</label><input type="text" className="form-control" placeholder={data1.website} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, website: e.target.value }))}/></div>
+                    <div className="col-md-6"><label className="labels">Industry</label><input type="text" className="form-control" placeholder={data1.industry} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, industry: e.target.value }))}/></div>
 
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' placeholder={data1.descriptions} onChange={(e)=>setupdatecontactdata({...updatecontactdata,descriptions:e.target.value})}/></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' placeholder={data1.descriptions} onChange={e => setupdatecontactdata(prevProfile => ({ ...prevProfile, descriptions: e.target.value }))}/></div>
                 
             
         </div>
