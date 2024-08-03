@@ -337,10 +337,7 @@ import { useNavigate } from "react-router-dom";
                   e.preventDefault();
              
                     try {
-                      if(inventory.preview=="")
-                        {
-                          return toast.error("must upload photos")
-                        }
+                     
                             const resp= await axios.post('http://localhost:5000/inventorydetails',inventory,config)
                               if(resp.status===200)
                                   {

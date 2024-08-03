@@ -17,6 +17,7 @@ import { event } from "jquery";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { utils, writeFile } from "xlsx";
 
 function InventoryDetails() {
   const navigate=useNavigate()
@@ -86,8 +87,9 @@ function InventoryDetails() {
         {
           setshow1(true);
           setdata1(item)
-          
         }
+       
+        
         
       
       
@@ -367,10 +369,11 @@ function InventoryDetails() {
                                                         const updateinventory=async()=>
                                                           {
                                                             try {
-                                                              if(updatecontactdata.preview=="")
-                                                                {
-                                                                 return toast.error("must upload photos");
-                                                                }
+                                                              // if(data1.preview && updatecontactdata.preview=="")
+                                                              //   {
+                                                              //    return toast.error("must upload photos");
+                                                              //   }
+                                                                
                                                               const id=data1._id
                                                               const resp=await axios.put(`http://localhost:5000/updateinventory/${id}`,updatecontactdata,config)
                                                               if(resp.status==200)
@@ -394,7 +397,24 @@ function InventoryDetails() {
                                                           }
 
  /*-------------------------------------------------------------------update updatecontactdata end---------------------------------------------------------------------------- */                                                     
+ const exportToExcel = () => {
+  const filteredData = data.map(({ developer,block_tower, project,unit_number,location,linkded_contact,ownership,facing}) => ({ developer,block_tower, project,unit_number,location,linkded_contact,ownership,facing }));
+  // Create a new workbook
+  const workbook = utils.book_new();
 
+  // Convert data to a worksheet
+  const worksheet = utils.json_to_sheet(filteredData);
+
+  // Append the worksheet to the workbook
+  utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+  // Export the workbook to an Excel file
+  writeFile(workbook, "inventory_data.xlsx");
+};
+ 
+ 
+ 
+ 
  const [show2, setshow2] = useState(false);
  const[data2,setdata2]=useState([])
  const handleClose2 = () => setshow2(false);
@@ -519,7 +539,7 @@ function InventoryDetails() {
         
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
-          <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} >Export Data</button>
+          <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} onClick={exportToExcel} >Export Data</button>
           </div>
           <div style={{paddingLeft:"60px",marginTop:"10px",backgroundColor:"white"}}>
           <TableContainer component={Paper}>
@@ -1057,52 +1077,117 @@ function InventoryDetails() {
               </div>
               <div style={{border:"1px solid black",padding:"20px"}}>
               <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Photos And Videos:</h4><hr></hr>
-              <b>S.NO:<br></br></b>
-            
-              {sno.map(item1=>
-                  (
-                    <span>{item1} <br></br></span>
-                  )
-                )}
-               
-              <br></br>
-              <b>Images:<br></br></b>
-            
-                  {
-                   pic && pic.map((imagePath, idx) => (
-                    <img key={idx} src={`http://localhost:5000/${imagePath}`} alt={`Preview ${idx + 1}`} style={{ width: '200px', margin: '10px' }} />
-                ))
-                } 
-               
-              <br></br>
-              <b>Description:<br></br></b>
-              {description.map(item1=>
-                  (
-                    <span>{item1} <br></br></span>
-                  )
-                )}
-        <br></br>
-        <b>Category:<br></br></b>
+              <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell align="center">S.NO</StyledTableCell>
+            <StyledTableCell align="center">DESCRIPTIONS</StyledTableCell>
+            <StyledTableCell align="center">CATEGORY</StyledTableCell>
+            <StyledTableCell align="center">IMAGES</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {
+            <StyledTableRow>
+
+              <StyledTableCell align="left">
+              {
+                        sno.map(item1=>
+                          (
+                            <StyledTableRow>
+                              <StyledTableCell align="left" style={{lineHeight:"150px"}}>
+                            <span>{item1}</span>
+                            </StyledTableCell>
+                            </StyledTableRow>
+                          )
+                        )
+                      }
+              </StyledTableCell>
+              <StyledTableCell align="left">
+              {
+                        description.map(item1=>
+                      (
+                        <StyledTableRow>
+                              <StyledTableCell align="left" style={{lineHeight:"150px"}}>
+                        <span>{item1} <br></br></span>
+                        </StyledTableCell>
+                        </StyledTableRow>
+                      )
+                      )
+                    }
+              </StyledTableCell>
+              <StyledTableCell align="left">
               {category.map(item1=>
                   (
+                    <StyledTableRow>
+                    <StyledTableCell align="left" style={{lineHeight:"150px"}}>
                     <span>{item1} <br></br></span>
+                    </StyledTableCell>
+                    </StyledTableRow>
                   )
                 )}
-        <br></br>
-        <b>S No:<br></br></b>
-              {sno1.map(item1=>
-                  (
-                    <span>{item1} <br></br></span>
-                  )
-                )}
-        <br></br>
-        <b>URL:<br></br></b>
-              {url.map(item1=>
-                  (
-                    <span>{item1} <br></br></span>
-                  )
-                )}
-        <br></br>
+              </StyledTableCell>
+              <StyledTableCell align="left">
+              {
+                
+                   pic && pic.map((imagePath, idx) => (
+                    <StyledTableRow>
+                    <StyledTableCell align="left" style={{lineHeight:"150px"}}>
+                    <img key={idx} src={`http://localhost:5000/${imagePath}`} alt={`Preview ${idx + 1}`} style={{ width: '200px', margin: '10px' }} />
+                    </StyledTableCell>
+                    </StyledTableRow>
+                ))
+                } 
+              </StyledTableCell>
+            </StyledTableRow>
+          }
+          </TableBody>
+          </Table>
+          </TableContainer>
+          <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell align="center">S.NO</StyledTableCell>
+            <StyledTableCell align="center">URL</StyledTableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+        {
+            <StyledTableRow>
+
+              <StyledTableCell align="left">
+              {
+                        sno1.map(item1=>
+                          (
+                            <StyledTableRow>
+                              <StyledTableCell align="left">
+                            <span>{item1}</span>
+                            </StyledTableCell>
+                            </StyledTableRow>
+                          )
+                        )
+                      }
+              </StyledTableCell>
+              <StyledTableCell align="left">
+              {
+                        url.map(item1=>
+                      (
+                        <StyledTableRow>
+                              <StyledTableCell align="left">
+                        <span>{item1} <br></br></span>
+                        </StyledTableCell>
+                        </StyledTableRow>
+                      )
+                      )
+                    }
+              </StyledTableCell>
+            </StyledTableRow>
+          }
+          </TableBody>
+          </Table>
+          </TableContainer>
         </div>
         <div style={{border:"1px solid black",padding:"20px"}}>
               <b>Cluter Details/Floor Plans:</b> <span>{data2.cluter_details}</span> <br></br>
