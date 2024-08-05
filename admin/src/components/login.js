@@ -1,12 +1,22 @@
 
 import { useNavigate } from 'react-router-dom';
 import '../css/login.css';
+import { toast } from 'react-toastify';
 function Login() {
 const navigate=useNavigate()
 const handle=()=>
   {
-    navigate('/dashboard')
+    if(document.getElementById("email").value=="admin" && document.getElementById("pass").value=="admin123")
+    {
+      navigate('/dashboard')
+    }
+    else
+    {
+      toast.error("plz enter correct email and password")
+    }
+    
   }
+ 
   
     return (
       <div className="App" style={{paddingTop:"50px"}}>
@@ -27,8 +37,8 @@ const handle=()=>
                   </div> */}
     
         <br />
-        <input className='logininput' type="email" name="email" placeholder="Email"  required/>
-        <input className='logininput'type="password" name="password" placeholder="Password" required/>
+        <input id='email' className='logininput' type="email" name="email" placeholder="Email"  required/>
+        <input id='pass' className='logininput'type="password" name="password" placeholder="Password" required/>
         <br />
         {/* <a href="#">Forgot your password?</a> */}
         <button className='button' type="submit" name="submit" value="submit" onClick={handle}>

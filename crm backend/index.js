@@ -8,8 +8,6 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const app=express();
 
-PORT=5000
-URL="mongodb://localhost:27017/crm"
 app.use(bodyParser.json())
 app.use(express.json())
 app.use('/images', express.static('images'));
