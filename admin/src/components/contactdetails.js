@@ -74,7 +74,7 @@ function Fetchcontact() {
     {
       
       try {
-        const resp=await axios.get('http://localhost:5000/viewcontact')
+        const resp=await axios.get('http://13.232.173.59:5000//viewcontact')
         setdata(resp.data.contact)
       } catch (error) {
         console.log(error);
