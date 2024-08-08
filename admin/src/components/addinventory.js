@@ -330,7 +330,7 @@
                   relation:"",document_name:"",number:"",date:"",linkded_contact:""})
                   const config = {
                     headers: {
-                      'Content-Type': 'multipart/form-data' // Set the Content-Type here
+                      'Content-Type': 'application/json' // Set the Content-Type here
                     }
                 }
               const add_inventory=async(e)=>
@@ -339,7 +339,7 @@
              
                     try {
                      
-                            const resp= await api.post('inventorydetails',inventory,config)
+                            const resp= await api.post('inventorydetails',inventory)
                               if(resp.status===200)
                                   {
                                     toast.success(resp.data.message)
