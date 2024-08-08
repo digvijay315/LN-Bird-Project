@@ -5,7 +5,7 @@ import Sidebar1 from './sidebar1';
 import axios from 'axios';
 import { ToastContainer, toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import api from "../api";
 
 
 function Addcontact() {
@@ -71,7 +71,7 @@ function Addcontact() {
     {
         e.preventDefault();
         try {
-            const resp= await axios.post('http://localhost:5000/addcontact',contact,config)
+            const resp= await api.post('addcontact',contact,config)
         if(resp.status===200)
             {
                 toast.success(resp.data.message)

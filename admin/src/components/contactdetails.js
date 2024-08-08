@@ -20,6 +20,7 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { utils, writeFile } from "xlsx";
+import api from "../api";
 
 function Fetchcontact() {
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -74,7 +75,7 @@ function Fetchcontact() {
     {
       
       try {
-        const resp=await axios.get('http://13.232.173.59:5000//viewcontact')
+        const resp=await api.get('viewcontact')
         setdata(resp.data.contact)
       } catch (error) {
         console.log(error);
@@ -83,11 +84,11 @@ function Fetchcontact() {
     }
   
 
-    const deletecontact=(item)=>
+    const deletecontact=async(item)=>
         {
           try {
             const id=item._id
-            const resp=axios.delete(`http://localhost:5000/deletecontact/${id}`)
+            const resp=await api.delete(`deletecontact/${id}`)
             toast.success("contact deleted successfully")
             setTimeout(() => {
               window.location.reload()
@@ -181,7 +182,7 @@ function Fetchcontact() {
                         {
                           // e.preventDefault()
                           try {
-                            const resp=await axios.get(`http://localhost:5000/viewcontactbyemail/${email}`);
+                            const resp=await api.get(`viewcontactbyemail/${email}`);
                             const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
                             setdata(incoming)
                           } catch (error) {
@@ -201,7 +202,7 @@ function Fetchcontact() {
                           {
                             
                             try {
-                              const resp=await axios.get(`http://localhost:5000/viewcontactbymobile/${mobile}`);
+                              const resp=await api.get(`viewcontactbymobile/${mobile}`);
                               const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
                               setdata(incoming)
                               setmobile('')
@@ -222,7 +223,7 @@ function Fetchcontact() {
         {
           try {
             const id=data1._id
-            const resp=await axios.put(`http://localhost:5000/updatecontact/${id}`,updatecontactdata)
+            const resp=await api.put(`updatecontact/${id}`,updatecontactdata)
             toast.success("contact updated")
             setTimeout(() => {
               navigate('/contactdetails')

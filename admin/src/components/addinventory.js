@@ -13,7 +13,8 @@
     import axios from "axios";
     import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
     import { render } from "@testing-library/react";
-import { useNavigate } from "react-router-dom";
+    import api from "../api";
+    import { useNavigate } from "react-router-dom";
 
     function Addinventory() {
       const navigate=useNavigate()
@@ -175,7 +176,7 @@ import { useNavigate } from "react-router-dom";
           {
             e.preventDefault();
             try {
-              const resp= await axios.post('http://localhost:5000/addproperty/adddeveloper',developer)
+              const resp= await api.post('addproperty/adddeveloper',developer)
               if(resp.status===200)
               {
                   toast.success(resp.data.message)
@@ -189,7 +190,7 @@ import { useNavigate } from "react-router-dom";
         const fetchdeveloper=async()=>
         {
           try {
-            const resp=await axios.get('http://localhost:5000/addproperty/viewdeveloper')
+            const resp=await api.get('addproperty/viewdeveloper')
             setuser(resp.data.developer)
           } catch (error) {
             toast.error(error.response.data.message)
@@ -205,7 +206,7 @@ import { useNavigate } from "react-router-dom";
           {
             e.preventDefault();
             try {
-              const resp= await axios.post('http://localhost:5000/addproperty/addtower',towers)
+              const resp= await api.post('addproperty/addtower',towers)
               if(resp.status===200)
               {
                   toast.success(resp.data.message)
@@ -219,7 +220,7 @@ import { useNavigate } from "react-router-dom";
         const fetchtower=async()=>
         {
           try {
-            const resp=await axios.get('http://localhost:5000/addproperty/viewtower')
+            const resp=await api.get('addproperty/viewtower')
             settower(resp.data.tower)
           } catch (error) {
             toast.error(error.response.data.message)
@@ -240,7 +241,7 @@ import { useNavigate } from "react-router-dom";
             e.preventDefault();
             try {
            
-              const resp= await axios.post('http://localhost:5000/addproperty/addproject',projects)
+              const resp= await api.post('addproperty/addproject',projects)
               if(resp.status===200)
               {
                   toast.success(resp.data.message)
@@ -254,7 +255,7 @@ import { useNavigate } from "react-router-dom";
         const fetchproject=async()=>
         {
           try {
-            const resp=await axios.get('http://localhost:5000/addproperty/viewproject')
+            const resp=await api.get('addproperty/viewproject')
             setproject(resp.data.project)
           } catch (error) {
             toast.error(error.response.data.message)
@@ -338,7 +339,7 @@ import { useNavigate } from "react-router-dom";
              
                     try {
                      
-                            const resp= await axios.post('http://localhost:5000/inventorydetails',inventory,config)
+                            const resp= await api.post('inventorydetails',inventory,config)
                               if(resp.status===200)
                                   {
                                     toast.success(resp.data.message)

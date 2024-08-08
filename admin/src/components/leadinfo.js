@@ -4,6 +4,7 @@ import Sidebar1 from "./sidebar1";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../api";
 
 function Leadinfo() {
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -59,12 +60,12 @@ function Leadinfo() {
         {
             e.preventDefault();
             try {
-                const resp=await axios.post('http://localhost:5000/leadinfo',leadinfo)
+                const resp=await api.post('leadinfo',leadinfo)
                 if(resp.status==200)
                 {
                     toast.success(resp.data.message)
                     setTimeout(() => {
-                        navigate('/lead')
+                        navigate('/leaddetails')
                     }, 2000);
                 }
             } catch (error) {

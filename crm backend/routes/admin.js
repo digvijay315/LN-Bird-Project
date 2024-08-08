@@ -50,7 +50,7 @@ router.post('/bookingdetails',booking_details)
 
 router.post('/paymentdetails',upload.any('image'),addpayment_details)
 
-router.post('/inventorydetails',upload.any('preview',10),inventory_details)
+router.post('/inventorydetails',upload.array('preview',10),inventory_details)
 router.get('/viewinventory',view_inventory)
 router.delete('/removeinventory/:_id',remove_inventory)
 router.get('/viewinventorybydeveloper/:developer',view_inventory_Bydeveloper)

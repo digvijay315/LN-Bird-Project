@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { utils, writeFile } from "xlsx";
 import '../css/hover.css';
 import { useRef } from "react";
+import api from "../api";
 
 function Leadfetch() {
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -74,7 +75,7 @@ const[countall,setcountall]=useState('')
   {
     
     try {
-      const resp=await axios.get('http://localhost:5000/leadinfo')
+      const resp=await api.get('leadinfo')
       const all=(resp.data.lead)
       setdata(all)
       setcountall(all.length)
@@ -93,7 +94,7 @@ const[countall,setcountall]=useState('')
     {
       
       try {
-        const resp=await axios.get(`http://localhost:5000/viewbyleadtype/${leadtype}`);
+        const resp=await api.get(`viewbyleadtype/${leadtype}`);
         console.log(resp);
         setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
       } catch (error) {
@@ -107,7 +108,7 @@ const[countall,setcountall]=useState('')
       {
         
         try {
-          const resp=await axios.get(`http://localhost:5000/viewleadbyemail/${email}`);
+          const resp=await api.get(`viewleadbyemail/${email}`);
           console.log(resp);
           setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
         } catch (error) {
@@ -125,7 +126,7 @@ const[countall,setcountall]=useState('')
       {
         
         try {
-          const resp=await axios.get(`http://localhost:5000/viewleadbymobile/${mobile}`);
+          const resp=await api.get(`viewleadbymobile/${mobile}`);
           console.log(resp);
           setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
         } catch (error) {
@@ -143,7 +144,7 @@ const[countall,setcountall]=useState('')
       {
         
         try {
-          const resp=await axios.get(`http://localhost:5000/viewleadbystage/Incoming`);
+          const resp=await api.get(`viewleadbystage/Incoming`);
           setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
         } catch (error) {
           console.log(error);
@@ -154,7 +155,7 @@ const[countall,setcountall]=useState('')
         {
           
           try {
-            const resp=await axios.get(`http://localhost:5000/viewleadbystage/Incoming`);
+            const resp=await api.get(`viewleadbystage/Incoming`);
             const incoming=(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
             setcountincoming(incoming.length);
           } catch (error) {
@@ -166,7 +167,7 @@ const[countall,setcountall]=useState('')
         {
           e.preventDefault()
           try {
-            const resp=await axios.get(`http://localhost:5000/viewleadbystage/Prospect`);
+            const resp=await api.get(`viewleadbystage/Prospect`);
              setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
           } catch (error) {
             console.log(error);
@@ -177,7 +178,7 @@ const[countall,setcountall]=useState('')
           {
             
             try {
-              const resp=await axios.get(`http://localhost:5000/viewleadbystage/Prospect`);
+              const resp=await api.get(`viewleadbystage/Prospect`);
               const prospect=(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
               setcountprospect(prospect.length);
               
@@ -190,7 +191,7 @@ const[countall,setcountall]=useState('')
           {
             
             try {
-              const resp=await axios.get(`http://localhost:5000/viewleadbystage/Negotiation`);
+              const resp=await api.get(`viewleadbystage/Negotiation`);
               setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead])
             } catch (error) {
               console.log(error);
@@ -201,7 +202,7 @@ const[countall,setcountall]=useState('')
             {
               
               try {
-                const resp=await axios.get(`http://localhost:5000/viewleadbystage/Negotiation`);
+                const resp=await api.get(`viewleadbystage/Negotiation`);
                 const negotiation=Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]
                 setcountnegotiation(negotiation.length)
               } catch (error) {
@@ -213,7 +214,7 @@ const[countall,setcountall]=useState('')
               {
                 
                 try {
-                  const resp=await axios.get(`http://localhost:5000/viewleadbystage/Won`);
+                  const resp=await api.get(`viewleadbystage/Won`);
                   const Won=Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]
                   setcountwon(Won.length)
                 } catch (error) {
@@ -225,7 +226,7 @@ const[countall,setcountall]=useState('')
                 {
                   
                   try {
-                    const resp=await axios.get(`http://localhost:5000/viewleadbystage/Lost`);
+                    const resp=await api.get(`viewleadbystage/Lost`);
                     const Lost=Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]
                     setcountlost(Lost.length)
                   } catch (error) {
@@ -240,11 +241,11 @@ const[countall,setcountall]=useState('')
       }
     };
 
-    const deletelead=(item)=>
+    const deletelead=async(item)=>
     {
       try {
         const id=item._id
-        const resp=axios.delete(`http://localhost:5000/removelead/${id}`)
+        const resp=await api.delete(`removelead/${id}`)
         toast.success("lead deleted successfully")
         setTimeout(() => {
           window.location.reload()
@@ -307,7 +308,7 @@ const[countall,setcountall]=useState('')
     {
       try {
         const id=data1._id
-        const resp=await axios.put(`http://localhost:5000/updatelead/${id}`,updatedata)
+        const resp=await api.put(`updatelead/${id}`,updatedata)
         toast.success("data updated")
         setTimeout(() => {
           navigate('/leaddetails')

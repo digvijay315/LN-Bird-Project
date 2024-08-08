@@ -19,6 +19,8 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { utils, writeFile } from "xlsx";
 
+import api from "../api";
+
 function InventoryDetails() {
   const navigate=useNavigate()
     React.useEffect(()=>{fetchdata()},[])
@@ -29,7 +31,7 @@ function InventoryDetails() {
         {
           
           try {
-            const resp=await axios.get('http://localhost:5000/viewinventory')
+            const resp=await api.get('viewinventory')
             const all=(resp.data.inventory)
             setdata(all)
           } catch (error) {
@@ -41,7 +43,7 @@ function InventoryDetails() {
         const fetchdata_bydeveloper=async()=>
             {
               try {
-                const resp= await axios.get(`http://localhost:5000/viewinventorybydeveloper/${developer}`)
+                const resp= await api.get(`viewinventorybydeveloper/${developer}`)
                 const incoming=(Array.isArray(resp.data.inventory) ? resp.data.inventory : [resp.data.inventory]);
                 setdata(incoming)
               } catch (error) {
@@ -60,7 +62,7 @@ function InventoryDetails() {
             const fetchdata_bylocation=async()=>
                 {
                   try {
-                    const resp= await axios.get(`http://localhost:5000/viewinventorybylocation/${location}`)
+                    const resp= await api.get(`viewinventorybylocation/${location}`)
                     const incoming=(Array.isArray(resp.data.inventory) ? resp.data.inventory : [resp.data.inventory]);
                     setdata(incoming)
                   } catch (error) {
@@ -329,7 +331,7 @@ function InventoryDetails() {
                                                       const fetchdeveloper=async()=>
                                                       {
                                                         try {
-                                                          const resp=await axios.get('http://localhost:5000/addproperty/viewdeveloper')
+                                                          const resp=await api.get('addproperty/viewdeveloper')
                                                           setuser(resp.data.developer)
                                                         } catch (error) {
                                                           toast.error(error.response.data.message)
@@ -339,7 +341,7 @@ function InventoryDetails() {
                                                       const fetchtower=async()=>
                                                       {
                                                         try {
-                                                          const resp=await axios.get('http://localhost:5000/addproperty/viewtower')
+                                                          const resp=await api.get('addproperty/viewtower')
                                                           settower(resp.data.tower)
                                                         } catch (error) {
                                                           toast.error(error.response.data.message)
@@ -349,7 +351,7 @@ function InventoryDetails() {
                                                       const fetchproject=async()=>
                                                       {
                                                         try {
-                                                          const resp=await axios.get('http://localhost:5000/addproperty/viewproject')
+                                                          const resp=await api.get('addproperty/viewproject')
                                                           setproject(resp.data.project)
                                                         } catch (error) {
                                                           toast.error(error.response.data.message)
@@ -375,7 +377,7 @@ function InventoryDetails() {
                                                               //   }
                                                                 
                                                               const id=data1._id
-                                                              const resp=await axios.put(`http://localhost:5000/updateinventory/${id}`,updatecontactdata,config)
+                                                              const resp=await api.put(`updateinventory/${id}`,updatecontactdata,config)
                                                               if(resp.status==200)
                                                               {
                                                                 toast.success("inventory updated")
@@ -440,11 +442,11 @@ function InventoryDetails() {
  
  
  
-      const deleteinventory=(item)=>
+      const deleteinventory=async(item)=>
             {
               try {
                 const id=item._id
-                const resp=axios.delete(`http://localhost:5000/removeinventory/${id}`)
+                const resp=await api.delete(`removeinventory/${id}`)
                 toast.success("inventory deleted successfully")
                 setTimeout(() => {
                   window.location.reload()
@@ -1134,7 +1136,7 @@ function InventoryDetails() {
                    pic && pic.map((imagePath, idx) => (
                     <StyledTableRow>
                     <StyledTableCell align="left" style={{lineHeight:"150px"}}>
-                    <img key={idx} src={`http://localhost:5000/${imagePath}`} alt={`Preview ${idx + 1}`} style={{ width: '200px', margin: '10px' }} />
+                    <img key={idx} src={`${imagePath}`} alt={`Preview ${idx + 1}`} style={{ width: '200px', margin: '10px' }} />
                     </StyledTableCell>
                     </StyledTableRow>
                 ))

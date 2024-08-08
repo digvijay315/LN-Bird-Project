@@ -1,27 +1,58 @@
 
 const addinventory = require('../models/add_inventory');
+const cloudinary=require('cloudinary').v2
+const fs=require('fs')
+const path=require('path')
 
-const inventory_details=async(req,res)=>
-    {
+require('dotenv').config()
+cloudinary.config({
+    cloud_name:process.env.CLOUD_NAME,
+    api_key:process.env.API_KEY,
+    api_secret:process.env.API_SECRET
+})
+
+const inventory_details = async (req, res) => {
+    try {
+      const {
+        developer, block_tower, project, unit_number, sub_category, size, project1, facing, road, ownership, type, cluter_details, length,
+        breadth, total_area, in_metrics, occupation_date, age_of_construction, furnish_details, furnished_item, aminities,
+        location, lattitude, langitude, s_no, descriptions, category, s_no1, url, search_contact, relation, document_name,
+        number, date, linkded_contact
+      } = req.body;
+  
+     
+      // Check if there are files to upload
+      const preview = req.files ? req.files.map(file => file.path) : [];
+     
+      
+      const images = [];
+      for (let file of preview) {
         try {
-            const{developer,block_tower,project,unit_number,sub_category,size,project1,facing,road,ownership,type,cluter_details,length,
-                    breadth,total_area,in_metrics,occupation_date,age_of_construction,furnish_details,furnished_item,aminities,
-                    location,lattitude,langitude,s_no,descriptions,category,s_no1,url,search_contact,relation,document_name,
-                    number,date,linkded_contact}=req.body;
-
-                    const preview = req.files ? req.files.map(file => file.path) : [];
-           
-                const new_inventory_details= new addinventory({developer,block_tower,project,unit_number,sub_category,size,project1,facing,road,ownership,type,cluter_details,length,
-                    breadth,total_area,in_metrics,occupation_date,age_of_construction,furnish_details,furnished_item,aminities,
-                    location,lattitude,langitude,s_no,preview,descriptions,category,s_no1,url,search_contact,relation,document_name,
-                    number,date,linkded_contact})
-            
-            const resp=await new_inventory_details.save()
-            res.status(200).send({message:"inventory details saved ",inventory_details:resp})
-        } catch (error) {
-            console.log(error)
+          // Upload each file to Cloudinary
+          const result = await cloudinary.uploader.upload(file);
+          images.push(result.secure_url);
+          fs.unlinkSync(file); // Remove file from the local server
+        } catch (uploadError) {
+          console.error('Error uploading file:', uploadError);
+          return res.status(500).send({ message: 'Error uploading file to Cloudinary', error: uploadError });
         }
+      }
+  
+      // Create a new inventory record with uploaded image URLs
+      const new_inventory_details = new addinventory({
+        developer, block_tower, project, unit_number, sub_category, size, project1, facing, road, ownership, type, cluter_details, length,
+        breadth, total_area, in_metrics, occupation_date, age_of_construction, furnish_details, furnished_item, aminities,
+        location, lattitude, langitude, s_no, preview: images, descriptions, category, s_no1, url, search_contact, relation, document_name,
+        number, date, linkded_contact
+      });
+  
+      const resp = await new_inventory_details.save();
+      res.status(200).send({ message: "Inventory details saved", inventory_details: resp });
+    } catch (error) {
+      console.error('Error saving inventory details:', error);
+      res.status(500).send({ message: 'Error saving inventory details', error });
     }
+  };
     const view_inventory=async(req,res)=>
         {
             try {
