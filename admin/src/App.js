@@ -21,6 +21,7 @@ import Addinventory from './components/addinventory';
 import Leadfetch from './components/leaddetails';
 import Fetchcontact from './components/contactdetails';
 import InventoryDetails from './components/inventorydetails';
+import TableComponent from './components/demo';
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
       <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
     </Routes>
+    {/* <TableComponent/> */}
   
    </div>
    </BrowserRouter>

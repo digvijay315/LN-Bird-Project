@@ -29,13 +29,13 @@ function Header1() {
         <div>
             <div class="header" style={{width:"100%",borderRadius:"5px",height:"60px"}}>
 		<div class="header-left" >
-		<button id='btn' onClick={myFunction} class="dropdown-toggle" style={{marginLeft:"5%",border:"none",backgroundColor:"transparent",position:"absolute"}}>Add</button>
+		<button id='btn' onClick={myFunction} class="dropdown-toggle" style={{marginLeft:"10%",border:"none",backgroundColor:"transparent",position:"absolute"}}>Add</button>
 		<div class="topnav">
   		<div id="myLinks">
 			<ul>
-				<li><a href="#news" onClick={handleShow}>Contacts</a></li>
-				<li><a href="#news" onClick={handleShow}>Leads</a></li>
-				<li><a href="#news" onClick={handleShow}>Inventory</a></li>
+				<li><Link to={'/addcontact'} class="dropdown-item">Contact</Link></li>
+				<li><Link to={'/leadinfo'} class="dropdown-item">Lead</Link></li>
+				<li><Link to={'/addinventory'} class="dropdown-item">Inventory</Link></li>
 			</ul>
   		</div>
 		</div>
@@ -43,13 +43,13 @@ function Header1() {
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
 				<form>
-					<div class="form-group mb-0" style={{width:"220px",marginLeft:"215%",position:"relative"}}>
+					<div class="form-group mb-0" style={{width:"320px",marginLeft:"180%",position:"relative"}}>
 						<i class="dw dw-search2 search-icon"></i>
 						<input type="text" class="form-control search-input" placeholder="Search Here"/>
 					</div>
 					<img src="https://static-00.iconduck.com/assets.00/phone-call-icon-2048x2048-jzb4bret.png"style={{height:"45px",position:"absolute",marginLeft:"110%", border:"1px solid #D3D3D3",padding:"8px"}}/>
 					<img src="https://cdn-icons-png.flaticon.com/512/5035/5035563.png"style={{height:"45px",position:"absolute",marginLeft:"118%", border:"1px solid #D3D3D3",padding:"8px"}}/>
-					<img src="https://w7.pngwing.com/pngs/115/15/png-transparent-dashboard-grid-menu-menu-icon-dashboard-line-style-icon.png"style={{height:"35px",position:"absolute",marginLeft:"125%"}}/>
+					
 				</form>
 			</div>
 		</div>

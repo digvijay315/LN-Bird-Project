@@ -6,6 +6,8 @@ import axios from 'axios';
 import { ToastContainer, toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import api from "../api";
+import { data } from 'jquery';
+import { dateCalendarClasses } from '@mui/x-date-pickers';
 
 
 function Addcontact() {
@@ -86,6 +88,9 @@ function Addcontact() {
         }
     }
 
+    const time=new Date()
+    console.log(time);
+    
 
 
 function addFn() {
@@ -156,34 +161,54 @@ function addFn() {
                 {
                     document.getElementById("r").style.marginLeft="0%"
                 }
+
+        const otherdetails=()=>
+        {
+          document.getElementById("basicdetails1").style.display="none"
+          document.getElementById("basicdetails2").style.display="none"
+           document.getElementById("basic").style.color="black"
+           document.getElementById("other").style.color="green"
+           document.getElementById("otherdetails").style.display="flex"
+        }
+        const basicdetails=()=>
+          {
+            document.getElementById("basicdetails1").style.display="flex"
+            document.getElementById("basicdetails2").style.display="flex"
+            document.getElementById("basic").style.color="green"
+            document.getElementById("other").style.color="black"
+            document.getElementById("otherdetails").style.display="none"
+          }
     return ( 
         <div>
             <div id='h'><Header1/></div>
             <div onMouseOver={mousehover} onMouseOut={mouseout}><Sidebar1/></div>
            
            <div style={{padding:"50px"}}>
-            <div className="container rounded bg-white mt-5 mb-5" style={{width:"90%",marginLeft:"90px"}}>
+            <div className="container rounded bg-white mt-5 mb-5" style={{width:"80%",marginLeft:"150px"}}>
     <div className="row" id='r' style={{transition:"0.5s"}}>
-        <div className="col-md-6 border-right">
+        <div className="col-md-12 border-right">
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right">Add Contact</h4><input type='checkbox'  style={{marginLeft:"30%"}}/><label style={{paddingTop:"5px"}}>only show required field</label>
+                    <h4 className="text-right">Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
                 </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                <div class="form-group mb-0" style={{width:"220px"}}>
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&s" alt='' style={{height:"25px",position:"absolute",marginLeft:"30%",marginTop:"2%"}}/>
-						<input type="text" class="form-control search-input" placeholder="Search Here"/>
+                <div className="d-flex justify-content-between align-items-center mb-3" >
+                <div class="form-group mb-0" style={{width:"220px"}} >
+						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&s" alt='' style={{height:"25px",position:"absolute",marginLeft:"14%",marginTop:"1%"}}/>
+						<input type="text" class="form-control search-input" placeholder="Search Here" style={{width:"200px"}}/>
 					</div>
-                    <div class="form-group mb-0" style={{width:"220px"}}>
+                    <div class="form-group mb-0" style={{width:"300px"}}>
 						
-						<input type="time" class="form-control" placeholder="Select time zone"/>
+						<input type="text" class="form-control" placeholder={time} value={time} style={{border:"none"}}/>
 					</div>
                 
                 
                 </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div><hr></hr>
-                <div className="row mt-2">
-                    
+                <div className="d-flex justify-content-between align-items-center experience" id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details</span>
+                <div className="d-flex justify-content-between align-items-center experience" id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Other Details</span></div>
+                </div><hr></hr>
+               
+                <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
+                <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div><br></br>
                     <div className="col-md-4"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
@@ -198,7 +223,7 @@ function addFn() {
                     <div className="col-md-4"><label className="labels">Name</label><input type="text" required="true" className="form-control" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Surname</label><input type="text" className="form-control"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
                 </div>
-                <div className="row mt-3">
+                <div className="row mt-3" id='basicdetails2'>
                     <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control" onChange={(e)=>setcontact({...contact,country_code:e.target.value})}>
                     <option value="">phone</option>
                     {
@@ -283,17 +308,13 @@ function addFn() {
                         </select>
                     </div>
                     </div>
-                    <div className="row mt-4">
-                    <div className="col-md-3"><button className="form-control">Cancel</button></div>
-                    <div className="col-md-6"><button className="form-control">Save & View Contact</button></div>
-                    <div className="col-md-3"><button className="form-control" onClick={addcontact}>Save</button></div>
-                    </div>
+                   
                     </div>
         </div>
-        <div className="col-md-6">
-            <div className="p-3 py-5"><br></br><br></br><br></br>
+        <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px"}}>
+            <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center experience"><span>Other Details</span></div><hr></hr>
-                <div className="row mt-2">
+                <div className="row " >
                     <div className="col-md-5"><label className="labels">Gender</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
                     <option>Select</option>
                         <option>Male</option>
@@ -366,6 +387,12 @@ function addFn() {
                     <div className="col-md-6"><label className="labels">Industry</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,industry:e.target.value})}/></div>
 
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
+                    <div className="col-md-2"></div>
+                    
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control">Cancel</button></div>
+                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control">Save & View Contact</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control" onClick={addcontact}>Save</button></div>
+                    
                     <ToastContainer/>
                 </div>
             </div>

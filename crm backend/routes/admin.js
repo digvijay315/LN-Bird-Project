@@ -14,6 +14,7 @@ const site_visit_form = require('../controllers/site_visit_form');
 const booking_details = require('../controllers/booking_details');
 const addpayment_details = require('../controllers/addpayment_details');
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
+const send_mail = require('../controllers/sendmail');
 
 
 const router=express.Router()
@@ -25,6 +26,7 @@ router.get('/viewcontactbyemail/:email',view_contact_Byemail)
 router.get('/viewcontactbymobile/:mobile_no',view_contact_Bymobile)
 router.put('/updatecontact/:_id',update_contact)
 router.delete('/deletecontact/:_id',remove_contact)
+router.post('/contact/sendmail',send_mail)
 
 router.post('/leadinfo',lead_info)
 router.get('/leadinfo',leadinfo_find)

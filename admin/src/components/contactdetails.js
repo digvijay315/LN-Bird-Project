@@ -21,6 +21,11 @@ import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { utils, writeFile } from "xlsx";
 import api from "../api";
+import {  Remove as RemoveIcon } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import'../css/addcontact.css';
+
+
 
 function Fetchcontact() {
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -177,14 +182,19 @@ function Fetchcontact() {
                           school_college: newschool
                         });
                       };
-                      const[email,setemail]=useState()
-                      const fetchdatabyemail=async(e)=>
+                      const[searchdata,setsearchdata]=useState()
+                      const fetchdatabyemailmobile=async(e)=>
                         {
                           // e.preventDefault()
                           try {
-                            const resp=await api.get(`viewcontactbyemail/${email}`);
-                            const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
-                            setdata(incoming)
+                            const resp=await api.get(`viewcontactbyemail/${searchdata}`);
+                              const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
+                              // setdata(incoming)
+                            const resp1=await api.get(`viewcontactbymobile/${searchdata}`);
+                            const incoming1=(Array.isArray(resp1.data.contact) ? resp1.data.contact : [resp1.data.contact]);
+                            setdata([...incoming,...incoming1])
+                            
+                            
                           } catch (error) {
                             console.log(error);
                           }
@@ -193,7 +203,8 @@ function Fetchcontact() {
                         {
                             if(event.key==="Enter")
                                 {
-                                    fetchdatabyemail()
+                                    fetchdatabyemailmobile()
+                                    setsearchdata('')
                                 }
                             
                         }
@@ -304,44 +315,98 @@ function Fetchcontact() {
       setschooldata(item.school_college)
     }
    
+  
 
+
+    
+ 
+    const [show3, setshow3] = useState(false);
+  
+    const handleClose3 = () => setshow3(false);
+    const[data3,setdata3]=useState([])
+    const handleShow3=(item)=>
+    {
+      setshow3(true);
+      setdata3(item)
+    }
+    const[mail,setmail]=useState({emails:"",message:""})
+    
+    const sendmail=async(e)=>
+      {
+        e.preventDefault();
+        try {
+          if(!mail.emails)
+          {
+            toast.error("no email address found")
+          }
+          const resp=await api.post(`contact/sendmail`,mail)
+          if(resp.status===200)
+          {
+            toast.success("Mail Sent Successfully")
+            setTimeout(() => {
+              navigate('/contactdetails')
+            }, 2000);
+            setTimeout(() => {
+              setshow3(false)
+            }, 2000);
+          }
+         
+        } catch (error) {
+          toast.error(error.response.data);
+        }
+      }
+
+      const columns = [
+        { id: 'number', label: '#' },
+        { id: 'personalDetails', label: 'Personal Details' },
+        { id: 'address', label: 'Address' },
+        { id: 'source', label: 'Source' },
+        { id: 'team', label: 'Team' },
+        { id: 'owner', label: 'Owner' },
+        { id: 'tags', label: 'Tags' },
+        { id: 'designation', label: 'Designation' },
+        { id: 'companyName', label: 'Company Name' },
+        { id: 'operations', label: 'Operations' },
+      ];
+      const [visibleColumns, setVisibleColumns] = useState(columns.map(col => col.id));
+
+      const removeColumn = (columnId) => {
+        // Prevent removal of 'number' and 'personalDetails' columns
+        if (columnId !== 'number' && columnId !== 'personalDetails') {
+          setVisibleColumns(visibleColumns.filter(id => id !== columnId));
+        }
+      }
     return ( 
         <div>
             <Header1/>
             <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
-        <h3 style={{marginLeft:"10px"}}>Contact</h3>
-        <button className="form-control" style={{width:"200px",marginLeft:"10px"}}>Select Team</button>
-        <button className="form-control" style={{width:"300px",marginLeft:"10px"}}>Select Sales Manager</button>
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",marginLeft:"40%"}}>
-            Add Contact
+        <h3 style={{marginLeft:"10px"}}>Contact </h3>
+        
+            <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
         </button>
-            <ul class="dropdown-menu">
-              <li><Link to={'/addcontact'} class="dropdown-item">Add Contact</Link></li>
+            <ul class="dropdown-menu" id="exporttoexcel"> 
+              
+            <li  onClick={exportToExcel} >Export Data</li>
+              
             </ul>
+        
+       
+       
+            {/* <ul class="dropdown-menu">
+              <li><Link to={'/addcontact'} class="dropdown-item">Add Contact</Link></li>
+            </ul> */}
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
-        {/* <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}}>
-          <h6>INCOMING</h6>
-          <p>{}</p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>PROSPECT</h6>
-          <p>{}</p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>OPPORTUNITY</h6>
-          <p></p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>NEGOTIATION</h6>
-          <p>{}</p>
-        </div> */}
+
+      <input type="text" className="form-control form-control-sm" placeholder="search by email or mobile" style={{width:"20%",marginTop:"10px"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+     
         <div className="lead" style={{width:"200px",borderRadius:"10px",padding:"10px",marginLeft:"70%",textAlign:"center"}} onClick={()=>fetchdata()}>
           <h6>All</h6>
         </div>
-        <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        {/* <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
             <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"5px",color:"black",backgroundColor:"transparent",width:"150px"}}>
             Filter
         </button>
@@ -350,66 +415,82 @@ function Fetchcontact() {
                 <label className="labels">By Email id</label><input type="text" className="form-control form-control-sm" placeholder="filter from email id" onChange={(e)=>setemail(e.target.value)} onKeyDown={handlekeypress1}/></li>
               <li><label className="labels">By Mobile no</label><input type="text" className="form-control form-control-sm" placeholder="filter from mobile no" onChange={(e)=>setmobile(e.target.value)} onKeyDown={handlekeypress2}/></li>
             </ul>
-        </div>  
+        </div>   */}
         
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
-          <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} onClick={exportToExcel}>Export Data</button>
-          </div>
+     
           <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-    {/* <table style={{textAlign:"center"}}>
-      <thead style={{textAlign:"center",fontWeight:"bold",fontFamily:"sans-serif"}}>
-        <tr >
-          <td style={{border:"1px solid black",width:"30px"}}>#</td>
-          <td style={{border:"1px solid black",width:"200px"}}>Personal Details</td>
-          <td style={{border:"1px solid black",width:"100px"}}>Address</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Source</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Team</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Owner</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Tags</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Designation</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Company Name</td>
-          <td style={{border:"1px solid black",width:"150px"}}>Operations</td>
-        </tr>
-      </thead>
-      <tbody>
-        
-          {
-            currentItems.map((item,index)=>
-            (
-              <tr>
-              <td  style={{border:"1px solid black",width:"30px"}}>{index+1}</td>
-              <td className="personaldetails" style={{border:"1px solid black",width:"200px"}}><span style={{color:"blue"}}>{item.title}{item.first_name}<span>{" "}</span>{item.last_name}</span><br></br>
-              <span style={{color:"green"}}>Mobile:{item.mobile_no}<br></br></span>
-              <span style={{color:"orange"}}>Email:{item.email}</span>
-              </td>
-              <td style={{border:"1px solid black",width:"100px"}}>
-              <span>{item.h_no }</span> <span>{item.street_address}</span><br></br>
-              <span>{item.city}</span>
-              </td>
-          <td style={{border:"1px solid black",width:"150px"}}>{item.source}</td>
-          <td style={{border:"1px solid black",width:"150px"}}>{item.team}</td>
-          <td style={{border:"1px solid black",width:"150px"}}>{item.owner}</td>
-          <td style={{border:"1px solid black",width:"150px"}}>{item.tags}</td>
-          <td style={{border:"1px solid black",width:"150px"}}>{item.designation}</td>
-          <td style={{border:"1px solid black",width:"150px"}}>{item.company_name}</td>
-          <td style={{border:"1px solid black",width:"150px"}}>
-          <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{backgroundColor:"transparent",color:"black"}}>
-            Actions
-        </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item"  style={{cursor:"pointer"}} onClick={()=>handleShow1(item)}>Edit</a></li>
-              <li><a class="dropdown-item" onClick={()=>deletecontact(item)} style={{cursor:"pointer"}}>Delete</a></li>
-            </ul>
-            </td>
-              </tr>
-            )
-            )
-          }
-        
-      </tbody>
-      </table> */}
-       <TableContainer component={Paper}>
+          <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            {columns.map((column) => (
+              visibleColumns.includes(column.id) && (
+                <StyledTableCell key={column.id} align="left" onClick={() => removeColumn(column.id)}  style={{cursor:"pointer"}}>
+                  {column.label}
+                  {/* <IconButton onClick={() => removeColumn(column.id)} size="small" style={{color:"white"}}>
+                    <RemoveIcon />
+                  </IconButton> */}
+                </StyledTableCell>
+              )
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {currentItems.map((item, index) => (
+            <TableRow key={index}>
+              {visibleColumns.includes('number') && (
+                <StyledTableCell align="left">{index + 1}</StyledTableCell>
+              )}
+              {visibleColumns.includes('personalDetails') && (
+                <StyledTableCell className="personaldetails" align="left" component="th" scope="row" onClick={() => handleShow2(item)}>
+                  {item.title} {item.first_name} {item.last_name}<br />
+                  <SvgIcon component={PhoneIphoneIcon}></SvgIcon><span>{item.mobile_no}</span><br />
+                  <SvgIcon component={EmailIcon}></SvgIcon><span>{item.email}</span>
+                </StyledTableCell>
+              )}
+              {visibleColumns.includes('address') && (
+                <StyledTableCell align="left">
+                  {item.h_no} <br />{item.street_address}<br />{item.city}
+                </StyledTableCell>
+              )}
+              {visibleColumns.includes('source') && (
+                <StyledTableCell align="left">{item.source}</StyledTableCell>
+              )}
+              {visibleColumns.includes('team') && (
+                <StyledTableCell align="left">{item.team}</StyledTableCell>
+              )}
+              {visibleColumns.includes('owner') && (
+                <StyledTableCell align="left">{item.owner}</StyledTableCell>
+              )}
+              {visibleColumns.includes('tags') && (
+                <StyledTableCell align="left">{item.tags}</StyledTableCell>
+              )}
+              {visibleColumns.includes('designation') && (
+                <StyledTableCell align="left">{item.designation}</StyledTableCell>
+              )}
+              {visibleColumns.includes('companyName') && (
+                <StyledTableCell align="left">{item.company_name}</StyledTableCell>
+              )}
+              {visibleColumns.includes('operations') && (
+                <StyledTableCell align="left">
+                  <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ backgroundColor: "transparent", color: "black" }}>
+                    Actions
+                  </button>
+                  <ul className="dropdown-menu">
+                    <li><a className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => handleShow1(item)}>Edit</a></li>
+                    <li><a className="dropdown-item" onClick={() => deletecontact(item)} style={{ cursor: "pointer" }}>Delete</a></li>
+                    <li><a className="dropdown-item" onClick={() => handleShow3(item)} style={{ cursor: "pointer" }}>Send Mail</a></li>
+                  </ul>
+                </StyledTableCell>
+              )}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+ 
+       {/* <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -450,6 +531,7 @@ function Fetchcontact() {
             <ul class="dropdown-menu">
               <li><a class="dropdown-item"  style={{cursor:"pointer"}} onClick={()=>handleShow1(item)}>Edit</a></li>
               <li><a class="dropdown-item" onClick={()=>deletecontact(item)} style={{cursor:"pointer"}}>Delete</a></li>
+              <li><a class="dropdown-item" onClick={()=>handleShow3(item)} style={{cursor:"pointer"}}>Send Mail</a></li>
             </ul>
 
               </StyledTableCell>
@@ -457,13 +539,12 @@ function Fetchcontact() {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer> */}
       </div>
       <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>
       {renderPageNumbers()}
       </div>
       
-      <ToastContainer/>
 
       <Modal show={show1} onHide={handleClose1} size='lg'>
             <Modal.Header>
@@ -736,6 +817,30 @@ function Fetchcontact() {
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose2}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={show3} onHide={handleClose3} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Send Mail</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+   
+  
+   <div className="row mt-2">
+       <div className="col-md-12"><label className="labels">Email</label><input type="text" required="true" className="form-control" placeholder={data3.email} onChange={e => setmail(prevProfile => ({ ...prevProfile, emails: e.target.value }))} /></div>
+       <div className="col-md-12"><label className="labels">Message</label><textarea className="form-control"  placeholder="Enter Your Message" onChange={e => setmail(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
+   </div>
+</div>
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={sendmail}>
+                Send
+              </Button>
+              <Button variant="secondary" onClick={handleClose3}>
                 Close
               </Button>
             </Modal.Footer>
