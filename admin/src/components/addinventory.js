@@ -179,11 +179,11 @@
               const resp= await api.post('addproperty/adddeveloper',developer)
               if(resp.status===200)
               {
-                  toast.success(resp.data.message)
+                  toast.success(resp.data.message,{ autoClose: 2000 })
                   
               }
             } catch (error) {
-              toast.error(error.response.data.message)
+              toast.error(error.response.data.message,{ autoClose: 2000 })
             }
           }
         const[user,setuser]=useState([])
@@ -193,7 +193,7 @@
             const resp=await api.get('addproperty/viewdeveloper')
             setuser(resp.data.developer)
           } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message,{ autoClose: 2000 })
           }
         }
 
@@ -209,11 +209,11 @@
               const resp= await api.post('addproperty/addtower',towers)
               if(resp.status===200)
               {
-                  toast.success(resp.data.message)
+                  toast.success(resp.data.message,{ autoClose: 2000 })
                   
               }
             } catch (error) {
-              toast.error(error.response.data.message)
+              toast.error(error.response.data.message,{ autoClose: 2000 })
             }
           }
         const[tower,settower]=useState([])
@@ -223,7 +223,7 @@
             const resp=await api.get('addproperty/viewtower')
             settower(resp.data.tower)
           } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message,{ autoClose: 2000 })
           }
         }
 
@@ -244,11 +244,11 @@
               const resp= await api.post('addproperty/addproject',projects)
               if(resp.status===200)
               {
-                  toast.success(resp.data.message)
+                  toast.success(resp.data.message,{ autoClose: 2000 })
                   
               }
             } catch (error) {
-              toast.error(error.response.data.message)
+              toast.error(error.response.data.message,{ autoClose: 2000 })
             }
           }
         const[project,setproject]=useState([])
@@ -258,7 +258,7 @@
             const resp=await api.get('addproperty/viewproject')
             setproject(resp.data.project)
           } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message,{ autoClose: 2000 })
           }
         }
 
@@ -342,14 +342,14 @@
                             const resp= await api.post('inventorydetails',inventory)
                               if(resp.status===200)
                                   {
-                                    toast.success(resp.data.message)
+                                    toast.success(resp.data.message,{ autoClose: 2000 })
                                     setTimeout(() => {
                                       navigate('/inventorydetails')
                                     }, 2000);
                                     
                                    }
                           } catch (error) {
-                                  toast.error(error.response.data.message)
+                                  toast.error(error.response.data.message,{ autoClose: 2000 })
                           }
                          }
 

@@ -50,18 +50,38 @@ function Leadinfo() {
                         "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
                         "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
 
+
+                        const requirment=["Buy","Rent","Lease"];
+                        const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
+                        const facing=["East","West","South","North","North East","South East","North West","South West"];
+                        const road=["9 mtr road","18 mtr road","24 mtr road"];
+                        const transaction_type=["Full White","Collecter Rate","50% White","75% White"];
+                        const furnishing=["Furnished","Unfurnished","Semi Furnished"];
+                        const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
+                        const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
+
     const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
         email:"",email_type:"",title_company:"",designation:"",company_name:"",tags:"",
         lead_type:"",descriptions:"",team:"",owner:"",campaign:"",source:"",sub_source:"",
-        stage:"",channel_partner:"",intrested_project:""})
+        stage:"",channel_partner:"",intrested_project:"",gender:"",maritial_status:"",birth_date:"",anniversary_date:"",father_husband_name:"",h_no:"",
+        street_address:"",location:"",city:"",pincode:"",state:"",country:"",website:"",industry:"",education:"",
+        degree:"",college:"",loan:"",bank:"",amount:"",social_media:"",url:"",income:"",amount1:"",document:"",number:"",file:"",requirment:"",property_type:"",purpose:"",nri:"no",sub_type:"",unit_type:"",
+        budget_min:"",budget_max:"",minimum_area:"",maximum_area:"",area_metric:"",search_location:"",street_address1:"",city1:"",area:"",
+        country1:"",pin_code:"",block:"",state1:"",lattitude:"",longitude:"",specific_unit:"",measurement:"",funding:"",timeline:"",
+        facing:"",road:"",transaction_type:"",furnishing:""})
         
         const navigate=useNavigate()
+        const config = {
+            headers: {
+              'Content-Type': 'multipart/form-data' // Set the Content-Type here
+            }
+        }
         const leadinfodetails=async(e)=>
         {
             e.preventDefault();
             try {
-                const resp=await api.post('leadinfo',leadinfo)
-                if(resp.status==200)
+                const resp=await api.post('leadinfo',leadinfo,config)
+                if(resp.status===200)
                 {
                     toast.success(resp.data.message)
                     setTimeout(() => {
@@ -73,6 +93,53 @@ function Leadinfo() {
                 toast.error(error.response.data)
             }
         }
+
+        const leadinfomain=()=>
+        {
+            document.getElementById("leadinfo1").style.display="flex";
+            document.getElementById("leadinfo2").style.display="flex";
+            document.getElementById("span1").style.color="green";
+
+            document.getElementById("leadinfopersonal1").style.display="none";
+            document.getElementById("leadinfopersonal2").style.display="none";
+            document.getElementById("span2").style.color="black";
+
+            document.getElementById("leadinforequirment1").style.display="none";
+            document.getElementById("leadinforequirment2").style.display="none";
+            document.getElementById("span3").style.color="black";
+         
+        }
+        const Leadinfopersonal=()=>
+            {
+                document.getElementById("leadinfo1").style.display="none";
+                document.getElementById("leadinfo2").style.display="none";
+                document.getElementById("span1").style.color="black";
+    
+                document.getElementById("leadinfopersonal1").style.display="flex";
+                document.getElementById("leadinfopersonal2").style.display="flex";
+                document.getElementById("span2").style.color="green";
+    
+                document.getElementById("leadinforequirment1").style.display="none";
+                document.getElementById("leadinforequirment2").style.display="none";
+                document.getElementById("span3").style.color="black";
+             
+            }
+            const leadinforequirment=()=>
+                {
+                    document.getElementById("leadinfo1").style.display="none";
+                    document.getElementById("leadinfo2").style.display="none";
+                    document.getElementById("span1").style.color="black";
+        
+                    document.getElementById("leadinfopersonal1").style.display="none";
+                    document.getElementById("leadinfopersonal2").style.display="none";
+                    document.getElementById("span2").style.color="black";
+        
+                    document.getElementById("leadinforequirment1").style.display="flex";
+                    document.getElementById("leadinforequirment2").style.display="flex";
+                    document.getElementById("span3").style.color="green";
+                 
+                }
+
     return ( 
         <div>
             <Header1/>
@@ -85,8 +152,13 @@ function Leadinfo() {
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h4 className="text-right">Add Lead</h4>
                 </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center experience"><span>Lead Info</span></div><hr></hr>
-                <div className="row mt-2">
+                <div className="d-flex justify-content-between align-items-center experience" style={{fontFamily:"times new roman",fontWeight:"bold"}}>
+                <span onClick={leadinfomain} id="span1" style={{cursor:"pointer"}}>Lead Info</span>
+                <span onClick={Leadinfopersonal} id="span2" style={{cursor:"pointer"}}>Lead Info(Personal)</span>
+                <span onClick={leadinforequirment} id="span3" style={{cursor:"pointer"}}> Lead Info(Requirment)</span>
+                </div>
+                <hr></hr>
+                <div className="row mt-2" id="leadinfo1">
                     
                     <div className="col-md-3"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
                     <option>Select title</option>
@@ -102,7 +174,7 @@ function Leadinfo() {
                     <div className="col-md-4"><label className="labels">Name</label><input type="text" required="true" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,first_name:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Surname</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
                 </div>
-                <div className="row mt-3">
+                <div className="row mt-3" id="leadinfo2">
                     <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,country_code:e.target.value})}>
                     <option value="">select</option>
                    {
@@ -214,6 +286,264 @@ function Leadinfo() {
                         <option>Suresh Kumar</option>
                         <option>Rakesh Kumar</option>
                         <option>Admin</option>
+                        </select>
+                    </div>
+                    </div>
+                    <div className="row mt-2" id="leadinfopersonal1" style={{display:"none"}}>
+                    
+                    <div className="col-md-3"><label className="labels">Gender</label><select className="form-control" required="true" onChange={(e)=>setleadinfo({...leadinfo,gender:e.target.value})} >
+                    <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                        </select>
+                        </div>
+                        <div className="col-md-3" style={{marginLeft:"25%"}}><label className="labels">Maritial Status</label><select className="form-control" required="true" onChange={(e)=>setleadinfo({...leadinfo,maritial_status:e.target.value})}>
+                    <option>Select</option>
+                        <option>Married</option>
+                        <option>Unmarried</option>
+                        </select>
+                        </div>
+                </div>
+                <div className="row mt-3" id="leadinfopersonal2" style={{display:"none"}}>
+                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" required="true" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,birth_date:e.target.value})} /></div>
+                    <div className="col-md-5"><label className="labels">Anniversary Date</label><input type="text" required="true" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,anniversary_date:e.target.value})} /></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+
+                    
+                    <div className="col-md-6"><label className="labels">Father/husband name</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,father_husband_name:e.target.value})} /></div>
+                    <div className="col-md-6"></div>
+                    
+                    <div className="col-md-3"><label className="labels">H.No.</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})} /></div>
+                    <div className="col-md-6"><label className="labels">Street Address</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                    <div className="col-md-3"></div>
+                    
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,location:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Pincode</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,pin_code:e.target.value})} /></div>
+                   
+                    <div className="col-md-4"><label className="labels">State</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,state:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Country</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,country:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-6"><label className="labels">Website</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,website:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Industry</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,industry:e.target.value})} /></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}></label><hr style={{marginTop:"-5px"}}></hr></div>
+
+                    <div className="col-md-4"><label className="labels">Education</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,education:e.target.value})} /></div>
+                    <div className="col-md-4"><label className="labels">Degree</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,degree:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">College</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,college:e.target.value})} /></div>
+
+                    <div className="col-md-4"><label className="labels">Loan</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,loan:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Bank</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,bank:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Amount</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,amount:e.target.value})} /></div>
+
+                    <div className="col-md-4"><label className="labels">Social Media</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,social_media:e.target.value})} /></div>
+                    <div className="col-md-8"><label className="labels">URL</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,url:e.target.value})}/></div>
+                    
+                    <div className="col-md-4"><label className="labels">Income</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,income:e.target.value})} /></div>
+                    <div className="col-md-8"><label className="labels">Amount</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,amount:e.target.value})}/></div>
+
+                    <div className="col-md-4"><label className="labels">Document</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,document:e.target.value})} /></div>
+                    <div className="col-md-6"><label className="labels">Number</label><input type="text" className="form-control"  onChange={(e)=>setleadinfo({...leadinfo,number:e.target.value})}/></div>
+                    <div className="col-md-2"><label className="labels" style={{visibility:"none"}}>.</label><input type="file" id="file-upload" className="form-control" name="file" style={{display:"none"}} onChange={(e)=>setleadinfo({...leadinfo,file:e.target.files[0]})}/>
+                    <label for="file-upload" className="form-control" style={{backgroundColor:"lightblue",cursor:"pointer",textAlign:"center"}}> 
+                     Upload
+                    </label>
+                    </div>
+                   </div> 
+                   <div className="row mt-2" id="leadinforequirment1" style={{display:"none"}}>
+                    
+                    <div className="col-md-5"><label className="labels">Requirment</label><select className="form-control" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
+                    <option>Select</option>
+                       {
+                        requirment.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+                        </select>
+                        </div>
+                        <div className="col-md-5"><label className="labels">Property Type</label><select className="form-control" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
+                    <option>Select</option>
+                        {
+                            property_type.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )   
+                            )
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-2"></div>
+                        <div className="col-md-6"><label className="labels" style={{display:"inline-block"}}>Purpose</label><br></br>
+                        <input type="radio" name="purpose" value={"End use"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>End use<input type="radio" name="purpose" value={"Investor"} style={{marginLeft:"20px",marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>Investor
+                        </div>
+                        <div className="col-md-2"><label className="labels" >NRI</label><br></br>
+                        <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,nri:e.target.value})}/>Yes
+                        </div>
+                        
+                        
+                </div>
+                <div className="row mt-3" id="leadinforequirment2" style={{display:"none"}}>
+                    <div className="col-md-6"><label className="labels">Sub Type</label><select required="true" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,sub_type:e.target.value})}>
+                    <option value="">select</option>
+                    <option value="93">Afghanistan +93</option>
+                    <option value="358">Aland Islands +358</option>
+                    <option value="355">Albania +355</option>
+                    </select>
+                    </div>
+                    
+                    <div className="col-md-6"><label className="labels">Unit Type</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,unit_type:e.target.value})}>
+                    <option>Select</option>
+                        <option>Home</option>
+                        <option>Office</option>
+                        <option>Mobile</option>
+                        </select></div>
+                    
+                        <div className="col-md-6"><label className="labels">Budget Min</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <option>Select</option>
+                        <option>Home</option>
+                        <option>Office</option>
+                        <option>Mobile</option>
+                        </select></div>
+
+                        <div className="col-md-6"><label className="labels">Budget Max</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <option>Select</option>
+                        <option>Home</option>
+                        <option>Office</option>
+                        <option>Mobile</option>
+                        </select></div>
+
+                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
+                        <option>Select</option>
+                        <option>Home</option>
+                        <option>Office</option>
+                        <option>Mobile</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
+                        <option>Select</option>
+                        <option>Home</option>
+                        <option>Office</option>
+                        <option>Mobile</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control"onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
+                        <option>Select Type</option>
+                        <option>Home</option>
+                        <option>Office</option>
+                        <option>Mobile</option>
+                        </select></div>
+                    <div className="col-md-6"><label className="labels">Search Location</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Street  Address</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,street_address1:e.target.value})}/></div>
+
+                    <div className="col-md-3"><label className="labels">City</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}>
+                    <option>Select</option>
+                        <option>Personal</option>
+                        <option>Office</option>
+                        <option>Business</option>
+                        </select></div>
+                        <div className="col-md-3"><label className="labels">Area</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,area:e.target.value})}>
+                    <option>Select</option>
+                        <option>Personal</option>
+                        <option>Office</option>
+                        <option>Business</option>
+                        </select></div>
+                        <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels">Pincode</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,pin_code:e.target.value})}/></div>
+
+                        <div className="col-md-3"><label className="labels">Block</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}>
+                    <option>Select</option>
+                        <option>Personal</option>
+                        <option>Office</option>
+                        <option>Business</option>
+                        </select></div>
+                        <div className="col-md-3"><label className="labels">State</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}>
+                    <option>Select</option>
+                        <option>Personal</option>
+                        <option>Office</option>
+                        <option>Business</option>
+                        </select></div>
+                        <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                       
+                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}></label><hr style={{marginTop:"10px"}}></hr></div>
+                          <div className="col-md-12"><label className="labels" style={{fontSize:"16px"}}>Other Requirment</label></div>
+
+                    
+                    <div className="col-md-2"><label className="labels">Specific Unit</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>system</label><input type="text" className="form-control" /></div>
+                    <div className="col-md-3" style={{marginLeft:"16%"}}><label className="labels">Funding</label>
+                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
+                    <option>Select</option>
+                   {
+                    funding.map(item=>
+                        (
+                            <option>{item}</option>
+                        )
+                    )
+                   }
+                        </select>
+                    </div>
+                    <div className="col-md-3"><label className="labels">Timeline</label>
+                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
+                    <option>Select</option>
+                      {
+                        timeline.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                      }
+                        </select>
+                    </div>
+
+                    <div className="col-md-2"><label className="labels">Facing</label>
+                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,facing:e.target.value})}>
+                    <option>Select</option>
+                        {
+                            facing.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )}
+                        </select>
+                    </div>
+                    <div className="col-md-2"><label className="labels">Road</label>
+                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,road:e.target.value})}>
+                    <option>Select</option>
+                     {
+                        road.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                     )}
+                        </select>
+                    </div>
+                     <div className="col-md-3" style={{marginLeft:"16%"}}><label className="labels">Transaction Type</label>
+                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
+                    <option>Select</option>
+                     {
+                        transaction_type.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                     }
+                        </select>
+                    </div>
+                    <div className="col-md-3"><label className="labels">Furnishing</label>
+                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
+                    <option>Select</option>
+                       {
+                        furnishing.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
                         </select>
                     </div>
                     </div>

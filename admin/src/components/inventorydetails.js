@@ -499,14 +499,22 @@ function InventoryDetails() {
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px"}}>Inventory</h3>
-        <button className="form-control" style={{width:"200px",marginLeft:"10px"}}>Select Team</button>
+        <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
+        </button>
+            <ul class="dropdown-menu" id="exporttoexcel"> 
+              
+            <li  onClick={exportToExcel} >Export Data</li>
+              
+            </ul>
+        {/* <button className="form-control" style={{width:"200px",marginLeft:"10px"}}>Select Team</button>
         <button className="form-control" style={{width:"300px",marginLeft:"10px"}}>Select Sales Manager</button>
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",marginLeft:"40%"}}>
             Add Inventory
         </button>
             <ul class="dropdown-menu">
               <li><Link to={'/addinventory'} class="dropdown-item">Add Inventory</Link></li>
-            </ul>
+            </ul> */}
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
         {/* <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}}>
@@ -540,9 +548,9 @@ function InventoryDetails() {
         </div>  
         
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+      {/* <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
           <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} onClick={exportToExcel} >Export Data</button>
-          </div>
+          </div> */}
           <div style={{paddingLeft:"60px",marginTop:"10px",backgroundColor:"white"}}>
           <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">

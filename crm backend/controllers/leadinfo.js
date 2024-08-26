@@ -6,18 +6,29 @@ const lead_info=async(req,res)=>
             const{title,first_name,last_name,country_code,mobile_no,mobile_type,
                 email,email_type,title_company,designation,company_name,tags,
                 lead_type,descriptions,team,owner,campaign,source,sub_source,
-                stage,channel_partner,intrested_project}=req.body;
+                stage,channel_partner,intrested_project,gender,maritial_status,birth_date,anniversary_date,father_husband_name,h_no,
+                street_address,location,city,pincode,state,country,website,industry,education,
+                degree,college,loan,bank,amount,social_media,url,income,amount1,document,number,requirment,property_type,purpose,nri,sub_type,unit_type,budget_min,budget_max,minimum_area,maximum_area,
+                area_metric,search_location,street_address1,city1,area,country1,pin_code,block,state1,lattitude,longitude,specific_unit,
+                measurement,funding,timeline,facing,road,transaction_type,furnishing}=req.body;
                 
                 const user=await leadinfo.findOne({email})
                 if(user)
                     {
                         return res.status(400).send("email id already taken")
                     }
+
+                    const file=req.files ? req.files.map(file => file.path) : [];
             
                 const newleadinfo=new leadinfo({title,first_name,last_name,country_code,mobile_no,mobile_type,
                     email,email_type,title_company,designation,company_name,tags,
                     lead_type,descriptions,team,owner,campaign,source,sub_source,
-                    stage,channel_partner,intrested_project})
+                    stage,channel_partner,intrested_project,gender,maritial_status,birth_date,anniversary_date,father_husband_name,h_no,
+                    street_address,location,city,pincode,state,country,website,industry,education,
+                    degree,college,loan,bank,amount,social_media,url,income,amount1,document,number,file:file,
+                    requirment,property_type,purpose,nri,sub_type,unit_type,budget_min,budget_max,minimum_area,maximum_area,
+                    area_metric,search_location,street_address1,city1,area,country1,pin_code,block,state1,lattitude,longitude,specific_unit,
+                    measurement,funding,timeline,facing,road,transaction_type,furnishing})
                 
                     const resp=await newleadinfo.save();
                     res.status(200).send({message:"lead information saved",lead:resp})

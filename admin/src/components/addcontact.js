@@ -2,12 +2,11 @@ import { useState } from 'react';
 import'../css/addcontact.css';
 import Header1 from './header1';
 import Sidebar1 from './sidebar1';
-import axios from 'axios';
 import { ToastContainer, toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import api from "../api";
-import { data } from 'jquery';
-import { dateCalendarClasses } from '@mui/x-date-pickers';
+import { event } from 'jquery'; 
+
 
 
 function Addcontact() {
@@ -56,12 +55,12 @@ function Addcontact() {
     "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
 
     const navigate=useNavigate();
-    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
-        email:"",email_type:"",title_company:"",designation:"",company_name:"",tags:"",
+    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[],mobile_no:[],mobile_type:[],action1:[],
+        email:[],email_type:[],action2:[],title_company:"",designation:"",company_name:"",tags:"",
         father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
         state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
-        birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],loan:"",bank:"",amount:"",
-        social_media:"",url:"",income:"",amount1:"",website:"",industry:"",descriptions:""});
+        birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action3:[],loan:[],bank:[],amount:[],action4:[],
+        social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:[],industry:[],action7:[],descriptions:""});
     
         const config = {
             headers: {
@@ -76,7 +75,7 @@ function Addcontact() {
             const resp= await api.post('addcontact',contact,config)
         if(resp.status===200)
             {
-                toast.success(resp.data.message)
+                toast.success(resp.data.message,{ autoClose: 2000 })
                 setTimeout(() => {
                   navigate('/contactdetails')
                 }, 2000);
@@ -84,24 +83,12 @@ function Addcontact() {
             
       
         } catch (error) {
-            toast.error(error.response.data.message)
+            toast.error(error.response.data.message,{ autoClose: 2000 })
         }
     }
 
     const time=new Date()
     console.log(time);
-    
-
-
-function addFn() {
-     
-        setcontact({
-          ...contact,
-          education: [...contact.education, ''],
-          degree: [...contact.degree, ''],
-          school_college: [...contact.school_college, '']
-        });
-      };
     
       const handleeducationChange = (index, event) => {
         const neweducation = [...contact.education];
@@ -123,29 +110,6 @@ function addFn() {
       const handleschool_collegeChange = (index, event) => {
         const newschool = [...contact.school_college];
         newschool[index] = event.target.value;
-        setcontact({
-          ...contact,
-          school_college: newschool
-        });
-      };
-
-
-      const handleDeleteeducation = (index) => {
-        const neweducation = contact.education.filter((_, i) => i !== index);
-        setcontact({
-          ...contact,
-          education: neweducation
-        });
-      };
-      const handleDeletedegree = (index) => {
-        const newdegree = contact.degree.filter((_, i) => i !== index);
-        setcontact({
-          ...contact,
-          degree: newdegree
-        });
-      };
-      const handleDeleteschool = (index) => {
-        const newschool = contact.school_college.filter((_, i) => i !== index);
         setcontact({
           ...contact,
           school_college: newschool
@@ -178,6 +142,297 @@ function addFn() {
             document.getElementById("other").style.color="black"
             document.getElementById("otherdetails").style.display="none"
           }
+          function addFn1() {
+        
+            setcontact({
+              ...contact,
+              country_code: [...contact.country_code, ''],
+              mobile_no: [...contact.mobile_no, ''],
+              mobile_type: [...contact.mobile_type, ''],
+              action1: [...contact.action1, '']
+            });
+          };
+
+          const deleteall1=(index)=>
+            {
+             
+              const newcountry_code = contact.country_code.filter((_, i) => i !== index);
+              const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
+              const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
+              const newaction1 = contact.action1.filter((_, i) => i !== index);
+              
+              setcontact({
+                ...contact,
+                country_code: newcountry_code,
+                mobile_no: newmobile_no,
+                mobile_type: newmobile_type,
+                action1: newaction1
+              });
+            }
+            const handlecountry_codechange = (index, event) => {
+              const newcountry_code = [...contact.country_code];
+              newcountry_code[index] = event.target.value;
+              setcontact({
+                ...contact,
+                country_code: newcountry_code
+              });
+            };
+            const handlemobile_nochange = (index, event) => {
+              const newmobile_no = [...contact.mobile_no];
+              newmobile_no[index] = event.target.value;
+              setcontact({
+                ...contact,
+                mobile_no: newmobile_no
+              });
+            };
+            const handlemobile_typechange = (index, event) => {
+              const newmobile_type = [...contact.mobile_type];
+              newmobile_type[index] = event.target.value;
+              setcontact({
+                ...contact,
+                mobile_type: newmobile_type
+              });
+            };
+
+            function addFn2() {
+        
+              setcontact({
+                ...contact,
+                email: [...contact.email, ''],
+                email_type: [...contact.email_type, ''],
+                action2: [...contact.action2, '']
+              });
+            };
+  
+            const deleteall2=(index)=>
+              {
+               
+                const newemail = contact.email.filter((_, i) => i !== index);
+                const newemail_type = contact.email_type.filter((_, i) => i !== index);
+                const newaction2 = contact.action2.filter((_, i) => i !== index);
+                
+                setcontact({
+                  ...contact,
+                  email: newemail,
+                  email_type: newemail_type,
+                  action2: newaction2
+                });
+              }
+              const handleemailchange = (index, event) => {
+                const newemail = [...contact.email];
+                newemail[index] = event.target.value;
+                setcontact({
+                  ...contact,
+                  email: newemail
+                });
+              };
+              const handleemail_typechange = (index, event) => {
+                const newemail_type = [...contact.email_type];
+                newemail_type[index] = event.target.value;
+                setcontact({
+                  ...contact,
+                  email_type: newemail_type
+                });
+              };
+
+              function addFn3() {
+     
+                setcontact({
+                  ...contact,
+                  education: [...contact.education, ''],
+                  degree: [...contact.degree, ''],
+                  school_college: [...contact.school_college, ''],
+                  action3: [...contact.action3, '']
+                });
+              };
+              const deleteall3=(index)=>
+                {
+                 
+                  const neweducation = contact.education.filter((_, i) => i !== index);
+                  const newdegree = contact.degree.filter((_, i) => i !== index);
+                  const newschool_college = contact.school_college.filter((_, i) => i !== index);
+                  const newaction3=contact.action3.filter((_,i) => i !== index);
+                  
+                  setcontact({
+                    ...contact,
+                    education: neweducation,
+                    degree: newdegree,
+                    school_college: newschool_college,
+                    action3:newaction3
+                  });
+                }
+             
+
+                function addFn4() {
+        
+                  setcontact({
+                    ...contact,
+                    loan: [...contact.loan, ''],
+                    bank: [...contact.bank, ''],
+                    amount: [...contact.amount, ''],
+                    action4: [...contact.action4, '']
+                  });
+                };
+                const deleteall4=(index)=>
+                  {
+                   
+                    const newloan = contact.loan.filter((_, i) => i !== index);
+                    const newbank = contact.bank.filter((_, i) => i !== index);
+                    const newamount = contact.amount.filter((_, i) => i !== index);
+                    const newaction4=contact.action4.filter((_,i) => i !== index);
+                    
+                    setcontact({
+                      ...contact,
+                      loan: newloan,
+                      bank: newbank,
+                      amount: newamount,
+                      action4:newaction4
+                    });
+                  }
+                  const handleloanchange = (index, event) => {
+                    const newloan = [...contact.loan];
+                    newloan[index] = event.target.value;
+                    setcontact({
+                      ...contact,
+                      loan: newloan
+                    });
+                  };
+                  const handlebankchange = (index, event) => {
+                    const newbank = [...contact.bank];
+                    newbank[index] = event.target.value;
+                    setcontact({
+                      ...contact,
+                      bank: newbank
+                    });
+                  };
+                  const handleamountchange = (index, event) => {
+                    const newamount = [...contact.amount];
+                    newamount[index] = event.target.value;
+                    setcontact({
+                      ...contact,
+                      amount: newamount
+                    });
+                  };
+
+                  function addFn5() {
+        
+                    setcontact({
+                      ...contact,
+                      social_media: [...contact.social_media, ''],
+                      url: [...contact.url, ''],
+                      action5: [...contact.action5, '']
+                    });
+                  };
+                  const deleteall5=(index)=>
+                    {
+                     
+                      const newsocial_media = contact.social_media.filter((_, i) => i !== index);
+                      const newurl = contact.url.filter((_, i) => i !== index);
+                      const newaction5=contact.action5.filter((_,i) => i !== index);
+                      
+                      setcontact({
+                        ...contact,
+                        social_media: newsocial_media,
+                        url: newurl,
+                        action5:newaction5
+                      });
+                    }
+                    const handlesocial_mediachange = (index, event) => {
+                      const newsocial_media = [...contact.social_media];
+                      newsocial_media[index] = event.target.value;
+                      setcontact({
+                        ...contact,
+                        social_media: newsocial_media
+                      });
+                    };
+                    const handleurlChange = (index, event) => {
+                      const newurl = [...contact.url];
+                      newurl[index] = event.target.value;
+                      setcontact({
+                        ...contact,
+                        url: newurl
+                      });
+                    };
+
+                    function addFn6() {
+        
+                      setcontact({
+                        ...contact,
+                        income: [...contact.income, ''],
+                        amount1: [...contact.amount1, ''],
+                        action6: [...contact.action6, '']
+                      });
+                    };
+                    const deleteall6=(index)=>
+                      {
+                       
+                        const newincome = contact.income.filter((_, i) => i !== index);
+                        const newamount1 = contact.amount1.filter((_, i) => i !== index);
+                        const newaction6=contact.action6.filter((_,i) => i !== index);
+                        
+                        setcontact({
+                          ...contact,
+                          income: newincome,
+                          amount1: newamount1,
+                          action6:newaction6
+                        });
+                      }
+                      const handleincomechange = (index, event) => {
+                        const newincome = [...contact.income];
+                        newincome[index] = event.target.value;
+                        setcontact({
+                          ...contact,
+                          income: newincome
+                        });
+                      };
+                      const handleamount1change = (index, event) => {
+                        const newamount1 = [...contact.amount1];
+                        newamount1[index] = event.target.value;
+                        setcontact({
+                          ...contact,
+                          amount1: newamount1
+                        });
+                      };
+                      function addFn7() {
+        
+                        setcontact({
+                          ...contact,
+                          website: [...contact.website, ''],
+                          industry: [...contact.industry, ''],
+                          action7: [...contact.action7, '']
+                        });
+                      };
+                      const deleteall7=(index)=>
+                        {
+                         
+                          const newwebsite = contact.website.filter((_, i) => i !== index);
+                          const newindustry = contact.industry.filter((_, i) => i !== index);
+                          const newaction7=contact.action7.filter((_,i) => i !== index);
+                          
+                          setcontact({
+                            ...contact,
+                            website: newwebsite,
+                            industry: newindustry,
+                            action7:newaction7
+                          });
+                        }
+                        const handlewebsitechange = (index, event) => {
+                          const newwebsite = [...contact.website];
+                          newwebsite[index] = event.target.value;
+                          setcontact({
+                            ...contact,
+                            website: newwebsite
+                          });
+                        };
+                        const handleindustrychange = (index, event) => {
+                          const newindustry = [...contact.industry];
+                          newindustry[index] = event.target.value;
+                          setcontact({
+                            ...contact,
+                            industry: newindustry
+                          });
+                        };
+
     return ( 
         <div>
             <div id='h'><Header1/></div>
@@ -209,7 +464,7 @@ function addFn() {
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div><br></br>
-                    <div className="col-md-4"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -220,33 +475,103 @@ function addFn() {
                         <option>col</option>
                         </select>
                         </div>
-                    <div className="col-md-4"><label className="labels">Name</label><input type="text" required="true" className="form-control" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" className="form-control"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
                 </div>
                 <div className="row mt-3" id='basicdetails2'>
-                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control" onChange={(e)=>setcontact({...contact,country_code:e.target.value})}>
-                    <option value="">phone</option>
+                <div className="col-md-4" > <label className="labels">Country</label>
                     {
-                      countrycode.map((item)=>
+                      contact.country_code.map((item,index)=>
                       (
-                        <option>{item}</option>
+                        <select style={{marginTop:"10px"}} required="true" className="form-control" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <option value={item} >phone</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
                       ))
                     }
-                    </select></div>
-                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text" required="true" className="form-control" placeholder="enter phone number" onChange={(e)=>setcontact({...contact,mobile_no:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" onChange={(e)=>setcontact({...contact,mobile_type:e.target.value})}>
-                    <option>Select Type</option>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       contact.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange(index,event)}>
+                          <option>Select Type</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
-                        </select></div>
-                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" className="form-control" placeholder="enter email-id" onChange={(e)=>setcontact({...contact,email:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control" onChange={(e)=>setcontact({...contact,email_type:e.target.value})}>
-                    <option>Select Type</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                       contact.action1.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control' onClick={addFn1}>+</button></div>
+                    
+                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        contact.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.email_type.map((item,index)=>
+                        (
+                          <select className="form-control" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange(index,event)}>
+                          <option>Select Type</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>
-                        </select></div>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                       contact.action2.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control' onClick={addFn2}>+</button></div>
                     
                     <div className="col-md-4"><label className="labels">Title & Company</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,title_company:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Designation</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,designation:e.target.value})}/></div>
@@ -335,56 +660,211 @@ function addFn() {
                     <div className="col-md-3"> <label className="labels">Education</label>
                         
                              {contact.education.map((name, index) => (
-                                <div key={index}>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    value={name}
+                                <div key={index} style={{marginTop:"10px"}}>
+                                  <select className="form-control"
                                     onChange={(event) => handleeducationChange(index, event)}
-                                  />
-                                  <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDeleteeducation(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  >
+                                    <option>select</option><option>Intermediate</option><option>Graduate</option><option>Master</option><option>Commerce</option>
+                                    <option>Doctor</option><option>Law</option><option>IT</option><option>P.H.D</option>
+                                  </select>
+                                  
                                 </div>
                               ))}
                         </div>
                     <div className="col-md-3"><label className="labels">Degree</label>
                     {contact.degree.map((name, index) => (
-                                <div key={index}>
-                                  <input
-                                    type="text"
+                                <div key={index} style={{marginTop:"10px"}}>
+                                  <select
                                     className="form-control"
-                                    value={name}
                                     onChange={(event) => handledegreeChange(index, event)}
-                                  />
-                                  <div><img className='deletebtn' src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDeletedegree(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  >
+                                    <option>select</option><option>12th</option><option>B.A</option><option>B.Sc</option><option>B.Com</option>
+                                    <option>M.A</option><option>M.Sc</option><option>M.Com</option><option>P.H.D</option>
+                                    <option>Bsc.It</option><option>MSc.It</option><option>B.Tech</option><option>M.Tech</option><option>BCA</option>
+                                    <option>MCA</option>
+                                  </select>
+                                  
                                 </div>
                               ))}
                     </div>
-                    <div className="col-md-5"><label className="labels">School/College/University</label>
+                    <div className="col-md-4"><label className="labels">School/College/University</label>
                     {contact.school_college.map((name, index) => (
-                                <div key={index}>
+                                <div key={index} style={{marginTop:"10px"}}>
                                   <input
                                     type="text"
                                     className="form-control"
                                     value={name}
                                     onChange={(event) => handleschool_collegeChange(index, event)}
                                   />
-                                  <div><img className='deletebtn' src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>handleDeleteschool(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
                                 </div>
                               ))}                    
                     </div>
-                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn}>+</button></div>
+                     <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                      contact.action3.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn3}>+</button></div>
                 
-                    <div className="col-md-4"><label className="labels">Loan</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,loan:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Bank</label><input type="text" className="form-control"onChange={(e)=>setcontact({...contact,bank:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Amount</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,amount:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Loan</label>
+                    {
+                      contact.loan.map((item,index)=>
+                      (
+                        <select type="text"
+                        style={{marginTop:"10px"}}
+                        className="form-control" 
+                        onChange={(event)=>handleloanchange(index,event)}
+                        >
+                          <option>Select</option><option>Personal Loan</option><option>Home Loan</option><option>Vechicle Loan</option>
+                          <option>Education Loan</option>
+                        </select>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-3"><label className="labels">Bank</label>
+                    {
+                      contact.bank.map((item,index)=>
+                      (
+                        <select type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control"
+                        onChange={(event)=>handlebankchange(index,event)}
+                        >
+                          <option>Select</option>
+                          <option>State Bank Of India</option><option>Axis Bank</option><option>Indian Bank</option><option>HDFC Bank</option>
+                          <option>Canera Bank</option><option>Union Bank</option><option>Indusind Bank</option><option>IDFC Bank</option>
+                        </select>
+                      ))
+                   
+                    }
+                    </div>
+                    <div className="col-md-3"><label className="labels">Amount</label>
+                    {
+                      contact.amount.map((item,index)=>
+                      (
+                        <input type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control"
+                        onCanPlay={(event)=>handleamountchange(index,event)} />
+                      ))
+                    }
+                  </div>
+                  <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                      contact.action4.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn4}>+</button></div>
 
-                    <div className="col-md-4"><label className="labels">Social Media</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,social_media:e.target.value})}/></div>
-                    <div className="col-md-8"><label className="labels">Url</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,url:e.target.value})}/></div>
+                    
+                    <div className="col-md-4"><label className="labels">Social Media</label>
+                    {
+                      contact.social_media.map((item,index)=>
+                      (
+                        <select
+                         className='form-control'
+                          style={{marginTop:"10px"}}
+                          onChange={(event)=>handlesocial_mediachange(index,event)}>
+                        
+                        <option>select</option>
+                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
+                        </select>
 
-                    <div className="col-md-4"><label className="labels">Income</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,income:e.target.value})}/></div>
-                    <div className="col-md-8"><label className="labels">Amount</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,amount1:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Website</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,website:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Industry</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,industry:e.target.value})}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-6"><label className="labels">Url</label>
+                    {
+                      contact.url.map((item,index)=>
+                      (
+                        <input type="text" className="form-control" style={{marginTop:"10px"}} 
+                        onChange={(event)=>handleurlChange(index,event)}/>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                      contact.action5.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn5}>+</button></div>
+
+                    <div className="col-md-4"><label className="labels">Income</label>
+                    {
+                      contact.income.map((item,index)=>
+                      (
+                        <input type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control" 
+                        onChange={(event)=>handleincomechange(index,event)}
+                        />
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-6"><label className="labels">Amount</label>
+                    {
+                      contact.amount1.map((item,index)=>
+                      (
+                        <input type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control" 
+                        onChange={(event)=>handleamount1change(index,event)}
+                        />
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                      contact.action6.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn6}>+</button></div>
+
+                    <div className="col-md-5"><label className="labels">Website</label>
+                    {
+                      contact.website.map((item,index)=>
+                      (
+                        <input type="text" 
+                        className="form-control" 
+                        style={{marginTop:"10px"}}
+                        onChange={(event)=>handlewebsitechange(index,event)}
+                        />
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-5"><label className="labels">Industry</label>
+                    {
+                      contact.industry.map((item,index)=>
+                      (
+                        <input type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control"
+                        onChange={(event)=>handleindustrychange(index,event)}/>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                      contact.action7.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn7}>+</button></div>
 
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
                     <div className="col-md-2"></div>

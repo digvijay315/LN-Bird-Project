@@ -69,6 +69,8 @@ React.useEffect(()=>{fetchdatabystage_lostcount()},[])
 
 
 
+
+
 const[countall,setcountall]=useState('')
   const[data,setdata]=useState([]);
   const fetchdata=async(event)=>
@@ -246,7 +248,7 @@ const[countall,setcountall]=useState('')
       try {
         const id=item._id
         const resp=await api.delete(`removelead/${id}`)
-        toast.success("lead deleted successfully")
+        toast.success("lead deleted successfully",{ autoClose: 2000 })
         setTimeout(() => {
           window.location.reload()
         }, 2000);
@@ -309,7 +311,7 @@ const[countall,setcountall]=useState('')
       try {
         const id=data1._id
         const resp=await api.put(`updatelead/${id}`,updatedata)
-        toast.success("data updated")
+        toast.success("data updated",{ autoClose: 2000 })
         setTimeout(() => {
           navigate('/leaddetails')
         }, 2000);
@@ -350,18 +352,26 @@ const[countall,setcountall]=useState('')
       writeFile(workbook, "table_data.xlsx");
     };
    
+   
   return ( 
     <div>
       <Header1/>
       <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLBAZLujfUSZGF-RIGxwm-s8day7ATTRPrrQ&s" style={{height:"30px"}}/>
         <h3 style={{marginLeft:"10px"}}>Leads</h3>
-        <button className="form-control" style={{width:"200px",marginLeft:"10px"}}>Select Team</button>
-        <button className="form-control" style={{width:"300px",marginLeft:"10px"}}>Select Sales Manager</button>
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",marginLeft:"40%"}}>
-            Add Leads
+        <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
         </button>
+            <ul class="dropdown-menu" id="exporttoexcel"> 
+              
+            <li  onClick={exportToExcel} >Export Data</li>
+              
+            </ul>
+        {/* <button className="form-control" style={{width:"200px",marginLeft:"10px"}}>Select Team</button>
+        <button className="form-control" style={{width:"300px",marginLeft:"10px"}}>Select Sales Manager</button> */}
+        {/* <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",marginLeft:"40%"}}>
+            Add Leads
+        </button> */}
             <ul class="dropdown-menu">
               <li><Link to={'/leadinfo'} class="dropdown-item">Add Lead</Link></li>
               <li><Link to={'/leadinfo-personal'}class="dropdown-item">Add Lead(Personal Info)</Link></li>
@@ -412,7 +422,6 @@ const[countall,setcountall]=useState('')
           <input type="checkbox" style={{width:"20px"}}></input>
           <input type="text" className="form-control" style={{width:"300px"}}placeholder="Type to filter by lead-type" onChange={(e)=>setleadtype(e.target.value)} onKeyDown={handleKeyPress} ></input>
           <img src="https://static.vecteezy.com/system/resources/previews/026/640/053/original/search-icon-isolated-on-white-background-creative-modern-logo-vector.jpg" style={{marginLeft:"-80px",height:"40px",marginTop:"4px"}}/>
-          <button className="form-control" onClick={exportToExcel} style={{width:"150px",marginLeft:"800px"}}>Export Data</button>
           </div>
 
       <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>

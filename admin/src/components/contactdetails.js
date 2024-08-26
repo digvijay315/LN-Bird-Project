@@ -94,7 +94,7 @@ function Fetchcontact() {
           try {
             const id=item._id
             const resp=await api.delete(`deletecontact/${id}`)
-            toast.success("contact deleted successfully")
+            toast.success("contact deleted successfully",{ autoClose: 2000 })
             setTimeout(() => {
               window.location.reload()
             }, 2000);
@@ -102,6 +102,21 @@ function Fetchcontact() {
             console.log(error);
           }
         }
+
+        const deleteSelectedItems = async () => {
+          try {
+            const resp = selectedItems.map(async (itemId) => {
+              await axios.delete(`http://localhost:5000/deletecontact/${itemId}`);
+            });
+            
+            toast.success('Selected items deleted successfully',{autoClose:"2000"})
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
      
       
         
@@ -190,11 +205,19 @@ function Fetchcontact() {
                             const resp=await api.get(`viewcontactbyemail/${searchdata}`);
                               const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
                               // setdata(incoming)
+
                             const resp1=await api.get(`viewcontactbymobile/${searchdata}`);
                             const incoming1=(Array.isArray(resp1.data.contact) ? resp1.data.contact : [resp1.data.contact]);
                             setdata([...incoming,...incoming1])
+
+                            const resp2=await api.get(`viewcontactbytags/${searchdata}`);
+                            const incoming2=(Array.isArray(resp2.data.contact) ? resp2.data.contact : [resp2.data.contact]);
+                            setdata([...incoming,...incoming1,...incoming2])
                             
-                            
+                            const resp3=await api.get(`viewcontactbycompany/${searchdata}`);
+                            const incoming3=(Array.isArray(resp3.data.contact) ? resp3.data.contact : [resp3.data.contact]);
+                            setdata([...incoming,...incoming1,...incoming2,...incoming3])
+
                           } catch (error) {
                             console.log(error);
                           }
@@ -235,7 +258,7 @@ function Fetchcontact() {
           try {
             const id=data1._id
             const resp=await api.put(`updatecontact/${id}`,updatecontactdata)
-            toast.success("contact updated")
+            toast.success("contact updated",{ autoClose: 2000 })
             setTimeout(() => {
               navigate('/contactdetails')
             }, 2000);
@@ -252,7 +275,7 @@ function Fetchcontact() {
     
 
         const [currentPage, setCurrentPage] = useState(1);
-        const [itemsPerPage] = useState('5');
+        const [itemsPerPage, setItemsPerPage] = useState(5); // User defined items per page
         const indexOfLastItem = currentPage * itemsPerPage;
         const indexOfFirstItem = indexOfLastItem - itemsPerPage;
         const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -335,14 +358,14 @@ function Fetchcontact() {
       {
         e.preventDefault();
         try {
-          if(!mail.emails)
-          {
-            toast.error("no email address found")
-          }
+          // if(!mail.emails)
+          // {
+          //   toast.error("no email address found",{ autoClose: 2000 })
+          // }
           const resp=await api.post(`contact/sendmail`,mail)
           if(resp.status===200)
           {
-            toast.success("Mail Sent Successfully")
+            toast.success("Mail Sent Successfully",{ autoClose: 2000 })
             setTimeout(() => {
               navigate('/contactdetails')
             }, 2000);
@@ -352,29 +375,95 @@ function Fetchcontact() {
           }
          
         } catch (error) {
-          toast.error(error.response.data);
+          toast.error(error.response.data,{ autoClose: 2000 });
         }
       }
 
-      const columns = [
-        { id: 'number', label: '#' },
-        { id: 'personalDetails', label: 'Personal Details' },
-        { id: 'address', label: 'Address' },
-        { id: 'source', label: 'Source' },
-        { id: 'team', label: 'Team' },
-        { id: 'owner', label: 'Owner' },
-        { id: 'tags', label: 'Tags' },
-        { id: 'designation', label: 'Designation' },
-        { id: 'companyName', label: 'Company Name' },
-        { id: 'operations', label: 'Operations' },
+      const allColumns = [
+        { id: 'sno', name: '#' },
+        { id: 'personaldetails', name: 'Personal Details' },
+        { id: 'mobile_type', name: 'Mobile Type' },
+        { id: 'email_type', name: 'Email Type' },
+        { id: 'title_company', name: 'Title (Company)' },
+        { id: 'designation', name: 'Designation' },
+        { id: 'company_name', name: 'Company Name' },
+        { id: 'tags', name: 'Tags' },
+        { id: 'father_husband_name', name: 'Father/Husband Name' },
+        { id: 'h_no', name: 'House No' },
+        { id: 'street_address', name: 'Street Address' },
+        { id: 'location', name: 'Location' },
+        { id: 'city', name: 'City' },
+        { id: 'pincode', name: 'Pincode' },
+        { id: 'state', name: 'State' },
+        { id: 'country', name: 'Country' },
+        { id: 'source', name: 'Source' },
+        { id: 'category', name: 'Category' },
+        { id: 'owner', name: 'Owner' },
+        { id: 'team', name: 'Team' },
+        { id: 'gender', name: 'Gender' },
+        { id: 'visible_to', name: 'Visible To' },
+        { id: 'marital_status', name: 'Marital Status' },
+        { id: 'birth_date', name: 'Birth Date' },
+        { id: 'anniversary_date', name: 'Anniversary Date' },
+        { id: 'education', name: 'Education' },
+        { id: 'degree', name: 'Degree' },
+        { id: 'school_college', name: 'School/College' },
+        { id: 'loan', name: 'Loan' },
+        { id: 'bank', name: 'Bank' },
+        { id: 'amount', name: 'Amount' },
+        { id: 'social_media', name: 'Social Media' },
+        { id: 'url', name: 'URL' },
+        { id: 'income', name: 'Income' },
+        { id: 'amount1', name: 'Amount 1' },
+        { id: 'website', name: 'Website' },
+        { id: 'industry', name: 'Industry' },
+        { id: 'descriptions', name: 'Descriptions' },
       ];
-      const [visibleColumns, setVisibleColumns] = useState(columns.map(col => col.id));
+      const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
+      const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
+      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 11));
+      const [showColumnList, setShowColumnList] = useState(false);
 
-      const removeColumn = (columnId) => {
-        // Prevent removal of 'number' and 'personalDetails' columns
-        if (columnId !== 'number' && columnId !== 'personalDetails') {
-          setVisibleColumns(visibleColumns.filter(id => id !== columnId));
+      const handleAddColumnClick = () => {
+        setShowColumnList(!showColumnList);
+      };
+    
+      const handleCheckboxChange = (column) => {
+        if (visibleColumns.some((col) => col.id === column.id)) {
+          // Remove column from visibleColumns if it's already present
+          setVisibleColumns(visibleColumns.filter((col) => col.id !== column.id));
+        } else {
+          // Add column to visibleColumns
+          setVisibleColumns([...visibleColumns, column]);
         }
+      };
+      const handleSelectAll = () => {
+        setSelectAll(!selectAll);
+        if (!selectAll) {
+          // Add all current page item IDs to selectedItems
+          setSelectedItems(currentItems.map((item) => item._id));
+        } else {
+          // Deselect all
+          setSelectedItems([]);
+        }
+      };
+    
+      const handleRowSelect = (id) => {
+        if (selectedItems.includes(id)) {
+          setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
+        } else {
+          setSelectedItems([...selectedItems, id]);
+        }
+      };
+    
+      // Handle items per page change
+      const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1); // Reset to first page whenever items per page changes
+      };
+      const pagereload=()=>
+      {
+        window.location.reload()
       }
     return ( 
         <div>
@@ -382,7 +471,7 @@ function Fetchcontact() {
             <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
-        <h3 style={{marginLeft:"10px"}}>Contact </h3>
+        <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Contact </h3>
         
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
             <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
@@ -399,13 +488,51 @@ function Fetchcontact() {
               <li><Link to={'/addcontact'} class="dropdown-item">Add Contact</Link></li>
             </ul> */}
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-      <input type="text" className="form-control form-control-sm" placeholder="search by email or mobile" style={{width:"20%",marginTop:"10px"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      <input type="text" className="form-control form-control-sm" placeholder="search by email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      
+      <div style={{position:"absolute",marginLeft:"25%"}}>
+      <button className="form-control form-control-sm" onClick={deleteSelectedItems} disabled={selectedItems.length === 0}>
+        Delete Selected
+      </button>
+      </div>
      
-        <div className="lead" style={{width:"200px",borderRadius:"10px",padding:"10px",marginLeft:"70%",textAlign:"center"}} onClick={()=>fetchdata()}>
-          <h6>All</h6>
-        </div>
+      <div style={{position:"absolute",marginLeft:"80%"}}><button className="form-control form-control-sm">Sort</button></div>
+
+      <div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
+                <button onClick={handleAddColumnClick} className="form-control form-control-sm" style={{width:"150px"}}>Add Fields</button>
+                {showColumnList && (
+                  <div
+                    style={{
+                      width:"200px",
+                      height:"500px",
+                      overflow:"scroll",
+                     backgroundColor:"gray",
+                      position: 'absolute',
+                      top: '100%',
+                      left: '-80px',
+                      border: '1px solid #ccc',
+                      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                      zIndex: 1000,
+                    }}
+                  >
+                    <ul style={{ listStyleType: 'none', margin: 0, padding: '10px' }}>
+                      {allColumns.slice(2).map((col) => (
+                        <li key={col.id} style={{ padding: '5px 0' }}>
+                          <input
+                            type="checkbox"
+                            checked={visibleColumns.some((visibleCol) => visibleCol.id === col.id)}
+                            onChange={() => handleCheckboxChange(col)}
+                          />{' '}
+                          {col.name}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+      
         {/* <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
             <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"5px",color:"black",backgroundColor:"transparent",width:"150px"}}>
             Filter
@@ -420,74 +547,85 @@ function Fetchcontact() {
       </div>
      
           <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-          <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            {columns.map((column) => (
-              visibleColumns.includes(column.id) && (
-                <StyledTableCell key={column.id} align="left" onClick={() => removeColumn(column.id)}  style={{cursor:"pointer"}}>
-                  {column.label}
-                  {/* <IconButton onClick={() => removeColumn(column.id)} size="small" style={{color:"white"}}>
-                    <RemoveIcon />
-                  </IconButton> */}
-                </StyledTableCell>
-              )
+          <TableContainer component={Paper}  >
+          < Table sx={{ minWidth: 700 }} aria-label="customized table" border="1" style={{fontFamily:"times new roman"}}>
+        <TableHead style={{textAlign:"center",backgroundColor:"black",color:"white",fontFamily:"times new roman"}}>
+          <TableRow >
+          <th>
+              <input
+                type="checkbox"
+                checked={selectAll}
+                onChange={handleSelectAll}
+              />
+            </th>
+            {visibleColumns.map((col) => (
+              <th key={col.id}>{col.name}</th>
             ))}
+            <th>Operations</th>
+          
           </TableRow>
         </TableHead>
-        <TableBody>
+        <tbody>
           {currentItems.map((item, index) => (
-            <TableRow key={index}>
-              {visibleColumns.includes('number') && (
-                <StyledTableCell align="left">{index + 1}</StyledTableCell>
-              )}
-              {visibleColumns.includes('personalDetails') && (
-                <StyledTableCell className="personaldetails" align="left" component="th" scope="row" onClick={() => handleShow2(item)}>
-                  {item.title} {item.first_name} {item.last_name}<br />
-                  <SvgIcon component={PhoneIphoneIcon}></SvgIcon><span>{item.mobile_no}</span><br />
-                  <SvgIcon component={EmailIcon}></SvgIcon><span>{item.email}</span>
-                </StyledTableCell>
-              )}
-              {visibleColumns.includes('address') && (
-                <StyledTableCell align="left">
-                  {item.h_no} <br />{item.street_address}<br />{item.city}
-                </StyledTableCell>
-              )}
-              {visibleColumns.includes('source') && (
-                <StyledTableCell align="left">{item.source}</StyledTableCell>
-              )}
-              {visibleColumns.includes('team') && (
-                <StyledTableCell align="left">{item.team}</StyledTableCell>
-              )}
-              {visibleColumns.includes('owner') && (
-                <StyledTableCell align="left">{item.owner}</StyledTableCell>
-              )}
-              {visibleColumns.includes('tags') && (
-                <StyledTableCell align="left">{item.tags}</StyledTableCell>
-              )}
-              {visibleColumns.includes('designation') && (
-                <StyledTableCell align="left">{item.designation}</StyledTableCell>
-              )}
-              {visibleColumns.includes('companyName') && (
-                <StyledTableCell align="left">{item.company_name}</StyledTableCell>
-              )}
-              {visibleColumns.includes('operations') && (
-                <StyledTableCell align="left">
-                  <button className="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ backgroundColor: "transparent", color: "black" }}>
+            <tr key={index}>
+              {/* Combine title, first_name, last_name */}
+              <td><input type="checkbox"  
+                  checked={selectedItems.includes(item._id)}
+                  onChange={() => handleRowSelect(item._id)}>
+              </input>{index+1}</td>
+              <td style={{padding:"10px",cursor:"pointer"}} onClick={()=>handleShow2(item)}>
+                {item.title} {item.first_name} {item.last_name}
+                <br />
+                <SvgIcon component={PhoneIphoneIcon}></SvgIcon><span>{item.mobile_no}</span>
+                <br />
+                <SvgIcon component={EmailIcon}></SvgIcon><span>{item.email}</span>
+              </td>
+
+              {/* Render other visible columns */}
+              {visibleColumns
+                .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
+                .map((col) => (
+                  <td key={col.id} style={{padding:"10px"}}>{item[col.id]}</td>
+                ))}
+
+              {/* Operations column */}
+              <td style={{padding:"10px"}}>
+                <div>
+                  <button
+                    className="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    style={{ backgroundColor: 'transparent', color: 'black' }}
+                  >
                     Actions
                   </button>
                   <ul className="dropdown-menu">
-                    <li><a className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => handleShow1(item)}>Edit</a></li>
-                    <li><a className="dropdown-item" onClick={() => deletecontact(item)} style={{ cursor: "pointer" }}>Delete</a></li>
-                    <li><a className="dropdown-item" onClick={() => handleShow3(item)} style={{ cursor: "pointer" }}>Send Mail</a></li>
+                    <li onClick={()=>handleShow1(item)}>
+                      <a className="dropdown-item" style={{ cursor: 'pointer' }}>
+                        Edit
+                      </a>
+                    </li>
+                    <li onClick={()=>deletecontact(item)}>
+                      <a className="dropdown-item" style={{ cursor: 'pointer' }}>
+                        Delete
+                      </a>
+                    </li>
+                    <li onClick={()=>handleShow3(item)}>
+                      <a className="dropdown-item" style={{ cursor: 'pointer' }}>
+                        Send Mail
+                      </a>
+                    </li>
                   </ul>
-                </StyledTableCell>
-              )}
-            </TableRow>
+                </div>
+              </td>
+            </tr>
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+        </Table>
+        <div style={{height:"50px",width:"100%"}}>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Summary</h5>
+        </div>
     </TableContainer>
  
        {/* <TableContainer component={Paper}>
@@ -541,7 +679,17 @@ function Fetchcontact() {
       </Table>
     </TableContainer> */}
       </div>
+     
       <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>
+      
+        <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items per page: </label>
+        <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman"}}>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+        </select>
+      
       {renderPageNumbers()}
       </div>
       

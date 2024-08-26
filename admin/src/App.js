@@ -22,6 +22,8 @@ import Leadfetch from './components/leaddetails';
 import Fetchcontact from './components/contactdetails';
 import InventoryDetails from './components/inventorydetails';
 import TableComponent from './components/demo';
+import CallButton from './components/demo';
+import Notification from './components/demo';
 
 
 function App() {

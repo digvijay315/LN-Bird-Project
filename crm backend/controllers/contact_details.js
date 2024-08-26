@@ -77,6 +77,34 @@ const add_contact=async(req,res)=>
                         console.log(error)
                     }
                 }
+                const view_contact_Bytags=async(req,res)=>
+                    {
+                        try {
+                            const tags=req.params.tags;
+                            const resp= await addcontact.find({tags:tags})
+                            if(!resp)
+                                {
+                                   return res.send("contact details not available")
+                                }
+                            res.status(200).send({message:"name found and here are contact details:",contact:resp})
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
+                    const view_contact_Bycompany=async(req,res)=>
+                        {
+                            try {
+                                const company_name=req.params.company_name;
+                                const resp= await addcontact.find({company_name:company_name})
+                                if(!resp)
+                                    {
+                                       return res.send("contact details not available")
+                                    }
+                                res.status(200).send({message:"name found and here are contact details:",contact:resp})
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        }
         const remove_contact=async(req,res)=>
             {
                 try {
@@ -107,4 +135,5 @@ const add_contact=async(req,res)=>
                         console.log(error)
                     }
                 }
-    module.exports={add_contact,view_contact,view_contact_ByName,remove_contact,update_contact,view_contact_Byemail,view_contact_Bymobile};
+    module.exports={add_contact,view_contact,view_contact_ByName,remove_contact,update_contact,
+                    view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany};

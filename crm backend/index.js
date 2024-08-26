@@ -6,6 +6,7 @@ const connect = require('./connectdb');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+
 const app=express();
 
 app.use(bodyParser.json())

@@ -48,7 +48,7 @@ function Leadinfo_personal() {
                     <h4 className="text-right">Add Lead</h4>
                 </div><hr></hr>
                 <div className="d-flex justify-content-between align-items-center experience"><span>Personal Info</span></div><hr></hr>
-                <div className="row mt-2">
+                <div className="row mt-2" id="leadinfopersonal1">
                     
                     <div className="col-md-3"><label className="labels">Gender</label><select className="form-control" required="true" onChange={(e)=>setleadinfopersonal({...leadinfopersonal,gender:e.target.value})} >
                     <option>Select</option>
@@ -64,7 +64,7 @@ function Leadinfo_personal() {
                         </select>
                         </div>
                 </div>
-                <div className="row mt-3">
+                <div className="row mt-3" id="leadinfopersonal2">
                     <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" required="true" className="form-control"  onChange={(e)=>setleadinfopersonal({...leadinfopersonal,birth_date:e.target.value})}/></div>
                     <div className="col-md-5"><label className="labels">Anniversary Date</label><input type="text" required="true" className="form-control"  onChange={(e)=>setleadinfopersonal({...leadinfopersonal,anniversary_date:e.target.value})}/></div>
 
