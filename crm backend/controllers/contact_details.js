@@ -34,12 +34,13 @@ const add_contact=async(req,res)=>
                 console.log(error)
             }
         }
+        
     
     const view_contact_ByName=async(req,res)=>
         {
             try {
-                const name=req.params.first_name;
-                const resp= await addcontact.findOne({first_name:name})
+                const _id=req.params._id;
+                const resp= await addcontact.findOne({_id:_id})
                 if(!resp)
                     {
                        return res.send("contact details not available")

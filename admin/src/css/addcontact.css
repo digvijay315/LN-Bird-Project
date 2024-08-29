@@ -67,3 +67,53 @@ button:hover{
   cursor: pointer;
   background-color: gray;
 }
+#delete{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#delete:hover
+{
+    transform: scale(1.1);
+    
+}
+#edit{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#edit:hover
+{
+    transform: scale(1.1);
+    
+}
+#mail{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#mail:hover
+{
+    transform: scale(1.1);
+    
+}
+#whatsapp{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#whatsapp:hover
+{
+    transform: scale(1.1);
+    
+}
+#message{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#message:hover
+{
+    transform: scale(1.1);
+    
+}

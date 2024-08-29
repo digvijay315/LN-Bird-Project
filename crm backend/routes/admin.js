@@ -21,7 +21,7 @@ const router=express.Router()
 
 router.post('/addcontact',add_contact)
 router.get('/viewcontact',view_contact)
-router.get('/viewcontactbyname/:first_name',view_contact_ByName)
+router.get('/viewcontactbyname/:_id',view_contact_ByName)
 router.get('/viewcontactbyemail/:email',view_contact_Byemail)
 router.get('/viewcontactbymobile/:mobile_no',view_contact_Bymobile)
 router.get('/viewcontactbytags/:tags',view_contact_Bytags)

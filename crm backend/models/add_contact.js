@@ -40,8 +40,8 @@ social_media:{type:Array},
 url:{type:Array},
 income:{type:Array},
 amount1:{type:Array},
-website:{type:Array},
-industry:{type:Array},
+website:{type:String},
+industry:{type:String},
 descriptions:{type:String},
 
 },{timestamps:true})

@@ -60,7 +60,7 @@ function Addcontact() {
         father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
         state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
         birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action3:[],loan:[],bank:[],amount:[],action4:[],
-        social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:[],industry:[],action7:[],descriptions:""});
+        social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:"",industry:"",descriptions:""});
     
         const config = {
             headers: {
@@ -88,33 +88,9 @@ function Addcontact() {
     }
 
     const time=new Date()
-    console.log(time);
     
-      const handleeducationChange = (index, event) => {
-        const neweducation = [...contact.education];
-        neweducation[index] = event.target.value;
-        setcontact({
-          ...contact,
-          education: neweducation
-        });
-      };
-      const handledegreeChange = (index, event) => {
-        const newdegree = [...contact.degree];
-        newdegree[index] = event.target.value;
-        setcontact({
-          ...contact,
-          degree: newdegree
-        });
-      };
-
-      const handleschool_collegeChange = (index, event) => {
-        const newschool = [...contact.school_college];
-        newschool[index] = event.target.value;
-        setcontact({
-          ...contact,
-          school_college: newschool
-        });
-      };
+    
+     
 
         const mousehover=()=>
             {
@@ -261,6 +237,31 @@ function Addcontact() {
                     action3:newaction3
                   });
                 }
+                const handleeducationChange = (index, event) => {
+                  const neweducation = [...contact.education];
+                  neweducation[index] = event.target.value;
+                  setcontact({
+                    ...contact,
+                    education: neweducation
+                  });
+                };
+                const handledegreeChange = (index, event) => {
+                  const newdegree = [...contact.degree];
+                  newdegree[index] = event.target.value;
+                  setcontact({
+                    ...contact,
+                    degree: newdegree
+                  });
+                };
+          
+                const handleschool_collegeChange = (index, event) => {
+                  const newschool = [...contact.school_college];
+                  newschool[index] = event.target.value;
+                  setcontact({
+                    ...contact,
+                    school_college: newschool
+                  });
+                };
              
 
                 function addFn4() {
@@ -393,45 +394,8 @@ function Addcontact() {
                           amount1: newamount1
                         });
                       };
-                      function addFn7() {
-        
-                        setcontact({
-                          ...contact,
-                          website: [...contact.website, ''],
-                          industry: [...contact.industry, ''],
-                          action7: [...contact.action7, '']
-                        });
-                      };
-                      const deleteall7=(index)=>
-                        {
-                         
-                          const newwebsite = contact.website.filter((_, i) => i !== index);
-                          const newindustry = contact.industry.filter((_, i) => i !== index);
-                          const newaction7=contact.action7.filter((_,i) => i !== index);
-                          
-                          setcontact({
-                            ...contact,
-                            website: newwebsite,
-                            industry: newindustry,
-                            action7:newaction7
-                          });
-                        }
-                        const handlewebsitechange = (index, event) => {
-                          const newwebsite = [...contact.website];
-                          newwebsite[index] = event.target.value;
-                          setcontact({
-                            ...contact,
-                            website: newwebsite
-                          });
-                        };
-                        const handleindustrychange = (index, event) => {
-                          const newindustry = [...contact.industry];
-                          newindustry[index] = event.target.value;
-                          setcontact({
-                            ...contact,
-                            industry: newindustry
-                          });
-                        };
+                  
+                    
 
     return ( 
         <div>
@@ -463,7 +427,8 @@ function Addcontact() {
                 </div><hr></hr>
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
-                <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div><br></br>
+                <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
+                <div className='col-md-12'><hr></hr></div>
                     <div className="col-md-2"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
@@ -833,38 +798,25 @@ function Addcontact() {
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn6}>+</button></div>
 
-                    <div className="col-md-5"><label className="labels">Website</label>
-                    {
-                      contact.website.map((item,index)=>
-                      (
+                    <div className="col-md-6"><label className="labels">Website</label>
+                   
                         <input type="text" 
                         className="form-control" 
                         style={{marginTop:"10px"}}
-                        onChange={(event)=>handlewebsitechange(index,event)}
+                        onChange={(event)=>setcontact({...contact,website:event.target.value})}
                         />
-                      ))
-                    }
+                    
                     </div>
-                    <div className="col-md-5"><label className="labels">Industry</label>
-                    {
-                      contact.industry.map((item,index)=>
-                      (
+                    <div className="col-md-6"><label className="labels">Industry</label>
+                    
                         <input type="text" 
                         style={{marginTop:"10px"}}
                         className="form-control"
-                        onChange={(event)=>handleindustrychange(index,event)}/>
-                      ))
-                    }
+                        onChange={(event)=> setcontact({...contact,industry:event.target.value})}/>
+                   
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
-                    {
-                      contact.action7.map((item,index)=>
-                      (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                      ))
-                    }
-                    </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn7}>+</button></div>
+                   
+                    
 
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
                     <div className="col-md-2"></div>
