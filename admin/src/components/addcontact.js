@@ -60,11 +60,12 @@ function Addcontact() {
         father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
         state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
         birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action3:[],loan:[],bank:[],amount:[],action4:[],
-        social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:"",industry:"",descriptions:""});
+        social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:"",industry:"",document_no:[],document_name:[],
+        document_pic:[],action7:[],descriptions:""});
     
         const config = {
             headers: {
-              'Content-Type': 'application/json' // Set the Content-Type here
+              'Content-Type': 'multipart/form-data' // Set the Content-Type here
             }
         }
       
@@ -394,6 +395,58 @@ function Addcontact() {
                           amount1: newamount1
                         });
                       };
+
+                      function addFn7() {
+        
+                        setcontact({
+                          ...contact,
+                          document_no: [...contact.document_no, ''],
+                          document_name: [...contact.document_name, ''],
+                          document_pic: [...contact.document_pic, ''],
+                          action7: [...contact.action7, '']
+                        });
+                      };
+                      const deleteall7=(index)=>
+                        {
+                         
+                          const newdocumentno = contact.document_no.filter((_, i) => i !== index);
+                          const newdocumentname = contact.document_name.filter((_, i) => i !== index);
+                          const newdocumentpic = contact.document_pic.filter((_, i) => i !== index);
+                          const newaction7=contact.action7.filter((_,i) => i !== index);
+                          
+                          setcontact({
+                            ...contact,
+                            document_no: newdocumentno,
+                            document_name: newdocumentname,
+                            document_pic: newdocumentpic,
+                            action7:newaction7
+                          });
+                        }
+                        const handledocumentnochange = (index, event) => {
+                          const newdocumentno = [...contact.document_no];
+                          newdocumentno[index] = event.target.value;
+                          setcontact({
+                            ...contact,
+                            document_no: newdocumentno
+                          });
+                        };
+                        const handledocumentnamechange = (index, event) => {
+                          const newdocumentname = [...contact.document_name];
+                          newdocumentname[index] = event.target.value;
+                          setcontact({
+                            ...contact,
+                            document_name: newdocumentname
+                          });
+                        };
+                        const handledocumentpicchange = (index, event) => {
+                          const newdocumentpic = [...contact.document_pic];
+                          const files = Array.from(event.target.files);
+                          newdocumentpic[index] = {files:files}
+                          setcontact({
+                            ...contact,
+                            document_pic: newdocumentpic
+                          });
+                        };
                   
                     
 
@@ -423,6 +476,7 @@ function Addcontact() {
                 
                 </div><hr></hr>
                 <div className="d-flex justify-content-between align-items-center experience" id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details</span>
+                <div className="d-flex justify-content-between align-items-center experience" id='professional'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details</span></div>
                 <div className="d-flex justify-content-between align-items-center experience" id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Other Details</span></div>
                 </div><hr></hr>
                
@@ -816,6 +870,51 @@ function Addcontact() {
                    
                     </div>
                    
+                    <div className="col-md-3"><label className="labels">Document No.</label>
+                    {
+                      contact.document_no.map((item,index)=>
+                      (
+                        <input type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control" 
+                        onChange={(event)=>handledocumentnochange(index,event)}
+                        />
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-3"><label className="labels">Document Name</label>
+                    {
+                      contact.document_name.map((item,index)=>
+                      (
+                        <input type="text" 
+                        style={{marginTop:"10px"}}
+                        className="form-control" 
+                        onChange={(event)=>handledocumentnamechange(index,event)}
+                        />
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Document Picture</label>
+                    {
+                      contact.document_pic.map((item,index)=>
+                      (
+                        <input type="file" 
+                        style={{marginTop:"10px"}}
+                        className="form-control" 
+                        onChange={(event)=>handledocumentpicchange(index,event)}
+                        />
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    {
+                      contact.action7.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn7}>+</button></div>
                     
 
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>

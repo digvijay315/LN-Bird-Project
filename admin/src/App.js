@@ -24,6 +24,7 @@ import InventoryDetails from './components/inventorydetails';
 import TableComponent from './components/demo';
 import CallButton from './components/demo';
 import Notification from './components/demo';
+import SuggestionBox from './components/demo';
 
 
 function App() {
@@ -49,7 +50,7 @@ function App() {
       <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
     </Routes>
-    {/* <TableComponent/> */}
+    {/* <SuggestionBox/> */}
   
    </div>
    </BrowserRouter>

@@ -1,0 +1,33 @@
+/* src/SuggestionBox.css */
+.suggestion-box {
+    position: relative;
+    width: 300px;
+  }
+  
+  .suggestion-box input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+  
+  .suggestion-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: white;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+  
+  .suggestion-list li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .suggestion-list li:hover {
+    background-color: #f0f0f0;
+  }
+  

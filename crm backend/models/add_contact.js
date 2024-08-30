@@ -42,6 +42,9 @@ income:{type:Array},
 amount1:{type:Array},
 website:{type:String},
 industry:{type:String},
+document_no:{type:Array},
+document_name:{type:Array},
+document_pic:{type:Array},
 descriptions:{type:String},
 
 },{timestamps:true})

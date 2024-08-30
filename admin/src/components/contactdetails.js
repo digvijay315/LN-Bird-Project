@@ -194,29 +194,130 @@ function Fetchcontact() {
 /*-------------------------------------------------------------------pagination,mui table cell and export to excel start---------------------------------------------------------------------------- */                                                     
     
 
-        const [currentPage, setCurrentPage] = useState(1);
-        const [itemsPerPage, setItemsPerPage] = useState(5); // User defined items per page
-        const indexOfLastItem = currentPage * itemsPerPage;
-        const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-        const totalPages = Math.ceil(data.length / itemsPerPage);
+        // const [currentPage, setCurrentPage] = useState(1);
+        // const [itemsPerPage, setItemsPerPage] = useState(5); // User defined items per page
+        // const indexOfLastItem = currentPage * itemsPerPage;
+        // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+        // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+        // const totalPages = Math.ceil(data.length / itemsPerPage);
         
-        const paginate = (pageNumber) => setCurrentPage(pageNumber);
+        // const paginate = (pageNumber) => setCurrentPage(pageNumber);
         
-        const renderPageNumbers = () => {
-          return Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-            <button key={number} onClick={() => paginate(number)} style={{width:"30px",borderRadius:"5px"}}>
-              {number}
-            </button>
-          ));
-        };
+        // // const renderPageNumbers = () => {
+        // //   return Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+        // //     <button key={number} onClick={() => paginate(number)} style={{width:"30px",borderRadius:"5px"}}>
+        // //       {number}
+        // //     </button>
+        // //   ));
+        // // };
+        // const renderPageNumbers = () => {
+        //   return (
+        //     <div
+        //       style={{
+        //         display: 'flex',
+        //         overflowX: 'scroll',
+        //         whiteSpace: 'nowrap',
+        //         padding: '10px-15px',
+        //         width:'100px', 
+        //         position:"auto"
+        //       }}
+        //     >
+        //       {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
+        //         <button
+        //           key={number}
+        //           onClick={() => paginate(number)}
+        //           style={{
+        //             width: '30px',
+        //             borderRadius: '5px',
+        //             marginRight: '5px',
+        //             flexShrink: 0, // Prevent buttons from shrinking
+        //           }}
+        //         >
+        //           {number}
+        //         </button>
+        //       ))}
+        //     </div>
+        //   );
+        // };
+const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+const totalPages = Math.ceil(data.length / itemsPerPage);
 
-        // Handle items per page change
-        const handleItemsPerPageChange = (e) => {
-          setItemsPerPage(Number(e.target.value));
-          setCurrentPage(1); // Reset to first page whenever items per page changes
-        };
+  // Handle items per page change
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // Reset to first page whenever items per page changes
+  };
 
+// Function to handle page changes
+const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+// Function to handle "Next" and "Previous" page changes
+const goToNextPage = () => {
+  if (currentPage < totalPages) {
+    setCurrentPage(currentPage + 1);
+  }
+};
+
+const goToPreviousPage = () => {
+  if (currentPage > 1) {
+    setCurrentPage(currentPage - 1);
+  }
+};
+
+const renderPageNumbers = () => {
+  // Define the range of page numbers to display
+  const maxPageNumbersToShow = 5;
+  const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+  const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+  
+  return (
+    <div
+      style={{
+        display: 'flex',
+       
+        whiteSpace: 'nowrap',
+        padding: '10px-15px',
+        width: '100%', 
+        position: 'relative'
+      }}
+    >
+      {/* Previous Button */}
+      {currentPage > 1 && (
+        <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Prev
+        </button>
+      )}
+
+      {/* Page Numbers */}
+      {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((number) => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          style={{
+            width: '30px',
+            borderRadius: '5px',
+            marginRight: '5px',
+            flexShrink: 0, // Prevent buttons from shrinking
+            backgroundColor: number === currentPage ? 'lightblue' : 'white',
+          }}
+        >
+          {number}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      {currentPage < totalPages && (
+        <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Next
+        </button>
+      )}
+    </div>
+  );
+};
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
       [`&.${tableCellClasses.head}`]: {
@@ -376,7 +477,6 @@ function Fetchcontact() {
       const handleSelectAll = () => {
         document.getElementById("delete").style.display="inline-block"
         document.getElementById("search").style.display="none"
-        document.getElementById("sort").style.display="none"
         document.getElementById("edit").style.display="none"
         document.getElementById("mail").style.display="inline-block"
          document.getElementById("whatsapp").style.display="inline-block"
@@ -390,7 +490,6 @@ function Fetchcontact() {
           setSelectedItems([]);
           document.getElementById("delete").style.display="none"
           document.getElementById("search").style.display="flex"
-          document.getElementById("sort").style.display="flex"
           document.getElementById("edit").style.display="none"
           document.getElementById("mail").style.display="none"
            document.getElementById("whatsapp").style.display="none"
@@ -405,7 +504,6 @@ function Fetchcontact() {
          document.getElementById("whatsapp").style.display="none"
             document.getElementById("message").style.display="none"
         document.getElementById("search").style.display="flex"
-          document.getElementById("sort").style.display="flex"
         if (selectedItems.includes(id)) {
           setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
         } else {
@@ -416,7 +514,6 @@ function Fetchcontact() {
           document.getElementById("whatsapp").style.display="inline-block"
              document.getElementById("message").style.display="inline-block"
          document.getElementById("search").style.display="none"
-          document.getElementById("sort").style.display="none"
         }
       };
 
@@ -850,11 +947,11 @@ const handleSort = (key) => {
       </Tooltip>
       </div>
     
-      <div id="sort" style={{position:"absolute",marginLeft:"75%"}}>
-      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>
+    
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
       
-      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items per page: </label>
-      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman"}}>
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -863,7 +960,7 @@ const handleSort = (key) => {
     
     {renderPageNumbers()}
     </div>
-        </div>
+        
 
       <div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
               
@@ -966,26 +1063,12 @@ const handleSort = (key) => {
       </tbody>
     </Table>
   </TableContainer>
-    <footer style={{height:"50px",width:"100%",position:"fixed",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+    <footer style={{height:"50px",width:"100%",position:"auto",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5>
         </footer>
       </div>
-     
-      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>
-      
-        <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items per page: </label>
-        <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman"}}>
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="50">50</option>
-        </select>
-      
-      {renderPageNumbers()}
-      </div>
-      
-
+       
       <Modal show={show1} onHide={handleClose1} size='xl'>
             <Modal.Header>
               <Modal.Title>Update Contact</Modal.Title>

@@ -1,112 +1,85 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../css/demo.css';
 
-// Define your columns
-const allColumns = [
-  { id: 'sno', name: '#' },
-  { id: 'personaldetails', name: 'Personal Details' },
-  { id: 'mobile_type', name: 'Mobile Type' },
-  { id: 'email_type', name: 'Email Type' },
-  { id: 'title_company', name: 'Title (Company)' },
-  { id: 'designation', name: 'Designation' },
-  { id: 'company_name', name: 'Company Name' },
-  { id: 'tags', name: 'Tags' },
-  { id: 'father_husband_name', name: 'Father/Husband Name' },
-  { id: 'h_no', name: 'House No' },
-  { id: 'street_address', name: 'Street Address' },
-  { id: 'location', name: 'Location' },
-  { id: 'city', name: 'City' },
-  { id: 'pincode', name: 'Pincode' },
-  { id: 'state', name: 'State' },
-  { id: 'country', name: 'Country' },
-  { id: 'source', name: 'Source' },
-  { id: 'category', name: 'Category' },
-  { id: 'owner', name: 'Owner' },
-  { id: 'team', name: 'Team' },
-  { id: 'gender', name: 'Gender' },
-  { id: 'visible_to', name: 'Visible To' },
-  { id: 'marital_status', name: 'Marital Status' },
-  { id: 'birth_date', name: 'Birth Date' },
-  { id: 'anniversary_date', name: 'Anniversary Date' },
-  { id: 'education', name: 'Education' },
-  { id: 'degree', name: 'Degree' },
-  { id: 'school_college', name: 'School/College' },
-  { id: 'loan', name: 'Loan' },
-  { id: 'bank', name: 'Bank' },
-  { id: 'amount', name: 'Amount' },
-  { id: 'social_media', name: 'Social Media' },
-  { id: 'url', name: 'URL' },
-  { id: 'income', name: 'Income' },
-  { id: 'amount1', name: 'Amount 1' },
-  { id: 'website', name: 'Website' },
-  { id: 'industry', name: 'Industry' },
-  { id: 'descriptions', name: 'Descriptions' },
-];
+const SuggestionBox = () => {
+  const [input, setInput] = useState('');
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [allSuggestions, setAllSuggestions] = useState([]);
+  const [selectedContact, setSelectedContact] = useState(null);
 
-const SortableTable = () => {
-  const [data, setData] = useState([]);
-  const [sortConfig, setSortConfig] = useState({ key: 'sno', direction: 'ascending' });
-
+  // Fetch data from the backend when the component mounts
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSuggestions = async () => {
       try {
-        const resp = await axios.get('http://localhost:5000/viewcontact');
-        setData(resp.data.contact); // Adjust according to the actual API response structure
+        const response = await axios.get('http://localhost:5000/viewcontact');
+        const data = response.data.contact;
+        
+        // Extract the first_name field from the fetched data
+        const names = data.map(item => item.first_name);
+        setAllSuggestions(data);
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching suggestions:', error);
       }
     };
 
-    fetchData();
+    fetchSuggestions();
   }, []);
 
-  const sortedData = useMemo(() => {
-    let sortableItems = [...data];
-    if (sortConfig !== null) {
-      sortableItems.sort((a, b) => {
-        if (a[sortConfig.key] < b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? -1 : 1;
-        }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
-          return sortConfig.direction === 'ascending' ? 1 : -1;
-        }
-        return 0;
-      });
+  // Filter suggestions based on user input
+  useEffect(() => {
+    if (input) {
+      const results = allSuggestions.filter(contact =>
+        contact.first_name?.toLowerCase().includes(input.toLowerCase())
+      );
+      setFilteredSuggestions(results);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
     }
-    return sortableItems;
-  }, [data, sortConfig]);
+  }, [input, allSuggestions]);
 
-  const requestSort = (key) => {
-    let direction = 'ascending';
-    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
-      direction = 'descending';
-    }
-    setSortConfig({ key, direction });
+  const handleInputChange = (event) => {
+    setInput(event.target.value);
+  };
+
+  const handleSuggestionClick = (contact) => {
+    setInput(contact.first_name);
+    setShowSuggestions(false);
+    setSelectedContact(contact); // Store the selected contact's data
   };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {allColumns.map(column => (
-            <th key={column.id} onClick={() => requestSort(column.id)}>
-              {column.name}
-              {sortConfig.key === column.id ? (sortConfig.direction === 'ascending' ? ' 🔼' : ' 🔽') : null}
-            </th>
+    <div className="suggestion-box">
+      <input
+        type="text"
+        value={input}
+        onChange={handleInputChange}
+        placeholder="Start typing your name..."
+      />
+      {showSuggestions && input && filteredSuggestions.length > 0 && (
+        <ul className="suggestion-list">
+          {filteredSuggestions.map((suggestion, index) => (
+            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+              {suggestion.first_name}
+            </li>
           ))}
-        </tr>
-      </thead>
-      <tbody>
-        {sortedData.map((item, index) => (
-          <tr key={index}>
-            {allColumns.map(column => (
-              <td key={column.id}>{item[column.id]}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+        </ul>
+      )}
+      
+      {selectedContact && (
+        <div className="contact-details">
+          <h3>Contact Details</h3>
+          <p><strong>First Name:</strong> {selectedContact.first_name}</p>
+          <p><strong>Last Name:</strong> {selectedContact.last_name}</p>
+          <p><strong>Email:</strong> {selectedContact.email}</p>
+          <p><strong>Phone:</strong> {selectedContact.phone}</p>
+          {/* Add more fields as needed */}
+        </div>
+      )}
+    </div>
   );
 };
 
-export default SortableTable;
+export default SuggestionBox;

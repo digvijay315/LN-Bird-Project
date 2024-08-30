@@ -19,7 +19,7 @@ const send_mail = require('../controllers/sendmail');
 
 const router=express.Router()
 
-router.post('/addcontact',add_contact)
+router.post('/addcontact',upload.any('document_pic'),add_contact)
 router.get('/viewcontact',view_contact)
 router.get('/viewcontactbyname/:_id',view_contact_ByName)
 router.get('/viewcontactbyemail/:email',view_contact_Byemail)
