@@ -53,15 +53,18 @@ function Addcontact() {
     "United Kingdom +44","United States +1","United States Minor Outlying Islands +1","Uruguay +598","Uzbekistan +998",
     "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
     "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
+    
 
     const navigate=useNavigate();
-    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[],mobile_no:[],mobile_type:[],action1:[],
-        email:[],email_type:[],action2:[],title_company:"",designation:"",company_name:"",tags:"",
-        father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
-        state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
-        birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action3:[],loan:[],bank:[],amount:[],action4:[],
-        social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:"",industry:"",document_no:[],document_name:[],
-        document_pic:[],action7:[],descriptions:""});
+    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action1:[],
+        email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
+
+        profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
+        company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+
+        father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+        birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+        social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[] });
     
         const config = {
             headers: {
@@ -103,22 +106,39 @@ function Addcontact() {
                     document.getElementById("r").style.marginLeft="0%"
                 }
 
-        const otherdetails=()=>
-        {
-          document.getElementById("basicdetails1").style.display="none"
-          document.getElementById("basicdetails2").style.display="none"
-           document.getElementById("basic").style.color="black"
-           document.getElementById("other").style.color="green"
-           document.getElementById("otherdetails").style.display="flex"
-        }
+       
         const basicdetails=()=>
           {
             document.getElementById("basicdetails1").style.display="flex"
             document.getElementById("basicdetails2").style.display="flex"
             document.getElementById("basic").style.color="green"
             document.getElementById("other").style.color="black"
+             document.getElementById("professional").style.color="black"
             document.getElementById("otherdetails").style.display="none"
+            document.getElementById("profession").style.display="none"
           }
+          const professionaldetails=()=>
+            {
+              document.getElementById("basicdetails1").style.display="none"
+              document.getElementById("basicdetails2").style.display="none"
+              document.getElementById("otherdetails").style.display="none"
+              document.getElementById("profession").style.display="flex"
+               document.getElementById("basic").style.color="black"
+               document.getElementById("other").style.color="black"
+                 document.getElementById("professional").style.color="green"
+               
+            }
+          const otherdetails=()=>
+            {
+              document.getElementById("basicdetails1").style.display="none"
+              document.getElementById("basicdetails2").style.display="none"
+               document.getElementById("profession").style.display="none"
+                 document.getElementById("otherdetails").style.display="flex"
+               document.getElementById("basic").style.color="black"
+                document.getElementById("professional").style.color="black"
+               document.getElementById("other").style.color="green"
+            }
+          
           function addFn1() {
         
             setcontact({
@@ -216,79 +236,119 @@ function Addcontact() {
      
                 setcontact({
                   ...contact,
-                  education: [...contact.education, ''],
-                  degree: [...contact.degree, ''],
-                  school_college: [...contact.school_college, ''],
+                  company_social_media: [...contact.company_social_media, ''],
+                  company_url: [...contact.company_url, ''],
                   action3: [...contact.action3, '']
                 });
               };
               const deleteall3=(index)=>
                 {
                  
-                  const neweducation = contact.education.filter((_, i) => i !== index);
-                  const newdegree = contact.degree.filter((_, i) => i !== index);
-                  const newschool_college = contact.school_college.filter((_, i) => i !== index);
+                  const newcomapnysocialmedia = contact.company_social_media.filter((_, i) => i !== index);
+                  const newcompanyurl = contact.company_url.filter((_, i) => i !== index);
                   const newaction3=contact.action3.filter((_,i) => i !== index);
                   
                   setcontact({
                     ...contact,
-                    education: neweducation,
-                    degree: newdegree,
-                    school_college: newschool_college,
+                    company_social_media: newcomapnysocialmedia,
+                    company_url: newcompanyurl,
                     action3:newaction3
                   });
                 }
-                const handleeducationChange = (index, event) => {
-                  const neweducation = [...contact.education];
-                  neweducation[index] = event.target.value;
+                const handlecompanysocialmediachange = (index, event) => {
+                  const newcomapnysocialmedia = [...contact.company_social_media];
+                  newcomapnysocialmedia[index] = event.target.value;
                   setcontact({
                     ...contact,
-                    education: neweducation
+                    company_social_media: newcomapnysocialmedia
                   });
                 };
-                const handledegreeChange = (index, event) => {
-                  const newdegree = [...contact.degree];
-                  newdegree[index] = event.target.value;
+                const handlecompanyurlchange = (index, event) => {
+                  const newcompanyurl = [...contact.company_url];
+                  newcompanyurl[index] = event.target.value;
                   setcontact({
                     ...contact,
-                    degree: newdegree
+                    company_url: newcompanyurl
                   });
                 };
           
-                const handleschool_collegeChange = (index, event) => {
-                  const newschool = [...contact.school_college];
-                  newschool[index] = event.target.value;
-                  setcontact({
-                    ...contact,
-                    school_college: newschool
-                  });
-                };
-             
-
+              
                 function addFn4() {
-        
+     
                   setcontact({
                     ...contact,
-                    loan: [...contact.loan, ''],
-                    bank: [...contact.bank, ''],
-                    amount: [...contact.amount, ''],
+                    education: [...contact.education, ''],
+                    degree: [...contact.degree, ''],
+                    school_college: [...contact.school_college, ''],
                     action4: [...contact.action4, '']
                   });
                 };
                 const deleteall4=(index)=>
                   {
                    
+                    const neweducation = contact.education.filter((_, i) => i !== index);
+                    const newdegree = contact.degree.filter((_, i) => i !== index);
+                    const newschool_college = contact.school_college.filter((_, i) => i !== index);
+                    const newaction4=contact.action4.filter((_,i) => i !== index);
+                    
+                    setcontact({
+                      ...contact,
+                      education: neweducation,
+                      degree: newdegree,
+                      school_college: newschool_college,
+                      action4:newaction4
+                    });
+                  }
+                  const handleeducationChange = (index, event) => {
+                    const neweducation = [...contact.education];
+                    neweducation[index] = event.target.value;
+                    setcontact({
+                      ...contact,
+                      education: neweducation
+                    });
+                  };
+                  const handledegreeChange = (index, event) => {
+                    const newdegree = [...contact.degree];
+                    newdegree[index] = event.target.value;
+                    setcontact({
+                      ...contact,
+                      degree: newdegree
+                    });
+                  };
+            
+                  const handleschool_collegeChange = (index, event) => {
+                    const newschool = [...contact.school_college];
+                    newschool[index] = event.target.value;
+                    setcontact({
+                      ...contact,
+                      school_college: newschool
+                    });
+                  };
+
+                function addFn5() {
+        
+                  setcontact({
+                    ...contact,
+                    loan: [...contact.loan, ''],
+                    bank: [...contact.bank, ''],
+                    amount: [...contact.amount, ''],
+                    action5: [...contact.action5, '']
+                  });
+                };
+                const deleteall5=(index)=>
+                  {
+                   
                     const newloan = contact.loan.filter((_, i) => i !== index);
                     const newbank = contact.bank.filter((_, i) => i !== index);
                     const newamount = contact.amount.filter((_, i) => i !== index);
-                    const newaction4=contact.action4.filter((_,i) => i !== index);
+                    const newaction5=contact.action5.filter((_,i) => i !== index);
                     
                     setcontact({
                       ...contact,
                       loan: newloan,
                       bank: newbank,
                       amount: newamount,
-                      action4:newaction4
+                      action5:newaction5
                     });
                   }
                   const handleloanchange = (index, event) => {
@@ -316,27 +376,27 @@ function Addcontact() {
                     });
                   };
 
-                  function addFn5() {
+                  function addFn6() {
         
                     setcontact({
                       ...contact,
                       social_media: [...contact.social_media, ''],
                       url: [...contact.url, ''],
-                      action5: [...contact.action5, '']
+                      action6: [...contact.action6, '']
                     });
                   };
-                  const deleteall5=(index)=>
+                  const deleteall6=(index)=>
                     {
                      
                       const newsocial_media = contact.social_media.filter((_, i) => i !== index);
                       const newurl = contact.url.filter((_, i) => i !== index);
-                      const newaction5=contact.action5.filter((_,i) => i !== index);
+                      const newaction6=contact.action6.filter((_,i) => i !== index);
                       
                       setcontact({
                         ...contact,
                         social_media: newsocial_media,
                         url: newurl,
-                        action5:newaction5
+                        action6:newaction6
                       });
                     }
                     const handlesocial_mediachange = (index, event) => {
@@ -356,27 +416,27 @@ function Addcontact() {
                       });
                     };
 
-                    function addFn6() {
+                    function addFn7() {
         
                       setcontact({
                         ...contact,
                         income: [...contact.income, ''],
                         amount1: [...contact.amount1, ''],
-                        action6: [...contact.action6, '']
+                        action7: [...contact.action7, '']
                       });
                     };
-                    const deleteall6=(index)=>
+                    const deleteall7=(index)=>
                       {
                        
                         const newincome = contact.income.filter((_, i) => i !== index);
                         const newamount1 = contact.amount1.filter((_, i) => i !== index);
-                        const newaction6=contact.action6.filter((_,i) => i !== index);
+                        const newaction7=contact.action7.filter((_,i) => i !== index);
                         
                         setcontact({
                           ...contact,
                           income: newincome,
                           amount1: newamount1,
-                          action6:newaction6
+                          action7:newaction7
                         });
                       }
                       const handleincomechange = (index, event) => {
@@ -396,30 +456,30 @@ function Addcontact() {
                         });
                       };
 
-                      function addFn7() {
+                      function addFn8() {
         
                         setcontact({
                           ...contact,
                           document_no: [...contact.document_no, ''],
                           document_name: [...contact.document_name, ''],
                           document_pic: [...contact.document_pic, ''],
-                          action7: [...contact.action7, '']
+                          action8: [...contact.action8, '']
                         });
                       };
-                      const deleteall7=(index)=>
+                      const deleteall8=(index)=>
                         {
                          
                           const newdocumentno = contact.document_no.filter((_, i) => i !== index);
                           const newdocumentname = contact.document_name.filter((_, i) => i !== index);
                           const newdocumentpic = contact.document_pic.filter((_, i) => i !== index);
-                          const newaction7=contact.action7.filter((_,i) => i !== index);
+                          const newaction8=contact.action8.filter((_,i) => i !== index);
                           
                           setcontact({
                             ...contact,
                             document_no: newdocumentno,
                             document_name: newdocumentname,
                             document_pic: newdocumentpic,
-                            action7:newaction7
+                            action8:newaction8
                           });
                         }
                         const handledocumentnochange = (index, event) => {
@@ -461,24 +521,22 @@ function Addcontact() {
         <div className="col-md-12 border-right">
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right">Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
+                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
                 </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center mb-3" >
-                <div class="form-group mb-0" style={{width:"220px"}} >
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&s" alt='' style={{height:"25px",position:"absolute",marginLeft:"14%",marginTop:"1%"}}/>
-						<input type="text" class="form-control search-input" placeholder="Search Here" style={{width:"200px"}}/>
-					</div>
-                    <div class="form-group mb-0" style={{width:"300px"}}>
-						
-						<input type="text" class="form-control" placeholder={time} value={time} style={{border:"none"}}/>
+               
+         
+             <div style={{display:"flex"}}>
+               <div style={{display:"flex",gap:"50px"}}>
+               <div  id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details   |</span></div>
+                <div  id='professional'><span onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details |</span></div>
+                <div  id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Personal Details |</span></div> 
+               </div>
+						    <div style={{marginLeft:"200px",width:"31%"}}><input type="text" class="form-control" placeholder={time} value={time} style={{border:"none"}}/></div>
 					</div>
                 
                 
-                </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center experience" id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details</span>
-                <div className="d-flex justify-content-between align-items-center experience" id='professional'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details</span></div>
-                <div className="d-flex justify-content-between align-items-center experience" id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Other Details</span></div>
-                </div><hr></hr>
+            
+ {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
@@ -541,7 +599,7 @@ function Addcontact() {
                         ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
                        contact.action1.map((item,index)=>
                         (
@@ -580,7 +638,7 @@ function Addcontact() {
                     }
                    </div>
                   
-                   <div className="col-md-1" style={{marginTop:"30px"}}>
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
                        contact.action2.map((item,index)=>
                         (
@@ -592,13 +650,50 @@ function Addcontact() {
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control' onClick={addFn2}>+</button></div>
                     
-                    <div className="col-md-4"><label className="labels">Title & Company</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,title_company:e.target.value})}/></div>
+                    {/* <div className="col-md-4"><label className="labels">Title & Company</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,title_company:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Designation</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,designation:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Company Name</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Company Name</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}/></div> */}
                     
                     <div className="col-md-12"><label className="labels">Tags</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,tags:e.target.value})}/></div>
                     
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
+                    <div className="col-md-2"></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                    <option>Select</option>
+                        <option>Walkin</option>
+                        <option>99acre</option>
+                        <option>Refrence</option>
+                        <option>Old Client</option>
+                        </select></div>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control">
+                    <option>Select</option>
+                        <option>Suresh Kumar</option>
+                        <option>Rajesh Kumar</option>
+                        <option>Rakesh Kumar</option>
+                        <option>Yogesh Kumar</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    <option>Select</option>
+                        <option>Suresh Kumar</option>
+                        <option>Rajesh kumar</option>
+                        <option>Rakesh kumar</option>
+                        </select></div>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <option>Select</option>
+                        <option>All User</option>
+                        <option>My Team</option>
+                        <option>Admin</option>
+                        </select>
+                    </div>
+
+
+
+
+                    {/* <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
                     <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control"onChange={(e)=>setcontact({...contact,father_husband_name:e.target.value})}/></div>
 
@@ -612,16 +707,16 @@ function Addcontact() {
                     <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div>
                     <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control"  onChange={(e)=>setcontact({...contact,country:e.target.value})}/></div>
 
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    {/* <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div> */}
 
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                    {/* <div className="col-md-6"><label className="labels">Source</label><select className="form-control" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
                     <option>Select</option>
                         <option>Walkin</option>
                         <option>99acre</option>
                         <option>Refrence</option>
                         <option>Old Client</option>
-                        </select></div>
-                    <div className="col-md-6"><label className="labels">Category</label><select className="form-control" onChange={(e)=>setcontact({...contact,category:e.target.value})}>
+                        </select></div> */}
+                    {/* <div className="col-md-6"><label className="labels">Category</label><select className="form-control" onChange={(e)=>setcontact({...contact,category:e.target.value})}>
                     <option>Select</option>
                         <option>Investor</option>
                         <option>Banker</option>
@@ -629,36 +724,178 @@ function Addcontact() {
                         <option>Builder</option>
                         <option>Company Employee</option>
                         </select>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    </div> */}
+                    {/* <div className="col-md-6"><label className="labels">Owner</label><select className="form-control" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
                     <option>Select</option>
                         <option>Suresh Kumar</option>
                         <option>Rajesh kumar</option>
                         <option>Rakesh kumar</option>
-                        </select></div>
-                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control">
+                        </select></div> */}
+                    {/* <div className="col-md-6"><label className="labels">Team</label><select className="form-control">
                     <option>Select</option>
                         <option>Suresh Kumar</option>
                         <option>Rajesh Kumar</option>
                         <option>Rakesh Kumar</option>
                         <option>Yogesh Kumar</option>
                         </select>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    </div> */}
+                    {/* <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
                     <option>Select</option>
                         <option>All User</option>
                         <option>My Team</option>
                         <option>Admin</option>
                         </select>
+                    </div> */}
                     </div>
+                    <div className='col-md-12'><hr></hr></div> 
+                    {/* <div className='row' style={{marginLeft:"50%"}}>
+                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control">Cancel</button></div>
+                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control">Save & View Contact</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control" onClick={addcontact}>Save</button></div>
+                    </div> */}
                     </div>
-                   
+                    
+        </div> 
+
+   {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
+                  
+  {/* -----------------------------------------professional Details start------------------------------------------------------------------- */}
+
+        <div className="col-md-12" id='profession' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
+            <div className="p-3 py-5">
+                <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
+                <div className="row " >
+                    <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
+                    <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                        </select>
                     </div>
-        </div>
+                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
+                    <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                    <div className="col-md-5"><label className="labels">Designation</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
+                    <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
+                    <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                    <div className="col-md-4" > <label className="labels">Country Code</label>
+                    
+                        <select  required="true" className="form-control" onChange={(event)=>handlecountry_codechange(event)}>
+                        <option>phone</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                    </div>
+                    <div className="col-md-6" > <label className="labels">Company Phone</label><input type='text' className='form-control'/></div>
+                    <div className="col-md-8" > <label className="labels">Company Email</label><input type='text' className='form-control'/></div>
+                    <div className="col-md-4" ></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Company Address</label></div>
+                    <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                    <div className="col-md-8"><label className="labels">Area</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,street_address:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control"  onChange={(e)=>setcontact({...contact,country:e.target.value})}/></div>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
+                    <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                    <div className='col-md-5'></div>
+                    <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
+                    {
+                      contact.company_social_media.map((item,index)=>
+                      (
+                        <select
+                         className='form-control'
+                          style={{marginTop:"10px"}}
+                          onChange={(event)=>handlecompanysocialmediachange(index,event)}>
+                        
+                        <option>select</option>
+                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
+                        </select>
+
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-6"><label className="labels">Url</label>
+                    {
+                      contact.company_url.map((item,index)=>
+                      (
+                        <input type="text" className="form-control" style={{marginTop:"10px"}} 
+                        onChange={(event)=>handlecompanyurlchange(index,event)}/>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      contact.action3.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn3}>+</button></div>
+                    <div className='col-md-12'><hr></hr></div> 
+              </div>
+              {/* <div className='row' style={{marginLeft:"50%"}}>
+                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control">Cancel</button></div>
+                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control">Save & View Contact</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control" onClick={addcontact}>Save</button></div>
+                    </div> */}
+             </div>
+           </div>
+ {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
+
+ {/*-------------------------------------------------- personal details start--------------------------------------------------------- */
+ 
+ }
         <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px"}}>
             <div className="p-3 py-5">
-                <div className="d-flex justify-content-between align-items-center experience"><span>Other Details</span></div><hr></hr>
+                <div className="d-flex justify-content-between align-items-center experience"><span>Personal Details</span></div><hr></hr>
                 <div className="row " >
+
+                <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+
+                    <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control"onChange={(e)=>setcontact({...contact,father_husband_name:e.target.value})}/></div>
+
+                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,h_no:e.target.value})}/></div>
+                    <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,street_address:e.target.value})}/></div>
+
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
+
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control"  onChange={(e)=>setcontact({...contact,country:e.target.value})}/></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+
                     <div className="col-md-5"><label className="labels">Gender</label><select className="form-control" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
                     <option>Select</option>
                         <option>Male</option>
@@ -719,15 +956,15 @@ function Addcontact() {
                                 </div>
                               ))}                    
                     </div>
-                     <div className="col-md-1" style={{marginTop:"30px"}}>
+                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                      contact.action3.map((item,index)=>
+                      contact.action4.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       ))
                     }
                     </div>
-                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn3}>+</button></div>
+                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn4}>+</button></div>
                 
                     <div className="col-md-4"><label className="labels">Loan</label>
                     {
@@ -772,15 +1009,15 @@ function Addcontact() {
                       ))
                     }
                   </div>
-                  <div className="col-md-1" style={{marginTop:"30px"}}>
+                  <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                      contact.action4.map((item,index)=>
+                      contact.action5.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn4}>+</button></div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn5}>+</button></div>
 
                     
                     <div className="col-md-4"><label className="labels">Social Media</label>
@@ -808,15 +1045,15 @@ function Addcontact() {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                      contact.action5.map((item,index)=>
+                      contact.action6.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn5}>+</button></div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn6}>+</button></div>
 
                     <div className="col-md-4"><label className="labels">Income</label>
                     {
@@ -842,33 +1079,15 @@ function Addcontact() {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                      contact.action6.map((item,index)=>
+                      contact.action7.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn6}>+</button></div>
-
-                    <div className="col-md-6"><label className="labels">Website</label>
-                   
-                        <input type="text" 
-                        className="form-control" 
-                        style={{marginTop:"10px"}}
-                        onChange={(event)=>setcontact({...contact,website:event.target.value})}
-                        />
-                    
-                    </div>
-                    <div className="col-md-6"><label className="labels">Industry</label>
-                    
-                        <input type="text" 
-                        style={{marginTop:"10px"}}
-                        className="form-control"
-                        onChange={(event)=> setcontact({...contact,industry:event.target.value})}/>
-                   
-                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn7}>+</button></div>
                    
                     <div className="col-md-3"><label className="labels">Document No.</label>
                     {
@@ -906,26 +1125,23 @@ function Addcontact() {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                      contact.action7.map((item,index)=>
+                      contact.action8.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall8(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn7}>+</button></div>
-                    
-
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
-                    <div className="col-md-2"></div>
-                    
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control">Cancel</button></div>
-                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control">Save & View Contact</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control" onClick={addcontact}>Save</button></div>
-                    
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn8}>+</button></div>
+                 <div className='col-md-12'><hr></hr></div> 
                     <ToastContainer/>
                 </div>
+                <div className='row' style={{marginLeft:"50%"}}>
+                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control">Cancel</button></div>
+                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control">Save & View Contact</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control" onClick={addcontact}>Save</button></div>
+                    </div>
             </div>
         </div>
     </div>
