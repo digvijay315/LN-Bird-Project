@@ -1,16 +1,16 @@
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState } from "react";
-import { useEffect } from "react";
+
 import { ToastContainer,toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { event } from "jquery";
+// import { event } from "jquery";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+// import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -21,8 +21,8 @@ import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { utils, writeFile } from "xlsx";
 import api from "../api";
-import {  AlternateEmail, Remove as RemoveIcon } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
+// import {  AlternateEmail, Remove as RemoveIcon } from '@mui/icons-material';
+// import { IconButton } from '@mui/material';
 import'../css/addcontact.css';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -94,23 +94,23 @@ function Fetchcontact() {
   /*-------------------------------------------------------------------fetching all contact data end---------------------------------------------------------------------------- */                                                     
 
   /*-------------------------------------------------------------------delete  contact data start---------------------------------------------------------------------------- */                                                     
-    const deletecontact=async(item)=>
-        {
-          try {
-            const id=item._id
-            const resp=await api.delete(`deletecontact/${id}`)
-            toast.success("contact deleted successfully",{ autoClose: 2000 })
-            setTimeout(() => {
-              window.location.reload()
-            }, 2000);
-          } catch (error) {
-            console.log(error);
-          }
-        }
+    // const deletecontact=async(item)=>
+    //     {
+    //       try {
+    //         const id=item._id
+    //         const resp=await api.delete(`deletecontact/${id}`)
+    //         toast.success("contact deleted successfully",{ autoClose: 2000 })
+    //         setTimeout(() => {
+    //           window.location.reload()
+    //         }, 2000);
+    //       } catch (error) {
+    //         console.log(error);
+    //       }
+    //     }
 
         const deleteSelectedItems = async () => {
           try {
-            if(selectedItems.length==0)
+            if(selectedItems.length===0)
             {
               toast.error("please select first",{autoClose:"2000"})
               return
@@ -416,30 +416,37 @@ const renderPageNumbers = () => {
 
 
 /*-------------------------------------------------------------------custome table settings start---------------------------------------------------------------------------- */                                                     
-      const allColumns = [
+      
+ 
+const allColumns = [
         { id: 'sno', name: '#' },
         { id: 'personaldetails', name: 'Personal Details' },
         { id: 'mobile_type', name: 'Mobile Type' },
         { id: 'email_type', name: 'Email Type' },
-        { id: 'title_company', name: 'Title (Company)' },
         { id: 'designation', name: 'Designation' },
         { id: 'company_name', name: 'Company Name' },
         { id: 'tags', name: 'Tags' },
         { id: 'father_husband_name', name: 'Father/Husband Name' },
         { id: 'h_no', name: 'House No' },
-        { id: 'street_address', name: 'Street Address' },
-        { id: 'location', name: 'Location' },
-        { id: 'city', name: 'City' },
-        { id: 'pincode', name: 'Pincode' },
-        { id: 'state', name: 'State' },
-        { id: 'country', name: 'Country' },
+        { id: 'area1', name: 'Street Address' },
+        { id: 'location1', name: 'Location' },
+        { id: 'city1', name: 'City' },
+        { id: 'pincode1', name: 'Pincode' },
+        { id: 'state1', name: 'State' },
+        { id: 'country1', name: 'Country' },
         { id: 'source', name: 'Source' },
         { id: 'category', name: 'Category' },
+        { id: 'profession_category', name: 'Profession Category' },
+        { id: 'profession_subcategory', name: 'Profession Dub-Category' },
+        { id: 'company_name', name: 'Company Name' },
+        { id: 'country_code1', name: 'Country Code' },
+        { id: 'company_phone', name: 'Company Phone' },
+        { id: 'company_email', name: 'Company Email' },
         { id: 'owner', name: 'Owner' },
         { id: 'team', name: 'Team' },
         { id: 'gender', name: 'Gender' },
         { id: 'visible_to', name: 'Visible To' },
-        { id: 'marital_status', name: 'Marital Status' },
+        { id: 'maritial_status', name: 'Marital Status' },
         { id: 'birth_date', name: 'Birth Date' },
         { id: 'anniversary_date', name: 'Anniversary Date' },
         { id: 'education', name: 'Education' },
@@ -452,9 +459,18 @@ const renderPageNumbers = () => {
         { id: 'url', name: 'URL' },
         { id: 'income', name: 'Income' },
         { id: 'amount1', name: 'Amount 1' },
-        { id: 'website', name: 'Website' },
+        { id: 'document_no', name: 'Document No' },
+        { id: 'document_name', name: 'Document Name' },
         { id: 'industry', name: 'Industry' },
-        { id: 'descriptions', name: 'Descriptions' },
+        { id: 'area', name: 'Company Address' },
+        { id: 'location', name: 'Company Location' },
+        { id: 'city', name: 'Company City' },
+        { id: 'pincode', name: 'Company Pincode' },
+        { id: 'state', name: 'Company State' },
+        { id: 'country', name: 'Company Country' },
+        { id: 'company_social_media', name: 'Company Social Media' },
+        { id: 'company_url', name: 'Company Url' },
+        { id: 'descriptions', name: 'Descriptions' }
       ];
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
       const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
@@ -528,11 +544,14 @@ const renderPageNumbers = () => {
  /*-------------------------------------------------------------------updation start---------------------------------------------------------------------------- */                                                     
 
  const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[],mobile_no:[],mobile_type:[],action1:[],
-  email:[],email_type:[],action2:[],title_company:"",designation:"",company_name:"",tags:"",
-  father_husband_name:"",h_no:"",street_address:"",location:"",city:"",pincode:"",
-  state:"",country:"",source:"",category:"",owner:"",team:"",gender:"",visible_to:"",maritial_status:"",
-  birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action3:[],loan:[],bank:[],amount:[],action4:[],
-  social_media:[],url:[],action5:[],income:[],amount1:[],action6:[],website:"",industry:"",descriptions:""});
+  email:[],email_type:[],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
+
+  profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
+  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[],company_url:[],action3:[],
+
+  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+  birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action4:[],loan:[],bank:[],amount:[],action5:[],
+  social_media:[],url:[],action6:[],income:[],amount1:[],action7:[],document_no:[],document_name:[],document_pic:[],action8:[]});
 
        const time=new Date()
     
@@ -542,7 +561,7 @@ const renderPageNumbers = () => {
         const[data1,setdata1]=useState([])
         const handleShow1=async()=>
         {
-          if(selectedItems.length==1)
+          if(selectedItems.length===1)
           {
             try {
               const resp=await api.get(`viewcontactbyname/${selectedItems}`)
@@ -560,23 +579,39 @@ const renderPageNumbers = () => {
          
         }
        
-        const otherdetails=()=>
+        const basicdetails=()=>
           {
-            document.getElementById("basicdetails1").style.display="none"
-            document.getElementById("basicdetails2").style.display="none"
-             document.getElementById("basic").style.color="black"
-             document.getElementById("other").style.color="green"
-             document.getElementById("otherdetails").style.display="flex"
+            document.getElementById("basicdetails1").style.display="flex"
+            document.getElementById("basicdetails2").style.display="flex"
+            document.getElementById("basic").style.color="green"
+            document.getElementById("other").style.color="black"
+             document.getElementById("professional").style.color="black"
+            document.getElementById("otherdetails").style.display="none"
+            document.getElementById("profession").style.display="none"
           }
-          const basicdetails=()=>
+          const professionaldetails=()=>
             {
-              document.getElementById("basicdetails1").style.display="flex"
-              document.getElementById("basicdetails2").style.display="flex"
-              document.getElementById("basic").style.color="green"
-              document.getElementById("other").style.color="black"
+              document.getElementById("basicdetails1").style.display="none"
+              document.getElementById("basicdetails2").style.display="none"
               document.getElementById("otherdetails").style.display="none"
+              document.getElementById("profession").style.display="flex"
+               document.getElementById("basic").style.color="black"
+               document.getElementById("other").style.color="black"
+                 document.getElementById("professional").style.color="green"
+               
+            }
+          const otherdetails=()=>
+            {
+              document.getElementById("basicdetails1").style.display="none"
+              document.getElementById("basicdetails2").style.display="none"
+               document.getElementById("profession").style.display="none"
+                 document.getElementById("otherdetails").style.display="flex"
+               document.getElementById("basic").style.color="black"
+                document.getElementById("professional").style.color="black"
+               document.getElementById("other").style.color="green"
             }
 
+           
             function addFn1() {
               setcontact(prevContact => ({
                 ...prevContact,
@@ -587,274 +622,364 @@ const renderPageNumbers = () => {
                
               }));
             }
-            
-
-          const deleteall1=(index)=>
-            {
-             
-              const newcountry_code = contact.country_code.filter((_, i) => i !== index);
-              const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
-              const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
-              const newaction1 = contact.action1.filter((_, i) => i !== index);
-              
-              setcontact({
-                ...contact,
-                country_code: newcountry_code,
-                mobile_no: newmobile_no,
-                mobile_type: newmobile_type,
-                action1: newaction1
-              });
-            }
-            const handlecountry_codechange = (index, event) => {
-              const newcountry_code = [...contact.country_code];
-              newcountry_code[index] = event.target.value;
-              setcontact((prevProfile)=>({
-                ...prevProfile,
-                country_code: newcountry_code
-              }));
-            };
-            const handlemobile_nochange = (index, event) => {
-              const newmobile_no = [...contact.mobile_no];
-              newmobile_no[index] = event.target.value;
-              setcontact((prevProfile)=>({
-                ...prevProfile,
-                mobile_no:newmobile_no
-              }));
-            };
-            const handlemobile_typechange = (index, event) => {
-              const newmobile_type = [...contact.mobile_type];
-              newmobile_type[index] = event.target.value;
-              setcontact((prevProfile)=>({
-                ...prevProfile,
-                mobile_type: newmobile_type
-              }));
-            };
-
-          
-            function addFn2() {
-              setcontact(prevContact => ({
-                ...prevContact,
-                email: [...prevContact.email, ''],
-                email_type: [...prevContact.email_type, ''],
-                action2: Array.isArray(prevContact.action2) ? [...prevContact.action2, ''] : ['']
-               
-              }));
-            }
   
-            const deleteall2=(index)=>
+            const deleteall1=(index)=>
               {
                
-                const newemail = contact.email.filter((_, i) => i !== index);
-                const newemail_type = contact.email_type.filter((_, i) => i !== index);
-                const newaction2 = contact.action2.filter((_, i) => i !== index);
+                const newcountry_code = contact.country_code.filter((_, i) => i !== index);
+                const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
+                const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
+                const newaction1 = contact.action1.filter((_, i) => i !== index);
                 
                 setcontact({
                   ...contact,
-                  email: newemail,
-                  email_type: newemail_type,
-                  action2: newaction2
+                  country_code: newcountry_code,
+                  mobile_no: newmobile_no,
+                  mobile_type: newmobile_type,
+                  action1: newaction1
                 });
               }
-              const handleemailchange = (index, event) => {
-                const newemail = [...contact.email];
-                newemail[index] = event.target.value;
+              const handlecountry_codechange = (index, event) => {
+                const newcountry_code = [...contact.country_code];
+                newcountry_code[index] = event.target.value;
                 setcontact((prevProfile)=>({
                   ...prevProfile,
-                  email:newemail
+                  country_code: newcountry_code
                 }));
               };
-              const handleemail_typechange = (index, event) => {
-                const newemail_type = [...contact.email_type];
-                newemail_type[index] = event.target.value;
+              const handlemobile_nochange = (index, event) => {
+                const newmobile_no = [...contact.mobile_no];
+                newmobile_no[index] = event.target.value;
                 setcontact((prevProfile)=>({
                   ...prevProfile,
-                  email_type:newemail_type
+                  mobile_no:newmobile_no
                 }));
               };
-
-             
-              function addFn3() {
+              const handlemobile_typechange = (index, event) => {
+                const newmobile_type = [...contact.mobile_type];
+                newmobile_type[index] = event.target.value;
+                setcontact((prevProfile)=>({
+                  ...prevProfile,
+                  mobile_type: newmobile_type
+                }));
+              };
+  
+              function addFn2() {
                 setcontact(prevContact => ({
                   ...prevContact,
-                  education: [...prevContact.education, ''],
-                  degree: [...prevContact.degree, ''],
-                  school_college: [...prevContact.school_college, ''],
-                  action3: Array.isArray(prevContact.action3) ? [...prevContact.action3, ''] : ['']
+                  email: [...prevContact.email, ''],
+                  email_type: [...prevContact.email_type, ''],
+                  action2: Array.isArray(prevContact.action2) ? [...prevContact.action2, ''] : ['']
                  
                 }));
               }
-              const deleteall3=(index)=>
+    
+              const deleteall2=(index)=>
                 {
                  
-                  const neweducation = contact.education.filter((_, i) => i !== index);
-                  const newdegree = contact.degree.filter((_, i) => i !== index);
-                  const newschool_college = contact.school_college.filter((_, i) => i !== index);
-                  const newaction3=contact.action3.filter((_,i) => i !== index);
+                  const newemail = contact.email.filter((_, i) => i !== index);
+                  const newemail_type = contact.email_type.filter((_, i) => i !== index);
+                  const newaction2 = contact.action2.filter((_, i) => i !== index);
                   
                   setcontact({
                     ...contact,
-                    education: neweducation,
-                    degree: newdegree,
-                    school_college: newschool_college,
-                    action3:newaction3
+                    email: newemail,
+                    email_type: newemail_type,
+                    action2: newaction2
                   });
                 }
-                const handleeducationChange = (index, event) => {
-                  const neweducation = [...contact.education];
-                  neweducation[index] = event.target.value;
+                const handleemailchange = (index, event) => {
+                  const newemail = [...contact.email];
+                  newemail[index] = event.target.value;
                   setcontact((prevProfile)=>({
                     ...prevProfile,
-                    education:neweducation
+                    email:newemail
                   }));
                 };
-                const handledegreeChange = (index, event) => {
-                  const newdegree = [...contact.degree];
-                  newdegree[index] = event.target.value;
+                const handleemail_typechange = (index, event) => {
+                  const newemail_type = [...contact.email_type];
+                  newemail_type[index] = event.target.value;
                   setcontact((prevProfile)=>({
                     ...prevProfile,
-                    degree:newdegree
+                    email_type:newemail_type
                   }));
                 };
-          
-                const handleschool_collegeChange = (index, event) => {
-                  const newschool = [...contact.school_college];
-                  newschool[index] = event.target.value;
-                  setcontact((prevProfile)=>({
-                    ...prevProfile,
-                    school_college:newschool
-                  }));
-                };
-             
-                function addFn4() {
-                  setcontact(prevContact => ({
+  
+                function addFn3() {
+       
+                  setcontact(prevContact=>({
                     ...prevContact,
-                    loan: [...prevContact.loan, ''],
-                    bank: [...prevContact.bank, ''],
-                    amount: [...prevContact.amount, ''],
-                    action4: Array.isArray(prevContact.action4) ? [...prevContact.action4, ''] : ['']
-                   
+                    company_social_media: [...prevContact.company_social_media, ''],
+                    company_url: [...prevContact.company_url, ''],
+                    action3:Array.isArray(prevContact.action3)? [...prevContact.action3, '']:['']
                   }));
-                }
-                const deleteall4=(index)=>
+                };
+                const deleteall3=(index)=>
                   {
                    
-                    const newloan = contact.loan.filter((_, i) => i !== index);
-                    const newbank = contact.bank.filter((_, i) => i !== index);
-                    const newamount = contact.amount.filter((_, i) => i !== index);
-                    const newaction4=contact.action4.filter((_,i) => i !== index);
+                    const newcomapnysocialmedia = contact.company_social_media.filter((_, i) => i !== index);
+                    const newcompanyurl = contact.company_url.filter((_, i) => i !== index);
+                    const newaction3=contact.action3.filter((_,i) => i !== index);
                     
                     setcontact({
                       ...contact,
-                      loan: newloan,
-                      bank: newbank,
-                      amount: newamount,
-                      action4:newaction4
+                      company_social_media: newcomapnysocialmedia,
+                      company_url: newcompanyurl,
+                      action3:newaction3
                     });
                   }
-                  const handleloanchange = (index, event) => {
-                    const newloan = [...contact.loan];
-                    newloan[index] = event.target.value;
-                    setcontact((prevProfile)=>({
-                      ...prevProfile,
-                      loan:newloan
-                    }));
-                  };
-                  const handlebankchange = (index, event) => {
-                    const newbank = [...contact.bank];
-                    newbank[index] = event.target.value;
-                    setcontact((prevProfile)=>({
-                      ...prevProfile,
-                      bank:newbank
-                    }));
-                  };
-                  const handleamountchange = (index, event) => {
-                    const newamount = [...contact.amount];
-                    newamount[index] = event.target.value;
-                    setcontact((prevProfile)=>({
-                      ...prevProfile,
-                      amount:newamount
-                    }));
-                  };
-
-                  function addFn5() {
-                    setcontact(prevContact => ({
+                  const handlecompanysocialmediachange = (index, event) => {
+                    const newcomapnysocialmedia = [...contact.company_social_media];
+                    newcomapnysocialmedia[index] = event.target.value;
+                    setcontact(prevContact=>({
                       ...prevContact,
-                      social_media: [...prevContact.social_media, ''],
-                      url: [...prevContact.url, ''],
-                      action5: Array.isArray(prevContact.action5) ? [...prevContact.action5, ''] : ['']
-                     
+                      company_social_media: newcomapnysocialmedia
                     }));
-                  }
+                  };
+                  const handlecompanyurlchange = (index, event) => {
+                    const newcompanyurl = [...contact.company_url];
+                    newcompanyurl[index] = event.target.value;
+                    setcontact(prevContact=>({
+                      ...prevContact,
+                      company_url: newcompanyurl
+                    }));
+                  };
+            
+                
+                  function addFn4() {
+       
+                    setcontact(prevContact=>({
+                      ...prevContact,
+                      education: [...prevContact.education, ''],
+                      degree: [...prevContact.degree, ''],
+                      school_college: [...prevContact.school_college, ''],
+                      action4: Array.isArray(prevContact.action4) ? [...prevContact.action4, ''] : ['']
+                    }));
+                  };
+                  const deleteall4=(index)=>
+                    {
+                     
+                      const neweducation = contact.education.filter((_, i) => i !== index);
+                      const newdegree = contact.degree.filter((_, i) => i !== index);
+                      const newschool_college = contact.school_college.filter((_, i) => i !== index);
+                      const newaction4=contact.action4.filter((_,i) => i !== index);
+                      
+                      setcontact({
+                        ...contact,
+                        education: neweducation,
+                        degree: newdegree,
+                        school_college: newschool_college,
+                        action4:newaction4
+                      });
+                    }
+                    const handleeducationChange = (index, event) => {
+                      const neweducation = [...contact.education];
+                      neweducation[index] = event.target.value;
+                      setcontact(prevContact=>({
+                        ...prevContact,
+                        education: neweducation
+                      }));
+                    };
+                    const handledegreeChange = (index, event) => {
+                      const newdegree = [...contact.degree];
+                      newdegree[index] = event.target.value;
+                      setcontact(prevContact=>({
+                        ...prevContact,
+                        degree: newdegree
+                      }));
+                    };
+              
+                    const handleschool_collegeChange = (index, event) => {
+                      const newschool = [...contact.school_college];
+                      newschool[index] = event.target.value;
+                      setcontact(prevContact=>({
+                        ...prevContact,
+                        school_college: newschool
+                      }));
+                    };
+  
+                  function addFn5() {
+          
+                    setcontact(prevContact=>({
+                      ...prevContact,
+                      loan: [...prevContact.loan, ''],
+                      bank: [...prevContact.bank, ''],
+                      amount: [...prevContact.amount, ''],
+                      action5: Array.isArray(prevContact.action5) ? [...prevContact.action5, ''] : ['']
+                    }));
+                  };
                   const deleteall5=(index)=>
                     {
                      
-                      const newsocial_media = contact.social_media.filter((_, i) => i !== index);
-                      const newurl = contact.url.filter((_, i) => i !== index);
+                      const newloan = contact.loan.filter((_, i) => i !== index);
+                      const newbank = contact.bank.filter((_, i) => i !== index);
+                      const newamount = contact.amount.filter((_, i) => i !== index);
                       const newaction5=contact.action5.filter((_,i) => i !== index);
                       
                       setcontact({
                         ...contact,
-                        social_media: newsocial_media,
-                        url: newurl,
+                        loan: newloan,
+                        bank: newbank,
+                        amount: newamount,
                         action5:newaction5
                       });
                     }
-                    const handlesocial_mediachange = (index, event) => {
-                      const newsocial_media = [...contact.social_media];
-                      newsocial_media[index] = event.target.value;
-                      setcontact((prevProfile)=>({
-                        ...prevProfile,
-                        social_media:newsocial_media
-                      }));
-                    };
-                    const handleurlChange = (index, event) => {
-                      const newurl = [...contact.url];
-                      newurl[index] = event.target.value;
-                      setcontact((prevProfile)=>({
-                        ...prevProfile,
-                        url:newurl
-                      }));
-                    };
-
-                    function addFn6() {
-                      setcontact(prevContact => ({
+                    const handleloanchange = (index, event) => {
+                      const newloan = [...contact.loan];
+                      newloan[index] = event.target.value;
+                      setcontact(prevContact=>({
                         ...prevContact,
-                        income: [...prevContact.income, ''],
-                        amount1: [...prevContact.amount1, ''],
-                        action6: Array.isArray(prevContact.action6) ? [...prevContact.action6, ''] : ['']
-                       
+                        loan: newloan
                       }));
-                    }
+                    };
+                    const handlebankchange = (index, event) => {
+                      const newbank = [...contact.bank];
+                      newbank[index] = event.target.value;
+                      setcontact(prevContact=>({
+                        ...prevContact,
+                        bank: newbank
+                      }));
+                    };
+                    const handleamountchange = (index, event) => {
+                      const newamount = [...contact.amount];
+                      newamount[index] = event.target.value;
+                      setcontact(prevContact=>({
+                        ...prevContact,
+                        amount: newamount
+                      }));
+                    };
+  
+                    function addFn6() {
+          
+                      setcontact(prevContact=>({
+                        ...prevContact,
+                        social_media: [...prevContact.social_media, ''],
+                        url: [...prevContact.url, ''],
+                        action6: Array.isArray(prevContact.action6) ? [...prevContact.action6, ''] : ['']
+                      }));
+                    };
                     const deleteall6=(index)=>
                       {
                        
-                        const newincome = contact.income.filter((_, i) => i !== index);
-                        const newamount1 = contact.amount1.filter((_, i) => i !== index);
+                        const newsocial_media = contact.social_media.filter((_, i) => i !== index);
+                        const newurl = contact.url.filter((_, i) => i !== index);
                         const newaction6=contact.action6.filter((_,i) => i !== index);
                         
                         setcontact({
                           ...contact,
-                          income: newincome,
-                          amount1: newamount1,
+                          social_media: newsocial_media,
+                          url: newurl,
                           action6:newaction6
                         });
                       }
-                      const handleincomechange = (index, event) => {
-                        const newincome = [...contact.income];
-                        newincome[index] = event.target.value;
-                        setcontact((prevProfile)=>({
-                          ...prevProfile,
-                          income:newincome
+                      const handlesocial_mediachange = (index, event) => {
+                        const newsocial_media = [...contact.social_media];
+                        newsocial_media[index] = event.target.value;
+                        setcontact(prevContact=>({
+                          ...prevContact,
+                          social_media: newsocial_media
                         }));
                       };
-                      const handleamount1change = (index, event) => {
-                        const newamount1 = [...contact.amount1];
-                        newamount1[index] = event.target.value;
-                        setcontact((prevProfile)=>({
-                          ...prevProfile,
-                          amount1:newamount1
+                      const handleurlChange = (index, event) => {
+                        const newurl = [...contact.url];
+                        newurl[index] = event.target.value;
+                        setcontact(prevContact=>({
+                          ...prevContact,
+                          url: newurl
                         }));
                       };
+  
+                      function addFn7() {
+          
+                        setcontact(prevContact=>({
+                          ...prevContact,
+                          income: [...prevContact.income, ''],
+                          amount1: [...prevContact.amount1, ''],
+                          action7: Array.isArray(prevContact.action7) ? [...prevContact.action7, ''] : ['']
+                        }));
+                      };
+                      const deleteall7=(index)=>
+                        {
+                         
+                          const newincome = contact.income.filter((_, i) => i !== index);
+                          const newamount1 = contact.amount1.filter((_, i) => i !== index);
+                          const newaction7=contact.action7.filter((_,i) => i !== index);
+                          
+                          setcontact({
+                            ...contact,
+                            income: newincome,
+                            amount1: newamount1,
+                            action7:newaction7
+                          });
+                        }
+                        const handleincomechange = (index, event) => {
+                          const newincome = [...contact.income];
+                          newincome[index] = event.target.value;
+                          setcontact(prevContact=>({
+                            ...prevContact,
+                            income: newincome
+                          }));
+                        };
+                        const handleamount1change = (index, event) => {
+                          const newamount1 = [...contact.amount1];
+                          newamount1[index] = event.target.value;
+                          setcontact(prevContact=>({
+                            ...prevContact,
+                            amount1: newamount1
+                          }));
+                        };
+  
+                        function addFn8() {
+          
+                          setcontact(prevContact=>({
+                            ...prevContact,
+                            document_no: [...prevContact.document_no, ''],
+                            document_name: [...prevContact.document_name, ''],
+                            document_pic: [...prevContact.document_pic, ''],
+                            action8: Array.isArray(prevContact.action8) ? [...prevContact.action8, ''] : ['']
+                          }));
+                        };
+                        const deleteall8=(index)=>
+                          {
+                           
+                            const newdocumentno = contact.document_no.filter((_, i) => i !== index);
+                            const newdocumentname = contact.document_name.filter((_, i) => i !== index);
+                            const newdocumentpic = contact.document_pic.filter((_, i) => i !== index);
+                            const newaction8=contact.action8.filter((_,i) => i !== index);
+                            
+                            setcontact({
+                              ...contact,
+                              document_no: newdocumentno,
+                              document_name: newdocumentname,
+                              document_pic: newdocumentpic,
+                              action8:newaction8
+                            });
+                          }
+                          const handledocumentnochange = (index, event) => {
+                            const newdocumentno = [...contact.document_no];
+                            newdocumentno[index] = event.target.value;
+                            setcontact(prevContact=>({
+                              ...prevContact,
+                              document_no: newdocumentno
+                            }));
+                          };
+                          const handledocumentnamechange = (index, event) => {
+                            const newdocumentname = [...contact.document_name];
+                            newdocumentname[index] = event.target.value;
+                            setcontact(prevContact=>({
+                              ...prevContact,
+                              document_name: newdocumentname
+                            }));
+                          };
+                          const handledocumentpicchange = (index, event) => {
+                            const newdocumentpic = [...contact.document_pic];
+                            const files = Array.from(event.target.files);
+                            newdocumentpic[index] = {files:files}
+                            setcontact(prevContact=>({
+                              ...prevContact,
+                              document_pic: newdocumentpic
+                            }));
+                          };
                         
       const updatecontact=async()=>
         {
@@ -906,7 +1031,7 @@ const handleSort = (key) => {
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Contact </h3>
         <Tooltip title="Export Data.." arrow>
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
-            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
         </button></Tooltip>
             <ul class="dropdown-menu" id="exporttoexcel"> 
             
@@ -915,8 +1040,8 @@ const handleSort = (key) => {
             </ul>
             
 
-            <button  className="form-control form-control-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
-            <button onClick={handleAddColumnClick} className="form-control form-control-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
+            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
+            <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
         
        
        
@@ -924,26 +1049,26 @@ const handleSort = (key) => {
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-      <input id="search" type="text" className="form-control form-control-sm" placeholder="search by email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
       
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    
       <Tooltip title="Delete Data.." arrow>
-      <img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}}/>
+      <img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
       </Tooltip>
     
       <Tooltip title="Edit Data.." arrow>
-      <img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} />
+      <img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
      
       <Tooltip title="Send Mail.." arrow>
-      <img id="mail" onClick={handleShow3} src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}}/>
+      <img id="mail" onClick={handleShow3} src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
       <Tooltip title="Send WhatsApp.." arrow>
-      <img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}/>
+      <img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
       </Tooltip>
       <Tooltip title="Send Message.." arrow>
-      <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}}/>
+      <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
       </Tooltip>
       </div>
     
@@ -1077,56 +1202,58 @@ const handleSort = (key) => {
            
             
            
+           
+           
            <div >
-            <div >
-    
-        <div className="col-12">
-            <div className="p-3">
+            <div  >
+    <div className="row" id='r' >
+        <div className="col-md-12 border">
+            <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right">Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
+                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
                 </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center mb-3" >
-                <div class="form-group mb-0" style={{width:"220px"}} >
-						<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyi_CVTmoL1ITHFxQkfLwvj93hcsgA1Olkhg&s" alt='' style={{height:"25px",position:"absolute",marginLeft:"14%",marginTop:"1%"}}/>
-						<input type="text" class="form-control search-input" placeholder="Search Here" style={{width:"200px"}}/>
-					</div>
-                    <div class="form-group mb-0" style={{width:"300px"}}>
-						
-						<input type="text" class="form-control" placeholder={time} value={time} style={{border:"none"}}/>
+               
+         
+             <div style={{display:"flex"}}>
+               <div style={{display:"flex",gap:"50px"}}>
+               <div  id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details   |</span></div>
+                <div  id='professional'><span onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details |</span></div>
+                <div  id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Personal Details |</span></div> 
+               </div>
+						    <div style={{marginLeft:"200px",width:"31%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
 					</div>
                 
                 
-                </div><hr></hr>
-                <div className="d-flex justify-content-between align-items-center experience" id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details</span></div>
-                <div className="d-flex justify-content-between align-items-center experience" id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Other Details</span></div>
-                <hr></hr>
+            
+ {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
-                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control" required="true" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,title:e.target.value}))}>
-                    <option>{data1.title}</option>
-                        <option>Mr.</option>
-                        <option>Mrs.</option>
-                        <option>Smt.</option>
-                        <option>Dr.</option>
-                        <option>Er.</option>
-                        <option>Sh.</option>
-                        <option>col</option>
+                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,title:e.target.value}))}>
+                              <option>{data1.title}</option>
+                              <option>Select</option>
+                              <option>Mr.</option>
+                              <option>Mrs.</option>
+                              <option>Sh.</option>
+                              <option>Smt.</option>
+                              <option>Dr.</option>
+                              <option>Er.</option>
+                              <option>Col.</option>
+                              <option>Maj.</option>
                         </select>
                         </div>
-                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control" defaultValue={data1.first_name} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,first_name:e.target.value}))}/></div>
-                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control"  defaultValue={data1.last_name} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,last_name:e.target.value}))}/></div>
+                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={data1.first_name} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,first_name:e.target.value}))}/></div>
+                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  defaultValue={data1.last_name} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,last_name:e.target.value}))}/></div>
                 </div>
                 <div className="row mt-3" id='basicdetails2'>
                 <div className="col-md-4" > <label className="labels">Country</label>
                     {
                       contact.country_code.map((item,index)=>
                       (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control" onChange={(event)=>handlecountry_codechange(index,event)}>
-                        <option value={item} >{data1.country_code[index]}</option><option></option>
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)} >
+                        <option value={item} >{data1.country_code[index]}</option>
                         {
-                          
                           countrycode.map((item)=>
                           (
                             <option>{item}</option>
@@ -1141,8 +1268,8 @@ const handleSort = (key) => {
                        contact.mobile_no.map((item,index)=>
                         (
                           <input type="text" required="true" style={{marginTop:"10px"}} 
-                          className="form-control" 
-                          defaultValue={data1.mobile_no[index]} 
+                           defaultValue={data1.mobile_no[index]}
+                          className="form-control form-control-sm" 
                           onChange={(event)=>handlemobile_nochange(index,event)}/>
                           
                         ))
@@ -1152,34 +1279,39 @@ const handleSort = (key) => {
                     {
                        contact.mobile_type.map((item,index)=>
                         (
-                         <select className="form-control" style={{marginTop:"10px"}} 
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}}
                          onChange={(event)=>handlemobile_typechange(index,event)}>
-                          <option>{data1.mobile_type[index]}</option><option></option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                                  <option>{data1.mobile_type[index]}</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
                         </select>
                           
                         ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
-                    {Array.isArray(contact.action1)?
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(contact.action1)?
                        contact.action1.map((item,index)=>
                         (
                           <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
                         )):[]
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control' onClick={addFn1}>+</button></div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
                     
                   <div className="col-md-8"><label className="labels">Email-Address</label>
                     {
                         contact.email.map((item,index)=>
                         (
                           <input type="text" style={{marginTop:"10px"}}
-                          className="form-control" 
                           defaultValue={data1.email[index]}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
                           onChange={(event)=>handleemailchange(index,event)}/>
                         ))
                     }
@@ -1189,18 +1321,20 @@ const handleSort = (key) => {
                     {
                        contact.email_type.map((item,index)=>
                         (
-                          <select className="form-control" style={{marginTop:"10px"}} 
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          
                           onChange={(event)=>handleemail_typechange(index,event)}>
-                          <option>{data1.email_type[index]}</option><option></option>
-                        <option>Personal</option>
-                        <option>Office</option>
-                        <option>Business</option>
+                             <option>{data1.email_type[index]}</option>
+                                <option>Select Type</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
                         </select>
                         ))
                     }
                    </div>
                   
-                   <div className="col-md-1" style={{marginTop:"30px"}}>
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
                       Array.isArray(contact.action2)?
                        contact.action2.map((item,index)=>
@@ -1211,101 +1345,348 @@ const handleSort = (key) => {
                         )):[]
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control' onClick={addFn2}>+</button></div>
+                    <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
                     
-                    <div className="col-md-4"><label className="labels">Title & Company</label><input type="text" className="form-control" defaultValue={data1.title_company} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,title_company:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">Designation</label><input type="text" className="form-control" defaultValue={data1.designation} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,designation:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">Company Name</label><input type="text" className="form-control" defaultValue={data1.company_name} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_name:e.target.value}))}/></div>
+                    <div className="col-md-12"><label className="labels">Tags</label><input type="text" className="form-control form-control-sm" defaultValue={data1.tags} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,tags:e.target.value}))}/></div>
                     
-                    <div className="col-md-12"><label className="labels">Tags</label><input type="text" className="form-control" defaultValue={data1.tags} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,tags:e.target.value}))}/></div>
-                    
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-
-                    <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" defaultValue={data1.father_husband_name} className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,father_husband_name:e.target.value}))}/></div>
-
-                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control" defaultValue={data1.h_no} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,h_no:e.target.value}))}/></div>
-                    <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control" defaultValue={data1.street_address} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,street_address:e.target.value}))}/></div>
-
-                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control" defaultValue={data1.location} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,location:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control" defaultValue={data1.city} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,city:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control" defaultValue={data1.pincode} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,pincode:e.target.value}))}/></div>
-
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control" defaultValue={data1.state} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,state:e.target.value}))}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control" defaultValue={data1.country} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country:e.target.value}))}/></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm'defaultValue={data1.descriptions} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,descriptions:e.target.value}))}/></div>
+                    <div className="col-md-2"></div>
 
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,source:e.target.value}))} >
+                                    <option>{data1.source}</option><option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
+                                    <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
+                                    <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
+                                    <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
+                                    <option>Old Client</option><option>Google</option><option>Whatsapp</option>
+                             </select>
+                        </div>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,team:e.target.value}))} >
+                              <option>{data1.team}</option> 
+                              <option>Select</option> 
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm"onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,owner:e.target.value}))} >
+                              <option>{data1.owner}</option>     
+                              <option>Select</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
+                        </select></div>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,visible_to:e.target.value}))} >
+                               <option>{data1.visible_to}</option> 
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                       </div>
+                  </div>
+             </div> 
 
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,source:e.target.value}))}>
-                    <option>{data1.source}</option>
-                        <option>Walkin</option>
-                        <option>99acre</option>
-                        <option>Refrence</option>
-                        <option>Old Client</option>
-                        </select></div>
-                    <div className="col-md-6"><label className="labels">Category</label><select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,category:e.target.value}))}>
-                    <option>{data1.category}</option>
-                        <option>Investor</option>
-                        <option>Banker</option>
-                        <option>Broker</option>
-                        <option>Builder</option>
-                        <option>Company Employee</option>
-                        </select>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,owner:e.target.value}))}>
-                    <option>{data1.owner}</option>
-                        <option>Suresh Kumar</option>
-                        <option>Rajesh kumar</option>
-                        <option>Rakesh kumar</option>
-                        </select></div>
-                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,team:e.target.value}))}>
-                    <option>{data1.team}</option>
-                        <option>Suresh Kumar</option>
-                        <option>Rajesh Kumar</option>
-                        <option>Rakesh Kumar</option>
-                        <option>Yogesh Kumar</option>
-                        </select>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,visible_to:e.target.value}))}>
-                    <option>{data1.visible_to}</option>
-                        <option>All User</option>
-                        <option>My Team</option>
-                        <option>Admin</option>
-                        </select>
-                    </div>
-                    </div>
-                   
-                    </div>
-        </div>
-        <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px"}}>
+   {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
+                  
+  {/* -----------------------------------------professional Details start------------------------------------------------------------------- */}
+
+        <div className="col-md-12" id='profession' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
-                <div className="d-flex justify-content-between align-items-center experience"><span>Other Details</span></div><hr></hr>
+                <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
                 <div className="row " >
-                    <div className="col-md-5"><label className="labels">Gender</label><select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,gender:e.target.value}))}>
-                    <option>{data1.gender}</option>
-                        <option>Male</option>
-                        <option>Female</option>
+                    <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,profession_category:e.target.value}))}>
+                                  <option>{data1.profession_category}</option> 
+                                  <option>Select</option>    
+                                  <option>Self Employed </option>
+                                  <option>Govt. Employee  </option>
+                                  <option>House Wife</option>
+                                  <option>Business Man</option>
+                                  <option>Retired</option>
+                                  <option>Student</option>
+                        </select>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,profession_subcategory:e.target.value}))}>
+                                <option>{data1.profession_subcategory}</option> 
+                                <option>Select</option>
+                                <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
+                                <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
+                                <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
+                                <option>Chef</option> <option>Teacher</option> <option>Scientist</option> <option>Software Developer</option>
+                                <option>Designer</option> <option>Author</option> <option>Nurse</option> <option>Baker</option>
+                                <option>Engineer</option> <option>Carpenter</option> <option>Construction</option> <option>Worker</option>
+                                <option>Sales Person</option> <option>Pilot</option> <option>Professor</option> <option>Author</option>
+                                <option>Clerk</option> <option>Peon</option> <option>Commision</option> <option>Agent(AAdati)</option>
+                                <option>Shop Keepar</option>
+                        </select>
+                    </div>
+                    <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,designation:e.target.value}))}>
+                        <option>{data1.designation}</option> 
+                        <option>Select</option>
+                        <option>Developer</option>
+                        <option>It Professional</option>
                         <option>Others</option>
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,maritial_status:e.target.value}))}>
-                    <option>{data1.maritial_status}</option>
-                        <option>Married</option>
-                        <option>Unmarried</option>
-                    </select>
+                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_name:e.target.value}))}>
+                        <option>{data1.company_name}</option> 
+                        <option>Select</option>
+                        <option>L.N Bird Technology Pvt. Ltd.</option>
+                        <option>T.C.S</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                    <div className="col-md-4" > <label className="labels">Country Code</label>
+                    
+                        <select  required="true" className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country_code1:e.target.value}))}>
+                        <option>{data1.country_code1}</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                    </div>
+                    <div className="col-md-6" > <label className="labels">Company Phone</label><input type='text' defaultValue={data1.company_phone} className='form-control form-control-sm' onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_phone:e.target.value}))}/></div>
+                    <div className="col-md-8" > <label className="labels">Company Email</label><input type='text' defaultValue={data1.company_email} className='form-control form-control-sm' onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_email:e.target.value}))}/></div>
+                    <div className="col-md-4" ></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Company Address</label></div>
+                    <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                    <div className="col-md-8"><label className="labels">Area</label><input type="text" defaultValue={data1.area} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,area:e.target.value}))}/></div>
+                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" defaultValue={data1.location} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,location:e.target.value}))}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" defaultValue={data1.city} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,city:e.target.value}))}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" defaultValue={data1.pincode} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,pincode:e.target.value}))}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" defaultValue={data1.state} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,state:e.target.value}))}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" defaultValue={data1.country} className="form-control form-control-sm"  onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country:e.target.value}))}/></div>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,industry:e.target.value}))}>
+                    <option>{data1.industry}</option>
+                    <option>choose</option>
+                          <optgroup label='Agriculture'>
+                                <option>Farming</option><option>horticulture</option><option>forestry</option>
+                                <option>fishing</option><option>Others</option>
+                          </optgroup>
+                          <optgroup label='Mining'>
+                                <option>Extraction of minerals</option><option>oil</option><option>gas</option>
+                                <option>other natural resources.</option>
+                          </optgroup>
+                          <optgroup label='Fishing and Hunting'>
+                                <option>Commercial fishing</option><option>aquaculture</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Forestry'>
+                                <option>Logging</option><option>timber production</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Manufacturing'>
+                                <option>Production of goods from raw materials (e.g., automotive, 
+                                  electronics, textiles, food processing)</option>
+                          </optgroup>
+                          <optgroup label='Construction'>
+                                <option>Building infrastructure</option><option>residential and commercial properties</option><option>roads</option>
+                                <option>bridges</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Utilities'>
+                                <option>Production and distribution of electricity</option><option>water</option><option>gas</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Refining'>
+                                <option>Processing raw materials like oil</option><option>metals</option><option>into usable products</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Retail'>
+                                <option>Selling goods directly to consumers</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Hospitality'>
+                                <option>Hotels</option><option>restaurants</option><option>tourism</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Healthcare'>
+                                <option>Hospitals</option><option>clinics</option><option>medical services</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Education'>
+                                <option>Schools</option><option>colleges</option><option>universities</option>
+                                <option>training centers</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Finance and Insurance'>
+                                <option>Banks</option><option>investment firms</option><option>insurance companies</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Transportation'>
+                                <option>Airlines</option><option>railways</option><option>shipping</option>
+                                <option>logistics</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Telecommunications'>
+                                <option>Internet services</option><option>phone companies</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Entertainment'>
+                                <option>Film</option><option>television</option><option>music</option>
+                                <option>gaming</option><option>sports</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Real Estate'>
+                                <option>Property sales</option><option>rentals</option><option>management</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Information Technology'>
+                                <option>Software development</option><option>data processing</option><option>IT services</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Research and Development'>
+                                <option>Innovation</option><option>scientific research</option><option>product development</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Consultancy'>
+                                <option>Professional advice in management</option><option>law</option><option>finance</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Media and Communication'>
+                                <option>Publishing</option><option>broadcasting</option><option>online media</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Government'>
+                                <option>Public administration</option><option>defense</option><option>public services</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Non-Profit Organizations'>
+                                <option>NGOs</option><option>charities</option><option>foundations</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Education (Executive)'>
+                                <option>High-level educational services</option><option>executive education</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='High-Level Decision-Making'>
+                                <option>Top management roles in large organizations</option><option>think tanks</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Green Industry'>
+                                <option>Renewable energy</option><option>environmental services</option><option>sustainability</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Biotechnology'>
+                                <option>Genetic engineering</option><option>pharmaceuticals</option><option>life sciences</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Creative Industries'>
+                                <option>Advertising</option><option>design</option><option>fashion</option><option>arts</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='E-commerce'>
+                                <option>Online</option><option>retail</option><option>digital marketplaces</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Aerospace'>
+                                <option>Aircraft manufacturing</option><option>space exploration</option><option>satellite services</option>
+                                <option>others</option>
+                          </optgroup>
+                        </select>
+                    </div>
+                    <div className='col-md-5'></div>
+                    <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
+                    {
+                      contact.company_social_media.map((item,index)=>
+                      (
+                        <select
+                         className='form-control form-control-sm'
+                          style={{marginTop:"10px"}}
+                          onChange={(event)=>handlecompanysocialmediachange(index,event)}>
+                         <option>{data1.company_social_media[index]}</option>
+                        <option>select</option>
+                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
+                        </select>
+
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-6"><label className="labels">Url</label>
+                    {
+                      contact.company_url.map((item,index)=>
+                      (
+                        <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} defaultValue={data1.company_url[index]}
+                        onChange={(event)=>handlecompanyurlchange(index,event)}/>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(contact.action3)?
+                      contact.action3.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      )):[]
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                    <div className='col-md-12'><hr></hr></div> 
+              </div>
+             </div>
+           </div>
+ {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
+
+ {/*-------------------------------------------------- personal details start--------------------------------------------------------- */
+ 
+ }
+        <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px"}}>
+            <div className="p-3 py-5">
+                <div className="d-flex justify-content-between align-items-center experience"><span>Personal Details</span></div><hr></hr>
+                <div className="row " >
+
+                <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+
+                    <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm" defaultValue={data1.father_husband_name} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,father_husband_name:e.target.value}))}/></div>
+
+                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" defaultValue={data1.h_no} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,h_no:e.target.value}))}/></div>
+                    <div className="col-md-9"><label className="labels">Area</label><input type="text" defaultValue={data1.area1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,area1:e.target.value}))}/></div>
+
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" defaultValue={data1.location1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,location1:e.target.value}))}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" defaultValue={data1.city1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,city1:e.target.value}))}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" defaultValue={data1.pincode1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,pincode1:e.target.value}))}/></div>
+
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" defaultValue={data1.state1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,state1:e.target.value}))}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" defaultValue={data1.country1} className="form-control form-control-sm"  onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country1:e.target.value}))}/></div>
+
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+
+                    <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,gender:e.target.value}))}>
+                                <option>{data1.gender}</option>
+                                <option>Select</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Others</option>
+                        </select>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,maritial_status:e.target.value}))}>
+                            <option>{data1.maritial_status}</option>
+                            <option>Select</option>
+                            <option>Married</option>
+                            <option>Unmarried</option>
+                            <option>Single</option>
+                        </select>
                     </div>
 
-                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control" defaultValue={data1.birth_date} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,birth_date:e.target.value}))}/></div>
-                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control" defaultValue={data1.anniversary_date} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,anniversary_date:e.target.value}))}/></div>
+                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" defaultValue={data1.birth_date} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,birth_date:e.target.value}))}/></div>
+                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" defaultValue={data1.anniversary_date} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,anniversary_date:e.target.value}))}/></div>
 
                     <div className="col-md-3"> <label className="labels">Education</label>
                         
                              {contact.education.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
-                                  <select className="form-control"
+                                  <select className="form-control form-control-sm"
                                     onChange={(event) => handleeducationChange(index, event)}
                                   >
-                                    <option>{data1.education[index]}</option><option></option><option>Intermediate</option><option>Graduate</option><option>Master</option><option>Commerce</option>
-                                    <option>Doctor</option><option>Law</option><option>IT</option><option>P.H.D</option>
+                                    <option>{data1.education[index]}</option>
+                                    <option>choose</option>
+                                    <option>Kindergaren</option><option>School</option><option>Primery Education</option><option> Secondary Education</option><option>Master</option><option>Commerce</option>
+                                    <option>Vocational Education</option>
                                   </select>
                                   
                                 </div>
@@ -1315,13 +1696,32 @@ const handleSort = (key) => {
                     {contact.degree.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <select
-                                    className="form-control"
+                                    className="form-control form-control-sm"
                                     onChange={(event) => handledegreeChange(index, event)}
                                   >
-                                    <option>{data1.degree[index]}</option><option></option><option>12th</option><option>B.A</option><option>B.Sc</option><option>B.Com</option>
-                                    <option>M.A</option><option>M.Sc</option><option>M.Com</option><option>P.H.D</option>
-                                    <option>Bsc.It</option><option>MSc.It</option><option>B.Tech</option><option>M.Tech</option><option>BCA</option>
-                                    <option>MCA</option>
+                                    <option>{data1.degree[index]}</option>
+                                    <option>choose</option>
+                                    <optgroup label='Bachelor’s '>
+                                        <option>Bachelor of Arts (BA) </option><option>Bachelor of Science (BS or BSc) </option><option>Bachelor of Fine Arts (BFA)</option><option> Bachelor of Education (BEd) </option>
+                                        <option> Bachelor of Business Administration (BBA) </option><option>Bachelor of Engineering (BE or BEng) </option><option>Bachelor of Science in Nursing (BSN)</option>
+                                        <option>B.Bachelor of Laws (LLB) </option><option>B.Bachelor of Architecture (BArch)</option><option>Bachelor of Social Work (BSW) </option><option> Bachelor of Music (BM) </option>
+                                        <option>Bachelor of Pharmacy (BPharm)</option><option>Bachelor of Technology (BTech) </option>
+                                    </optgroup>
+                                    <optgroup label='Master’s '>
+                                        <option>Master of Arts (MA)</option><option>Master of Science (MS or MSc)</option><option>Master of Business Administration (MBA)</option><option>Master of Fine Arts (MFA)</option>
+                                        <option>Master of Engineering (ME or MEng)</option><option>Master of Education (MEd or EdM)</option><option>Master of Public Health (MPH) </option>
+                                        <option>Master of Social Work (MSW)</option><option> Master of Laws (LLM)</option><option>Master of Public Administration (MPA)</option><option>Master of Architecture (MArch)</option>
+                                        <option>Master of Library Science (MLS or MLIS)</option><option> Master of Music (MM or MMus)</option><option>Master of Philosophy (MPhil)</option>
+                                        <option>Master of Arts in Teaching (MAT)</option><option>Master of Theology (MTh or ThM)</option>
+                                    </optgroup>
+                                    <optgroup label='Doctoral '>
+                                        <option>Doctor of Philosophy (PhD)</option><option>Doctor of Medicine (MD)</option><option>Doctor of Education (EdD)</option><option>Doctor of Business Administration (DBA) </option>
+                                        <option>Juris Doctor (JD) </option><option>Doctor of Nursing Practice (DNP) </option><option>Doctor of Public Health (DrPH)</option><option>Doctor of Psychology (PsyD)</option>
+                                        <option>Doctor of Engineering (EngD or DEng) </option><option> Doctor of Pharmacy (PharmD)</option><option> Doctor of Social Work (DSW) </option><option>Doctor of Theology (ThD) </option>
+                                        <option>Doctor of Veterinary Medicine (DVM) </option><option>Doctor of Musical Arts (DMA)</option><option>Doctor of Dental Surgery (DDS) or Doctor of Dental Medicine (DMD) </option>
+                                        <option>Doctor of Public Administration (DPA)</option><option>Doctor of Health Administration (DHA) </option>
+                                    </optgroup>
+                        
                                   </select>
                                   
                                 </div>
@@ -1332,8 +1732,7 @@ const handleSort = (key) => {
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <input
                                     type="text"
-                                    className="form-control"
-                                    value={name}
+                                    className="form-control form-control-sm"
                                     defaultValue={data1.school_college[index]}
                                     onChange={(event) => handleschool_collegeChange(index, event)}
                                   />
@@ -1341,16 +1740,16 @@ const handleSort = (key) => {
                                 </div>
                               ))}                    
                     </div>
-                     <div className="col-md-1" style={{marginTop:"30px"}}>
+                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       Array.isArray(contact.action3)?
-                      contact.action3.map((item,index)=>
+                      Array.isArray(contact.action4)?
+                      contact.action4.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       )):[]
                     }
                     </div>
-                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn3}>+</button></div>
+                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn4}>+</button></div>
                 
                     <div className="col-md-4"><label className="labels">Loan</label>
                     {
@@ -1358,11 +1757,11 @@ const handleSort = (key) => {
                       (
                         <select type="text"
                         style={{marginTop:"10px"}}
-                        className="form-control" 
+                        className="form-control form-control-sm" 
                         onChange={(event)=>handleloanchange(index,event)}
                         >
-                          <option>{data1.loan[index]}</option><option></option><option>Personal Loan</option><option>Home Loan</option><option>Vechicle Loan</option>
-                          <option>Education Loan</option>
+                          <option>{data1.loan[index]}</option> <option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
+                          <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                         </select>
                       ))
                     }
@@ -1373,12 +1772,26 @@ const handleSort = (key) => {
                       (
                         <select type="text" 
                         style={{marginTop:"10px"}}
-                        className="form-control"
+                        className="form-control form-control-sm"
                         onChange={(event)=>handlebankchange(index,event)}
                         >
-                          <option>{data1.bank[index]}</option><option></option>
-                          <option>State Bank Of India</option><option>Axis Bank</option><option>Indian Bank</option><option>HDFC Bank</option>
-                          <option>Canera Bank</option><option>Union Bank</option><option>Indusind Bank</option><option>IDFC Bank</option>
+                                <option>{data1.bank[index]}</option><option>Select</option>
+                              <option>State Bank of India (SBI) </option><option>Punjab National Bank (PNB)</option><option>Bank of Baroda</option><option>Canara Bank</option>
+                              <option>Union Bank of India</option><option>Bank of India (BOI)</option><option>Indian Bank </option><option>Central Bank of India</option>
+                              <option>Indian Overseas Bank (IOB)</option><option>UCO Bank</option><option>Bank of Maharashtra</option><option></option>
+                              <option>HDFC Bank </option><option>ICICI Bank</option><option>Axis Bank</option><option>Kotak Mahindra Bank </option>
+                              <option>IndusInd Bank </option><option>Yes Bank </option><option>IDFC FIRST Bank</option><option>Federal Bank </option>
+                              <option>RBL Bank </option><option>South Indian Bank</option><option>Karur Vysya Bank </option><option>Tamilnad Mercantile Bank </option>
+                              <option>Bandhan Bank</option><option>Jammu & Kashmir Bank </option><option>DCB Bank </option><option>Citibank </option><option></option>
+                              <option>HSBC</option><option>Standard Chartered Bank </option><option>Deutsche Bank </option><option>Barclays Bank</option>
+                              <option>Royal Bank of Scotland (RBS) </option><option>Bank of America</option><option>American Express Bank </option><option>UBS</option>
+                              <option>Nabard Financial Services Ltd. (NABARD)</option><option></option>
+                              <option>The Saraswat Cooperative Bank</option><option>The Mumbai District Central Cooperative Bank</option><option>The Delhi State Cooperative Bank</option>
+                              <option>The Karnataka Vikas Grameen Bank</option><option>The Maharashtra State Cooperative Bank </option><option>The Uttar Bihar Gramin Bank</option>
+                              <option>The Punjab State Cooperative Bank</option><option>Gramin Bank of Aryavart </option><option></option>
+                              <option>Haryana Gramin Bank</option><option>Bangiya Gramin Vikash Bank </option><option>Kaveri Grameena Bank</option>
+                              <option>Prathama Bank </option><option>Small Industries Development Bank of India (SIDBI) </option><option></option>
+                              <option>Export-Import Bank of India (EXIM Bank) </option><option>National Bank for Agriculture and Rural Development (NABARD) </option><option></option>
                         </select>
                       ))
                    
@@ -1389,23 +1802,23 @@ const handleSort = (key) => {
                       contact.amount.map((item,index)=>
                       (
                         <input type="text" 
-                        style={{marginTop:"10px"}}
                         defaultValue={data1.amount[index]}
-                        className="form-control"
+                        style={{marginTop:"10px"}}
+                        className="form-control form-control-sm"
                         onCanPlay={(event)=>handleamountchange(index,event)} />
                       ))
                     }
                   </div>
-                  <div className="col-md-1" style={{marginTop:"30px"}}>
+                  <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       Array.isArray(contact.action4)?
-                      contact.action4.map((item,index)=>
+                      Array.isArray(contact.action5)?
+                      contact.action5.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       )):[]
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn4}>+</button></div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
 
                     
                     <div className="col-md-4"><label className="labels">Social Media</label>
@@ -1413,12 +1826,12 @@ const handleSort = (key) => {
                       contact.social_media.map((item,index)=>
                       (
                         <select
-                         className='form-control'
+                         className='form-control form-control-sm'
                           style={{marginTop:"10px"}}
                           onChange={(event)=>handlesocial_mediachange(index,event)}>
                         
-                        <option>{data1.social_media[index]}</option><option></option>
-                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
+                        <option>{data1.social_media[index]}</option><option>select</option>
+                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                         </select>
 
                       ))
@@ -1428,32 +1841,34 @@ const handleSort = (key) => {
                     {
                       contact.url.map((item,index)=>
                       (
-                        <input type="text" className="form-control" style={{marginTop:"10px"}} defaultValue={data1.url[index]}
+                        <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} defaultValue={data1.url[index]}
                         onChange={(event)=>handleurlChange(index,event)}/>
                       ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       Array.isArray(contact.action5)?
-                      contact.action5.map((item,index)=>
+                      Array.isArray(contact.action6)?
+                      contact.action6.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       )):[]
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn5}>+</button></div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
 
                     <div className="col-md-4"><label className="labels">Income</label>
                     {
                       contact.income.map((item,index)=>
                       (
-                        <input type="text" 
-                        style={{marginTop:"10px"}}
-                        defaultValue={data1.income[index]}
-                        className="form-control" 
-                        onChange={(event)=>handleincomechange(index,event)}
-                        />
+                        <select
+                        className='form-control form-control-sm'
+                         style={{marginTop:"10px"}}
+                         onChange={(event)=>handleincomechange(index,event)}>
+                       
+                       <option>{data1.income[index]}</option><option>select</option>
+                       <option>Personal Income</option><option>Business Income</option>
+                       </select>
                       ))
                     }
                     </div>
@@ -1461,52 +1876,80 @@ const handleSort = (key) => {
                     {
                       contact.amount1.map((item,index)=>
                       (
-                        <input type="text" 
+                        <input type="text" defaultValue={data1.amount1[index]}
                         style={{marginTop:"10px"}}
-                        className="form-control" 
-                        defaultValue={data1.amount1[index]}
+                        className="form-control form-control-sm" 
                         onChange={(event)=>handleamount1change(index,event)}
                         />
                       ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"30px"}}>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       Array.isArray(contact.action6)?
-                      contact.action6.map((item,index)=>
+                      Array.isArray(contact.action7)?
+                      contact.action7.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       )):[]
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control" onClick={addFn6}>+</button></div>
-
-                    <div className="col-md-6"><label className="labels">Website</label>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn7}>+</button></div>
                    
+                    <div className="col-md-3"><label className="labels">Document No.</label>
+                    {
+                      contact.document_no.map((item,index)=>
+                      (
                         <input type="text" 
-                        className="form-control" 
+                        defaultValue={data1.document_no[index]}
                         style={{marginTop:"10px"}}
-                        defaultValue={data1.website}
-                        onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,website:e.target.value}))}
+                        className="form-control form-control-sm" 
+                        onChange={(event)=>handledocumentnochange(index,event)}
                         />
-                    
+                      ))
+                    }
                     </div>
-                    <div className="col-md-6"><label className="labels">Industry</label>
-                    
-                        <input type="text" 
+                    <div className="col-md-3"><label className="labels">Document Name</label>
+                    {
+                      contact.document_name.map((item,index)=>
+                      (
+                        <select
+                        className='form-control form-control-sm'
+                         style={{marginTop:"10px"}}
+                         onChange={(event)=>handledocumentnamechange(index,event)}>
+                       
+                       <option>{data1.document_name}</option><option>select</option>
+                       <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
+                       <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
+                       </select>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Document Picture</label>
+                    {
+                      contact.document_pic.map((item,index)=>
+                      (
+                        
+                        <input type="file"
                         style={{marginTop:"10px"}}
-                        className="form-control"
-                        defaultValue={data1.industry}
-                        onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,industry:e.target.value}))}/>
-                   
+                        className="form-control form-control-sm" 
+                        onChange={(event)=>handledocumentpicchange(index,event)}
+                        />
+                      ))
+                    }
                     </div>
-                   
-                    
-
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control' defaultValue={data1.descriptions} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,descriptions:e.target.value}))}/></div>
-                    <div className="col-md-2"></div>
-                    
-
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(contact.action8)?
+                      contact.action8.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall8(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      )):[]
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
+                 <div className='col-md-12'><hr></hr></div> 
+                </div>
+               
             </div>
         </div>
     </div>
@@ -1604,8 +2047,8 @@ const handleSort = (key) => {
    
   
    <div className="row mt-2">
-       <div className="col-md-12"><label className="labels">Email</label><input type="text" required="true" className="form-control" defaultValue={emails} /></div>
-       <div className="col-md-12"><label className="labels">Message</label><textarea className="form-control"  placeholder="Enter Your Message" onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
+       <div className="col-md-12"><label className="labels">Email</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={emails} /></div>
+       <div className="col-md-12"><label className="labels">Message</label><textarea className="form-control form-control-sm"  placeholder="Enter Your Message" onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
    </div>
 </div>
           </Modal.Body>

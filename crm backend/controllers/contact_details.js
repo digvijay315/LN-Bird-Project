@@ -4,21 +4,21 @@ const addcontact = require('../models/add_contact');
 const add_contact=async(req,res)=>
     {
         try {
-            const{title,first_name,last_name,country_code,mobile_no,mobile_type,
-                    email,email_type,title_company,designation,company_name,tags,
-                    father_husband_name,h_no,street_address,location,city,pincode,
-                    state,country,source,category,owner,team,gender,visible_to,maritial_status,
-                    birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,
-                    social_media,url,income,amount1,website,industry,document_no,document_name,descriptions}=req.body;
+            const{title,first_name,last_name,country_code,mobile_no,mobile_type,email,email_type,tags,descriptions,
+                    source,team,owner,visible_to,profession_category,profession_subcategory,designation,company_name,country_code1,
+                    company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url,
+                    father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,
+                    birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,
+                    income,amount1,document_no,document_name}=req.body;
 
                     const documentpic=req.files ? req.files.map(file => file.path) : [];
       
-                const new_add_contact= new addcontact({title,first_name,last_name,country_code,mobile_no,mobile_type,
-                    email,email_type,title_company,designation,company_name,tags,
-                    father_husband_name,h_no,street_address,location,city,pincode,
-                    state,country,source,category,owner,team,gender,visible_to,maritial_status,
-                    birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,
-                    social_media,url,income,amount1,website,industry,document_no,document_name,document_pic:documentpic,descriptions})
+                const new_add_contact= new addcontact({title,first_name,last_name,country_code,mobile_no,mobile_type,email,email_type,tags,descriptions,
+                    source,team,owner,visible_to,profession_category,profession_subcategory,designation,company_name,country_code1,
+                    company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url,
+                    father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,
+                    birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,
+                    income,amount1,document_no,document_name,document_pic:documentpic})
             
             const resp=await new_add_contact.save()
             res.status(200).send({message:"contact saved",user:resp})
