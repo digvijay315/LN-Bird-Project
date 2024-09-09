@@ -1,6 +1,6 @@
 const express=require('express');
 const {add_contact,view_contact, view_contact_ByName, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany} = require('../controllers/contact_details');
-const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bystage, view_lead_Byemail, view_lead_Bymobile} = require('../controllers/leadinfo');
+const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
 const {add_developer,view_developer} = require('../controllers/add_developer');
@@ -26,16 +26,17 @@ router.get('/viewcontactbyemail/:email',view_contact_Byemail)
 router.get('/viewcontactbymobile/:mobile_no',view_contact_Bymobile)
 router.get('/viewcontactbytags/:tags',view_contact_Bytags)
 router.get('/viewcontactbycompany/:company_name',view_contact_Bycompany)
-router.put('/updatecontact/:_id',update_contact)
+router.put('/updatecontact/:_id',upload.any('document_pic'),update_contact)
 router.delete('/deletecontact/:_id',remove_contact)
 router.post('/contact/sendmail',send_mail)
 
-router.post('/leadinfo',upload.array('file'),lead_info)
+router.post('/leadinfo',upload.any('document_pic'),lead_info)
 router.get('/leadinfo',leadinfo_find)
 router.get('/viewbyleadtype/:lead_type',view_lead_Byleadtype)
 router.get('/viewbyid/:_id',view_lead_Byid)
 router.delete('/removelead/:_id',remove_lead)
-router.put('/updatelead/:_id',update_lead)
+router.put('/updatelead/:_id',upload.any('document_pic'),update_lead)
+router.get('/viewleadbycompany/:company_name',view_lead_Bycompany)
 router.get('/viewleadbystage/:stage',view_lead_Bystage)
 router.get('/viewleadbyemail/:email',view_lead_Byemail)
 router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)

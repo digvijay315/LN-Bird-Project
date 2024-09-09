@@ -132,7 +132,14 @@ const add_contact=async(req,res)=>
                             {
                                 return res.send({message:"lead not found"})
                             }
-                        const resp=await addcontact.findByIdAndUpdate(id,req.body)
+
+                        const document_pic = req.files && req.files.length > 0 ? req.files.map(file => file.path) : user.document_pic;
+                        
+                        const updatedFields = {
+                            ...req.body,
+                            document_pic // Update preview field with new images if provided
+                        };
+                        const resp=await addcontact.findByIdAndUpdate(id,updatedFields,{ new: true })
                         res.status(200).send({message:"lead update successfully"})
                     } catch (error) {
                         console.log(error)

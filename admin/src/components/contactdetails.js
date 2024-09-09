@@ -167,78 +167,7 @@ function Fetchcontact() {
                             
                         }
 /*-------------------------------------------------------------------searching all contact data by mobile email tags and company end---------------------------------------------------------------------------- */                                                     
-                        // const[mobile,setmobile]=useState('')
-                        // const fetchdatabymobile=async()=>
-                        //   {
-                            
-                        //     try {
-                        //       const resp=await api.get(`viewcontactbymobile/${mobile}`);
-                        //       const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
-                        //       setdata(incoming)
-                        //       setmobile('')
-                        //     } catch (error) {
-                        //       console.log(error);
-                        //     }
-                        //   }
-                        //   const handlekeypress2=(event)=>
-                        //   {
-                        //       if(event.key==="Enter")
-                        //           {
-                        //             fetchdatabymobile()
-                        //           }
-                              
-                        //   }
-
-     
-
-/*-------------------------------------------------------------------pagination,mui table cell and export to excel start---------------------------------------------------------------------------- */                                                     
-    
-
-        // const [currentPage, setCurrentPage] = useState(1);
-        // const [itemsPerPage, setItemsPerPage] = useState(5); // User defined items per page
-        // const indexOfLastItem = currentPage * itemsPerPage;
-        // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-        // const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-        // const totalPages = Math.ceil(data.length / itemsPerPage);
-        
-        // const paginate = (pageNumber) => setCurrentPage(pageNumber);
-        
-        // // const renderPageNumbers = () => {
-        // //   return Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-        // //     <button key={number} onClick={() => paginate(number)} style={{width:"30px",borderRadius:"5px"}}>
-        // //       {number}
-        // //     </button>
-        // //   ));
-        // // };
-        // const renderPageNumbers = () => {
-        //   return (
-        //     <div
-        //       style={{
-        //         display: 'flex',
-        //         overflowX: 'scroll',
-        //         whiteSpace: 'nowrap',
-        //         padding: '10px-15px',
-        //         width:'100px', 
-        //         position:"auto"
-        //       }}
-        //     >
-        //       {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-        //         <button
-        //           key={number}
-        //           onClick={() => paginate(number)}
-        //           style={{
-        //             width: '30px',
-        //             borderRadius: '5px',
-        //             marginRight: '5px',
-        //             flexShrink: 0, // Prevent buttons from shrinking
-        //           }}
-        //         >
-        //           {number}
-        //         </button>
-        //       ))}
-        //     </div>
-        //   );
-        // };
+      
 const [currentPage, setCurrentPage] = useState(1);
 const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
@@ -385,7 +314,7 @@ const renderPageNumbers = () => {
       setshow3(true);
       selectedItems.map(async(item)=>
             {
-              const resp1=await api.get(`viewcontactbyname/${item}`)
+              const resp1=await api.get(`viewcontactbyname/${item}`)// here search contact by id not name
               const emaildata=(resp1.data.contact.email)
               setemails((prevProfile)=>([...prevProfile,emaildata]))
             })
@@ -396,7 +325,7 @@ const renderPageNumbers = () => {
       {
         e.preventDefault();
         try {
-          debugger
+          
           const resp=await api.post(`contact/sendmail`,{emails,message})
           if(resp.status===200)
           {
@@ -564,8 +493,10 @@ const allColumns = [
           if(selectedItems.length===1)
           {
             try {
-              const resp=await api.get(`viewcontactbyname/${selectedItems}`)
+              const resp=await api.get(`viewcontactbyname/${selectedItems}`)//here search contact by id
               setshow1(true);
+              console.log(resp);
+              
               setcontact(resp.data.contact)
               setdata1(resp.data.contact)
             } catch (error) {
@@ -578,6 +509,9 @@ const allColumns = [
           }
          
         }
+       console.log(data1);
+      //  console.log(contact);
+       
        
         const basicdetails=()=>
           {
@@ -981,12 +915,17 @@ const allColumns = [
                             }));
                           };
                         
+                          const config = {
+                            headers: {
+                              'Content-Type': 'multipart/form-data' // Set the Content-Type here
+                            }
+                        }
       const updatecontact=async()=>
         {
           try {
             
             const id=data1._id
-            const resp=await api.put(`updatecontact/${id}`,contact)
+            const resp=await api.put(`updatecontact/${id}`,contact,config)
             toast.success("contact updated",{ autoClose: 2000 })
             setTimeout(() => {
               navigate('/contactdetails')
@@ -1188,7 +1127,7 @@ const handleSort = (key) => {
       </tbody>
     </Table>
   </TableContainer>
-    <footer style={{height:"50px",width:"100%",position:"auto",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5>
         </footer>

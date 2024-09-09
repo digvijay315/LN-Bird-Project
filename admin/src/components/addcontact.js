@@ -727,15 +727,15 @@ function Addcontact() {
                     </div>
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,designation:e.target.value})}>
                     <option>Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
+                        <option>Developer</option>
+                        <option>HR</option>
                         <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
                     <option>Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
+                        <option>TCS</option>
+                        <option>Microsoft</option>
                         <option>Others</option>
                         </select>
                     </div>
