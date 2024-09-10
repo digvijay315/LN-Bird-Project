@@ -25,13 +25,14 @@ import TableComponent from './components/demo';
 import CallButton from './components/demo';
 import Notification from './components/demo';
 import SuggestionBox from './components/demo';
+import Adddeveloper from './components/adddeveloper';
 
 
 function App() {
   return (
     <BrowserRouter>
    <div>
-    <Routes>
+    {/* <Routes>
       <Route path='/' element={<Login/>}></Route>
       <Route path='/dashboard' element={<Dashboard/>}></Route>
       <Route path='/addcontact' element={<Addcontact/>}></Route>
@@ -49,8 +50,9 @@ function App() {
       <Route path='/leaddetails' element={<Leadfetch/>}></Route>
       <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
-    </Routes>
+    </Routes> 
     {/* <SuggestionBox/> */}
+    <Adddeveloper/>
   
    </div>
    </BrowserRouter>
