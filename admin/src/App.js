@@ -26,6 +26,7 @@ import CallButton from './components/demo';
 import Notification from './components/demo';
 import SuggestionBox from './components/demo';
 import Adddeveloper from './components/adddeveloper';
+import Projectform from './components/projectform';
 
 
 function App() {
@@ -52,7 +53,8 @@ function App() {
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
     </Routes> 
     {/* <SuggestionBox/> */}
-    <Adddeveloper/>
+    {/* <Adddeveloper/> */}
+    <Projectform/>
   
    </div>
    </BrowserRouter>

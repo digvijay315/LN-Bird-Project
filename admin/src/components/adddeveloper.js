@@ -777,8 +777,8 @@ function Adddeveloper() {
                         </div>
                         <div className='col-md-12'><hr></hr></div>
                         <div className="row" style={{margin:"5px",padding:"10px"}}>
-                        <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-          <TableContainer component={Paper} style={{height:"400px",overflow:"scroll"}}>
+                        <div style={{marginLeft:"20px",marginTop:"10px",backgroundColor:"white"}}>
+          <TableContainer component={Paper} style={{height:"400px",overflowY:"scroll"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
       <tbody>

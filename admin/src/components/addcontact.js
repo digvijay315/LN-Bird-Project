@@ -527,9 +527,9 @@ function Addcontact() {
          
              <div style={{display:"flex"}}>
                <div style={{display:"flex",gap:"50px"}}>
-               <div  id='basic' onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}><span >Basic Details   |</span></div>
-                <div  id='professional' onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}><span >Professional Details |</span></div>
-                <div  id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}><span >Personal Details |</span></div> 
+               <div  id='basic' onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details   |</div>
+                <div  id='professional' onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details |</div>
+                <div  id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Personal Details |</div> 
                </div>
 						    <div style={{marginLeft:"200px",width:"31%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
 					</div>
