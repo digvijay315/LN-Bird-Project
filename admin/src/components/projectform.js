@@ -126,12 +126,14 @@ function Projectform() {
             document.getElementById("block").style.display="none"
              document.getElementById("sizedetails").style.display="none"
              document.getElementById("unitdetails").style.display="none"
+             document.getElementById("aminities").style.display="none"
           
             document.getElementById("basic").style.color="green"
             document.getElementById("other").style.color="black"
              document.getElementById("professional").style.color="black"
              document.getElementById("size1").style.color="black"
              document.getElementById("unit").style.color="black"
+             document.getElementById("aminities1").style.color="black"
           }
           const professionaldetails=()=>
             {
@@ -140,6 +142,7 @@ function Projectform() {
               document.getElementById("block").style.display="none"
               document.getElementById("sizedetails").style.display="none"
               document.getElementById("unitdetails").style.display="none"
+              document.getElementById("aminities").style.display="none"
               
 
                document.getElementById("basic").style.color="black"
@@ -147,6 +150,7 @@ function Projectform() {
             document.getElementById("professional").style.color="green"
             document.getElementById("size1").style.color="black"
             document.getElementById("unit").style.color="black"
+            document.getElementById("aminities1").style.color="black"
                
             }
           const otherdetails=()=>
@@ -156,12 +160,14 @@ function Projectform() {
                  document.getElementById("block").style.display="flex"
                  document.getElementById("sizedetails").style.display="none"
                  document.getElementById("unitdetails").style.display="none"
+                 document.getElementById("aminities").style.display="none"
 
                document.getElementById("basic").style.color="black"
                 document.getElementById("professional").style.color="black"
                document.getElementById("other").style.color="green"
                document.getElementById("size1").style.color="black"
                document.getElementById("unit").style.color="black"
+               document.getElementById("aminities1").style.color="black"
             }
             const sizedetails=()=>
                 {
@@ -170,12 +176,14 @@ function Projectform() {
                      document.getElementById("block").style.display="none"
                      document.getElementById("sizedetails").style.display="flex"
                      document.getElementById("unitdetails").style.display="none"
+                     document.getElementById("aminities").style.display="none"
 
                    document.getElementById("basic").style.color="black"
                     document.getElementById("professional").style.color="black"
                    document.getElementById("other").style.color="black"
                    document.getElementById("size1").style.color="green"
                    document.getElementById("unit").style.color="black"
+                   document.getElementById("aminities1").style.color="black"
                 }
                 const unitdetails=()=>
                   {
@@ -184,12 +192,14 @@ function Projectform() {
                        document.getElementById("block").style.display="none"
                        document.getElementById("sizedetails").style.display="none"
                        document.getElementById("unitdetails").style.display="flex"
+                        document.getElementById("aminities").style.display="none"
   
                      document.getElementById("basic").style.color="black"
                       document.getElementById("professional").style.color="black"
                      document.getElementById("other").style.color="black"
                      document.getElementById("size1").style.color="black"
                      document.getElementById("unit").style.color="green"
+                     document.getElementById("aminities1").style.color="black"
                   }
 
                    
@@ -213,6 +223,86 @@ function Projectform() {
               document.getElementById("unitlocationdetails").style.color="green"
               
             }
+            const aminitiesdetails=()=>
+              {
+                document.getElementById("basicdetails1").style.display="none"
+                 document.getElementById("location").style.display="none"
+                   document.getElementById("block").style.display="none"
+                   document.getElementById("sizedetails").style.display="none"
+                   document.getElementById("unitdetails").style.display="none"
+                    document.getElementById("aminities").style.display="flex"
+
+                 document.getElementById("basic").style.color="black"
+                  document.getElementById("professional").style.color="black"
+                 document.getElementById("other").style.color="black"
+                 document.getElementById("size1").style.color="black"
+                 document.getElementById("unit").style.color="black"
+                  document.getElementById("aminities1").style.color="green"
+              }
+
+              const basicaminities=()=>
+                {
+                  document.getElementById("basicaminities").style.display="flex"
+                  document.getElementById("featuredaminities").style.display="none"
+                  document.getElementById("nearbyaminities").style.display="none"
+              
+                    
+                  document.getElementById("featuredaminities1").style.color="black"
+                  document.getElementById("featuredaminities1").style.backgroundColor="white"
+                  document.getElementById("nearbyaminities1").style.color="black"
+                  document.getElementById("nearbyaminities1").style.backgroundColor="white"
+
+                  document.getElementById("basicaminities1").style.backgroundColor="black"
+                  document.getElementById("basicaminities1").style.color="white"
+                  document.getElementById("basicaminities1").style.borderRadius="50px"
+                  document.getElementById("basicaminities1").style.width="80px"
+                  document.getElementById("basicaminities1").style.textAlign="center"
+                
+                 
+             
+                  
+                }
+                const featuredaminities=()=>
+                  {
+                     document.getElementById("basicaminities").style.display="none"
+                     document.getElementById("featuredaminities").style.display="flex"
+                     document.getElementById("nearbyaminities").style.display="none"
+                
+                  
+                    document.getElementById("basicaminities1").style.color="black"
+                    document.getElementById("basicaminities1").style.backgroundColor="white"
+                       document.getElementById("nearbyaminities1").style.color="black"
+                    document.getElementById("nearbyaminities1").style.backgroundColor="white"
+
+                    document.getElementById("featuredaminities1").style.backgroundColor="black"
+                    document.getElementById("featuredaminities1").style.color="white"
+                    document.getElementById("featuredaminities1").style.borderRadius="50px"
+                    document.getElementById("featuredaminities1").style.width="80px"
+                    document.getElementById("featuredaminities1").style.textAlign="center"
+                    
+                  }
+                  const nearbyaminities=()=>
+                    {
+                      
+                      document.getElementById("basicaminities").style.display="none"
+                      document.getElementById("featuredaminities").style.display="none"
+                      document.getElementById("nearbyaminities").style.display="flex"
+                  
+                    
+                      document.getElementById("basicaminities1").style.color="black"
+                      document.getElementById("basicaminities1").style.backgroundColor="white"
+                       document.getElementById("featuredaminities1").style.color="black"
+                      document.getElementById("featuredaminities1").style.backgroundColor="white"
+
+                      document.getElementById("nearbyaminities1").style.backgroundColor="black"
+                      document.getElementById("nearbyaminities1").style.color="white"
+                      document.getElementById("nearbyaminities1").style.borderRadius="50px"
+                      document.getElementById("nearbyaminities1").style.width="80px"
+                      document.getElementById("nearbyaminities1").style.textAlign="center"
+                      
+                    }
+              
+            
           
           function addFn1() {
         
@@ -708,6 +798,120 @@ function Projectform() {
                       
                       // }
                       // console.log(category);
+                      const checkboxItems = [
+                        "Car Parking",
+                        "Intercom",
+                        "Multi-Purpose Hall",
+                        "24x7 Water Supply",
+                        "Municipal Water Supply",
+                        "Garbage Management System",
+                        "Fire Fighting System",
+                        "Visitor Car Parking",
+                        "Earthquake Resistance",
+                        "Lift",
+                        "Maintenance Staff",
+                        "Power Supply",
+                        "Air Condition",
+                        "Security",
+                        "Bike Parking",
+                        "Others"
+                      ];
+                      const [checkedItems, setCheckedItems] = useState(Array(checkboxItems.length).fill(false));
+                      const [selectAll, setSelectAll] = useState(false);
+                    
+                      // Toggle individual checkboxes
+                      const handleCheckboxChange = (index) => {
+                        const updatedCheckedItems = [...checkedItems];
+                        updatedCheckedItems[index] = !updatedCheckedItems[index];
+                        setCheckedItems(updatedCheckedItems);
+                    
+                        // If any checkbox is unchecked, deselect "Select All"
+                        if (updatedCheckedItems.some((item) => !item)) {
+                          setSelectAll(false);
+                        }
+                      };
+                    
+                      // Handle "Select All" checkbox
+                      const handleSelectAllChange = () => {
+                        const newSelectAll = !selectAll;
+                        setSelectAll(newSelectAll);
+                        setCheckedItems(Array(checkboxItems.length).fill(newSelectAll));
+                      };
+
+                      const checkboxItems1 = [
+                          "Seniour Citizen Corner","Worship Place","HAVC System","Cricket Pitch",
+                          "Two Tier Security","Cafeteria","Car Washing Area","No Common Wall",
+                          "Driver Dormitory","EPABX System","CCTV","Gymaasium",
+                          "Garden","Power Back Up","Party Lawn","Gazebo",
+                          "Cold Storage","Solar Water Heater","Jogging Track","DTH Connection",
+                          "Three Tier Security","Smoking Area","Spa & Saloon","Solar Power",
+                          "Video Door Phone","Utility Shop","Steam Room","Amphi Theatre",
+                          "Private Car Parking","Guest Room","Internet","Kids Play area",
+                          "Barbeque Facility","Basket Ball Court","Skating Rink","Socity Office",
+                          "Squash Court","Waiting Longue","Yoga And Meditation Center","Water Softener",
+                          "Swipe Card Entry","Health Facilities","Library","Day Care Center",
+                          "Reception","Shiping Stores","Laundry Room","Indoor Games",
+                          "Piped Lpg Connection","Confrence Or Meeting Room","Badminton Court","Sauna Bath",
+                          "Rain Water Harvesting","Jacuzzi","Massage Parlor","Tution Room",
+                          "Restaurant","Tennis Court","Club House","Swimming Pool",
+                          "Wi-Fi","Mini Theater","Modular Kitchen","Cycliing Track",
+                          "Outdoor Games"
+
+
+                      ];
+                      const [checkedItems1, setCheckedItems1] = useState(Array(checkboxItems1.length).fill(false));
+                      const [selectAll1, setSelectAll1] = useState(false);
+                    
+                      // Toggle individual checkboxes
+                      const handleCheckboxChange1 = (index) => {
+                        const updatedCheckedItems1 = [...checkedItems1];
+                        updatedCheckedItems1[index] = !updatedCheckedItems1[index];
+                        setCheckedItems1(updatedCheckedItems1);
+                    
+                        // If any checkbox is unchecked, deselect "Select All"
+                        if (updatedCheckedItems1.some((item) => !item)) {
+                          setSelectAll1(false);
+                        }
+                      };
+                    
+                      // Handle "Select All" checkbox
+                      const handleSelectAllChange1 = () => {
+                        const newSelectAll1 = !selectAll1;
+                        setSelectAll1(newSelectAll1);
+                        setCheckedItems1(Array(checkboxItems1.length).fill(newSelectAll1));
+                      };
+
+                      const[destinationdetails,setdestinationdetails]=useState([])
+                      const[destinations,setdestinations]=useState({destination:"",name_of_destination:"",distance:"",measurment:""})
+                      // function adddestination() {
+        
+                      //  setdestinationdetails([...destinationdetails,destinations])
+                      // };
+                      // console.log(destinationdetails);
+                      const adddestination = () => {
+                       
+                        if (destinations.destination && destinations.name_of_destination && destinations.distance && destinations.measurment) {
+                          setdestinationdetails([...destinationdetails, destinations]);
+                          // Clear the input fields after adding
+                        
+                          document.getElementById("nameofdestination").value=""
+                          document.getElementById("destination").value=""
+                          document.getElementById("measurment").value=""
+                          document.getElementById("choosedestination").value="Select"
+                        } else {
+                          toast.error("Please fill out all fields.");
+                        }
+                      };
+                      const deletedestination = (index) => {
+                       
+                      
+                        // Filter out the destination at the given index
+                        const newDestinationDetails = destinationdetails.filter((_, i) => i !== index);
+                      
+                        // Set the updated destination details
+                        setdestinationdetails(newDestinationDetails);
+                      };
+                      
                       
                 
     return ( 
@@ -732,7 +936,7 @@ function Projectform() {
                 <div  id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Block |</div> 
                 <div  id='size1' onClick={sizedetails} style={{cursor:'pointer',fontWeight:"bold"}}>Size |</div>
                 <div  id='unit' onClick={unitdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Unit |</div>
-                <div  id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Aminities |</div> 
+                <div  id='aminities1' onClick={aminitiesdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Aminities |</div> 
                 <div  id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Price |</div> 
                </div>
 						    <div style={{marginLeft:"20%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
@@ -1388,8 +1592,8 @@ function Projectform() {
             <Modal.Body>
             <div style={{display:"flex"}}>
                <div style={{display:"flex",gap:"30px"}}>
-               <div  id='unitdetail' onClick={unitdetails1} style={{cursor:'pointer',fontWeight:"bold"}}>Unit</div>
-                <div  id='unitlocationdetails' onClick={unitdetails2} style={{cursor:'pointer',fontWeight:"bold"}}>Location</div>
+               <div  id='unitdetail'><span onClick={unitdetails1} style={{cursor:'pointer',fontWeight:"bold"}}>Unit</span> </div>
+                <div  id='unitlocationdetails'><span onClick={unitdetails2} style={{cursor:'pointer',fontWeight:"bold"}}>Location</span> </div>
                  
                </div>
               </div>
@@ -1574,7 +1778,7 @@ function Projectform() {
                 <div className="row">
                 <div className="col-md-12" id='unitlocation' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
                  <div className="p-3 py-5">
-                <div className="col-md-12" style={{border:"1px solid black",height:"700px"}}>
+                <div className="col-md-12" style={{border:"1px solid black",height:"700px",marginTop:"30px"}}>
                 <div style={{border:"1px solid black",marginTop:"10px"}}>
                           <LoadScript
                             googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
@@ -1623,6 +1827,108 @@ function Projectform() {
                     </div>
                     </div>
 {/*=======================----------------------------------------- unit details end====================------------------------------ */}
+
+
+{/* -----------------------=========================aminities details===================----------------------------------------------- */}
+
+
+          <div className="col-md-12" id='aminities' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
+                      <div className="p-3 py-5">
+                          <div className="row " >
+                            <div style={{display:"flex"}}>
+                          <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
+                             <div  id='basicaminities1' onClick={basicaminities} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"80px",textAlign:"center",transition:"0.5s ease-out"}}>Basic </div>
+                             <div  id='featuredaminities1' onClick={featuredaminities} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Featured</div>
+                             <div  id='nearbyaminities1' onClick={nearbyaminities} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Nearby</div>
+                         </div>
+                        
+                         </div>
+                           <div className="row" id='basicaminities' style={{ marginTop: "20px" }}>
+                           <div className='col-md-12' style={{width:"250px",marginLeft:"200px"}}><input type="checkbox" style={{transform:"scale(1.5)",marginRight:"10px"}} checked={selectAll} onChange={handleSelectAllChange}></input>Select All</div>
+                              {checkboxItems.map((item, index) => (
+                                <div className="col-md-6" style={{ marginTop: "20px" }} key={index}>
+                                  <input
+                                    type="checkbox"
+                                    style={{ transform: "scale(1.5)", marginRight: "10px" }}
+                                    checked={checkedItems[index]}
+                                    onChange={() => handleCheckboxChange(index)}
+                                  />
+                                  {item}
+                                </div>
+                              ))}
+                        </div>
+                        <div className="row" id='featuredaminities' style={{ marginTop: "20px",display:"none" }}>
+                        <div className='col-md-12' style={{width:"250px",marginLeft:"200px"}}><input type="checkbox" style={{transform:"scale(1.5)",marginRight:"10px"}} checked={selectAll1} onChange={handleSelectAllChange1}></input>Select All</div>
+                              {checkboxItems1.map((item, index) => (
+                                <div className="col-md-3" style={{ marginTop: "20px" }} key={index}>
+                                  <input
+                                    type="checkbox"
+                                    style={{ transform: "scale(1.5)", marginRight: "10px" }}
+                                    checked={checkedItems1[index]}
+                                    onChange={() => handleCheckboxChange1(index)}
+                                  />
+                                  {item}
+                                </div>
+                              ))}
+                        </div>
+                        <div className="row" id='nearbyaminities' style={{ marginTop: "20px",display:"none"}}>
+                        <div className='col-md-12'></div><br></br>
+                       
+                        <div className="col-md-3"><label className='labels'>Destination</label><select id='choosedestination' className='form-control form-control-sm' onChange={(e)=>setdestinations({...destinations,destination:e.target.value})} >
+                              <option>Select</option>
+                              <option>Bus Stop</option>
+                              <option>Railway Station</option>
+                              <option>Airport</option>
+                              <option>Taxi Stand</option>
+                              <option>Shoping Mall</option>
+                        </select>
+                        </div>
+                        <div className="col-md-3"><label className='labels'>Name Of Destination</label><input id='nameofdestination' type='text' className='form-control form-control-sm' onChange={(e)=>setdestinations((prevprofile)=>({...prevprofile,name_of_destination:e.target.value}))}/> </div>
+                        <div className="col-md-2"><label className='labels'>Distance</label><input id='destination' type='text' className='form-control form-control-sm' onChange={(e)=>setdestinations((prevprofile)=>({...prevprofile,distance:e.target.value}))}/> </div>
+                        <div className="col-md-2"><label className='labels' style={{visibility:"hidden"}}>Measurement</label><select id='measurment' className='form-control form-control-sm' onChange={(e)=>setdestinations((prevprofile)=>({...prevprofile,measurment:e.target.value}))}>
+                         <option>Select</option><option>K.M</option><option>Miles</option><option>Meter</option>
+                          </select>
+                           </div>
+                         <div className="col-md-1"><label className='labels' style={{visibility:"hidden"}} >Add</label><button className='form-control form-control-sm' onClick={adddestination}>+</button></div>
+                    <div className='col-md-4'></div><br></br>
+                    <div className='col-md-12'><label className='labels'>List Of Destinations</label></div>
+                    <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginTop:"40px",marginLeft:"10px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+     
+    <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sr.</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Name Of Destination</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Type Of Destination</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Distance</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
+          
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+          destinationdetails.map((item, index) => (
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+              {index+1}
+            </StyledTableCell>
+            <StyledTableCell >{item.name_of_destination} </StyledTableCell>
+            <StyledTableCell >{item.destination} </StyledTableCell>
+            <StyledTableCell >{item.distance}{item.measurment} </StyledTableCell> 
+            <StyledTableCell >
+              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/>
+            </StyledTableCell>
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+    </TableContainer>
+    </div>
+                </div>
+              </div>
+          </div>
+{/* ==========================-----------------------------aminities details end---------------------------------============================= */}
 
                  <div className='col-md-12'><hr></hr></div> 
                     <ToastContainer/>
