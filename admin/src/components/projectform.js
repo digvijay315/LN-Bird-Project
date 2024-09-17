@@ -67,6 +67,13 @@ function Projectform() {
     
 
     const navigate=useNavigate(); 
+
+    const add_developer=()=>
+    {
+      navigate('/adddeveloper')
+    }
+
+
     const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],
         type:[''],floor:[''],action2:[],tagcs:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
@@ -75,7 +82,7 @@ function Projectform() {
         breadth:[''],total_area:[''],meseaurment:[''],action3:[],
 
         father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-        birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+        birth_date:"",anniversary_date:"",step_name:[''],calculation_type:[''],blank1:[''],blank2:[''],blank3:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
         social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[] });
     
         const config = {
@@ -118,203 +125,232 @@ function Projectform() {
                     document.getElementById("r").style.marginLeft="0%"
                 }
 
-       
+// ----------------------=========================all form tab view toggle code ======================------------------------------------------      
         const basicdetails=()=>
           {
-            document.getElementById("basicdetails1").style.display="flex"
-            document.getElementById("location").style.display="none"
-            document.getElementById("block").style.display="none"
-             document.getElementById("sizedetails").style.display="none"
-             document.getElementById("unitdetails").style.display="none"
-             document.getElementById("aminities").style.display="none"
-          
-            document.getElementById("basic").style.color="green"
-            document.getElementById("other").style.color="black"
-             document.getElementById("professional").style.color="black"
-             document.getElementById("size1").style.color="black"
-             document.getElementById("unit").style.color="black"
-             document.getElementById("aminities1").style.color="black"
+                document.getElementById("basicdetails1").style.display="flex"
+                document.getElementById("location").style.display="none"
+                document.getElementById("block").style.display="none"
+                document.getElementById("sizedetails").style.display="none"
+                document.getElementById("unitdetails").style.display="none"
+                document.getElementById("aminities").style.display="none"
+                document.getElementById("price").style.display="none"
+              
+                document.getElementById("basic").style.color="green"
+                document.getElementById("other").style.color="black"
+                document.getElementById("professional").style.color="black"
+                document.getElementById("size1").style.color="black"
+                document.getElementById("unit").style.color="black"
+                document.getElementById("aminities1").style.color="black"
+                document.getElementById("prices").style.color="black"
           }
           const professionaldetails=()=>
             {
-              document.getElementById("basicdetails1").style.display="none"
-              document.getElementById("location").style.display="flex"
-              document.getElementById("block").style.display="none"
-              document.getElementById("sizedetails").style.display="none"
-              document.getElementById("unitdetails").style.display="none"
-              document.getElementById("aminities").style.display="none"
+                document.getElementById("basicdetails1").style.display="none"
+                document.getElementById("location").style.display="flex"
+                document.getElementById("block").style.display="none"
+                document.getElementById("sizedetails").style.display="none"
+                document.getElementById("unitdetails").style.display="none"
+                document.getElementById("aminities").style.display="none"
+                document.getElementById("price").style.display="none"
               
 
-               document.getElementById("basic").style.color="black"
-               document.getElementById("other").style.color="black"
-            document.getElementById("professional").style.color="green"
-            document.getElementById("size1").style.color="black"
-            document.getElementById("unit").style.color="black"
-            document.getElementById("aminities1").style.color="black"
+                document.getElementById("basic").style.color="black"
+                document.getElementById("other").style.color="black"
+                document.getElementById("professional").style.color="green"
+                document.getElementById("size1").style.color="black"
+                document.getElementById("unit").style.color="black"
+                document.getElementById("aminities1").style.color="black"
+                document.getElementById("prices").style.color="black"
                
             }
           const otherdetails=()=>
             {
-              document.getElementById("basicdetails1").style.display="none"
-               document.getElementById("location").style.display="none"
-                 document.getElementById("block").style.display="flex"
-                 document.getElementById("sizedetails").style.display="none"
-                 document.getElementById("unitdetails").style.display="none"
-                 document.getElementById("aminities").style.display="none"
+                  document.getElementById("basicdetails1").style.display="none"
+                  document.getElementById("location").style.display="none"
+                  document.getElementById("block").style.display="flex"
+                  document.getElementById("sizedetails").style.display="none"
+                  document.getElementById("unitdetails").style.display="none"
+                  document.getElementById("aminities").style.display="none"
+                  document.getElementById("price").style.display="none"
 
-               document.getElementById("basic").style.color="black"
-                document.getElementById("professional").style.color="black"
-               document.getElementById("other").style.color="green"
-               document.getElementById("size1").style.color="black"
-               document.getElementById("unit").style.color="black"
-               document.getElementById("aminities1").style.color="black"
+                  document.getElementById("basic").style.color="black"
+                  document.getElementById("professional").style.color="black"
+                  document.getElementById("other").style.color="green"
+                  document.getElementById("size1").style.color="black"
+                  document.getElementById("unit").style.color="black"
+                  document.getElementById("aminities1").style.color="black"
+                  document.getElementById("prices").style.color="black"
             }
             const sizedetails=()=>
                 {
-                  document.getElementById("basicdetails1").style.display="none"
-                   document.getElementById("location").style.display="none"
-                     document.getElementById("block").style.display="none"
-                     document.getElementById("sizedetails").style.display="flex"
-                     document.getElementById("unitdetails").style.display="none"
-                     document.getElementById("aminities").style.display="none"
+                      document.getElementById("basicdetails1").style.display="none"
+                      document.getElementById("location").style.display="none"
+                      document.getElementById("block").style.display="none"
+                      document.getElementById("sizedetails").style.display="flex"
+                      document.getElementById("unitdetails").style.display="none"
+                      document.getElementById("aminities").style.display="none"
+                      document.getElementById("price").style.display="none"
 
-                   document.getElementById("basic").style.color="black"
-                    document.getElementById("professional").style.color="black"
-                   document.getElementById("other").style.color="black"
-                   document.getElementById("size1").style.color="green"
-                   document.getElementById("unit").style.color="black"
-                   document.getElementById("aminities1").style.color="black"
+                      document.getElementById("basic").style.color="black"
+                      document.getElementById("professional").style.color="black"
+                      document.getElementById("other").style.color="black"
+                      document.getElementById("size1").style.color="green"
+                      document.getElementById("unit").style.color="black"
+                      document.getElementById("aminities1").style.color="black"
+                      document.getElementById("prices").style.color="black"
                 }
                 const unitdetails=()=>
                   {
-                    document.getElementById("basicdetails1").style.display="none"
-                     document.getElementById("location").style.display="none"
-                       document.getElementById("block").style.display="none"
-                       document.getElementById("sizedetails").style.display="none"
-                       document.getElementById("unitdetails").style.display="flex"
+                        document.getElementById("basicdetails1").style.display="none"
+                        document.getElementById("location").style.display="none"
+                        document.getElementById("block").style.display="none"
+                        document.getElementById("sizedetails").style.display="none"
+                        document.getElementById("unitdetails").style.display="flex"
                         document.getElementById("aminities").style.display="none"
-  
-                     document.getElementById("basic").style.color="black"
-                      document.getElementById("professional").style.color="black"
-                     document.getElementById("other").style.color="black"
-                     document.getElementById("size1").style.color="black"
-                     document.getElementById("unit").style.color="green"
-                     document.getElementById("aminities1").style.color="black"
+                        document.getElementById("price").style.display="none"
+      
+                        document.getElementById("basic").style.color="black"
+                        document.getElementById("professional").style.color="black"
+                        document.getElementById("other").style.color="black"
+                        document.getElementById("size1").style.color="black"
+                        document.getElementById("unit").style.color="green"
+                        document.getElementById("aminities1").style.color="black"
+                        document.getElementById("prices").style.color="black"
                   }
-
-                   
-        const unitdetails1=()=>
-          {
-            document.getElementById("unitdetails1").style.display="flex"
-            document.getElementById("unitlocation").style.display="none"
-        
-          
-            document.getElementById("unitdetail").style.color="green"
-            document.getElementById("unitlocationdetails").style.color="black"
-            
-          }
-          const unitdetails2=()=>
-            {
-              document.getElementById("unitdetails1").style.display="none"
-              document.getElementById("unitlocation").style.display="flex"
-          
-            
-              document.getElementById("unitdetail").style.color="black"
-              document.getElementById("unitlocationdetails").style.color="green"
-              
-            }
-            const aminitiesdetails=()=>
-              {
-                document.getElementById("basicdetails1").style.display="none"
-                 document.getElementById("location").style.display="none"
-                   document.getElementById("block").style.display="none"
-                   document.getElementById("sizedetails").style.display="none"
-                   document.getElementById("unitdetails").style.display="none"
-                    document.getElementById("aminities").style.display="flex"
-
-                 document.getElementById("basic").style.color="black"
-                  document.getElementById("professional").style.color="black"
-                 document.getElementById("other").style.color="black"
-                 document.getElementById("size1").style.color="black"
-                 document.getElementById("unit").style.color="black"
-                  document.getElementById("aminities1").style.color="green"
-              }
-
-              const basicaminities=()=>
-                {
-                  document.getElementById("basicaminities").style.display="flex"
-                  document.getElementById("featuredaminities").style.display="none"
-                  document.getElementById("nearbyaminities").style.display="none"
-              
-                    
-                  document.getElementById("featuredaminities1").style.color="black"
-                  document.getElementById("featuredaminities1").style.backgroundColor="white"
-                  document.getElementById("nearbyaminities1").style.color="black"
-                  document.getElementById("nearbyaminities1").style.backgroundColor="white"
-
-                  document.getElementById("basicaminities1").style.backgroundColor="black"
-                  document.getElementById("basicaminities1").style.color="white"
-                  document.getElementById("basicaminities1").style.borderRadius="50px"
-                  document.getElementById("basicaminities1").style.width="80px"
-                  document.getElementById("basicaminities1").style.textAlign="center"
-                
-                 
-             
-                  
-                }
-                const featuredaminities=()=>
-                  {
-                     document.getElementById("basicaminities").style.display="none"
-                     document.getElementById("featuredaminities").style.display="flex"
-                     document.getElementById("nearbyaminities").style.display="none"
-                
-                  
-                    document.getElementById("basicaminities1").style.color="black"
-                    document.getElementById("basicaminities1").style.backgroundColor="white"
-                       document.getElementById("nearbyaminities1").style.color="black"
-                    document.getElementById("nearbyaminities1").style.backgroundColor="white"
-
-                    document.getElementById("featuredaminities1").style.backgroundColor="black"
-                    document.getElementById("featuredaminities1").style.color="white"
-                    document.getElementById("featuredaminities1").style.borderRadius="50px"
-                    document.getElementById("featuredaminities1").style.width="80px"
-                    document.getElementById("featuredaminities1").style.textAlign="center"
-                    
-                  }
-                  const nearbyaminities=()=>
+                                  const unitdetail1=()=>
+                                    {
+                                      document.getElementById("unitdetails1").style.display="flex"
+                                      document.getElementById("unitlocation").style.display="none"
+                                  
+                                    
+                                      document.getElementById("unitdetail").style.color="green"
+                                      document.getElementById("unitlocationdetails").style.color="black"
+                                      
+                                    }
+                                    const unitdetail2=()=>
+                                      {
+                                        document.getElementById("unitdetails1").style.display="none"
+                                        document.getElementById("unitlocation").style.display="flex"
+                                    
+                                      
+                                        document.getElementById("unitdetail").style.color="black"
+                                        document.getElementById("unitlocationdetails").style.color="green"
+                                        
+                                      }
+                  const aminitiesdetails=()=>
                     {
-                      
-                      document.getElementById("basicaminities").style.display="none"
-                      document.getElementById("featuredaminities").style.display="none"
-                      document.getElementById("nearbyaminities").style.display="flex"
-                  
-                    
-                      document.getElementById("basicaminities1").style.color="black"
-                      document.getElementById("basicaminities1").style.backgroundColor="white"
-                       document.getElementById("featuredaminities1").style.color="black"
-                      document.getElementById("featuredaminities1").style.backgroundColor="white"
-
-                      document.getElementById("nearbyaminities1").style.backgroundColor="black"
-                      document.getElementById("nearbyaminities1").style.color="white"
-                      document.getElementById("nearbyaminities1").style.borderRadius="50px"
-                      document.getElementById("nearbyaminities1").style.width="80px"
-                      document.getElementById("nearbyaminities1").style.textAlign="center"
-                      
-                    }
-              
-            
+                          document.getElementById("basicdetails1").style.display="none"
+                          document.getElementById("location").style.display="none"
+                          document.getElementById("block").style.display="none"
+                          document.getElementById("sizedetails").style.display="none"
+                          document.getElementById("unitdetails").style.display="none"
+                          document.getElementById("aminities").style.display="flex"
+                          document.getElementById("price").style.display="none"
           
+                          document.getElementById("basic").style.color="black"
+                          document.getElementById("professional").style.color="black"
+                          document.getElementById("other").style.color="black"
+                          document.getElementById("size1").style.color="black"
+                          document.getElementById("unit").style.color="black"
+                          document.getElementById("aminities1").style.color="green"
+                          document.getElementById("prices").style.color="black"
+                    }
+
+                                    const basicaminities=()=>
+                                      {
+                                        document.getElementById("basicaminities").style.display="flex"
+                                        document.getElementById("featuredaminities").style.display="none"
+                                        document.getElementById("nearbyaminities").style.display="none"
+                                    
+                                          
+                                        document.getElementById("featuredaminities1").style.color="black"
+                                        document.getElementById("featuredaminities1").style.backgroundColor="white"
+                                        document.getElementById("nearbyaminities1").style.color="black"
+                                        document.getElementById("nearbyaminities1").style.backgroundColor="white"
+                      
+                                        document.getElementById("basicaminities1").style.backgroundColor="black"
+                                        document.getElementById("basicaminities1").style.color="white"
+                                        document.getElementById("basicaminities1").style.borderRadius="50px"
+                                        document.getElementById("basicaminities1").style.width="80px"
+                                        document.getElementById("basicaminities1").style.textAlign="center"
+                                      
+                                      
+                                  
+                                        
+                                      }
+                                      const featuredaminities=()=>
+                                        {
+                                          document.getElementById("basicaminities").style.display="none"
+                                          document.getElementById("featuredaminities").style.display="flex"
+                                          document.getElementById("nearbyaminities").style.display="none"
+                                      
+                                        
+                                          document.getElementById("basicaminities1").style.color="black"
+                                          document.getElementById("basicaminities1").style.backgroundColor="white"
+                                          document.getElementById("nearbyaminities1").style.color="black"
+                                          document.getElementById("nearbyaminities1").style.backgroundColor="white"
+                      
+                                          document.getElementById("featuredaminities1").style.backgroundColor="black"
+                                          document.getElementById("featuredaminities1").style.color="white"
+                                          document.getElementById("featuredaminities1").style.borderRadius="50px"
+                                          document.getElementById("featuredaminities1").style.width="80px"
+                                          document.getElementById("featuredaminities1").style.textAlign="center"
+                                          
+                                        }
+                                        const nearbyaminities=()=>
+                                          {
+                                            
+                                            document.getElementById("basicaminities").style.display="none"
+                                            document.getElementById("featuredaminities").style.display="none"
+                                            document.getElementById("nearbyaminities").style.display="flex"
+                                        
+                                          
+                                            document.getElementById("basicaminities1").style.color="black"
+                                            document.getElementById("basicaminities1").style.backgroundColor="white"
+                                            document.getElementById("featuredaminities1").style.color="black"
+                                            document.getElementById("featuredaminities1").style.backgroundColor="white"
+                      
+                                            document.getElementById("nearbyaminities1").style.backgroundColor="black"
+                                            document.getElementById("nearbyaminities1").style.color="white"
+                                            document.getElementById("nearbyaminities1").style.borderRadius="50px"
+                                            document.getElementById("nearbyaminities1").style.width="80px"
+                                            document.getElementById("nearbyaminities1").style.textAlign="center"
+                                            
+                                          }
+                    const pricedetails=()=>
+                      {
+                            document.getElementById("basicdetails1").style.display="none"
+                            document.getElementById("location").style.display="none"
+                            document.getElementById("block").style.display="none"
+                            document.getElementById("sizedetails").style.display="none"
+                            document.getElementById("unitdetails").style.display="none"
+                            document.getElementById("aminities").style.display="none"
+                            document.getElementById("price").style.display="flex"
+            
+                            document.getElementById("basic").style.color="black"
+                            document.getElementById("professional").style.color="black"
+                            document.getElementById("other").style.color="black"
+                            document.getElementById("size1").style.color="black"
+                            document.getElementById("unit").style.color="black"
+                            document.getElementById("aminities1").style.color="black"
+                            document.getElementById("prices").style.color="green"
+                      }
+// ===================================-----------all form tab toggle code end------------------------------=================================
+                   
+  //--------------------------==========================  add delete and onchange event of array start -------------==================================     
+
           function addFn1() {
         
-            setcontact({
-              ...contact,
-              approvals: [...contact.approvals, ''],
-              registration_no: [...contact.registration_no, ''],
-              date: [...contact.date, ''],
-              pic: [...contact.pic, ''],
-              action1: [...contact.action1, '']
-            });
-          };
+                    setcontact({
+                      ...contact,
+                      approvals: [...contact.approvals, ''],
+                      registration_no: [...contact.registration_no, ''],
+                      date: [...contact.date, ''],
+                      pic: [...contact.pic, ''],
+                      action1: [...contact.action1, '']
+                    });
+                  };
 
           const deleteall1=(index)=>
             {
@@ -348,6 +384,15 @@ function Projectform() {
               setcontact({
                 ...contact,
                 mobile_no: newmobile_no
+              });
+            };
+            const handledocumentpicchange = (index, event) => {
+              const newdocumentpic = [...contact.document_pic];
+              const files = Array.from(event.target.files);
+              newdocumentpic[index] = {files:files}
+              setcontact({
+                ...contact,
+                document_pic: newdocumentpic
               });
             };
             const handlemobile_typechange = (index, event) => {
@@ -454,25 +499,31 @@ function Projectform() {
      
                   setcontact({
                     ...contact,
-                    education: [...contact.education, ''],
-                    degree: [...contact.degree, ''],
-                    school_college: [...contact.school_college, ''],
-                    action4: [...contact.action4, '']
+                    step_name: [...contact.step_name, ''],
+                    calculation_type: [...contact.calculation_type, ''],
+                    blank1: [...contact.blank1, ''],
+                    blank2: [...contact.blank2, ''],
+                    blank3: [...contact.blank3, ''],
+                    action4:[...contact.action4,'']
                   });
                 };
                 const deleteall4=(index)=>
                   {
                    
-                    const neweducation = contact.education.filter((_, i) => i !== index);
-                    const newdegree = contact.degree.filter((_, i) => i !== index);
-                    const newschool_college = contact.school_college.filter((_, i) => i !== index);
+                    const newstepname = contact.step_name.filter((_, i) => i !== index);
+                    const newcalculationtype = contact.calculation_type.filter((_, i) => i !== index);
+                    const newblank1 = contact.blank1.filter((_, i) => i !== index);
+                    const newblank2 = contact.blank2.filter((_, i) => i !== index);
+                    const newblank3 = contact.blank3.filter((_, i) => i !== index);
                     const newaction4=contact.action4.filter((_,i) => i !== index);
                     
                     setcontact({
                       ...contact,
-                      education: neweducation,
-                      degree: newdegree,
-                      school_college: newschool_college,
+                      step_name: newstepname,
+                      calculation_type: newcalculationtype,
+                      blank1: newblank1,
+                      blank2: newblank2,
+                      blank3: newblank3,
                       action4:newaction4
                     });
                   }
@@ -502,189 +553,10 @@ function Projectform() {
                     });
                   };
 
-                function addFn5() {
-        
-                  setcontact({
-                    ...contact,
-                    loan: [...contact.loan, ''],
-                    bank: [...contact.bank, ''],
-                    amount: [...contact.amount, ''],
-                    action5: [...contact.action5, '']
-                  });
-                };
-                const deleteall5=(index)=>
-                  {
-                   
-                    const newloan = contact.loan.filter((_, i) => i !== index);
-                    const newbank = contact.bank.filter((_, i) => i !== index);
-                    const newamount = contact.amount.filter((_, i) => i !== index);
-                    const newaction5=contact.action5.filter((_,i) => i !== index);
-                    
-                    setcontact({
-                      ...contact,
-                      loan: newloan,
-                      bank: newbank,
-                      amount: newamount,
-                      action5:newaction5
-                    });
-                  }
-                  const handleloanchange = (index, event) => {
-                    const newloan = [...contact.loan];
-                    newloan[index] = event.target.value;
-                    setcontact({
-                      ...contact,
-                      loan: newloan
-                    });
-                  };
-                  const handlebankchange = (index, event) => {
-                    const newbank = [...contact.bank];
-                    newbank[index] = event.target.value;
-                    setcontact({
-                      ...contact,
-                      bank: newbank
-                    });
-                  };
-                  const handleamountchange = (index, event) => {
-                    const newamount = [...contact.amount];
-                    newamount[index] = event.target.value;
-                    setcontact({
-                      ...contact,
-                      amount: newamount
-                    });
-                  };
+    //==================----------------- add delete and onchange event of array end---------------------------===============================
 
-                  function addFn6() {
-        
-                    setcontact({
-                      ...contact,
-                      social_media: [...contact.social_media, ''],
-                      url: [...contact.url, ''],
-                      action6: [...contact.action6, '']
-                    });
-                  };
-                  const deleteall6=(index)=>
-                    {
-                     
-                      const newsocial_media = contact.social_media.filter((_, i) => i !== index);
-                      const newurl = contact.url.filter((_, i) => i !== index);
-                      const newaction6=contact.action6.filter((_,i) => i !== index);
-                      
-                      setcontact({
-                        ...contact,
-                        social_media: newsocial_media,
-                        url: newurl,
-                        action6:newaction6
-                      });
-                    }
-                    const handlesocial_mediachange = (index, event) => {
-                      const newsocial_media = [...contact.social_media];
-                      newsocial_media[index] = event.target.value;
-                      setcontact({
-                        ...contact,
-                        social_media: newsocial_media
-                      });
-                    };
-                    const handleurlChange = (index, event) => {
-                      const newurl = [...contact.url];
-                      newurl[index] = event.target.value;
-                      setcontact({
-                        ...contact,
-                        url: newurl
-                      });
-                    };
+// ==============---------------------------google location code start-----------------====================================================
 
-                    function addFn7() {
-        
-                      setcontact({
-                        ...contact,
-                        income: [...contact.income, ''],
-                        amount1: [...contact.amount1, ''],
-                        action7: [...contact.action7, '']
-                      });
-                    };
-                    const deleteall7=(index)=>
-                      {
-                       
-                        const newincome = contact.income.filter((_, i) => i !== index);
-                        const newamount1 = contact.amount1.filter((_, i) => i !== index);
-                        const newaction7=contact.action7.filter((_,i) => i !== index);
-                        
-                        setcontact({
-                          ...contact,
-                          income: newincome,
-                          amount1: newamount1,
-                          action7:newaction7
-                        });
-                      }
-                      const handleincomechange = (index, event) => {
-                        const newincome = [...contact.income];
-                        newincome[index] = event.target.value;
-                        setcontact({
-                          ...contact,
-                          income: newincome
-                        });
-                      };
-                      const handleamount1change = (index, event) => {
-                        const newamount1 = [...contact.amount1];
-                        newamount1[index] = event.target.value;
-                        setcontact({
-                          ...contact,
-                          amount1: newamount1
-                        });
-                      };
-
-                      function addFn8() {
-        
-                        setcontact({
-                          ...contact,
-                          document_no: [...contact.document_no, ''],
-                          document_name: [...contact.document_name, ''],
-                          document_pic: [...contact.document_pic, ''],
-                          action8: [...contact.action8, '']
-                        });
-                      };
-                      const deleteall8=(index)=>
-                        {
-                         
-                          const newdocumentno = contact.document_no.filter((_, i) => i !== index);
-                          const newdocumentname = contact.document_name.filter((_, i) => i !== index);
-                          const newdocumentpic = contact.document_pic.filter((_, i) => i !== index);
-                          const newaction8=contact.action8.filter((_,i) => i !== index);
-                          
-                          setcontact({
-                            ...contact,
-                            document_no: newdocumentno,
-                            document_name: newdocumentname,
-                            document_pic: newdocumentpic,
-                            action8:newaction8
-                          });
-                        }
-                        const handledocumentnochange = (index, event) => {
-                          const newdocumentno = [...contact.document_no];
-                          newdocumentno[index] = event.target.value;
-                          setcontact({
-                            ...contact,
-                            document_no: newdocumentno
-                          });
-                        };
-                        const handledocumentnamechange = (index, event) => {
-                          const newdocumentname = [...contact.document_name];
-                          newdocumentname[index] = event.target.value;
-                          setcontact({
-                            ...contact,
-                            document_name: newdocumentname
-                          });
-                        };
-                        const handledocumentpicchange = (index, event) => {
-                          const newdocumentpic = [...contact.document_pic];
-                          const files = Array.from(event.target.files);
-                          newdocumentpic[index] = {files:files}
-                          setcontact({
-                            ...contact,
-                            document_pic: newdocumentpic
-                          });
-                        };
-                  
                         const [coordinates, setCoordinates] = useState('');
                         const handleSubmit = async (e) => {
                         try {
@@ -716,7 +588,12 @@ function Projectform() {
                       const defaultCenter = {
                         lat: coordinates.lat || 37.7749, lng: coordinates.lng || -122.4194
                       };
+
+// ================================----------------------google location code end-----------------------------================================
                     
+
+//================----------------------------- styled table view code start-----------------------==========================================
+
                       const StyledTableCell = styled(TableCell)(({ theme }) => ({
                         [`&.${tableCellClasses.head}`]: {
                           backgroundColor: theme.palette.common.black,
@@ -737,6 +614,10 @@ function Projectform() {
                         },
                       }));
 
+// ===================--------------------styled table view code end--------------------------------=============================================
+
+
+//=================================================== all model open and close code start----==================================================
                       const [show1, setshow1] = useState(false);
     
                       const handleClose1 = () => setshow1(false);
@@ -761,7 +642,28 @@ function Projectform() {
                         setshow3(true);
                        
                       }
-                      function selectsize()
+                      const [show4, setshow4] = useState(false);
+    
+                      const handleClose4 = () => setshow4(false);
+                      const handleShow4=async()=>
+                      {
+                        setshow4(true);
+                       
+                      }
+                      const [show5, setshow5] = useState(false);
+    
+                      const handleClose5 = () => setshow5(false);
+                      const handleShow5=async()=>
+                      {
+                        setshow5(true);
+                       
+                      }
+// ====================================----- all model open and close code end-------------===================================================
+                     
+
+
+// ---------------===============  size toggle start --------------===========================================================================
+                    function selectsize()
                       {
                           const size=document.getElementById("subcategory").value;
                           if(size==="Apartment")
@@ -781,6 +683,8 @@ function Projectform() {
                               }
                               
                       }
+
+  //==========================------------------------------- size toggle end--------------------------=================================
                       // const[category,setcategory]=useState([])
                       // const selectcategory=()=>
                       // {
@@ -798,6 +702,9 @@ function Projectform() {
                       
                       // }
                       // console.log(category);
+
+
+// ======================------------------- both check boxes code start ---------------===============================================
                       const checkboxItems = [
                         "Car Parking",
                         "Intercom",
@@ -881,13 +788,15 @@ function Projectform() {
                         setCheckedItems1(Array(checkboxItems1.length).fill(newSelectAll1));
                       };
 
-                      const[destinationdetails,setdestinationdetails]=useState([])
+// ---------------------=============== both check box code end--------------------------------========================================
+
+            
+
+// -------------------------==========================destinations add and delete code start---------------------------------====================
+
+                    const[destinationdetails,setdestinationdetails]=useState([])
                       const[destinations,setdestinations]=useState({destination:"",name_of_destination:"",distance:"",measurment:""})
-                      // function adddestination() {
-        
-                      //  setdestinationdetails([...destinationdetails,destinations])
-                      // };
-                      // console.log(destinationdetails);
+                   
                       const adddestination = () => {
                        
                         if (destinations.destination && destinations.name_of_destination && destinations.distance && destinations.measurment) {
@@ -911,7 +820,7 @@ function Projectform() {
                         // Set the updated destination details
                         setdestinationdetails(newDestinationDetails);
                       };
-                      
+// ========================-----------------------------destination add and delete end--------------------------------------------============
                       
                 
     return ( 
@@ -937,7 +846,7 @@ function Projectform() {
                 <div  id='size1' onClick={sizedetails} style={{cursor:'pointer',fontWeight:"bold"}}>Size |</div>
                 <div  id='unit' onClick={unitdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Unit |</div>
                 <div  id='aminities1' onClick={aminitiesdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Aminities |</div> 
-                <div  id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Price |</div> 
+                <div  id='prices' onClick={pricedetails} style={{cursor:'pointer',fontWeight:"bold"}}>Price |</div> 
                </div>
 						    <div style={{marginLeft:"20%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
 					</div>
@@ -963,7 +872,8 @@ function Projectform() {
                               <option>Maj.</option>
                         </select>
                         </div>
-                        <div className='col-md-6'></div>
+                        <div className='col-md-1'><label style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={add_developer}>+</button></div>
+                        <div className='col-md-5'></div>
                         <div className="col-md-6"><input type='checkbox' /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
                         <div className="col-md-6"><label className="labels">Secondary Developer</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                               <option>Select</option>
@@ -1590,13 +1500,12 @@ function Projectform() {
               <Modal.Title>Add Unit</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <div style={{display:"flex"}}>
+            
                <div style={{display:"flex",gap:"30px"}}>
-               <div  id='unitdetail'><span onClick={unitdetails1} style={{cursor:'pointer',fontWeight:"bold"}}>Unit</span> </div>
-                <div  id='unitlocationdetails'><span onClick={unitdetails2} style={{cursor:'pointer',fontWeight:"bold"}}>Location</span> </div>
-                 
+               <div  id='unitdetail'  style={{cursor:'pointer',fontWeight:"bold"}} onClick={unitdetail1}>Unit </div>
+                <div  id='unitlocationdetails' style={{cursor:'pointer',fontWeight:"bold"}}  onClick={unitdetail2}>Location</div>
                </div>
-              </div>
+              
               <hr></hr>
             <div style={{width:"100%"}}>
             <div className="row" id='unitdetails1'>
@@ -1930,14 +1839,328 @@ function Projectform() {
           </div>
 {/* ==========================-----------------------------aminities details end---------------------------------============================= */}
 
+{/* -------------------=====================================price start==================================---------------------------------- */}
+
+<div className="col-md-12" id='price' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
+                      <div className="p-3 py-5">
+                        
+                        <div className="row" id='nearbyaminities' style={{ marginTop: "20px"}}>
+                        <div className='col-md-12'></div><br></br>
+                       
+                      
+                        <div className='col-md-10'><label className='labels'>Price List</label></div>
+                         <div className="col-md-1"><button className='form-control form-control-sm' onClick={handleShow4}>Add</button></div>
+                    <div className='col-md-12'><hr></hr></div>
+                    <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginLeft:"10px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+     
+    <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block Name.</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sub Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Size</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Charge</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Taxes</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Total Price</StyledTableCell>
+          
+        </TableRow>
+      </TableHead>
+      {/* <tbody>
+        {
+          destinationdetails.map((item, index) => (
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+              {index+1}
+            </StyledTableCell>
+            <StyledTableCell >{item.name_of_destination} </StyledTableCell>
+            <StyledTableCell >{item.destination} </StyledTableCell>
+            <StyledTableCell >{item.distance}{item.measurment} </StyledTableCell> 
+            <StyledTableCell >
+              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/>
+            </StyledTableCell>
+              
+          </StyledTableRow>
+        ))}
+      </tbody> */}
+    </Table>
+    </TableContainer>
+
+    <Modal show={show4} onHide={handleClose4} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Price Details</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className='row'>
+              <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Base Price</u></label></div>
+              <div className='col-md-12'><hr></hr></div>
+            <div className="col-md-4"><label className="labels">Block</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Sub Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-8"><label className="labels">Size</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Covered Area</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className='col-md-6'><label className='labels'>Base Rate</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
+                    <div className='col-md-6'></div>
+
+                    <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Charges</u></label></div>
+                  <div className='col-md-12'><hr></hr></div>
+                  <div className="col-md-4"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className='col-md-4'></div>
+
+                    <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>calculation_type</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Percentage</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Base Type</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+
+                    <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Taxes</u></label></div>
+                  <div className='col-md-12'><hr></hr></div>
+                  <div className="col-md-5"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className="col-md-5"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className='col-md-2'></div>
+
+                    <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className='col-md-4'><label className='labels' style={{visibility:"hidden"}}>Amount</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
+                   
+                    
+                  </div>
+    </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={addcontact}>
+                Save
+              </Button>
+              <Button variant="secondary" onClick={handleClose4}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+    <div className='col-md-10' style={{marginTop:"10px"}}><label className='labels'>Payment Plan</label></div>
+    <div className='col-md-1' style={{marginTop:"10px"}}><button className='form-control form-control-sm' onClick={handleShow5}>Add</button></div>
+                    <div className='col-md-12'><hr></hr></div>
+                    <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginLeft:"10px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+     
+    <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block Name.</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sub Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Size</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Charge</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Taxes</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Total Price</StyledTableCell>
+          
+        </TableRow>
+      </TableHead>
+      {/* <tbody>
+        {
+          destinationdetails.map((item, index) => (
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+              {index+1}
+            </StyledTableCell>
+            <StyledTableCell >{item.name_of_destination} </StyledTableCell>
+            <StyledTableCell >{item.destination} </StyledTableCell>
+            <StyledTableCell >{item.distance}{item.measurment} </StyledTableCell> 
+            <StyledTableCell >
+              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/>
+            </StyledTableCell>
+              
+          </StyledTableRow>
+        ))}
+      </tbody> */}
+    </Table>
+    </TableContainer>
+    <Modal show={show5} onHide={handleClose5} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Add Payment Plan</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className='row'>
+              <div className='col-md-6'><label className='labels'>Payment Plan Name</label><input type='text' className='form-control form-control-sm'></input></div>
+              <div className='col-md-6'></div>
+
+              <div className='col-md-2'><label className='labels'>Step Name</label>
+            {
+              contact.step_name.map((item,index)=>
+              (
+                <input type='text' className='form-control form-control-sm' style={{marginTop:"10px"}}></input>
+              ))
+            }
+            </div>
+
+            <div className='col-md-2'><label className='labels' style={{width:"200px"}}>Calculation Type</label>
+            {
+              contact.calculation_type.map((item,index)=>
+              (
+              <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                <option>Select</option>
+                <option>My Team</option>
+                <option>My Self</option>
+                <option>All Users</option>
+                </select>
+              ))
+            }
+            </div>
+
+            <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank1</label>
+             {
+              contact.blank1.map((item,index)=>
+              (
+                <input type='text'style={{marginTop:"10px"}} className='form-control form-control-sm'></input>
+                
+              ))
+            }
+            </div>
+
+            <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank2</label>
+            {
+              contact.blank2.map((item,index)=>
+              (
+               <input type='text' style={{marginTop:"10px"}} className='form-control form-control-sm'></input>
+               
+              ))
+            }
+             </div>
+
+             <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank3</label>
+              {
+              contact.blank3.map((item,index)=>
+              (
+                <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                <option>Select</option>
+                <option>My Team</option>
+                <option>My Self</option>
+                <option>All Users</option>
+                </select>
+               
+              ))
+            }
+             </div>
+
+             <div className='col-md-1' style={{marginTop:"90px"}}>
+              {
+              contact.action4.map((item,index)=>
+              (
+               <img   src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)} style={{height:"40px",cursor:"pointer"}}/>
+              ))
+            }
+            </div>
+            <div className='col-md-1'><label className='labels' style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={addFn4}>+</button></div>
+           
+           <div className='col-md-8'><label className='labels'>Terms & Condition</label>
+              <textarea className='form-control form-control-sm' style={{height:"100px"}}/>
+           </div>
+           <div className='col-md-4'></div>
+                 
+                   
+                  
+                    
+              </div>
+    </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={addcontact}>
+                Save
+              </Button>
+              <Button variant="secondary" onClick={handleClose5}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+    
+                </div>
+              </div>
+          </div>
+
+
+{/* ===========================-----------------------------price end--------------------------=============================================== */}
+
+
                  <div className='col-md-12'><hr></hr></div> 
                     <ToastContainer/>
                 </div>
-                {/* <div className='row' style={{marginLeft:"50%"}}>
+                <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
                     <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
+                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Project</button></div>
                     <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
-                    </div> */}
+                    </div>
             </div>
         </div>
     </div>

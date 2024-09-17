@@ -36,6 +36,7 @@ function Header1() {
 				<li><Link to={'/addcontact'} class="dropdown-item">Contact</Link></li>
 				<li><Link to={'/leadinfo'} class="dropdown-item">Lead</Link></li>
 				<li><Link to={'/addinventory'} class="dropdown-item">Inventory</Link></li>
+				<li><Link to={'/project'} class="dropdown-item">Project</Link></li>
 			</ul>
   		</div>
 		</div>

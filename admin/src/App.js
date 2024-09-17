@@ -32,8 +32,8 @@ import Projectform from './components/projectform';
 function App() {
   return (
     <BrowserRouter>
-   <div>
-    {/* <Routes>
+    <div>
+     <Routes>
       <Route path='/' element={<Login/>}></Route>
       <Route path='/dashboard' element={<Dashboard/>}></Route>
       <Route path='/addcontact' element={<Addcontact/>}></Route>
@@ -51,10 +51,12 @@ function App() {
       <Route path='/leaddetails' element={<Leadfetch/>}></Route>
       <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
+      <Route path='/project' element={<Projectform/>}/>
+      <Route path='/adddeveloper' element={<Adddeveloper/>}/>
     </Routes> 
-    {/* <SuggestionBox/> */}
+    {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}
-    <Projectform/>
+    {/* <Projectform/> */}
   
    </div>
    </BrowserRouter>
