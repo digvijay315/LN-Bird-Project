@@ -18,6 +18,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import {React, useEffect } from 'react';
 
 
 function Projectform() {
@@ -65,6 +66,8 @@ function Projectform() {
     "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
     "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
     
+       
+     useEffect(()=>{fetchdeveloper()},[])
 
     const navigate=useNavigate(); 
 
@@ -73,8 +76,30 @@ function Projectform() {
       navigate('/adddeveloper')
     }
 
+    const[data1,setdata1]=useState([]);
+    const fetchdeveloper=async(event)=>
+    {
+      
+      try {
+        const resp=await api.get('addproject/viewdeveloper')
+        
+        setdata1(resp.data.developer)
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
 
-    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],
+    const [contact,setcontact]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+                                          category:"",sub_category:"",land_area:"",measurment1:"",total_block:"",total_floor:"",
+                                          total_units:"",status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
+                                          approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:"",
+                                          team:"",visible_to:"",
+                                          add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
+                                          price_list:[],Payment_plan:[],
+
+                                          location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
+
         type:[''],floor:[''],action2:[],tagcs:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
         profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
@@ -790,8 +815,86 @@ function Projectform() {
 
 // ---------------------=============== both check box code end--------------------------------========================================
 
-            
+// ===========================------------------block add and remove code---------------------=================================================
+                                    const[blocks,setblocks]=useState([])
+                                    const[block,setblock]=useState({block_name:"",category:[''],sub_category:"",land_area:"",
+                                                                    measurment:"",total_blocks:"",total_floors:"",total_units:"",
+                                                                    status:"",launched_on:"",expected_competion:"",possession:"",
+                                                                    parking_type:"",rera_no:""})
 
+                                        const addblock = () => {
+                       
+                                            if (block.block_name ) 
+                                              {
+                                                setblocks([...blocks, block]);
+                                                handleClose1()
+
+                                                  // Clear the input fields after adding
+                                                                      
+                                                  //  document.getElementById("nameofdestination").value=""
+                                                  //  document.getElementById("destination").value=""
+                                                  //  document.getElementById("measurment").value=""
+                                                  //    document.getElementById("choosedestination").value="Select"
+                                                 } 
+                                                 else
+                                                   {
+                                                       toast.error("Please fill out all fields.");
+                                                   }
+                                                 };
+                                    const deleteblock = (index) => {
+                                    
+
+                                      // Filter out the destination at the given index
+                                      const newblocks = blocks.filter((_, i) => i !== index);
+
+                                      // Set the updated destination details
+                                      setblocks(newblocks);
+                                    };
+
+                                    const residentialcategory=(e)=>
+                                    {
+                                      {
+                                        e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
+                                        setblock((prevProfile) => ({
+                                            ...prevProfile,
+                                            category: "Residential"
+                                        }))
+                                    
+                                        }
+                                    }
+                                    const commercialcategory=(e)=>
+                                      {
+                                        {
+                                          e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
+                                          setblock((prevProfile) => ({
+                                              ...prevProfile,
+                                              category: "Commercial"
+                                          }))
+                                      
+                                          }
+                                      }
+                                      const agriculturalcategory=(e)=>
+                                        {
+                                          {
+                                            e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
+                                            setblock((prevProfile) => ({
+                                                ...prevProfile,
+                                                category: "Agricultural"
+                                            }))
+                                        
+                                            }
+                                        }
+                                      const institutionalcategory=(e)=>
+                                        {
+                                          {
+                                            e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
+                                            setblock((prevProfile) => ({
+                                                ...prevProfile,
+                                                category: "Institutional"
+                                            }))
+                                        
+                                            }
+                                        }
 // -------------------------==========================destinations add and delete code start---------------------------------====================
 
                     const[destinationdetails,setdestinationdetails]=useState([])
@@ -862,14 +965,12 @@ function Projectform() {
                 <div className='col-md-6'></div>
                     <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                               <option>Select</option>
-                              <option>Mr.</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              {
+                                data1.map((item)=>
+                                (
+                                  <option>{item.name}</option>
+                                ))
+                              }
                         </select>
                         </div>
                         <div className='col-md-1'><label style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={add_developer}>+</button></div>
@@ -1163,28 +1264,30 @@ function Projectform() {
           <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
          
-        data.map ((item, index) => (
+        blocks.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
-             <img src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' style={{height:"30px"}}/>
-             
-            </StyledTableCell>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
-              {item.title} {item.first_name} {item.last_name}<br></br>
-              {item.designation}
-            </StyledTableCell>
-           
-                <StyledTableCell >
-                {item.mobile_no.join(',')}<br></br>
-                {item.email.join(',')}
-                </StyledTableCell>
+            {item.block_name}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            {item.category}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            {item.sub_category}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            {item.status}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteblock(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+             </StyledTableCell>
               
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
     </Table>
     </TableContainer>
 
@@ -1196,27 +1299,27 @@ function Projectform() {
             <div style={{width:"100%"}}>
             <div className="row" id='basicdetails1'>
              
-                    <div className="col-md-6"><label className="labels">Block/Tower Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Block/Tower Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setblock({...block,block_name:e.target.value})}/></div>
                     <div className='col-md-6'></div>
 
                     <div className="col-md-12"><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Residential</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Commercial</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Agricultural</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Institutional</button></div>
+                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>residentialcategory(e)}>Residential</button></div>
+                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>commercialcategory(e)}>Commercial</button></div>
+                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>agriculturalcategory(e)}>Agricultural</button></div>
+                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>institutionalcategory(e)}>Institutional</button></div>
                     </div>
 
-                    <div className="col-md-12"><label className="labels">Sub Category</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-12"><label className="labels">Sub Category</label><select  className="form-control form-control-sm"  onChange={(e)=>setblock({...block,sub_category:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" /></div>
-                        <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                    <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,land_area:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>measurment</label>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,measurment:e.target.value})}>
                               <option>Acres.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1227,23 +1330,23 @@ function Projectform() {
                               <option>Maj.</option>
                         </select>
                        </div>
-                        <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" /></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  /></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" /></div>
+                        <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_blocks:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_floors:e.target.value})} /></div>
+                        <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_units:e.target.value})}/></div>
                         <div className="col-md-2"></div>
-                        <div className="col-md-12"><label className="labels">Status</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                        <div className="col-md-12"><label className="labels">Status</label><select  className="form-control form-control-sm"  onChange={(e)=>setblock({...block,status:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" /></div>
-                       <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true"/></div>
-                       <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true"/></div>
+                    <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,launched_on:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,expected_competion:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,possession:e.target.value})}/></div>
 
                        <div className="col-md-6"><label className="labels">Parking Type</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,parking_type:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1255,13 +1358,13 @@ function Projectform() {
                         </select>
                        </div>
                        <div className='col-md-6'></div>
-                       <div className="col-md-7" ><label className="labels">Rera Number</label><input type="text"   className="form-control form-control-sm" required="true"/></div>
+                       <div className="col-md-7" ><label className="labels">Rera Number</label><input type="text"   className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,rera_no:e.target.value})}/></div>
                 </div>
                 </div>
                 
           </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addcontact}>
+            <Button variant="secondary" onClick={addblock}>
                 Add Block
               </Button>
               <Button variant="secondary" onClick={handleClose1}>
@@ -1296,11 +1399,10 @@ function Projectform() {
       {/* <tbody>
         {
          
-        data.map ((item, index) => (
+        blocks.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
-             <img src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' style={{height:"30px"}}/>
-             
+             {blocks.block_name}
             </StyledTableCell>
             <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
               {item.title} {item.first_name} {item.last_name}<br></br>
@@ -1340,7 +1442,7 @@ function Projectform() {
 
                     <div className="col-md-12"><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Residential</button></div>
+                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green' }>Residential</button></div>
                         <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Commercial</button></div>
                         <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Agricultural</button></div>
                         <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Institutional</button></div>

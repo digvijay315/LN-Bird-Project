@@ -65,8 +65,55 @@ function Adddeveloper() {
     "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
     
     React.useEffect(()=>{fetchdata()},[])
+  
     
     const navigate=useNavigate(); 
+
+// ------------------------------=======================quick add contact start=============================================------------------
+                  const time=new Date()
+                    
+                  const mousehover=()=>
+                      {
+                        document.getElementById("r").style.marginLeft="15%"
+                        
+                      }
+                  const mouseout=()=>
+                      {
+                         document.getElementById("r").style.marginLeft="0%"
+                       }
+
+                       const basicdetails=()=>
+                        {
+                          document.getElementById("basicdetails1").style.display="flex"
+                       
+                          document.getElementById("basic").style.color="green"
+                          document.getElementById("other").style.color="black"
+                           document.getElementById("professional").style.color="black"
+                          document.getElementById("otherdetails").style.display="none"
+                          document.getElementById("profession").style.display="none"
+                        }
+                        const professionaldetails=()=>
+                          {
+                            document.getElementById("basicdetails1").style.display="none"
+                           
+                            document.getElementById("otherdetails").style.display="none"
+                            document.getElementById("profession").style.display="flex"
+                             document.getElementById("basic").style.color="black"
+                             document.getElementById("other").style.color="black"
+                               document.getElementById("professional").style.color="green"
+                             
+                          }
+                        const otherdetails=()=>
+                          {
+                            document.getElementById("basicdetails1").style.display="none"
+                          
+                             document.getElementById("profession").style.display="none"
+                               document.getElementById("otherdetails").style.display="flex"
+                             document.getElementById("basic").style.color="black"
+                              document.getElementById("professional").style.color="black"
+                             document.getElementById("other").style.color="green"
+                          }
+
     const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action1:[],
         email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
@@ -82,274 +129,360 @@ function Adddeveloper() {
               'Content-Type': 'multipart/form-data' // Set the Content-Type here
             }
         }
-      
-    const addcontact=async(e)=>
-    {
-        e.preventDefault();
-        try {
 
-            const resp= await api.post('addcontact',contact,config)
-        if(resp.status===200)
-            {
-                toast.success(resp.data.message,{ autoClose: 2000 })
-                setTimeout(() => {
-                  window.location.reload()
-                }, 2000);
-            }
-            
-      
-        } catch (error) {
-            toast.error(error.response.data.message,{ autoClose: 2000 })
-        }
-    }
-    const[data,setdata]=useState([]);
-    const[totalcontact,settotalcontact]=useState()
-    const fetchdata=async(event)=>
-    {
-      
-      try {
-        const resp=await api.get('viewcontact')
-        setdata(resp.data.contact)
-        const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
-        settotalcontact(countcontact.length)
-      } catch (error) {
-        console.log(error);
-      }
-    
-    }
-    const[searchdata,setsearchdata]=useState()
-    const fetchdatabyemail_mobile_tags_company=async(e)=>
-      {
-        // e.preventDefault()
-        try {
-          const resp=await api.get(`viewcontactbyemail/${searchdata}`);
-            const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
-
-          const resp1=await api.get(`viewcontactbymobile/${searchdata}`);
-          const incoming1=(Array.isArray(resp1.data.contact) ? resp1.data.contact : [resp1.data.contact]);
-          setdata([...incoming,...incoming1])
-            document.getElementById("searchcontact").value=''
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      const handlekeypress1=(event)=>
-      {
-          if(event.key==="Enter")
-              {
-                fetchdatabyemail_mobile_tags_company()
-                  setsearchdata('')
-              }
-          
-      }
-     
-      const [show1, setshow1] = useState(false);
-    
-      const handleClose1 = () => setshow1(false);
-      const handleShow1=async()=>
-      {
-        setshow1(true);
-       
-      }
-
-    const StyledTableCell = styled(TableCell)(({ theme }) => ({
-        [`&.${tableCellClasses.head}`]: {
-          backgroundColor: theme.palette.common.black,
-          color: theme.palette.common.white,
-        },
-        [`&.${tableCellClasses.body}`]: {
-          fontSize: 14,
-        },
-      }));
-      
-      const StyledTableRow = styled(TableRow)(({ theme }) => ({
-        '&:nth-of-type(odd)': {
-          backgroundColor: theme.palette.action.hover,
-        },
-        // hide last border
-        '&:last-child td, &:last-child th': {
-          border: 0,
-        },
-      }));
-
-    const time=new Date()
-    
-    
-     
-
-        const mousehover=()=>
-            {
-               document.getElementById("r").style.marginLeft="15%"
-               
-            }
-            const mouseout=()=>
-                {
-                    document.getElementById("r").style.marginLeft="0%"
-                }
-
-       
-        const basicdetails=()=>
+        const addcontact=async(e)=>
           {
-            document.getElementById("basicdetails1").style.display="flex"
-         
-            document.getElementById("basic").style.color="green"
-            document.getElementById("other").style.color="black"
-             document.getElementById("professional").style.color="black"
-            document.getElementById("otherdetails").style.display="none"
-            document.getElementById("profession").style.display="none"
-          }
-          const professionaldetails=()=>
-            {
-              document.getElementById("basicdetails1").style.display="none"
-             
-              document.getElementById("otherdetails").style.display="none"
-              document.getElementById("profession").style.display="flex"
-               document.getElementById("basic").style.color="black"
-               document.getElementById("other").style.color="black"
-                 document.getElementById("professional").style.color="green"
-               
-            }
-          const otherdetails=()=>
-            {
-              document.getElementById("basicdetails1").style.display="none"
+              e.preventDefault();
+              try {
+      
+                  const resp= await api.post('addcontact',contact,config)
+              if(resp.status===200)
+                  {
+                      toast.success(resp.data.message,{ autoClose: 2000 })
+                      setTimeout(() => {
+                        window.location.reload()
+                      }, 2000);
+                  }
+                  
             
-               document.getElementById("profession").style.display="none"
-                 document.getElementById("otherdetails").style.display="flex"
-               document.getElementById("basic").style.color="black"
-                document.getElementById("professional").style.color="black"
-               document.getElementById("other").style.color="green"
+              } catch (error) {
+                  toast.error(error.response.data.message,{ autoClose: 2000 })
+              }
+          }
+// =====================================------------fetch contact data----------------------------========================================
+
+
+          const[data,setdata]=useState([]);
+          const[totalcontact,settotalcontact]=useState()
+          const fetchdata=async(event)=>
+          {
+            
+            try {
+              const resp=await api.get('viewcontact')
+              setdata(resp.data.contact)
+              const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
+              settotalcontact(countcontact.length)
+            } catch (error) {
+              console.log(error);
             }
           
-          function addFn1() {
-        
-            setcontact({
-              ...contact,
-              country_code: [...contact.country_code, ''],
-              mobile_no: [...contact.mobile_no, ''],
-              mobile_type: [...contact.mobile_type, ''],
-              action1: [...contact.action1, '']
-            });
-          };
+          }
 
-          const deleteall1=(index)=>
+// ====================----------------------------search contact data-----------------------------------------------======================
+
+          const[searchdata,setsearchdata]=useState()
+          const fetchdatabyemail_mobile_tags_company=async(e)=>
             {
-             
-              const newcountry_code = contact.country_code.filter((_, i) => i !== index);
-              const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
-              const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
-              const newaction1 = contact.action1.filter((_, i) => i !== index);
-              
-              setcontact({
-                ...contact,
-                country_code: newcountry_code,
-                mobile_no: newmobile_no,
-                mobile_type: newmobile_type,
-                action1: newaction1
-              });
+              // e.preventDefault()
+              try {
+                const resp=await api.get(`viewcontactbyemail/${searchdata}`);
+                  const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
+      
+                const resp1=await api.get(`viewcontactbymobile/${searchdata}`);
+                const incoming1=(Array.isArray(resp1.data.contact) ? resp1.data.contact : [resp1.data.contact]);
+                setdata([...incoming,...incoming1])
+                  document.getElementById("searchcontact").value=''
+              } catch (error) {
+                console.log(error);
+              }
             }
-            const handlecountry_codechange = (index, event) => {
-              const newcountry_code = [...contact.country_code];
-              newcountry_code[index] = event.target.value;
-              setcontact({
-                ...contact,
-                country_code: newcountry_code
-              });
-            };
-            const handlemobile_nochange = (index, event) => {
-              const newmobile_no = [...contact.mobile_no];
-              newmobile_no[index] = event.target.value;
-              setcontact({
-                ...contact,
-                mobile_no: newmobile_no
-              });
-            };
-            const handlemobile_typechange = (index, event) => {
-              const newmobile_type = [...contact.mobile_type];
-              newmobile_type[index] = event.target.value;
-              setcontact({
-                ...contact,
-                mobile_type: newmobile_type
-              });
-            };
+            const handlekeypress1=(event)=>
+            {
+                if(event.key==="Enter")
+                    {
+                      fetchdatabyemail_mobile_tags_company()
+                        setsearchdata('')
+                    }
+                
+            }
 
-            function addFn2() {
+
+// -----------------------------==========================modal and styled table row and column--------------------------------==================
+
+            const [show1, setshow1] = useState(false);
+    
+            const handleClose1 = () => setshow1(false);
+            const handleShow1=async()=>
+            {
+              setshow1(true);
+             
+            }
+      
+          const StyledTableCell = styled(TableCell)(({ theme }) => ({
+              [`&.${tableCellClasses.head}`]: {
+                backgroundColor: theme.palette.common.black,
+                color: theme.palette.common.white,
+              },
+              [`&.${tableCellClasses.body}`]: {
+                fontSize: 14,
+              },
+            }));
+            
+            const StyledTableRow = styled(TableRow)(({ theme }) => ({
+              '&:nth-of-type(odd)': {
+                backgroundColor: theme.palette.action.hover,
+              },
+              // hide last border
+              '&:last-child td, &:last-child th': {
+                border: 0,
+              },
+            }));
+
+// =================================add array contact and email onchange code==========================================================
+
+            function addFn1() {
         
               setcontact({
                 ...contact,
-                email: [...contact.email, ''],
-                email_type: [...contact.email_type, ''],
-                action2: [...contact.action2, '']
+                country_code: [...contact.country_code, ''],
+                mobile_no: [...contact.mobile_no, ''],
+                mobile_type: [...contact.mobile_type, ''],
+                action1: [...contact.action1, '']
               });
             };
   
-            const deleteall2=(index)=>
+            const deleteall1=(index)=>
               {
                
-                const newemail = contact.email.filter((_, i) => i !== index);
-                const newemail_type = contact.email_type.filter((_, i) => i !== index);
-                const newaction2 = contact.action2.filter((_, i) => i !== index);
+                const newcountry_code = contact.country_code.filter((_, i) => i !== index);
+                const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
+                const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
+                const newaction1 = contact.action1.filter((_, i) => i !== index);
                 
                 setcontact({
                   ...contact,
-                  email: newemail,
-                  email_type: newemail_type,
-                  action2: newaction2
+                  country_code: newcountry_code,
+                  mobile_no: newmobile_no,
+                  mobile_type: newmobile_type,
+                  action1: newaction1
                 });
               }
-              const handleemailchange = (index, event) => {
-                const newemail = [...contact.email];
-                newemail[index] = event.target.value;
+              const handlecountry_codechange = (index, event) => {
+                const newcountry_code = [...contact.country_code];
+                newcountry_code[index] = event.target.value;
                 setcontact({
                   ...contact,
-                  email: newemail
+                  country_code: newcountry_code
                 });
               };
-              const handleemail_typechange = (index, event) => {
-                const newemail_type = [...contact.email_type];
-                newemail_type[index] = event.target.value;
+              const handlemobile_nochange = (index, event) => {
+                const newmobile_no = [...contact.mobile_no];
+                newmobile_no[index] = event.target.value;
                 setcontact({
                   ...contact,
-                  email_type: newemail_type
+                  mobile_no: newmobile_no
                 });
               };
-
-              function addFn3() {
-     
+              const handlemobile_typechange = (index, event) => {
+                const newmobile_type = [...contact.mobile_type];
+                newmobile_type[index] = event.target.value;
                 setcontact({
                   ...contact,
-                  company_social_media: [...contact.company_social_media, ''],
-                  company_url: [...contact.company_url, ''],
-                  action3: [...contact.action3, '']
+                  mobile_type: newmobile_type
                 });
               };
-              const deleteall3=(index)=>
+  
+              function addFn2() {
+          
+                setcontact({
+                  ...contact,
+                  email: [...contact.email, ''],
+                  email_type: [...contact.email_type, ''],
+                  action2: [...contact.action2, '']
+                });
+              };
+    
+              const deleteall2=(index)=>
                 {
                  
-                  const newcomapnysocialmedia = contact.company_social_media.filter((_, i) => i !== index);
-                  const newcompanyurl = contact.company_url.filter((_, i) => i !== index);
-                  const newaction3=contact.action3.filter((_,i) => i !== index);
+                  const newemail = contact.email.filter((_, i) => i !== index);
+                  const newemail_type = contact.email_type.filter((_, i) => i !== index);
+                  const newaction2 = contact.action2.filter((_, i) => i !== index);
                   
                   setcontact({
                     ...contact,
-                    company_social_media: newcomapnysocialmedia,
-                    company_url: newcompanyurl,
-                    action3:newaction3
+                    email: newemail,
+                    email_type: newemail_type,
+                    action2: newaction2
                   });
                 }
-                const handlecompanysocialmediachange = (index, event) => {
-                  const newcomapnysocialmedia = [...contact.company_social_media];
-                  newcomapnysocialmedia[index] = event.target.value;
+                const handleemailchange = (index, event) => {
+                  const newemail = [...contact.email];
+                  newemail[index] = event.target.value;
                   setcontact({
                     ...contact,
-                    company_social_media: newcomapnysocialmedia
+                    email: newemail
                   });
                 };
-                const handlecompanyurlchange = (index, event) => {
-                  const newcompanyurl = [...contact.company_url];
-                  newcompanyurl[index] = event.target.value;
+                const handleemail_typechange = (index, event) => {
+                  const newemail_type = [...contact.email_type];
+                  newemail_type[index] = event.target.value;
                   setcontact({
                     ...contact,
-                    company_url: newcompanyurl
+                    email_type: newemail_type
+                  });
+                };
+
+
+//-----------------------------=================================== add developer start------------------------------------=====================
+
+        const [developer,setdeveloper]=useState({name:"",country_code1:[''],mobile_no1:[''],mobile_type1:[''],action11:[],email1:[''],email_type1:[''],
+          action22:[],profession_category:"",profession_subcategory:"",descriptions:"",gst_no:"",
+          industry:"",source:"",team:"",owner:"",visible_to:"",
+
+          area:"",location:"",city:"",pin_code:"",state:"",country:"",website:"",company_social_media1:[''],
+          company_url1:[''],action33:[],});
+    
+          const adddeveloper=async(e)=>
+            {
+                e.preventDefault();
+                try {
+        
+                    const resp= await api.post('addproject/adddeveloper',developer)
+                if(resp.status===200)
+                    {
+                        toast.success(resp.data.message,{ autoClose: 2000 })
+                        setTimeout(() => {
+                          navigate('/project')
+                        }, 2000);
+                    }
+                    
+              
+                } catch (error) {
+                    toast.error(error.response.data.message,{ autoClose: 2000 })
+                }
+            }
+
+
+            function addFn11() {
+        
+              setdeveloper({
+                ...developer,
+                country_code1: [...developer.country_code1, ''],
+                mobile_no1: [...developer.mobile_no1, ''],
+                mobile_type1: [...developer.mobile_type1, ''],
+                action11: [...developer.action11, '']
+              });
+            };
+  
+            const deleteall11=(index)=>
+              {
+               
+                const newcountry_code = developer.country_code1.filter((_, i) => i !== index);
+                const newmobile_no = developer.mobile_no1.filter((_, i) => i !== index);
+                const newmobile_type = developer.mobile_type1.filter((_, i) => i !== index);
+                const newaction1 = developer.action11.filter((_, i) => i !== index);
+                
+                setdeveloper({
+                  ...developer,
+                  country_code1: newcountry_code,
+                  mobile_no1: newmobile_no,
+                  mobile_type1: newmobile_type,
+                  action11: newaction1
+                });
+              }
+              const handlecountry_codechange1 = (index, event) => {
+                const newcountry_code1 = [...developer.country_code1];
+                newcountry_code1[index] = event.target.value;
+                setdeveloper({
+                  ...developer,
+                  country_code1: newcountry_code1
+                });
+              };
+              const handlemobile_nochange1 = (index, event) => {
+                const newmobile_no = [...developer.mobile_no1];
+                newmobile_no[index] = event.target.value;
+                setdeveloper({
+                  ...developer,
+                  mobile_no1: newmobile_no
+                });
+              };
+              const handlemobile_typechange1 = (index, event) => {
+                const newmobile_type = [...developer.mobile_type1];
+                newmobile_type[index] = event.target.value;
+                setdeveloper({
+                  ...developer,
+                  mobile_type1: newmobile_type
+                });
+              };
+  
+              function addFn22() {
+          
+                setdeveloper({
+                  ...developer,
+                  email1: [...developer.email1, ''],
+                  email_type1: [...developer.email_type1, ''],
+                  action22: [...developer.action22, '']
+                });
+              };
+    
+              const deleteall22=(index)=>
+                {
+                 
+                  const newemail = developer.email1.filter((_, i) => i !== index);
+                  const newemail_type = developer.email_type1.filter((_, i) => i !== index);
+                  const newaction2 = developer.action22.filter((_, i) => i !== index);
+                  
+                  setdeveloper({
+                    ...developer,
+                    email1: newemail,
+                    email_type1: newemail_type,
+                    action22: newaction2
+                  });
+                }
+                const handleemailchange1 = (index, event) => {
+                  const newemail = [...developer.email1];
+                  newemail[index] = event.target.value;
+                  setdeveloper({
+                    ...developer,
+                    email1: newemail
+                  });
+                };
+                const handleemail_typechange1 = (index, event) => {
+                  const newemail_type = [...developer.email_type1];
+                  newemail_type[index] = event.target.value;
+                  setdeveloper({
+                    ...developer,
+                    email_type1: newemail_type
+                  });
+                };
+              function addFn33() {
+     
+                setdeveloper({
+                  ...developer,
+                  company_social_media1: [...developer.company_social_media1, ''],
+                  company_url1: [...developer.company_url1, ''],
+                  action33: [...developer.action33, '']
+                });
+              };
+              const deleteall33=(index)=>
+                {
+                 
+                  const newcomapnysocialmedia = developer.company_social_media1.filter((_, i) => i !== index);
+                  const newcompanyurl = developer.company_url1.filter((_, i) => i !== index);
+                  const newaction3=developer.action33.filter((_,i) => i !== index);
+                  
+                  setdeveloper({
+                    ...developer,
+                    company_social_media1: newcomapnysocialmedia,
+                    company_url1: newcompanyurl,
+                    action33:newaction3
+                  });
+                }
+                const handlecompanysocialmediachange1 = (index, event) => {
+                  const newcomapnysocialmedia = [...developer.company_social_media1];
+                  newcomapnysocialmedia[index] = event.target.value;
+                  setdeveloper({
+                    ...developer,
+                    company_social_media1: newcomapnysocialmedia
+                  });
+                };
+                const handlecompanyurlchange1 = (index, event) => {
+                  const newcompanyurl = [...developer.company_url1];
+                  newcompanyurl[index] = event.target.value;
+                  setdeveloper({
+                    ...developer,
+                    company_url1: newcompanyurl
                   });
                 };
           
@@ -389,14 +522,14 @@ function Adddeveloper() {
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
             
-                    <div className="col-md-8"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter your name"/></div>
+                    <div className="col-md-8"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter your name" onChange={(e)=>setdeveloper({...developer,name:e.target.value})}/></div>
                     <div className='col-md-4'></div>
              
                 <div className="col-md-4" > <label className="labels">Country</label>
                     {
-                      contact.country_code.map((item,index)=>
+                      developer.country_code1.map((item,index)=>
                       (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
                         <option value={item} >phone</option>
                         {
                           countrycode.map((item)=>
@@ -410,22 +543,22 @@ function Adddeveloper() {
                     </div>
                     <div className="col-md-4"><label className="labels">Mobile Number</label>
                     {
-                       contact.mobile_no.map((item,index)=>
+                       developer.mobile_no1.map((item,index)=>
                         (
                           <input type="text" required="true" style={{marginTop:"10px"}} 
                           className="form-control form-control-sm" 
                           placeholder="enter phone number" 
-                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          onChange={(event)=>handlemobile_nochange1(index,event)}/>
                           
                         ))
                     }
                     </div>
                     <div className="col-md-2"><label className="labels">Type</label>
                     {
-                       contact.mobile_type.map((item,index)=>
+                       developer.mobile_type1.map((item,index)=>
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                         onChange={(event)=>handlemobile_typechange(index,event)}>
+                         onChange={(event)=>handlemobile_typechange1(index,event)}>
                                   <option>Select Type</option>
                                   <option>Personal</option>
                                   <option>Official</option>
@@ -438,34 +571,34 @@ function Adddeveloper() {
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       contact.action1.map((item,index)=>
+                       developer.action11.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
                           
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn11}>+</button></div>
                     
                   <div className="col-md-8"><label className="labels">Email-Address</label>
                     {
-                        contact.email.map((item,index)=>
+                        developer.email1.map((item,index)=>
                         (
                           <input type="text" style={{marginTop:"10px"}}
                           className="form-control form-control-sm" 
                           placeholder="enter email-id"
-                          onChange={(event)=>handleemailchange(index,event)}/>
+                          onChange={(event)=>handleemailchange1(index,event)}/>
                         ))
                     }
                     </div>
                     
                     <div className="col-md-2"><label className="labels">Type</label>
                     {
-                       contact.email_type.map((item,index)=>
+                       developer.email_type1.map((item,index)=>
                         (
                           <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                          onChange={(event)=>handleemail_typechange(index,event)}>
+                          onChange={(event)=>handleemail_typechange1(index,event)}>
                                 <option>Select Type</option>
                                 <option>Personal</option>
                                 <option>Official</option>
@@ -477,17 +610,17 @@ function Adddeveloper() {
                   
                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       contact.action2.map((item,index)=>
+                       developer.action22.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
                           
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
                     
-                  <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,profession_category:e.target.value})}>
+                  <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_category:e.target.value})}>
                                   <option>Select</option>    
                                   <option>Self Employed </option>
                                   <option>Govt. Employee  </option>
@@ -497,7 +630,7 @@ function Adddeveloper() {
                                   <option>Student</option>
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,profession_subcategory:e.target.value})}>
+                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_subcategory:e.target.value})}>
                                 <option>Select</option>
                                 <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
                                 <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
@@ -513,13 +646,13 @@ function Adddeveloper() {
 
                     
                     
-                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setdeveloper({...developer,descriptions:e.target.value})}/></div>
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-8"><label className="labels">GST Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter gst no."/></div>
+                    <div className="col-md-8"><label className="labels">GST Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter gst no." onChange={(e)=>setdeveloper({...developer,gst_no:e.target.value})}/></div>
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,industry:e.target.value})}>
+                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,industry:e.target.value})}>
                     <option>choose</option>
                           <optgroup label='Agriculture'>
                                 <option>Farming</option><option>horticulture</option><option>forestry</option>
@@ -644,7 +777,7 @@ function Adddeveloper() {
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,source:e.target.value})}>
                                     <option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
                                     <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
                                     <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
@@ -652,7 +785,7 @@ function Adddeveloper() {
                                     <option>Old Client</option><option>Google</option><option>Whatsapp</option>
                              </select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,team:e.target.value})}>
                               <option>Select</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -660,7 +793,7 @@ function Adddeveloper() {
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,owner:e.target.value})}>
                     <option>Select</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
@@ -668,7 +801,7 @@ function Adddeveloper() {
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
                         </select></div>
-                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,visible_to:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -690,27 +823,27 @@ function Adddeveloper() {
               
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}> Address</label></div>
                     <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                    <div className="col-md-8"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,area:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,location:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,pincode:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,state:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setdeveloper({...developer,country:e.target.value})}/></div>
                     </div>
                     
                     <div className='col-md-5'></div>
-                    <div className="col-md-8"><label className="labels">Website</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Website</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setdeveloper({...developer,website:e.target.value})}/></div>
                     <div className="col-md-4"></div>
 
                     <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
                     {
-                      contact.company_social_media.map((item,index)=>
+                      developer.company_social_media1.map((item,index)=>
                       (
                         <select
                          className='form-control form-control-sm'
                           style={{marginTop:"10px"}}
-                          onChange={(event)=>handlecompanysocialmediachange(index,event)}>
+                          onChange={(event)=>handlecompanysocialmediachange1(index,event)}>
                         
                         <option>select</option>
                         <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
@@ -721,22 +854,22 @@ function Adddeveloper() {
                     </div>
                     <div className="col-md-6"><label className="labels">Url</label>
                     {
-                      contact.company_url.map((item,index)=>
+                      developer.company_url1.map((item,index)=>
                       (
                         <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                        onChange={(event)=>handlecompanyurlchange(index,event)}/>
+                        onChange={(event)=>handlecompanyurlchange1(index,event)}/>
                       ))
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                      contact.action3.map((item,index)=>
+                      developer.action33.map((item,index)=>
                       (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall33(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn33}>+</button></div>
                     <div className='col-md-12'><hr></hr></div> 
               </div>
             
@@ -744,7 +877,7 @@ function Adddeveloper() {
            </div>
  {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
 
- {/*-------------------------------------------------- personal details start--------------------------------------------------------- */}
+ {/*-------------------------------------------------- employee details start--------------------------------------------------------- */}
  {/* <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
                
@@ -805,7 +938,7 @@ function Adddeveloper() {
       </tbody>
     </Table>
 
-    <Modal show={show1} onHide={handleClose1} size='lg'>
+    <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
               <Modal.Title>Quick Add Contact</Modal.Title>
             </Modal.Header>
@@ -957,6 +1090,7 @@ function Adddeveloper() {
      </div>
  </div>
 
+{/*-------------------------==================== employee details end --------------------==============================================*/}
                 
  
     
@@ -966,7 +1100,7 @@ function Adddeveloper() {
                 <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
                     <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
                     <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={adddeveloper}>Save</button></div>
                     </div>
             </div>
         </div>
