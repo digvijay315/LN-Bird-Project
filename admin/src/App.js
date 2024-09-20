@@ -27,6 +27,7 @@ import Notification from './components/demo';
 import SuggestionBox from './components/demo';
 import Adddeveloper from './components/adddeveloper';
 import Projectform from './components/projectform';
+import Deal from './components/deal';
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
       <Route path='/project' element={<Projectform/>}/>
       <Route path='/adddeveloper' element={<Adddeveloper/>}/>
+      <Route path='/deal' element={<Deal/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

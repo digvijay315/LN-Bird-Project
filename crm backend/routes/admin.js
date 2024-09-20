@@ -15,6 +15,7 @@ const booking_details = require('../controllers/booking_details');
 const addpayment_details = require('../controllers/addpayment_details');
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
+const createProject = require('../controllers/project');
 
 
 const router=express.Router()
@@ -40,6 +41,8 @@ router.get('/viewleadbycompany/:company_name',view_lead_Bycompany)
 router.get('/viewleadbystage/:stage',view_lead_Bystage)
 router.get('/viewleadbyemail/:email',view_lead_Byemail)
 router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)
+
+router.post('/project',upload.any('pic'),createProject)
 
 router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 

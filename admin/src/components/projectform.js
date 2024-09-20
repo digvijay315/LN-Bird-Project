@@ -19,6 +19,9 @@ import Paper from '@mui/material/Paper';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import {React, useEffect } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 
 function Projectform() {
@@ -95,20 +98,15 @@ function Projectform() {
                                           total_units:"",status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
                                           approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:"",
                                           team:"",visible_to:"",
+                         
+                                          location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
+
                                           add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
                                           price_list:[],Payment_plan:[],
 
-                                          location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
-
-        type:[''],floor:[''],action2:[],tagcs:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
-
-        profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
-        company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",cluter:[''],length:[''],
-        breadth:[''],total_area:[''],meseaurment:[''],action3:[],
-
-        father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-        birth_date:"",anniversary_date:"",step_name:[''],calculation_type:[''],blank1:[''],blank2:[''],blank3:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-        social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[] });
+        type:[''],floor:[''],action2:[],tagcs:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",cluter:[''],length:[''],
+        breadth:[''],meseaurment:[''],total_area:[''],action3:[],step_name:[''],calculation_type:[''],blank1:[''],blank2:[''],
+        blank3:[''],action4:[]});
     
         const config = {
             headers: {
@@ -118,14 +116,15 @@ function Projectform() {
       
     const addcontact=async(e)=>
     {
+      
         e.preventDefault();
         try {
-            const resp= await api.post('addcontact',contact,config)
-        if(resp.status===200)
+            const resp= await api.post('project',contact,config)
+        if(resp.status===201)
             {
-                toast.success(resp.data.message,{ autoClose: 2000 })
+                toast.success("Project Saved",{ autoClose: 2000 })
                 setTimeout(() => {
-                  navigate('/contactdetails')
+                  navigate('/project')
                 }, 2000);
             }
             
@@ -395,39 +394,40 @@ function Projectform() {
                 action1: newaction1
               });
             }
-            const handlecountry_codechange = (index, event) => {
-              const newcountry_code = [...contact.country_code];
-              newcountry_code[index] = event.target.value;
+            const handleapprovalschange = (index, event) => {
+              const newapprovals = [...contact.approvals];
+              newapprovals[index] = event.target.value;
               setcontact({
                 ...contact,
-                country_code: newcountry_code
+                approvals: newapprovals
               });
             };
-            const handlemobile_nochange = (index, event) => {
-              const newmobile_no = [...contact.mobile_no];
-              newmobile_no[index] = event.target.value;
+            const handleregistrationchange = (index, event) => {
+              const newregistration = [...contact.registration_no];
+              newregistration[index] = event.target.value;
               setcontact({
                 ...contact,
-                mobile_no: newmobile_no
+                registration_no: newregistration
               });
             };
-            const handledocumentpicchange = (index, event) => {
-              const newdocumentpic = [...contact.document_pic];
+            const handledatechange = (index, event) => {
+              const newdate = [...contact.date];
+              newdate[index] = event.target.value;
+              setcontact({
+                ...contact,
+                date: newdate
+              });
+            };
+            const handlepicchange = (index, event) => {
+              const newpic = [...contact.pic];
               const files = Array.from(event.target.files);
-              newdocumentpic[index] = {files:files}
+              newpic[index] = {files:files}
               setcontact({
                 ...contact,
-                document_pic: newdocumentpic
+                pic: newpic
               });
             };
-            const handlemobile_typechange = (index, event) => {
-              const newmobile_type = [...contact.mobile_type];
-              newmobile_type[index] = event.target.value;
-              setcontact({
-                ...contact,
-                mobile_type: newmobile_type
-              });
-            };
+         
 
             function addFn2() {
         
@@ -826,15 +826,13 @@ function Projectform() {
                        
                                             if (block.block_name ) 
                                               {
-                                                setblocks([...blocks, block]);
+                                                const updateblocks= [...blocks, block];
+                                                setblocks(updateblocks);
+                                                setcontact(prevState => ({
+                                                  ...prevState,
+                                                  add_block: updateblocks
+                                                }));
                                                 handleClose1()
-
-                                                  // Clear the input fields after adding
-                                                                      
-                                                  //  document.getElementById("nameofdestination").value=""
-                                                  //  document.getElementById("destination").value=""
-                                                  //  document.getElementById("measurment").value=""
-                                                  //    document.getElementById("choosedestination").value="Select"
                                                  } 
                                                  else
                                                    {
@@ -845,44 +843,98 @@ function Projectform() {
                                     
 
                                       // Filter out the destination at the given index
-                                      const newblocks = blocks.filter((_, i) => i !== index);
+                                      const newblocks = contact.add_block.filter((_, i) => i !== index);
 
                                       // Set the updated destination details
-                                      setblocks(newblocks);
+                                      setcontact(prevState => ({
+                                        ...prevState,
+                                        add_block: newblocks
+                                      }));
                                     };
+
+//===================================--------------------------- size add and delete start---------------------------=======================
+
+
+                                            const[size,setsize]=useState([])
+                                            const[sizes,setsizes]=useState({block_name:"",category:[''],sub_category:"",land_area:"",
+                                                                            measurment:"",total_blocks:"",total_floors:"",total_units:"",
+                                                                            status:"",launched_on:"",expected_competion:"",possession:"",
+                                                                            parking_type:"",rera_no:""})
+
+                                                const addsize = () => {
+
+                                                    if (block.block_name ) 
+                                                      {
+                                                        const updateblocks= [...blocks, block];
+                                                        setblocks(updateblocks);
+                                                        setcontact(prevState => ({
+                                                          ...prevState,
+                                                          add_block: updateblocks
+                                                        }));
+                                                        handleClose1()
+
+                                                          // Clear the input fields after adding
+                                                                              
+                                                          //  document.getElementById("nameofdestination").value=""
+                                                          //  document.getElementById("destination").value=""
+                                                          //  document.getElementById("measurment").value=""
+                                                          //    document.getElementById("choosedestination").value="Select"
+                                                        } 
+                                                        else
+                                                          {
+                                                              toast.error("Please fill out all fields.");
+                                                          }
+                                                        };
+                                            const deletesize = (index) => {
+
+
+                                              // Filter out the destination at the given index
+                                              const newblocks = contact.add_block.filter((_, i) => i !== index);
+
+                                              // Set the updated destination details
+                                              setcontact(prevState => ({
+                                                ...prevState,
+                                                add_block: newblocks
+                                              }));
+                                            };
+
+
+
+
+// ================================-----------------size add and delete end------------------------=========================================
 
                                     const residentialcategory=(e)=>
                                     {
-                                      {
+                                      
                                         e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
                                         setblock((prevProfile) => ({
                                             ...prevProfile,
                                             category: "Residential"
                                         }))
                                     
-                                        }
+                                        
                                     }
                                     const commercialcategory=(e)=>
                                       {
-                                        {
+                                        
                                           e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
                                           setblock((prevProfile) => ({
                                               ...prevProfile,
                                               category: "Commercial"
                                           }))
                                       
-                                          }
+                                          
                                       }
                                       const agriculturalcategory=(e)=>
                                         {
-                                          {
+                                          
                                             e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
                                             setblock((prevProfile) => ({
                                                 ...prevProfile,
                                                 category: "Agricultural"
                                             }))
                                         
-                                            }
+                                            
                                         }
                                       const institutionalcategory=(e)=>
                                         {
@@ -924,7 +976,28 @@ function Projectform() {
                         setdestinationdetails(newDestinationDetails);
                       };
 // ========================-----------------------------destination add and delete end--------------------------------------------============
-                      
+const modules = {
+  toolbar: [
+    [{ 'font': [] }, { 'size': [] }], // font and size
+    [{ 'header': '1'}, { 'header': '2'}, { 'header': [3, 4, 5, 6, false] }], // headers
+    [{ 'color': [] }, { 'background': [] }], // color and background
+    ['bold', 'italic', 'underline', 'strike'], // formatting buttons
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }], // lists
+    [{ 'align': [] }], // text alignment
+    ['link', 'image'], // link and image options
+    ['clean'] // remove formatting button
+  ]
+};
+
+// Formats that should be available
+const formats = [
+  'font', 'size', 'header',
+  'bold', 'italic', 'underline', 'strike',
+  'color', 'background',
+  'list', 'bullet',
+  'align',
+  'link', 'image'
+];
                 
     return ( 
         <div>
@@ -961,9 +1034,9 @@ function Projectform() {
  {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
-                <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,name:e.target.value})}/></div>
                 <div className='col-md-6'></div>
-                    <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,developer_name:e.target.value})}>
                               <option>Select</option>
                               {
                                 data1.map((item)=>
@@ -975,8 +1048,8 @@ function Projectform() {
                         </div>
                         <div className='col-md-1'><label style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={add_developer}>+</button></div>
                         <div className='col-md-5'></div>
-                        <div className="col-md-6"><input type='checkbox' /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
-                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                        <div className="col-md-6"><input type='checkbox' onChange={(e)=>setcontact({...contact,joint_venture:e.target.value})} /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
+                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,secondary_developer:e.target.value})}>
                               <option>Select</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -989,12 +1062,13 @@ function Projectform() {
                         </select>
                         </div>
 
-                    <div className="col-md-5"><label className="labels">Rera Number</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Rera Number</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,rera_number:e.target.value})}/></div>
                     <div className='col-md-7'></div>
 
-                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-                    <div className="col-md-12"><label className="labels">Category</label></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={contact.descriptions} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setcontact({ ...contact, descriptions: value })}/></div>
+                    <div className="col-md-2"></div>
+                    
+                    <div className="col-md-12" style={{marginTop:"50px"}}><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
                         <div className="col-md-2"><button className='form-control form-control-sm' id='resd' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Residential</button></div>
                         <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Commercial</button></div>
@@ -1002,7 +1076,7 @@ function Projectform() {
                         <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Institutional</button></div>
                         <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Industrial</button></div>
                     </div>
-                    <div className="col-md-6"><label className="labels">Sub Category</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Sub Category</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,sub_category:e.target.value})}>
                               <option>Select</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -1016,9 +1090,9 @@ function Projectform() {
                     </div>
                     <div className="col-md-6"></div>
 
-                        <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" /></div>
+                        <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,land_area:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,measurment1:e.target.value})}>
                               <option>Acres.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1029,13 +1103,13 @@ function Projectform() {
                               <option>Maj.</option>
                         </select>
                        </div>
-                        <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" /></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  /></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" /></div>
+                        <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,total_block:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  onChange={(e)=>setcontact({...contact,total_floor:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,total_units:e.target.value})}/></div>
                         <div className="col-md-2"></div>
 
                         <div className="col-md-8"><label className="labels">Status</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,status:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1048,12 +1122,12 @@ function Projectform() {
                        </div>
                        <div className="col-md-4"></div>
 
-                       <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" /></div>
-                       <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true"/></div>
-                       <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true"/></div>
+                       <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,launched_on:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,expected_competion:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,possession:e.target.value})}/></div>
 
                        <div className="col-md-6"><label className="labels">Parking Type</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,parking_type:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1065,7 +1139,7 @@ function Projectform() {
                         </select>
                        </div>
                        <div className="col-md-6"><label className="labels">Approved Bank</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,approved_bank:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1080,7 +1154,7 @@ function Projectform() {
                     {
                       contact.approvals.map((item,index)=>
                       (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handleapprovalschange(index,event)}>
                         <option>choose</option>
                         <option>Upcoming</option>
                               <option>Mrs.</option>
@@ -1101,7 +1175,7 @@ function Projectform() {
                           <input type="text" required="true" style={{marginTop:"10px"}} 
                           className="form-control form-control-sm" 
                           
-                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          onChange={(event)=>handleregistrationchange(index,event)}/>
                           
                         ))
                     }
@@ -1113,7 +1187,7 @@ function Projectform() {
                           <input type="date" required="true" style={{marginTop:"10px"}} 
                           className="form-control form-control-sm" 
                           placeholder="enter phone number" 
-                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          onChange={(event)=>handledatechange(index,event)}/>
                           
                         ))
                     }
@@ -1125,7 +1199,7 @@ function Projectform() {
                         <input type="file" 
                         style={{marginTop:"10px"}}
                         className="form-control form-control-sm" 
-                        onChange={(event)=>handledocumentpicchange(index,event)}
+                        onChange={(event)=>handlepicchange(index,event)}
                         />
                       ))
                     }
@@ -1213,13 +1287,13 @@ function Projectform() {
                           
                           <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
                     <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,address:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,street:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">CITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,locality:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">CITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,zip:e.target.value})}/></div>
                     <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
@@ -1267,7 +1341,7 @@ function Projectform() {
       <tbody>
         {
          
-        blocks.map ((item, index) => (
+        contact.add_block.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
             {item.block_name}
