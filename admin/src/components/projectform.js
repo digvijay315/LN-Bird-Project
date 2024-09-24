@@ -5,7 +5,6 @@ import Sidebar1 from './sidebar1';
 import { ToastContainer, toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import api from "../api";
-import { event } from 'jquery'; 
 import axios from 'axios';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { styled } from '@mui/material/styles';
@@ -26,48 +25,7 @@ import 'react-quill/dist/quill.snow.css';
 
 function Projectform() {
   
-  const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
-    "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
-    "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
-    "Barbados +1246","Belarus +375","Belgium +32","Belize +501","Benin +229","Bermuda +1441","Bhutan +975",
-    "Bolivia +591","Bonaire, Sint Eustatius and Saba +599","Bosnia and Herzegovina +387","Botswana +267",
-    "Bouvet Island +55","Brazil +55","British Indian Ocean Territory +246","Brunei Darussalam +673","Bulgaria +359",
-    "Burkina Faso +226","Burundi +257","Cambodia +855","Cameroon +237","Canada +1","Cape Verde +238","Cayman Islands +1345",
-    "Central African Republic +236","Chad +235","Chile +56","China +86","Christmas Island +61","Cocos (Keeling) Islands +672",
-    "Colombia +57","Comoros +269","Congo +242","Congo, Democratic Republic of the Congo +242","Cook Islands +682",
-    "Costa Rica +506","Cote D'Ivoire +225","Croatia +385","Cuba +53","Curacao +599","Cyprus +357","Czech Republic +420",
-    "Denmark +45","Djibouti +253","Dominica +1767","Dominican Republic +1809","Ecuador +593","Egypt +20",
-    "El Salvador +503","Equatorial Guinea +240","Eritrea +291","Estonia +372","Ethiopia +251","Falkland Islands (Malvinas) +500",
-    "Faroe Islands +298","Fiji +679","Finland +358","France +33","French Guiana +594","French Polynesia +689",
-    "French Southern Territories +262","Gabon +241","Gambia +220","Georgia +995","Germany +49","Ghana +233","Gibraltar +350",
-    "Greece +30","Greenland +299","Grenada +1473","Guadeloupe +590","Guam +1671","Guatemala +502","Guernsey +44",
-    "Guinea +224","Guinea-Bissau +245","Guyana +592","Haiti +509","Holy See (Vatican City State) +39","Honduras +504",
-    "Hong Kong +852","Hungary +36","Iceland +354","India +91","Indonesia +62","Iran, Islamic Republic of +98","Iraq +964",
-    "Ireland +353","Isle of Man +44","Israel +972","Italy +39","Jamaica +1876","Japan +81","Jersey +44","Jordan +962",
-    "Kazakhstan +7","Kenya +254","Kiribati +686","Korea Democratic People's Republic of +850","Korea Republic of +82","Kosovo +383",
-    "Kuwait +965","Kyrgyzstan +996","Lao People's Democratic Republic +856","Latvia +371","Lebanon +961","Lesotho +266",
-    "Liberia +231","Libyan Arab Jamahiriya +218","Liechtenstein +423","Lithuania +370","Luxembourg +352","Macao +853",
-    "Macedonia, the Former Yugoslav Republic of +389","Madagascar +261","Malawi +265","Malaysia +60","Maldives +960",
-    "Mali +223","Malta +356","Marshall Islands +692","Martinique +596","Mauritania +222","Mauritius +230","Mayotte +262",
-    "Mexico +52","Micronesia, Federated States of +691","Moldova, Republic of +373","Monaco +377","Mongolia +976",
-    "Montenegro +382","Montserrat +1664","Morocco +212","Mozambique +258","Myanmar +95","Namibia +264","Nauru +674",
-    "Nepal +977","Netherlands +31","Netherlands Antilles +599","New Caledonia +687","New Zealand +64","Nicaragua +505",
-    "Niger +227","Nigeria +234","Niue +683","Norfolk Island +672","Northern Mariana Islands +1670","Norway +47",
-    "Oman +968","Pakistan +92","Palau +680","Palestinian Territory, Occupied +970","Panama +507","Papua New Guinea +675",
-    "Paraguay +595","Peru +51","Philippines +63","Pitcairn +64","Poland +48","Portugal +351","Puerto Rico +1787",
-    "Qatar +974","Reunion +262","Romania +40","Russian Federation +7","Rwanda +250","Saint Barthelemy +590",
-    "Saint Helena +290","Saint Kitts and Nevis +1869","Saint Lucia +1758","Saint Martin +590","Saint Pierre and Miquelon +508",
-    "Saint Vincent and the Grenadines +1784","Samoa +684","San Marino +378","Sao Tome and Principe +239","Saudi Arabia +966",
-    "Senegal +221","Serbia +381","Serbia and Montenegro +381","Seychelles +248","Sierra Leone +232","Singapore +65",
-    "Sint Maarten +721","Slovakia +421","Slovenia +386","Solomon Islands +677","Somalia +252","South Africa +27",
-    "South Georgia and the South Sandwich Islands +500","South Sudan +211","Spain +34","Sri Lanka +94","Sudan +249",
-    "Suriname +597","Svalbard and Jan Mayen +47","Swaziland +268","Sweden +46","Switzerland +41","Syrian Arab Republic +963",
-    "Taiwan, Province of China +886","Tajikistan +992","Tanzania, United Republic of +255","Thailand +66","Timor-Leste +670",
-    "Togo +228","Tokelau +690","Tonga +676","Trinidad and Tobago +1868","Tunisia +216","Turkey +90","Turkmenistan +7370",
-    "Turks and Caicos Islands +1649","Tuvalu +688","Uganda +256","Ukraine +380","United Arab Emirates +971",
-    "United Kingdom +44","United States +1","United States Minor Outlying Islands +1","Uruguay +598","Uzbekistan +998",
-    "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
-    "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
+  
     
        
      useEffect(()=>{fetchdeveloper()},[])
@@ -93,8 +51,11 @@ function Projectform() {
     
     }
 
-    const [contact,setcontact]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
-                                          category:"",sub_category:"",land_area:"",measurment1:"",total_block:"",total_floor:"",
+   
+    
+
+    const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+                                          category:[],sub_category:"",land_area:"",measurment1:"",total_block:"",total_floor:"",
                                           total_units:"",status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
                                           approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:"",
                                           team:"",visible_to:"",
@@ -102,11 +63,7 @@ function Projectform() {
                                           location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
 
                                           add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
-                                          price_list:[],Payment_plan:[],
-
-        type:[''],floor:[''],action2:[],tagcs:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",cluter:[''],length:[''],
-        breadth:[''],meseaurment:[''],total_area:[''],action3:[],step_name:[''],calculation_type:[''],blank1:[''],blank2:[''],
-        blank3:[''],action4:[]});
+                                          price_list:[],Payment_plan:[]});
     
         const config = {
             headers: {
@@ -114,12 +71,12 @@ function Projectform() {
             }
         }
       
-    const addcontact=async(e)=>
+    const addproject=async(e)=>
     {
       
         e.preventDefault();
         try {
-            const resp= await api.post('project',contact,config)
+            const resp= await api.post('project',project,config)
         if(resp.status===201)
             {
                 toast.success("Project Saved",{ autoClose: 2000 })
@@ -366,27 +323,27 @@ function Projectform() {
 
           function addFn1() {
         
-                    setcontact({
-                      ...contact,
-                      approvals: [...contact.approvals, ''],
-                      registration_no: [...contact.registration_no, ''],
-                      date: [...contact.date, ''],
-                      pic: [...contact.pic, ''],
-                      action1: [...contact.action1, '']
+                    setproject({
+                      ...project,
+                      approvals: [...project.approvals, ''],
+                      registration_no: [...project.registration_no, ''],
+                      date: [...project.date, ''],
+                      pic: [...project.pic, ''],
+                      action1: [...project.action1, '']
                     });
                   };
 
           const deleteall1=(index)=>
             {
              
-              const newapprovals = contact.approvals.filter((_, i) => i !== index);
-              const newregistrationno = contact.registration_no.filter((_, i) => i !== index);
-              const newdate = contact.date.filter((_, i) => i !== index);
-              const newpic = contact.pic.filter((_, i) => i !== index);
-              const newaction1 = contact.action1.filter((_, i) => i !== index);
+              const newapprovals = project.approvals.filter((_, i) => i !== index);
+              const newregistrationno = project.registration_no.filter((_, i) => i !== index);
+              const newdate = project.date.filter((_, i) => i !== index);
+              const newpic = project.pic.filter((_, i) => i !== index);
+              const newaction1 = project.action1.filter((_, i) => i !== index);
               
-              setcontact({
-                ...contact,
+              setproject({
+                ...project,
                 approvals: newapprovals,
                 registration_no: newregistrationno,
                 date: newdate,
@@ -395,155 +352,138 @@ function Projectform() {
               });
             }
             const handleapprovalschange = (index, event) => {
-              const newapprovals = [...contact.approvals];
+              const newapprovals = [...project.approvals];
               newapprovals[index] = event.target.value;
-              setcontact({
-                ...contact,
+              setproject({
+                ...project,
                 approvals: newapprovals
               });
             };
             const handleregistrationchange = (index, event) => {
-              const newregistration = [...contact.registration_no];
+              const newregistration = [...project.registration_no];
               newregistration[index] = event.target.value;
-              setcontact({
-                ...contact,
+              setproject({
+                ...project,
                 registration_no: newregistration
               });
             };
             const handledatechange = (index, event) => {
-              const newdate = [...contact.date];
+              const newdate = [...project.date];
               newdate[index] = event.target.value;
-              setcontact({
-                ...contact,
+              setproject({
+                ...project,
                 date: newdate
               });
             };
             const handlepicchange = (index, event) => {
-              const newpic = [...contact.pic];
+              const newpic = [...project.pic];
               const files = Array.from(event.target.files);
               newpic[index] = {files:files}
-              setcontact({
-                ...contact,
+              setproject({
+                ...project,
                 pic: newpic
               });
             };
          
-
-            function addFn2() {
-        
-              setcontact({
-                ...contact,
-                type: [...contact.type, ''],
-                floor: [...contact.floor, ''],
-                action2: [...contact.action2, '']
-              });
-            };
-  
-            const deleteall2=(index)=>
-              {
-               
-                const newtype = contact.type.filter((_, i) => i !== index);
-                const newfloor = contact.floor.filter((_, i) => i !== index);
-                const newaction2 = contact.action2.filter((_, i) => i !== index);
-                
-                setcontact({
-                  ...contact,
-                  type: newtype,
-                  floor: newfloor,
-                  action2: newaction2
-                });
-              }
-              const handleemailchange = (index, event) => {
-                const newemail = [...contact.email];
-                newemail[index] = event.target.value;
-                setcontact({
-                  ...contact,
-                  email: newemail
-                });
-              };
-              const handleemail_typechange = (index, event) => {
-                const newemail_type = [...contact.email_type];
-                newemail_type[index] = event.target.value;
-                setcontact({
-                  ...contact,
-                  email_type: newemail_type
-                });
-              };
-
               function addFn3() {
      
-                setcontact({
-                  ...contact,
-                  cluter: [...contact.cluter, ''],
-                  length: [...contact.length, ''],
-                  breadth: [...contact.breadth, ''],
-                  total_area: [...contact.total_area, ''],
-                  meseaurment: [...contact.meseaurment, ''],
-                  action3: [...contact.action3, '']
+                setunits({
+                  ...units,
+                  floor:[...units.floor,''],
+                  cluter_details: [...units.cluter_details, ''],
+                  length: [...units.length, ''],
+                  bredth: [...units.bredth, ''],
+                  total_area: [...units.total_area, ''],
+                  measurment2: [...units.measurment2, ''],
+                  action3: [...units.action3, '']
                 });
               };
               const deleteall3=(index)=>
                 {
-                 
-                  const newcluter = contact.cluter.filter((_, i) => i !== index);
-                  const newlength = contact.length.filter((_, i) => i !== index);
-                  const newbreadth = contact.breadth.filter((_, i) => i !== index);
-                  const newtotalarea = contact.total_area.filter((_, i) => i !== index);
-                  const newmeasurement = contact.meseaurment.filter((_, i) => i !== index);
-                  const newaction3=contact.action3.filter((_,i) => i !== index);
+                  const newfloor = units.floor.filter((_, i) => i !== index);
+                  const newcluter = units.cluter_details.filter((_, i) => i !== index);
+                  const newlength = units.length.filter((_, i) => i !== index);
+                  const newbreadth = units.bredth.filter((_, i) => i !== index);
+                  const newtotalarea = units.total_area.filter((_, i) => i !== index);
+                  const newmeasurement = units.measurment2.filter((_, i) => i !== index);
+                  const newaction3=units.action3.filter((_,i) => i !== index);
                   
-                  setcontact({
-                    ...contact,
-                    cluter: newcluter,
+                  setunits({
+                    ...units,
+                    floor:newfloor,
+                    cluter_details: newcluter,
                     length: newlength,
-                    breadth: newbreadth,
+                    bredth: newbreadth,
                     total_area: newtotalarea,
-                    meseaurment: newmeasurement,
+                    measurment2: newmeasurement,
                     action3:newaction3
                   });
                 }
-                const handlecompanysocialmediachange = (index, event) => {
-                  const newcomapnysocialmedia = [...contact.company_social_media];
-                  newcomapnysocialmedia[index] = event.target.value;
-                  setcontact({
-                    ...contact,
-                    company_social_media: newcomapnysocialmedia
+                const handlefloorchange = (index, event) => {
+                  const newfloor = [...units.floor];
+                  newfloor[index] = event.target.value;
+                  setunits({
+                    ...units,
+                    floor: newfloor
                   });
                 };
-                const handlecompanyurlchange = (index, event) => {
-                  const newcompanyurl = [...contact.company_url];
-                  newcompanyurl[index] = event.target.value;
-                  setcontact({
-                    ...contact,
-                    company_url: newcompanyurl
+                const handlecluterdetails = (index, event) => {
+                  const newcluterdetails = [...units.cluter_details];
+                  newcluterdetails[index] = event.target.value;
+                  setunits({
+                    ...units,
+                    cluter_details: newcluterdetails
                   });
                 };
-          
+                const handlelengthchange = (index, event) => {
+                  const newlength = [...units.length];
+                  newlength[index] = event.target.value;
+                  setunits({
+                    ...units,
+                    length: newlength
+                  });
+                };
+                const handlebredthchange = (index, event) => {
+                  const newbreadth = [...units.bredth];
+                  newbreadth[index] = event.target.value;
+                  setunits({
+                    ...units,
+                    bredth: newbreadth
+                  });
+                };
+                const handletotalarea = (index, event) => {
+                  const newtotalarea = [...units.total_area];
+                  newtotalarea[index] = event.target.value;
+                  setunits({
+                    ...units,
+                    total_area: newtotalarea
+                  });
+                };
               
                 function addFn4() {
      
-                  setcontact({
-                    ...contact,
-                    step_name: [...contact.step_name, ''],
-                    calculation_type: [...contact.calculation_type, ''],
-                    blank1: [...contact.blank1, ''],
-                    blank2: [...contact.blank2, ''],
-                    blank3: [...contact.blank3, ''],
-                    action4:[...contact.action4,'']
+                  setpayments({
+                    ...payments,
+                    step_name: [...payments.step_name, ''],
+                    calculation_type: [...payments.calculation_type, ''],
+                    blank1: [...payments.blank1, ''],
+                    blank2: [...payments.blank2, ''],
+                    blank3: [...payments.blank3, ''],
+                    action4:[...payments.action4,'']
                   });
                 };
                 const deleteall4=(index)=>
                   {
                    
-                    const newstepname = contact.step_name.filter((_, i) => i !== index);
-                    const newcalculationtype = contact.calculation_type.filter((_, i) => i !== index);
-                    const newblank1 = contact.blank1.filter((_, i) => i !== index);
-                    const newblank2 = contact.blank2.filter((_, i) => i !== index);
-                    const newblank3 = contact.blank3.filter((_, i) => i !== index);
-                    const newaction4=contact.action4.filter((_,i) => i !== index);
+                    const newstepname = payments.step_name.filter((_, i) => i !== index);
+                    const newcalculationtype = payments.calculation_type.filter((_, i) => i !== index);
+                    const newblank1 = payments.blank1.filter((_, i) => i !== index);
+                    const newblank2 = payments.blank2.filter((_, i) => i !== index);
+                    const newblank3 = payments.blank3.filter((_, i) => i !== index);
+                    const newaction4=payments.action4.filter((_,i) => i !== index);
                     
-                    setcontact({
-                      ...contact,
+                    setpayments({
+                      ...payments,
                       step_name: newstepname,
                       calculation_type: newcalculationtype,
                       blank1: newblank1,
@@ -552,31 +492,48 @@ function Projectform() {
                       action4:newaction4
                     });
                   }
-                  const handleeducationChange = (index, event) => {
-                    const neweducation = [...contact.education];
-                    neweducation[index] = event.target.value;
-                    setcontact({
-                      ...contact,
-                      education: neweducation
+                  const handlestepnamechange = (index, event) => {
+                    const newstep = [...payments.step_name];
+                    newstep[index] = event.target.value;
+                    setpayments({
+                      ...payments,
+                      step_name: newstep
                     });
                   };
-                  const handledegreeChange = (index, event) => {
-                    const newdegree = [...contact.degree];
-                    newdegree[index] = event.target.value;
-                    setcontact({
-                      ...contact,
-                      degree: newdegree
+                  const handlecalculationtypechange = (index, event) => {
+                    const newcalculationtype = [...payments.calculation_type];
+                    newcalculationtype[index] = event.target.value;
+                    setpayments({
+                      ...payments,
+                      calculation_type: newcalculationtype
+                    });
+                  };
+                  const handleblank1change = (index, event) => {
+                    const newblank1 = [...payments.blank1];
+                    newblank1[index] = event.target.value;
+                    setpayments({
+                      ...payments,
+                      blank1: newblank1
+                    });
+                  };
+                  const handleblank2change = (index, event) => {
+                    const newblank2 = [...payments.blank2];
+                    newblank2[index] = event.target.value;
+                    setpayments({
+                      ...payments,
+                      blank2: newblank2
+                    });
+                  };
+                  const handleblank3change = (index, event) => {
+                    const newblank3 = [...payments.blank3];
+                    newblank3[index] = event.target.value;
+                    setpayments({
+                      ...payments,
+                      blank3: newblank3
                     });
                   };
             
-                  const handleschool_collegeChange = (index, event) => {
-                    const newschool = [...contact.school_college];
-                    newschool[index] = event.target.value;
-                    setcontact({
-                      ...contact,
-                      school_college: newschool
-                    });
-                  };
+                
 
     //==================----------------- add delete and onchange event of array end---------------------------===============================
 
@@ -587,7 +544,7 @@ function Projectform() {
                         try {
                           const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                             params: {
-                              address: contact.location,
+                              address: project.location,
                               key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'  // Replace with your API key
                             }
                           });
@@ -595,7 +552,7 @@ function Projectform() {
                           if (response.data.results.length > 0) {
                             const { lat, lng } = response.data.results[0].geometry.location;
                             setCoordinates({ lat, lng });
-                            setcontact({...contact,lattitude:lat,langitude:lng})
+                            setproject({...project,lattitude:lat,langitude:lng})
                           } else {
                             setCoordinates(null);
                             console.log('No results found');
@@ -693,11 +650,13 @@ function Projectform() {
                           const size=document.getElementById("subcategory").value;
                           if(size==="Apartment")
                               {
+                                  setsizes({...sizes,sub_category:"Apartment"})
                                   document.getElementById("apartmentsize").style.display="flex"
                                   document.getElementById("plotsize").style.display="none"
                               }
                               if(size==="Plot")
                                   {
+                                      setsizes({...sizes,sub_category:"Plot"})
                                       document.getElementById("apartmentsize").style.display="none"
                                       document.getElementById("plotsize").style.display="flex"
                                   }   
@@ -756,6 +715,20 @@ function Projectform() {
                         const updatedCheckedItems = [...checkedItems];
                         updatedCheckedItems[index] = !updatedCheckedItems[index];
                         setCheckedItems(updatedCheckedItems);
+
+                        const selectedAminity = checkboxItems[index];
+
+                        // Add or remove item from basic_aminities in the project state
+                                setproject((prevState) => {
+                                  const updatedBasicAminities = updatedCheckedItems[index]
+                                    ? [...prevState.basic_aminities, selectedAminity]
+                                    : prevState.basic_aminities.filter((item) => item !== selectedAminity);
+
+                                  return {
+                                    ...prevState,
+                                    basic_aminities: updatedBasicAminities
+                                  };
+                                });
                     
                         // If any checkbox is unchecked, deselect "Select All"
                         if (updatedCheckedItems.some((item) => !item)) {
@@ -768,7 +741,15 @@ function Projectform() {
                         const newSelectAll = !selectAll;
                         setSelectAll(newSelectAll);
                         setCheckedItems(Array(checkboxItems.length).fill(newSelectAll));
+
+                        setproject((prevState) => ({
+                          ...prevState,
+                          basic_aminities: newSelectAll ? checkboxItems : []
+                        }));
                       };
+
+
+                     
 
                       const checkboxItems1 = [
                           "Seniour Citizen Corner","Worship Place","HAVC System","Cricket Pitch",
@@ -799,6 +780,20 @@ function Projectform() {
                         const updatedCheckedItems1 = [...checkedItems1];
                         updatedCheckedItems1[index] = !updatedCheckedItems1[index];
                         setCheckedItems1(updatedCheckedItems1);
+
+                        const selectedAminity1 = checkboxItems1[index];
+
+                        // Add or remove item from basic_aminities in the project state
+                                setproject((prevState) => {
+                                  const updatedBasicAminities = updatedCheckedItems1[index]
+                                    ? [...prevState.features_aminities, selectedAminity1]
+                                    : prevState.features_aminities.filter((item) => item !== selectedAminity1);
+
+                                  return {
+                                    ...prevState,
+                                    features_aminities: updatedBasicAminities
+                                  };
+                                });
                     
                         // If any checkbox is unchecked, deselect "Select All"
                         if (updatedCheckedItems1.some((item) => !item)) {
@@ -811,7 +806,14 @@ function Projectform() {
                         const newSelectAll1 = !selectAll1;
                         setSelectAll1(newSelectAll1);
                         setCheckedItems1(Array(checkboxItems1.length).fill(newSelectAll1));
+
+                        setproject((prevState) => ({
+                          ...prevState,
+                          features_aminities: newSelectAll1 ? checkboxItems1 : []
+                        }));
                       };
+                    console.log(project.features_aminities)
+                    
 
 // ---------------------=============== both check box code end--------------------------------========================================
 
@@ -828,7 +830,7 @@ function Projectform() {
                                               {
                                                 const updateblocks= [...blocks, block];
                                                 setblocks(updateblocks);
-                                                setcontact(prevState => ({
+                                                setproject(prevState => ({
                                                   ...prevState,
                                                   add_block: updateblocks
                                                 }));
@@ -843,10 +845,10 @@ function Projectform() {
                                     
 
                                       // Filter out the destination at the given index
-                                      const newblocks = contact.add_block.filter((_, i) => i !== index);
+                                      const newblocks = project.add_block.filter((_, i) => i !== index);
 
                                       // Set the updated destination details
-                                      setcontact(prevState => ({
+                                      setproject(prevState => ({
                                         ...prevState,
                                         add_block: newblocks
                                       }));
@@ -856,29 +858,24 @@ function Projectform() {
 
 
                                             const[size,setsize]=useState([])
-                                            const[sizes,setsizes]=useState({block_name:"",category:[''],sub_category:"",land_area:"",
-                                                                            measurment:"",total_blocks:"",total_floors:"",total_units:"",
-                                                                            status:"",launched_on:"",expected_competion:"",possession:"",
-                                                                            parking_type:"",rera_no:""})
+                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[''],sub_category:"",
+                                                                            total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
+                                                                            carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
+                                                                            length:"",yard1:"yard",bredth:"",yard2:"yard",total_area:"",yard3:"yard"})
 
                                                 const addsize = () => {
 
-                                                    if (block.block_name ) 
+                                                    if (sizes.size_name ) 
                                                       {
-                                                        const updateblocks= [...blocks, block];
-                                                        setblocks(updateblocks);
-                                                        setcontact(prevState => ({
+                                                        const updatesizes= [...size, sizes];
+                                                        setsize(updatesizes);
+                                                        setproject(prevState => ({
                                                           ...prevState,
-                                                          add_block: updateblocks
+                                                          add_size: updatesizes
                                                         }));
-                                                        handleClose1()
+                                                        handleClose2()
 
-                                                          // Clear the input fields after adding
-                                                                              
-                                                          //  document.getElementById("nameofdestination").value=""
-                                                          //  document.getElementById("destination").value=""
-                                                          //  document.getElementById("measurment").value=""
-                                                          //    document.getElementById("choosedestination").value="Select"
+                                                           document.getElementById("choosedestination").value="Select"
                                                         } 
                                                         else
                                                           {
@@ -889,12 +886,12 @@ function Projectform() {
 
 
                                               // Filter out the destination at the given index
-                                              const newblocks = contact.add_block.filter((_, i) => i !== index);
+                                              const newsizes = project.add_size.filter((_, i) => i !== index);
 
                                               // Set the updated destination details
-                                              setcontact(prevState => ({
+                                              setproject(prevState => ({
                                                 ...prevState,
-                                                add_block: newblocks
+                                                add_size: newsizes
                                               }));
                                             };
 
@@ -902,6 +899,52 @@ function Projectform() {
 
 
 // ================================-----------------size add and delete end------------------------=========================================
+
+
+// ==============================----------------------add unit start===========================================---------------------------
+                                          const[unit,setunit]=useState([])
+                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:[''],block:"",
+                                                                          size:"",direction:"",facing:"",road:"",ownership:"",floor:[''],
+                                                                          cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
+                                                                          action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",
+                                                                          furnished_item:"",location:"",lattitude:"",langitude:""})
+
+                                              const addunit = () => {
+
+                                                  if (units.unit_no ) 
+                                                    {
+                                                      const updateunit= [...unit, units];
+                                                      setunit(updateunit);
+                                                      setproject(prevState => ({
+                                                        ...prevState,
+                                                        add_unit: updateunit
+                                                      }));
+                                                      handleClose3()
+
+                                                        document.getElementById("choosedestination").value="Select"
+                                                      } 
+                                                      else
+                                                        {
+                                                            toast.error("Please fill out all fields.");
+                                                        }
+                                                      };
+                                          const deleteunit = (index) => {
+
+
+                                            // Filter out the destination at the given index
+                                            const newunit = project.add_unit.filter((_, i) => i !== index);
+
+                                            // Set the updated destination details
+                                            setproject(prevState => ({
+                                              ...prevState,
+                                              add_unit: newunit
+                                            }));
+                                          };
+
+
+
+// ================================------------------------add unit end========================================----------------------------
+
 
                                     const residentialcategory=(e)=>
                                     {
@@ -937,7 +980,7 @@ function Projectform() {
                                             
                                         }
                                       const institutionalcategory=(e)=>
-                                        {
+                                        
                                           {
                                             e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
                                             setblock((prevProfile) => ({
@@ -945,7 +988,7 @@ function Projectform() {
                                                 category: "Institutional"
                                             }))
                                         
-                                            }
+                                            
                                         }
 // -------------------------==========================destinations add and delete code start---------------------------------====================
 
@@ -955,7 +998,14 @@ function Projectform() {
                       const adddestination = () => {
                        
                         if (destinations.destination && destinations.name_of_destination && destinations.distance && destinations.measurment) {
-                          setdestinationdetails([...destinationdetails, destinations]);
+                          const updatedestination= [...destinationdetails, destinations];
+                          setdestinationdetails(updatedestination);
+                          setproject(prevState => ({
+                            ...prevState,
+                            nearby_aminities: updatedestination
+                          }));
+                          
+
                           // Clear the input fields after adding
                         
                           document.getElementById("nameofdestination").value=""
@@ -970,35 +1020,143 @@ function Projectform() {
                        
                       
                         // Filter out the destination at the given index
-                        const newDestinationDetails = destinationdetails.filter((_, i) => i !== index);
+                        const newDestinationDetails = project.nearby_aminities.filter((_, i) => i !== index);
                       
                         // Set the updated destination details
-                        setdestinationdetails(newDestinationDetails);
+                        setproject(prevState => ({
+                          ...prevState,
+                          nearby_aminities: newDestinationDetails
+                        }));
                       };
 // ========================-----------------------------destination add and delete end--------------------------------------------============
-const modules = {
-  toolbar: [
-    [{ 'font': [] }, { 'size': [] }], // font and size
-    [{ 'header': '1'}, { 'header': '2'}, { 'header': [3, 4, 5, 6, false] }], // headers
-    [{ 'color': [] }, { 'background': [] }], // color and background
-    ['bold', 'italic', 'underline', 'strike'], // formatting buttons
-    [{ 'list': 'ordered'}, { 'list': 'bullet' }], // lists
-    [{ 'align': [] }], // text alignment
-    ['link', 'image'], // link and image options
-    ['clean'] // remove formatting button
-  ]
-};
 
-// Formats that should be available
-const formats = [
-  'font', 'size', 'header',
-  'bold', 'italic', 'underline', 'strike',
-  'color', 'background',
-  'list', 'bullet',
-  'align',
-  'link', 'image'
-];
-                
+// ====================-----------------------------price add and delete--------------------------------------------===========================
+                          const[price,setprice]=useState([])
+                          const[prices,setprices]=useState({block:"",category:[],sub_category:"",size:"",
+                                                          covered_area:"",base_rate:"",
+                                                          name:"",type:"",calculation_type:"",blank1:"",blank2:"",blank3:"",
+                                                          name1:"",type1:"",calculation_type1:"",blank4:""})
+
+                              const addprice = () => {
+
+                                  if (prices.block ) 
+                                    {
+                                      const updateprice= [...price, prices];
+                                      setprice(updateprice);
+                                      setproject(prevState => ({
+                                        ...prevState,
+                                        price_list: updateprice
+                                      }));
+                                      handleClose4()
+
+                                      
+                                      } 
+                                      else
+                                        {
+                                            toast.error("Please fill out all fields.");
+                                        }
+                                      };
+                          const deleteprice = (index) => {
+
+
+                            // Filter out the destination at the given index
+                            const newprice = project.price_list.filter((_, i) => i !== index);
+
+                            // Set the updated destination details
+                            setproject(prevState => ({
+                              ...prevState,
+                              price_list: newprice
+                            }));
+                          };
+
+
+
+// =======================------------------------price add and delete end====================-----------------------------------------
+  
+
+// ===================================-----payment plan add and delete start-----------------------==================================
+
+
+                                const[payment,setpayment]=useState([])
+                                const[payments,setpayments]=useState({payment_planname:"",step_name:[''],calculation_type:[''],
+                                                                blank1:[''],blank2:[''],blank3:[''],action4:[],condition:""})
+
+                                    const addpayment = () => {
+
+                                        if (payments.payment_planname) 
+                                          {
+                                            const updatepayment= [...payment, payments];
+                                            setpayment(updatepayment);
+                                            setproject(prevState => ({
+                                              ...prevState,
+                                              Payment_plan: updatepayment
+                                            }));
+                                            handleClose5()
+
+                                            
+                                            } 
+                                            else
+                                              {
+                                                  toast.error("Please fill out all fields.");
+                                              }
+                                            };
+                                const deletepayment = (index) => {
+
+
+                                  // Filter out the destination at the given index
+                                  const newpayment = project.Payment_plan.filter((_, i) => i !== index);
+
+                                  // Set the updated destination details
+                                  setproject(prevState => ({
+                                    ...prevState,
+                                    Payment_plan: newpayment
+                                  }));
+                                };
+
+// -------------------------========================payment plan add and delete end--------------------------===========================
+
+                    const modules = {
+                      toolbar: [
+                        [{ 'font': [] }, { 'size': [] }], // font and size
+                        [{ 'header': '1'}, { 'header': '2'}, { 'header': [3, 4, 5, 6, false] }], // headers
+                        [{ 'color': [] }, { 'background': [] }], // color and background
+                        ['bold', 'italic', 'underline', 'strike'], // formatting buttons
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }], // lists
+                        [{ 'align': [] }], // text alignment
+                        ['link', 'image'], // link and image options
+                        ['clean'] // remove formatting button
+                      ]
+                    };
+
+                    // Formats that should be available
+                    const formats = [
+                      'font', 'size', 'header',
+                      'bold', 'italic', 'underline', 'strike',
+                      'color', 'background',
+                      'list', 'bullet',
+                      'align',
+                      'link', 'image'
+                    ];
+                const[ischecked,setischecked]=useState(false)
+                const handleischeckedchange = (e) => {
+                  setischecked(e.target.checked); // Update the state based on checkbox status
+                };
+
+                const handleTypeClick = (type) => {
+                  setproject(prevProject => {
+                      const { category } = prevProject;
+                      if (category.includes(type)) {
+                          // Remove the type from basic_aminities if already selected
+                          return { ...prevProject, category: category.filter(item => item !== type) };
+                      } else {
+                          // Add the type to basic_aminities if not already selected
+                          return { ...prevProject, category: [...category, type] };
+                      }
+                  });
+                };
+                const isSelected = (type) => project.category.includes(type);
+
+
     return ( 
         <div>
             <div id='h'><Header1/></div>
@@ -1034,9 +1192,9 @@ const formats = [
  {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
-                <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,name:e.target.value})}/></div>
+                <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
                 <div className='col-md-6'></div>
-                    <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,developer_name:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,developer_name:e.target.value})}>
                               <option>Select</option>
                               {
                                 data1.map((item)=>
@@ -1048,8 +1206,8 @@ const formats = [
                         </div>
                         <div className='col-md-1'><label style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={add_developer}>+</button></div>
                         <div className='col-md-5'></div>
-                        <div className="col-md-6"><input type='checkbox' onChange={(e)=>setcontact({...contact,joint_venture:e.target.value})} /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
-                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,secondary_developer:e.target.value})}>
+                        <div className="col-md-6"><input  type='checkbox' onChange={handleischeckedchange} checked={ischecked} /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
+                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select id='secondarydeveloper' className="form-control form-control-sm" required="true" disabled={!ischecked} onChange={(e)=>setproject({...project,secondary_developer:e.target.value})}>
                               <option>Select</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -1062,24 +1220,30 @@ const formats = [
                         </select>
                         </div>
 
-                    <div className="col-md-5"><label className="labels">Rera Number</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,rera_number:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Rera Number</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setproject({...project,rera_number:e.target.value})}/></div>
                     <div className='col-md-7'></div>
 
-                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={contact.descriptions} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setcontact({ ...contact, descriptions: value })}/></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={project.descriptions} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setproject({ ...project, descriptions: value })}/></div>
                     <div className="col-md-2"></div>
                     
-                    <div className="col-md-12" style={{marginTop:"50px"}}><label className="labels">Category</label></div>
-                    <div className="col-md-12" style={{display:"flex"}} >
-                        <div className="col-md-2"><button className='form-control form-control-sm' id='resd' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Residential</button></div>
-                        <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Commercial</button></div>
-                        <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Agricultural</button></div>
-                        <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Institutional</button></div>
-                        <div className="col-md-2"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Industrial</button></div>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Sub Category</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,sub_category:e.target.value})}>
+                   
+                    <div className="col-md-12" style={{ display: "flex",marginTop:"70px" }}><label className="labels">Category</label>
+            {['Residential', 'Commercial', 'Agricultural', 'Institutional', 'Industrial'].map((type) => (
+                <div className="col-md-2" key={type} style={{marginTop:"20px"}}>
+                    <button 
+                        className='form-control form-control-sm' 
+                        onClick={() => handleTypeClick(type)} 
+                        style={{ backgroundColor: isSelected(type) ? 'green' : '' }}
+                    >
+                        {type}
+                    </button>
+                </div>
+            ))}
+        </div>
+                    <div className="col-md-6"><label className="labels">Sub Category</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,sub_category:e.target.value})}>
                               <option>Select</option>
-                              <option>Mr.</option>
-                              <option>Mrs.</option>
+                              <option>Apartment</option>
+                              <option>Plot</option>
                               <option>Sh.</option>
                               <option>Smt.</option>
                               <option>Dr.</option>
@@ -1090,9 +1254,9 @@ const formats = [
                     </div>
                     <div className="col-md-6"></div>
 
-                        <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,land_area:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,land_area:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,measurment1:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,measurment1:e.target.value})}>
                               <option>Acres.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1103,13 +1267,13 @@ const formats = [
                               <option>Maj.</option>
                         </select>
                        </div>
-                        <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,total_block:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  onChange={(e)=>setcontact({...contact,total_floor:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,total_units:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,total_block:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  onChange={(e)=>setproject({...project,total_floor:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,total_units:e.target.value})}/></div>
                         <div className="col-md-2"></div>
 
                         <div className="col-md-8"><label className="labels">Status</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,status:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,status:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1122,12 +1286,12 @@ const formats = [
                        </div>
                        <div className="col-md-4"></div>
 
-                       <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,launched_on:e.target.value})}/></div>
-                       <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,expected_competion:e.target.value})}/></div>
-                       <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,possession:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,launched_on:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,expected_competion:e.target.value})}/></div>
+                       <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,possession:e.target.value})}/></div>
 
                        <div className="col-md-6"><label className="labels">Parking Type</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,parking_type:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,parking_type:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1139,7 +1303,7 @@ const formats = [
                         </select>
                        </div>
                        <div className="col-md-6"><label className="labels">Approved Bank</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,approved_bank:e.target.value})}>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,approved_bank:e.target.value})}>
                               <option>Upcoming</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -1152,7 +1316,7 @@ const formats = [
                        </div>
                 <div className="col-md-2" > <label className="labels">Approvals</label>
                     {
-                      contact.approvals.map((item,index)=>
+                      project.approvals.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handleapprovalschange(index,event)}>
                         <option>choose</option>
@@ -1170,7 +1334,7 @@ const formats = [
                     </div>
                     <div className="col-md-3"><label className="labels">Registration No.</label>
                     {
-                       contact.registration_no.map((item,index)=>
+                       project.registration_no.map((item,index)=>
                         (
                           <input type="text" required="true" style={{marginTop:"10px"}} 
                           className="form-control form-control-sm" 
@@ -1182,7 +1346,7 @@ const formats = [
                     </div>
                     <div className="col-md-2"><label className="labels">Date</label>
                     {
-                       contact.date.map((item,index)=>
+                       project.date.map((item,index)=>
                         (
                           <input type="date" required="true" style={{marginTop:"10px"}} 
                           className="form-control form-control-sm" 
@@ -1194,7 +1358,7 @@ const formats = [
                     </div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Pic</label>
                     {
-                      contact.pic.map((item,index)=>
+                      project.pic.map((item,index)=>
                       (
                         <input type="file" 
                         style={{marginTop:"10px"}}
@@ -1206,7 +1370,7 @@ const formats = [
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
-                       contact.action1.map((item,index)=>
+                       project.action1.map((item,index)=>
                         (
                           <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
@@ -1223,7 +1387,7 @@ const formats = [
 
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setproject({...project,owner:e.target.value})}>
                     <option>Select</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
@@ -1232,7 +1396,7 @@ const formats = [
                               <option>Sukram</option>
                         </select></div>
                   
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setproject({...project,team:e.target.value})}>
                               <option>Select</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -1241,7 +1405,7 @@ const formats = [
                         </select>
                     </div>
                   
-                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setproject({...project,visible_to:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -1276,7 +1440,7 @@ const formats = [
                             </LoadScript>
                           </div>
                           <div className="row">
-                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
+                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" onChange={(e)=>setproject({...project,location:e.target.value})}/></div>
                           {/* <div className='col-md-5'></div> */}
                           <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit}>Get</button></div>
                           <div className='col-md-5'></div>
@@ -1287,21 +1451,21 @@ const formats = [
                           
                           <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
                     <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,address:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,address:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,street:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,street:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,locality:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">CITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,zip:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,locality:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">CITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,zip:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setproject({...project,state:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setproject({...project,country:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -1341,7 +1505,7 @@ const formats = [
       <tbody>
         {
          
-        contact.add_block.map ((item, index) => (
+        project.add_block.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
             {item.block_name}
@@ -1377,18 +1541,23 @@ const formats = [
                     <div className='col-md-6'></div>
 
                     <div className="col-md-12"><label className="labels">Category</label></div>
-                    <div className="col-md-12" style={{display:"flex"}} >
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>residentialcategory(e)}>Residential</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>commercialcategory(e)}>Commercial</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>agriculturalcategory(e)}>Agricultural</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>institutionalcategory(e)}>Institutional</button></div>
+                    <div className="col-md-12" style={{display:"flex",flexWrap:"wrap"}} >
+                       {
+                        project.category.map((type)=>
+                        (
+                          <div className="col-md-3" key={type}>
+                          <button 
+                              className='form-control form-control-sm' 
+                          >
+                              {type}
+                          </button>
+                      </div>
+                        ))
+                       }
                     </div>
 
                     <div className="col-md-12"><label className="labels">Sub Category</label><select  className="form-control form-control-sm"  onChange={(e)=>setblock({...block,sub_category:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>{project.sub_category}</option>
                                 </select>
                     </div>
                     <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,land_area:e.target.value})}/></div>
@@ -1470,27 +1639,30 @@ const formats = [
           <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
          
-        blocks.map ((item, index) => (
+        project.add_size.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
-             {blocks.block_name}
+             {item.block1}
             </StyledTableCell>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
-              {item.title} {item.first_name} {item.last_name}<br></br>
-              {item.designation}
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.category}
             </StyledTableCell>
-           
-                <StyledTableCell >
-                {item.mobile_no.join(',')}<br></br>
-                {item.email.join(',')}
-                </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.sub_category}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.size_name}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletesize(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+            </StyledTableCell>
               
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
     </Table>
     </TableContainer>
 
@@ -1502,36 +1674,45 @@ const formats = [
             <div style={{width:"100%"}}>
             <div className="row" id='basicdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Size Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Size Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setsizes({...sizes,size_name:e.target.value})}/></div>
                     <div className='col-md-4'></div>
 
-                    <div className="col-md-8"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                    <div className="col-md-8"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setsizes({...sizes,block1:e.target.value})}>
+                               {
+                                project.add_block.map((item)=>
+                                (
+                                  <option>{item.block_name}</option>
+                                ))
+                               }
                                 </select>
                     </div>
                     <div className='col-md-4'></div>
 
                     <div className="col-md-12"><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green' }>Residential</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Commercial</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Agricultural</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Institutional</button></div>
+                         <div className="col-md-12" style={{display:"flex",flexWrap:"wrap"}} >
+                       {
+                        project.category.map((type)=>
+                        (
+                          <div className="col-md-3" key={type}>
+                          <button 
+                              className='form-control form-control-sm' 
+                          >
+                              {type}
+                          </button>
+                      </div>
+                        ))
+                       }
+                    </div>
                     </div>
 
-                    <div className="col-md-12"><label className="labels">Sub Category</label><select id='subcategory'  className="form-control form-control-sm"  onChange={selectsize}>
-                                <option>Select</option>
-                                <option>Apartment</option>
-                                <option>Plot</option>
-                                <option>All Users</option>
+                    <div className="col-md-12"><label className="labels">Sub Category</label><select id='subcategory'  className="form-control form-control-sm"  onClick={selectsize}>
+                                <option value={project.sub_category}>{project.sub_category}</option>
                                 </select>
                     </div>   
                     <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
-                    <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Feet</option>
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
@@ -1539,8 +1720,8 @@ const formats = [
                                 </select>
                              </div>
                              <div className='col-md-6'></div>
-                             <div className="col-md-3"><label className="labels"> Covered Area</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                             <div className="col-md-3"><label className="labels"> Covered Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,covered_area:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Feet</option>
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
@@ -1548,16 +1729,16 @@ const formats = [
                                 </select>
                              </div>
                              <div className='col-md-6'></div>
-                             <div className="col-md-3"><label className="labels"> Carpet Area</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                             <div className="col-md-3"><label className="labels"> Carpet Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,carpet_area:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Feet</option>
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
                                 <option>All Users</option>
                                 </select>
                              </div>
-                             <div className="col-md-3"><label className="labels"> Loading</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                             <div className="col-md-3"><label className="labels"> Loading</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,loading:e.target.value})}/></div>
+                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>%</option>
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
@@ -1568,8 +1749,8 @@ const formats = [
                             </div>
 
                             <div className='row' id='plotsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Yard</option>
                                 <option>Sq Feet</option>
                                 <option>Plot</option>
@@ -1578,16 +1759,16 @@ const formats = [
                              </div>
                              <div className='col-md-6'></div>
                 
-                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Carpet Area</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Carpet Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Yard</option>
                                 <option>Sq Feet</option>
                                 <option>Plot</option>
                                 <option>All Users</option>
                                 </select>
                              </div>
-                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Loading</label><input type='text' className='form-control form-control-sm'/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Loading</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_area:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
                                 <option>All Users</option>
@@ -1601,7 +1782,7 @@ const formats = [
                 
           </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addcontact}>
+            <Button variant="secondary" onClick={addsize}>
                 Add Size
               </Button>
               <Button variant="secondary" onClick={handleClose2}>
@@ -1644,30 +1825,58 @@ const formats = [
           <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Lattitude</StyledTableCell>
           <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Longitude</StyledTableCell>
           <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Builtup Details</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
          
-        data.map ((item, index) => (
+        project.add_unit.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
-             <img src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' style={{height:"30px"}}/>
-             
+             {item.unit_no}
             </StyledTableCell>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
-              {item.title} {item.first_name} {item.last_name}<br></br>
-              {item.designation}
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.block}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.category}
             </StyledTableCell>
-           
-                <StyledTableCell >
-                {item.mobile_no.join(',')}<br></br>
-                {item.email.join(',')}
-                </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.unit_type}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.size}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.direction}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.road}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.facing}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.ownership}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.lattitude}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.langitude}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             {item.type}
+            </StyledTableCell>
+            
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+              <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteunit(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+            </StyledTableCell>
               
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
     </Table>
     </TableContainer>
 
@@ -1686,8 +1895,8 @@ const formats = [
             <div style={{width:"100%"}}>
             <div className="row" id='unitdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -1696,48 +1905,62 @@ const formats = [
                     </div>
                     <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Residential</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Commercial</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Agricultural</button></div>
-                        <div className="col-md-3"><button className='form-control form-control-sm' onClick={(e)=>e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green'}>Institutional</button></div>
+                      <div className="col-md-12" style={{display:"flex",flexWrap:"wrap"}} >
+                       {
+                        project.category.map((type)=>
+                        (
+                          <div className="col-md-3" key={type}>
+                          <button 
+                              className='form-control form-control-sm' 
+                          >
+                              {type}
+                          </button>
+                      </div>
+                        ))
+                       }
+                    </div>
                     </div>
 
-                    <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
+                    {
+                                project.add_block.map((item)=>
+                                (
+                                  <option>{item.block_name}</option>
+                                ))
+                               }
+                                </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
+                    {
+                                project.add_size.map((item)=>
+                                (
+                                  <option>{item.size_name}</option>
+                                ))
+                               }
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
-                                </select>
-                    </div>
-                    <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
-                                </select>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -1747,44 +1970,28 @@ const formats = [
                     <div className='col-md-6'></div>
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
-                    <div className='col-md-6' ><label className='labels'>Type</label>
-                    {
-                      contact.type.map((item,index)=>
-                      (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
+                    <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                           <option>select</option><option>Duplex</option><option>Single</option>
                         </select>
-                      ))
-                    }
                     </div>
-                    <div className='col-md-4' style={{border:"1px solid black",borderBottom:"none"}}><label className='labels'>Floor</label>
+                    <div className='col-md-6'></div>
+                  
+                    <div className='row mt-2' style={{border:"1px dashed black",margin:"10px",marginTop:"0",padding:"10px",width:"100%"}}>
+                    <div className='col-md-2' ><label className='labels'>Floor</label>
                     {
-                      contact.floor.map((item,index)=>
+                      units.floor.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
                       ))
                     }
                     </div>
-                    <div className='col-md-1' style={{marginTop:"90px"}}>
-                    {
-                      contact.action2.map((item,index)=>
-                      (
-                        
-                            <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                        
-                      ))
-                    }
-                    </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn2}>+</button></div>
-                   
-                    <div className='row' style={{border:"1px dashed black",margin:"10px",marginTop:"0",padding:"10px",width:"100%"}}>
                     <div className='col-md-2' ><label className='labels' style={{width:"500px"}}>Cluter Details</label>
                     {
-                      contact.cluter.map((item,index)=>
+                      units.cluter_details.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
                           <option>select</option><option>Duplex</option><option>Single</option>
                         </select>
                       ))
@@ -1792,9 +1999,9 @@ const formats = [
                     </div>
                     <div className='col-md-2' ><label className='labels'>Length</label>
                     {
-                      contact.length.map((item,index)=>
+                      units.length.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlelengthchange(index,event)}>
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
                       ))
@@ -1802,9 +2009,9 @@ const formats = [
                     </div>
                     <div className='col-md-2' ><label className='labels'>Breadth</label>
                     {
-                      contact.breadth.map((item,index)=>
+                      units.bredth.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlebredthchange(index,event)}>
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
                       ))
@@ -1812,27 +2019,18 @@ const formats = [
                     </div>
                       <div className='col-md-2' ><label className='labels'>Total Area</label>
                     {
-                      contact.total_area.map((item,index)=>
+                      units.total_area.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handletotalarea(index,event)}>
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
                       ))
                     }
                     </div>
-                    <div className='col-md-2' ><label className='labels'>Measurement</label>
-                    {
-                      contact.meseaurment.map((item,index)=>
-                      (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}}>
-                          <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
-                        </select>
-                      ))
-                    }
-                    </div>
+                   
                     <div className='col-md-1' style={{marginTop:"90px"}}>
                     {
-                      contact.action3.map((item,index)=>
+                      units.action3.map((item,index)=>
                       (
                         
                             <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
@@ -1843,11 +2041,11 @@ const formats = [
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
                     </div>
 
-                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm'/></div>
-                    <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm'/></div>
+                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                    <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
                     
 
-                    <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm"  onChange={selectsize}>
+                    <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm" onChange={(e)=>setunits({...units,furnishing_details:e.target.value})}>
                                 <option>Select</option>
                                 <option>Apartment</option>
                                 <option>Plot</option>
@@ -1856,7 +2054,7 @@ const formats = [
                     </div>   
                     <div className='col-md-6'></div>
 
-                    <div className='col-md-8'><label>Furnished Items</label><input type='text' className='form-control form-control-sm'/></div>
+                    <div className='col-md-8'><label>Furnished Items</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,furnished_item:e.target.value})}/></div>
                  
                 </div>
                 </div>
@@ -1880,12 +2078,12 @@ const formats = [
                             </LoadScript>
                           </div>
                           <div className="row">
-                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
+                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" value={project.location}/></div>
                           {/* <div className='col-md-5'></div> */}
                           <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit}>Get</button></div>
                           <div className='col-md-4'></div>
-                          <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={coordinates.lat} readOnly/></div>
-                          <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={coordinates.lng} readOnly/></div>
+                          <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={project.lattitude} readOnly/></div>
+                          <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={project.langitude} readOnly/></div>
                           </div>
                           </div>
            
@@ -1896,7 +2094,7 @@ const formats = [
                 
           </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addcontact}>
+            <Button variant="secondary" onClick={addunit}>
                 Add Unit
               </Button>
               <Button variant="secondary" onClick={handleClose3}>
@@ -1992,7 +2190,7 @@ const formats = [
       </TableHead>
       <tbody>
         {
-          destinationdetails.map((item, index) => (
+          project.nearby_aminities.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
             <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
               {index+1}
@@ -2041,23 +2239,24 @@ const formats = [
           
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
-          destinationdetails.map((item, index) => (
+          project.price_list.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
             <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
-              {index+1}
+             {item.block}
             </StyledTableCell>
-            <StyledTableCell >{item.name_of_destination} </StyledTableCell>
-            <StyledTableCell >{item.destination} </StyledTableCell>
-            <StyledTableCell >{item.distance}{item.measurment} </StyledTableCell> 
+            <StyledTableCell >{item.sub_category} </StyledTableCell>
+            <StyledTableCell >{item.size} </StyledTableCell>
+            <StyledTableCell >{item.blank1}</StyledTableCell> 
+            <StyledTableCell >{item.blank4}</StyledTableCell> 
             <StyledTableCell >
-              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/>
+              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteprice(index)}   style={{height:"40px",cursor:"pointer"}}/>
             </StyledTableCell>
               
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
     </Table>
     </TableContainer>
 
@@ -2069,35 +2268,29 @@ const formats = [
               <div className='row'>
               <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Base Price</u></label></div>
               <div className='col-md-12'><hr></hr></div>
-            <div className="col-md-4"><label className="labels">Block</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+            <div className="col-md-4"><label className="labels">Block</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,block:e.target.value})}>
+                                <option>{block.block_name}</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                    <div className="col-md-4"><label className="labels">Category</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,category:e.target.value})}>
+                            
+                       {
+                        project.category.map((type)=>
+                        (
+                        <option>{type}</option>
+                        ))
+                       }
+                        </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Sub Category</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,sub_category:e.target.value})}>
+                                <option>{project.sub_category}</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Sub Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                    <div className="col-md-8"><label className="labels">Size</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,size:e.target.value})}>
+                                <option>{size.size_name}</option>
                                 </select>
                     </div>
-                    <div className="col-md-8"><label className="labels">Size</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
-                                </select>
-                    </div>
-                    <div className="col-md-4"><label className="labels">Covered Area</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Covered Area</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,covered_area:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -2109,14 +2302,14 @@ const formats = [
 
                     <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Charges</u></label></div>
                   <div className='col-md-12'><hr></hr></div>
-                  <div className="col-md-4"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                  <div className="col-md-4"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,name:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,type:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -2125,22 +2318,22 @@ const formats = [
                     </div>
                     <div className='col-md-4'></div>
 
-                    <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,calculation_type:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>calculation_type</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Percentage</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>blank1</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setprices({...prices,blank1:e.target.value})}></input></div><br></br>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>blank2</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,blank2:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Base Type</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>blank3</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,blank3:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -2150,14 +2343,14 @@ const formats = [
 
                     <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Taxes</u></label></div>
                   <div className='col-md-12'><hr></hr></div>
-                  <div className="col-md-5"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                  <div className="col-md-5"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,name1:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-5"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className="col-md-5"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,type1:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -2166,21 +2359,21 @@ const formats = [
                     </div>
                     <div className='col-md-2'></div>
 
-                    <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,calculation_type1:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className='col-md-4'><label className='labels' style={{visibility:"hidden"}}>Amount</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
+                    <div className='col-md-4'><label className='labels' style={{visibility:"hidden"}}>blank4</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setprices({...prices,blank4:e.target.value})}></input></div><br></br>
                    
                     
                   </div>
     </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addcontact}>
-                Save
+            <Button variant="secondary" onClick={addprice}>
+                Add Price
               </Button>
               <Button variant="secondary" onClick={handleClose4}>
                 Close
@@ -2196,32 +2389,27 @@ const formats = [
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block Name.</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sub Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Charge</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Taxes</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Total Price</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Serial</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Plan Name</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
           
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
-          destinationdetails.map((item, index) => (
+          project.Payment_plan.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
             <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
               {index+1}
             </StyledTableCell>
-            <StyledTableCell >{item.name_of_destination} </StyledTableCell>
-            <StyledTableCell >{item.destination} </StyledTableCell>
-            <StyledTableCell >{item.distance}{item.measurment} </StyledTableCell> 
+            <StyledTableCell >{item.payment_planname} </StyledTableCell>
             <StyledTableCell >
-              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/>
+              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletepayment(index)}   style={{height:"40px",cursor:"pointer"}}/>
             </StyledTableCell>
               
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
     </Table>
     </TableContainer>
     <Modal show={show5} onHide={handleClose5} size='lg'>
@@ -2230,23 +2418,23 @@ const formats = [
             </Modal.Header>
             <Modal.Body>
               <div className='row'>
-              <div className='col-md-6'><label className='labels'>Payment Plan Name</label><input type='text' className='form-control form-control-sm'></input></div>
+              <div className='col-md-6'><label className='labels'>Payment Plan Name</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setpayments({...payments,payment_planname:e.target.value})}></input></div>
               <div className='col-md-6'></div>
 
               <div className='col-md-2'><label className='labels'>Step Name</label>
             {
-              contact.step_name.map((item,index)=>
+              payments.step_name.map((item,index)=>
               (
-                <input type='text' className='form-control form-control-sm' style={{marginTop:"10px"}}></input>
+                <input type='text' className='form-control form-control-sm' style={{marginTop:"10px"}} onChange={(event)=>handlestepnamechange(index,event)}></input>
               ))
             }
             </div>
 
             <div className='col-md-2'><label className='labels' style={{width:"200px"}}>Calculation Type</label>
             {
-              contact.calculation_type.map((item,index)=>
+              payments.calculation_type.map((item,index)=>
               (
-              <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+              <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecalculationtypechange(index,event)}>
                 <option>Select</option>
                 <option>My Team</option>
                 <option>My Self</option>
@@ -2258,9 +2446,9 @@ const formats = [
 
             <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank1</label>
              {
-              contact.blank1.map((item,index)=>
+              payments.blank1.map((item,index)=>
               (
-                <input type='text'style={{marginTop:"10px"}} className='form-control form-control-sm'></input>
+                <input type='text'style={{marginTop:"10px"}} className='form-control form-control-sm'onChange={(event)=>handleblank1change(index,event)}></input>
                 
               ))
             }
@@ -2268,9 +2456,9 @@ const formats = [
 
             <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank2</label>
             {
-              contact.blank2.map((item,index)=>
+              payments.blank2.map((item,index)=>
               (
-               <input type='text' style={{marginTop:"10px"}} className='form-control form-control-sm'></input>
+               <input type='text' style={{marginTop:"10px"}} className='form-control form-control-sm' onChange={(event)=>handleblank2change(index,event)}></input>
                
               ))
             }
@@ -2278,9 +2466,9 @@ const formats = [
 
              <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank3</label>
               {
-              contact.blank3.map((item,index)=>
+              payments.blank3.map((item,index)=>
               (
-                <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handleblank3change(index,event)}>
                 <option>Select</option>
                 <option>My Team</option>
                 <option>My Self</option>
@@ -2293,7 +2481,7 @@ const formats = [
 
              <div className='col-md-1' style={{marginTop:"90px"}}>
               {
-              contact.action4.map((item,index)=>
+              payments.action4.map((item,index)=>
               (
                <img   src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)} style={{height:"40px",cursor:"pointer"}}/>
               ))
@@ -2312,8 +2500,8 @@ const formats = [
               </div>
     </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addcontact}>
-                Save
+            <Button variant="secondary" onClick={addpayment}>
+                Add Payment
               </Button>
               <Button variant="secondary" onClick={handleClose5}>
                 Close
@@ -2335,7 +2523,7 @@ const formats = [
                 <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
                     <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
                     <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Project</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addproject}>Save</button></div>
                     </div>
             </div>
         </div>
