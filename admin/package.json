@@ -10,7 +10,7 @@
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
     "@mobiscroll/react-lite": "^4.10.9",
-    "@mui/icons-material": "^5.16.5",
+    "@mui/icons-material": "^5.16.5", 
     "@mui/material": "^5.16.5",
     "@mui/x-date-pickers": "^7.8.0",
     "@react-google-maps/api": "^2.19.3",

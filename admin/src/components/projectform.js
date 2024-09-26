@@ -20,6 +20,8 @@ import Modal from 'react-bootstrap/Modal';
 import {React, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { Select, MenuItem, Checkbox, ListItemText, FormControl, InputLabel } from '@mui/material';
+
 
 
 
@@ -57,8 +59,8 @@ function Projectform() {
     const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
                                           category:[],sub_category:"",land_area:"",measurment1:"",total_block:"",total_floor:"",
                                           total_units:"",status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
-                                          approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:"",
-                                          team:"",visible_to:"",
+                                          approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
+                                          team:[],visible_to:"",
                          
                                           location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
 
@@ -946,50 +948,9 @@ function Projectform() {
 // ================================------------------------add unit end========================================----------------------------
 
 
-                                    const residentialcategory=(e)=>
-                                    {
-                                      
-                                        e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
-                                        setblock((prevProfile) => ({
-                                            ...prevProfile,
-                                            category: "Residential"
-                                        }))
+                                 
+                              
                                     
-                                        
-                                    }
-                                    const commercialcategory=(e)=>
-                                      {
-                                        
-                                          e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
-                                          setblock((prevProfile) => ({
-                                              ...prevProfile,
-                                              category: "Commercial"
-                                          }))
-                                      
-                                          
-                                      }
-                                      const agriculturalcategory=(e)=>
-                                        {
-                                          
-                                            e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
-                                            setblock((prevProfile) => ({
-                                                ...prevProfile,
-                                                category: "Agricultural"
-                                            }))
-                                        
-                                            
-                                        }
-                                      const institutionalcategory=(e)=>
-                                        
-                                          {
-                                            e.target.style.backgroundColor = e.target.style.backgroundColor === 'green' ? '' : 'green';
-                                            setblock((prevProfile) => ({
-                                                ...prevProfile,
-                                                category: "Institutional"
-                                            }))
-                                        
-                                            
-                                        }
 // -------------------------==========================destinations add and delete code start---------------------------------====================
 
                     const[destinationdetails,setdestinationdetails]=useState([])
@@ -1155,7 +1116,92 @@ function Projectform() {
                   });
                 };
                 const isSelected = (type) => project.category.includes(type);
+                const getSubcategories = () => {
+                  const subcategories = [];
+                  if (isSelected('Residential')) {
+                      subcategories.push('Plot', 'Indenpendent House','Flat/Apartment','Builder Floor');
+                  }
+                  if (isSelected('Commercial')) {
+                    subcategories.push('Shop','Showroom','Office Space','Retail Store','Soho','Excutive Room','Multiplex','Virtual Space','Plot');
+                  }
+                  if (isSelected('Agricultural')) {
+                      subcategories.push('Land','Farm House');
+                  }
+                  if (isSelected('Industrial')) {
+                    subcategories.push('Plot','Ware House','Cold Storage','Rice Seller','Building','Factory');
+                  }
+                if (isSelected('Institutional')) {
+                  subcategories.push('School','Hotel','Universities','Hospital','Collage');
+                }
+                  return subcategories;
+              };
+                
+                const baseprice=()=>
+                {
+                  document.getElementById("baseprice").style.display="flex"
+                  document.getElementById("baseprice1").style.color="green"
+                  document.getElementById("charges").style.display="none"
+                  document.getElementById("charges1").style.color="black"
+                  document.getElementById("taxes").style.display="none"
+                  document.getElementById("taxes1").style.color="black"
+                }
+                const charges=()=>
+                  {
+                    document.getElementById("baseprice").style.display="none"
+                    document.getElementById("baseprice1").style.color="black"
+                    document.getElementById("charges").style.display="flex"
+                    document.getElementById("charges1").style.color="green"
+                    document.getElementById("taxes").style.display="none"
+                    document.getElementById("taxes1").style.color="black"
+                  }
+                  const taxes=()=>
+                    {
+                      document.getElementById("baseprice").style.display="none"
+                      document.getElementById("baseprice1").style.color="black"
+                      document.getElementById("charges").style.display="none"
+                      document.getElementById("charges1").style.color="black"
+                      document.getElementById("taxes").style.display="flex"
+                      document.getElementById("taxes1").style.color="green"
+                    }
 
+                    const ownersList = [
+                      'Suraj',
+                      'Suresh Kumar',
+                      'Ramesh Singh',
+                      'Maanav Sharma',
+                      'Sukram'
+                  ];
+                    const [owners, setOwners] = useState([]);
+
+                    const handleOwnerChange = (event) => {
+                      const {
+                          target: { value },
+                      } = event;
+              
+                      const selectedOwners = typeof value === 'string' ? value.split(',') : value;
+              
+                      setOwners(selectedOwners);
+                      setproject({ ...project, owner: selectedOwners });
+                  };
+
+                  const teamlist = [
+                    'Sales',
+                    'Marketing',
+                    'Post Sales',
+                    'Pre Sales'
+                ];
+                  const [teams, setteams] = useState([]);
+
+                  const handleteamchange = (event) => {
+                    const {
+                        target: { value },
+                    } = event;
+            
+                    const selectedteam = typeof value === 'string' ? value.split(',') : value;
+            
+                    setteams(selectedteam);
+                    setproject({ ...project, team: selectedteam });
+                };
 
     return ( 
         <div>
@@ -1207,7 +1253,7 @@ function Projectform() {
                         <div className='col-md-1'><label style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={add_developer}>+</button></div>
                         <div className='col-md-5'></div>
                         <div className="col-md-6"><input  type='checkbox' onChange={handleischeckedchange} checked={ischecked} /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
-                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select id='secondarydeveloper' className="form-control form-control-sm" required="true" disabled={!ischecked} onChange={(e)=>setproject({...project,secondary_developer:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select id='secondarydeveloper'  className="form-control form-control-sm" required="true" disabled={!ischecked} onChange={(e)=>setproject({...project,secondary_developer:e.target.value})}>
                               <option>Select</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -1240,16 +1286,13 @@ function Projectform() {
                 </div>
             ))}
         </div>
-                    <div className="col-md-6"><label className="labels">Sub Category</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,sub_category:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Sub Category</label><select id='subcategory' className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,sub_category:e.target.value})}>
                               <option>Select</option>
-                              <option>Apartment</option>
-                              <option>Plot</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              {getSubcategories().map((subCategory) => (
+                        <option key={subCategory} value={subCategory}>
+                            {subCategory}
+                        </option>
+                    ))}
                         </select>
                     </div>
                     <div className="col-md-6"></div>
@@ -1387,22 +1430,37 @@ function Projectform() {
 
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setproject({...project,owner:e.target.value})}>
-                    <option>Select</option>
-                              <option>Suraj</option> 
-                              <option>Suresh Kumar</option>
-                              <option>Ramesh Singh</option>
-                              <option>Maanav Sharma</option>
-                              <option>Sukram</option>
-                        </select></div>
+                    <div className="col-md-6"><label className="labels">Owner</label>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={owners}
+                    onChange={handleOwnerChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {ownersList.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={owners.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                    </div>
                   
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setproject({...project,team:e.target.value})}>
-                              <option>Select</option> 
-                              <option>Sales</option>
-                              <option>Marketing</option>
-                              <option> Post Sales</option>
-                              <option> Pre Sales</option>
-                        </select>
+                        <div className="col-md-6"><label className="labels">Team</label>
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={teams}
+                    onChange={handleteamchange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {teamlist.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={teams.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+
                     </div>
                   
                         <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setproject({...project,visible_to:e.target.value})}>
@@ -1495,11 +1553,11 @@ function Projectform() {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sub-Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Status</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }} >Block Name</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Sub-Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Status</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
@@ -1507,19 +1565,19 @@ function Projectform() {
          
         project.add_block.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell >
             {item.block_name}
              </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <StyledTableCell >
             {item.category}
              </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <StyledTableCell >
             {item.sub_category}
              </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <StyledTableCell >
             {item.status}
              </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <StyledTableCell >
              <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteblock(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
              </StyledTableCell>
               
@@ -1632,11 +1690,11 @@ function Projectform() {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sub-Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Block Name</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Sub-Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Size</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
@@ -1644,19 +1702,19 @@ function Projectform() {
          
         project.add_size.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.block1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.category}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.sub_category}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.size_name}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletesize(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
             </StyledTableCell>
               
@@ -1813,19 +1871,19 @@ function Projectform() {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Unit No.</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Unit Type</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Direction</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Road</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Facing</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Ownership</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Lattitude</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Longitude</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Builtup Details</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Unit No.</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Block</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Unit Type</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Size</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Direction</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Road</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Facing</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Ownership</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Lattitude</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Longitude</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Builtup Details</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
@@ -1833,40 +1891,40 @@ function Projectform() {
          
         project.add_unit.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.unit_no}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.block}
              </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.category}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.unit_type}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.size}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.direction}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.road}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.facing}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.ownership}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.lattitude}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.langitude}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.type}
             </StyledTableCell>
             
@@ -2180,11 +2238,11 @@ function Projectform() {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sr.</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Name Of Destination</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Type Of Destination</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Distance</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Sr.</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Name Of Destination</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Type Of Destination</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Distance</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Action</StyledTableCell>
           
         </TableRow>
       </TableHead>
@@ -2230,12 +2288,12 @@ function Projectform() {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Block Name.</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Sub Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Charge</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Taxes</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Total Price</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Block Name</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Sub Category</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Size</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Charge</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Taxes</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Total Price</StyledTableCell>
           
         </TableRow>
       </TableHead>
@@ -2266,8 +2324,8 @@ function Projectform() {
             </Modal.Header>
             <Modal.Body>
               <div className='row'>
-              <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Base Price</u></label></div>
-              <div className='col-md-12'><hr></hr></div>
+              <div className='col-md-12'  style={{marginTop:"20px",display:"flex",gap:"30px"}}> <u id='baseprice1' onClick={baseprice} style={{cursor:"pointer",fontWeight:"bold"}}>Base Price</u><u id='charges1' onClick={charges} style={{cursor:"pointer",fontWeight:"bold"}}>Charges</u><u id='taxes1' onClick={taxes} style={{cursor:"pointer",fontWeight:"bold"}}>Taxes</u></div>
+              <div className='row' id='baseprice' style={{marginTop:"20px",padding:"30px"}}><hr></hr>
             <div className="col-md-4"><label className="labels">Block</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,block:e.target.value})}>
                                 <option>{block.block_name}</option>
                                 </select>
@@ -2299,8 +2357,9 @@ function Projectform() {
                     </div>
                     <div className='col-md-6'><label className='labels'>Base Rate</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
                     <div className='col-md-6'></div>
+                    </div>
 
-                    <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Charges</u></label></div>
+                    <div className='row' id='charges' style={{marginTop:"20px",padding:"30px",display:"none"}}>
                   <div className='col-md-12'><hr></hr></div>
                   <div className="col-md-4"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,name:e.target.value})}>
                                 <option>Select</option>
@@ -2340,8 +2399,8 @@ function Projectform() {
                                 <option>All Users</option>
                                 </select>
                     </div>
-
-                    <div className='col-md-12' style={{marginTop:"20px"}}> <label className='labels' style={{fontWeight:"bold"}}><u>Taxes</u></label></div>
+                    </div>
+                    <div className='row' id='taxes' style={{marginTop:"20px",padding:"30px",display:"none"}}>
                   <div className='col-md-12'><hr></hr></div>
                   <div className="col-md-5"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,name1:e.target.value})}>
                                 <option>Select</option>
@@ -2367,8 +2426,7 @@ function Projectform() {
                                 </select>
                     </div>
                     <div className='col-md-4'><label className='labels' style={{visibility:"hidden"}}>blank4</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setprices({...prices,blank4:e.target.value})}></input></div><br></br>
-                   
-                    
+                   </div>
                   </div>
     </Modal.Body>
             <Modal.Footer>
@@ -2389,9 +2447,9 @@ function Projectform() {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Serial</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Plan Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>Action</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Serial</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Plan Name</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
           
         </TableRow>
       </TableHead>

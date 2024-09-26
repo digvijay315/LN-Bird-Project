@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+.labels
+{
+  font-size: 16px;
+}
+StyledTableCell
+{
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+}

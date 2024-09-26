@@ -28,7 +28,7 @@ import SuggestionBox from './components/demo';
 import Adddeveloper from './components/adddeveloper';
 import Projectform from './components/projectform';
 import Deal from './components/deal';
-
+import '../src/App.css';
 
 function App() {
   return (
