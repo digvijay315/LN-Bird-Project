@@ -50,7 +50,7 @@ function Meeting_task_form() {
                 <hr></hr>
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control" required="true" onChange={(e)=>setmeetingtask({...meetingtask,activity_type:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,activity_type:e.target.value})}>
                     <option>Select </option>
                         {
                             activity.map(item=>
@@ -61,7 +61,7 @@ function Meeting_task_form() {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
                        
                         </select>
@@ -69,14 +69,14 @@ function Meeting_task_form() {
                     <div className="col-md-4"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control" required="true" onChange={(e)=>setmeetingtask({...meetingtask,lead:e.target.value})}>
+                <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,lead:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
                         <div className="col-md-8">
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
                     <option>Select</option>
                         {
                             location.map(item=>
@@ -89,21 +89,21 @@ function Meeting_task_form() {
                         </div>
                     <div className="col-md-8"></div>
 
-                    <div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" className="form-control"onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" className="form-control form-control-sm"onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control" required="true" onChange={(e)=>setmeetingtask({...meetingtask,reason:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,reason:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Inventory</label><select className="form-control" required="true" onChange={(e)=>setmeetingtask({...meetingtask,inventory:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,inventory:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
 
-                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control' style={{height:"100px"}} /></div>
+                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} /></div>
 
                     <div className="col-md-6"><label className="labels">Remind me?</label> 
                     <label class="switch">
@@ -117,11 +117,11 @@ function Meeting_task_form() {
                         <span class="slider round"></span>
                         </label>
                     </div>
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
                     </div>
                     <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control" onClick={meetingtaskdetails}>Submit</button></div>
-                    <div className="col-md-6"><button className="form-control">Cancel</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm" onClick={meetingtaskdetails}>Submit</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
                     </div>
                     <ToastContainer/>
                     </div>

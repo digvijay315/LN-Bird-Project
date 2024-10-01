@@ -29,6 +29,8 @@ import Adddeveloper from './components/adddeveloper';
 import Projectform from './components/projectform';
 import Deal from './components/deal';
 import '../src/App.css';
+import BankSelector from './components/demo1';
+import Tasks from './components/tasks.js';
 
 function App() {
   return (
@@ -55,11 +57,12 @@ function App() {
       <Route path='/project' element={<Projectform/>}/>
       <Route path='/adddeveloper' element={<Adddeveloper/>}/>
       <Route path='/deal' element={<Deal/>}/>
+      <Route path='/tasks' element={<Tasks/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}
     {/* <Projectform/> */}
-  
+  {/* <BankSelector/> */}
    </div>
    </BrowserRouter>
   );

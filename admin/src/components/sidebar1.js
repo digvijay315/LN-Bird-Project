@@ -54,16 +54,10 @@ function Sidebar1() {
 						</Link>
 					</li>
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<Link to={'/tasks'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Tasks</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="font-awesome.html">Manage All Tasks</a></li>
-							<li><Link to={'/calltaskform'}>Add Call Task</Link></li>
-							<li><Link to={'/mailtaskform'}>Add Mail Task</Link></li>
-							<li><Link to={'/meetingtaskform'}>Add Meeting Task</Link></li>
-							<li><Link to={'/sitevisitform'}>Add Site Visit Task</Link></li>
-						</ul>
+						</Link>
+					
 					</li>
 				
 					<li class="dropdown">

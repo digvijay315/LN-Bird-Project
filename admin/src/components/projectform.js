@@ -20,7 +20,7 @@ import Modal from 'react-bootstrap/Modal';
 import {React, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Select, MenuItem, Checkbox, ListItemText, FormControl, InputLabel } from '@mui/material';
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 
 
@@ -1202,7 +1202,41 @@ function Projectform() {
                     setteams(selectedteam);
                     setproject({ ...project, team: selectedteam });
                 };
+                const bankOptions = [
+                  { value: 'sbi', label: 'State Bank of India', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/SBI-logo.svg/2048px-SBI-logo.svg.png' },
+                  { value: 'hdfc', label: 'HDFC Bank', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPiQARLn9IY-nzbl9wU0-IHn6_lcfZvCa76w&s' },
+                  { value: 'icici', label: 'ICICI Bank', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd2SufMo9hay75vGgsFcIX0kbzn1fCuOPQqg&s' },
+                  { value: 'axis', label: 'Axis Bank', logo: 'https://download.logo.wine/logo/Axis_Bank/Axis_Bank-Logo.wine.png' },
+                  { value: 'punjab_national', label: 'Punjab National Bank', logo: 'https://iconape.com/wp-content/files/ek/208557/svg/208557.svg' },
+                  { value: 'bank_of_baroda', label: 'Bank of Baroda', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPjV3MWR0PoGMFoqLEgZe5RUF49lU-Z3Ofyw&s' },
+                  { value: 'union_bank', label: 'Union Bank of India', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIv2bcBKrbGxkjWvLX08z-80PgmL9v-SRvzA&s' },
+                  { value: 'kotak', label: 'Kotak Mahindra Bank', logo: 'https://seekvectors.com/files/download/Kotak%20Mahindra%20Bank.png' },
+              ];
+              const [selectedBanks, setSelectedBanks] = useState([]);
 
+              const handleChange = (event) => {
+                  const value = event.target.value;
+                  setSelectedBanks(value);
+          
+                  // Map selected values to include both name and logo
+                  const approvedBanks = value.map((bankValue) => {
+                      const option = bankOptions.find(opt => opt.value === bankValue);
+                      return {
+                          name: option.label,
+                          logo: option.logo,
+                      };
+                  });
+          
+                  // Update project state with approved banks
+                  setproject(prevState => ({
+                      ...prevState,
+                      approved_bank: approvedBanks
+                  }));
+              };
+        
+            
+            
+              
     return ( 
         <div>
             <div id='h'><Header1/></div>
@@ -1346,16 +1380,24 @@ function Projectform() {
                         </select>
                        </div>
                        <div className="col-md-6"><label className="labels">Approved Bank</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,approved_bank:e.target.value})}>
-                              <option>Upcoming</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
-                        </select>
+                       <Select className="form-control form-control-sm" style={{border:"none"}}
+                labelId="bank-select-label"
+                multiple
+                value={selectedBanks}
+                onChange={handleChange}
+                renderValue={(selected) => selected.map((value) => {
+                    const option = bankOptions.find(opt => opt.value === value);
+                    return option.label;
+                }).join(', ')}
+            >
+                {bankOptions.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                        <Checkbox checked={selectedBanks.indexOf(option.value) > -1} />
+                        <ListItemText primary={option.label} />
+                        <img src={option.logo} alt={option.label} style={{ width: 50, height: 40 }} />
+                    </MenuItem>
+                ))}
+            </Select>
                        </div>
                 <div className="col-md-2" > <label className="labels">Approvals</label>
                     {

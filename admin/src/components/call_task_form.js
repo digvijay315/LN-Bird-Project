@@ -49,7 +49,7 @@ function Call_task_form() {
                 <hr></hr>
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control" required="true" onChange={(e)=>setcalltask({...calltask,activity_type:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,activity_type:e.target.value})}>
                     <option>Select</option>
                         {
                             activity.map(item=>
@@ -60,7 +60,7 @@ function Call_task_form() {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Reason</label><select className="form-control" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
                     <option>Select</option>
                         {
                             reason.map(item=>
@@ -74,19 +74,19 @@ function Call_task_form() {
                     <div className="col-md-4"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control" required="true" onChange={(e)=>setcalltask({...calltask,lead:e.target.value})}>
+                <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,lead:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control' onChange={(e)=>setcalltask({...calltask,remarks:e.target.value})}/></div>
+                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setcalltask({...calltask,remarks:e.target.value})}/></div>
 
                     <div className="col-md-6"><label className="labels">Remind me?</label> 
                     <label class="switch">
@@ -100,11 +100,11 @@ function Call_task_form() {
                         <span class="slider round"></span>
                         </label>
                     </div>
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control" onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
                     </div>
                     <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control" onClick={calltaskdetails}>Submit</button></div>
-                    <div className="col-md-6"><button className="form-control">Cancel</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm" onClick={calltaskdetails}>Submit</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
                     </div>
                     <ToastContainer/>
                     </div>

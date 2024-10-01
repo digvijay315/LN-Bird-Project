@@ -49,6 +49,28 @@
   {
     transition: 0.5s;
   }
+  #myLinks ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  #myLinks > ul > li {
+    position: relative; /* Important for positioning submenu */
+  }
+  
+  .submenu {
+    display: none; /* Hide by default */
+    position: absolute; /* Position it relative to the parent */
+    left: 100%; /* Align to the right of the parent */
+    top: 0; /* Align vertically with the parent */
+    background-color: white; /* Background for submenu */
+    z-index: 1; /* Make sure it appears above other elements */
+  }
+  
+  #myLinks > ul > li:hover .submenu {
+    display: block; /* Show on hover */
+  }
+  
  
 
   

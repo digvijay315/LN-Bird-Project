@@ -19,7 +19,7 @@ function Mail_task_complete_form() {
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control" required="true" >
+                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                         {
                             direction.map(item=>
@@ -30,7 +30,7 @@ function Mail_task_complete_form() {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control" required="true" >
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                         {
                             status.map(item=>
@@ -44,16 +44,16 @@ function Mail_task_complete_form() {
                     <div className="col-md-4"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control" /></div>
+                <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" /></div>
                 <div className="col-md-8"> </div>
 
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control'  style={{height:"100px"}}/></div>
+                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
                      </div>
                     <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control" >Submit</button></div>
-                    <div className="col-md-6"><button className="form-control">Cancel</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
                     </div>
                     </div>
                     </div>

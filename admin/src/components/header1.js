@@ -13,13 +13,22 @@ function Header1() {
 		  x.style.display = "block";
 		}
 	  }
-	  document.addEventListener('click', function(event) {
+	  document.addEventListener('DOMContentLoaded', function() {
+		// Ensure elements are available
 		var x = document.getElementById("myLinks");
 		var b = document.getElementById("btn");
-		if (event.target !==b ) {
-			x.style.display = "none";
+	
+		// Check if elements exist before adding the event listener
+		if (x && b) {
+			document.addEventListener('click', function(event) {
+				// Hide the menu if the click is outside the button
+				if (!b.contains(event.target) && !x.contains(event.target)) {
+					x.style.display = "none";
+				}
+			});
 		}
-	})
+	});
+	
 	const [show, setShow] = useState(false);
 
 	const handleClose = () => setShow(false);
@@ -38,6 +47,14 @@ function Header1() {
 				<li><Link to={'/addinventory'} class="dropdown-item">Inventory</Link></li>
 				<li><Link to={'/project'} class="dropdown-item">Project</Link></li>
 				<li><Link to={'/deal'} class="dropdown-item">Deal</Link></li>
+				<li><Link  class="dropdown-item">Add Task</Link>
+				<ul className="submenu">
+        			<li><Link to={'/calltaskform'} className="dropdown-item">Call Task </Link></li>
+        			<li><Link to={'/mailtaskform'} className="dropdown-item">Mail Task</Link></li>
+        			<li><Link to={'/meetingtaskform'} className="dropdown-item">Meeting Task</Link></li>
+					<li><Link to={'/sitevisitform'} className="dropdown-item">Site Visit Task</Link></li>
+      			</ul>
+				</li>
 			</ul>
   		</div>
 		</div>

@@ -52,7 +52,7 @@ function Site_visit() {
                 <hr></hr>
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,activity_type:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,activity_type:e.target.value})}>
                     <option>Select </option>
                         {
                             activity.map(item=>
@@ -65,12 +65,12 @@ function Site_visit() {
                         </div>
                         <div className="col-md-8"></div>
 
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})}>
                     <option>Select </option>
                        
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Project</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,project:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Project</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,project:e.target.value})}>
                     <option>Select </option>
                        {
                         project.map(item=>
@@ -83,7 +83,7 @@ function Site_visit() {
                         </div>
                         <div className="col-md-4"></div>
                     
-                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
                     <option>Select </option>
                        {
                         visittype.map(item=>
@@ -94,7 +94,7 @@ function Site_visit() {
                        }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Inventory</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,inventory:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,inventory:e.target.value})}>
                     <option>Select </option>
                        
                         </select>
@@ -102,12 +102,12 @@ function Site_visit() {
                         <div className="col-md-4"></div>
 
                          
-                        <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,lead:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,lead:e.target.value})}>
                     <option>Select </option>
                        
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
                     <option>Select </option>
                        <option>Confirmed</option>
                        <option>Tentative</option>
@@ -115,10 +115,10 @@ function Site_visit() {
                         </div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remarks:e.target.value})}/></div>
+                        <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remarks:e.target.value})}/></div>
                 </div>
                 <div className="row mt-3">
-                        <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
                     <option>Select</option>
                        
                         </select>
@@ -137,12 +137,12 @@ function Site_visit() {
                         <span class="slider round"></span>
                         </label>
                     </div>
-                    <div className="col-md-4"><label className="labels">Select Start Date</label><input type="date" className="form-control" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Select End Date</label><input type="date" className="form-control" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Start Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select End Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
                     </div>
                     <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control" onClick={sitevisitdetails}>Submit</button></div>
-                    <div className="col-md-6"><button className="form-control">Cancel</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm" onClick={sitevisitdetails}>Submit</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
                     </div>
                     <ToastContainer/>
                     </div>
