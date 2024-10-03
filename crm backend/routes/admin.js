@@ -9,7 +9,7 @@ const { add_project, view_project } = require('../controllers/add_project');
 const lead_info_requirment = require('../controllers/leadinfo_requirment');
 const mail_task_form = require('../controllers/mail_task_form');
 const call_task_form = require('../controllers/call_task_form');
-const meeting_task_form = require('../controllers/meeting_task_form');
+const {meeting_task_form,viewmeeting_task} = require('../controllers/meeting_task_form');
 const site_visit_form = require('../controllers/site_visit_form');
 const booking_details = require('../controllers/booking_details');
 const addpayment_details = require('../controllers/addpayment_details');
@@ -54,7 +54,10 @@ router.post('/leadinforequirment',lead_info_requirment)
 
 router.post('/mailtask',mail_task_form)
 router.post('/calltask',call_task_form)
+
 router.post('/meetingtask',meeting_task_form)
+router.get('/viewmeetingtask',viewmeeting_task)
+
 router.post('/sitevisit',site_visit_form)
 
 router.post('/bookingdetails',booking_details)

@@ -347,63 +347,23 @@ const renderPageNumbers = () => {
 /*-------------------------------------------------------------------custome table settings start---------------------------------------------------------------------------- */                                                     
       
  
-const allColumns = [
+const sitevisitcolumns = [
         { id: 'sno', name: '#' },
-        { id: 'personaldetails', name: 'Personal Details' },
-        { id: 'mobile_type', name: 'Mobile Type' },
-        { id: 'email_type', name: 'Email Type' },
-        { id: 'designation', name: 'Designation' },
-        { id: 'company_name', name: 'Company Name' },
-        { id: 'tags', name: 'Tags' },
-        { id: 'father_husband_name', name: 'Father/Husband Name' },
-        { id: 'h_no', name: 'House No' },
-        { id: 'area1', name: 'Street Address' },
-        { id: 'location1', name: 'Location' },
-        { id: 'city1', name: 'City' },
-        { id: 'pincode1', name: 'Pincode' },
-        { id: 'state1', name: 'State' },
-        { id: 'country1', name: 'Country' },
+        { id: 'lead', name: 'Lead' },
+        { id: 'project', name: 'Project' },
+        { id: 'date', name: 'Date' },
+        { id: 'scheduled_for', name: 'Scheduled For' },
+        { id: 'scheduled_by', name: 'Scheduled By' },
+        { id: 'agenda', name: 'Agenda' },
         { id: 'source', name: 'Source' },
-        { id: 'category', name: 'Category' },
-        { id: 'profession_category', name: 'Profession Category' },
-        { id: 'profession_subcategory', name: 'Profession Dub-Category' },
-        { id: 'company_name', name: 'Company Name' },
-        { id: 'country_code1', name: 'Country Code' },
-        { id: 'company_phone', name: 'Company Phone' },
-        { id: 'company_email', name: 'Company Email' },
-        { id: 'owner', name: 'Owner' },
-        { id: 'team', name: 'Team' },
-        { id: 'gender', name: 'Gender' },
-        { id: 'visible_to', name: 'Visible To' },
-        { id: 'maritial_status', name: 'Marital Status' },
-        { id: 'birth_date', name: 'Birth Date' },
-        { id: 'anniversary_date', name: 'Anniversary Date' },
-        { id: 'education', name: 'Education' },
-        { id: 'degree', name: 'Degree' },
-        { id: 'school_college', name: 'School/College' },
-        { id: 'loan', name: 'Loan' },
-        { id: 'bank', name: 'Bank' },
-        { id: 'amount', name: 'Amount' },
-        { id: 'social_media', name: 'Social Media' },
-        { id: 'url', name: 'URL' },
-        { id: 'income', name: 'Income' },
-        { id: 'amount1', name: 'Amount 1' },
-        { id: 'document_no', name: 'Document No' },
-        { id: 'document_name', name: 'Document Name' },
-        { id: 'industry', name: 'Industry' },
-        { id: 'area', name: 'Company Address' },
-        { id: 'location', name: 'Company Location' },
-        { id: 'city', name: 'Company City' },
-        { id: 'pincode', name: 'Company Pincode' },
-        { id: 'state', name: 'Company State' },
-        { id: 'country', name: 'Company Country' },
-        { id: 'company_social_media', name: 'Company Social Media' },
-        { id: 'company_url', name: 'Company Url' },
-        { id: 'descriptions', name: 'Descriptions' }
+        { id: 'feedback', name: 'Feedback' },
+        { id: 'status', name: 'Status' },
+        { id: 'action', name: 'Action' },
       ];
+      
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
       const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 11));
+      const [visibleColumns, setVisibleColumns] = useState(sitevisitcolumns.slice(1));
       const [showColumnList, setShowColumnList] = useState(false);
 
       const handleAddColumnClick = () => {
@@ -420,12 +380,7 @@ const allColumns = [
         }
       };
       const handleSelectAll = () => {
-        document.getElementById("delete").style.display="inline-block"
-        document.getElementById("search").style.display="none"
-        document.getElementById("edit").style.display="none"
-        document.getElementById("mail").style.display="inline-block"
-         document.getElementById("whatsapp").style.display="inline-block"
-         document.getElementById("message").style.display="inline-block"
+       
         setSelectAll(!selectAll);
         if (!selectAll) {
           // Add all current page item IDs to selectedItems
@@ -433,32 +388,96 @@ const allColumns = [
         } else {
           // Deselect all
           setSelectedItems([]);
-          document.getElementById("delete").style.display="none"
-          document.getElementById("search").style.display="flex"
-          document.getElementById("edit").style.display="none"
-          document.getElementById("mail").style.display="none"
-           document.getElementById("whatsapp").style.display="none"
-           document.getElementById("message").style.display="none"
+       
         }
       };
     
       const handleRowSelect = (id) => {
-        document.getElementById("delete").style.display="none"
-        document.getElementById("edit").style.display="none"
-        document.getElementById("mail").style.display="none"
-         document.getElementById("whatsapp").style.display="none"
-            document.getElementById("message").style.display="none"
-        document.getElementById("search").style.display="flex"
+     
         if (selectedItems.includes(id)) {
           setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
         } else {
           setSelectedItems([...selectedItems, id]);
-          document.getElementById("delete").style.display="inline-block"
-           document.getElementById("edit").style.display="inline-block"
-         document.getElementById("mail").style.display="inline-block"
-          document.getElementById("whatsapp").style.display="inline-block"
-             document.getElementById("message").style.display="inline-block"
-         document.getElementById("search").style.display="none"
+        
+        }
+      };
+
+      const followupcolumns = [
+        { id: 'sno', name: '#' },
+        { id: 'details', name: 'Details' },
+        { id: 'scheduled_date', name: 'Scheduled Date' },
+        { id: 'agenda', name: 'Agenda' },
+        { id: 'activity_type', name: 'Activity Type' },
+        { id: 'scheduled_by', name: 'Scheduled By' },
+        { id: 'scheduled_for', name: 'Scheduled For' },
+        { id: 'status', name: 'Status' },
+        { id: 'action', name: 'Action' },
+      ];
+      const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
+      const [selectAll1, setSelectAll1] = useState(false); // To track the state of the "Select All" checkbox
+      const [visibleColumns1, setVisibleColumns1] = useState(followupcolumns.slice(1));
+      const [showColumnList1, setShowColumnList1] = useState(false);
+
+      const handleSelectAll1 = () => {
+       
+        setSelectAll1(!selectAll1);
+        if (!selectAll1) {
+          // Add all current page item IDs to selectedItems
+          setSelectedItems1(currentItems.map((item) => item._id));
+        } else {
+          // Deselect all
+          setSelectedItems1([]);
+       
+        }
+      };
+    
+      const handleRowSelect1 = (id) => {
+     
+        if (selectedItems1.includes(id)) {
+          setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
+        } else {
+          setSelectedItems1([...selectedItems1, id]);
+        
+        }
+      };
+
+      
+      const meetingcolumns = [
+        { id: 'sno', name: '#' },
+        { id: 'details', name: 'Details' },
+        { id: 'scheduled_date', name: 'Scheduled Date' },
+        { id: 'agenda', name: 'Agenda' },
+        { id: 'activity_type', name: 'Activity Type' },
+        { id: 'scheduled_by', name: 'Scheduled By' },
+        { id: 'scheduled_for', name: 'Scheduled For' },
+        { id: 'status', name: 'Status' },
+        { id: 'action', name: 'Action' },
+      ];
+      const [selectedItems2, setSelectedItems2] = useState([]); // To track selected rows
+      const [selectAll2, setSelectAll2] = useState(false); // To track the state of the "Select All" checkbox
+      const [visibleColumns2, setVisibleColumns2] = useState(meetingcolumns.slice(1));
+      const [showColumnList2, setShowColumnList2] = useState(false);
+
+      const handleSelectAll2 = () => {
+       
+        setSelectAll2(!selectAll2);
+        if (!selectAll1) {
+          // Add all current page item IDs to selectedItems
+          setSelectedItems2(currentItems.map((item) => item._id));
+        } else {
+          // Deselect all
+          setSelectedItems2([]);
+       
+        }
+      };
+    
+      const handleRowSelect2 = (id) => {
+     
+        if (selectedItems2.includes(id)) {
+          setSelectedItems2(selectedItems2.filter((itemId) => itemId !== id));
+        } else {
+          setSelectedItems2([...selectedItems2, id]);
+        
         }
       };
 
@@ -959,6 +978,56 @@ const handleSort = (key) => {
   setSortConfig({ key, direction });
   setdata(sortedData)
 };
+
+const[ischecked,setischecked]=useState(false)
+const handleischeckedchange=(e)=>
+{
+  setischecked(e.target.checked)
+}
+
+const sitevisit=()=>
+{
+  document.getElementById("followup").style.display="none"
+  document.getElementById("followup1").style.backgroundColor="white"
+  document.getElementById("followup1").style.borderRadius="0px"
+
+  document.getElementById("sitevisit").style.display="block"
+  document.getElementById("sitevisit1").style.backgroundColor="gray"
+  document.getElementById("sitevisit1").style.borderRadius="10px"
+
+  document.getElementById("meeting").style.display="none"
+  document.getElementById("meeting1").style.backgroundColor="white"
+  document.getElementById("meeting1").style.borderRadius="0px"
+}
+const followup=()=>
+  {
+    document.getElementById("followup").style.display="block"
+    document.getElementById("followup1").style.backgroundColor="gray"
+    document.getElementById("followup1").style.borderRadius="10px"
+
+    document.getElementById("sitevisit").style.display="none"
+    document.getElementById("sitevisit1").style.backgroundColor="white"
+    document.getElementById("sitevisit1").style.borderRadius="0px"
+
+    document.getElementById("meeting").style.display="none"
+      document.getElementById("meeting1").style.backgroundColor="white"
+      document.getElementById("meeting1").style.borderRadius="0px"
+  }
+  const meeting=()=>
+    {
+
+      document.getElementById("meeting").style.display="block"
+      document.getElementById("meeting1").style.backgroundColor="gray"
+      document.getElementById("meeting1").style.borderRadius="10px"
+
+      document.getElementById("followup").style.display="none"
+      document.getElementById("followup1").style.backgroundColor="white"
+      document.getElementById("followup1").style.borderRadius="0px"
+  
+      document.getElementById("sitevisit").style.display="none"
+      document.getElementById("sitevisit1").style.backgroundColor="white"
+      document.getElementById("sitevisit1").style.borderRadius="0px"
+    }
         
 
     return ( 
@@ -978,9 +1047,9 @@ const handleSort = (key) => {
             <li  onClick={exportToExcel} >Export Data</li>
               
             </ul>
-            <label className="labels" style={{marginLeft:"30px",cursor:"pointer",width:"120px"}} onClick={pagereload}>Follow Up </label>
-            <label className="labels" style={{marginLeft:"30px",cursor:"pointer",width:"100px"}} onClick={pagereload}>Site Visit </label>
-            <label className="labels" style={{marginLeft:"30px",cursor:"pointer",width:"100px"}} onClick={pagereload}>Meeting </label>
+            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px"}} onClick={followup}>Follow Up </label>
+            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px"}} onClick={sitevisit}>Site Visit </label>
+            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px"}} onClick={meeting}>Meeting </label>
 
             <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"55%"}}>Add Task</button>
             <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Filter</button>
@@ -998,10 +1067,14 @@ const handleSort = (key) => {
         <div style={{cursor:"pointer"}}>Completed</div>
         <div style={{cursor:"pointer"}}>All</div>
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
-
-      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
-      
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
+      <input type="checkbox" onChange={handleischeckedchange}/>
+      <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"60%",position:"absolute"}}>
+           <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button>
+           <label className="labels" style={{width:"350px"}}>Sorted By Due Date</label>
+           </div>
+{/*       
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    
       <Tooltip title="Delete Data.." arrow>
@@ -1021,10 +1094,11 @@ const handleSort = (key) => {
       <Tooltip title="Send Message.." arrow>
       <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
       </Tooltip>
-      </div>
+      </div> */}
     
     
-      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute"}}>
+   
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
       <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
@@ -1038,7 +1112,7 @@ const handleSort = (key) => {
     </div>
         
 
-      <div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
+      {/* <div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
               
                 {showColumnList && (
                   <div
@@ -1056,7 +1130,7 @@ const handleSort = (key) => {
                     }}
                   >
                     <ul style={{ listStyleType: 'none', margin: 0, padding: '10px' }}>
-                      {allColumns.slice(2).map((col) => (
+                      {allColumns.map((col) => (
                         <li key={col.id} style={{ padding: '5px 0' }}>
                           <input
                             type="checkbox"
@@ -1069,28 +1143,28 @@ const handleSort = (key) => {
                     </ul>
                   </div>
                 )}
-              </div>
+              </div> */}
       
        
         
       </div>
      
-          <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+          <div id="followup" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>
             <input
               type="checkbox"
-              checked={selectAll}
-              onChange={handleSelectAll}
+              checked={selectAll1}
+              onChange={handleSelectAll1}
             />
           </StyledTableCell>
-          {visibleColumns.map((col) => (
+          {visibleColumns1.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", fontSize: "10px", cursor: 'pointer' }}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -1104,7 +1178,77 @@ const handleSort = (key) => {
          
         currentItems.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email}</span>
+            </StyledTableCell>
+            {visibleColumns1
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman", fontSize: "10px" }}
+                >
+                  {item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+      <div id="sitevisit" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>
+            <input
+              type="checkbox"
+              checked={selectAll}
+              onChange={handleSelectAll}
+            />
+          </StyledTableCell>
+          {visibleColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
                 type="checkbox"
                 checked={selectedItems.includes(item._id)}
@@ -1113,7 +1257,7 @@ const handleSort = (key) => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }} 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
             >
               {item.title} {item.first_name} {item.last_name}
@@ -1141,7 +1285,77 @@ const handleSort = (key) => {
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5>
+          {/* <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+      <div id="meeting" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>
+            <input
+              type="checkbox"
+              checked={selectAll2}
+              onChange={handleSelectAll2}
+            />
+          </StyledTableCell>
+          {visibleColumns2.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems2.includes(item._id)}
+                onChange={() => handleRowSelect2(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email}</span>
+            </StyledTableCell>
+            {visibleColumns2
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman", fontSize: "10px" }}
+                >
+                  {item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
         </footer>
       </div>
        

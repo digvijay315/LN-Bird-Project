@@ -144,9 +144,15 @@ function Deal() {
                      
                                   const[document1,setdocument1]=useState([])
                                   const[documents,setdocuments]=useState({document_name:"",document_no:"",document_Date:"",
-                                                                  linkded_contact:"",pic:""})
+                                                                  linkded_contact:"",pic:[]})
   
-                                    
+                                                                  const handlepicchange = (e) => {
+                                                                    const files = Array.from(e.target.files); // Get selected files
+                                                                    setdocuments((prevDocs) => ({
+                                                                      ...prevDocs,
+                                                                      pics: files, // Update pics in state
+                                                                    }));
+                                                                  };
 
                                     const adddocument = () => {
                                      
@@ -672,7 +678,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
                         <div className="col-md-2"><label className="labels">Document No</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setdocuments({...documents,document_no:e.target.value})} /></div>
                         <div className="col-md-2"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_Date:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels">Linked Contact</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div>
-                        <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Pic</label><input type="file" name="pic" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,pic:e.target.files[0]})}/></div>
+                        <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Pic</label><input type="file" name="pic" multiple className="form-control form-control-sm" onChange={handlepicchange}/></div>
                         <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={adddocument}>+</button></div>
                         <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">

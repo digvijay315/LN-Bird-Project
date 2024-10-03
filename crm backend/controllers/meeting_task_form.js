@@ -13,5 +13,17 @@ const meeting_task_form=async(req,res)=>
         }
 
     }
-    module.exports=meeting_task_form;
+    const viewmeeting_task=async(req,res)=>
+        {
+            try {
+                const resp= await meetingtask_form.find()
+    
+                  
+                        res.status(200).send({message:"meeting task details ",meetingtask:resp})
+            } catch (error) {
+                console.log(error)
+            }
+    
+        }
+    module.exports={meeting_task_form,viewmeeting_task};
     
