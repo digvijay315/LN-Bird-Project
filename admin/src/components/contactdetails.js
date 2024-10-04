@@ -1068,7 +1068,7 @@ const handleSort = (key) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <input
               type="checkbox"
               checked={selectAll}
@@ -1078,7 +1078,7 @@ const handleSort = (key) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", fontSize: "10px", cursor: 'pointer' }}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -1092,7 +1092,7 @@ const handleSort = (key) => {
          
         currentItems.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
                 type="checkbox"
                 checked={selectedItems.includes(item._id)}
@@ -1101,7 +1101,7 @@ const handleSort = (key) => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }} 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
             >
               {item.title} {item.first_name} {item.last_name}
@@ -1117,7 +1117,7 @@ const handleSort = (key) => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman", fontSize: "10px" }}
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
                 >
                   {item[col.id]}
                 </StyledTableCell>

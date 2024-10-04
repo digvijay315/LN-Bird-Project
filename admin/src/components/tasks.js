@@ -1047,12 +1047,12 @@ const followup=()=>
             <li  onClick={exportToExcel} >Export Data</li>
               
             </ul>
-            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px"}} onClick={followup}>Follow Up </label>
-            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px"}} onClick={sitevisit}>Site Visit </label>
-            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px"}} onClick={meeting}>Meeting </label>
+            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px",textAlign:"center"}} onClick={followup}>Follow Up </label>
+            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={sitevisit}>Site Visit </label>
+            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={meeting}>Meeting </label>
 
-            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"55%"}}>Add Task</button>
-            <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Filter</button>
+            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"40%"}}>Add Task</button>
+            <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"120px",marginLeft:"1%"}}><img src="https://cdn-icons-png.flaticon.com/512/566/566737.png" style={{height:"20px"}}/>Filter</button>
         
        
        
