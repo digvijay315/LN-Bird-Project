@@ -76,8 +76,7 @@ function Site_visit() {
                     <div className="col-md-4"><p><u>Site visit Form</u></p></div>
                 </div><hr></hr>
 
-                <div className="col-md-12"><label className="labels">Title</label><p>Site Visit with Anil Gupta For 722_Aero
-                    City on September 4,2023 ati5:32 AM</p></div>
+               
                 
                 <hr></hr>
                 <div className="row mt-2">
@@ -94,6 +93,9 @@ function Site_visit() {
                         </select>
                         </div>
                         <div className="col-md-8"></div>
+                        
+                        <div className="col-md-12"><label className="labels">Title</label><p>Site Visit with Anil Gupta For 722_Aero
+                        City on September 4,2023 ati5:32 AM</p></div>
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})}>
                     <option>Select </option>

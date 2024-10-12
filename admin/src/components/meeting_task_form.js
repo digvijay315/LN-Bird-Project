@@ -74,8 +74,7 @@ function Meeting_task_form() {
                     <div className="col-md-4"><p><u>Meeting Task Form</u></p></div>
                 </div><hr></hr>
 
-                <div className="col-md-12"><label className="labels">Title</label><p>MEETING with R K Jain For Negotiation of 722
-                    _Sector3_Kurukshetra on Office @ September 4,2023 at 6:10 PM</p></div>
+               
                 
                 <hr></hr>
                 <div className="row mt-2">
@@ -91,6 +90,9 @@ function Meeting_task_form() {
                         }
                         </select>
                         </div>
+                        
+                        <div className="col-md-12"><label className="labels">Title</label><p>MEETING with R K Jain For Negotiation of 722
+                        _Sector3_Kurukshetra on Office @ September 4,2023 at 6:10 PM</p></div>
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
                        

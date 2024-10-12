@@ -1119,7 +1119,7 @@ function Projectform() {
                 const getSubcategories = () => {
                   const subcategories = [];
                   if (isSelected('Residential')) {
-                      subcategories.push('Plot', 'Indenpendent House','Flat/Apartment','Builder Floor');
+                      subcategories.push('Plot', 'Indenpendent House','Flat','Apartment','Builder Floor');
                   }
                   if (isSelected('Commercial')) {
                     subcategories.push('Shop','Showroom','Office Space','Retail Store','Soho','Excutive Room','Multiplex','Virtual Space','Plot');

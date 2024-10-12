@@ -82,10 +82,13 @@ function Tasks() {
     {
       
       try {
-        const resp=await api.get('viewcontact')
-        setdata(resp.data.contact)
-        const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
-        settotalcontact(countcontact.length)
+        const resp=await api.get('viewcalltask')
+        const callincoming=resp.data.call_task
+
+        const resp1=await api.get('viewmailtask')
+        const mailincoming=resp1.data.mail_task
+
+        setdata([...callincoming,...mailincoming])
       } catch (error) {
         console.log(error);
       }
@@ -1190,7 +1193,7 @@ const followup=()=>
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
             >
-              {item.title} {item.first_name} {item.last_name}
+               {item.title2} {item.first_name} {item.last_name}
               <br />
               <SvgIcon component={PhoneIphoneIcon} />
               <span>{item.mobile_no}</span>
@@ -1198,16 +1201,30 @@ const followup=()=>
               <SvgIcon component={EmailIcon} />
               <span>{item.email}</span>
             </StyledTableCell>
-            {visibleColumns1
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
-              .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman", fontSize: "10px" }}
-                >
-                  {item[col.id]}
-                </StyledTableCell>
-              ))}
+
+            <StyledTableCell>
+              {item.due_date}
+            </StyledTableCell>
+            <StyledTableCell>
+              <b>{item.title}</b> <br></br>
+              {item.remarks}
+            </StyledTableCell>
+            <StyledTableCell>
+              {item.activity_type}
+            </StyledTableCell>
+            <StyledTableCell>
+              
+            </StyledTableCell>
+            <StyledTableCell>
+              
+            </StyledTableCell>
+            <StyledTableCell>
+             
+            </StyledTableCell>
+            <StyledTableCell>
+              <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
+            </StyledTableCell>
+            
           </StyledTableRow>
         ))}
       </tbody>

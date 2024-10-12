@@ -1,6 +1,6 @@
 import Addcontact from './components/addcontact';
 import Call_task_complete_form from './components/call_task_complete_form';
-import Call_task_form from './components/call_task_form';
+import Call_task_form from './components/task_form.js';
 import Dashboard from './components/dashboard';
 import Leadinfo from './components/leadinfo';
 import Leadinfo_personal from './components/leadinfo_personal';
@@ -31,6 +31,7 @@ import Deal from './components/deal';
 import '../src/App.css';
 import BankSelector from './components/demo1';
 import Tasks from './components/tasks.js';
+import Task_form from './components/task_form.js';
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
       <Route path='/adddeveloper' element={<Adddeveloper/>}/>
       <Route path='/deal' element={<Deal/>}/>
       <Route path='/tasks' element={<Tasks/>}/>
+      <Route path='/tasksform' element={<Task_form/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

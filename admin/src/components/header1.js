@@ -47,13 +47,8 @@ function Header1() {
 				<li><Link to={'/addinventory'} class="dropdown-item">Inventory</Link></li>
 				<li><Link to={'/project'} class="dropdown-item">Project</Link></li>
 				<li><Link to={'/deal'} class="dropdown-item">Deal</Link></li>
-				<li><Link  class="dropdown-item">Add Task</Link>
-				<ul className="submenu">
-        			<li><Link to={'/calltaskform'} className="dropdown-item">Call Task </Link></li>
-        			<li><Link to={'/mailtaskform'} className="dropdown-item">Mail Task</Link></li>
-        			<li><Link to={'/meetingtaskform'} className="dropdown-item">Meeting Task</Link></li>
-					<li><Link to={'/sitevisitform'} className="dropdown-item">Site Visit Task</Link></li>
-      			</ul>
+				<li><Link to={'/tasksform'} class="dropdown-item">Add Tasks</Link>
+				
 				</li>
 			</ul>
   		</div>

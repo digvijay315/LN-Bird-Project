@@ -2,12 +2,12 @@ const mongoose=require('mongoose')
 
 const mail_taskform=new mongoose.Schema({
 activity_type:{type:String},
+title:{type:String},
 executive:{type:String},
 lead:{type:String},
 inventory:{type:String},
 subject:{type:String},
 remarks:{type:String},
-remind_me:{type:String},
 complete:{type:String},
 due_date:{type:String}
 },{timestamps:true})
