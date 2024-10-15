@@ -74,10 +74,11 @@ function Tasks() {
 
     const navigate=useNavigate()
     React.useEffect(()=>{fetchdata()},[])
+    React.useEffect(()=>{fetchdata1()},[])
+    React.useEffect(()=>{fetchdata2()},[])
 
 /*-------------------------------------------------------------------fetching all contact data start---------------------------------------------------------------------------- */                                                     
     const[data,setdata]=useState([]);
-    const[totalcontact,settotalcontact]=useState()
     const fetchdata=async(event)=>
     {
       
@@ -94,6 +95,36 @@ function Tasks() {
       }
     
     }
+
+    const[meetingdata,setmeetingdata]=useState([]);
+    const fetchdata1=async()=>
+    {
+      
+      try {
+        const resp=await api.get('viewmeetingtask')
+        const incoming=resp.data.meetingtask
+        setmeetingdata([...incoming])
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+    const[sitedata,setsitedata]=useState([]);
+    const fetchdata2=async()=>
+    {
+      
+      try {
+        const resp=await api.get('viesitevisit')
+        const incoming=resp.data.sitevisit
+        setsitedata([...incoming])
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+    
+    
   /*-------------------------------------------------------------------fetching all contact data end---------------------------------------------------------------------------- */                                                     
 
   /*-------------------------------------------------------------------delete  contact data start---------------------------------------------------------------------------- */                                                     
@@ -178,6 +209,21 @@ const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 const totalPages = Math.ceil(data.length / itemsPerPage);
 
+const [currentPage1, setCurrentPage1] = useState(1);
+const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
+const indexOfLastItem1 = currentPage1 * itemsPerPage1;
+const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
+const currentItems1 = meetingdata.slice(indexOfFirstItem1, indexOfLastItem1);
+const totalPages1 = Math.ceil(meetingdata.length / itemsPerPage1);
+
+const [currentPage2, setCurrentPage2] = useState(1);
+const [itemsPerPage2, setItemsPerPage2] = useState(5); // User-defined items per page
+const indexOfLastItem2 = currentPage2 * itemsPerPage2;
+const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
+const currentItems2 = sitedata.slice(indexOfFirstItem2, indexOfLastItem2);
+const totalPages2 = Math.ceil(sitedata.length / itemsPerPage2);
+
+
   // Handle items per page change
   const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
@@ -205,6 +251,9 @@ const renderPageNumbers = () => {
   const maxPageNumbersToShow = 5;
   const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
   const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+
+
+  
   
   return (
     <div
@@ -464,9 +513,9 @@ const sitevisitcolumns = [
       const handleSelectAll2 = () => {
        
         setSelectAll2(!selectAll2);
-        if (!selectAll1) {
+        if (!selectAll2) {
           // Add all current page item IDs to selectedItems
-          setSelectedItems2(currentItems.map((item) => item._id));
+          setSelectedItems2(currentItems1.map((item) => item._id));
         } else {
           // Deselect all
           setSelectedItems2([]);
@@ -1263,7 +1312,7 @@ const followup=()=>
       <tbody>
         {
          
-        currentItems.map ((item, index) => (
+        currentItems2.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
@@ -1277,24 +1326,44 @@ const followup=()=>
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
             >
-              {item.title} {item.first_name} {item.last_name}
+              {item.title2} {item.first_name} {item.last_name}
               <br />
               <SvgIcon component={PhoneIphoneIcon} />
               <span>{item.mobile_no}</span>
               <br />
+
               <SvgIcon component={EmailIcon} />
               <span>{item.email}</span>
             </StyledTableCell>
-            {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
-              .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman", fontSize: "10px" }}
-                >
-                  {item[col.id]}
+           
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 {item.project}
                 </StyledTableCell>
-              ))}
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 {item.title}
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 {item.remark}
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                 
+                </StyledTableCell>
+                <StyledTableCell>
+              <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
+            </StyledTableCell>
+            
           </StyledTableRow>
         ))}
       </tbody>
@@ -1333,7 +1402,7 @@ const followup=()=>
       <tbody>
         {
          
-        currentItems.map ((item, index) => (
+        currentItems1.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
@@ -1347,7 +1416,7 @@ const followup=()=>
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
             >
-              {item.title} {item.first_name} {item.last_name}
+              {item.title2} {item.first_name} {item.last_name}
               <br />
               <SvgIcon component={PhoneIphoneIcon} />
               <span>{item.mobile_no}</span>
@@ -1355,16 +1424,51 @@ const followup=()=>
               <SvgIcon component={EmailIcon} />
               <span>{item.email}</span>
             </StyledTableCell>
-            {visibleColumns2
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
-              .map((col) => (
+           
                 <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman", fontSize: "10px" }}
+                 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
                 >
-                  {item[col.id]}
+                  {item.due_date}
                 </StyledTableCell>
-              ))}
+
+                <StyledTableCell 
+                 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                  {item.title}
+                </StyledTableCell>
+                <StyledTableCell 
+                 
+                 style={{ padding: "10px", fontFamily: "times new roman" }}
+               >
+                 {item.activity_type}
+               </StyledTableCell>
+               <StyledTableCell 
+                 
+                 style={{ padding: "10px", fontFamily: "times new roman" }}
+               >
+                 
+               </StyledTableCell>
+               <StyledTableCell 
+                 
+                 style={{ padding: "10px", fontFamily: "times new roman" }}
+               >
+                 
+               </StyledTableCell>
+               <StyledTableCell 
+                 
+                 style={{ padding: "10px", fontFamily: "times new roman" }}
+               >
+                
+               </StyledTableCell>
+               <StyledTableCell 
+                 
+                 style={{ padding: "10px", fontFamily: "times new roman" }}
+               >
+                 <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
+               </StyledTableCell>
+              
           </StyledTableRow>
         ))}
       </tbody>

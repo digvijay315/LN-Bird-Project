@@ -9,7 +9,12 @@ inventory:{type:String},
 subject:{type:String},
 remarks:{type:String},
 complete:{type:String},
-due_date:{type:String}
+due_date:{type:String},
+title2:{type:String},
+first_name:{type:String},
+last_name:{type:String},
+mobile_no:{type:String},
+email:{type:String}
 },{timestamps:true})
 
 const mailtask_form=mongoose.model('mailtask_form',mail_taskform)

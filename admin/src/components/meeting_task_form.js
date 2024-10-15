@@ -13,6 +13,8 @@ function Meeting_task_form() {
     const status=["Conducted","Cancelled","Postponed"]
     const result=["Deal Done","Negotiation Uncomplete","Deal Not Done","Site Visit"]
 
+    
+
     const [meetingtask,setmeetingtask]=useState({activity_type:"",executive:"",lead:"",location_type:"",location_address:"",reason:"",inventory:"",
                                         remarks:"",remind_me:"",complete:"",due_date:""})
 

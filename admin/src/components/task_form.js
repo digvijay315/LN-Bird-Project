@@ -7,6 +7,7 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import api from "../api";
+import { Inventory } from "@mui/icons-material";
 
 
 function Task_form() {
@@ -32,11 +33,7 @@ function Task_form() {
 
     
 
-    const leaddata=(id)=>
-    {
-       console.log(id);
-       
-    }
+   
 
    
    
@@ -53,7 +50,7 @@ function Task_form() {
             const updatedCallTask = { ...calltask, title: title1 };
             
             try {
-            const resp=await axios.post('http://localhost:5000/calltask',updatedCallTask)
+            const resp=await api.post('calltask',updatedCallTask)
             if(resp.status===200)
             {
             toast.success(resp.data.message)
@@ -68,8 +65,8 @@ function Task_form() {
         }
     }
 
-    const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",inventory:"",subject:"",remarks:"",remind_me:"",
-        complete:"",due_date:""})
+    const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",inventory:"",subject:"",remarks:"",
+        complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
 
 
         const mailtaskdetails=async()=>
@@ -80,7 +77,7 @@ function Task_form() {
                 // Update state
                 const updatedMailTask = { ...mailtask, title: title1 };
                 try {
-                    const resp=await axios.post('http://localhost:5000/mailtask',updatedMailTask)
+                    const resp=await api.post('mailtask',updatedMailTask)
                     if(resp.status===200)
                     {
                         toast.success(resp.data.message)
@@ -108,6 +105,60 @@ function Task_form() {
     }
   
   }
+
+  const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
+            reason:"",inventory:"",remark:"",complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
+
+
+    const meetingtaskdetails=async()=>
+        {
+         
+            const title1 = document.getElementById("meetingtitle").innerText;
+    
+            // Update state
+            const updatedMailTask = { ...meetingtask, title: title1 };
+            try {
+                const resp=await api.post('meetingtask',updatedMailTask)
+                if(resp.status===200)
+                {
+                    toast.success(resp.data.message)
+                    setTimeout(() => {
+                        window.location.reload();
+                      }, 2000); // 2000 milliseconds = 2 seconds
+                    
+                }
+            } catch (error) {
+                
+                toast.error(error.message)
+            }
+        }
+
+        const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:"",sitevisit_type:"",
+                            inventory:"",lead:"",confirmation:"",remark:"",participants:"",complete:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
+
+
+    const sitevisitdetails=async()=>
+        {
+         
+            const title1 = document.getElementById("sitevisittitle").innerText;
+    
+            // Update state
+            const updatedMailTask = { ...sitevisit, title: title1 };
+            try {
+                const resp=await api.post('sitevisit',updatedMailTask)
+                if(resp.status===200)
+                {
+                    toast.success(resp.data.message)
+                    setTimeout(() => {
+                        window.location.reload();
+                      }, 2000); // 2000 milliseconds = 2 seconds
+                    
+                }
+            } catch (error) {
+                
+                toast.error(error.message)
+            }
+        }
   
     const [show1, setshow1] = useState(false);
     
@@ -135,6 +186,18 @@ function Task_form() {
     
         // Open the modal only if the checkbox is checked
         if (isChecked) {
+           document.getElementById("maildetails").style.display="block"
+        }
+        else{
+            document.getElementById("maildetails").style.display="none"
+        }
+    };
+    const handleToggle2 = (e) => {
+        const isChecked = e.target.checked; // Get the checked state
+        setmeetingtask({ ...meetingtask, complete: isChecked }); // Update the calltask state
+    
+        // Open the modal only if the checkbox is checked
+        if (isChecked) {
            document.getElementById("meetingdetails").style.display="block"
         }
         else{
@@ -142,6 +205,18 @@ function Task_form() {
         }
     };
 
+    const handleToggle3 = (e) => {
+        const isChecked = e.target.checked; // Get the checked state
+        setsitevisit({ ...sitevisit, complete: isChecked }); // Update the calltask state
+    
+        // Open the modal only if the checkbox is checked
+        if (isChecked) {
+           document.getElementById("sitevisitdetails").style.display="block"
+        }
+        else{
+            document.getElementById("sitevisitdetails").style.display="none"
+        }
+    };
     const handler1=()=>
         {
             document.getElementById("date1").style.color="black"
@@ -284,7 +359,8 @@ function Task_form() {
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="
+                    " className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
@@ -387,13 +463,33 @@ function Task_form() {
                     <div className="col-md-8"></div>
                 
                 
-                <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,lead:e.target.value})}>
+                <div className="col-md-4"><label className="labels">Select Lead</label>     <select
+    className="form-control form-control-sm"
+    required
+    onChange={(e) => {
+      const selectedLead = data.find(item => item._id === e.target.value);
+      if (selectedLead) {
+        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+        setmailtask(prevState => ({
+          ...prevState,
+          lead: fullName,
+          title2: selectedLead.title,
+          first_name: selectedLead.first_name,
+          last_name: selectedLead.last_name,
+          mobile_no:selectedLead.mobile_no,
+          email:selectedLead.email
+        }));
+      }
+    }}
+  >
                     <option>Select</option>
                         {
                             data.map((item)=>
                             (
-                                <option>{item.title} {item.first_name} {item.last_name}</option>
+                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+                                
                             ))
+                            
                         }
                         </select>
                         </div>
@@ -427,7 +523,7 @@ function Task_form() {
                         </label>
                     </div>
                  
-                    <div className="p-3 py-5" id="meetingdetails" style={{display:"none"}}>
+                    <div className="p-3 py-5" id="maildetails" style={{display:"none"}}>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h4 className="text-right">Complete Mail Task</h4>
                 </div><hr></hr>
@@ -475,29 +571,29 @@ function Task_form() {
                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
                     </div>
 
-{/* ==========================================================meeting task end================================================================= */}
+{/* ==========================================================mail task end================================================================= */}
 
 
 
 {/* ==============================================site visit task=============================================================================== */}
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p>Site Visit with Anil Gupta For 722_Aero
-                        City on September 4,2023 ati5:32 AM</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For 722_Aero
+                        City on September 4,2023 at 5:32 AM</p></div>
 
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
-                       
+                       <option>Rajesh</option>
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Project</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Select Project</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,project:e.target.value})} >
                     <option>Select </option>
-                       
+                       <option>Project 1</option>
                         </select>
                         </div>
                         <div className="col-md-4"></div>
                     
-                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
                     <option>Select </option>
                        {
                         visittype.map(item=>
@@ -508,20 +604,46 @@ function Task_form() {
                        }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Inventory</label><select className="form-control form-control-sm" required="true">
+                        <div className="col-md-4"><label className="labels">Select Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,inventory:e.target.value})}>
                     <option>Select </option>
-                       
+                       <option>Inventory 1</option>
                         </select>
                         </div>
                         <div className="col-md-4"></div>
 
                          
-                        <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control form-control-sm" required="true">
-                    <option>Select </option>
-                       
+                        <div className="col-md-4"><label className="labels">Select Lead</label>
+                        <select
+    className="form-control form-control-sm"
+    required
+    onChange={(e) => {
+      const selectedLead = data.find(item => item._id === e.target.value);
+      if (selectedLead) {
+        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+        setsitevisit(prevState => ({
+          ...prevState,
+          lead: fullName,
+          title2: selectedLead.title,
+          first_name: selectedLead.first_name,
+          last_name: selectedLead.last_name,
+          mobile_no:selectedLead.mobile_no,
+          email:selectedLead.email
+        }));
+      }
+    }}
+  >
+                    <option>Select</option>
+                        {
+                            data.map((item)=>
+                            (
+                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+                                
+                            ))
+                            
+                        }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
                     <option>Select </option>
                        <option>Confirmed</option>
                        <option>Tentative</option>
@@ -529,23 +651,68 @@ function Task_form() {
                         </div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} /></div>
+                        <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
                 
                
-                        <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
                     <option>Select</option>
-                       
+                       <option>1 to 100</option>
                         </select>
                         </div>
                   
                     <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
                     <label class="switch">
-                    <input type="checkbox" onChange={handleToggle}/>
+                    <input type="checkbox" onChange={handleToggle3}/>
                         <span class="slider round"></span>
                         </label>
                     </div>
+
+                   
+        
+            <div className="p-3 py-5" id="sitevisitdetails" style={{width:"100%",display:"none"}}>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right">Complete Site Visit</h4>
+                </div><hr></hr>
+                
+                <div className="row mt-2">
+                    
+                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
+                    <option>Select</option>
+                        {
+                            status.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Select Intersted Inventory</label><select className="form-control form-control-sm" required="true" >
+                    <option>Select</option>
+                        {
+                            result.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+              
+                
+                <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" /></div>
+                <div className="col-md-8"></div>
+
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                 
+                   
+                    </div>
+                    </div>
+       
+
                     <div className="col-md-2"></div>
-                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm">Submit</button></div>
+                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={sitevisitdetails}>Submit</button></div>
                     <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
                    
                     
@@ -556,24 +723,51 @@ function Task_form() {
                 
 
         {/*=========================================== meeting task=================================================================================== */}
+                
+                
                     <div className="row" id="meeting" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p>MEETING with R K Jain For Negotiation of 722
-                        _Sector3_Kurukshetra on Office @ September 4,2023 at 6:10 PM</p></div>
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true">
+                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For Negotiation of {meetingtask.location_address}   on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+                        
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
                        
                         </select>
                         </div>
                         
-                <div className="col-md-4"><label className="labels">Select Lead</label><select className="form-control form-control-sm" required="true">
+                <div className="col-md-4"><label className="labels">Select Lead</label> <select
+    className="form-control form-control-sm"
+    required
+    onChange={(e) => {
+      const selectedLead = data.find(item => item._id === e.target.value);
+      if (selectedLead) {
+        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+        setmeetingtask(prevState => ({
+          ...prevState,
+          lead: fullName,
+          title2: selectedLead.title,
+          first_name: selectedLead.first_name,
+          last_name: selectedLead.last_name,
+          mobile_no:selectedLead.mobile_no,
+          email:selectedLead.email
+        }));
+      }
+    }}
+  >
                     <option>Select</option>
-                        <option>Mr.</option>
+                        {
+                            data.map((item)=>
+                            (
+                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+                                
+                            ))
+                            
+                        }
                         </select>
                         </div>
                         <div className="col-md-4"></div>
                         
-                        <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true">
+                        <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
                     <option>Select</option>
                         {
                             location.map(item=>
@@ -586,39 +780,77 @@ function Task_form() {
                         </div>
                     <div className="col-md-8"></div>
 
-                    <div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" className="form-control form-control-sm"/></div>
+                    <div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
                     <div className="col-md-4"></div>
                   
 
-                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,reason:e.target.value})}>
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Inventory</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Inventory</label><select className="form-control form-control-sm" required="true"onChange={(e)=>setmeetingtask({...meetingtask,inventory:e.target.value})} >
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
 
-                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} /></div>
+                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
                     <div className="col-md-2"></div>
                     
                   
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
-                    <input type="checkbox" onChange={handleToggle}/>
+                    <input type="checkbox" onChange={handleToggle2} />
                         <span class="slider round"></span>
                         </label>
                     </div>
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm"/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+                   
+                    <div className="p-3 py-5" id="meetingdetails" style={{display:"none",width:"100%"}}>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right">Complete Meeting Task</h4>
+                </div><hr></hr>
+                
+                <div className="row mt-2">
                     
-                    <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
-                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
-                    </div>
+                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
+                    <option>Select</option>
+                        {
+                            status.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" >
+                    <option>Select</option>
+                        {
+                            result.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+                </div>
+                <div className="row mt-3">
+                <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" /></div>
 
-                    </div>    
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                     </div>
+                   
+                        </div>
+                        
+                    <div className="col-md-2"  style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={meetingtaskdetails}>Submit</button></div>
+                    <div className="col-md-2"  style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                   
+                        </div> 
+                       
 
                     <Modal show={show1} onHide={handleClose1} size='lg'>
             <Modal.Header>

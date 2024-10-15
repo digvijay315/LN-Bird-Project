@@ -3,9 +3,11 @@ const meetingtask_form=require('../models/meeting_task_form')
 const meeting_task_form=async(req,res)=>
     {
         try {
-            const{activity_type,executive,lead,location_type,location_address,reason,inventory,remarks,remind_me,complete,due_date}=req.body;
+            const{activity_type,title,executive,lead,location_type,location_address,reason,inventory,remarks,complete,due_date,
+                title2,first_name,last_name,mobile_no,email }=req.body;
 
-                const newmeetingtaskform=new meetingtask_form({activity_type,executive,lead,location_type,location_address,reason,inventory,remarks,remind_me,complete,due_date})
+                const newmeetingtaskform=new meetingtask_form({activity_type,title,executive,lead,location_type,location_address,
+                                    reason,inventory,remarks,complete,due_date,title2,first_name,last_name,mobile_no,email})
                     const resp=await newmeetingtaskform.save(); 
                     res.status(200).send({message:"meeting task details saved",meetingtask:resp})
         } catch (error) {
