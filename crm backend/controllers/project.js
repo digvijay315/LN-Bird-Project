@@ -27,4 +27,24 @@ const createProject = async (req, res) => {
       res.status(500).json({ error: 'Error creating project', message: error.message });
     }
   };
-   module.exports=createProject
+
+  const view_project=async(req,res)=>
+    {
+        try {
+            const resp=await addproject.find()
+            res.status(200).send({message:"project details fetch successfully",project:resp})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const view_projectbyname=async(req,res)=>
+      {
+          try {
+            const name=req.params.name
+              const resp=await addproject.find({name:name})
+              res.status(200).send({message:"project details fetch successfully",project:resp})
+          } catch (error) {
+              console.log(error)
+          }
+      }
+   module.exports={createProject,view_project,view_projectbyname}

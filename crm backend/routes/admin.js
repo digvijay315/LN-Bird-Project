@@ -5,7 +5,7 @@ const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
 const {add_developer,view_developer} = require('../controllers/add_developer');
 const { add_tower, view_tower } = require('../controllers/add_tower');
-const { add_project, view_project } = require('../controllers/add_project');
+const add_project = require('../controllers/add_project');
 const lead_info_requirment = require('../controllers/leadinfo_requirment');
 const {mail_task_form,view_mail} = require('../controllers/mail_task_form');
 const {call_task_form,view_call} = require('../controllers/call_task_form');
@@ -15,7 +15,7 @@ const booking_details = require('../controllers/booking_details');
 const addpayment_details = require('../controllers/addpayment_details');
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
-const createProject = require('../controllers/project');
+const {createProject,view_project, view_projectbyname} = require('../controllers/project');
 const { add_deal, view_deal } = require('../controllers/add_deal');
 
 
@@ -44,6 +44,8 @@ router.get('/viewleadbyemail/:email',view_lead_Byemail)
 router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)
 
 router.post('/project',upload.any('pic'),createProject)
+router.get('/viewproject',view_project)
+router.get('/viewprojectbyname/:name',view_projectbyname)
 
 router.post('/adddeal',upload.any('pic','preview'),add_deal)
 router.get('/viewdeal',view_deal)
@@ -81,7 +83,7 @@ router.post('/addproject/adddeveloper',add_developer)
 router.get('/addproject/viewdeveloper',view_developer)
 router.post('/addproperty/addtower',add_tower)
 router.get('/addproperty/viewtower',view_tower)
-router.post('/addproperty/addproject',add_project)
+router.post('/addproperty/addproject')
 router.get('/addproperty/viewproject',view_project)
 
 module.exports=router;

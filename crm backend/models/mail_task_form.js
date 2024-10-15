@@ -14,7 +14,8 @@ title2:{type:String},
 first_name:{type:String},
 last_name:{type:String},
 mobile_no:{type:String},
-email:{type:String}
+email:{type:String},
+stage:{type:String}
 },{timestamps:true})
 
 const mailtask_form=mongoose.model('mailtask_form',mail_taskform)

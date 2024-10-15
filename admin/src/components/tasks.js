@@ -1262,13 +1262,13 @@ const followup=()=>
               {item.activity_type}
             </StyledTableCell>
             <StyledTableCell>
-              
+            {item.executive}
             </StyledTableCell>
             <StyledTableCell>
               
             </StyledTableCell>
             <StyledTableCell>
-             
+             {item.stage}
             </StyledTableCell>
             <StyledTableCell>
               <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
@@ -1346,7 +1346,7 @@ const followup=()=>
                  
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
-                 
+                {item.executive}
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
                  {item.title}
@@ -1358,7 +1358,7 @@ const followup=()=>
                  {item.remark}
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
-                 
+                {item.stage}
                 </StyledTableCell>
                 <StyledTableCell>
               <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
@@ -1448,7 +1448,7 @@ const followup=()=>
                  
                  style={{ padding: "10px", fontFamily: "times new roman" }}
                >
-                 
+                  {item.executive}
                </StyledTableCell>
                <StyledTableCell 
                  
@@ -1460,7 +1460,7 @@ const followup=()=>
                  
                  style={{ padding: "10px", fontFamily: "times new roman" }}
                >
-                
+                {item.stage}
                </StyledTableCell>
                <StyledTableCell 
                  

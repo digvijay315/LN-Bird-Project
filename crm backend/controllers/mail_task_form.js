@@ -4,11 +4,11 @@ const mail_task_form=async(req,res)=>
     {
         try {
             const{activity_type,title,executive,lead,inventory,subject,remarks,complete,due_date,title2,first_name,last_name,
-                    mobile_no,email}=req.body;
+                    mobile_no,email,stage}=req.body;
                 
                 
                 const newmailtaskform=new mailtask_form({activity_type,title,executive,lead,inventory,subject,remarks,complete,due_date,
-                    title2,first_name,last_name, mobile_no,email })
+                    title2,first_name,last_name, mobile_no,email,stage })
                 
                     const resp=await newmailtaskform.save(); 
                     res.status(200).send({message:"mail task details saved",mailtask:resp})

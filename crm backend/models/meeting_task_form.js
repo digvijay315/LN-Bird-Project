@@ -16,7 +16,8 @@ title2:{type:String},
 first_name:{type:String},
 last_name:{type:String},
 mobile_no:{type:String},
-email:{type:String}
+email:{type:String},
+stage:{type:String}
 },{timestamps:true})
 
 const meetingtask_form=mongoose.model('meetingtask_form',meeting_taskform)

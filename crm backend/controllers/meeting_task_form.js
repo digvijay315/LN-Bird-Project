@@ -4,10 +4,10 @@ const meeting_task_form=async(req,res)=>
     {
         try {
             const{activity_type,title,executive,lead,location_type,location_address,reason,inventory,remarks,complete,due_date,
-                title2,first_name,last_name,mobile_no,email }=req.body;
+                title2,first_name,last_name,mobile_no,email,stage}=req.body;
 
                 const newmeetingtaskform=new meetingtask_form({activity_type,title,executive,lead,location_type,location_address,
-                                    reason,inventory,remarks,complete,due_date,title2,first_name,last_name,mobile_no,email})
+                                    reason,inventory,remarks,complete,due_date,title2,first_name,last_name,mobile_no,email,stage})
                     const resp=await newmeetingtaskform.save(); 
                     res.status(200).send({message:"meeting task details saved",meetingtask:resp})
         } catch (error) {

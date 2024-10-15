@@ -16,6 +16,11 @@ function Task_form() {
     {
         fetchdata()
     },[])
+
+    useEffect(()=>
+        {
+            fetchdata1()
+        },[])
    
     
 
@@ -29,7 +34,7 @@ function Task_form() {
     const location=["Home","Office","Company","Site"]
     
     
-    const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
+    const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
 
     
 
@@ -66,7 +71,7 @@ function Task_form() {
     }
 
     const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",inventory:"",subject:"",remarks:"",
-        complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
+        complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
 
 
         const mailtaskdetails=async()=>
@@ -105,9 +110,74 @@ function Task_form() {
     }
   
   }
+  const [units1,setunits1]=useState([])
+  const[data1,setdata1]=useState([]);
+  const fetchdata1=async()=>
+  {
+    
+    try {
+      const resp=await api.get('viewproject')
+      setdata1(resp.data.project)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    if (data1.length >= 0) {
+      const collectedUnits = data1.flatMap(item => item.add_unit); // Collect all add_unit arrays
+      setunits1(collectedUnits); // Set allUnits with the collected units
+    }
+  }, [data1]);
 
+
+const [units,setunits]=useState([])
+const [allUnits,setallUnits]=useState([])
+const fetchdatabyprojectname = async (e) => {
+    const projectName = e.target.value; // Get the project name directly from the event
+  
+    try {
+      setsitevisit(prev => ({ ...prev, project: projectName })); // Update the state
+      const resp = await api.get(`viewprojectbyname/${projectName}`);
+     setunits(resp.data.project)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (units.length >= 0) {
+      const collectedUnits = units.flatMap(item => item.add_unit); // Collect all add_unit arrays
+      setallUnits(collectedUnits); // Set allUnits with the collected units
+    }
+  }, [units]);
+
+
+
+//   const [allUnits,setallUnits]=useState([])
+//   useEffect(()=>
+// {
+//     if (data1.length > 0) {
+//         setallUnits (data1.flatMap(item => item.add_unit)); // Collect all add_unit arrays
+//        // This will log all add_units combined into a single array
+//      }
+// },[data1])
+//    console.log(allUnits);
+   
+  
+
+  
+  
+
+ 
+
+
+
+
+
+
+
+  
   const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
-            reason:"",inventory:"",remark:"",complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
+            reason:"",inventory:"",remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
 
 
     const meetingtaskdetails=async()=>
@@ -134,7 +204,7 @@ function Task_form() {
         }
 
         const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:"",sitevisit_type:"",
-                            inventory:"",lead:"",confirmation:"",remark:"",participants:"",complete:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:""})
+                            inventory:"",lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
 
 
     const sitevisitdetails=async()=>
@@ -331,7 +401,8 @@ function Task_form() {
           first_name: selectedLead.first_name,
           last_name: selectedLead.last_name,
           mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email
+          email:selectedLead.email,
+          stage:selectedLead.stage
         }));
       }
     }}
@@ -349,7 +420,9 @@ function Task_form() {
                         </div>
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
                     <option>Select</option>
-                        <option>Mr.</option>
+                        <option>Rajesh</option>
+                        <option>Suresh</option>
+                        <option>Vivek</option>
                         </select>
                         </div>
                     <div className="col-md-4"></div>
@@ -359,8 +432,7 @@ function Task_form() {
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="
-                    " className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
@@ -457,7 +529,9 @@ function Task_form() {
 
                     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
                     <option>Select </option>
-                    <option>Mr.</option>
+                    <option>Rajesh</option>
+                        <option>Suresh</option>
+                        <option>Vivek</option>
                         </select>
                         </div>
                     <div className="col-md-8"></div>
@@ -477,7 +551,8 @@ function Task_form() {
           first_name: selectedLead.first_name,
           last_name: selectedLead.last_name,
           mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email
+          email:selectedLead.email,
+          stage:selectedLead.stage
         }));
       }
     }}
@@ -495,7 +570,12 @@ function Task_form() {
                         </div>
                         <div className="col-md-4"><label className="labels">Select Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,inventory:e.target.value})} >
                     <option>Select</option>
-                        <option>Mr.</option>
+                    {
+                        units1.map((item)=>
+                    (
+                       <option>{item.unit_no}</option>
+                    ))
+                      }
                         </select>
                         </div>
                     <div className="col-md-4"></div>
@@ -576,6 +656,8 @@ function Task_form() {
 
 
 {/* ==============================================site visit task=============================================================================== */}
+                  
+                  
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
                     <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For 722_Aero
@@ -583,12 +665,19 @@ function Task_form() {
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
-                       <option>Rajesh</option>
+                    <option>Rajesh</option>
+                        <option>Suresh</option>
+                        <option>Vivek</option>
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Project</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,project:e.target.value})} >
+                        <div className="col-md-4"><label className="labels">Select Project</label><select className="form-control form-control-sm" required="true" onChange={(e)=>fetchdatabyprojectname(e)} >
                     <option>Select </option>
-                       <option>Project 1</option>
+                       {
+                        data1.map((item)=>
+                        (
+                            <option>{item.name}</option>
+                        ))
+                       }
                         </select>
                         </div>
                         <div className="col-md-4"></div>
@@ -606,7 +695,12 @@ function Task_form() {
                         </div>
                         <div className="col-md-4"><label className="labels">Select Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,inventory:e.target.value})}>
                     <option>Select </option>
-                       <option>Inventory 1</option>
+                      {
+                        allUnits.map((item)=>
+                    (
+                       <option>{item.unit_no}</option>
+                    ))
+                      }
                         </select>
                         </div>
                         <div className="col-md-4"></div>
@@ -627,7 +721,8 @@ function Task_form() {
           first_name: selectedLead.first_name,
           last_name: selectedLead.last_name,
           mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email
+          email:selectedLead.email,
+          stage:selectedLead.stage
         }));
       }
     }}
@@ -729,9 +824,11 @@ function Task_form() {
 
                     <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For Negotiation of {meetingtask.location_address}   on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
                         
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>({...meetingtask,executive:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
-                       
+                    <option>Rajesh</option>
+                        <option>Suresh</option>
+                        <option>Vivek</option>
                         </select>
                         </div>
                         
@@ -749,7 +846,8 @@ function Task_form() {
           first_name: selectedLead.first_name,
           last_name: selectedLead.last_name,
           mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email
+          email:selectedLead.email,
+          stage:selectedLead.stage
         }));
       }
     }}
@@ -791,7 +889,12 @@ function Task_form() {
                         </div>
                         <div className="col-md-4"><label className="labels">Inventory</label><select className="form-control form-control-sm" required="true"onChange={(e)=>setmeetingtask({...meetingtask,inventory:e.target.value})} >
                     <option>Select</option>
-                        <option>Mr.</option>
+                    {
+                        units1.map((item)=>
+                    (
+                       <option>{item.unit_no}</option>
+                    ))
+                      }
                         </select>
                         </div>
 
