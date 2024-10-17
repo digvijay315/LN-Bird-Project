@@ -409,6 +409,7 @@ const sitevisitcolumns = [
         { id: 'agenda', name: 'Agenda' },
         { id: 'source', name: 'Source' },
         { id: 'feedback', name: 'Feedback' },
+        { id: 'stage', name: 'Stage' },
         { id: 'status', name: 'Status' },
         { id: 'action', name: 'Action' },
       ];
@@ -462,6 +463,7 @@ const sitevisitcolumns = [
         { id: 'activity_type', name: 'Activity Type' },
         { id: 'scheduled_by', name: 'Scheduled By' },
         { id: 'scheduled_for', name: 'Scheduled For' },
+        { id: 'stage', name: 'Stage' },
         { id: 'status', name: 'Status' },
         { id: 'action', name: 'Action' },
       ];
@@ -502,6 +504,7 @@ const sitevisitcolumns = [
         { id: 'activity_type', name: 'Activity Type' },
         { id: 'scheduled_by', name: 'Scheduled By' },
         { id: 'scheduled_for', name: 'Scheduled For' },
+        { id: 'stage', name: 'Stage' },
         { id: 'status', name: 'Status' },
         { id: 'action', name: 'Action' },
       ];
@@ -1103,7 +1106,7 @@ const followup=()=>
             <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={sitevisit}>Site Visit </label>
             <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={meeting}>Meeting </label>
 
-            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"40%"}}>Add Task</button>
+            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"40%"}}>Play Task</button>
             <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"120px",marginLeft:"1%"}}><img src="https://cdn-icons-png.flaticon.com/512/566/566737.png" style={{height:"20px"}}/>Filter</button>
         
        
@@ -1122,8 +1125,8 @@ const followup=()=>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       <input type="checkbox" onChange={handleischeckedchange}/>
       <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
-      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"60%",position:"absolute"}}>
-           <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button>
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
+           {/* <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button> */}
            <label className="labels" style={{width:"350px"}}>Sorted By Due Date</label>
            </div>
 {/*       
@@ -1271,6 +1274,9 @@ const followup=()=>
              {item.stage}
             </StyledTableCell>
             <StyledTableCell>
+             
+            </StyledTableCell>
+            <StyledTableCell>
               <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
             </StyledTableCell>
             
@@ -1359,6 +1365,9 @@ const followup=()=>
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
                 {item.stage}
+                </StyledTableCell>
+                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                
                 </StyledTableCell>
                 <StyledTableCell>
               <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
@@ -1461,6 +1470,12 @@ const followup=()=>
                  style={{ padding: "10px", fontFamily: "times new roman" }}
                >
                 {item.stage}
+               </StyledTableCell>
+               <StyledTableCell 
+                 
+                 style={{ padding: "10px", fontFamily: "times new roman" }}
+               >
+               
                </StyledTableCell>
                <StyledTableCell 
                  
