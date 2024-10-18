@@ -61,15 +61,16 @@ function Sidebar1() {
 					</li>
 				
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiStickerCheckOutline} size={1}/><span class="mtext">Post Sales</span>
-						</a>
-						<ul class="submenu">
-							<li><a href="video-player.html">Manage Booking</a></li>
-							<li><Link to={'/bookingdetails'}>Add Booking Details</Link></li>
-							<li><a href="forgot-password.html">Manage Payment</a></li>
-							<li><Link to={'/paymentdetails'}>Add Payment Details</Link></li>
-						</ul>
+						<Link to={'/bookingdetailsdata'} class="dropdown-toggle no-arrow">
+						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Booking Details</span>
+						</Link>
+					
+					</li>
+					<li class="dropdown">
+						<Link to={'/paymentdetailsdata'} class="dropdown-toggle no-arrow">
+						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Payment Details</span>
+						</Link>
+					
 					</li>
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">

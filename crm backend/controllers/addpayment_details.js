@@ -7,7 +7,7 @@ const addpayment_details=async(req,res)=>
             const{date,account_name_to,recieved_from,payment_mode,cheque_number,cheque_bank_name,cheque_date,in_favour_of,amount,tds,
                 tds_amount,tax_type,discount_type,sgst,sgst_value,cgst,cgst_value,discount,payment_for,narration}=req.body;
 
-                const file=req.file.filename;
+                const file=req.files ? req.files.map(item => item.path) : [];
            
                 const new_payment_details= new add_payment_details({date,account_name_to,recieved_from,payment_mode,cheque_number,cheque_bank_name,cheque_date,in_favour_of,amount,tds,
                     tds_amount,tax_type,discount_type,sgst,sgst_value,cgst,cgst_value,discount,payment_for,narration,image:file})

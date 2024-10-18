@@ -21,7 +21,7 @@ cgst_value:{type:String},
 discount:{type:String},
 payment_for:{type:String},
 narration:{type:String},
-image:{type:String}
+image:{type:Array}
 },{timestamps:true})
 
 const add_payment_details=mongoose.model('add_payment_details',add_paymentdetails)
