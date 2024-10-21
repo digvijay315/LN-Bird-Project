@@ -32,27 +32,41 @@ function Paymentdetails() {
 
 
     const navigate=useNavigate()
-    // React.useEffect(()=>{fetchdata()},[])
+    React.useEffect(()=>{fetchdata()},[])
  
 
 /*-------------------------------------------------------------------fetching all contact data start---------------------------------------------------------------------------- */                                                     
-    const[data,setdata]=useState([]);
-    const fetchdata=async(event)=>
-    {
-      
-      try {
-        const resp=await api.get('viewcalltask')
-        const callincoming=resp.data.call_task
-
-        const resp1=await api.get('viewmailtask')
-        const mailincoming=resp1.data.mail_task
-
-        setdata([...callincoming,...mailincoming])
-      } catch (error) {
-        console.log(error);
-      }
+const[data,setdata]=useState([]);
+const fetchdata=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('viewpaymentdetails')
+    const incoming=resp.data.payment
+    setdata(incoming)
     
-    }
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+ 
+// const[data1,setdata1]=useState([]);
+// const fetchdata1=async(event)=>
+// {
+  
+//   try {
+//     const resp=await api.get('viewbookingdetails')
+//     console.log(resp);
+    
+//     const incoming=resp.data.booking
+//     setdata1(incoming)
+//   } catch (error) {
+//     console.log(error);
+//   }
+
+// }
 
 
  
@@ -380,45 +394,11 @@ const allColumns = [
         }
       };
 
-      const followupcolumns = [
-        { id: 'sno', name: '#' },
-        { id: 'details', name: 'Details' },
-        { id: 'scheduled_date', name: 'Scheduled Date' },
-        { id: 'agenda', name: 'Agenda' },
-        { id: 'activity_type', name: 'Activity Type' },
-        { id: 'scheduled_by', name: 'Scheduled By' },
-        { id: 'scheduled_for', name: 'Scheduled For' },
-        { id: 'stage', name: 'Stage' },
-        { id: 'status', name: 'Status' },
-        { id: 'action', name: 'Action' },
-      ];
-      const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
-      const [selectAll1, setSelectAll1] = useState(false); // To track the state of the "Select All" checkbox
-      const [visibleColumns1, setVisibleColumns1] = useState(followupcolumns.slice(1));
-      const [showColumnList1, setShowColumnList1] = useState(false);
+   
 
-      const handleSelectAll1 = () => {
-       
-        setSelectAll1(!selectAll1);
-        if (!selectAll1) {
-          // Add all current page item IDs to selectedItems
-          setSelectedItems1(currentItems.map((item) => item._id));
-        } else {
-          // Deselect all
-          setSelectedItems1([]);
-       
-        }
-      };
+      
     
-      const handleRowSelect1 = (id) => {
-     
-        if (selectedItems1.includes(id)) {
-          setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
-        } else {
-          setSelectedItems1([...selectedItems1, id]);
-        
-        }
-      };
+   
 
       
     
@@ -434,45 +414,8 @@ const allColumns = [
 
  /*-------------------------------------------------------------------updation start---------------------------------------------------------------------------- */                                                     
 
- const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[],mobile_no:[],mobile_type:[],action1:[],
-  email:[],email_type:[],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
-  profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
-  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[],company_url:[],action3:[],
-
-  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-  birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action4:[],loan:[],bank:[],amount:[],action5:[],
-  social_media:[],url:[],action6:[],income:[],amount1:[],action7:[],document_no:[],document_name:[],document_pic:[],action8:[]});
-
-       const time=new Date()
-    
-        const [show1, setshow1] = useState(false);
-
-        const handleClose1 = () => setshow1(false);
-        const[data1,setdata1]=useState([])
-        const handleShow1=async()=>
-        {
-          if(selectedItems.length===1)
-          {
-            try {
-              const resp=await api.get(`viewcontactbyname/${selectedItems}`)//here search contact by id
-              setshow1(true);
-              console.log(resp);
-              
-              setcontact(resp.data.contact)
-              setdata1(resp.data.contact)
-            } catch (error) {
-              console.log(error);
-            }
-          }
-          else
-          {
-            toast.error("please select only one")
-          }
-         
-        }
-       console.log(data1);
-      //  console.log(contact);
+ 
        
        
        
@@ -604,8 +547,8 @@ const handleischeckedchange=(e)=>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
                 type="checkbox"
-                checked={selectedItems1.includes(item._id)}
-                onChange={() => handleRowSelect1(item._id)}
+                checked={selectedItems.includes(item._id)}
+                onChange={() => handleRowSelect(item._id)}
               />
               {index + 1}
             </StyledTableCell>
@@ -613,40 +556,62 @@ const handleischeckedchange=(e)=>
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
             >
-               {item.title2} {item.first_name} {item.last_name}
-              <br />
-              <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
-              <br />
-              <SvgIcon component={EmailIcon} />
-              <span>{item.email}</span>
+               
+             
+            
             </StyledTableCell>
 
             <StyledTableCell>
-              {item.due_date}
+             
             </StyledTableCell>
             <StyledTableCell>
-              <b>{item.title}</b> <br></br>
-              {item.remarks}
-            </StyledTableCell>
-            <StyledTableCell>
-              {item.activity_type}
-            </StyledTableCell>
-            <StyledTableCell>
-            {item.executive}
-            </StyledTableCell>
-            <StyledTableCell>
-              
-            </StyledTableCell>
-            <StyledTableCell>
-             {item.stage}
+            {item.date}
             </StyledTableCell>
             <StyledTableCell>
              
             </StyledTableCell>
             <StyledTableCell>
-              <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
+         
             </StyledTableCell>
+            <StyledTableCell>
+              {item.payment_mode}
+            </StyledTableCell>
+            <StyledTableCell>
+             {item.cheque_bank_name}
+            </StyledTableCell>
+            <StyledTableCell>
+             {item.cheque_number}
+            </StyledTableCell>
+            <StyledTableCell>
+              {item.in_favour_of}
+            </StyledTableCell>
+            <StyledTableCell>
+              {item.amount}
+              </StyledTableCell>
+              <StyledTableCell>
+              {item.tds}%
+              </StyledTableCell>
+              <StyledTableCell>
+              {item.tds_amount}
+              </StyledTableCell>
+              <StyledTableCell>
+              
+              </StyledTableCell>
+              <StyledTableCell>
+              
+              </StyledTableCell>
+              <StyledTableCell>
+              <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+   
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+  <li><a class="dropdown-item" href="#">invoice</a></li>
+    <li><a class="dropdown-item" href="#">edit</a></li>
+    <li><a class="dropdown-item" href="#">delete</a></li>
+  </ul>
+</div>
+              </StyledTableCell>
             
           </StyledTableRow>
         ))}
@@ -663,7 +628,7 @@ const handleischeckedchange=(e)=>
 
       
        
-      <Modal show={show1} onHide={handleClose1} size='xl'>
+      <Modal  size='xl'>
             <Modal.Header>
               <Modal.Title>Update Contact</Modal.Title>
             </Modal.Header>

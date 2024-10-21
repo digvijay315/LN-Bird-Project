@@ -70,35 +70,23 @@ function Booking_details() {
                 <div className="row mt-2">
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setbooking({...booking,type:e.target.value})}>
                     <option>Select</option>
-                        <option>Mr.</option>
-                        <option>Mrs.</option>
-                        <option>Smt.</option>
-                        <option>Dr.</option>
-                        <option>Er.</option>
-                        <option>Sh.</option>
-                        <option>col</option>
+                        <option>Rent</option>
+                        <option>Sell</option>
+                        <option>Buy</option>
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Property</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setbooking({...booking,property:e.target.value})}>
                         <option>Select</option>
-                        <option>Mr.</option>
-                        <option>Mrs.</option>
-                        <option>Smt.</option>
-                        <option>Dr.</option>
-                        <option>Er.</option>
-                        <option>Sh.</option>
-                        <option>col</option>
+                        <option>Noida sec 61</option>
+                        <option>Noida sec 63</option>
+                        <option>Anand Vihar Delhi</option>
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Booked Lead</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setbooking({...booking,booked_lead:e.target.value})}>
                         <option>Select</option>
-                        <option>Mr.</option>
-                        <option>Mrs.</option>
-                        <option>Smt.</option>
-                        <option>Dr.</option>
-                        <option>Er.</option>
-                        <option>Sh.</option>
-                        <option>col</option>
+                        <option>Ajay</option>
+                        <option>Rajesh</option>
+                        <option>Suresh</option>
                         </select>
                         </div>
 
@@ -121,17 +109,18 @@ function Booking_details() {
 
                     <div className="col-md-3"><label className="labels">Sales Agent</label><select className="form-control form-control-sm" onChange={(e)=>setbooking({...booking,sales_agent:e.target.value})}>
                     <option>Select</option>
-                        <option>Personal</option>
-                        <option>Office</option>
-                        <option>Business</option>
+                        <option>Rakesh</option>
+                        <option>Ajit</option>
+                        <option>Mohan</option>
                         </select></div>
-                        <div className="col-md-3"><label className="labels" style={{marginLeft:"200px"}} >Channel</label><select className="form-control form-control-sm" style={{marginLeft:"200px"}} onChange={(e)=>setbooking({...booking,channel:e.target.value})}>
+                        <div className="col-md-3"></div>
+                        <div className="col-md-3"><label className="labels"  >Channel</label><select className="form-control form-control-sm"  onChange={(e)=>setbooking({...booking,channel:e.target.value})}>
                     <option>Select</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>
                         </select></div>
-                    <div className="col-md-3"><label className="labels" style={{marginLeft:"200px"}}>Side</label><select className="form-control form-control-sm" style={{marginLeft:"200px"}} onChange={(e)=>setbooking({...booking,side:e.target.value})}>
+                    <div className="col-md-3"><label className="labels" >Side</label><select className="form-control form-control-sm" onChange={(e)=>setbooking({...booking,side:e.target.value})}>
                     <option>Select</option>
                         <option>Personal</option>
                         <option>Office</option>

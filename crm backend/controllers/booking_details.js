@@ -19,4 +19,13 @@ const booking_details=async(req,res)=>
         }
     }
 
-    module.exports=booking_details
+    const view_booking=async(req,res)=>
+        {
+            try {
+                const resp=await Booking_details.find()
+                res.status(200).send({message:"booking details fetch successfully",booking:resp})
+            } catch (error) {
+                console.log(error)
+            }
+        }
+    module.exports={booking_details,view_booking}

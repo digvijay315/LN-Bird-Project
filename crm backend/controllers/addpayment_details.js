@@ -19,4 +19,14 @@ const addpayment_details=async(req,res)=>
         }
     }
 
-    module.exports=addpayment_details
+    const view_payment=async(req,res)=>
+        {
+            try {
+                const resp=await add_payment_details.find()
+                res.status(200).send({message:"payment details fetch successfully",payment:resp})
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
+    module.exports={addpayment_details,view_payment}
