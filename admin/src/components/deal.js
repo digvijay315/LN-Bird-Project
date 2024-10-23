@@ -22,12 +22,13 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
+import { toWords } from 'number-to-words';
 
 function Deal() {
   const navigate=useNavigate()
   
   /*-------------------------------------------------------------------form next and prev buttons display code start----------------------------------------------------- */
-  
+
  
   function handler()
     {
@@ -112,7 +113,8 @@ function Deal() {
 
 
             const[deal,setdeal]=useState({available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-                                expected_price:"",quote_price:"",price1:"",price2:"",security_deposite:"",
+                                expected_price:"",quote_price:"",calculated_type:"",price1:"",totalarea:"",measurment1:"",
+                                total_price:"",  price2:"",price3:"",security_deposite:"",
                                 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
                                 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
                                 document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
@@ -299,48 +301,7 @@ const deleteall1=(index)=>
     });
   }
 
-// const handleDeletesno = (index) => {
-//   const newsno = inventory.s_no.filter((_, i) => i !== index);
-//   setinventory({
-//     ...inventory,
-//     s_no: newsno
-//   });
-// };
-// const handleDeletepreview = (index) => {
-//   const newpreview = inventory.preview.filter((_, i) => i !== index);
-//   setinventory({
-//     ...inventory,
-//     preview: newpreview
-//   });
-// };
-// const handleDeletedescription = (index) => {
-//   const newdescription = inventory.descriptions.filter((_, i) => i !== index);
-//   setinventory({
-//     ...inventory,
-//     descriptions: newdescription
-//   });
-// };
-// const handleDeletecategory = (index) => {
-//   const newcategory = inventory.category.filter((_, i) => i !== index);
-//   setinventory({
-//     ...inventory,
-//     category: newcategory
-//   });
-// };
-// const handleDeletesno1 = (index) => {
-//   const newsno1 = inventory.s_no1.filter((_, i) => i !== index);
-//   setinventory({
-//     ...inventory,
-//     s_no1: newsno1
-//   });
-// };
-// const handleDeleteurl = (index) => {
-//   const newurl = inventory.url.filter((_, i) => i !== index);
-//   setinventory({
-//     ...inventory,
-//     url: newurl
-//   });
-// };
+
 
 
 function available_for()
@@ -385,6 +346,52 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const formatCurrency = (num) => {
+  if (num === 0) return "₹0"; // Handle zero case
+
+  // Convert number to string
+  const numStr = num.toString();
+
+  // Split the number into whole and decimal parts
+  const [whole, decimal] = numStr.split('.');
+
+  // Format the whole part for Indian currency style
+  const lastThreeDigits = whole.slice(-3);
+  const otherDigits = whole.slice(0, -3);
+  const formattedWhole = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + (otherDigits.length > 0 ? "," : "") + lastThreeDigits;
+
+  // Combine whole and decimal parts, if any
+  return `${formattedWhole}${decimal ? '.' + decimal : ''}`;
+};
+const [result, setResult] = useState(0);
+const [resultText, setResultText] = useState('');
+
+const totalAreaValue = () => {
+  const areaValue = parseFloat(deal.totalarea) || 0; // Ensure valid number
+  const priceValue = parseFloat(deal.price1) || 0; // Ensure valid number
+  const calculatedResult = areaValue * priceValue;
+  setResult(calculatedResult);
+  setdeal({ ...deal, total_price: calculatedResult }); // Set total price in deal
+};
+
+React.useEffect(() => {
+  totalAreaValue();
+}, [deal.totalarea,deal.price1]);
+
+React.useEffect(() => {
+  // Convert result to text format
+  if (result) {
+    const words = toWords(result, { format: 'en-IN' });
+    setResultText(`(${words} only)`);
+  } else {
+    setResultText('');
+  }
+}, [result]);
+
+
+
+
+  
 
   
 
@@ -468,18 +475,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
                 <div className="row" id="sale" style={{display:"none"}}>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>blank</label><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price<select required="true" className="form-control form-control-sm" >
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>blank</label><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price<select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,calculated_type:e.target.value})} >
                     <option value="">calculated</option><option value="">absolute</option>
                     </select></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>blank</label><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price<input className="form-control form-control-sm"/></div>
+                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>blank</label><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price<input type="number" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,price1:e.target.value})}/></div>
                     <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Blank</label><select className="form-control form-control-sm">
                     <option value="">X</option>
                     </select>
                     </div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Total Area</label><select required="true" className="form-control form-control-sm" >
-                    <option value="">total area</option>
+                    <div className="col-md-2"><label className="labels" > Total Area</label><input type="number"  className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,totalarea:e.target.value})}/></div>
+                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}> measurment</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
+                    <option value="">sq feet</option>
+                    <option value="">sq yard</option>
                     </select></div>
-                   <div className="col-md-2"></div>
+                   <div className="col-md-2"><label className="labels">Total Price<br></br>₹{formatCurrency(result)}<br></br>{resultText}</label></div>
 
                     <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
                     <option>Select</option>

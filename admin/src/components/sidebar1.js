@@ -50,7 +50,7 @@ function Sidebar1() {
 				
 					<li class="dropdown">
 						<Link to={'/inventorydetails'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiApplication} size={1} /><span class="mtext"> Properties/Inventory </span>
+						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiApplication} size={1} /><span class="mtext"> Inventory </span>
 						</Link>
 					</li>
 					<li class="dropdown">
@@ -62,20 +62,20 @@ function Sidebar1() {
 				
 					<li class="dropdown">
 						<Link to={'/bookingdetailsdata'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Booking Details</span>
+						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Post Sales</span>
 						</Link>
 					
 					</li>
-					<li class="dropdown">
+					{/* <li class="dropdown">
 						<Link to={'/paymentdetailsdata'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Payment Details</span>
 						</Link>
 					
-					</li>
+					</li> */}
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiMessageOutline} size={1} /><span class="mtext">Marketing</span>
-						</a>
+					<Link to={'/marketing'} class="dropdown-toggle no-arrow">
+						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Marketing</span>
+						</Link>
 						<ul class="submenu">
 						
 						</ul>

@@ -1,6 +1,6 @@
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
-import {  useNavigate } from "react-router-dom";
+import {  Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState } from "react";
 
@@ -441,8 +441,9 @@ const handleischeckedchange=(e)=>
             <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
-        <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Deals </h3>
-        
+        <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Booking</h3>
+       
+        <button style={{marginLeft:"20px",width:"150px"}} className="form-control form-control-sm"><Link to={'/bookingdetails'}>Add Booking</Link></button>
         <Tooltip title="Export Data.." arrow>
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
             <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
@@ -455,7 +456,7 @@ const handleischeckedchange=(e)=>
            
 
 
-            <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"120px",marginLeft:"80%"}}><img src="https://cdn-icons-png.flaticon.com/512/566/566737.png" style={{height:"20px"}}/>Filter</button>
+            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"120px",marginLeft:"65%"}}><img src="https://cdn-icons-png.flaticon.com/512/566/566737.png" style={{height:"20px"}}/>Filter</button>
         
        
        
@@ -573,10 +574,10 @@ const handleischeckedchange=(e)=>
     <li><a class="dropdown-item" href="#">update approved</a></li>
     <li><a class="dropdown-item" href="#">generate token recipt</a></li>
     <li><a class="dropdown-item" href="#">generate aggrement</a></li>
-    <li><a class="dropdown-item" href="#">add payment</a></li>
+    <li><Link to={'/paymentdetails'} class="dropdown-item"><img style={{height:"20px"}} src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Indian_Rupee_symbol.svg/1200px-Indian_Rupee_symbol.svg.png"></img>add payment</Link></li>
     <li><a class="dropdown-item" href="#">payment schedule</a></li>
     <li><a class="dropdown-item" href="#">view schedule</a></li>
-    <li><a class="dropdown-item" href="#">view payments</a></li>
+    <li><Link to={'/paymentdetailsdata'} class="dropdown-item">view payments</Link></li>
   </ul>
 </div>
               </StyledTableCell>

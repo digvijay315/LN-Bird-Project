@@ -492,13 +492,20 @@ function InventoryDetails() {
       ));
     };
 
+    const[ischecked,setischecked]=useState(false)
+    const handleischeckedchange=(e)=>
+    {
+      setischecked(e.target.checked)
+    }
+
+
     return ( 
         <div>
             <Header1/>
             <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
-        <h3 style={{marginLeft:"10px"}}>Inventory</h3>
+        <h3 style={{marginLeft:"10px",cursor:"pointer"}}>Inventory</h3>
         <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
             <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
         </button>
@@ -515,29 +522,8 @@ function InventoryDetails() {
             <ul class="dropdown-menu">
               <li><Link to={'/addinventory'} class="dropdown-item">Add Inventory</Link></li>
             </ul> */}
-      </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
-        {/* <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}}>
-          <h6>INCOMING</h6>
-          <p>{}</p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>PROSPECT</h6>
-          <p>{}</p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>OPPORTUNITY</h6>
-          <p></p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>NEGOTIATION</h6>
-          <p>{}</p>
-        </div> */}
-        <div className="lead" style={{width:"200px",borderRadius:"10px",padding:"10px",marginLeft:"70%",textAlign:"center"}} onClick={fetchdata}>
-          <h6>All</h6>
-        </div>
-        <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-            <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"5px",color:"black",backgroundColor:"transparent",width:"150px"}}>
+            <div style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px",marginLeft:"70%"}}>
+            <button  class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{marginLeft:"5px",color:"black",backgroundColor:"transparent",width:"120px"}}>
             Filter
         </button>
             <ul class="dropdown-menu">
@@ -546,7 +532,62 @@ function InventoryDetails() {
               <li><label className="labels">By location</label><input type="text" className="form-control form-control-sm" placeholder="filter from location" onChange={(e)=>setlocation(e.target.value)} onKeyDown={handlepress2}/></li>
             </ul>
         </div>  
+      </div>
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}}>
+          <h6>OPEN</h6>
+          <p>{}</p>
+        </div>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+          <h6>QUOTE</h6>
+          <p>{}</p>
+        </div>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+          <h6>NEGOTIATION</h6>
+          <p></p>
+        </div>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+          <h6>BOOKED</h6>
+          <p>{}</p>
+        </div>
+        <div style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+     
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none",fontWeight:"bold",marginTop:"-10px"}}>
+            CLOSED
+        </button>
+            <ul class="dropdown-menu">
+              <li className="form-control">Won <span style={{fontSize:"30px",color:"green",fontWeight:"bolder"}}><sup></sup></span></li>
+              <li className="form-control">Reject <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup></sup></span></li>
+              <li className="form-control">Lost <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup></sup></span></li>
+            </ul>
+        </div>  
         
+        
+      </div>
+
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
+      <input type="checkbox" onChange={handleischeckedchange}/>
+      <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} />
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
+           {/* <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button> */}
+         
+           </div>
+
+    
+    
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute"}}>
+   
+      
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage}  style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    
+    {renderPageNumbers()}
+    </div> 
       </div>
       {/* <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
           <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} onClick={exportToExcel} >Export Data</button>
