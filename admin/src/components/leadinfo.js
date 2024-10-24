@@ -614,7 +614,7 @@ return (
               
               
                 <div className="row mt-2" id="leadinforequirment" style={{display:"none"}}>
-                <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
+                <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
                     <option>Select</option>
                        {
                         requirment.map(item=>
@@ -625,7 +625,7 @@ return (
                        }
                         </select>
                         </div>
-                        <div className="col-md-3"><label className="labels">Property Type</label><select className="form-control" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
+                        <div className="col-md-3"><label className="labels">Property Type</label><select className="form-control form-control-sm" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
                     <option>Select</option>
                         {
                             property_type.map(item=>
@@ -643,7 +643,7 @@ return (
                         <div className="col-md-2"><label className="labels" >NRI</label><br></br>
                         <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,nri:e.target.value})}/>Yes
                         </div>
-                        <div className="col-md-6"><label className="labels">Sub Type</label><select required="true" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,sub_type:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Sub Type</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,sub_type:e.target.value})}>
                     <option value="">select</option>
                     <option value="93">Afghanistan +93</option>
                     <option value="358">Aland Islands +358</option>
@@ -651,38 +651,38 @@ return (
                     </select>
                     </div>
                     
-                    <div className="col-md-6"><label className="labels">Unit Type</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,unit_type:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Unit Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,unit_type:e.target.value})}>
                     <option>Select</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                        <div className="col-md-6"><label className="labels">Budget Min</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
                         <option>Select</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
 
-                        <div className="col-md-6"><label className="labels">Budget Max</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
                         <option>Select</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
                         <option>Select</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
                         <option>Select</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
+                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
                         <option>Select Type</option>
                         <option>Home</option>
                         <option>Office</option>

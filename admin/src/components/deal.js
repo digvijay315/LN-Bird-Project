@@ -23,9 +23,56 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import { toWords } from 'number-to-words';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import { SvgIcon } from "@mui/material";
+import EmailIcon from '@mui/icons-material/Email';
 
 function Deal() {
   const navigate=useNavigate()
+
+
+  const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
+    "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
+    "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
+    "Barbados +1246","Belarus +375","Belgium +32","Belize +501","Benin +229","Bermuda +1441","Bhutan +975",
+    "Bolivia +591","Bonaire, Sint Eustatius and Saba +599","Bosnia and Herzegovina +387","Botswana +267",
+    "Bouvet Island +55","Brazil +55","British Indian Ocean Territory +246","Brunei Darussalam +673","Bulgaria +359",
+    "Burkina Faso +226","Burundi +257","Cambodia +855","Cameroon +237","Canada +1","Cape Verde +238","Cayman Islands +1345",
+    "Central African Republic +236","Chad +235","Chile +56","China +86","Christmas Island +61","Cocos (Keeling) Islands +672",
+    "Colombia +57","Comoros +269","Congo +242","Congo, Democratic Republic of the Congo +242","Cook Islands +682",
+    "Costa Rica +506","Cote D'Ivoire +225","Croatia +385","Cuba +53","Curacao +599","Cyprus +357","Czech Republic +420",
+    "Denmark +45","Djibouti +253","Dominica +1767","Dominican Republic +1809","Ecuador +593","Egypt +20",
+    "El Salvador +503","Equatorial Guinea +240","Eritrea +291","Estonia +372","Ethiopia +251","Falkland Islands (Malvinas) +500",
+    "Faroe Islands +298","Fiji +679","Finland +358","France +33","French Guiana +594","French Polynesia +689",
+    "French Southern Territories +262","Gabon +241","Gambia +220","Georgia +995","Germany +49","Ghana +233","Gibraltar +350",
+    "Greece +30","Greenland +299","Grenada +1473","Guadeloupe +590","Guam +1671","Guatemala +502","Guernsey +44",
+    "Guinea +224","Guinea-Bissau +245","Guyana +592","Haiti +509","Holy See (Vatican City State) +39","Honduras +504",
+    "Hong Kong +852","Hungary +36","Iceland +354","India +91","Indonesia +62","Iran, Islamic Republic of +98","Iraq +964",
+    "Ireland +353","Isle of Man +44","Israel +972","Italy +39","Jamaica +1876","Japan +81","Jersey +44","Jordan +962",
+    "Kazakhstan +7","Kenya +254","Kiribati +686","Korea Democratic People's Republic of +850","Korea Republic of +82","Kosovo +383",
+    "Kuwait +965","Kyrgyzstan +996","Lao People's Democratic Republic +856","Latvia +371","Lebanon +961","Lesotho +266",
+    "Liberia +231","Libyan Arab Jamahiriya +218","Liechtenstein +423","Lithuania +370","Luxembourg +352","Macao +853",
+    "Macedonia, the Former Yugoslav Republic of +389","Madagascar +261","Malawi +265","Malaysia +60","Maldives +960",
+    "Mali +223","Malta +356","Marshall Islands +692","Martinique +596","Mauritania +222","Mauritius +230","Mayotte +262",
+    "Mexico +52","Micronesia, Federated States of +691","Moldova, Republic of +373","Monaco +377","Mongolia +976",
+    "Montenegro +382","Montserrat +1664","Morocco +212","Mozambique +258","Myanmar +95","Namibia +264","Nauru +674",
+    "Nepal +977","Netherlands +31","Netherlands Antilles +599","New Caledonia +687","New Zealand +64","Nicaragua +505",
+    "Niger +227","Nigeria +234","Niue +683","Norfolk Island +672","Northern Mariana Islands +1670","Norway +47",
+    "Oman +968","Pakistan +92","Palau +680","Palestinian Territory, Occupied +970","Panama +507","Papua New Guinea +675",
+    "Paraguay +595","Peru +51","Philippines +63","Pitcairn +64","Poland +48","Portugal +351","Puerto Rico +1787",
+    "Qatar +974","Reunion +262","Romania +40","Russian Federation +7","Rwanda +250","Saint Barthelemy +590",
+    "Saint Helena +290","Saint Kitts and Nevis +1869","Saint Lucia +1758","Saint Martin +590","Saint Pierre and Miquelon +508",
+    "Saint Vincent and the Grenadines +1784","Samoa +684","San Marino +378","Sao Tome and Principe +239","Saudi Arabia +966",
+    "Senegal +221","Serbia +381","Serbia and Montenegro +381","Seychelles +248","Sierra Leone +232","Singapore +65",
+    "Sint Maarten +721","Slovakia +421","Slovenia +386","Solomon Islands +677","Somalia +252","South Africa +27",
+    "South Georgia and the South Sandwich Islands +500","South Sudan +211","Spain +34","Sri Lanka +94","Sudan +249",
+    "Suriname +597","Svalbard and Jan Mayen +47","Swaziland +268","Sweden +46","Switzerland +41","Syrian Arab Republic +963",
+    "Taiwan, Province of China +886","Tajikistan +992","Tanzania, United Republic of +255","Thailand +66","Timor-Leste +670",
+    "Togo +228","Tokelau +690","Tonga +676","Trinidad and Tobago +1868","Tunisia +216","Turkey +90","Turkmenistan +7370",
+    "Turks and Caicos Islands +1649","Tuvalu +688","Uganda +256","Ukraine +380","United Arab Emirates +971",
+    "United Kingdom +44","United States +1","United States Minor Outlying Islands +1","Uruguay +598","Uzbekistan +998",
+    "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
+    "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
   
   /*-------------------------------------------------------------------form next and prev buttons display code start----------------------------------------------------- */
 
@@ -113,11 +160,11 @@ function Deal() {
 
 
             const[deal,setdeal]=useState({available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-                                expected_price:"",quote_price:"",calculated_type:"",price1:"",totalarea:"",measurment1:"",
+                                expected_price:"",quote_price:"",calculated_type:"",price1:"",totalarea:"",measurment1:"",total_price:"",
                                 total_price:"",  price2:"",price3:"",security_deposite:"",
                                 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
                                 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
-                                document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
+                                owner_details:[],document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
                                 website:"",social_media:"",send_matchedlead:""})
               const config = {
                 headers: {
@@ -389,10 +436,209 @@ React.useEffect(() => {
 }, [result]);
 
 
+const [show1, setshow1] = useState(false);
+    
+const handleClose1 = () => setshow1(false);
+const handleShow1=async()=>
+{
+  setshow1(true);
+ 
+}
 
+const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action1:[],
+  email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
+  profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
+  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+
+  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+  birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],relation:"" });
+
+  // const config = {
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data' // Set the Content-Type here
+  //     }
+  // }
+
+  const addcontact=async(e)=>
+    {
+        e.preventDefault();
+        try {
+
+            const resp= await api.post('addcontact',contact,config)
+        if(resp.status===200)
+            {
+                toast.success(resp.data.message,{ autoClose: 2000 })
+                setTimeout(() => {
+                  window.location.reload()
+                }, 2000);
+            }
+            
+      
+        } catch (error) {
+            toast.error(error.response.data.message,{ autoClose: 2000 })
+        }
+    }
+
+    function addFn3() {
+        
+      setcontact({
+        ...contact,
+        country_code: [...contact.country_code, ''],
+        mobile_no: [...contact.mobile_no, ''],
+        mobile_type: [...contact.mobile_type, ''],
+        action1: [...contact.action1, '']
+      });
+    };
+
+    const deleteall3=(index)=>
+      {
+       
+        const newcountry_code = contact.country_code.filter((_, i) => i !== index);
+        const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
+        const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
+        const newaction1 = contact.action1.filter((_, i) => i !== index);
+        
+        setcontact({
+          ...contact,
+          country_code: newcountry_code,
+          mobile_no: newmobile_no,
+          mobile_type: newmobile_type,
+          action1: newaction1
+        });
+      }
+      const handlecountry_codechange = (index, event) => {
+        const newcountry_code = [...contact.country_code];
+        newcountry_code[index] = event.target.value;
+        setcontact({
+          ...contact,
+          country_code: newcountry_code
+        });
+      };
+      const handlemobile_nochange = (index, event) => {
+        const newmobile_no = [...contact.mobile_no];
+        newmobile_no[index] = event.target.value;
+        setcontact({
+          ...contact,
+          mobile_no: newmobile_no
+        });
+      };
+      const handlemobile_typechange = (index, event) => {
+        const newmobile_type = [...contact.mobile_type];
+        newmobile_type[index] = event.target.value;
+        setcontact({
+          ...contact,
+          mobile_type: newmobile_type
+        });
+      };
+
+      function addFn4() {
   
+        setcontact({
+          ...contact,
+          email: [...contact.email, ''],
+          email_type: [...contact.email_type, ''],
+          action2: [...contact.action2, '']
+        });
+      };
 
+      const deleteall4=(index)=>
+        {
+         
+          const newemail = contact.email.filter((_, i) => i !== index);
+          const newemail_type = contact.email_type.filter((_, i) => i !== index);
+          const newaction2 = contact.action2.filter((_, i) => i !== index);
+          
+          setcontact({
+            ...contact,
+            email: newemail,
+            email_type: newemail_type,
+            action2: newaction2
+          });
+        }
+        const handleemailchange = (index, event) => {
+          const newemail = [...contact.email];
+          newemail[index] = event.target.value;
+          setcontact({
+            ...contact,
+            email: newemail
+          });
+        };
+        const handleemail_typechange = (index, event) => {
+          const newemail_type = [...contact.email_type];
+          newemail_type[index] = event.target.value;
+          setcontact({
+            ...contact,
+            email_type: newemail_type
+          });
+        };
+
+        const [input, setInput] = useState('');
+        const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+        const [showSuggestions, setShowSuggestions] = useState(false);
+        const [allSuggestions, setAllSuggestions] = useState([]);
+        const [selectedContacts, setSelectedContacts] = useState([]);
+  
+        React.useEffect(() => {
+          const fetchSuggestions = async () => {
+            try {
+              const response = await axios.get('http://localhost:5000/viewcontact');
+              const data = response.data.contact;
+              
+              // Extract the first_name field from the fetched data
+              const names = data.map(item => item.first_name);
+              setAllSuggestions(data);
+            } catch (error) {
+              console.error('Error fetching suggestions:', error);
+            }
+          };
+      
+          fetchSuggestions();
+        }, []);
+
+        React.useEffect(() => {
+          if (input) {
+            const results = allSuggestions.filter(contact =>
+              contact.first_name?.toLowerCase().includes(input.toLowerCase())
+            );
+            setFilteredSuggestions(results);
+            setShowSuggestions(true);
+          } else {
+            setShowSuggestions(false);
+          }
+        }, [input, allSuggestions]);
+      
+        const handleInputChange = (event) => {
+          setInput(event.target.value);
+        };
+        
+        
+        
+      
+        const handleSuggestionClick = (contact) => {
+            // Add the new contact to the selectedContacts array
+            const updatedContacts = [...selectedContacts, contact];
+            setSelectedContacts(updatedContacts);
+          
+          setInput(''); // Clear the input after selection
+          setShowSuggestions(false); // Hide suggestions after selection
+          setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+        };
+      
+        const removeContact = (id) => {
+          const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+          setSelectedContacts(updatedContacts);
+          
+          // Update deal.owner_details with the current selected contacts
+          setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+        };
+console.log(deal.owner_details);
+
+        
+        
+       
+        
   
 
     return ( 
@@ -660,14 +906,111 @@ React.useEffect(() => {
                 <div id="basicform" style={{padding:"5px"}}>
                 <div className="row" style={{width:"100%"}}>
                
-                        <div className="col-md-9"><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" placeholder="Type here For Search in Contact" required="true"/></div>
-                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}}>+</button></div>
+                        <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                        {showSuggestions && input && filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-list">
+                              {filteredSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                  {suggestion.first_name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={handleShow1}>+</button></div>
                     
-                     <div className="col-md-12" style={{marginTop:"20px",height:"200px",overflowY:"scroll"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div></div>
-                
+                     <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                     {selectedContacts.length > 0 && (
+                      <div className="contact-details">
+                        <table  style={{width:"100%"}}>
+                          
+                          <tbody>
+                          {selectedContacts.filter(contact => contact.relation === 'Self').map(contact => (
+                              <StyledTableRow key={contact.id}>
+                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png"></img>
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                    {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                    <SvgIcon component={EmailIcon} />
+                                    <span>{contact.email}</span>
+                                </StyledTableCell>
 
-                <div className="col-md-12" style={{marginTop:"20px",height:"200px",overflowY:"scroll"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div></div>
-                
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  {contact.mobile_no.map((number, index) => (
+                                    <span key={index}>
+                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      {number}<br></br>
+                                    </span>
+                                  ))}
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  S/W/O <br></br>{contact.father_husband_name}
+                                  </StyledTableCell>
+
+                                  <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                  {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                  </StyledTableCell>
+
+                                  <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                    </StyledTableCell>
+
+                                <StyledTableCell>
+                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)}></img>
+                                   </StyledTableCell>
+                                
+                              </StyledTableRow>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                </div>
+                <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                {selectedContacts.length > 0 && (
+                <div className="contact-details">
+                    <table style={{width:"100%"}}>
+                        <tbody>
+                            {selectedContacts.filter(contact => contact.relation !== 'Self').map(contact => (
+                                <StyledTableRow key={contact.id}>
+                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {contact.title} {contact.first_name} {contact.last_name}<br />
+                                        <SvgIcon component={EmailIcon} />
+                                        <span>{contact.email}</span>
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {contact.mobile_no.map((number, index) => (
+                                            <span key={index}>
+                                                <SvgIcon component={PhoneIphoneIcon} />
+                                                {number}<br />
+                                            </span>
+                                        ))}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        S/W/O <br />{contact.father_husband_name}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {contact.relation}
+                                    </StyledTableCell>
+                                        
+                                    <StyledTableCell>
+                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            </div>
                      </div>
                   </div>
                 <div className="row mt-4">
@@ -677,7 +1020,157 @@ React.useEffect(() => {
                 </div>
               </div>
 
-{/*-----------------------------------------------------------------photos/videos form----------------------------------------------------------------- */}             
+
+              <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Quick Add Contact</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+            <div className="row" id='basicdetails1'>
+                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                              <option>Select</option>
+                              <option>Mr.</option>
+                              <option>Mrs.</option>
+                              <option>Sh.</option>
+                              <option>Smt.</option>
+                              <option>Dr.</option>
+                              <option>Er.</option>
+                              <option>Col.</option>
+                              <option>Maj.</option>
+                        </select>
+                        </div>
+                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                </div>
+                </div>
+                <div className="row mt-3" id='basicdetails2'>
+                <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      contact.country_code.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <option value={item} >phone</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       contact.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange(index,event)}>
+                                  <option>Select</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action1.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn3}>+</button></div>
+                    
+                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        contact.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.email_type.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange(index,event)}>
+                                <option>Select</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action2.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn4}>+</button></div>
+                  <div className="col-md-6"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setcontact({...contact,father_husband_name:e.target.value})}/></div>
+                  <div className="col-md-6"><label className="labels">Relation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,relation:e.target.value})}>
+                        <option>Select</option>
+                        <option>Self</option>
+                        <option>Relative</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                  
+                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,h_no:e.target.value})}/></div>
+                    <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area1:e.target.value})}/></div>
+
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location1:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city1:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode1:e.target.value})}/></div>
+
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state1:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country1:e.target.value})}/></div>
+    
+            </div>
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={addcontact}>
+                Add Contact
+              </Button>
+              <Button variant="secondary" onClick={handleClose1}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+{/*-----------------------------------------------------------------document form----------------------------------------------------------------- */}             
           
               <div id="photosform" style={{border:"1px solid gray",padding:"5px",marginTop:"-50px",display:"none"}}>
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -738,7 +1231,8 @@ React.useEffect(() => {
                     <div className="col-md-2" onClick={handler4} style={{marginLeft:"-90%",display:"none"}} id="prevbtn1"><button className="form-control" >Prev</button></div>
                 </div>  
 
-{/*-----------------------------------------------------------------owner details form----------------------------------------------------------------- */}             
+{/*-----------------------------------------------------------------photos and videos form----------------------------------------------------------------- */}             
+              
                 <div id="ownerform" style={{padding:"5px",marginTop:"-130px",display:"none"}}>
                
                   <div className="d-flex justify-content-between align-items-center mb-3">

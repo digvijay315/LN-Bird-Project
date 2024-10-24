@@ -399,7 +399,8 @@ const allColumns = [
         { id: 'country', name: 'Company Country' },
         { id: 'company_social_media', name: 'Company Social Media' },
         { id: 'company_url', name: 'Company Url' },
-        { id: 'descriptions', name: 'Descriptions' }
+        { id: 'descriptions', name: 'Descriptions' },
+        { id: 'relation', name: 'Relation' }
       ];
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
       const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox

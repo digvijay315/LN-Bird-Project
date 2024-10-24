@@ -1040,7 +1040,7 @@ const handleallunitschange2 = (event) => {
                         contactdata.map((item)=>
                         (
                             <option>{item.title} {item.first_name} {item.last_name} ({item.company_name})</option>
-                        ))
+                        )) 
                        }
                         </select>
                         </div>

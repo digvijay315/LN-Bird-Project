@@ -9,7 +9,7 @@ const add_contact=async(req,res)=>
                     company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url,
                     father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,
                     birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,
-                    income,amount1,document_no,document_name}=req.body;
+                    income,amount1,document_no,document_name,relation}=req.body;
 
                     const documentpic=req.files ? req.files.map(file => file.path) : [];
       
@@ -18,7 +18,7 @@ const add_contact=async(req,res)=>
                     company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url,
                     father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,
                     birth_date,anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,
-                    income,amount1,document_no,document_name,document_pic:documentpic})
+                    income,amount1,document_no,document_name,document_pic:documentpic,relation})
             
             const resp=await new_add_contact.save()
             res.status(200).send({message:"contact saved",user:resp})
