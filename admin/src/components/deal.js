@@ -11,8 +11,8 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { toast,ToastContainer } from "react-toastify";
 import axios from "axios";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import { render } from "@testing-library/react";
+// import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+// import { render } from "@testing-library/react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -30,6 +30,104 @@ import EmailIcon from '@mui/icons-material/Email';
 function Deal() {
   const navigate=useNavigate()
 
+  const[data1,setdata1]=useState([]);
+        const fetchdata1=async()=>
+        {
+          
+          try {
+            const resp=await api.get('viewproject')
+            setdata1(resp.data.project)
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+  React.useState(()=>
+  {fetchdata1()},[])
+
+  const allproject =[]
+  data1.map((item)=>
+  (
+      allproject.push(item.name)
+  ))
+   
+  // const [projects, setprojects] = useState([]);
+  const [units, setunits] = useState([]);
+  const [allUnits, setallUnits] = useState([]);
+  const [allblocks, setallblocks] = useState([]);
+
+  const fetchdatabyprojectname = async (projectNames) => {
+
+    try {
+      
+        const resp = await api.get(`viewprojectbyname/${projectNames}`);
+        const allFetchedUnits= resp.data.project; 
+        setunits(allFetchedUnits);// Assuming resp.data.project is an array of units for that project
+      
+  
+      // const results = await Promise.all(fetchPromises);
+      // const allFetchedUnits = results.flat();
+      // setunits(allFetchedUnits); // Set the units to the flattened result
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+  React.useEffect(() => {
+    if (units.length >= 0) {
+      const collectedUnits = units.flatMap(item => item.add_unit);
+      const collectedblocks=units.flatMap(item=>item.add_block) // Collect all add_unit arrays
+      setallUnits(collectedUnits);
+      setallblocks(collectedblocks) // Set allUnits with the collected units
+    }
+  }, [units]);
+
+  const handleprojectchange = (event) => {
+    // const {
+    //   target: { value },
+    // } = event;
+  
+    const selectproject = event.target.value
+  
+    // setprojects(selectproject);
+    setdeal((prev) => {
+      const updateproject = { ...prev, project: selectproject };
+       fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updateproject; // Return the updated state
+    });
+  };
+
+  const[allunit,setallunit]=useState([])
+const handleallunitschange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectunits = typeof value === 'string' ? value.split(',') : value;
+  
+     setallunit(selectunits);
+    setdeal((prev) => {
+      const updateunit = { ...prev, units: selectunits };
+    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updateunit; // Return the updated state
+    });
+  };
+
+  const[allblock,setallblock]=useState([])
+  const handleallblockchange = (event) => {
+      const {
+        target: { value },
+      } = event;
+    
+      const selectblocks = typeof value === 'string' ? value.split(',') : value;
+    
+       setallblock(selectblocks);
+      setdeal((prev) => {
+        const updateblock = { ...prev, blocks: selectblocks };
+      //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+        return updateblock; // Return the updated state
+      });
+    };
 
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
     "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
@@ -161,7 +259,7 @@ function Deal() {
 
             const[deal,setdeal]=useState({available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
                                 expected_price:"",quote_price:"",calculated_type:"",price1:"",totalarea:"",measurment1:"",total_price:"",
-                                total_price:"",  price2:"",price3:"",security_deposite:"",
+                                  price2:"",price3:"",security_deposite:"",
                                 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
                                 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
                                 owner_details:[],document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
@@ -587,7 +685,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
               const data = response.data.contact;
               
               // Extract the first_name field from the fetched data
-              const names = data.map(item => item.first_name);
+              // const names = data.map(item => item.first_name);
               setAllSuggestions(data);
             } catch (error) {
               console.error('Error fetching suggestions:', error);
@@ -633,9 +731,73 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
           // Update deal.owner_details with the current selected contacts
           setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
         };
-console.log(deal.owner_details);
 
         
+        const handleselectpricetypechang=(e)=>
+        {
+
+          const selectedValue = e.target.value;
+
+          if (selectedValue === "absolute") {
+              document.getElementById("price1").style.display="none"
+            document.getElementById("multiply").style.display="none"
+            document.getElementById("totalarea").style.display="none"
+            document.getElementById("measurment").style.display="none"
+             document.getElementById("priceintext").style.display="none"
+
+            document.getElementById("totalprice").style.display="block"
+            document.getElementById("divforprice1").style.display="block"
+          } else if (selectedValue === "calculated") {
+             document.getElementById("price1").style.display="block"
+            document.getElementById("multiply").style.display="block"
+            document.getElementById("totalarea").style.display="block"
+            document.getElementById("measurment").style.display="block"
+             document.getElementById("priceintext").style.display="block"
+             
+            document.getElementById("totalprice").style.display="none"
+            document.getElementById("divforprice1").style.display="none"
+          }
+          setdeal((prev)=>({
+            ...prev,
+            calculated_type:e.target.value
+
+          }))
+         
+        }
+
+        const handleselectpricetypechang1=(e)=>
+          {
+  
+            const selectedValue1 = e.target.value;
+  
+            if (selectedValue1 === "absolute") {
+                document.getElementById("price11").style.display="none"
+              document.getElementById("multiply1").style.display="none"
+              document.getElementById("totalarea1").style.display="none"
+              document.getElementById("measurment1").style.display="none"
+               document.getElementById("priceintext1").style.display="none"
+  
+              document.getElementById("totalprice1").style.display="block"
+              document.getElementById("divforprice11").style.display="block"
+            } else if (selectedValue1 === "calculated") {
+               document.getElementById("price11").style.display="block"
+              document.getElementById("multiply1").style.display="block"
+              document.getElementById("totalarea1").style.display="block"
+              document.getElementById("measurment1").style.display="block"
+               document.getElementById("priceintext1").style.display="block"
+               
+              document.getElementById("totalprice1").style.display="none"
+              document.getElementById("divforprice11").style.display="none"
+            }
+            setdeal((prev)=>({
+              ...prev,
+              calculated_type:e.target.value
+  
+            }))
+           
+          }
+      
+      
         
        
         
@@ -655,9 +817,9 @@ console.log(deal.owner_details);
                     <h4 className="text-right" onClick={()=>window.location.reload()} style={{cursor:"pointer"}}>Add Deal</h4>
                 </div><hr></hr><br></br>
                 <div className="row mt-2" style={{padding:"5px"}}>
-                <div className="col-md-3" id="projectlabel"><label className="labels"style={{fontWeight:"bolder"}}>Price Info</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" style={{height:"20px",width:"145px"}}/></div>
-                <div className="col-md-3" id="basiclabel"><label className="labels" style={{fontWeight:"bolder"}}>Add Owner</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" style={{height:"20px",width:"145px"}}/></div>
-                <div className="col-md-3" id="photolabel"><label className="labels" style={{fontWeight:"bolder"}}>Add Document</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" style={{height:"20px",width:"115px"}}/></div>
+                <div className="col-md-3" id="projectlabel"><label className="labels"style={{fontWeight:"bolder"}}>Price Info</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" alt="" style={{height:"20px",width:"145px"}}/></div>
+                <div className="col-md-3" id="basiclabel"><label className="labels" style={{fontWeight:"bolder"}}>Add Owner</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" alt="" style={{height:"20px",width:"145px"}}/></div>
+                <div className="col-md-3" id="photolabel"><label className="labels" style={{fontWeight:"bolder"}}>Add Document</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" alt="" style={{height:"20px",width:"115px"}}/></div>
                 <div className="col-md-3" id="ownerlabel"><label className="labels" style={{fontWeight:"bolder"}}>Upload</label></div>
                 <div className="col-md-12"><hr></hr></div>
                 </div><br></br>
@@ -692,26 +854,46 @@ console.log(deal.owner_details);
                         </div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-4"><label className="labels">Project</label><select  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,project:e.target.value})} >
-                    <option>Select</option>
-                        <option>Sale</option>
-                        <option>Rent</option>
-                        <option>Lease</option>
+                        <div className="col-md-4"><label className="labels">Project</label>
+                        <select className="form-control form-control-sm" onChange={handleprojectchange}>
+                        <option>choose</option>
+                        {
+                          allproject.map((project)=>
+                          (
+                            <option>{project}</option>
+                          ))
+                        }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Block</label><select  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,block:e.target.value})} >
-                    <option>Select</option>
-                        <option>Sale</option>
-                        <option>Rent</option>
-                        <option>Lease</option>
-                        </select>
+                        <div className="col-md-4"><label className="labels">Block</label>
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={allblock}
+                    onChange={handleallblockchange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {allblocks.map((block) => (
+        <MenuItem key={block._id} value={block.block_name}> {/* Ensure unit_no is the value you want */}
+            <Checkbox checked={allblock.indexOf(block.block_name) > -1} />
+            <ListItemText primary={block.block_name} /> {/* Render unit_no or other relevant property */}
+        </MenuItem>
+    ))}
+                </Select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Unit No.</label><select  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,unit_number:e.target.value})} >
-                    <option>Select</option>
-                        <option>Sale</option>
-                        <option>Rent</option>
-                        <option>Lease</option>
-                        </select>
+                        <div className="col-md-4"><label className="labels">Unit No.</label>
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={allunit}
+                    onChange={handleallunitschange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {allUnits.map((unit) => (
+        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
+            <Checkbox checked={allunit.indexOf(unit.unit_no) > -1} />
+            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+        </MenuItem>
+    ))}
+                </Select>
                         </div>
                   
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Terms Details</label><hr style={{marginTop:"-5px"}}></hr></div>
@@ -721,20 +903,27 @@ console.log(deal.owner_details);
 
 
                 <div className="row" id="sale" style={{display:"none"}}>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>blank</label><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price<select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,calculated_type:e.target.value})} >
-                    <option value="">calculated</option><option value="">absolute</option>
+                  <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price</div>
+                  <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price</div>
+                  <div className="col-md-6"></div>
+
+                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={handleselectpricetypechang} >
+                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
                     </select></div>
-                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>blank</label><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price<input type="number" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,price1:e.target.value})}/></div>
-                    <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Blank</label><select className="form-control form-control-sm">
-                    <option value="">X</option>
-                    </select>
+                    <div id="price1" className="col-md-2"><label className="labels">Price</label>
+                    <input  type="number" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,price1:e.target.value})}/></div>
+                    
+                    <div className="col-md-0" id="multiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                    <p>X</p>
                     </div>
-                    <div className="col-md-2"><label className="labels" > Total Area</label><input type="number"  className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,totalarea:e.target.value})}/></div>
-                    <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}> measurment</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
+                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number"  className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,totalarea:e.target.value})}/></div>
+                    <div className="col-md-2" id="measurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
                     <option value="">sq feet</option>
                     <option value="">sq yard</option>
                     </select></div>
-                   <div className="col-md-2"><label className="labels">Total Price<br></br>₹{formatCurrency(result)}<br></br>{resultText}</label></div>
+                    
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,total_price:e.target.value})}/></div>
+                   <div id="divforprice1" className="col-md-5" style={{display:"none"}}></div>
 
                     <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
                     <option>Select</option>
@@ -803,15 +992,27 @@ console.log(deal.owner_details);
                         </select></div>
                         <div className="col-md-8"></div>
 
-                        <div className="col-md-3"><label className="labels">Expected Price</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}>
-                    <option value="">phone</option>
+                        <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price</div>
+                  <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price</div>
+                  <div className="col-md-6"></div>
+
+                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute1" required="true" className="form-control form-control-sm" onChange={handleselectpricetypechang1} >
+                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
                     </select></div>
-                    <div className="col-md-3"><label className="labels">Quote Price</label><input className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
-                    <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Blank</label><input className="form-control form-control-sm"/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Total Area</label><select required="true" className="form-control form-control-sm" >
-                    <option value="">phone</option>
+                    <div id="price11" className="col-md-2"><label className="labels">Price</label>
+                    <input  type="number" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,price1:e.target.value})}/></div>
+                    
+                    <div className="col-md-0" id="multiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                    <p>X</p>
+                    </div>
+                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number"  className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,totalarea:e.target.value})}/></div>
+                    <div className="col-md-2" id="measurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
+                    <option value="">sq feet</option>
+                    <option value="">sq yard</option>
                     </select></div>
-                   <div className="col-md-2"></div>
+                    
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,total_price:e.target.value})}/></div>
+                   <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
                 
                     <div className="col-md-3"><label className="labels">Security Deposite</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,security_deposite:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Maintanance Charge</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,maintainence_charge:e.target.value})}/></div>
@@ -894,7 +1095,7 @@ console.log(deal.owner_details);
                   
                     <div className="col-md-12"><hr></hr></div>
                     <div className="row mt-4">
-                        <div className="col-md-2" id="projectbtn" onClick={handler} style={{marginLeft:"82%",marginBottom:"-50px"}}><button className="form-control">Next</button></div>
+                        <div className="col-md-2" id="projectbtn" onClick={handler} style={{marginLeft:"82%",marginBottom:"-50px"}}><button className="form-control form-control-sm">Next</button></div>
       
                         </div>
                     </div>
@@ -926,7 +1127,7 @@ console.log(deal.owner_details);
                           <tbody>
                           {selectedContacts.filter(contact => contact.relation === 'Self').map(contact => (
                               <StyledTableRow key={contact.id}>
-                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png"></img>
+                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
                                 <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
                                     <SvgIcon component={EmailIcon} />
@@ -956,7 +1157,7 @@ console.log(deal.owner_details);
                                     </StyledTableCell>
 
                                 <StyledTableCell>
-                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)}></img>
+                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
                                    </StyledTableCell>
                                 
                               </StyledTableRow>
@@ -1014,8 +1215,8 @@ console.log(deal.owner_details);
                      </div>
                   </div>
                 <div className="row mt-4">
-                    <div className="col-md-2" onClick={handler3} style={{marginLeft:"82%",marginBottom:"40px"}}><button className="form-control" id="basicbtn">Next</button></div>
-                    <div className="col-md-2" onClick={handler2} style={{marginLeft:"-90%"}}><button className="form-control" id="prevbtn">Prev</button></div>
+                    <div className="col-md-2" onClick={handler3} style={{marginLeft:"82%",marginBottom:"40px"}}><button className="form-control form-control-sm" id="basicbtn">Next</button></div>
+                    <div className="col-md-2" onClick={handler2} style={{marginLeft:"-90%"}}><button className="form-control form-control-sm" id="prevbtn">Prev</button></div>
                 </div>
                 </div>
               </div>
@@ -1176,7 +1377,15 @@ console.log(deal.owner_details);
               <div className="d-flex justify-content-between align-items-center mb-3">
                 </div><hr></hr>
                 <div className="row mt-2">
-                        <div className="col-md-2"><label className="labels">Document Name</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_name:e.target.value})}/> </div>
+                        <div className="col-md-2"><label className="labels">Document Name</label><select className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_name:e.target.value})}>
+                          <option>Aadhar Card</option>
+                          <option>Pan Card</option>
+                          <option>Voter Id</option>
+                          <option>Passport</option>
+                          <option>Driving Licence</option>
+                          <option>Other</option>
+                          </select>
+                         </div>
                         <div className="col-md-2"><label className="labels">Document No</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setdocuments({...documents,document_no:e.target.value})} /></div>
                         <div className="col-md-2"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_Date:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels">Linked Contact</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div>
@@ -1227,8 +1436,8 @@ console.log(deal.owner_details);
                   </div>
               </div>
               <div className="row mt-4">
-                    <div className="col-md-2" onClick={handler5} style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="photosbtn"><button className="form-control" >Next</button></div>
-                    <div className="col-md-2" onClick={handler4} style={{marginLeft:"-90%",display:"none"}} id="prevbtn1"><button className="form-control" >Prev</button></div>
+                    <div className="col-md-2" onClick={handler5} style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="photosbtn"><button className="form-control form-control-sm" >Next</button></div>
+                    <div className="col-md-2" onClick={handler4} style={{marginLeft:"-90%",display:"none"}} id="prevbtn1"><button className="form-control form-control-sm" >Prev</button></div>
                 </div>  
 
 {/*-----------------------------------------------------------------photos and videos form----------------------------------------------------------------- */}             
@@ -1275,8 +1484,8 @@ console.log(deal.owner_details);
                                         onChange={(event) => handlepreviewchange(index, event)}
                                       />
                                         {name.previewUrls && name.previewUrls.map((url, idx) => (
-          <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-        ))}
+                                            <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                                          ))}
                                     </div>
                                   ))}
                           </td>
@@ -1387,44 +1596,33 @@ console.log(deal.owner_details);
                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
                                       <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
                                           <option>select</option>
-                                          <option>Mr.</option>
-                                          <option>Mrs.</option>
-                                          <option>Smt.</option>
-                                          <option>Dr.</option>
-                                          <option>Er.</option>
-                                          <option>Sh.</option>
-                                          <option>col</option>
+                                          <option>Own Website</option>
+                                          <option>99 Acre</option>
+                                          <option>Olx</option>
+                                          <option>Magicbricks</option>
+                                          <option>Etc.</option>
                                           </select>
                                     </div>
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
                                       <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
                                           <option>select</option>
-                                          <option>Mr.</option>
-                                          <option>Mrs.</option>
-                                          <option>Smt.</option>
-                                          <option>Dr.</option>
-                                          <option>Er.</option>
-                                          <option>Sh.</option>
-                                          <option>col</option>
+                                          <option>Facebook</option>
+                                          <option>Instagram</option>
+                                          <option>Googe Page</option>
+                                          <option>Linkdin</option>
+                                          <option>Twitter</option>
                                           </select>
                                     </div>
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
                                       <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
                                           <option>select</option>
-                                          <option>Mr.</option>
-                                          <option>Mrs.</option>
-                                          <option>Smt.</option>
-                                          <option>Dr.</option>
-                                          <option>Er.</option>
-                                          <option>Sh.</option>
-                                          <option>col</option>
                                           </select>
                                     </div>
                                     </div>
                   </div>
                 <div className="row mt-4">
-                    <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="ownerbtn"><button className="form-control" onClick={add_deal}>Save</button></div>
-                    <div className="col-md-2" onClick={handler6} style={{marginLeft:"-90%",display:"none"}} id="prevbtn2"><button className="form-control" >Prev</button></div>
+                    <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="ownerbtn"><button className="form-control form-control-sm" onClick={add_deal}>Save</button></div>
+                    <div className="col-md-2" onClick={handler6} style={{marginLeft:"-90%",display:"none"}} id="prevbtn2"><button className="form-control form-control-sm" >Prev</button></div>
                 </div>  
       
         </div>
