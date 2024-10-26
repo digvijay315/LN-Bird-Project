@@ -254,7 +254,7 @@ const[countall,setcountall]=useState('')
           return
         }
         const resp = selectedItems.map(async (itemId) => {
-          await axios.delete(`http://localhost:5000/removelead/${itemId}`);
+          await api.delete(`removelead/${itemId}`);
         });
         
         toast.success('Selected items deleted successfully',{autoClose:"2000"})
