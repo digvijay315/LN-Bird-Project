@@ -1,5 +1,3 @@
-
-
 {
   "version": 2,
   "builds": [
@@ -15,8 +13,7 @@
     },
     {
       "src": "/images/(.*)",
-      "dest": "/index.js"
+      "dest": "index.js"
     }
   ]
 }
-

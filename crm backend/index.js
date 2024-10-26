@@ -14,7 +14,10 @@ app.use(express.json())
 app.use('/images', express.static('images'));
 app.use(cors())
 connect();
-
+app.get('/',(req,res)=>
+{
+    res.send("welcome")
+})
 app.use('/',require('./routes/admin'));
 
 
@@ -22,3 +25,5 @@ app.listen(process.env.PORT,()=>
 {
     console.log(`server is running on port:${process.env.PORT}`);
 })
+
+module.exports = app;
