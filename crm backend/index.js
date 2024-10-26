@@ -20,10 +20,7 @@ app.get('/',(req,res)=>
 })
 app.use('/',require('./routes/admin'));
 
-app.use((req, res, next) => {
-    console.log(`Received request for: ${req.url}`);
-    next();
-});
+
 
 app.listen(process.env.PORT,()=>
 {
