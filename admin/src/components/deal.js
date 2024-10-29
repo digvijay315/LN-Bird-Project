@@ -97,34 +97,27 @@ function Deal() {
     });
   };
 
-  const[allunit,setallunit]=useState([])
+
 const handleallunitschange = (event) => {
-    const {
-      target: { value },
-    } = event;
+   
+  const selectunit = event.target.value
   
-    const selectunits = typeof value === 'string' ? value.split(',') : value;
-  
-     setallunit(selectunits);
+    
     setdeal((prev) => {
-      const updateunit = { ...prev, units: selectunits };
-    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      const updateunit = { ...prev, units: selectunit };
       return updateunit; // Return the updated state
     });
   };
 
-  const[allblock,setallblock]=useState([])
+
   const handleallblockchange = (event) => {
-      const {
-        target: { value },
-      } = event;
+     
     
-      const selectblocks = typeof value === 'string' ? value.split(',') : value;
+      const selectblocks = event.target.value
     
-       setallblock(selectblocks);
+       
       setdeal((prev) => {
         const updateblock = { ...prev, blocks: selectblocks };
-      //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
         return updateblock; // Return the updated state
       });
     };
@@ -709,24 +702,97 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
       
         const handleInputChange = (event) => {
           setInput(event.target.value);
+          handleClose2()
         };
         
         
-        
       
-        const handleSuggestionClick = (contact) => {
-            // Add the new contact to the selectedContacts array
-            const updatedContacts = [...selectedContacts, contact];
-            setSelectedContacts(updatedContacts);
+
+        const [show2, setshow2] = useState(false);
+        const handleClose2 = () => setshow2(false);
+        const handleShow2=async()=>
+        {
+          setshow2(true);
+        
+        }
+
+        const [selectedcontact1,setselectedcontact1]=useState([])
+        const [selectedcontact2,setselectedcontact2]=useState([])
+        const[newcontact,setnewcontact]=useState([])
+        
+        const[relation,setrelation]=useState("")
+
+        const handlerelationchange = (e) => {
+          setrelation(e.target.value);
+        };
+
+        const [relation1,setrelation1]=useState("")
+        React.useEffect(() => {
           
+          if (relation && newcontact) {
+            console.log("Relation changed:", relation);
+            // You can add additional logic here that depends on the new relation value
+          }
+          if (relation === "Self") {
+            setrelation("")
+            setselectedcontact1(prevContacts => [
+              ...prevContacts,
+              newcontact // Add the new contact (assumed to be an object)
+            ]);
+           
+          }
+           else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+            
+            setselectedcontact2(prevContacts => [
+              ...prevContacts,
+              newcontact // Add the new contact for other relations
+            ]);
+            setrelation1(relation)
+            setrelation("")
+          }
+        }, [relation,newcontact]);
+
+
+       
+        const handleSuggestionClick = (contact) => {
+          handleShow2();
+          setnewcontact(contact)
+          // Update the selectedContacts array
+          const updatedContacts = [...selectedContacts, contact];
+          setSelectedContacts(updatedContacts);
+        
           setInput(''); // Clear the input after selection
           setShowSuggestions(false); // Hide suggestions after selection
           setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
         };
+     
+     
+        // console.log(selectedcontact2);
+        
+
+      
+        // React.useEffect(() => {
+        //   if (relation === "Self") {
+        //     setselectedcontact1(newcontact);
+        //   }
+        //   else  {
+        //     setselectedcontact2(prevContacts2 => [
+        //       ...prevContacts2,
+        //       ...newcontact // Merge previous contacts with the new ones
+        //     ]);
+        //   }
+        // }, [relation, selectedContacts]);
+         
+          
+        
       
         const removeContact = (id) => {
           const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+          const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+          const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
           setSelectedContacts(updatedContacts);
+          setselectedcontact1(updatedContacts1)
+          setselectedcontact2(updatedContacts2)
           
           // Update deal.owner_details with the current selected contacts
           setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
@@ -866,34 +932,28 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Block</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allblock}
-                    onChange={handleallblockchange}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allblocks.map((block) => (
-        <MenuItem key={block._id} value={block.block_name}> {/* Ensure unit_no is the value you want */}
-            <Checkbox checked={allblock.indexOf(block.block_name) > -1} />
-            <ListItemText primary={block.block_name} /> {/* Render unit_no or other relevant property */}
-        </MenuItem>
-    ))}
-                </Select>
+                        <select className="form-control form-control-sm"  onChange={handleallblockchange} >
+                        <option>choose</option>
+                    {
+                      allblocks.map((block)=>
+                      (
+                        <option>{block.block_name}</option>
+                      ))
+                    }
+                      
+  
+                </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Unit No.</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allunit}
-                    onChange={handleallunitschange}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allUnits.map((unit) => (
-        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-            <Checkbox checked={allunit.indexOf(unit.unit_no) > -1} />
-            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
-        </MenuItem>
-    ))}
-                </Select>
+                        <select className="form-control form-control-sm" onChange={handleallunitschange}  >
+                      <option>choose</option>
+                      {
+                        allUnits.map((units)=>
+                        (
+                          <option>{units.unit_no}</option>
+                        ))
+                      }
+                </select>
                         </div>
                   
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Terms Details</label><hr style={{marginTop:"-5px"}}></hr></div>
@@ -1120,13 +1180,13 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                         <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={handleShow1}>+</button></div>
                     
                      <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
-                     {selectedContacts.length > 0 && (
+                     {selectedcontact1.length >= 0 && (
                       <div className="contact-details">
                         <table  style={{width:"100%"}}>
                           
                           <tbody>
-                          {selectedContacts.filter(contact => contact.relation === 'Self').map(contact => (
-                              <StyledTableRow key={contact.id}>
+                          {selectedcontact1.map(contact => (
+                              <StyledTableRow>
                                 <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
                                 <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
@@ -1167,13 +1227,16 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                       </div>
                     )}
                 </div>
+                
                 <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
-                {selectedContacts.length > 0 && (
+                {selectedcontact2.length >= 0 && (
                 <div className="contact-details">
                     <table style={{width:"100%"}}>
                         <tbody>
-                            {selectedContacts.filter(contact => contact.relation !== 'Self').map(contact => (
-                                <StyledTableRow key={contact.id}>
+                             {
+                              
+                              selectedcontact2.map(contact => (
+                                <StyledTableRow>
                                     <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
                                     <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
                                         {contact.title} {contact.first_name} {contact.last_name}<br />
@@ -1182,12 +1245,14 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                                     </StyledTableCell>
 
                                     <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
-                                        {contact.mobile_no.map((number, index) => (
+                                        {
+                                        Array.isArray(contact.mobile_no) ?
+                                        contact.mobile_no.map((number, index) => (
                                             <span key={index}>
                                                 <SvgIcon component={PhoneIphoneIcon} />
                                                 {number}<br />
                                             </span>
-                                        ))}
+                                        )):[]}
                                     </StyledTableCell>
 
                                     <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
@@ -1199,14 +1264,14 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                                     </StyledTableCell>
 
                                     <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
-                                        {contact.relation}
+                                    <span style={{color:"orange",fontWeight:"bolder"}}>Relative</span>
                                     </StyledTableCell>
                                         
                                     <StyledTableCell>
                                         <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
                                     </StyledTableCell>
                                 </StyledTableRow>
-                            ))}
+                            ))} 
                         </tbody>
                     </table>
                 </div>
@@ -1366,6 +1431,33 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                 Add Contact
               </Button>
               <Button variant="secondary" onClick={handleClose1}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Choose Relation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+            <div className="row">
+                    <div className="col-md-4"><label className="labels">Relation</label><select className="form-control form-control-sm" required="true" onChange={handlerelationchange}>
+                              <option>Select</option>
+                              <option value="Self">Self</option>
+                              <option value="Son">Son</option>
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Uncle">Uncle</option>
+                              <option value="Other">Other</option>
+                        </select>
+                  </div>
+               </div>
+           </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose2}>
                 Close
               </Button>
             </Modal.Footer>
