@@ -812,7 +812,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
         React.useEffect(() => {
           const fetchSuggestions = async () => {
             try {
-              const response = await axios.get('http://localhost:5000/viewcontact');
+              const response = await api.get('viewcontact');
               const data = response.data.contact;
               
               // Extract the first_name field from the fetched data
