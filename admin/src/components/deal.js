@@ -5,14 +5,8 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import * as React from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
 import { toast,ToastContainer } from "react-toastify";
 import axios from "axios";
-// import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-// import { render } from "@testing-library/react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -27,10 +21,14 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 
+
 function Deal() {
   const navigate=useNavigate()
+// ================================select project,units and block from project data start==============================================================
+  
 
-  const[data1,setdata1]=useState([]);
+
+const[data1,setdata1]=useState([]);
         const fetchdata1=async()=>
         {
           
@@ -42,8 +40,26 @@ function Deal() {
           }
         }
 
+        const[data2,setdata2]=useState([]);
+        const fetchdata2=async()=>
+        {
+          
+          try {
+            const resp=await api.get('leadinfo')
+            setdata2(resp.data.lead)
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+       
+
   React.useState(()=>
   {fetchdata1()},[])
+
+  React.useState(()=>
+    {fetchdata2()},[])
+
 
   const allproject =[]
   data1.map((item)=>
@@ -51,7 +67,7 @@ function Deal() {
       allproject.push(item.name)
   ))
    
-  // const [projects, setprojects] = useState([]);
+
   const [units, setunits] = useState([]);
   const [allUnits, setallUnits] = useState([]);
   const [allblocks, setallblocks] = useState([]);
@@ -65,9 +81,7 @@ function Deal() {
         setunits(allFetchedUnits);// Assuming resp.data.project is an array of units for that project
       
   
-      // const results = await Promise.all(fetchPromises);
-      // const allFetchedUnits = results.flat();
-      // setunits(allFetchedUnits); // Set the units to the flattened result
+    
     } catch (error) {
       console.log(error);
     }
@@ -83,13 +97,11 @@ function Deal() {
   }, [units]);
 
   const handleprojectchange = (event) => {
-    // const {
-    //   target: { value },
-    // } = event;
+ 
   
     const selectproject = event.target.value
   
-    // setprojects(selectproject);
+
     setdeal((prev) => {
       const updateproject = { ...prev, project: selectproject };
        fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
@@ -104,7 +116,7 @@ const handleallunitschange = (event) => {
   
     
     setdeal((prev) => {
-      const updateunit = { ...prev, units: selectunit };
+      const updateunit = { ...prev, unit_number: selectunit };
       return updateunit; // Return the updated state
     });
   };
@@ -117,10 +129,14 @@ const handleallunitschange = (event) => {
     
        
       setdeal((prev) => {
-        const updateblock = { ...prev, blocks: selectblocks };
+        const updateblock = { ...prev, block: selectblocks };
         return updateblock; // Return the updated state
       });
     };
+
+    //================================== select project,units and blocks end============================================================
+
+
 
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
     "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
@@ -165,7 +181,9 @@ const handleallunitschange = (event) => {
     "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
     "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
   
-  /*-------------------------------------------------------------------form next and prev buttons display code start----------------------------------------------------- */
+  
+  
+    /*-------------------------------------------------------------------form next and prev buttons display code start----------------------------------------------------- */
 
  
   function handler()
@@ -250,18 +268,37 @@ const handleallunitschange = (event) => {
 /*-------------------------------------------------------------------form next and prev buttons display code end----------------------------------------------------- */
 
 
+
+// ===============================add deal state,and function start=====================================================================
+
+
             const[deal,setdeal]=useState({available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-                                expected_price:"",quote_price:"",calculated_type:"",price1:"",totalarea:"",measurment1:"",total_price:"",
-                                  price2:"",price3:"",security_deposite:"",
+                                   expected_price:"",quote_price:"",security_deposite:"",
                                 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
                                 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
-                                owner_details:[],document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
-                                website:"",social_media:"",send_matchedlead:""})
+                                owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
+                                website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:""})
               const config = {
                 headers: {
                   'Content-Type': 'multipart/form-data' // Set the Content-Type here
                 }
             }
+
+            React.useEffect(() => {
+
+              const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
+              const filteredLeads = data2.filter(item => item.requirment ===  availableFor);
+              setdeal(prevDeal => ({
+                ...prevDeal,
+                matchedleads: filteredLeads,
+                matchinglead: filteredLeads.length
+            })); // Update the state with the filtered leads
+          }, [ data2,deal.available_for]);
+
+
+     
+          
+          
           const add_deal=async(e)=>
           {
               e.preventDefault();
@@ -273,7 +310,7 @@ const handleallunitschange = (event) => {
                               {
                                 toast.success(resp.data.message,{ autoClose: 2000 })
                                 setTimeout(() => {
-                                  navigate('/deal')
+                                  navigate('/dealdetails')
                                 }, 2000);
                                 
                                }
@@ -281,7 +318,11 @@ const handleallunitschange = (event) => {
                               toast.error(error.response.data.message,{ autoClose: 2000 })
                       }
                      }
-                     
+// =======================================add deal end=================================================================================
+
+//================== add document and remove document inside deal start==================================================================
+
+
                                   const[document1,setdocument1]=useState([])
                                   const[documents,setdocuments]=useState({document_name:"",document_no:"",document_Date:"",
                                                                   linkded_contact:"",pic:[]})
@@ -318,13 +359,21 @@ const handleallunitschange = (event) => {
 
                                   // Filter out the destination at the given index
                                   const newdocument = deal.document_details.filter((_, i) => i !== index);
-
                                   // Set the updated destination details
                                   setdeal(prevState => ({
                                     ...prevState,
                                     document_details: newdocument
                                   }));
+                                  setdocument1(newdocument);
                                 };
+
+
+//=============================== add document and remove document inside deal start=====================================================
+
+
+//============================ add and delete code for adding more phots and videos start=================================================
+
+
 
 function addFn() {
     
@@ -440,6 +489,10 @@ const deleteall1=(index)=>
   }
 
 
+//================================  add and delete code for adding more phots and videos end=============================================
+
+
+//============================== code for show rent or sale form start================================================================
 
 
 function available_for()
@@ -464,6 +517,13 @@ function available_for()
         }
         
 }
+
+// ==============================code end for sale or rent form==========================================================================
+
+
+//================================== mui table row and cell code and currency convert code start===========================================
+
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -501,20 +561,18 @@ const formatCurrency = (num) => {
   // Combine whole and decimal parts, if any
   return `${formattedWhole}${decimal ? '.' + decimal : ''}`;
 };
-const [result, setResult] = useState(0);
+
+const [result, setResult] = useState("");
 const [resultText, setResultText] = useState('');
 
-const totalAreaValue = () => {
-  const areaValue = parseFloat(deal.totalarea) || 0; // Ensure valid number
-  const priceValue = parseFloat(deal.price1) || 0; // Ensure valid number
+const calculateResult = () => {
+  const areaValue = parseFloat(document.getElementById("earea").value) || 0; // Ensure valid number
+  const priceValue = parseFloat(document.getElementById("eprice").value) || 0; // Ensure valid number
   const calculatedResult = areaValue * priceValue;
-  setResult(calculatedResult);
-  setdeal({ ...deal, total_price: calculatedResult }); // Set total price in deal
-};
 
-React.useEffect(() => {
-  totalAreaValue();
-}, [deal.totalarea,deal.price1]);
+  setResult(calculatedResult);
+  setdeal(prevDeal => ({ ...prevDeal, expected_price: calculatedResult }));
+};
 
 React.useEffect(() => {
   // Convert result to text format
@@ -525,6 +583,81 @@ React.useEffect(() => {
     setResultText('');
   }
 }, [result]);
+
+const [result1, setResult1] = useState(0);
+const [resultText1, setResultText1] = useState('');
+
+const calculateResult1 = () => {
+  const areaValue = parseFloat(document.getElementById("qarea").value) || 0; // Ensure valid number
+  const priceValue = parseFloat(document.getElementById("qprice").value) || 0; // Ensure valid number
+  const calculatedResult = areaValue * priceValue;
+
+  setResult1(calculatedResult);
+  setdeal(prevDeal => ({ ...prevDeal, quote_price: calculatedResult }));
+};
+
+
+React.useEffect(() => {
+  // Convert result to text format
+  if (result1) {
+    const words = toWords(result1, { format: 'en-IN' });
+    setResultText1(`(${words} only)`);
+  } else {
+    setResultText1('');
+  }
+}, [result1]);
+
+
+const [result2, setResult2] = useState(0);
+const [resultText2, setResultText2] = useState('');
+
+const calculateResult2 = () => {
+  const areaValue = parseFloat(document.getElementById("rearea").value) || 0; // Ensure valid number
+  const priceValue = parseFloat(document.getElementById("reprice").value) || 0; // Ensure valid number
+  const calculatedResult = areaValue * priceValue;
+
+  setResult2(calculatedResult);
+  setdeal(prevDeal => ({ ...prevDeal, expected_price: calculatedResult }));
+};
+
+
+React.useEffect(() => {
+  // Convert result to text format
+  if (result2) {
+    const words = toWords(result2, { format: 'en-IN' });
+    setResultText2(`(${words} only)`);
+  } else {
+    setResultText2('');
+  }
+}, [result2]);
+
+const [result3, setResult3] = useState(0);
+const [resultText3, setResultText3] = useState('');
+
+const calculateResult3 = () => {
+  const areaValue = parseFloat(document.getElementById("rqarea1").value) || 0; // Ensure valid number
+  const priceValue = parseFloat(document.getElementById("rqprice1").value) || 0; // Ensure valid number
+  const calculatedResult = areaValue * priceValue;
+
+  setResult3(calculatedResult);
+  setdeal(prevDeal => ({ ...prevDeal, quote_price: calculatedResult }));
+};
+
+React.useEffect(() => {
+  // Convert result to text format
+  if (result3) {
+    const words = toWords(result3, { format: 'en-IN' });
+    setResultText3(`(${words} only)`);
+  } else {
+    setResultText3('');
+  }
+}, [result3]);
+
+
+//============================mui table row and cell code and currency convert code start===============================================
+
+
+//===============================Sort add contact form start===============================================================================
 
 
 const [show1, setshow1] = useState(false);
@@ -544,7 +677,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
 
   father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
   birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],relation:"" });
+  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]});
 
   // const config = {
   //     headers: {
@@ -664,6 +797,11 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
             email_type: newemail_type
           });
         };
+//============================================Sort add contact form end==================================================================
+
+
+//===============================suggestion box code start for owner form and documents==================================================
+
 
         const [input, setInput] = useState('');
         const [filteredSuggestions, setFilteredSuggestions] = useState([]);
@@ -698,7 +836,19 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
           } else {
             setShowSuggestions(false);
           }
-        }, [input, allSuggestions]);
+        }, [input,allSuggestions]);
+
+        React.useEffect(() => {
+          if (documents.linkded_contact) {
+            const results = allSuggestions.filter(contact =>
+              contact.first_name?.toLowerCase().includes(documents.linkded_contact.toLowerCase())
+            );
+            setFilteredSuggestions(results);
+            setShowSuggestions(true);
+          } else {
+            setShowSuggestions(false);
+          }
+        }, [documents.linkded_contact, allSuggestions]);
       
         const handleInputChange = (event) => {
           setInput(event.target.value);
@@ -706,8 +856,6 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
         };
         
         
-      
-
         const [show2, setshow2] = useState(false);
         const handleClose2 = () => setshow2(false);
         const handleShow2=async()=>
@@ -726,19 +874,17 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
           setrelation(e.target.value);
         };
 
-        const [relation1,setrelation1]=useState("")
+        // const [relation1,setrelation1]=useState("")
         React.useEffect(() => {
           
-          if (relation && newcontact) {
-            console.log("Relation changed:", relation);
-            // You can add additional logic here that depends on the new relation value
-          }
+          
           if (relation === "Self") {
             setrelation("")
             setselectedcontact1(prevContacts => [
               ...prevContacts,
               newcontact // Add the new contact (assumed to be an object)
             ]);
+           setdeal(prevDeal => ({ ...prevDeal, owner_details: newcontact }));
            
           }
            else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
@@ -747,7 +893,9 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
               ...prevContacts,
               newcontact // Add the new contact for other relations
             ]);
-            setrelation1(relation)
+            setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
+            setdeal(prevDeal => ({ ...prevDeal, associated_contact: newcontact }));
+            // setrelation1(relation)
             setrelation("")
           }
         }, [relation,newcontact]);
@@ -756,6 +904,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
        
         const handleSuggestionClick = (contact) => {
           handleShow2();
+          
           setnewcontact(contact)
           // Update the selectedContacts array
           const updatedContacts = [...selectedContacts, contact];
@@ -763,30 +912,19 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
         
           setInput(''); // Clear the input after selection
           setShowSuggestions(false); // Hide suggestions after selection
-          setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+          //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
         };
-     
-     
-        // console.log(selectedcontact2);
-        
 
-      
-        // React.useEffect(() => {
-        //   if (relation === "Self") {
-        //     setselectedcontact1(newcontact);
-        //   }
-        //   else  {
-        //     setselectedcontact2(prevContacts2 => [
-        //       ...prevContacts2,
-        //       ...newcontact // Merge previous contacts with the new ones
-        //     ]);
-        //   }
-        // }, [relation, selectedContacts]);
+        const handleSuggestionClick1 = (contact) => {
          
+          setShowSuggestions(false);
+          const fullcontact=`${contact.title} ${contact.first_name} ${contact.last_name}`
+          setdocuments({ ...documents, linkded_contact: fullcontact })
           
-        
-      
+        };
+         
         const removeContact = (id) => {
+    
           const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
           const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
           const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
@@ -796,9 +934,18 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
           
           // Update deal.owner_details with the current selected contacts
           setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+
         };
 
+ 
         
+//================================suggestion box code end for owner form and documents======================================================
+
+
+
+// ============================price change by calculated or absoulute code start======================================================
+
+
         const handleselectpricetypechang=(e)=>
         {
 
@@ -831,12 +978,12 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
          
         }
 
-        const handleselectpricetypechang1=(e)=>
+        const ehandleselectpricetypechang=(e)=>
           {
   
-            const selectedValue1 = e.target.value;
+            const selectedValue = e.target.value;
   
-            if (selectedValue1 === "absolute") {
+            if (selectedValue === "absolute") {
                 document.getElementById("price11").style.display="none"
               document.getElementById("multiply1").style.display="none"
               document.getElementById("totalarea1").style.display="none"
@@ -845,7 +992,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
   
               document.getElementById("totalprice1").style.display="block"
               document.getElementById("divforprice11").style.display="block"
-            } else if (selectedValue1 === "calculated") {
+            } else if (selectedValue === "calculated") {
                document.getElementById("price11").style.display="block"
               document.getElementById("multiply1").style.display="block"
               document.getElementById("totalarea1").style.display="block"
@@ -862,10 +1009,93 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
             }))
            
           }
-      
-      
+
+        const rhandleselectpricetypechang=(e)=>
+          {
+  
+            const selectedValue1 = e.target.value;
+  
+            if (selectedValue1 === "absolute") {
+                document.getElementById("rprice1").style.display="none"
+              document.getElementById("rmultiply").style.display="none"
+              document.getElementById("rtotalarea").style.display="none"
+              document.getElementById("rmeasurment").style.display="none"
+               document.getElementById("rpriceintext").style.display="none"
+  
+              document.getElementById("rtotalprice").style.display="block"
+              document.getElementById("rdivforprice1").style.display="block"
+            } else if (selectedValue1 === "calculated") {
+               document.getElementById("rprice1").style.display="block"
+              document.getElementById("rmultiply").style.display="block"
+              document.getElementById("rtotalarea").style.display="block"
+              document.getElementById("rmeasurment").style.display="block"
+               document.getElementById("rpriceintext").style.display="block"
+               
+              document.getElementById("rtotalprice").style.display="none"
+              document.getElementById("rdivforprice1").style.display="none"
+            }
+            setdeal((prev)=>({
+              ...prev,
+              calculated_type:e.target.value
+  
+            }))
+           
+          }
+
+          const rhandleselectpricetypechang1=(e)=>
+            {
+    
+              const selectedValue1 = e.target.value;
+    
+              if (selectedValue1 === "absolute") {
+                  document.getElementById("rprice11").style.display="none"
+                document.getElementById("rmultiply1").style.display="none"
+                document.getElementById("rtotalarea1").style.display="none"
+                document.getElementById("rmeasurment1").style.display="none"
+                 document.getElementById("rpriceintext1").style.display="none"
+    
+                document.getElementById("rtotalprice1").style.display="block"
+                document.getElementById("rdivforprice11").style.display="block"
+              } else if (selectedValue1 === "calculated") {
+                 document.getElementById("rprice11").style.display="block"
+                document.getElementById("rmultiply1").style.display="block"
+                document.getElementById("rtotalarea1").style.display="block"
+                document.getElementById("rmeasurment1").style.display="block"
+                 document.getElementById("rpriceintext1").style.display="block"
+                 
+                document.getElementById("rtotalprice1").style.display="none"
+                document.getElementById("rdivforprice11").style.display="none"
+              }
+              setdeal((prev)=>({
+                ...prev,
+                calculated_type:e.target.value
+    
+              }))
+             
+            }
+
+//================================== price change by calculated or absoulute code start====================================================
         
-       
+const [progress, setProgress] = useState(deal.white_portion || 10); // Initialize with deal.whiteportion
+
+const handleMouseMove = (e) => {
+  const progressBar = e.target.getBoundingClientRect();
+  const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
+  const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
+  setProgress(clampedProgress);
+  setdeal((prevDeal) => ({ ...prevDeal, white_portion: clampedProgress })); // Update deal.whiteportion
+};
+
+const handleMouseDown = (e) => {
+  handleMouseMove(e); // Set initial progress
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', handleMouseUp);
+};
+
+const handleMouseUp = () => {
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mouseup', handleMouseUp);
+};
         
   
 
@@ -963,27 +1193,48 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
 
 
                 <div className="row" id="sale" style={{display:"none"}}>
-                  <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price</div>
-                  <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price</div>
-                  <div className="col-md-6"></div>
-
+                  <div className="col-md-12"><u><b>Expected Price</b></u></div>
+                 
                     <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={handleselectpricetypechang} >
                     <option value="calculated">calculated</option><option value="absolute">absolute</option>
                     </select></div>
                     <div id="price1" className="col-md-2"><label className="labels">Price</label>
-                    <input  type="number" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,price1:e.target.value})}/></div>
+                    <input id="eprice" onChange={calculateResult} type="number" className="form-control form-control-sm" /></div>
                     
                     <div className="col-md-0" id="multiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
                     <p>X</p>
                     </div>
-                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number"  className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,totalarea:e.target.value})}/></div>
+                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number" id="earea" onChange={calculateResult} className="form-control form-control-sm"  /></div>
                     <div className="col-md-2" id="measurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
                     <option value="">sq feet</option>
                     <option value="">sq yard</option>
                     </select></div>
                     
-                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,total_price:e.target.value})}/></div>
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
                    <div id="divforprice1" className="col-md-5" style={{display:"none"}}></div>
+
+
+                 
+                  <div className="col-md-12"><u><b>Quote Price</b></u></div>
+              
+
+                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute1" required="true" className="form-control form-control-sm" onChange={ehandleselectpricetypechang} >
+                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                    </select></div>
+                    <div id="price11" className="col-md-2"><label className="labels">Price</label>
+                    <input id="qprice" onChange={calculateResult1} type="number" className="form-control form-control-sm" /></div>
+                    
+                    <div className="col-md-0" id="multiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                    <p>X</p>
+                    </div>
+                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number" id="qarea" onChange={calculateResult1}  className="form-control form-control-sm"/></div>
+                    <div className="col-md-2" id="measurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
+                    <option value="">sq feet</option>
+                    <option value="">sq yard</option>
+                    </select></div>
+                    
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{formatCurrency(result1)}<br></br>{resultText1}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
+                   <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
 
                     <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
                     <option>Select</option>
@@ -1009,12 +1260,12 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                         <option>Walkin</option>
                         <option>Olx</option>
                         </select></div>
-                        <div className="col-md-5"><label className="labels">White Portion</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,white_portion:e.target.value})}>
-                    <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
-                        </select></div>
+                        <div className="col-md-5" ><label className="labels">White Portion</label>
+                        <div className="progress-container" onMouseDown={handleMouseDown}>
+                        <div className="progress-bar" style={{ width: `${progress}%` }} />
+                        <div className="progress-percentage">{Math.round(progress)}%</div>
+                        </div>
+                        </div>
                        
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
@@ -1042,37 +1293,63 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
 {/* -----------------------=========================sale end====================================-------------------------------------- */}
 
 {/* ------------------------------------------------============rent start========================-------------------------------------- */}
+                     
+                     
                         <div className="row" id="rent" style={{display:"none"}}>
                         <div className="col-md-4"><label className="labels">Floors</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,floors:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                        <option>Ground</option>
+                        <option>1st</option>
+                        <option>2nd</option>
+                        <option>3rd</option>
+                        <option>4th</option>
+                        <option>Top</option>
                         </select></div>
                         <div className="col-md-8"></div>
 
-                        <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Expected Price</div>
-                  <div className="col-md-3"><input  type="radio" name="priceoptions" style={{marginRight:"10px"}}/>Quote Price</div>
-                  <div className="col-md-6"></div>
+                        <div className="col-md-12"><u><b>Expected Price</b></u></div>
+                 
+                 <div className="col-md-2"><label className="labels" >Type</label><select id="rcalculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={rhandleselectpricetypechang} >
+                 <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                 </select></div>
+                 <div id="rprice1" className="col-md-2"><label className="labels">Price</label>
+                 <input id="reprice" onChange={calculateResult2} type="number" className="form-control form-control-sm" /></div>
+                 
+                 <div className="col-md-0" id="rmultiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                 <p>X</p>
+                 </div>
+                 <div className="col-md-2" id="rtotalarea"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult2} id="rearea"  className="form-control form-control-sm"  /></div>
+                 <div className="col-md-2" id="rmeasurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
+                 <option value="">sq feet</option>
+                 <option value="">sq yard</option>
+                 </select></div>
+                 
+                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext"><br></br>{formatCurrency(result2)}<br></br>{resultText2}</span></label><input type="text" id="rtotalprice" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
+                <div id="rdivforprice1" className="col-md-5" style={{display:"none"}}></div>
 
-                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute1" required="true" className="form-control form-control-sm" onChange={handleselectpricetypechang1} >
-                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
-                    </select></div>
-                    <div id="price11" className="col-md-2"><label className="labels">Price</label>
-                    <input  type="number" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,price1:e.target.value})}/></div>
-                    
-                    <div className="col-md-0" id="multiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
-                    <p>X</p>
-                    </div>
-                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number"  className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,totalarea:e.target.value})}/></div>
-                    <div className="col-md-2" id="measurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
-                    <option value="">sq feet</option>
-                    <option value="">sq yard</option>
-                    </select></div>
-                    
-                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,total_price:e.target.value})}/></div>
-                   <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
+
+              
+               <div className="col-md-12"><u><b>Quote Price</b></u></div>
+           
+
+                 <div className="col-md-2"><label className="labels" >Type</label><select id="rcalculatedorabsoulute11" required="true" className="form-control form-control-sm" onChange={rhandleselectpricetypechang1} >
+                 <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                 </select></div>
+                 <div id="rprice11" className="col-md-2"><label className="labels">Price</label>
+                 <input id="rqprice1" onChange={calculateResult3} type="number" className="form-control form-control-sm" /></div>
+                 
+                 <div className="col-md-0" id="rmultiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                 <p>X</p>
+                 </div>
+                 <div className="col-md-2" id="rtotalarea1"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult3} id="rqarea1"  className="form-control form-control-sm"/></div>
+                 <div className="col-md-2" id="rmeasurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" >
+                 <option value="">sq feet</option>
+                 <option value="">sq yard</option>
+                 </select></div>
+                 
+                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext1"><br></br>{formatCurrency(result3)}<br></br>{resultText3}</span></label><input type="text" id="rtotalprice1" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
+                <div id="rdivforprice11" className="col-md-5" style={{display:"none"}}></div>
+
                 
                     <div className="col-md-3"><label className="labels">Security Deposite</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,security_deposite:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Maintanance Charge</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,maintainence_charge:e.target.value})}/></div>
@@ -1085,17 +1362,17 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                         </select></div>
                         <div className="col-md-2"><label className="labels">Rent Period</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,rent_period:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                        <option>06 months</option>
+                        <option>11 months</option>
+                        <option>24 months</option>
+                        <option>36 months</option>
                         </select></div>
                         <div className="col-md-2"><label className="labels">Fitout Period</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,fitout_perioud:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                        <option>06 months</option>
+                        <option>11 months</option>
+                        <option>24 months</option>
+                        <option>36 months</option>
                         </select></div>
 
                         <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
@@ -1106,25 +1383,30 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                         </select></div>
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                    <option>Cash</option>
+                        <option>Online</option>
+                        <option>Net Banking</option>
+                        <option>NEFT</option>
+                        <option>Upi</option>
+                        <option>RTGS</option>
                         </select></div>
                         <div className="col-md-4"></div>
 
                         <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                     <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                    <option>99 Acre</option>
+                        <option>News Paper</option>
+                        <option>Walkin</option>
+                        <option>Olx</option>
                         </select></div>
-                        <div className="col-md-5"><label className="labels">White Portion</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,white_portion:e.target.value})}>
-                    <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
-                        </select></div>
+                
+                        <div className="col-md-5" ><label className="labels">White Portion</label>
+                        <div className="progress-container" onMouseDown={handleMouseDown}>
+                        <div className="progress-bar" style={{ width: `${progress}%` }} />
+                        <div className="progress-percentage">{Math.round(progress)}%</div>
+                        </div>
+                        </div>
+                        
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                         <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
@@ -1143,10 +1425,9 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                         </select></div>
                         <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                        <option>Only Me</option>
+                        <option>Team</option>
+                        <option>All User</option>
                         </select></div>
                       </div>
                   </div>
@@ -1264,7 +1545,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                                     </StyledTableCell>
 
                                     <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
-                                    <span style={{color:"orange",fontWeight:"bolder"}}>Relative</span>
+                                    <span style={{color:"orange",fontWeight:"bolder"}}>{deal.relation}</span>
                                     </StyledTableCell>
                                         
                                     <StyledTableCell>
@@ -1406,13 +1687,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn4}>+</button></div>
                   <div className="col-md-6"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setcontact({...contact,father_husband_name:e.target.value})}/></div>
-                  <div className="col-md-6"><label className="labels">Relation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,relation:e.target.value})}>
-                        <option>Select</option>
-                        <option>Self</option>
-                        <option>Relative</option>
-                        <option>Others</option>
-                        </select>
-                    </div>
+                  <div className="col-md-6"></div>
                   
                     <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,h_no:e.target.value})}/></div>
                     <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area1:e.target.value})}/></div>
@@ -1470,6 +1745,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                 </div><hr></hr>
                 <div className="row mt-2">
                         <div className="col-md-2"><label className="labels">Document Name</label><select className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_name:e.target.value})}>
+                          <option>Choose</option>
                           <option>Aadhar Card</option>
                           <option>Pan Card</option>
                           <option>Voter Id</option>
@@ -1480,7 +1756,23 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                          </div>
                         <div className="col-md-2"><label className="labels">Document No</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setdocuments({...documents,document_no:e.target.value})} /></div>
                         <div className="col-md-2"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_Date:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">Linked Contact</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div>
+                        <div className="col-md-2" id="suggestion-box" style={{ position: 'relative' }}><label className="labels">Linked Contact</label><input type="text" className="form-control form-control-sm" value={documents.linkded_contact} onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div>
+
+
+
+                        {/* <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={documents.linkded_contact}  placeholder="Type here For Search in Contact" required="true" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div> */}
+                        {showSuggestions  && filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-list">
+                              {filteredSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick1(suggestion)}>
+                                  {suggestion.title} {suggestion.first_name} {suggestion.last_name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
+
+
                         <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Pic</label><input type="file" name="pic" multiple className="form-control form-control-sm" onChange={handlepicchange}/></div>
                         <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={adddocument}>+</button></div>
                         <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
@@ -1599,13 +1891,14 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <select className="form-control form-control-sm" required="true" onChange={(event) => handlecategorychange(index, event)}>
                                           <option>select</option>
-                                          <option>Mr.</option>
-                                          <option>Mrs.</option>
-                                          <option>Smt.</option>
-                                          <option>Dr.</option>
-                                          <option>Er.</option>
-                                          <option>Sh.</option>
-                                          <option>col</option>
+                                          <option>Bedroom</option>
+                                          <option>Hall</option>
+                                          <option>Kitchen</option>
+                                          <option>Balcony</option>
+                                          <option>Washroom</option>
+                                          <option>Pooja Room</option>
+                                          <option>Dining Room</option>
+                                          <option>Drawing Room</option>
                                           </select>
                                     </div>
                                   ))}
@@ -1708,6 +2001,9 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
                                       <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
                                           <option>select</option>
+                                          <option>Message</option>
+                                          <option>What's App</option>
+                                          <option>Email</option>
                                           </select>
                                     </div>
                                     </div>

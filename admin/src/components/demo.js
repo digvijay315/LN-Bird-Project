@@ -1,85 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import '../css/demo.css';
+import React, { useState } from 'react';
+import '../css/demo.css' // Import your CSS styles
 
-const SuggestionBox = () => {
-  const [input, setInput] = useState('');
-  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [allSuggestions, setAllSuggestions] = useState([]);
-  const [selectedContact, setSelectedContact] = useState(null);
+const Demo = () => {
+  const [progress, setProgress] = useState(0);
 
-  // Fetch data from the backend when the component mounts
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/viewcontact');
-        const data = response.data.contact;
-        
-        // Extract the first_name field from the fetched data
-        const names = data.map(item => item.first_name);
-        setAllSuggestions(data);
-      } catch (error) {
-        console.error('Error fetching suggestions:', error);
-      }
-    };
-
-    fetchSuggestions();
-  }, []);
-
-  // Filter suggestions based on user input
-  useEffect(() => {
-    if (input) {
-      const results = allSuggestions.filter(contact =>
-        contact.first_name?.toLowerCase().includes(input.toLowerCase())
-      );
-      setFilteredSuggestions(results);
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
-    }
-  }, [input, allSuggestions]);
-
-  const handleInputChange = (event) => {
-    setInput(event.target.value);
+  const handleMouseMove = (e) => {
+    const progressBar = e.target.getBoundingClientRect();
+    const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
+    setProgress(Math.max(0, Math.min(newProgress, 100))); // Clamp between 0 and 100
   };
 
-  const handleSuggestionClick = (contact) => {
-    setInput(contact.first_name);
-    setShowSuggestions(false);
-    setSelectedContact(contact); // Store the selected contact's data
+  const handleMouseDown = (e) => {
+    handleMouseMove(e); // Set initial progress
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseUp = () => {
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
   };
 
   return (
-    <div className="suggestion-box">
-      <input
-        type="text"
-        value={input}
-        onChange={handleInputChange}
-        placeholder="Start typing your name..."
-      />
-      {showSuggestions && input && filteredSuggestions.length > 0 && (
-        <ul className="suggestion-list">
-          {filteredSuggestions.map((suggestion, index) => (
-            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-              {suggestion.first_name}
-            </li>
-          ))}
-        </ul>
-      )}
-      
-      {selectedContact && (
-        <div className="contact-details">
-          <h3>Contact Details</h3>
-          <p><strong>First Name:</strong> {selectedContact.first_name}</p>
-          <p><strong>Last Name:</strong> {selectedContact.last_name}</p>
-          <p><strong>Email:</strong> {selectedContact.email}</p>
-          <p><strong>Phone:</strong> {selectedContact.phone}</p>
-          {/* Add more fields as needed */}
-        </div>
-      )}
+    <div className="progress-container" onMouseDown={handleMouseDown}>
+      <div className="progress-bar" style={{ width: `${progress}%` }} />
+      <div className="progress-percentage">{Math.round(progress)}%</div>
     </div>
   );
 };
 
-export default SuggestionBox;
+export default Demo;

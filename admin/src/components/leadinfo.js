@@ -535,17 +535,19 @@ return (
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,owner:e.target.value})}>
-                    <option>Select</option>
-                        <option>Suresh Kumar</option>
-                        <option>Rajesh kumar</option>
-                        <option>Rakesh kumar</option>
+                              <option>Select</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
                         </select></div>
                     <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,team:e.target.value})}>
-                    <option>Select</option>
-                        <option>Suresh Kumar</option>
-                        <option>Rajesh Kumar</option>
-                        <option>Rakesh Kumar</option>
-                        <option>Yogesh Kumar</option>
+                              <option>Select</option> 
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,visible_to:e.target.value})}>

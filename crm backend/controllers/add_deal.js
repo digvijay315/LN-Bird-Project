@@ -5,22 +5,24 @@ const path = require('path');
 const add_deal=async(req,res)=>
     {
         try {
-            const{available_for,stage,project,block,unit_number,floors,expected_price,quote_price,price1,price2,security_deposite,
+            const{available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
-                    team,user,visible_to,document_details=[],s_no,descriptions,category,s_no1,url,website,social_media,send_matchedlead}=req.body;
+                    team,user,visible_to,owner_details,associated_contact,relation,document_details,s_no,descriptions,category,s_no1,url,
+                    website,social_media,send_matchedlead,matchedleads,matchinglead}=req.body;
 
                     const pics = req.files ? req.files.map(item => item.path) : [];
                     const preview=req.files ? req.files.map((item=>item.path)):[]
                  
                     
-                    const updatedDocumentDetails = document_details.map((doc, index) => ({
+                    const updatedDocumentDetails = document_details ? document_details.map((doc, index) => ({
                         ...doc,
                         pic: pics[index] || doc.pic // Add pic from files if available
-                    }));
+                    })):[];
            
-                const new_add_deal= new adddeal({available_for,stage,project,block,unit_number,floors,expected_price,quote_price,price1,price2,security_deposite,
+                const new_add_deal= new adddeal({available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
-                    team,user,visible_to,document_details:updatedDocumentDetails,s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead})
+                    team,user,visible_to,owner_details,associated_contact,relation,document_details:updatedDocumentDetails,
+                    s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead,matchedleads,matchinglead})
             
             const resp=await new_add_deal.save()
             res.status(200).send({message:"deal added ",deal:resp})

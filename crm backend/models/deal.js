@@ -9,7 +9,7 @@ const documentschema = new mongoose.Schema({
 });
 
 
-const add_deal=new mongoose.Schema({
+const add_deal=new mongoose.Schema({                    
     available_for:{type:String},
     stage:{type:String},
     project:{type:String},
@@ -18,11 +18,6 @@ const add_deal=new mongoose.Schema({
     floors:{type:String},
     expected_price:{type:String},
     quote_price:{type:String},
-    price1:{type:String},
-    totalarea:{type:String},
-    measurment1:{type:String},
-    total_price:{type:String},
-    price2:{type:String},
     security_deposite:{type:String},
     maintainence_charge:{type:String},
     rent_escltion:{type:String},
@@ -35,6 +30,9 @@ const add_deal=new mongoose.Schema({
     team:{type:String},
     user:{type:String},
     visible_to:{type:String},
+    owner_details:{type:Array},
+    associated_contact:{type:Array},
+    relation:{type:String},
     document_details:[documentschema],
     s_no:{type:Array},
     preview:{type:Array},
@@ -45,12 +43,9 @@ const add_deal=new mongoose.Schema({
     website:{type:String},
     social_media:{type:String},
     send_matchedlead:{type:String},
+    matchedleads:{type:Array},
+    matchinglead:{type:String},
 },{timestamps:true})
-
-
-
-                                         
-                                         
 
 const adddeal=mongoose.model('deal',add_deal)
 module.exports=adddeal

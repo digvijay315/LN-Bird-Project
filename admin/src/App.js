@@ -35,6 +35,7 @@ import Task_form from './components/task_form.js';
 import Paymentdetails from './components/paymentdetails.js';
 import Bookingdetails from './components/bookingdetails.js';
 import Marketing from './components/marketing.js';
+import Dealdetails from './components/dealdetails.js';
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
       <Route path='/paymentdetailsdata' element={<Paymentdetails/>}/>
       <Route path='/bookingdetailsdata' element={<Bookingdetails/>}/>
       <Route path='/marketing' element={<Marketing/>}/>
+      <Route path='/dealdetails' element={<Dealdetails/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

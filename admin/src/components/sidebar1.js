@@ -49,7 +49,7 @@ function Sidebar1() {
 					</li>
 				
 					<li class="dropdown">
-						<Link to={'/inventorydetails'} class="dropdown-toggle no-arrow">
+						<Link to={'/dealdetails'} class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiApplication} size={1} /><span class="mtext"> Inventory </span>
 						</Link>
 					</li>
