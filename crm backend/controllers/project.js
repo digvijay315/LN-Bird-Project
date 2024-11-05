@@ -7,7 +7,8 @@ const createProject = async (req, res) => {
         name, developer_name, joint_venture, secondary_developer, rera_number, descriptions,
         category, sub_category, land_area, measurment1, total_block, total_floor, total_units,
         status, launched_on, expected_competion, possession, parking_type, approved_bank,
-        approvals, registration_no, date,owner, team, visible_to, add_block,add_size,add_unit,basic_aminities,
+        approvals, registration_no, date,owner, team, visible_to, location,lattitude,langitude,address,
+        street,locality,city,zip,state,country, add_block,add_size,add_unit,basic_aminities,
         features_aminities,nearby_aminities,price_list,Payment_plan} = req.body;
       
       const pic=req.files ? req.files.map((item=>item.path)):[]
@@ -17,7 +18,8 @@ const createProject = async (req, res) => {
         name, developer_name, joint_venture, secondary_developer, rera_number, descriptions,
         category, sub_category, land_area, measurment1, total_block, total_floor, total_units,
         status, launched_on, expected_competion, possession, parking_type, approved_bank,
-        approvals, registration_no, date, pic:pic, owner, team, visible_to, add_block,add_size,add_unit,basic_aminities,
+        approvals, registration_no, date, pic:pic, owner, team, visible_to,location,lattitude,langitude,address,
+        street,locality,city,zip,state,country, add_block,add_size,add_unit,basic_aminities,
         features_aminities,nearby_aminities,price_list,Payment_plan
       });
   

@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import * as React from 'react';
 import { toast,ToastContainer } from "react-toastify";
-import axios from "axios";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -25,7 +24,18 @@ import EmailIcon from '@mui/icons-material/Email';
 function Deal() {
   const navigate=useNavigate()
 // ================================select project,units and block from project data start==============================================================
-  
+const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+  expected_price:"",quote_price:"",security_deposite:"",
+maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
+deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
+owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
+website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:""})
+const config = {
+headers: {
+'Content-Type': 'multipart/form-data' // Set the Content-Type here
+}
+}
+
 
 
 const[data1,setdata1]=useState([]);
@@ -72,6 +82,7 @@ const[data1,setdata1]=useState([]);
   const [allUnits, setallUnits] = useState([]);
   const [allblocks, setallblocks] = useState([]);
 
+
   const fetchdatabyprojectname = async (projectNames) => {
 
     try {
@@ -90,12 +101,23 @@ const[data1,setdata1]=useState([]);
   React.useEffect(() => {
     if (units.length >= 0) {
       const collectedUnits = units.flatMap(item => item.add_unit);
-      const collectedblocks=units.flatMap(item=>item.add_block) // Collect all add_unit arrays
+      const collectedblocks=units.flatMap(item=>item.add_block)
+      const collectcategory=units.flatMap(item=>item.category) 
+      const collectsubcategory=units.flatMap(item=>item.sub_category) // Collect all add_unit arrays
+      const fulllocation = units.flatMap(item => `${item.location}, ${item.address} ${item.street} ${item.locality} ${item.city}`).join(' ');
       setallUnits(collectedUnits);
-      setallblocks(collectedblocks) // Set allUnits with the collected units
+      setallblocks(collectedblocks) 
+      setdeal({...deal,project_category:collectcategory,project_subcategory:collectsubcategory,location:fulllocation})// Set allUnits with the collected units
     }
   }, [units]);
 
+ 
+ 
+  
+
+  
+  
+  
   const handleprojectchange = (event) => {
  
   
@@ -272,18 +294,7 @@ const handleallunitschange = (event) => {
 // ===============================add deal state,and function start=====================================================================
 
 
-            const[deal,setdeal]=useState({available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-                                   expected_price:"",quote_price:"",security_deposite:"",
-                                maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
-                                deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
-                                owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
-                                website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:""})
-              const config = {
-                headers: {
-                  'Content-Type': 'multipart/form-data' // Set the Content-Type here
-                }
-            }
-
+           
             React.useEffect(() => {
 
               const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;

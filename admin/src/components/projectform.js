@@ -814,14 +814,14 @@ function Projectform() {
                           features_aminities: newSelectAll1 ? checkboxItems1 : []
                         }));
                       };
-                    console.log(project.features_aminities)
+                    
                     
 
 // ---------------------=============== both check box code end--------------------------------========================================
 
 // ===========================------------------block add and remove code---------------------=================================================
                                     const[blocks,setblocks]=useState([])
-                                    const[block,setblock]=useState({block_name:"",category:[''],sub_category:"",land_area:"",
+                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:"",land_area:"",
                                                                     measurment:"",total_blocks:"",total_floors:"",total_units:"",
                                                                     status:"",launched_on:"",expected_competion:"",possession:"",
                                                                     parking_type:"",rera_no:""})
@@ -830,12 +830,14 @@ function Projectform() {
                        
                                             if (block.block_name ) 
                                               {
+                                                setblock({...block,category:project.category})
                                                 const updateblocks= [...blocks, block];
                                                 setblocks(updateblocks);
                                                 setproject(prevState => ({
                                                   ...prevState,
                                                   add_block: updateblocks
                                                 }));
+                                                setblock('')
                                                 handleClose1()
                                                  } 
                                                  else
@@ -843,11 +845,14 @@ function Projectform() {
                                                        toast.error("Please fill out all fields.");
                                                    }
                                                  };
+                                                
+                                                 
                                     const deleteblock = (index) => {
                                     
 
                                       // Filter out the destination at the given index
                                       const newblocks = project.add_block.filter((_, i) => i !== index);
+                                      setblocks(newblocks)
 
                                       // Set the updated destination details
                                       setproject(prevState => ({
@@ -860,7 +865,7 @@ function Projectform() {
 
 
                                             const[size,setsize]=useState([])
-                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[''],sub_category:"",
+                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",
                                                                             total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
                                                                             carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
                                                                             length:"",yard1:"yard",bredth:"",yard2:"yard",total_area:"",yard3:"yard"})
@@ -869,6 +874,8 @@ function Projectform() {
 
                                                     if (sizes.size_name ) 
                                                       {
+                                                       
+                              
                                                         const updatesizes= [...size, sizes];
                                                         setsize(updatesizes);
                                                         setproject(prevState => ({
@@ -1115,6 +1122,48 @@ function Projectform() {
                       }
                   });
                 };
+                const handleTypeClick1 = (type) => {
+                   document.getElementById("bcat").style.backgroundColor="green"
+                  setblock(prevProject => {
+                    const category = Array.isArray(prevProject.category) ? prevProject.category : [];
+                      // if (category.includes(type)) {
+                      //     // Remove the type from basic_aminities if already selected
+                      //     return { ...prevProject, category: category.filter(item => item !== type) };
+                      // } else {
+                          // Add the type to basic_aminities if not already selected
+                          return { ...prevProject, category: [ ...category,type] };
+                      //}
+                  });
+               
+                };
+                // const handleTypeClick2 = (type) => {
+                //   // document.getElementById("scat").style.backgroundColor="green"
+                //   setsizes(prevProject => {
+                //       const { category } = prevProject;
+                //       // if (category.includes(type)) {
+                //       //     // Remove the type from basic_aminities if already selected
+                //       //     return { ...prevProject, category: category.filter(item => item !== type) };
+                //       // } else {
+                //           // Add the type to basic_aminities if not already selected
+                //           return { ...prevProject, category: [ type] };
+                //       //}
+                //   });
+                // };
+                // const handleTypeClick3 = (type) => {
+                //   // document.getElementById("ucat").style.backgroundColor="green"
+                //   setunits(prevProject => {
+                //       const { category } = prevProject;
+                //       // if (category.includes(type)) {
+                //       //     // Remove the type from basic_aminities if already selected
+                //       //     return { ...prevProject, category: category.filter(item => item !== type) };
+                //       // } else {
+                //           // Add the type to basic_aminities if not already selected
+                //           return { ...prevProject, category: [ type] };
+                //       //}
+                //   });
+                // };
+
+
                 const isSelected = (type) => project.category.includes(type);
                 const getSubcategories = () => {
                   const subcategories = [];
@@ -1135,6 +1184,8 @@ function Projectform() {
                 }
                   return subcategories;
               };
+
+              
                 
                 const baseprice=()=>
                 {
@@ -1646,8 +1697,9 @@ function Projectform() {
                         project.category.map((type)=>
                         (
                           <div className="col-md-3" key={type}>
-                          <button 
+                          <button id='bcat'
                               className='form-control form-control-sm' 
+                              onClick={() => handleTypeClick1(type)} 
                           >
                               {type}
                           </button>
@@ -1657,6 +1709,7 @@ function Projectform() {
                     </div>
 
                     <div className="col-md-12"><label className="labels">Sub Category</label><select  className="form-control form-control-sm"  onChange={(e)=>setblock({...block,sub_category:e.target.value})}>
+                                <option>choose</option>
                                 <option>{project.sub_category}</option>
                                 </select>
                     </div>
@@ -1797,6 +1850,7 @@ function Projectform() {
                           <div className="col-md-3" key={type}>
                           <button 
                               className='form-control form-control-sm' 
+                           
                           >
                               {type}
                           </button>
@@ -2010,8 +2064,9 @@ function Projectform() {
                         project.category.map((type)=>
                         (
                           <div className="col-md-3" key={type}>
-                          <button 
+                          <button id='ucat'
                               className='form-control form-control-sm' 
+                              
                           >
                               {type}
                           </button>

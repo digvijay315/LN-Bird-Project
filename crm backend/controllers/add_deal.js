@@ -5,7 +5,7 @@ const path = require('path');
 const add_deal=async(req,res)=>
     {
         try {
-            const{available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
+            const{project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
                     team,user,visible_to,owner_details,associated_contact,relation,document_details,s_no,descriptions,category,s_no1,url,
                     website,social_media,send_matchedlead,matchedleads,matchinglead}=req.body;
@@ -19,7 +19,7 @@ const add_deal=async(req,res)=>
                         pic: pics[index] || doc.pic // Add pic from files if available
                     })):[];
            
-                const new_add_deal= new adddeal({available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
+                const new_add_deal= new adddeal({project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
                     team,user,visible_to,owner_details,associated_contact,relation,document_details:updatedDocumentDetails,
                     s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead,matchedleads,matchinglead})

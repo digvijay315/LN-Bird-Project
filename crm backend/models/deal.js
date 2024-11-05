@@ -9,7 +9,10 @@ const documentschema = new mongoose.Schema({
 });
 
 
-const add_deal=new mongoose.Schema({                    
+const add_deal=new mongoose.Schema({   
+    project_category:{type:Array},
+    project_subcategory:{type:Array},   
+    location:{type:String},              
     available_for:{type:String},
     stage:{type:String},
     project:{type:String},

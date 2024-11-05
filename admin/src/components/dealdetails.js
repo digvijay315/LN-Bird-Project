@@ -215,8 +215,8 @@ function Dealdetails() {
     //  website:"",social_media:"",send_matchedlead:""})
       const allColumns = [
         { id: 'sno', name: '#' },
-        { id: 'unit_number', name: 'Unit Number' },
         { id: 'details', name: 'Details' },
+        { id: 'unit_number', name: 'Unit Number' },
         { id: 'owner_details', name: 'Owner Details' },
         { id: 'associated_contact', name: 'Associated Contact' },
         { id: 'expected_price', name: 'Expectation' },
@@ -503,9 +503,14 @@ function Dealdetails() {
               />
               {index + 1}
             </StyledTableCell>
-          
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+             {item.project_category}<br></br>
+             {item.project_subcategory}<br></br>
+             {item.location}
+            </StyledTableCell>
+            
             {visibleColumns
-              .filter((col) => col.id !== 'sno')
+              .filter((col) => col.id !== 'sno' && col.id !== 'details')
               .map((col) => (
                 <StyledTableCell 
                 key={col.id} 
@@ -567,6 +572,7 @@ function Dealdetails() {
                 )}
               </StyledTableCell>
               ))}
+              
           </StyledTableRow>
         ))}
       </tbody>
