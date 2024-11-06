@@ -21,6 +21,7 @@ import { utils, writeFile } from "xlsx";
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
+import Tooltip from '@mui/material/Tooltip';
 
 import api from "../api";
 
@@ -222,7 +223,7 @@ function Dealdetails() {
         { id: 'expected_price', name: 'Expectation' },
         { id: 'matchinglead', name: 'Matched Lead' },
         { id: 'stage', name: 'Status' },
-        { id: 'assigned_to', name: 'Assigned To' },
+        { id: 'user', name: 'Assigned To' },
         { id: 'remarks', name: 'Remarks' },
         { id: 'follow_up', name: 'Follow Up' },
         { id: 'last_contacted', name: 'Last Contacted Date & Time' },
@@ -359,7 +360,211 @@ function Dealdetails() {
         setdata(sortedData)
       };
 
+      const fetchdatabystage_open=async()=>
+        {
+          
+          try {
+            const resp=await api.get(`viewdealbystage/Open`);
+            setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+        const[countopen,setcountopen]=useState('')
+        const fetchdatabystage_opencount=async()=>
+          {
+            
+            try {
+              const resp=await api.get(`viewdealbystage/Open`);
+              const incoming=(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
+              setcountopen(incoming.length);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+         
+        const fetchdatabystage_quote=async(e)=>
+          {
+            e.preventDefault()
+            try {
+              const resp=await api.get(`viewdealbystage/Quote`);
+               setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          const[countquote,setcountquote]=useState('')
+          const fetchdatabystage_quotecount=async()=>
+            {
+              
+              try {
+                const resp=await api.get(`viewdealbystage/Quote`);
+                const quote=(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
+                setcountquote(quote.length);
+                
+              } catch (error) {
+                console.log(error);
+              }
+            }
+          
+          const fetchdatabystage_Negotiation=async()=>
+            {
+              
+              try {
+                const resp=await api.get(`viewdealbystage/Negotiation`);
+                setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal])
+              } catch (error) {
+                console.log(error);
+              }
+            }
+            const[countnegotiation,setcountnegotiation]=useState('')
+            const fetchdatabystage_Negotiationcount=async()=>
+              {
+                
+                try {
+                  const resp=await api.get(`viewdealbystage/Negotiation`);
+                  const negotiation=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
+                  setcountnegotiation(negotiation.length)
+                } catch (error) {
+                  console.log(error);
+                }
+              }
 
+              const fetchdatabystage_booked=async()=>
+                {
+                  
+                  try {
+                    const resp=await api.get(`viewdealbystage/Booked`);
+                    setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal])
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+                const[countbooked,setcountbooked]=useState('')
+                const fetchdatabystage_bookedcount=async()=>
+                  {
+                    
+                    try {
+                      const resp=await api.get(`viewdealbystage/Booked`);
+                      const booked=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
+                      setcountbooked(booked.length)
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }
+              const[countwon,setcountwon]=useState('')
+              const fetchdatabystage_woncount=async()=>
+                {
+                  
+                  try {
+                    const resp=await api.get(`viewdealbystage/Won`);
+                    const Won=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
+                    setcountwon(Won.length)
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+                const[countlost,setcountlost]=useState('')
+                const fetchdatabystage_lostcount=async()=>
+                  {
+                    
+                    try {
+                      const resp=await api.get(`viewdealbystage/Lost`);
+                      const Lost=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
+                      setcountlost(Lost.length)
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }
+
+                  const[countreject,setcountreject]=useState('')
+                  const fetchdatabystage_rejectcount=async()=>
+                    {
+                      
+                      try {
+                        const resp=await api.get(`viewdealbystage/Lost`);
+                        const reject=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
+                        setcountreject(reject.length)
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }
+  
+                   React.useEffect(()=>{fetchdatabystage_opencount()},[])  
+                  React.useEffect(()=>{fetchdatabystage_quotecount()},[]) 
+                  React.useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
+                  React.useEffect(()=>{fetchdatabystage_bookedcount()},[])
+                  React.useEffect(()=>{fetchdatabystage_woncount()},[]) 
+                  React.useEffect(()=>{fetchdatabystage_lostcount()},[])
+                  React.useEffect(()=>{fetchdatabystage_rejectcount()},[])
+
+
+                  const dealallColumns = [
+                    { id: 'unit_number', name: 'Unit Number' },
+                    { id: 'location', name: 'Project Name' },
+                    { id: 'block', name: 'Block' },
+                    { id: 'size', name: 'Size' },
+                    { id: 'project_category', name: 'Category' },
+                    { id: 'project_subcategory', name: 'Sub Category' },
+                    { id: 'expected_price', name: 'Price' }
+                  ]
+
+                  const leadllColumns = [
+                    { id: 'lead_details', name: 'Lead Details' },
+                    { id: 'score', name: 'Score' },
+                    { id: 'requirment', name: 'Requirment' },
+                    { id: 'budget', name: 'Budget' },
+                    { id: 'stage', name: 'Stage' },
+                    { id: 'source', name: 'Source' },
+                    { id: 'recived_on', name: 'Recived On' },
+                    { id: 'site_visit', name: 'Site Visit' },
+                    { id: 'user', name: 'User' }
+                  ]
+                    
+                    
+                  const [show1, setshow1] = useState(false);
+    
+                  const handleClose1 = () => setshow1(false);
+                  const handleShow1=async()=>
+                  {
+                    setshow1(true);
+                   
+                  }
+                  const[deal1,setdeal1]=useState([])
+                  const[lead1,setlead1]=useState([])
+                  const[deallocation,setdeallocation]=useState("")
+                  const handleMatchLeadClick=(item)=>
+                  {
+                    handleShow1()
+                    setdeal1([item])
+                    setdeallocation(item.location);
+                    setlead1(item.matchedleads)
+                  }
+               
+                  const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
+                  const [selectAll1, setSelectAll1] = useState(false);
+                  const handleSelectAll1 = () => {
+                    
+                    setSelectAll1(!selectAll1);
+                    if (!selectAll1) {
+                      // Add all current page item IDs to selectedItems
+                      setSelectedItems1(lead1.map((item) => item._id));
+                    } else {
+                      // Deselect all
+                      setSelectedItems1([]);
+                   
+                    }
+                  };
+                
+                  const handleRowSelect1 = (id) => {
+                   
+                    if (selectedItems1.includes(id)) {
+                      setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
+                    } else {
+                      setSelectedItems1([...selectedItems, id]);
+                    
+                    }
+                  };
     return ( 
         <div>
             <Header1/>
@@ -395,21 +600,21 @@ function Dealdetails() {
         </div>  
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
-        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}}>
+        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={fetchdatabystage_open}>
           <h6>OPEN</h6>
-          <p>{}</p>
+          <p>{countopen}</p>
         </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={fetchdatabystage_quote}>
           <h6>QUOTE</h6>
-          <p>{}</p>
+          <p>{countquote}</p>
         </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={fetchdatabystage_Negotiation}>
           <h6>NEGOTIATION</h6>
-          <p></p>
+          <p>{countnegotiation}</p>
         </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={fetchdatabystage_booked}>
           <h6>BOOKED</h6>
-          <p>{}</p>
+          <p>{countbooked}</p>
         </div>
         <div style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
      
@@ -417,9 +622,9 @@ function Dealdetails() {
             CLOSED
         </button>
             <ul class="dropdown-menu">
-              <li className="form-control">Won <span style={{fontSize:"30px",color:"green",fontWeight:"bolder"}}><sup></sup></span></li>
-              <li className="form-control">Reject <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup></sup></span></li>
-              <li className="form-control">Lost <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup></sup></span></li>
+              <li className="form-control">Won <span style={{fontSize:"30px",color:"green",fontWeight:"bolder"}}><sup>{countwon}</sup></span></li>
+              <li className="form-control">Reject <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup>{countlost}</sup></span></li>
+              <li className="form-control">Lost <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup>{countreject}</sup></span></li>
             </ul>
         </div>  
         
@@ -514,7 +719,8 @@ function Dealdetails() {
               .map((col) => (
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px", fontFamily: "times new roman" }}
+                style={{ padding: "10px", fontFamily: "times new roman",cursor: col.id === 'matchinglead' ? 'pointer' : 'default' }}
+                onClick={col.id === 'matchinglead' ? () => handleMatchLeadClick(item) : undefined} // Handle click if it's 'matchlead'
               >
                 {col.id === 'owner_details' && Array.isArray(item.owner_details) ? (
                   item.owner_details.map(detail => (
@@ -583,9 +789,171 @@ function Dealdetails() {
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}></span></h5>
         </footer>
       </div>
-    <div style={{height:"100px"}}>
-      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>{renderPageNumbers()}</div></div>
+    {/* <div style={{height:"100px"}}>
+      <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>{renderPageNumbers()}</div></div> */}
       
+
+      <Modal show={show1} onHide={handleClose1} size='xl' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Matched Lead for {deallocation}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+      
+          {dealallColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              onClick={() => handleSort(col.id)}
+              
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+              
+            </StyledTableCell>
+          ))}
+          <StyledTableCell>
+              <Tooltip title="Filter lead.." arrow>
+             <img src="https://static-00.iconduck.com/assets.00/filter-icon-1024x1024-g4w8llud.png" style={{height:"35px",border:"none",cursor:"pointer"}}></img>
+             </Tooltip>
+             </StyledTableCell>
+        </TableRow>
+       
+      </TableHead>
+    
+      <tbody>
+        {
+         
+        deal1.map ((item, index) => (
+          <StyledTableRow key={index}>
+            
+         
+            
+            {dealallColumns
+              .filter((col) => col.id !== 'sno')
+              .map((col) => (
+                <StyledTableCell 
+                key={col.id} 
+                style={{ padding: "10px", fontFamily: "times new roman" }}
+                
+              >
+                {item[col.id]}
+              </StyledTableCell>
+              ))}
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+  <div style={{marginTop:"10px",backgroundColor:"gray",padding:"12px",height:"60px",display:"flex",gap:"10px"}}>
+     
+      <input id="search" type="text"  className="form-control form-control-sm form-control form-control-sm-sm" placeholder="Type here for search" style={{width:"25%"}} />
+      <div style={{marginLeft:"45%"}}><button className="form-control form-control-sm">Send Details</button></div>
+      <div><button className="form-control form-control-sm">Mark As Intrested</button></div>
+      </div>
+
+      <TableContainer component={Paper} style={{marginTop:"20px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell>
+          {leadllColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+              
+            </StyledTableCell>
+          ))}
+      
+        </TableRow>
+       
+      </TableHead>
+    
+      <tbody>
+        {
+         
+        lead1.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+             {item.title} {item.first_name} {item.last_name} <br></br>
+             {
+              Array.isArray(item.mobile_no) 
+                ? item.mobile_no.map((mobile, index) => (
+                    <div key={index}>
+                      <SvgIcon component={PhoneIphoneIcon} />
+                      <span style={{ color: "#9400D3" }}>{mobile}</span>
+                    </div>
+                  ))
+                :  <div>
+                    <SvgIcon component={PhoneIphoneIcon} />  
+                    <span style={{ color: "#9400D3" }}>{item.mobile_no}</span> 
+                </div> 
+            }
+
+
+            </StyledTableCell>
+            
+            {leadllColumns
+              .filter((col) => col.id !== 'sno' && col.id !=='lead_details' )
+              .map((col) => (
+                <StyledTableCell 
+                key={col.id} 
+                style={{ padding: "10px", fontFamily: "times new roman" }}
+                
+              >
+                
+                {col.id === 'stage' ? (
+              <>
+                {item.stage} <br />
+                <span style={{ color: item.lead_type === 'Hot' ? 'red' : item.lead_type === 'Warm' ? 'green' : item.lead_type === 'Cold' ? 'blue' : 'black' }}>
+                  {item.lead_type}
+                </span>
+              </>
+            ) : (
+              item[col.id]
+            )}
+                  
+
+             
+              </StyledTableCell>
+              ))}
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+      
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose1}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
      
             

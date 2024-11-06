@@ -48,6 +48,7 @@ const add_deal=new mongoose.Schema({
     send_matchedlead:{type:String},
     matchedleads:{type:Array},
     matchinglead:{type:String},
+    remarks:{type:String},
 },{timestamps:true})
 
 const adddeal=mongoose.model('deal',add_deal)

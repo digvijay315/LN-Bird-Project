@@ -19,6 +19,8 @@ import { toWords } from 'number-to-words';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 
 function Deal() {
@@ -29,7 +31,7 @@ const[deal,setdeal]=useState({project_category:[],project_subcategory:"",locatio
 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
 owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
-website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:""})
+website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 const config = {
 headers: {
 'Content-Type': 'multipart/form-data' // Set the Content-Type here
@@ -1108,7 +1110,28 @@ const handleMouseUp = () => {
   window.removeEventListener('mouseup', handleMouseUp);
 };
         
-  
+const modules = {
+  toolbar: [
+    [{ 'font': [] }, { 'size': [] }], // font and size
+    [{ 'header': '1'}, { 'header': '2'}, { 'header': [3, 4, 5, 6, false] }], // headers
+    [{ 'color': [] }, { 'background': [] }], // color and background
+    ['bold', 'italic', 'underline', 'strike'], // formatting buttons
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }], // lists
+    [{ 'align': [] }], // text alignment
+    ['link', 'image'], // link and image options
+    ['clean'] // remove formatting button
+  ]
+};
+
+// Formats that should be available
+const formats = [
+  'font', 'size', 'header',
+  'bold', 'italic', 'underline', 'strike',
+  'color', 'background',
+  'list', 'bullet',
+  'align',
+  'link', 'image'
+]
 
     return ( 
         <div>
@@ -1282,17 +1305,18 @@ const handleMouseUp = () => {
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                         <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
                     <option>Select</option>
@@ -1395,8 +1419,8 @@ const handleMouseUp = () => {
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
                     <option>Cash</option>
-                        <option>Online</option>
-                        <option>Net Banking</option>
+                        <option>Collecter Rate</option>
+                        <option>Flexiable</option>
                         <option>NEFT</option>
                         <option>Upi</option>
                         <option>RTGS</option>
@@ -1422,23 +1446,25 @@ const handleMouseUp = () => {
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                         <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                               <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
                     <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
+                    <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
                     <option>Select</option>
-                        <option>Only Me</option>
-                        <option>Team</option>
-                        <option>All User</option>
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
                         </select></div>
                       </div>
                   </div>
@@ -2017,9 +2043,12 @@ const handleMouseUp = () => {
                                           <option>Email</option>
                                           </select>
                                     </div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={deal.remarks} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setdeal({ ...deal, remarks: value })}/></div>
+                                    <div className="col-md-2"></div>
+                    
                                     </div>
                   </div>
-                <div className="row mt-4">
+                <div className="row mt-5">
                     <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="ownerbtn"><button className="form-control form-control-sm" onClick={add_deal}>Save</button></div>
                     <div className="col-md-2" onClick={handler6} style={{marginLeft:"-90%",display:"none"}} id="prevbtn2"><button className="form-control form-control-sm" >Prev</button></div>
                 </div>  

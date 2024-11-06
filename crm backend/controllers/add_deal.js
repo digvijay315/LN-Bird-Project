@@ -8,7 +8,7 @@ const add_deal=async(req,res)=>
             const{project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
                     team,user,visible_to,owner_details,associated_contact,relation,document_details,s_no,descriptions,category,s_no1,url,
-                    website,social_media,send_matchedlead,matchedleads,matchinglead}=req.body;
+                    website,social_media,send_matchedlead,matchedleads,matchinglead,remarks}=req.body;
 
                     const pics = req.files ? req.files.map(item => item.path) : [];
                     const preview=req.files ? req.files.map((item=>item.path)):[]
@@ -22,7 +22,7 @@ const add_deal=async(req,res)=>
                 const new_add_deal= new adddeal({project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
                     team,user,visible_to,owner_details,associated_contact,relation,document_details:updatedDocumentDetails,
-                    s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead,matchedleads,matchinglead})
+                    s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead,matchedleads,matchinglead,remarks})
             
             const resp=await new_add_deal.save()
             res.status(200).send({message:"deal added ",deal:resp})
@@ -41,5 +41,20 @@ const add_deal=async(req,res)=>
             }
         }
 
+        const view_deal_Bystage=async(req,res)=>
+            {
+                try {
+                    const stage=req.params.stage;
+                    const resp= await adddeal.find({stage:stage})
+                    if(!resp)
+                        {
+                           return res.send("lead info not available")
+                        }
+                       
+                    res.status(200).send({message:"lead found and here are lead details:",deal:resp})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
     
-    module.exports={add_deal,view_deal};
+    module.exports={add_deal,view_deal,view_deal_Bystage};
