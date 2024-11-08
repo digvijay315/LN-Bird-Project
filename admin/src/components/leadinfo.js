@@ -661,28 +661,35 @@ return (
                         </select></div>
                         <div className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
                         <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                        <option>2500</option>
+                        <option>3000</option>
+                        <option>3500</option>
+                        <option>1000000</option>
+                        <option>1500000</option>
+                        <option>2000000</option>
+                        <option>3000000</option>
                         </select></div>
 
                         <div className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
                         <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                        <option>5000</option>
+                        <option>8000</option>
+                        <option>1500</option>
+                        <option>5000000</option>
+                        <option>10000000</option>
+                        <option>20000000</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
                         <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                        <option>800</option>
+                        <option>1000</option>
+                        <option>1200</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
                         <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                        <option>2000</option>
+                        <option>2500</option>
+                        <option>3000</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
                         <option>Select Type</option>

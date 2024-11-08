@@ -1,7 +1,7 @@
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import '../css/addinventory.css';
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import * as React from 'react';
@@ -294,19 +294,98 @@ const handleallunitschange = (event) => {
 
 
 // ===============================add deal state,and function start=====================================================================
+const [deals, setDeals] = useState([]);
 
+const previousDealsRef = useRef([]);
+// Function to fetch multiple deals (assuming you fetch all deals from the backend)
+const fetchDeals = async () => {
+  try {
+    const response = await api.get('viewdeal'); // Get all deals from API
+    setDeals(response.data.deal);
+  } catch (error) {
+    console.error('Error fetching deals:', error);
+  }
+};
+
+
+
+
+// Function to update a deal on the server (based on deal ID)
+const updateDealApi = async (updatedDeal) => {
+  try {
+    await api.put(`updatedeal/${updatedDeal._id}`, updatedDeal); // PUT request to update the deal
+    console.log('Deal updated successfully:', updatedDeal);
+  } catch (error) {
+    console.error('Error updating deal:', error);
+  }
+};
+
+// Fetch all deals and data2 when the component mounts
+React.useEffect(() => {
+  fetchDeals();
+  
+}, []); // Empty dependency array ensures this runs only once when the component mounts
+
+// Recalculate matched leads for each deal whenever data2 changes
+React.useEffect(() => {
+  if (data2.length > 0 && deals.length > 0) {
+    const updatedDeals = deals.map((deal) => {
+      const price = deal.expected_price;
+      const availableFor = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
+
+      // Filter leads based on the current deal's criteria
+      const filteredLeads = data2.filter(
+        (item) =>
+          item.requirment === availableFor &&
+          price >= parseFloat(item.budget_min) &&
+          price <= parseFloat(item.budget_max)
+      );
+
+      // Create a new deal object with updated matched leads and matched lead count
+      return {
+        ...deal,
+        matchedleads: filteredLeads,
+        matchinglead: filteredLeads.length, // Update the matched lead count
+      };
+    });
+
+    // Only update deals if there is a meaningful change
+    if (JSON.stringify(previousDealsRef.current) !== JSON.stringify(updatedDeals)) {
+      setdeal(updatedDeals); // Update the state with the updated deals
+      previousDealsRef.current = updatedDeals; // Update the previousDealsRef
+
+      // Send updates to the server in a separate async function
+      (async () => {
+        for (const updatedDeal of updatedDeals) {
+          await updateDealApi(updatedDeal); // Update each deal on the server
+        }
+      })();
+    }
+  }
+}, [data2, deals]); // Trigger this effect whenever `data2` or `deals` changes
+
+// Debugging: log the updated deals and data2
+// React.useEffect(() => {
+//   console.log('Updated deals:', deals);  // Log the current deals array
+//   console.log('Updated data2:', data2);  // Log the current data2 (leads)
+// }, [deals, data2]);
 
            
-            React.useEffect(() => {
-
-              const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
-              const filteredLeads = data2.filter(item => item.requirment ===  availableFor);
-              setdeal(prevDeal => ({
-                ...prevDeal,
-                matchedleads: filteredLeads,
-                matchinglead: filteredLeads.length
-            })); // Update the state with the filtered leads
-          }, [ data2,deal.available_for]);
+          //   React.useEffect(() => {
+          //     const price=deal.expected_price
+          //     const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
+          //     const filteredLeads = data2.filter(item => 
+          //       item.requirment === availableFor && 
+          //       price >= parseFloat(item.budget_min) && 
+          //       price <= parseFloat(item.budget_max)
+          //     );
+          //     setdeal(prevDeal => ({
+          //       ...prevDeal,
+          //       matchedleads: filteredLeads,
+          //       matchinglead: filteredLeads.length
+          //   })); // Update the state with the filtered leads
+          // }, [ data2,deal.available_for,deal.expected_price]);
+       
 
 
      
@@ -1827,7 +1906,7 @@ const formats = [
       </TableHead>
       <tbody>
         {
-         
+         Array.isArray(deal.document_details)?
         deal.document_details.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >
@@ -1849,7 +1928,7 @@ const formats = [
             <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedocument(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
             </StyledTableCell>
           </StyledTableRow>
-        ))}
+        )):[]}
       </tbody>
     </Table>
     </TableContainer>
@@ -1882,7 +1961,9 @@ const formats = [
                           <tbody>
                           <tr>
                           <td>
-                          {deal.s_no.map((name, index) => (
+                          {
+                          Array.isArray(deal.s_no)?
+                          deal.s_no.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
@@ -1892,10 +1973,12 @@ const formats = [
                                       />
                                       
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
                           <td>
-                          {deal.preview.map((name, index) => (
+                          {
+                          Array.isArray(deal.preview)?
+                          deal.preview.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                       name="preview"
@@ -1908,10 +1991,11 @@ const formats = [
                                             <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
                                           ))}
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
                           <td>
-                          {deal.descriptions.map((name, index) => (
+                          {Array.isArray(deal.descriptions)?
+                          deal.descriptions.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
@@ -1921,10 +2005,11 @@ const formats = [
                                       />
                                       
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
                           <td>
-                          {deal.category.map((name, index) => (
+                          {Array.isArray(deal.category)?
+                          deal.category.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <select className="form-control form-control-sm" required="true" onChange={(event) => handlecategorychange(index, event)}>
                                           <option>select</option>
@@ -1938,15 +2023,16 @@ const formats = [
                                           <option>Drawing Room</option>
                                           </select>
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
                           <td>
-                          {deal.action.map((name, index) => (
+                          {Array.isArray(deal.action)?
+                          deal.action.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                     
                                       <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
 
                           </tr>
@@ -1971,7 +2057,8 @@ const formats = [
                           <tbody>
                           <tr>
                           <td>
-                          {deal.s_no1.map((name, index) => (
+                          {Array.isArray(deal.s_no1)?
+                          deal.s_no1.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
@@ -1981,10 +2068,11 @@ const formats = [
                                       />
                                   
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
                           <td>
-                          {deal.url.map((name, index) => (
+                          {Array.isArray(deal.url)?
+                          deal.url.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
@@ -1994,16 +2082,17 @@ const formats = [
                                       />
                                       
                                     </div>
-                                  ))}
+                                  )):[]}
                                   
                           </td>
                           <td>
-                          {deal.action1.map((name, index) => (
+                          {Array.isArray(deal.action1)?
+                          deal.action1.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                     
                                       <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                     </div>
-                                  ))}
+                                  )):[]}
                           </td>
                           </tr>
                         </tbody>

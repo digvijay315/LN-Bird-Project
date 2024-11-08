@@ -56,5 +56,45 @@ const add_deal=async(req,res)=>
                     console.log(error)
                 }
             }
+
+            const remove_deal=async(req,res)=>
+                {
+                    try {
+                        const id=req.params._id;
+                        const user=await adddeal.findOne({_id:id})
+                        if(!user)
+                            {
+                                return res.send({message:"deal not found"})
+                            }
+                        const resp=await adddeal.deleteOne({_id:id})
+                        res.status(200).send({message:"deal deleted successfully"})
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+
+                const update_deal=async(req,res)=>
+                    {
+                        try {
+                            const id=req.params._id;
+                            const user=await adddeal.findOne({_id:id})
+                            if(!user)
+                                {
+                                    return res.send({message:"deal not found"})
+                                }
+                                const pics = req.files ? req.files.map(item => item.path) : [];
+                                const preview=req.files ? req.files.map((item=>item.path)):[]
+                            
+                             const updatedFields = {
+                                ...req.body,
+                                preview,
+                                pics // Update preview field with new images if provided
+                            };
+                            const resp=await adddeal.findByIdAndUpdate(id,updatedFields,{ new: true })
+                            res.status(200).send({message:"lead update successfully"})
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }
     
-    module.exports={add_deal,view_deal,view_deal_Bystage};
+    module.exports={add_deal,view_deal,view_deal_Bystage,remove_deal,update_deal};

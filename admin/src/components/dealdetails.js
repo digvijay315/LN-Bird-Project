@@ -44,20 +44,26 @@ function Dealdetails() {
         
         }
 
-
-        const deleteinventory=async(item)=>
+        const deleteSelectedItems = async () => {
+          try {
+            if(selectedItems.length===0)
             {
-              try {
-                const id=item._id
-                const resp=await api.delete(`removeinventory/${id}`)
-                toast.success("inventory deleted successfully")
-                setTimeout(() => {
-                  window.location.reload()
-                }, 2000);
-              } catch (error) {
-                console.log(error);
-              }
+              toast.error("please select first",{autoClose:"2000"})
+              return
             }
+            const resp = selectedItems.map(async (itemId) => {
+              await api.delete(`removedeal/${itemId}`);
+            });
+            
+            toast.success('Selected items deleted successfully',{autoClose:"2000"})
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
       
 
        
@@ -227,7 +233,6 @@ function Dealdetails() {
         { id: 'remarks', name: 'Remarks' },
         { id: 'follow_up', name: 'Follow Up' },
         { id: 'last_contacted', name: 'Last Contacted Date & Time' },
-        { id: 'action', name: 'Action' },
         { id: 'available_for', name: 'Available For' },
         { id: 'mobile_type', name: 'Mobile Type' },
         { id: 'email_type', name: 'Email Type' },
@@ -283,7 +288,7 @@ function Dealdetails() {
       ];
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
       const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 13));
+      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 12));
       const [showColumnList, setShowColumnList] = useState(false);
 
       const handleAddColumnClick = () => {
@@ -300,12 +305,13 @@ function Dealdetails() {
         }
       };
       const handleSelectAll = () => {
-        // document.getElementById("delete").style.display="inline-block"
-        // document.getElementById("search").style.display="none"
-        // document.getElementById("edit").style.display="none"
-        // document.getElementById("mail").style.display="inline-block"
-        //  document.getElementById("whatsapp").style.display="inline-block"
-        //  document.getElementById("message").style.display="inline-block"
+        document.getElementById("delete").style.display="inline-block"
+        document.getElementById("search").style.display="none"
+        document.getElementById("toggelsearch").style.display="none"
+        document.getElementById("edit").style.display="none"
+        document.getElementById("mail").style.display="inline-block"
+         document.getElementById("whatsapp").style.display="inline-block"
+         document.getElementById("message").style.display="inline-block"
         setSelectAll(!selectAll);
         if (!selectAll) {
           // Add all current page item IDs to selectedItems
@@ -313,32 +319,35 @@ function Dealdetails() {
         } else {
           // Deselect all
           setSelectedItems([]);
-        //   document.getElementById("delete").style.display="none"
-        //   document.getElementById("search").style.display="flex"
-        //   document.getElementById("edit").style.display="none"
-        //   document.getElementById("mail").style.display="none"
-        //    document.getElementById("whatsapp").style.display="none"
-        //    document.getElementById("message").style.display="none"
+          document.getElementById("delete").style.display="none"
+          document.getElementById("search").style.display="flex"
+            document.getElementById("toggelsearch").style.display="flex"
+          document.getElementById("edit").style.display="none"
+          document.getElementById("mail").style.display="none"
+           document.getElementById("whatsapp").style.display="none"
+           document.getElementById("message").style.display="none"
         }
       };
     
       const handleRowSelect = (id) => {
-        // document.getElementById("delete").style.display="none"
-        // document.getElementById("edit").style.display="none"
-        // document.getElementById("mail").style.display="none"
-        //  document.getElementById("whatsapp").style.display="none"
-        //     document.getElementById("message").style.display="none"
-        // document.getElementById("search").style.display="flex"
+        document.getElementById("delete").style.display="none"
+        document.getElementById("edit").style.display="none"
+        document.getElementById("mail").style.display="none"
+         document.getElementById("whatsapp").style.display="none"
+            document.getElementById("message").style.display="none"
+        document.getElementById("search").style.display="flex"
+          document.getElementById("toggelsearch").style.display="flex"
         if (selectedItems.includes(id)) {
           setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
         } else {
           setSelectedItems([...selectedItems, id]);
-        //   document.getElementById("delete").style.display="inline-block"
-        //    document.getElementById("edit").style.display="inline-block"
-        //  document.getElementById("mail").style.display="inline-block"
-        //   document.getElementById("whatsapp").style.display="inline-block"
-        //      document.getElementById("message").style.display="inline-block"
-        //  document.getElementById("search").style.display="none"
+          document.getElementById("delete").style.display="inline-block"
+           document.getElementById("edit").style.display="inline-block"
+         document.getElementById("mail").style.display="inline-block"
+          document.getElementById("whatsapp").style.display="inline-block"
+             document.getElementById("message").style.display="inline-block"
+         document.getElementById("search").style.display="none"
+           document.getElementById("toggelsearch").style.display="none"
         }
       };
 
@@ -503,13 +512,14 @@ function Dealdetails() {
                     { id: 'unit_number', name: 'Unit Number' },
                     { id: 'location', name: 'Project Name' },
                     { id: 'block', name: 'Block' },
+                    { id: 'available_for', name: 'For' },
                     { id: 'size', name: 'Size' },
                     { id: 'project_category', name: 'Category' },
                     { id: 'project_subcategory', name: 'Sub Category' },
                     { id: 'expected_price', name: 'Price' }
                   ]
 
-                  const leadllColumns = [
+                  const leadallColumns = [
                     { id: 'lead_details', name: 'Lead Details' },
                     { id: 'score', name: 'Score' },
                     { id: 'requirment', name: 'Requirment' },
@@ -518,7 +528,7 @@ function Dealdetails() {
                     { id: 'source', name: 'Source' },
                     { id: 'recived_on', name: 'Recived On' },
                     { id: 'site_visit', name: 'Site Visit' },
-                    { id: 'user', name: 'User' }
+                    { id: 'owner', name: 'User' }
                   ]
                     
                     
@@ -565,7 +575,88 @@ function Dealdetails() {
                     
                     }
                   };
-    return ( 
+
+                  const [removedColumns, setRemovedColumns] = useState([]);
+
+                  // Track visibility of '-' buttons for column removal
+                  const [showRemoveButtons, setShowRemoveButtons] = useState(false);
+                
+                  // Handle filter icon click to toggle visibility of '-' buttons
+                  const handleFilterClick = () => {
+                    setShowRemoveButtons((prev) => !prev); // Toggle visibility of '-' buttons
+                  };
+                
+                  // Handle column removal (when `-` icon is clicked)
+                  const handleColumnRemove = (colId) => {
+                    setRemovedColumns((prev) => [...prev, colId]); // Add the column ID to removedColumns
+                  };
+
+                  const[leaddata,setleaddata]=useState([]);
+                  const fetchleaddata=async(event)=>
+                  {
+                    
+                    try {
+                      const resp=await api.get('leadinfo')
+                      const all=(resp.data.lead)
+                      setleaddata(all)
+                
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  
+                  }
+                  
+                  
+                  React.useEffect(()=>{fetchleaddata()},[])
+
+           
+                  
+                  
+                  
+
+                 
+                  useEffect(() => {
+                    const filterLeadsByRemovedColumns = () => {
+                       let newFilteredLeads = [...leaddata];
+              
+                      if(lead1.length!==0){
+                      // If the 'price' column is removed, don't filter based on price
+                      if (!removedColumns.includes('price')) {
+                        const price = deal1[0]?.expected_price;
+                        const availableFor = deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
+                
+                        // Filter leads by availableFor, and price range if price column is not removed
+                        newFilteredLeads = leaddata.filter((item) =>
+                          item.requirment === availableFor &&
+                          price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)
+                        );
+                      } else {
+                        // If the 'price' column is removed, exclude price-based filtering
+                        newFilteredLeads = leaddata.filter((item) => item.requirment === deal1[0]?.available_for);
+                      }
+                
+                      setlead1(newFilteredLeads); // Update filtered leads
+                    };
+                  }
+
+                  if(lead1.length==0){
+                    let newFilteredLeads = [...leaddata];
+                    const availableForFallback =deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
+                    newFilteredLeads = leaddata.filter((item) =>
+                      item.requirment === availableForFallback // Use availableFor as fallback
+                    );
+                    setlead1(newFilteredLeads);
+                  }
+                    console.log(leaddata);
+                    console.log(lead1);
+                    
+                
+                    filterLeadsByRemovedColumns(); // Trigger filtering when removedColumns change
+                
+                  }, [removedColumns]);
+                
+                  
+    return (
         <div>
             <Header1/>
             <Sidebar1/>
@@ -632,13 +723,29 @@ function Dealdetails() {
       </div>
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
-      <input type="checkbox" onChange={handleischeckedchange}/>
+      <input id="toggelsearch" type="checkbox" onChange={handleischeckedchange}/>
       <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} />
-      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
-           {/* <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button> */}
-         
-           </div>
+     
+      <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
+<Tooltip title="Delete Data.." arrow>
+<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems}    style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Edit Data.." arrow>
+<img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Send Mail.." arrow>
+<img id="mail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Send WhatsApp.." arrow>
+<img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
+</Tooltip>
+<Tooltip title="Send Message.." arrow>
+<img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+</Tooltip>
+</div>
     
     
       {/* <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute"}}>
@@ -800,28 +907,56 @@ function Dealdetails() {
             <Modal.Body>
             <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
-      <TableHead>
-        <TableRow>
+    <TableHead>
       
+
+        {/* Render the column headers */}
+        <TableRow>
           {dealallColumns.map((col) => (
-            <StyledTableCell
-              key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
-              onClick={() => handleSort(col.id)}
-              
-            >
-              {col.name}
-              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
-              
-            </StyledTableCell>
+            // Only render columns that are NOT in the removedColumns list
+            !removedColumns.includes(col.id) && (
+              <StyledTableCell key={col.id} style={{ fontFamily: 'times new roman' }}>
+                <span>{col.name}</span>
+
+                {/* Conditionally render '-' button based on showRemoveButtons */}
+                {showRemoveButtons && (
+                  <Tooltip title="Click to remove column">
+                    <button
+                      onClick={() => handleColumnRemove(col.id)} // Remove the column
+                      style={{
+                        marginLeft: '10px',
+                        cursor: 'pointer',
+                        backgroundColor: 'red',
+                        color: 'white',
+                        border: 'none',
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        textAlign: 'center',
+                        fontSize: '14px',
+                      }}
+                    >
+                      -
+                    </button>
+                  </Tooltip>
+                )}
+              </StyledTableCell>
+            )
           ))}
-          <StyledTableCell>
-              <Tooltip title="Filter lead.." arrow>
-             <img src="https://static-00.iconduck.com/assets.00/filter-icon-1024x1024-g4w8llud.png" style={{height:"35px",border:"none",cursor:"pointer"}}></img>
-             </Tooltip>
-             </StyledTableCell>
+           <TableRow>
+          {/* Single Filter Image Icon */}
+          <StyledTableCell >
+            <Tooltip title="Click to toggle filter" arrow>
+              <img
+                src="https://static-00.iconduck.com/assets.00/filter-icon-1024x1024-g4w8llud.png"
+                alt="filter"
+                style={{ height: '35px', border: 'none', cursor: 'pointer' }}
+                onClick={handleFilterClick} // Toggle the visibility of '-' buttons
+              />
+            </Tooltip>
+          </StyledTableCell>
         </TableRow>
-       
+        </TableRow>
       </TableHead>
     
       <tbody>
@@ -835,6 +970,7 @@ function Dealdetails() {
             {dealallColumns
               .filter((col) => col.id !== 'sno')
               .map((col) => (
+                !removedColumns.includes(col.id) &&
                 <StyledTableCell 
                 key={col.id} 
                 style={{ padding: "10px", fontFamily: "times new roman" }}
@@ -867,7 +1003,7 @@ function Dealdetails() {
               onChange={handleSelectAll1}
             />
           </StyledTableCell>
-          {leadllColumns.map((col) => (
+          {leadallColumns.map((col) => (
             <StyledTableCell
               key={col.id}
               style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
@@ -886,7 +1022,7 @@ function Dealdetails() {
       <tbody>
         {
          
-        lead1.map ((item, index) => (
+         lead1.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
@@ -916,7 +1052,7 @@ function Dealdetails() {
 
             </StyledTableCell>
             
-            {leadllColumns
+            {leadallColumns
               .filter((col) => col.id !== 'sno' && col.id !=='lead_details' )
               .map((col) => (
                 <StyledTableCell 
@@ -931,6 +1067,12 @@ function Dealdetails() {
                 <span style={{ color: item.lead_type === 'Hot' ? 'red' : item.lead_type === 'Warm' ? 'green' : item.lead_type === 'Cold' ? 'blue' : 'black' }}>
                   {item.lead_type}
                 </span>
+              </>
+            ) :   col.id === 'budget' ? (
+              <>
+                Min:  {item.budget_min} <br />
+                Max:  {item.budget_max}
+              
               </>
             ) : (
               item[col.id]

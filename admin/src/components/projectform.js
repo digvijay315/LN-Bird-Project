@@ -865,6 +865,7 @@ function Projectform() {
 
 
                                             const[size,setsize]=useState([])
+                                            
                                             const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",
                                                                             total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
                                                                             carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
@@ -875,13 +876,13 @@ function Projectform() {
                                                     if (sizes.size_name ) 
                                                       {
                                                        
-                              
                                                         const updatesizes= [...size, sizes];
                                                         setsize(updatesizes);
                                                         setproject(prevState => ({
                                                           ...prevState,
                                                           add_size: updatesizes
                                                         }));
+                                                        setsizes('')
                                                         handleClose2()
 
                                                            document.getElementById("choosedestination").value="Select"
@@ -902,7 +903,9 @@ function Projectform() {
                                                 ...prevState,
                                                 add_size: newsizes
                                               }));
+                                              setsize(newsizes)
                                             };
+
 
 
 
@@ -912,7 +915,7 @@ function Projectform() {
 
 // ==============================----------------------add unit start===========================================---------------------------
                                           const[unit,setunit]=useState([])
-                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:[''],block:"",
+                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:[],block:"",
                                                                           size:"",direction:"",facing:"",road:"",ownership:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",
@@ -928,6 +931,7 @@ function Projectform() {
                                                         ...prevState,
                                                         add_unit: updateunit
                                                       }));
+                                                      setunits('')
                                                       handleClose3()
 
                                                         document.getElementById("choosedestination").value="Select"
@@ -942,12 +946,13 @@ function Projectform() {
 
                                             // Filter out the destination at the given index
                                             const newunit = project.add_unit.filter((_, i) => i !== index);
-
+                                          
                                             // Set the updated destination details
                                             setproject(prevState => ({
                                               ...prevState,
                                               add_unit: newunit
                                             }));
+                                            setunit(newunit)
                                           };
 
 
@@ -1137,18 +1142,19 @@ function Projectform() {
                
                 };
                 // const handleTypeClick2 = (type) => {
-                //   // document.getElementById("scat").style.backgroundColor="green"
                 //   setsizes(prevProject => {
-                //       const { category } = prevProject;
-                //       // if (category.includes(type)) {
-                //       //     // Remove the type from basic_aminities if already selected
-                //       //     return { ...prevProject, category: category.filter(item => item !== type) };
-                //       // } else {
-                //           // Add the type to basic_aminities if not already selected
-                //           return { ...prevProject, category: [ type] };
-                //       //}
+                //     const category = Array.isArray(prevProject.category) ? prevProject.category : [];
+                    
+                //     // Prevent state update if there's no change (to avoid unnecessary re-renders)
+                //     if (!category.includes(type)) {
+                //       return { ...prevProject, category: [...category, type] };
+                //     }
+                    
+                //     // If 'type' is already in the category, don't change the state
+                //     return prevProject;
                 //   });
                 // };
+                
                 // const handleTypeClick3 = (type) => {
                 //   // document.getElementById("ucat").style.backgroundColor="green"
                 //   setunits(prevProject => {
@@ -1662,7 +1668,7 @@ function Projectform() {
             {item.block_name}
              </StyledTableCell>
              <StyledTableCell >
-            {item.category}
+            {item.category.join(',')}
              </StyledTableCell>
              <StyledTableCell >
             {item.sub_category}
@@ -1801,7 +1807,7 @@ function Projectform() {
              {item.block1}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-             {item.category}
+             {item.category.join(',')}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.sub_category}
@@ -1831,6 +1837,7 @@ function Projectform() {
                     <div className='col-md-4'></div>
 
                     <div className="col-md-8"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setsizes({...sizes,block1:e.target.value})}>
+                                <option>choose</option>
                                {
                                 project.add_block.map((item)=>
                                 (
@@ -1843,24 +1850,38 @@ function Projectform() {
 
                     <div className="col-md-12"><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
-                         <div className="col-md-12" style={{display:"flex",flexWrap:"wrap"}} >
-                       {
-                        project.category.map((type)=>
-                        (
+                    <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
+                      {
+                        project.category.map((type) => (
                           <div className="col-md-3" key={type}>
-                          <button 
-                              className='form-control form-control-sm' 
-                           
-                          >
+                            <button 
+                              className="form-control form-control-sm"
+                              onClick={() => setsizes(prevSizes => {
+                                const category = Array.isArray(prevSizes.category) ? prevSizes.category : [];  // Ensure category is always an array
+
+                                // Only add 'type' if it's not already in the 'category' array
+                                if (!category.includes(type)) {
+                                  return {
+                                    ...prevSizes, 
+                                    category: [...category, type]  // Add the type to the category array
+                                  };
+                                }
+
+                                // Return the previous state if there's no change
+                                return prevSizes; 
+                              })}
+                            >
                               {type}
-                          </button>
-                      </div>
+                            </button>
+                          </div>
                         ))
-                       }
-                    </div>
+                      }
                     </div>
 
-                    <div className="col-md-12"><label className="labels">Sub Category</label><select id='subcategory'  className="form-control form-control-sm"  onClick={selectsize}>
+                    </div>
+
+                    <div className="col-md-12"><label className="labels">Sub Category</label><select id='subcategory'  className="form-control form-control-sm"  onClick={selectsize} onChange={(e)=>setsizes({...sizes,sub_category:e.target.value})}>
+                                <option>choose</option>
                                 <option value={project.sub_category}>{project.sub_category}</option>
                                 </select>
                     </div>   
@@ -1994,7 +2015,7 @@ function Projectform() {
              {item.block}
              </StyledTableCell>
              <StyledTableCell style={{ fontFamily: "times new roman" }}>
-             {item.category}
+             {item.category.join(',')}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.unit_type}
@@ -2059,24 +2080,37 @@ function Projectform() {
                     </div>
                     <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex"}} >
-                      <div className="col-md-12" style={{display:"flex",flexWrap:"wrap"}} >
-                       {
-                        project.category.map((type)=>
-                        (
+                    <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
+                      {
+                        project.category.map((type) => (
                           <div className="col-md-3" key={type}>
-                          <button id='ucat'
-                              className='form-control form-control-sm' 
-                              
-                          >
+                            <button 
+                              className="form-control form-control-sm"
+                              onClick={() => setunits(prevunits => {
+                                const category = Array.isArray(prevunits.category) ? prevunits.category : [];  // Ensure category is always an array
+
+                                // Only add 'type' if it's not already in the 'category' array
+                                if (!category.includes(type)) {
+                                  return {
+                                    ...prevunits, 
+                                    category: [...category, type]  // Add the type to the category array
+                                  };
+                                }
+
+                                // Return the previous state if there's no change
+                                return prevunits; 
+                              })}
+                            >
                               {type}
-                          </button>
-                      </div>
+                            </button>
+                          </div>
                         ))
-                       }
+                      }
                     </div>
                     </div>
 
                     <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
+                    <option>choose</option>
                     {
                                 project.add_block.map((item)=>
                                 (
@@ -2086,6 +2120,7 @@ function Projectform() {
                                 </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
+                    <option>choose</option>
                     {
                                 project.add_size.map((item)=>
                                 (
@@ -2134,63 +2169,69 @@ function Projectform() {
                     <div className='row mt-2' style={{border:"1px dashed black",margin:"10px",marginTop:"0",padding:"10px",width:"100%"}}>
                     <div className='col-md-2' ><label className='labels'>Floor</label>
                     {
+                      Array.isArray(units.floor) ?
                       units.floor.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className='col-md-2' ><label className='labels' style={{width:"500px"}}>Cluter Details</label>
                     {
+                       Array.isArray(units.cluter_details) ?
                       units.cluter_details.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
                           <option>select</option><option>Duplex</option><option>Single</option>
                         </select>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className='col-md-2' ><label className='labels'>Length</label>
                     {
+                          Array.isArray(units.length) ?
                       units.length.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlelengthchange(index,event)}>
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className='col-md-2' ><label className='labels'>Breadth</label>
                     {
+                      Array.isArray(units.bredth) ?
                       units.bredth.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlebredthchange(index,event)}>
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
-                      ))
+                      )):[]
                     }
                     </div>
                       <div className='col-md-2' ><label className='labels'>Total Area</label>
                     {
+                      Array.isArray(units.total_area) ?
                       units.total_area.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handletotalarea(index,event)}>
                           <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
                         </select>
-                      ))
+                      )):[]
                     }
                     </div>
                    
                     <div className='col-md-1' style={{marginTop:"90px"}}>
                     {
+                      Array.isArray(units.action3) ?
                       units.action3.map((item,index)=>
                       (
                         
                             <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
                         
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
