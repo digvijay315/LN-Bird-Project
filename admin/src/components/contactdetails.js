@@ -153,6 +153,10 @@ function Fetchcontact() {
                             const incoming3=(Array.isArray(resp3.data.contact) ? resp3.data.contact : [resp3.data.contact]);
                             setdata([...incoming,...incoming1,...incoming2,...incoming3])
 
+                            const resp4=await api.get(`viewcontactbyname/${searchdata}`);
+                            const incoming4=(Array.isArray(resp4.data.contact) ? resp4.data.contact : [resp4.data.contact]);
+                            setdata([...incoming,...incoming1,...incoming2,...incoming3,...incoming4])
+
                           } catch (error) {
                             console.log(error);
                           }
@@ -989,7 +993,7 @@ const handleSort = (key) => {
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
       
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    

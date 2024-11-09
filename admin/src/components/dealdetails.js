@@ -618,22 +618,19 @@ function Dealdetails() {
                   useEffect(() => {
                     const filterLeadsByRemovedColumns = () => {
                        let newFilteredLeads = [...leaddata];
-              
+                       const price = deal1[0]?.expected_price;
+                       const availableFor = deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
                       if(lead1.length!==0){
                       // If the 'price' column is removed, don't filter based on price
-                      if (!removedColumns.includes('price')) {
-                        const price = deal1[0]?.expected_price;
-                        const availableFor = deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
-                
-                        // Filter leads by availableFor, and price range if price column is not removed
-                        newFilteredLeads = leaddata.filter((item) =>
-                          item.requirment === availableFor &&
-                          price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)
-                        );
-                      } else {
-                        // If the 'price' column is removed, exclude price-based filtering
-                        newFilteredLeads = leaddata.filter((item) => item.requirment === deal1[0]?.available_for);
-                      }
+                      newFilteredLeads = !removedColumns.includes('price')
+                        ? leaddata.filter((item) => item.requirment === availableFor)
+                        : leaddata.filter(
+                            (item) =>
+                              item.requirment === availableFor &&
+                              price >= parseFloat(item.budget_min) &&
+                              price <= parseFloat(item.budget_max)
+                          );
+                      
                 
                       setlead1(newFilteredLeads); // Update filtered leads
                     };
@@ -647,10 +644,7 @@ function Dealdetails() {
                     );
                     setlead1(newFilteredLeads);
                   }
-                    console.log(leaddata);
-                    console.log(lead1);
-                    
-                
+              
                     filterLeadsByRemovedColumns(); // Trigger filtering when removedColumns change
                 
                   }, [removedColumns]);
@@ -662,7 +656,7 @@ function Dealdetails() {
             <Sidebar1/>
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
-        <h3 style={{marginLeft:"10px",cursor:"pointer"}}>Inventory</h3>
+        <h3 style={{marginLeft:"10px",cursor:"pointer"}}>Deals</h3>
         <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
             <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}}/>
         </button>

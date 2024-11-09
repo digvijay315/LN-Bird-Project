@@ -508,7 +508,11 @@ function Addcontact() {
                           });
                         };
                   
-                    
+                        const [isChecked, setIsChecked] = useState(false);
+
+                        const handleCheckboxChange = (event) => {
+                          setIsChecked(event.target.checked);
+                        };
 
     return ( 
         <div>
@@ -521,11 +525,169 @@ function Addcontact() {
         <div className="col-md-12 border-right">
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
+                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Add Contact</h4>
+                    <input type='checkbox' id='checkform'  style={{marginLeft:"60%",height:"20px",width:"20px"}}  checked={isChecked} 
+                    onChange={handleCheckboxChange}  />
+                    <label style={{paddingTop:"5px"}}>only show required field</label>
                 </div><hr></hr>
                
+
+                <div id='sortform' style={{display: isChecked ? "flex" : "none"}}>
+               <div className="row" id='basicdetails11' style={{marginTop:"40px"}}>
+                <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
+                <div className='col-md-12'><hr></hr></div>
+                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                              <option>Select</option>
+                              <option>Mr.</option>
+                              <option>Mrs.</option>
+                              <option>Sh.</option>
+                              <option>Smt.</option>
+                              <option>Dr.</option>
+                              <option>Er.</option>
+                              <option>Col.</option>
+                              <option>Maj.</option>
+                        </select>
+                        </div>
+                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+               
+                    <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      contact.country_code.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <option value={item} >phone</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       contact.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange(index,event)}>
+                                  <option>Select Type</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action1.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                    
+                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        contact.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.email_type.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange(index,event)}>
+                                <option>Select Type</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action2.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                                    <option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
+                                    <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
+                                    <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
+                                    <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
+                                    <option>Old Client</option><option>Google</option><option>Whatsapp</option>
+                             </select>
+                        </div>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                              <option>Select</option> 
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    <option>Select</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
+                        </select></div>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    <div className='col-md-5'></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
+                    
+                </div>
+              
+               </div>
          
-             <div style={{display:"flex",gap:"100px"}}>
+             <div style={{display: isChecked ? "none" : "flex",gap:"100px"}}>
               
                <span  id='basic' onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details</span>
                 <span  id='professional' onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details</span >
@@ -537,7 +699,9 @@ function Addcontact() {
                 
             
  {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
-               
+          
+      {/* ====================================full form start with basic details====================================================== */}
+               <div id='fullform' style={{ display: isChecked ? "none" : "block" }}>
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
@@ -698,7 +862,7 @@ function Addcontact() {
                   
   {/* -----------------------------------------professional Details start------------------------------------------------------------------- */}
 
-        <div className="col-md-12" id='profession' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
+        <div className="col-md-12" id='profession' style={{display: "none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
                 <div className="row " >
@@ -1242,7 +1406,7 @@ function Addcontact() {
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
                  <div className='col-md-12'><hr></hr></div> 
-                    <ToastContainer/>
+                    
                 </div>
                 <div className='row' style={{marginLeft:"50%"}}>
                     <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
@@ -1251,9 +1415,12 @@ function Addcontact() {
                     </div>
             </div>
         </div>
+        </div>
+
     </div>
 </div>
 </div>
+<ToastContainer/>
 </div>
 
 );

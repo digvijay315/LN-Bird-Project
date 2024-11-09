@@ -38,7 +38,7 @@ const add_contact=async(req,res)=>
         }
         
     
-    const view_contact_ByName=async(req,res)=>
+    const view_contact_Byid=async(req,res)=>
         {
             try {
                 const _id=req.params._id;
@@ -52,6 +52,21 @@ const add_contact=async(req,res)=>
                 console.log(error)
             }
         }
+
+        const view_contact_ByName=async(req,res)=>
+            {
+                try {
+                    const name=req.params.first_name;
+                    const resp= await addcontact.find({first_name:name})
+                    if(!resp)
+                        {
+                           return res.send("contact details not available")
+                        }
+                    res.status(200).send({message:"name found and here are contact details:",contact:resp})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
         const view_contact_Byemail=async(req,res)=>
             {
                 try {
@@ -145,5 +160,6 @@ const add_contact=async(req,res)=>
                         console.log(error)
                     }
                 }
-    module.exports={add_contact,view_contact,view_contact_ByName,remove_contact,update_contact,
-                    view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany};
+    module.exports={add_contact,view_contact,view_contact_Byid,remove_contact,update_contact,
+                    view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany,
+                view_contact_ByName};

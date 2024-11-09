@@ -1,5 +1,5 @@
 const express=require('express');
-const {add_contact,view_contact, view_contact_ByName, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany} = require('../controllers/contact_details');
+const {add_contact,view_contact, view_contact_Byid, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany, view_contact_ByName} = require('../controllers/contact_details');
 const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
@@ -23,7 +23,8 @@ const router=express.Router()
 
 router.post('/addcontact',upload.any('document_pic'),add_contact)
 router.get('/viewcontact',view_contact)
-router.get('/viewcontactbyname/:_id',view_contact_ByName)
+router.get('/viewcontactbyid/:_id',view_contact_Byid)
+router.get('/viewcontactbyname/:first_name',view_contact_ByName)
 router.get('/viewcontactbyemail/:email',view_contact_Byemail)
 router.get('/viewcontactbymobile/:mobile_no',view_contact_Bymobile)
 router.get('/viewcontactbytags/:tags',view_contact_Bytags)

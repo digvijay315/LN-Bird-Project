@@ -371,20 +371,20 @@ React.useEffect(() => {
 // }, [deals, data2]);
 
            
-          //   React.useEffect(() => {
-          //     const price=deal.expected_price
-          //     const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
-          //     const filteredLeads = data2.filter(item => 
-          //       item.requirment === availableFor && 
-          //       price >= parseFloat(item.budget_min) && 
-          //       price <= parseFloat(item.budget_max)
-          //     );
-          //     setdeal(prevDeal => ({
-          //       ...prevDeal,
-          //       matchedleads: filteredLeads,
-          //       matchinglead: filteredLeads.length
-          //   })); // Update the state with the filtered leads
-          // }, [ data2,deal.available_for,deal.expected_price]);
+            React.useEffect(() => {
+              const price=deal.expected_price
+              const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
+              const filteredLeads = data2.filter(item => 
+                item.requirment === availableFor && 
+                price >= parseFloat(item.budget_min) && 
+                price <= parseFloat(item.budget_max)
+              );
+              setdeal(prevDeal => ({
+                ...prevDeal,
+                matchedleads: filteredLeads,
+                matchinglead: filteredLeads.length
+            })); // Update the state with the filtered leads
+          }, [ data2,deal.available_for,deal.expected_price]);
        
 
 
