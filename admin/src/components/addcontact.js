@@ -514,13 +514,104 @@ function Addcontact() {
                           setIsChecked(event.target.checked);
                         };
 
+                         
+  function next1()
+  {
+      document.getElementById("basicdetails1").style.display="none";
+      document.getElementById("basicdetails2").style.display="none";
+      document.getElementById("profession").style.display="flex";
+
+      document.getElementById("professional").style.color="green";
+      document.getElementById("basic").style.color="black";
+
+   
+  }
+  function next2()
+  {
+
+      document.getElementById("profession").style.display="none";
+      document.getElementById("otherdetails").style.display="flex";
+
+      document.getElementById("professional").style.color="black";
+      document.getElementById("other").style.color="green";
+
+   
+  }
+
+  function prev1()
+  {
+    document.getElementById("basicdetails1").style.display="flex";
+    document.getElementById("basicdetails2").style.display="flex";
+    document.getElementById("profession").style.display="none";
+
+    document.getElementById("professional").style.color="black";
+    document.getElementById("basic").style.color="green";
+     
+  }
+  function prev2()
+  {
+    document.getElementById("profession").style.display="flex";
+    document.getElementById("otherdetails").style.display="none";
+
+    document.getElementById("professional").style.color="green";
+    document.getElementById("other").style.color="black";
+     
+  }
+
+  const statesAndCities = {
+    AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+    ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+    Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+    Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+    Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+    Goa: ["North Goa", "South Goa"],
+    Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+    Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+    HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+    Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+    Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+    Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+    MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+    Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+    Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+    Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+    Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+    Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+    Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+    Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+    Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+    Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+    TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+    Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+    Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+    UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+    WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+  };
+  
+
+  const states = Object.keys(statesAndCities);
+  const cities = statesAndCities[contact.state1] || [];
+
+
+  const asianCountries = [
+    "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
+    "Brunei", "Burma (Myanmar)", "Cambodia", "China", "Cyprus", "Georgia", 
+    "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", 
+    "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", 
+    "Maldives", "Mongolia", "Nepal", "North Korea", "Oman", "Pakistan", 
+    "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+    "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", 
+    "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
+    "Vietnam", "Yemen"
+  ];
+  
     return ( 
         <div>
             <div id='h'><Header1/></div>
             <div onMouseOver={mousehover} onMouseOut={mouseout}><Sidebar1/></div>
            
            <div style={{padding:"50px"}}>
-            <div className="container rounded bg-white mt-5 mb-5" style={{width:"80%",marginLeft:"150px"}}>
+            <div className="container rounded bg-white mt-5 mb-5" style={{width:"70%",marginLeft:"250px"}}>
     <div className="row" id='r' style={{transition:"0.5s"}}>
         <div className="col-md-12 border-right">
             <div className="p-3 py-5">
@@ -537,7 +628,7 @@ function Addcontact() {
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
                     <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
-                              <option>Select</option>
+                              <option>---Select---</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -556,7 +647,7 @@ function Addcontact() {
                       contact.country_code.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
-                        <option value={item} >phone</option>
+                        <option value={item} >---select code---</option>
                         {
                           countrycode.map((item)=>
                           (
@@ -585,7 +676,7 @@ function Addcontact() {
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                          onChange={(event)=>handlemobile_typechange(index,event)}>
-                                  <option>Select Type</option>
+                                  <option>---Select---</option>
                                   <option>Personal</option>
                                   <option>Official</option>
                                   <option>Home</option>
@@ -701,12 +792,14 @@ function Addcontact() {
  {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
           
       {/* ====================================full form start with basic details====================================================== */}
+              
+              
                <div id='fullform' style={{ display: isChecked ? "none" : "block" }}>
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
                     <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
-                              <option>Select</option>
+                              <option>---Select---</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -726,7 +819,7 @@ function Addcontact() {
                       contact.country_code.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
-                        <option value={item} >phone</option>
+                        <option value={item} >---select country code---</option>
                         {
                           countrycode.map((item)=>
                           (
@@ -755,7 +848,7 @@ function Addcontact() {
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                          onChange={(event)=>handlemobile_typechange(index,event)}>
-                                  <option>Select Type</option>
+                                  <option>---Select---</option>
                                   <option>Personal</option>
                                   <option>Official</option>
                                   <option>Home</option>
@@ -795,7 +888,7 @@ function Addcontact() {
                         (
                           <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                           onChange={(event)=>handleemail_typechange(index,event)}>
-                                <option>Select Type</option>
+                                <option>---Select---</option>
                                 <option>Personal</option>
                                 <option>Official</option>
                                 <option>Business</option>
@@ -824,7 +917,7 @@ function Addcontact() {
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
                     <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
-                                    <option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
+                                    <option>---Select source---</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
                                     <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
                                     <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
                                     <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
@@ -832,7 +925,7 @@ function Addcontact() {
                              </select>
                         </div>
                         <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
-                              <option>Select</option> 
+                              <option>---Select team---</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
                               <option> Post Sales</option>
@@ -840,7 +933,7 @@ function Addcontact() {
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
-                    <option>Select</option>
+                             <option>---Select owner---</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
                               <option>Ramesh Singh</option>
@@ -848,14 +941,20 @@ function Addcontact() {
                               <option>Sukram</option>
                         </select></div>
                         <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
-                                <option>Select</option>
+                                <option>---Select---</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
+                    <div className="col-md-12"><hr></hr></div>
+                   
+                   <div className="col-md-2" id="projectbtn" onClick={next1}  style={{marginLeft:"82%"}}><button className="form-control form-control-sm">Next</button></div>
+ 
                     </div>
               </div>    
+           
+                        
         </div> 
 
    {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
@@ -867,7 +966,7 @@ function Addcontact() {
                 <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
                 <div className="row " >
                     <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,profession_category:e.target.value})}>
-                                  <option>Select</option>    
+                                  <option>---Select profession category---</option>    
                                   <option>Self Employed </option>
                                   <option>Govt. Employee  </option>
                                   <option>House Wife</option>
@@ -877,7 +976,7 @@ function Addcontact() {
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,profession_subcategory:e.target.value})}>
-                                <option>Select</option>
+                                <option>---Select profession sub-category---</option>
                                 <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
                                 <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
                                 <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
@@ -890,14 +989,14 @@ function Addcontact() {
                         </select>
                     </div>
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,designation:e.target.value})}>
-                    <option>Select</option>
+                    <option>---Select designation---</option>
                         <option>Developer</option>
                         <option>HR</option>
                         <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
-                    <option>Select</option>
+                    <option>---Select company---</option>
                         <option>TCS</option>
                         <option>Microsoft</option>
                         <option>Others</option>
@@ -906,7 +1005,7 @@ function Addcontact() {
                     <div className="col-md-4" > <label className="labels">Country Code</label>
                     
                         <select  required="true" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,country_code1:e.target.value})}>
-                        <option>phone</option>
+                        <option>---choose county code---</option>
                         {
                           countrycode.map((item)=>
                           (
@@ -926,11 +1025,25 @@ function Addcontact() {
                     <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}/></div>
+                    {/* <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div> */}
+
+
+
+
+                    <div className="col-md-6"><label className="labels">Country</label>
+                    
+                    <select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
+                      <option>---select country---</option>
+                    {asianCountries.map((country, index) => (
+                      <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
+                        {country}
+                      </option>
+                    ))}
+                    </select>
+                    </div>
                     </div>
                     <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,industry:e.target.value})}>
-                    <option>choose</option>
+                    <option>---choose industry---</option>
                           <optgroup label='Agriculture'>
                                 <option>Farming</option><option>horticulture</option><option>forestry</option>
                                 <option>fishing</option><option>Others</option>
@@ -1061,7 +1174,7 @@ function Addcontact() {
                           style={{marginTop:"10px"}}
                           onChange={(event)=>handlecompanysocialmediachange(index,event)}>
                         
-                        <option>select</option>
+                        <option>---select social_media---</option>
                         <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
                         </select>
 
@@ -1088,11 +1201,10 @@ function Addcontact() {
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
                     <div className='col-md-12'><hr></hr></div> 
               </div>
-              {/* <div className='row' style={{marginLeft:"50%"}}>
-                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
-                    </div> */}
+              <div className="row mt-4">
+                    <div className="col-md-2"   onClick={prev1}><button className="form-control form-control-sm" >Prev</button></div>
+                    <div className="col-md-2" onClick={next2}  style={{marginLeft:"65%"}}><button className="form-control form-control-sm" >Next</button></div>
+                </div>
              </div>
            </div>
  {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
@@ -1113,31 +1225,77 @@ function Addcontact() {
                     <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area1:e.target.value})}/></div>
 
                     <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location1:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city1:e.target.value})}/></div>
+                    {/* <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city1:e.target.value})}/></div> */}
+
+
+                    <div className="col-md-4">
+                  <label className="labels">City</label>
+                  <select
+                    className="form-control form-control-sm"
+                    value={contact.city1}
+                    onChange={(e) => setcontact({ ...contact, city1: e.target.value })}
+                    disabled={!contact.state1 || cities.length === 0} // Disable if no state or invalid state
+                  >
+                    <option value="">--Select City--</option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                     <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode1:e.target.value})}/></div>
 
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state1:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country1:e.target.value})}/></div>
+                    {/* <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state1:e.target.value,city1: "" })}/></div> */}
+                    <div className="col-md-6">
+                    <label className="labels">State</label>
+                    <select
+                      className="form-control form-control-sm"
+                      value={contact.state1}
+                      onChange={(e) => {
+                        const state = e.target.value;
+                        setcontact({ ...contact, state1: state, city1: "" }); // Clear city when state changes
+                      }}>
+                        <option value="">--Select State--</option>
+                      {states.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                  
+                  </div>
+
+                    <div className="col-md-6"><label className="labels">Country</label>
+                    <select className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country1:e.target.value})}>
+                      <option>---select country---</option>
+                    {asianCountries.map((country, index) => (
+                      <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
+                        {country}
+                      </option>
+                    ))}
+                    </select>
+                    </div>
 
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
                     <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
-                                <option>Select</option>
+                                <option>---Select gender---</option>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,maritial_status:e.target.value})}>
-                            <option>Select</option>
+                            <option>---Select your status---</option>
                             <option>Married</option>
                             <option>Unmarried</option>
                             <option>Single</option>
                         </select>
                     </div>
 
-                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,birth_date:e.target.value})}/></div>
-                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,anniversary_date:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,birth_date:e.target.value})}/></div>
+                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,anniversary_date:e.target.value})}/></div>
 
                     <div className="col-md-3"> <label className="labels">Education</label>
                         
@@ -1146,7 +1304,7 @@ function Addcontact() {
                                   <select className="form-control form-control-sm"
                                     onChange={(event) => handleeducationChange(index, event)}
                                   >
-                                    <option>choose</option>
+                                    <option>---choose your education---</option>
                                     <option>Kindergaren</option><option>School</option><option>Primery Education</option><option> Secondary Education</option><option>Master</option><option>Commerce</option>
                                     <option>Vocational Education</option>
                                   </select>
@@ -1161,7 +1319,7 @@ function Addcontact() {
                                     className="form-control form-control-sm"
                                     onChange={(event) => handledegreeChange(index, event)}
                                   >
-                                    <option>choose</option>
+                                    <option>---choose degree---</option>
                                     <optgroup label='Bachelor’s '>
                                         <option>Bachelor of Arts (BA) </option><option>Bachelor of Science (BS or BSc) </option><option>Bachelor of Fine Arts (BFA)</option><option> Bachelor of Education (BEd) </option>
                                         <option> Bachelor of Business Administration (BBA) </option><option>Bachelor of Engineering (BE or BEng) </option><option>Bachelor of Science in Nursing (BSN)</option>
@@ -1220,7 +1378,7 @@ function Addcontact() {
                         className="form-control form-control-sm" 
                         onChange={(event)=>handleloanchange(index,event)}
                         >
-                          <option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
+                          <option>---Select loan type---</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
                           <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                         </select>
                       ))
@@ -1235,7 +1393,7 @@ function Addcontact() {
                         className="form-control form-control-sm"
                         onChange={(event)=>handlebankchange(index,event)}
                         >
-                          <option>Select</option>
+                          <option>---Select bank---</option>
                               <option>State Bank of India (SBI) </option><option>Punjab National Bank (PNB)</option><option>Bank of Baroda</option><option>Canara Bank</option>
                               <option>Union Bank of India</option><option>Bank of India (BOI)</option><option>Indian Bank </option><option>Central Bank of India</option>
                               <option>Indian Overseas Bank (IOB)</option><option>UCO Bank</option><option>Bank of Maharashtra</option><option></option>
@@ -1288,7 +1446,7 @@ function Addcontact() {
                           style={{marginTop:"10px"}}
                           onChange={(event)=>handlesocial_mediachange(index,event)}>
                         
-                        <option>select</option>
+                        <option>---select social_media---</option>
                         <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                         </select>
 
@@ -1323,7 +1481,7 @@ function Addcontact() {
                          style={{marginTop:"10px"}}
                          onChange={(event)=>handleincomechange(index,event)}>
                        
-                       <option>select</option>
+                       <option>---select your income---</option>
                        <option>Personal Income</option><option>Business Income</option>
                        </select>
                       ))
@@ -1377,7 +1535,7 @@ function Addcontact() {
                          style={{marginTop:"10px"}}
                          onChange={(event)=>handledocumentnamechange(index,event)}>
                        
-                       <option>select</option>
+                       <option>---select document---</option>
                        <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
                        <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
                        </select>
@@ -1406,13 +1564,15 @@ function Addcontact() {
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
                  <div className='col-md-12'><hr></hr></div> 
-                    
+                     <div className="col-md-2" style={{marginTop:"20px"}}   onClick={prev2}><button className="form-control form-control-sm" >Prev</button></div>
+                    <div className="col-md-3"></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
+                   
                 </div>
-                <div className='row' style={{marginLeft:"50%"}}>
-                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
-                    </div>
+               
+                    
             </div>
         </div>
         </div>

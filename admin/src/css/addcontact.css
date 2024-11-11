@@ -117,3 +117,49 @@ button:hover{
     transform: scale(1.1);
     
 }
+
+
+
+
+/* Flip Card Container */
+.flip-container {
+    width: 100%;
+    height: 200px; 
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1s; 
+  }
+  
+  /* When flipped, rotate the card 180 degrees */
+  .flip-container.flipped {
+    transform: rotateY(180deg);
+  }
+  
+
+  
+  /* The back side (Company) */
+  .flip-card-back {
+    transform: rotateY(180deg); 
+ 
+  }
+  
+  /* The front side (Contact) */
+  .flip-card-front { 
+     display: flex; 
+     flex-direction: column;
+    justify-content: space-between; 
+  }
+  
+  /* Optional: Adjust the appearance of the divs */
+   #contactlistview, #companylistview {
+    transition: opacity 1s ease-in-out;
+  }
+  
+  #companylistview {
+    opacity: 1;
+  }
+  
+  #companylistview.flipped {
+    opacity: 1;
+  } 
+  

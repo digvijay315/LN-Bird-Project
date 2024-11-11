@@ -1,32 +1,134 @@
 import React, { useState } from 'react';
-import '../css/demo.css' // Import your CSS styles
+import '../css/demo.css'
 
-const Demo = () => {
-  const [progress, setProgress] = useState(0);
+import Tooltip from '@mui/material/Tooltip';
 
-  const handleMouseMove = (e) => {
-    const progressBar = e.target.getBoundingClientRect();
-    const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
-    setProgress(Math.max(0, Math.min(newProgress, 100))); // Clamp between 0 and 100
+const FlipViewComponent = () => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const pagereload = () => {
+    setIsFlipped(true);
+    setTimeout(() => {
+      document.getElementById("contactlistview").style.display = "none";
+      document.getElementById("companylistview").style.display = "block";
+    }, 1000);  // Wait for flip animation to complete before hiding/showing the divs
   };
 
-  const handleMouseDown = (e) => {
-    handleMouseMove(e); // Set initial progress
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+  const pagereload2 = () => {
+    setIsFlipped(false);
+    setTimeout(() => {
+      document.getElementById("contactlistview").style.display = "block";
+      document.getElementById("companylistview").style.display = "none";
+    }, 1000);  // Wait for flip animation to complete before hiding/showing the divs
   };
 
-  const handleMouseUp = () => {
-    window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
+  const exportToExcel = () => {
+    // Logic for exporting data to Excel
+  };
+
+  const handleAddColumnClick = () => {
+    // Logic for handling the add column button click
   };
 
   return (
-    <div className="progress-container" onMouseDown={handleMouseDown}>
-      <div className="progress-bar" style={{ width: `${progress}%` }} />
-      <div className="progress-percentage">{Math.round(progress)}%</div>
+    <div>
+      
+      <div
+        className={`flip-container ${isFlipped ? 'flipped' : ''}`}
+        style={{ marginTop: "80px", paddingLeft: "80px", backgroundColor: "white" }}
+      >
+        {/* Contact List View */}
+        <div
+          id="contactlistview"
+          className="flip-card-front"
+          style={{ display: 'flex', paddingTop: '10px', paddingBottom: '10px' }}
+          onClick={pagereload}
+        >
+          <h3 style={{ marginLeft: "10px", cursor: "pointer" }}>Contact</h3>
+          <Tooltip title="Export Data.." arrow>
+            <button
+              className="btn btn-secondary"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{
+                color: "black",
+                backgroundColor: "transparent",
+                border: "none"
+              }}
+            >
+              <img
+                src="https://static.thenounproject.com/png/61783-200.png"
+                style={{ height: "25px" }}
+                alt=""
+              />
+            </button>
+          </Tooltip>
+          <ul className="dropdown-menu" id="exporttoexcel">
+            <li onClick={exportToExcel}>Export Data</li>
+          </ul>
+          <button
+            className="form-control form-control-sm"
+            style={{ width: "150px", marginLeft: "65%" }}
+          >
+            Filter
+          </button>
+          <button
+            onClick={handleAddColumnClick}
+            className="form-control form-control-sm"
+            style={{ width: "150px", marginLeft: "1%" }}
+          >
+            Add Fields
+          </button>
+        </div>
+
+        {/* Company List View */}
+        <div
+          id="companylistview"
+          className="flip-card-back"
+          style={{ display: 'none', paddingTop: '10px', paddingBottom: '10px' }}
+          onClick={pagereload2}
+        >
+          <h3 style={{ marginLeft: "10px", cursor: "pointer" }}>Company</h3>
+          <Tooltip title="Export Data.." arrow>
+            <button
+              className="btn btn-secondary"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              style={{
+                color: "black",
+                backgroundColor: "transparent",
+                border: "none"
+              }}
+            >
+              <img
+                src="https://static.thenounproject.com/png/61783-200.png"
+                style={{ height: "25px" }}
+                alt=""
+              />
+            </button>
+          </Tooltip>
+          <ul className="dropdown-menu" id="exporttoexcel">
+            <li onClick={exportToExcel}>Export Data</li>
+          </ul>
+          <button
+            className="form-control form-control-sm"
+            style={{ width: "150px", marginLeft: "65%" }}
+          >
+            Filter
+          </button>
+          <button
+            onClick={handleAddColumnClick}
+            className="form-control form-control-sm"
+            style={{ width: "150px", marginLeft: "1%" }}
+          >
+            Add Fields
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Demo;
+export default FlipViewComponent;

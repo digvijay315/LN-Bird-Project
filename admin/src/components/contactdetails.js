@@ -2,7 +2,7 @@ import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ToastContainer,toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
@@ -425,55 +425,118 @@ const allColumns = [
         }
       };
       const handleSelectAll = () => {
-        document.getElementById("delete").style.display="inline-block"
-        document.getElementById("search").style.display="none"
-        document.getElementById("edit").style.display="none"
-        document.getElementById("mail").style.display="inline-block"
-         document.getElementById("whatsapp").style.display="inline-block"
-         document.getElementById("message").style.display="inline-block"
+ 
         setSelectAll(!selectAll);
         if (!selectAll) {
           // Add all current page item IDs to selectedItems
           setSelectedItems(currentItems.map((item) => item._id));
         } else {
           // Deselect all
-          setSelectedItems([]);
-          document.getElementById("delete").style.display="none"
-          document.getElementById("search").style.display="flex"
-          document.getElementById("edit").style.display="none"
-          document.getElementById("mail").style.display="none"
-           document.getElementById("whatsapp").style.display="none"
-           document.getElementById("message").style.display="none"
+           setSelectedItems([]);
+   
         }
       };
     
       const handleRowSelect = (id) => {
-        document.getElementById("delete").style.display="none"
-        document.getElementById("edit").style.display="none"
-        document.getElementById("mail").style.display="none"
-         document.getElementById("whatsapp").style.display="none"
-            document.getElementById("message").style.display="none"
-        document.getElementById("search").style.display="flex"
+     
         if (selectedItems.includes(id)) {
           setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
         } else {
           setSelectedItems([...selectedItems, id]);
-          document.getElementById("delete").style.display="inline-block"
-           document.getElementById("edit").style.display="inline-block"
-         document.getElementById("mail").style.display="inline-block"
-          document.getElementById("whatsapp").style.display="inline-block"
-             document.getElementById("message").style.display="inline-block"
-         document.getElementById("search").style.display="none"
+      
         }
       };
 
+      useEffect(()=>
+      {
+        if(selectedItems.length==0)
+          {
+            document.getElementById("delete").style.display="none"
+            document.getElementById("edit").style.display="none"
+          document.getElementById("mail").style.display="none"
+           document.getElementById("whatsapp").style.display="none"
+              document.getElementById("message").style.display="none"
+              document.getElementById("call").style.display="none"
+              document.getElementById("addtask").style.display="none"
+              document.getElementById("addtolead").style.display="none"
+              document.getElementById("transfercontact").style.display="none"
+              document.getElementById("sequence").style.display="none"
+              document.getElementById("mergecontact").style.display="none"
+             document.getElementById("search").style.display="flex"
+          }
+        if(selectedItems.length==1)
+          {
+            document.getElementById("delete").style.display="inline-block"
+            document.getElementById("edit").style.display="inline-block"
+          document.getElementById("mail").style.display="inline-block"
+           document.getElementById("whatsapp").style.display="inline-block"
+              document.getElementById("message").style.display="inline-block"
+              document.getElementById("call").style.display="inline-block"
+              document.getElementById("addtask").style.display="inline-block"
+              document.getElementById("addtolead").style.display="inline-block"
+              document.getElementById("transfercontact").style.display="inline-block"
+              document.getElementById("sequence").style.display="inline-block"
+              document.getElementById("mergecontact").style.display="none"
+             document.getElementById("search").style.display="none"
+          }
+          if(selectedItems.length==2)
+            {
+           
+
+              document.getElementById("delete").style.display="inline-block"
+              document.getElementById("edit").style.display="none"
+            document.getElementById("mail").style.display="inline-block"
+             document.getElementById("whatsapp").style.display="inline-block"
+                document.getElementById("message").style.display="inline-block"
+                document.getElementById("call").style.display="none"
+                document.getElementById("addtask").style.display="none"
+                document.getElementById("addtolead").style.display="none"
+                document.getElementById("transfercontact").style.display="inline-block"
+                document.getElementById("sequence").style.display="inline-block"
+                document.getElementById("mergecontact").style.display="inline-block"
+               document.getElementById("search").style.display="none"
+            }
+
+            if(selectedItems.length>2)
+              {
+                document.getElementById("delete").style.display="inline-block"
+                document.getElementById("edit").style.display="none"
+              document.getElementById("mail").style.display="inline-block"
+               document.getElementById("whatsapp").style.display="inline-block"
+                  document.getElementById("message").style.display="inline-block"
+                  document.getElementById("call").style.display="none"
+                  document.getElementById("addtask").style.display="none"
+                  document.getElementById("addtolead").style.display="none"
+                  document.getElementById("transfercontact").style.display="inline-block"
+                  document.getElementById("sequence").style.display="inline-block"
+                  document.getElementById("mergecontact").style.display="none"
+                 document.getElementById("search").style.display="none"
+              }
+    
+      },[selectedItems])
+      
     /*-------------------------------------------------------------------custome table end---------------------------------------------------------------------------- */                                                     
     
     
-      const pagereload=()=>
-      {
-        window.location.reload()
-      }
+    const [isFlipped, setIsFlipped] = useState(false);
+
+  const pagereload = () => {
+    // Flip effect for contactlistview to companylistview
+    setIsFlipped(true);
+    setTimeout(() => {
+      document.getElementById("contactlistview").style.display = "none";
+      document.getElementById("companylistview").style.display = "block";
+    }, 500);  // Wait for flip animation to complete before hiding/showing the divs
+  };
+
+  const pagereload2 = () => {
+    // Flip effect for companylistview to contactlistview
+    setIsFlipped(false);
+    setTimeout(() => {
+      document.getElementById("contactlistview").style.display = "block";
+      document.getElementById("companylistview").style.display = "none";
+    }, 500);  // Wait for flip animation to complete before hiding/showing the divs
+  };
 
  /*-------------------------------------------------------------------updation start---------------------------------------------------------------------------- */                                                     
 
@@ -514,7 +577,7 @@ const allColumns = [
           }
          
         }
-       console.log(data1);
+      
       //  console.log(contact);
        
        
@@ -970,6 +1033,8 @@ const handleSort = (key) => {
         <div>
             <Header1/>
             <Sidebar1/>
+            <div className={`flip-container ${isFlipped ? 'flipped' : ''}`}>
+            <div id="contactlistview" className="flip-card-front">
       <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Contact </h3>
@@ -1004,7 +1069,31 @@ const handleSort = (key) => {
       <Tooltip title="Edit Data.." arrow>
       <img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
-     
+
+      <Tooltip title="Add to lead.." arrow>
+      <img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      </Tooltip>
+
+      <Tooltip title="Call.." arrow>
+      <img id="call" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+      </Tooltip>
+
+      <Tooltip title="transfer contact.." arrow>
+      <img id="transfercontact" src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      </Tooltip>
+
+      <Tooltip title="merge contact..." arrow>
+      <img id="mergecontact" src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+      </Tooltip>    
+
+      <Tooltip title="add task..." arrow>
+      <img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      </Tooltip> 
+
+      <Tooltip title="sequence.." arrow>
+      <img id="sequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      </Tooltip>  
+
       <Tooltip title="Send Mail.." arrow>
       <img id="mail" onClick={handleShow3} src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
@@ -2005,6 +2094,135 @@ const handleSort = (key) => {
               </Button>
             </Modal.Footer>
           </Modal>
+         
+          </div>
+
+          <div id="companylistview" className="flip-card-back" style={{display:"none"}}>
+          <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+        
+        <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload2}>Company </h3>
+        <Tooltip title="Export Data.." arrow>
+            <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
+        </button></Tooltip>
+            <ul class="dropdown-menu" id="exporttoexcel"> 
+            
+            <li  onClick={exportToExcel} >Export Data</li>
+              
+            </ul>
+            
+
+            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
+            <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
+        
+       
+       
+          
+      </div> 
+
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+
+<input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+
+<div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
+
+<Tooltip title="Delete Data.." arrow>
+<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Edit Data.." arrow>
+<img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add to lead.." arrow>
+<img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Call.." arrow>
+<img id="call" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="transfer contact.." arrow>
+<img id="transfercontact" src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="merge contact..." arrow>
+<img id="mergecontact" src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+</Tooltip>    
+
+<Tooltip title="add task..." arrow>
+<img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip> 
+
+<Tooltip title="sequence.." arrow>
+<img id="sequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>  
+
+<Tooltip title="Send Mail.." arrow>
+<img id="mail" onClick={handleShow3} src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Send WhatsApp.." arrow>
+<img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
+</Tooltip>
+<Tooltip title="Send Message.." arrow>
+<img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+</Tooltip>
+</div>
+
+
+<div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
+
+<label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+<select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+  <option value="5">5</option>
+  <option value="10">10</option>
+  <option value="20">20</option>
+  <option value="50">50</option>
+</select>
+
+{renderPageNumbers()}
+</div>
+  
+
+<div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
+        
+          {showColumnList && (
+            <div
+              style={{
+                width:"200px",
+                height:"500px",
+                overflow:"scroll",
+               backgroundColor:"gray",
+                position: 'absolute',
+                top: '-40%',
+                left: '-80px',
+                border: '1px solid #ccc',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                zIndex: 1000,
+              }}
+            >
+              <ul style={{ listStyleType: 'none', margin: 0, padding: '10px' }}>
+                {allColumns.slice(2).map((col) => (
+                  <li key={col.id} style={{ padding: '5px 0' }}>
+                    <input
+                      type="checkbox"
+                      checked={visibleColumns.some((visibleCol) => visibleCol.id === col.id)}
+                      onChange={() => handleCheckboxChange(col)}
+                    />{' '}
+                    {col.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+ 
+  
+</div>
+
+          </div>
+          </div>
           <ToastContainer/>
         </div>
      );
