@@ -77,6 +77,7 @@ function Fetchcontact() {
 
 /*-------------------------------------------------------------------fetching all contact data start---------------------------------------------------------------------------- */                                                     
     const[data,setdata]=useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const[totalcontact,settotalcontact]=useState()
     const fetchdata=async(event)=>
     {
@@ -86,6 +87,7 @@ function Fetchcontact() {
         setdata(resp.data.contact)
         const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
         settotalcontact(countcontact.length)
+        setFilteredData(countcontact);
       } catch (error) {
         console.log(error);
       }
@@ -561,7 +563,7 @@ const allColumns = [
           if(selectedItems.length===1)
           {
             try {
-              const resp=await api.get(`viewcontactbyname/${selectedItems}`)//here search contact by id
+              const resp=await api.get(`viewcontactbyid/${selectedItems}`)//here search contact by id
               setshow1(true);
               console.log(resp);
               
@@ -578,7 +580,7 @@ const allColumns = [
          
         }
       
-      //  console.log(contact);
+        console.log(data1);
        
        
         const basicdetails=()=>
@@ -1027,8 +1029,38 @@ const handleSort = (key) => {
   setSortConfig({ key, direction });
   setdata(sortedData)
 };
-        
 
+
+
+
+const professions = [
+  'Self Employed', 
+  'Business Man', 
+  'Govt. Employee', 
+  'Private Job', 
+  'Retired', 
+  'Student', 
+  'House Wife'
+];
+
+        
+  const [selectedProfessions, setSelectedProfessions] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdown1, setShowDropdown1] = useState(false);
+ 
+
+  const handlefilterCheckboxChange = (profession) => {
+    const updatedSelections = selectedProfessions.includes(profession)
+      ? selectedProfessions.filter((p) => p !== profession)
+      : [...selectedProfessions, profession];
+    setSelectedProfessions(updatedSelections);
+    
+    // Filter the data based on selected professions
+   const newFilteredData = filteredData.filter((item) =>
+      updatedSelections.length === 0 || updatedSelections.includes(item.profession_category)
+    );
+    setdata(newFilteredData);
+  };
     return ( 
         <div>
             <Header1/>
@@ -1049,7 +1081,59 @@ const handleSort = (key) => {
             </ul>
             
 
-            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
+            <button  style={{ position:"relative",width: '150px',marginLeft: '65%',padding: '8px',backgroundColor: '#4CAF50',color: 'white',border: 'none',
+                             borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center',width:"150px",marginLeft:"65%"}}
+                              className="form-control form-control-sm form-control form-control-sm-sm" onClick={() => setShowDropdown(!showDropdown)} >Filter</button>
+            {showDropdown && (
+        <div className="dropdown-container" style={{position: 'absolute',marginTop:"40px",left: '75%',width: '200px',backgroundColor: '#f9f9f9',
+                        border: '1px solid #ddd',borderRadius: '4px',padding: '10px',boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',zIndex: 10,}}>
+            <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={() => setShowDropdown1(!showDropdown1)} // Toggle dropdown visibility
+          >
+            <h4
+              style={{
+                fontSize: '16px',
+                fontWeight: 'bold',
+                color: '#333',
+                marginBottom: '8px',
+                textAlign: 'center',
+              }}
+            >
+              <u>Profession</u>
+            </h4>
+            <span
+              style={{
+                fontSize: '20px',
+                fontWeight: 'bold',
+                transform: showDropdown1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the icon when dropdown is visible
+                transition: 'transform 0.3s ease', // Smooth rotation effect
+              }}
+            >
+              &#9660; {/* Down arrow symbol */}
+            </span>
+          </div>
+          {showDropdown1 &&
+            professions.map((profession) => (
+              <div key={profession} className="dropdown-item" style={{ marginBottom: '6px' }}>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedProfessions.includes(profession)}
+                    onChange={() => handlefilterCheckboxChange(profession)}
+                    style={{ marginRight: '8px' }}
+                  />
+                  {profession}
+                </label>
+              </div>
+            ))}
+        </div>
+      )}
             <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
         
        
@@ -1282,6 +1366,7 @@ const handleSort = (key) => {
                 <div className="row mt-3" id='basicdetails2'>
                 <div className="col-md-4" > <label className="labels">Country</label>
                     {
+                      Array.isArray(contact.country_code)?
                       contact.country_code.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)} >
@@ -1293,11 +1378,12 @@ const handleSort = (key) => {
                           ))
                         }
                         </select> 
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-4"><label className="labels">Mobile Number</label>
                     {
+                      Array.isArray(contact.mobile_no)?
                        contact.mobile_no.map((item,index)=>
                         (
                           <input type="text" required="true" style={{marginTop:"10px"}} 
@@ -1305,11 +1391,12 @@ const handleSort = (key) => {
                           className="form-control form-control-sm" 
                           onChange={(event)=>handlemobile_nochange(index,event)}/>
                           
-                        ))
+                        )):[]
                     }
                     </div>
                     <div className="col-md-2"><label className="labels">Type</label>
                     {
+                      Array.isArray(contact.mobile_type)?
                        contact.mobile_type.map((item,index)=>
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}}
@@ -1321,7 +1408,7 @@ const handleSort = (key) => {
                                   <option>Phone</option>
                         </select>
                           
-                        ))
+                        )):[]
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
@@ -1339,6 +1426,7 @@ const handleSort = (key) => {
                     
                   <div className="col-md-8"><label className="labels">Email-Address</label>
                     {
+                      Array.isArray(contact.email)?
                         contact.email.map((item,index)=>
                         (
                           <input type="text" style={{marginTop:"10px"}}
@@ -1346,12 +1434,13 @@ const handleSort = (key) => {
                           className="form-control form-control-sm" 
                           placeholder="enter email-id"
                           onChange={(event)=>handleemailchange(index,event)}/>
-                        ))
+                        )):[]
                     }
                     </div>
                     
                     <div className="col-md-2"><label className="labels">Type</label>
                     {
+                      Array.isArray(contact.email_type)?
                        contact.email_type.map((item,index)=>
                         (
                           <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
@@ -1363,7 +1452,7 @@ const handleSort = (key) => {
                                 <option>Official</option>
                                 <option>Business</option>
                         </select>
-                        ))
+                        )):[]
                     }
                    </div>
                   
@@ -1626,6 +1715,7 @@ const handleSort = (key) => {
                     <div className='col-md-5'></div>
                     <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
                     {
+                      Array.isArray(contact.company_social_media)?
                       contact.company_social_media.map((item,index)=>
                       (
                         <select
@@ -1637,16 +1727,17 @@ const handleSort = (key) => {
                         <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
                         </select>
 
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-6"><label className="labels">Url</label>
                     {
+                      Array.isArray(contact.url)?
                       contact.company_url.map((item,index)=>
                       (
                         <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} defaultValue={data1.company_url[index]}
                         onChange={(event)=>handlecompanyurlchange(index,event)}/>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
@@ -1711,7 +1802,9 @@ const handleSort = (key) => {
 
                     <div className="col-md-3"> <label className="labels">Education</label>
                         
-                             {contact.education.map((name, index) => (
+                             {
+                             Array.isArray(contact.education)?
+                             contact.education.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <select className="form-control form-control-sm"
                                     onChange={(event) => handleeducationChange(index, event)}
@@ -1723,10 +1816,12 @@ const handleSort = (key) => {
                                   </select>
                                   
                                 </div>
-                              ))}
+                              )):[]}
                         </div>
                     <div className="col-md-3"><label className="labels">Degree</label>
-                    {contact.degree.map((name, index) => (
+                    {
+                    Array.isArray(contact.degree)?
+                    contact.degree.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <select
                                     className="form-control form-control-sm"
@@ -1758,10 +1853,12 @@ const handleSort = (key) => {
                                   </select>
                                   
                                 </div>
-                              ))}
+                              )):[]}
                     </div>
                     <div className="col-md-4"><label className="labels">School/College/University</label>
-                    {contact.school_college.map((name, index) => (
+                    {
+                    Array.isArray(contact.school_college)?
+                    contact.school_college.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <input
                                     type="text"
@@ -1771,7 +1868,7 @@ const handleSort = (key) => {
                                   />
                                   
                                 </div>
-                              ))}                    
+                              )):[]}                    
                     </div>
                      <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
@@ -1786,6 +1883,7 @@ const handleSort = (key) => {
                 
                     <div className="col-md-4"><label className="labels">Loan</label>
                     {
+                      Array.isArray(contact.loan)?
                       contact.loan.map((item,index)=>
                       (
                         <select type="text"
@@ -1796,11 +1894,12 @@ const handleSort = (key) => {
                           <option>{data1.loan[index]}</option> <option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
                           <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                         </select>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-3"><label className="labels">Bank</label>
                     {
+                      Array.isArray(contact.bank)?
                       contact.bank.map((item,index)=>
                       (
                         <select type="text" 
@@ -1826,12 +1925,13 @@ const handleSort = (key) => {
                               <option>Prathama Bank </option><option>Small Industries Development Bank of India (SIDBI) </option><option></option>
                               <option>Export-Import Bank of India (EXIM Bank) </option><option>National Bank for Agriculture and Rural Development (NABARD) </option><option></option>
                         </select>
-                      ))
+                      )):[]
                    
                     }
                     </div>
                     <div className="col-md-3"><label className="labels">Amount</label>
                     {
+                      Array.isArray(contact.amount)?
                       contact.amount.map((item,index)=>
                       (
                         <input type="text" 
@@ -1839,7 +1939,7 @@ const handleSort = (key) => {
                         style={{marginTop:"10px"}}
                         className="form-control form-control-sm"
                         onCanPlay={(event)=>handleamountchange(index,event)} />
-                      ))
+                      )):[]
                     }
                   </div>
                   <div className="col-md-1" style={{marginTop:"90px"}}>
@@ -1856,6 +1956,7 @@ const handleSort = (key) => {
                     
                     <div className="col-md-4"><label className="labels">Social Media</label>
                     {
+                      Array.isArray(contact.social_media)?
                       contact.social_media.map((item,index)=>
                       (
                         <select
@@ -1867,16 +1968,17 @@ const handleSort = (key) => {
                         <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                         </select>
 
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-6"><label className="labels">Url</label>
                     {
+                      Array.isArray(contact.url)?
                       contact.url.map((item,index)=>
                       (
                         <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} defaultValue={data1.url[index]}
                         onChange={(event)=>handleurlChange(index,event)}/>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
@@ -1892,6 +1994,7 @@ const handleSort = (key) => {
 
                     <div className="col-md-4"><label className="labels">Income</label>
                     {
+                      Array.isArray(contact.income)?
                       contact.income.map((item,index)=>
                       (
                         <select
@@ -1902,11 +2005,12 @@ const handleSort = (key) => {
                        <option>{data1.income[index]}</option><option>select</option>
                        <option>Personal Income</option><option>Business Income</option>
                        </select>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-6"><label className="labels">Amount</label>
                     {
+                      Array.isArray(contact.amount1)?
                       contact.amount1.map((item,index)=>
                       (
                         <input type="text" defaultValue={data1.amount1[index]}
@@ -1914,7 +2018,7 @@ const handleSort = (key) => {
                         className="form-control form-control-sm" 
                         onChange={(event)=>handleamount1change(index,event)}
                         />
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
@@ -1930,6 +2034,7 @@ const handleSort = (key) => {
                    
                     <div className="col-md-3"><label className="labels">Document No.</label>
                     {
+                      Array.isArray(contact.document_no)?
                       contact.document_no.map((item,index)=>
                       (
                         <input type="text" 
@@ -1938,11 +2043,12 @@ const handleSort = (key) => {
                         className="form-control form-control-sm" 
                         onChange={(event)=>handledocumentnochange(index,event)}
                         />
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-3"><label className="labels">Document Name</label>
                     {
+                      Array.isArray(contact.document_name)?
                       contact.document_name.map((item,index)=>
                       (
                         <select
@@ -1954,11 +2060,12 @@ const handleSort = (key) => {
                        <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
                        <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
                        </select>
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-4"><label className="labels">Document Picture</label>
                     {
+                      Array.isArray(contact.document_pic)?
                       contact.document_pic.map((item,index)=>
                       (
                         
@@ -1967,7 +2074,7 @@ const handleSort = (key) => {
                         className="form-control form-control-sm" 
                         onChange={(event)=>handledocumentpicchange(index,event)}
                         />
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>

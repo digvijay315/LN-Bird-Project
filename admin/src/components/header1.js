@@ -36,7 +36,7 @@ function Header1() {
 	  
     return ( 
         <div>
-            <div class="header" style={{width:"100%",borderRadius:"5px",height:"60px"}}>
+            <div class="header" style={{width:"100%",borderRadius:"5px",height:"50px",padding:"10px"}}>
 		<div class="header-left" >
 		<button id='btn' onClick={myFunction} class="dropdown-toggle" style={{marginLeft:"10%",border:"none",backgroundColor:"transparent",position:"absolute"}}>Add</button>
 		<div class="topnav">
@@ -56,17 +56,17 @@ function Header1() {
 			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
 			<div class="header-search">
 				<form>
-					<div class="form-group mb-0" style={{width:"320px",marginLeft:"180%",position:"relative"}}>
+					<div class="form-group mb-0" style={{width:"320px",marginLeft:"220%",position:"relative"}}>
 						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here"/>
+						<input  type="text" className="form-control search-input" placeholder="Search Here" style={{height:"35px"}}/>
 					</div>
-					<img src="https://static-00.iconduck.com/assets.00/phone-call-icon-2048x2048-jzb4bret.png"style={{height:"45px",position:"absolute",marginLeft:"110%", border:"1px solid #D3D3D3",padding:"8px"}}/>
-					<img src="https://cdn-icons-png.flaticon.com/512/5035/5035563.png"style={{height:"45px",position:"absolute",marginLeft:"118%", border:"1px solid #D3D3D3",padding:"8px"}}/>
+					{/* //<img src="https://static-00.iconduck.com/assets.00/phone-call-icon-2048x2048-jzb4bret.png"style={{height:"45px",position:"absolute",marginLeft:"110%", border:"1px solid #D3D3D3",padding:"8px"}}/> */}
+					<img src="https://cdn-icons-png.flaticon.com/512/5035/5035563.png"style={{height:"35px",position:"absolute",marginLeft:"118%", border:"1px solid #D3D3D3",padding:"8px"}}/>
 					
 				</form>
 			</div>
 		</div>
-		<div class="header-right">
+		<div class="header-right" style={{marginTop:"-10px"}}>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
 					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" style={{paddingRight:"40px"}}>
