@@ -44,7 +44,7 @@ function Projectform() {
     {
       
       try {
-        const resp=await api.get('addproject/viewdeveloper')
+        const resp=await api.get('viewcompany')
         
         setdata1(resp.data.developer)
       } catch (error) {

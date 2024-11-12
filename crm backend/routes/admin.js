@@ -85,8 +85,8 @@ router.get('/viewinventorybylocation/:location',view_inventory_Bylocation)
 router.put('/updateinventory/:_id',upload.any('preview',10),update_inventory)
 
 
-router.post('/addproject/adddeveloper',add_developer)
-router.get('/addproject/viewdeveloper',view_developer)
+router.post('/addcompany',add_developer)
+router.get('/viewcompany',view_developer)
 router.post('/addproperty/addtower',add_tower)
 router.get('/addproperty/viewtower',view_tower)
 router.post('/addproperty/addproject')

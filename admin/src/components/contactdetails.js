@@ -74,6 +74,7 @@ function Fetchcontact() {
 
     const navigate=useNavigate()
     React.useEffect(()=>{fetchdata()},[])
+    React.useEffect(()=>{fetchcdata()},[])
 
 /*-------------------------------------------------------------------fetching all contact data start---------------------------------------------------------------------------- */                                                     
     const[data,setdata]=useState([]);
@@ -88,6 +89,24 @@ function Fetchcontact() {
         const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
         settotalcontact(countcontact.length)
         setFilteredData(countcontact);
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+    const[cdata,setcdata]=useState([]);
+    // const [filteredData, setFilteredData] = useState([]);
+    const[totalcompany,settotalcompany]=useState()
+    const fetchcdata=async(event)=>
+    {
+      
+      try {
+        const resp=await api.get('viewcompany')
+        setcdata(resp.data.developer)
+        const countcompany=Array.isArray(resp.data.developer) ? resp.data.developer : [resp.data.developer]
+        settotalcompany(countcompany.length)
+        // setFilteredData(countcontact);
       } catch (error) {
         console.log(error);
       }
@@ -1060,6 +1079,156 @@ const professions = [
       updatedSelections.length === 0 || updatedSelections.includes(item.profession_category)
     );
     setdata(newFilteredData);
+  };
+
+
+
+
+
+  const [currentPage1, setCurrentPage1] = useState(1);
+const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
+const indexOfLastItem1 = currentPage1 * itemsPerPage1;
+const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
+const currentItems1 = cdata.slice(indexOfFirstItem1, indexOfLastItem1);
+const totalPages1 = Math.ceil(cdata.length / itemsPerPage1);
+
+  // Handle items per page change
+  const handleItemsPerPageChange1 = (e) => {
+    setItemsPerPage1(Number(e.target.value));
+    setCurrentPage1(1); // Reset to first page whenever items per page changes
+  };
+
+// Function to handle page changes
+const paginate1 = (pageNumber) => setCurrentPage1(pageNumber);
+
+// Function to handle "Next" and "Previous" page changes
+const goToNextPage1 = () => {
+  if (currentPage1 < totalPages1) {
+    setCurrentPage1(currentPage1 + 1);
+  }
+};
+
+const goToPreviousPage1 = () => {
+  if (currentPage1 > 1) {
+    setCurrentPage1(currentPage1 - 1);
+  }
+};
+
+const renderPageNumbers1 = () => {
+  // Define the range of page numbers to display
+  const maxPageNumbersToShow1 = 5;
+  const startPage1 = Math.max(1, currentPage1 - Math.floor(maxPageNumbersToShow1 / 2));
+  const endPage1 = Math.min(totalPages1, startPage1 + maxPageNumbersToShow1 - 1);
+  
+  return (
+    <div
+      style={{
+        display: 'flex',
+       
+        whiteSpace: 'nowrap',
+        padding: '10px-15px',
+        width: '100%', 
+        position: 'relative'
+      }}
+    >
+      {/* Previous Button */}
+      {currentPage1 > 1 && (
+        <button onClick={goToPreviousPage1} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Prev
+        </button>
+      )}
+
+      {/* Page Numbers */}
+      {Array.from({ length: endPage1 - startPage1 + 1 }, (_, i) => startPage1 + i).map((number) => (
+        <button
+          key={number}
+          onClick={() => paginate1(number)}
+          style={{
+            width: '30px',
+            borderRadius: '5px',
+            marginRight: '5px',
+            flexShrink: 0, // Prevent buttons from shrinking
+            backgroundColor: number === currentPage ? 'lightblue' : 'white',
+          }}
+        >
+          {number}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      {currentPage1 < totalPages1 && (
+        <button onClick={goToNextPage1} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Next
+        </button>
+      )}
+    </div>
+  );
+};
+
+
+  const allcompanyColumns = [
+                  
+    { id: 'sno', name: '#' },
+    { id: 'personaldetails', name: 'Personal Details' },
+    { id: 'mobile_type1', name: 'Mobile Type' },
+    { id: 'email_type1', name: 'Email Type' },
+    { id: 'profession_category', name: 'Profession Category' },
+    { id: 'profession_subcategory', name: 'Profession Subcategory' },
+    { id: 'gst_no', name: 'Gst No' },
+    { id: 'industry', name: 'Industry ' },
+    { id: 'source', name: 'Source ' },
+    { id: 'team', name: 'Team ' },
+    { id: 'owner', name: 'Owner' },
+    { id: 'visible_to', name: 'Visible To' },
+    { id: 'area', name: 'Area' },
+    { id: 'location', name: 'Location' },
+    { id: 'pin_code', name: 'Pin Code' },
+    { id: 'state', name: 'State' },
+    { id: 'country', name: 'Country' },
+    { id: 'website', name: 'Website ' },
+    { id: 'company_social_media1', name: 'Company Social Media' },
+    { id: 'company_url1', name: 'Company Url ' },
+    { id: 'descriptions', name: 'Descriptions  ' },
+  ];
+  const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
+  const [selectAll1, setSelectAll1] = useState(false); // To track the state of the "Select All" checkbox
+  const [visibleColumns1, setVisibleColumns1] = useState(allcompanyColumns.slice(1, 11));
+  const [showColumnList1, setShowColumnList1] = useState(false);
+
+  // const handleAddColumnClick = () => {
+  //   setShowColumnList(!showColumnList);
+  // };
+
+  // const handleCheckboxChange = (column) => {
+  //   if (visibleColumns.some((col) => col.id === column.id)) {
+  //     // Remove column from visibleColumns if it's already present
+  //     setVisibleColumns(visibleColumns.filter((col) => col.id !== column.id));
+  //   } else {
+  //     // Add column to visibleColumns
+  //     setVisibleColumns([...visibleColumns, column]);
+  //   }
+  // };
+  const handleSelectAll1 = () => {
+
+    setSelectAll1(!selectAll1);
+    if (!selectAll1) {
+      // Add all current page item IDs to selectedItems
+      setSelectedItems1(currentItems1.map((item) => item._id));
+    } else {
+      // Deselect all
+       setSelectedItems1([]);
+
+    }
+  };
+
+  const handleRowSelect1 = (id) => {
+ 
+    if (selectedItems1.includes(id)) {
+      setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
+    } else {
+      setSelectedItems1([...selectedItems1, id]);
+  
+    }
   };
     return ( 
         <div>
@@ -2327,6 +2496,77 @@ const professions = [
  
   
 </div>
+<div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell>
+          {visibleColumns1.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+        currentItems1.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", fontFamily: "times new roman" }} 
+             
+            >
+              {item.name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no1}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email1}</span>
+            </StyledTableCell>
+            {visibleColumns1
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                  {item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Company <span style={{color:"green",fontSize:"25px"}}>{totalcompany}</span></h5>
+        </footer>
+      </div>
+
+
 
           </div>
           </div>

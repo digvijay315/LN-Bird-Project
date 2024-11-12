@@ -338,7 +338,7 @@ function Adddeveloper() {
                 e.preventDefault();
                 try {
         
-                    const resp= await api.post('addproject/adddeveloper',developer)
+                    const resp= await api.post('addcompany',developer)
                 if(resp.status===200)
                     {
                         toast.success(resp.data.message,{ autoClose: 2000 })
