@@ -1195,19 +1195,19 @@ const renderPageNumbers1 = () => {
   const [visibleColumns1, setVisibleColumns1] = useState(allcompanyColumns.slice(1, 11));
   const [showColumnList1, setShowColumnList1] = useState(false);
 
-  // const handleAddColumnClick = () => {
-  //   setShowColumnList(!showColumnList);
-  // };
+  const handleAddColumnClick1 = () => {
+    setShowColumnList1(!showColumnList1);
+  };
 
-  // const handleCheckboxChange = (column) => {
-  //   if (visibleColumns.some((col) => col.id === column.id)) {
-  //     // Remove column from visibleColumns if it's already present
-  //     setVisibleColumns(visibleColumns.filter((col) => col.id !== column.id));
-  //   } else {
-  //     // Add column to visibleColumns
-  //     setVisibleColumns([...visibleColumns, column]);
-  //   }
-  // };
+  const handleCheckboxChange1 = (column) => {
+    if (visibleColumns1.some((col) => col.id === column.id)) {
+      // Remove column from visibleColumns if it's already present
+      setVisibleColumns1(visibleColumns1.filter((col) => col.id !== column.id));
+    } else {
+      // Add column to visibleColumns
+      setVisibleColumns1([...visibleColumns1, column]);
+    }
+  };
   const handleSelectAll1 = () => {
 
     setSelectAll1(!selectAll1);
@@ -1229,6 +1229,15 @@ const renderPageNumbers1 = () => {
       setSelectedItems1([...selectedItems1, id]);
   
     }
+  };
+  const [isFlashing, setIsFlashing] = useState(false);
+  const handleFocus = () => {
+    setIsFlashing(true); // Start the flash effect when focused
+    
+  };
+
+  const handleBlur = () => {
+    setIsFlashing(false); // Remove the flash effect when focus is lost
   };
     return ( 
         <div>
@@ -1311,7 +1320,11 @@ const renderPageNumbers1 = () => {
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%",padding: '8px',
+        borderRadius: '4px',
+        border: isFlashing ? '2px solid #4CAF50' : '1px solid #ccc',
+        boxShadow: isFlashing ? '0px 0px 8px rgba(76, 175, 80, 0.6)' : 'none',
+        transition: 'border 0.3s ease, box-shadow 0.3s ease',}} onFocus={handleFocus} onBlur={handleBlur}  onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
       
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    
@@ -2389,7 +2402,7 @@ const renderPageNumbers1 = () => {
             
 
             <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
-            <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
+            <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
         
        
        
@@ -2462,7 +2475,7 @@ const renderPageNumbers1 = () => {
 
 <div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
         
-          {showColumnList && (
+          {showColumnList1 && (
             <div
               style={{
                 width:"200px",
@@ -2478,12 +2491,12 @@ const renderPageNumbers1 = () => {
               }}
             >
               <ul style={{ listStyleType: 'none', margin: 0, padding: '10px' }}>
-                {allColumns.slice(2).map((col) => (
+                {allcompanyColumns.slice(2).map((col) => (
                   <li key={col.id} style={{ padding: '5px 0' }}>
                     <input
                       type="checkbox"
-                      checked={visibleColumns.some((visibleCol) => visibleCol.id === col.id)}
-                      onChange={() => handleCheckboxChange(col)}
+                      checked={visibleColumns1.some((visibleCol) => visibleCol.id === col.id)}
+                      onChange={() => handleCheckboxChange1(col)}
                     />{' '}
                     {col.name}
                   </li>
@@ -2496,6 +2509,8 @@ const renderPageNumbers1 = () => {
  
   
 </div>
+
+
 <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
