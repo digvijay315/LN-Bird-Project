@@ -56,7 +56,8 @@ const add_contact=new mongoose.Schema({
     document_no:{type:Array},
     document_name:{type:Array},
     document_pic:{type:Array},
-    relation:{type:String}},{timestamps:true})
+    relation:{type:String},
+    lastcommunication:{type:String}},{timestamps:true})
 
 const addcontact=mongoose.model('add_contact',add_contact)
 module.exports=addcontact

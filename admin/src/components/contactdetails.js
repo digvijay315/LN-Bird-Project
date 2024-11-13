@@ -334,16 +334,51 @@ const renderPageNumbers = () => {
     const [show3, setshow3] = useState(false);
   
     const handleClose3 = () => setshow3(false);
-    const handleShow3=async()=>
-    {
+    const handleShow3 = async () => {
       setshow3(true);
-      selectedItems.map(async(item)=>
-            {
-              const resp1=await api.get(`viewcontactbyname/${item}`)// here search contact by id not name
-              const emaildata=(resp1.data.contact.email)
-              setemails((prevProfile)=>([...prevProfile,emaildata]))
-            })
-    }
+  
+      const currentDateTime = new Date().toISOString(); // Get the current date and time
+  
+      const updatedData = await Promise.all(
+        selectedItems.map(async (item) => {
+          const resp1 = await axios.get(`http://localhost:5000/viewcontactbyid/${item}`); // Use ID to search contact
+          const emailData = resp1.data.contact.email;
+
+          await api.put(`updatecontact/${item}`, {
+            lastcommunication: currentDateTime,
+          });
+  
+          // Add the email to the emails array
+          setemails((prevEmails) => [...prevEmails, emailData]);
+  
+          // Update the lastcommunication field for each item in the data
+          return {
+            ...data.find((contact) => contact._id === item),
+            lastcommunication: currentDateTime,
+          };
+        })
+      );
+  
+      // Update the data state with the new lastcommunication values
+      setdata((prevData) =>
+        prevData.map((contact) =>
+          updatedData.find((updatedContact) => updatedContact._id === contact._id) ||
+          contact
+        )
+      );
+    };
+
+    const formatRelativeDate = (date) => {
+      const now = new Date();
+      const communicationDate = new Date(date);
+      const differenceInTime = now - communicationDate;
+      const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
+    
+      if (differenceInDays === 0) return 'Today';
+      if (differenceInDays === 1) return '1 day ago';
+      return `${differenceInDays} days ago`;
+    };
+
     const[message,setmessage]=useState("")
     
     const sendmail=async(e)=>
@@ -1528,20 +1563,23 @@ const renderPageNumbers1 = () => {
               .map((col) => (
                 <StyledTableCell key={col.id} style={{ padding: "10px", fontFamily: "Times New Roman" }}>
                 {col.id === "createdAt" ? (
-                  formatDate(item[col.id])
+                  formatDate(item[col.id]) // Format createdAt date
                 ) : col.id === "ownership" ? (
                   <>
-                      {item.owner.map((owner, index) => (
-                        <span key={index}>
-                          {owner} ({item.team || ""})<br></br>
-                         
-                        </span>
-                      ))}
-                    </>
+                    {item.owner.map((owner, index) => (
+                      <span key={index}>
+                        {owner} ({item.team || ""})
+                        <br />
+                      </span>
+                    ))}
+                  </>
+                ) : col.id === "lastcommunication" ? (
+                  item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
                 ) : (
-                  item[col.id] || "-"
+                  item[col.id] || "-" // Default display if not createdAt, ownership, or lastcommunication
                 )}
               </StyledTableCell>
+              
               ))}
           </StyledTableRow>
         ))}
