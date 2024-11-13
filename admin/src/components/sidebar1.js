@@ -3,10 +3,10 @@ import '../css/mystyle.css';
 import 'react-router-dom';
 import Icon from '@mdi/react';
 import { mdiNetworkStrength4, mdiPhone } from '@mdi/js';
-import { mdiStickerCheckOutline } from '@mdi/js';
+// import { mdiStickerCheckOutline } from '@mdi/js';
 import { mdiAccountBox } from '@mdi/js';
 import { mdiCurrencyUsd } from '@mdi/js';
-import { mdiMessageOutline } from '@mdi/js';
+// import { mdiMessageOutline } from '@mdi/js';
 import { mdiCalendarCheck } from '@mdi/js';
 import { mdiApplication } from '@mdi/js';
 function Sidebar1() {
@@ -81,13 +81,13 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle no-arrow">
+						<a  class="dropdown-toggle no-arrow">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiPhone} size={1} /><span class="mtext">Communication</span>
 						</a>
 						
 					</li>
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<a  class="dropdown-toggle">
 						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiNetworkStrength4} size={1}/><span class="mtext">Report</span>
 						</a>
 						<ul class="submenu">
@@ -95,7 +95,7 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
+						<a  class="dropdown-toggle">
 							<span class="micon dw dw-settings"></span><span class="mtext">Settings</span>
 						</a>
 						<ul class="submenu">
@@ -103,7 +103,7 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li>
-						<a href="sitemap.html" class="dropdown-toggle no-arrow">
+						<a  class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-diagram"></span><span class="mtext">LogOut</span>
 						</a>
 					</li>

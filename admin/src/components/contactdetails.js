@@ -341,7 +341,7 @@ const renderPageNumbers = () => {
   
       const updatedData = await Promise.all(
         selectedItems.map(async (item) => {
-          const resp1 = await axios.get(`http://localhost:5000/viewcontactbyid/${item}`); // Use ID to search contact
+          const resp1 = await api.get(`viewcontactbyid/${item}`); // Use ID to search contact
           const emailData = resp1.data.contact.email;
 
           await api.put(`updatecontact/${item}`, {
@@ -530,7 +530,7 @@ const allColumns = [
 
       useEffect(()=>
       {
-        if(selectedItems.length==0)
+        if(selectedItems.length===0)
           {
             document.getElementById("delete").style.display="none"
             document.getElementById("edit").style.display="none"
@@ -545,7 +545,7 @@ const allColumns = [
               document.getElementById("mergecontact").style.display="none"
              document.getElementById("search").style.display="flex"
           }
-        if(selectedItems.length==1)
+        if(selectedItems.length===1)
           {
             document.getElementById("delete").style.display="inline-block"
             document.getElementById("edit").style.display="inline-block"
@@ -560,7 +560,7 @@ const allColumns = [
               document.getElementById("mergecontact").style.display="none"
              document.getElementById("search").style.display="none"
           }
-          if(selectedItems.length==2)
+          if(selectedItems.length===2)
             {
            
 
@@ -1320,7 +1320,7 @@ const renderPageNumbers1 = () => {
             
 
             <button  style={{ position:"relative",width: '150px',marginLeft: '65%',padding: '8px',backgroundColor: '#4CAF50',color: 'white',border: 'none',
-                             borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center',width:"150px",marginLeft:"65%"}}
+                             borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center'}}
                               className="form-control form-control-sm form-control form-control-sm-sm" onClick={() => setShowDropdown(!showDropdown)} >Filter</button>
             {showDropdown && (
         <div className="dropdown-container" style={{position: 'absolute',marginTop:"40px",left: '75%',width: '200px',backgroundColor: '#f9f9f9',
