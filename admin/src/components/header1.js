@@ -43,6 +43,7 @@ function Header1() {
   		<div id="myLinks">
 			<ul>
 				<li><Link to={'/addcontact'} class="dropdown-item">Contact</Link></li>
+				<li><Link to={'/addcompany'} class="dropdown-item">Add Company</Link></li>
 				<li><Link to={'/leadinfo'} class="dropdown-item">Lead</Link></li>
 				{/* <li><Link to={'/addinventory'} class="dropdown-item">Inventory</Link></li> */}
 				<li><Link to={'/project'} class="dropdown-item">Project</Link></li>

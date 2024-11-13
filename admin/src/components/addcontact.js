@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {React, useState,useEffect} from 'react';
 import'../css/addcontact.css';
 import Header1 from './header1';
 import Sidebar1 from './sidebar1';
@@ -92,6 +92,24 @@ function Addcontact() {
         }
     }
 
+    useEffect(()=>{fetchcdata()},[])
+
+    const[cdata,setcdata]=useState([]);
+    const[totalcompany,settotalcompany]=useState()
+    const fetchcdata=async(event)=>
+    {
+      
+      try {
+        const resp=await api.get('viewcompany')
+        setcdata(resp.data.developer)
+        const countcompany=Array.isArray(resp.data.developer) ? resp.data.developer : [resp.data.developer]
+        settotalcompany(countcompany.length)
+        // setFilteredData(countcontact);
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
     const time=new Date()
     
     
@@ -1041,17 +1059,18 @@ const handleOwnerChange = (event) => {
                         <option>Others</option>
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
+                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
                     <option>---Select company---</option>
-                        <option>Dharam Construction</option>
-                        <option>Somya Enterprises</option>
-                        <option>Bharat Properties</option>
-                        <option>State Bank Of India</option>
-                        <option>Microsoft</option>
-                        <option>Others</option>
+                      {
+                        cdata.map((item)=>
+                        (
+                          <option>{item.name}</option>
+                        ))
+                      }
                         </select>
                     </div>
-                    <div className="col-md-4" > <label className="labels">Country Code</label>
+                    {/* <div className="col-md-4" > <label className="labels">Country Code</label>
                     
                         <select  required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country_code1:e.target.value})}>
                         <option>India +91</option>
@@ -1062,19 +1081,19 @@ const handleOwnerChange = (event) => {
                           ))
                         }
                         </select> 
-                    </div>
-                    <div className="col-md-6" > <label className="labels">Company Phone</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setcontact({...contact,company_phone:e.target.value})}/></div>
+                    </div> */}
+                    {/* <div className="col-md-6" > <label className="labels">Company Phone</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setcontact({...contact,company_phone:e.target.value})}/></div>
                     <div className="col-md-8" > <label className="labels">Company Email</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setcontact({...contact,company_email:e.target.value})}/></div>
-                    <div className="col-md-4" ></div>
+                    <div className="col-md-4" ></div> */}
 
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Company Address</label></div>
-                    <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                    {/* <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Company Address</label></div> */}
+                    {/* <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
                     <div className="col-md-8"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area:e.target.value})}/></div>
                     <div className="col-md-4"></div>
                     <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode:e.target.value})}/></div>
-                    {/* <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div> */}
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state:e.target.value})}/></div>
 
 
 
@@ -1090,8 +1109,8 @@ const handleOwnerChange = (event) => {
                     ))}
                     </select>
                     </div>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,industry:e.target.value})}>
+                    </div> */}
+                    {/* <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,industry:e.target.value})}>
                     <option>---choose industry---</option>
                           <optgroup label='Agriculture'>
                                 <option>Farming</option><option>horticulture</option><option>forestry</option>
@@ -1212,8 +1231,8 @@ const handleOwnerChange = (event) => {
                                 <option>others</option>
                           </optgroup>
                         </select>
-                    </div>
-                    <div className='col-md-5'></div>
+                    </div> */}
+                    {/* <div className='col-md-5'></div>
                     <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
                     {
                       contact.company_social_media.map((item,index)=>
@@ -1248,7 +1267,7 @@ const handleOwnerChange = (event) => {
                     }
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
-                    <div className='col-md-12'><hr></hr></div> 
+                    <div className='col-md-12'><hr></hr></div>  */}
               </div>
               <div className="row mt-4">
                     <div className="col-md-2"   onClick={prev1}><button className="form-control form-control-sm" >Prev</button></div>

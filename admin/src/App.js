@@ -61,7 +61,7 @@ function App() {
       <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
       <Route path='/project' element={<Projectform/>}/>
-      <Route path='/adddeveloper' element={<Adddeveloper/>}/>
+      <Route path='/addcompany' element={<Adddeveloper/>}/>
       <Route path='/deal' element={<Deal/>}/>
       <Route path='/tasks' element={<Tasks/>}/>
       <Route path='/tasksform' element={<Task_form/>}/>

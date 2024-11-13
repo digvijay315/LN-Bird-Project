@@ -343,7 +343,7 @@ function Adddeveloper() {
                     {
                         toast.success(resp.data.message,{ autoClose: 2000 })
                         setTimeout(() => {
-                          navigate('/project')
+                          navigate('/contactdetails')
                         }, 2000);
                     }
                     
@@ -522,7 +522,7 @@ function Adddeveloper() {
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
             
-                    <div className="col-md-8"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter your name" onChange={(e)=>setdeveloper({...developer,name:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter company name" onChange={(e)=>setdeveloper({...developer,name:e.target.value})}/></div>
                     <div className='col-md-4'></div>
              
                 <div className="col-md-4" > <label className="labels">Country</label>
