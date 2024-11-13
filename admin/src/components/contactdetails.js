@@ -375,11 +375,19 @@ const renderPageNumbers = () => {
 const allColumns = [
         { id: 'sno', name: '#' },
         { id: 'personaldetails', name: 'Personal Details' },
+        { id: 'address', name: 'Address' },
+        { id: 'professionaldetails', name: 'Professional Details' },
+        { id: 'tags', name: 'Tags' },
+        { id: 'source', name: 'Source' },
+        { id: 'lastcommunication', name: 'Last Communication' },
+        { id: 'actionable', name: 'Actionable' },
+        { id: 'ownership', name: 'Ownership' },
+        { id: 'createdAt', name: 'Add On' },
         { id: 'mobile_type', name: 'Mobile Type' },
         { id: 'email_type', name: 'Email Type' },
         { id: 'designation', name: 'Designation' },
         { id: 'company_name', name: 'Company Name' },
-        { id: 'tags', name: 'Tags' },
+      
         { id: 'father_husband_name', name: 'Father/Husband Name' },
         { id: 'h_no', name: 'House No' },
         { id: 'area1', name: 'Street Address' },
@@ -388,15 +396,15 @@ const allColumns = [
         { id: 'pincode1', name: 'Pincode' },
         { id: 'state1', name: 'State' },
         { id: 'country1', name: 'Country' },
-        { id: 'source', name: 'Source' },
+       
         { id: 'category', name: 'Category' },
         { id: 'profession_category', name: 'Profession Category' },
-        { id: 'profession_subcategory', name: 'Profession Dub-Category' },
+        { id: 'profession_subcategory', name: 'Profession Sub-Category' },
         { id: 'company_name', name: 'Company Name' },
         { id: 'country_code1', name: 'Country Code' },
         { id: 'company_phone', name: 'Company Phone' },
         { id: 'company_email', name: 'Company Email' },
-        { id: 'owner', name: 'Owner' },
+   
         { id: 'team', name: 'Team' },
         { id: 'gender', name: 'Gender' },
         { id: 'visible_to', name: 'Visible To' },
@@ -427,9 +435,26 @@ const allColumns = [
         { id: 'descriptions', name: 'Descriptions' },
         { id: 'relation', name: 'Relation' }
       ];
+
+
+      const formatDate = (isoString) => {
+        if (!isoString) return "-"; // Fallback for missing date
+        const date = new Date(isoString);
+        const localDate = date.toLocaleDateString();
+        const localTime = date.toLocaleTimeString();
+        return (
+          <>
+            <div>{localDate}</div>
+            <div>{localTime}</div>
+          </>
+        );
+      };
+
+      
+      
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
       const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 11));
+      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 10));
       const [showColumnList, setShowColumnList] = useState(false);
 
       const handleAddColumnClick = () => {
@@ -1404,7 +1429,7 @@ const renderPageNumbers1 = () => {
                     }}
                   >
                     <ul style={{ listStyleType: 'none', margin: 0, padding: '10px' }}>
-                      {allColumns.slice(2).map((col) => (
+                      {allColumns.slice(4).map((col) => (
                         <li key={col.id} style={{ padding: '5px 0' }}>
                           <input
                             type="checkbox"
@@ -1462,7 +1487,7 @@ const renderPageNumbers1 = () => {
             </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-              onClick={() => handleShow2(item)}
+           
             >
               {item.title} {item.first_name} {item.last_name}
               <br />
@@ -1472,15 +1497,51 @@ const renderPageNumbers1 = () => {
               <SvgIcon component={EmailIcon} />
               <span>{item.email}</span>
             </StyledTableCell>
+
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+             
+            >
+              {item.h_no} {item.area}
+              <br />
+              
+              {item.location1} 
+              <br />
+             
+              {item.city1} {item.pincode1}
+            </StyledTableCell>
+
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+             
+            >
+              {item.profession_category} ({item.profession_subcategory})
+              <br />
+              
+              {item.designation} 
+              <br />
+             
+              {item.company_name} 
+            </StyledTableCell>
             {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'professionaldetails' && col.id !== 'address')
               .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
-                >
-                  {item[col.id]}
-                </StyledTableCell>
+                <StyledTableCell key={col.id} style={{ padding: "10px", fontFamily: "Times New Roman" }}>
+                {col.id === "createdAt" ? (
+                  formatDate(item[col.id])
+                ) : col.id === "ownership" ? (
+                  <>
+                      {item.owner.map((owner, index) => (
+                        <span key={index}>
+                          {owner} ({item.team || ""})<br></br>
+                         
+                        </span>
+                      ))}
+                    </>
+                ) : (
+                  item[col.id] || "-"
+                )}
+              </StyledTableCell>
               ))}
           </StyledTableRow>
         ))}
@@ -1675,7 +1736,8 @@ const renderPageNumbers1 = () => {
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm"onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,owner:e.target.value}))} >
+                    <div className="col-md-6"><label className="labels">Owner</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,owner:e.target.value}))} >
                               <option>{data1.owner}</option>     
                               <option>Select</option>
                               <option>Suraj</option> 
@@ -1683,7 +1745,9 @@ const renderPageNumbers1 = () => {
                               <option>Ramesh Singh</option>
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
-                        </select></div>
+                        </select>
+                        
+                        </div>
                         <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,visible_to:e.target.value}))} >
                                <option>{data1.visible_to}</option> 
                                 <option>Select</option>
@@ -1706,7 +1770,7 @@ const renderPageNumbers1 = () => {
                 <div className="row " >
                     <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,profession_category:e.target.value}))}>
                                   <option>{data1.profession_category}</option> 
-                                  <option>Select</option>    
+                                  <option>---Select---</option>    
                                   <option>Self Employed </option>
                                   <option>Govt. Employee  </option>
                                   <option>House Wife</option>
@@ -1717,7 +1781,7 @@ const renderPageNumbers1 = () => {
                     </div>
                     <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,profession_subcategory:e.target.value}))}>
                                 <option>{data1.profession_subcategory}</option> 
-                                <option>Select</option>
+                                <option>---Select---</option>
                                 <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
                                 <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
                                 <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
@@ -1731,17 +1795,23 @@ const renderPageNumbers1 = () => {
                     </div>
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,designation:e.target.value}))}>
                         <option>{data1.designation}</option> 
-                        <option>Select</option>
+                        <option>---Select---</option>
+                        <option>Cashier</option>
+                        <option>Partner</option>
+                        <option>Proprietor</option>
                         <option>Developer</option>
-                        <option>It Professional</option>
+                        <option>HR</option>
                         <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_name:e.target.value}))}>
                         <option>{data1.company_name}</option> 
-                        <option>Select</option>
-                        <option>L.N Bird Technology Pvt. Ltd.</option>
-                        <option>T.C.S</option>
+                        <option>---Select---</option>
+                        <option>Dharam Construction</option>
+                        <option>Somya Enterprises</option>
+                        <option>Bharat Properties</option>
+                        <option>State Bank Of India</option>
+                        <option>Microsoft</option>
                         <option>Others</option>
                         </select>
                     </div>

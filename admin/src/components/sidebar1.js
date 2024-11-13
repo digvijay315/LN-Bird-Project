@@ -21,7 +21,7 @@ function Sidebar1() {
 		<div class="brand-logo">
 			<Link to={'/dashboard'}>
 				<img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo"/>
-				<img src="https://bharatsproperties.com/logo-4-copy.png" alt="" class="light-logo" style={{height:"80px",width:"80px",marginLeft:"60px"}}/>
+				<img src="./WhatsApp Image 2024-11-13 at 09.36.23_ba950cdb.jpg" alt="" class="light-logo" style={{height:"80px",width:"80px",marginLeft:"60px",backgroundColor:"transparent"}}/>
 			</Link>
 			<div class="close-sidebar" data-toggle="left-sidebar-close">
 				<i class="ion-close-round"></i>

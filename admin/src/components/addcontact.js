@@ -6,6 +6,7 @@ import { ToastContainer, toast} from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import api from "../api";
 import { event } from 'jquery'; 
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 
 
@@ -56,13 +57,13 @@ function Addcontact() {
     
 
     const navigate=useNavigate(); 
-    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action1:[],
+    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:['India +91'],mobile_no:[''],mobile_type:[''],action1:[],
         email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
-        profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
-        company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+        profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"India +91",company_phone:"",
+        company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"India",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
-        father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+        father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"India",gender:"",maritial_status:"",
         birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
         social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],relation:"" });
     
@@ -604,7 +605,26 @@ function Addcontact() {
     "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
     "Vietnam", "Yemen"
   ];
-  
+  const ownersList = [
+    'Suraj',
+    'Suresh Kumar',
+    'Ramesh Singh',
+    'Maanav Sharma',
+    'Sukram'
+];
+
+const [owners, setOwners] = useState([]);
+
+const handleOwnerChange = (event) => {
+  const {
+      target: { value },
+  } = event;
+
+  const selectedOwners = typeof value === 'string' ? value.split(',') : value;
+
+  setOwners(selectedOwners);
+  setcontact({ ...contact, owner: selectedOwners });
+};
     return ( 
         <div>
             <div id='h'><Header1/></div>
@@ -647,7 +667,7 @@ function Addcontact() {
                       contact.country_code.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
-                        <option value={item} >---select code---</option>
+                        <option value={item} >India +91</option>
                         {
                           countrycode.map((item)=>
                           (
@@ -754,14 +774,29 @@ function Addcontact() {
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Owner</label>
+                    {/* <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
                     <option>Select</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
                               <option>Ramesh Singh</option>
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
-                        </select></div>
+                        </select> */}
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={owners}
+                    onChange={handleOwnerChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {ownersList.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={owners.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                        </div>
                         <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
@@ -819,7 +854,7 @@ function Addcontact() {
                       contact.country_code.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
-                        <option value={item} >---select country code---</option>
+                        <option value={item} >India +91</option>
                         {
                           countrycode.map((item)=>
                           (
@@ -932,14 +967,22 @@ function Addcontact() {
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
-                             <option>---Select owner---</option>
-                              <option>Suraj</option> 
-                              <option>Suresh Kumar</option>
-                              <option>Ramesh Singh</option>
-                              <option>Maanav Sharma</option>
-                              <option>Sukram</option>
-                        </select></div>
+                    <div className="col-md-6"><label className="labels">Owner</label>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={owners}
+                    onChange={handleOwnerChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                
+                    {ownersList.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={owners.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                        </div>
                         <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>My Team</option>
@@ -990,6 +1033,9 @@ function Addcontact() {
                     </div>
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,designation:e.target.value})}>
                     <option>---Select designation---</option>
+                        <option>Cashier</option>
+                        <option>Partner</option>
+                        <option>Proprietor</option>
                         <option>Developer</option>
                         <option>HR</option>
                         <option>Others</option>
@@ -997,15 +1043,18 @@ function Addcontact() {
                     </div>
                     <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
                     <option>---Select company---</option>
-                        <option>TCS</option>
+                        <option>Dharam Construction</option>
+                        <option>Somya Enterprises</option>
+                        <option>Bharat Properties</option>
+                        <option>State Bank Of India</option>
                         <option>Microsoft</option>
                         <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-4" > <label className="labels">Country Code</label>
                     
-                        <select  required="true" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,country_code1:e.target.value})}>
-                        <option>---choose county code---</option>
+                        <select  required="true" className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country_code1:e.target.value})}>
+                        <option>India +91</option>
                         {
                           countrycode.map((item)=>
                           (
@@ -1033,7 +1082,7 @@ function Addcontact() {
                     <div className="col-md-6"><label className="labels">Country</label>
                     
                     <select  className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country:e.target.value})}>
-                      <option>---select country---</option>
+                      <option>India</option>
                     {asianCountries.map((country, index) => (
                       <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
                         {country}
@@ -1268,7 +1317,7 @@ function Addcontact() {
 
                     <div className="col-md-6"><label className="labels">Country</label>
                     <select className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country1:e.target.value})}>
-                      <option>---select country---</option>
+                      <option>India</option>
                     {asianCountries.map((country, index) => (
                       <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
                         {country}

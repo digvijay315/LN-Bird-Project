@@ -13,7 +13,7 @@ const add_contact=new mongoose.Schema({
     descriptions:{type:String},
     source:{type:String},
     team:{type:String},
-    owner:{type:String},
+    owner:{type:Array},
     visible_to:{type:String},
     profession_category:{type:String},
     profession_subcategory:{type:String},
