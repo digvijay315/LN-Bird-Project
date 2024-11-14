@@ -1299,6 +1299,83 @@ const renderPageNumbers1 = () => {
   const handleBlur = () => {
     setIsFlashing(false); // Remove the flash effect when focus is lost
   };
+
+const addtotask=(selecteditems)=>
+{
+  navigate('/tasksform')
+
+  
+}
+const addtolead = async (selectedItems) => {
+  // const navigate = useNavigate(); // Initialize navigate
+  
+  try {
+    const resp1 = await api.get(`viewcontactbyid/${selectedItems}`);
+    // Passing resp1 data to LeadInfo component as state
+    navigate('/leadinfo', { state: { leaddata: resp1.data.contact } });
+  } catch (error) {
+    console.error("Error fetching lead data:", error);
+  }
+};
+
+
+
+
+
+const mergeAndSave = async (selectedItems) => {
+  try {
+    // Fetch data for each selected item asynchronously
+    const fetchedData = await Promise.all(
+      selectedItems.map(async (item) => {
+        const response = await api.get(`viewcontactbyid/${item}`);
+        return response.data.contact; // Assuming response.data contains the contact data
+      })
+    );
+
+    // Merge the fetched data
+    const mergedData = fetchedData.reduce((acc, item) => {
+      Object.keys(item).forEach((key) => {
+        if (!acc[key]) {
+          // If the key doesn't exist in acc, add it directly
+          acc[key] = item[key];
+        } else {
+          // Concatenate strings or merge arrays without duplicates
+          if (typeof acc[key] === 'string' && typeof item[key] === 'string') {
+            acc[key] = `${acc[key]} ${item[key]}`;
+          } else if (Array.isArray(acc[key]) && Array.isArray(item[key])) {
+            acc[key] = [...new Set([...acc[key], ...item[key]])];
+          }
+        }
+      });
+      return acc;
+    }, {});
+
+    
+
+    // Save the merged data to the API
+    const resp=await api.post('addcontact', mergedData,config);
+    if(resp.status===200)
+      {
+        toast.success("Contact data merged and saved Successfully",{ autoClose: 2000 })
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      
+      }
+ 
+    
+    return mergedData; // Return if you need to use it further
+  } catch (error) {
+    console.error("Error merging and saving data:", error);
+    toast.error('Failed to merge and save data.');
+  }
+};
+
+
+
+
+
+
     return ( 
         <div>
             <Header1/>
@@ -1397,7 +1474,7 @@ const renderPageNumbers1 = () => {
       </Tooltip>
 
       <Tooltip title="Add to lead.." arrow>
-      <img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png" onClick={()=>addtolead(selectedItems)}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
 
       <Tooltip title="Call.." arrow>
@@ -1409,11 +1486,11 @@ const renderPageNumbers1 = () => {
       </Tooltip>
 
       <Tooltip title="merge contact..." arrow>
-      <img id="mergecontact" src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+      <img id="mergecontact" onClick={()=>mergeAndSave(selectedItems)} src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
       </Tooltip>    
 
       <Tooltip title="add task..." arrow>
-      <img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={()=>addtotask(selectedItems)}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip> 
 
       <Tooltip title="sequence.." arrow>
@@ -1526,9 +1603,22 @@ const renderPageNumbers1 = () => {
             >
               {item.title} {item.first_name} {item.last_name}
               <br />
-              <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
+              {
+                item.mobile_no.map((item1)=>
+                (
+                  <>
+                  <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item1}</span>
               <br />
+            
+              </>
+                ))
+              }
+                {/* <SvgIcon component={EmailIcon} />
+                <span>{item.email}</span> */}
+              {/* <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br /> */}
               <SvgIcon component={EmailIcon} />
               <span>{item.email}</span>
             </StyledTableCell>
@@ -1537,7 +1627,7 @@ const renderPageNumbers1 = () => {
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
              
             >
-              {item.h_no} {item.area}
+              {item.h_no} {item.area1}
               <br />
               
               {item.location1} 

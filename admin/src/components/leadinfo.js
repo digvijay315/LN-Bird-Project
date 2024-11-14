@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {React, useState,useEffect } from "react";
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { toast, ToastContainer } from "react-toastify";
@@ -6,8 +6,19 @@ import axios from "axios";
 import '../css/common.css';
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { useLocation } from 'react-router-dom';
 
 function Leadinfo() {
+
+  const location = useLocation(); // Get location object
+  const leadData = location.state?.leaddata; // Access lead data passed as state
+
+  // console.log(leadData);
+
+
+
+  
+
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
                         "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
                         "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
@@ -100,6 +111,16 @@ function Leadinfo() {
             }
         }
 
+
+        useEffect(() => {
+          // Check if leadData exists and update the state accordingly
+          if (leadData) {
+            setleadinfo(prevState => ({
+              ...prevState, // Keep existing state
+              ...leadData   // Update with the leadData passed from the previous component
+            }));
+          }
+        }, [leadData]);
 //===================================------------- lead tab view=================================---------------------------------------- 
         const leadinfobasic=()=>
         {
@@ -446,6 +467,7 @@ function Leadinfo() {
                                   };
 
 
+                                  
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================
 return ( 
         <div>
@@ -472,7 +494,7 @@ return (
                 <div className="row mt-2" id="leadinfobasic1">
                     
                     <div className="col-md-3"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
-                    <option>Select title</option>
+                        <option>{leadData?.title|| ''}</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
                         <option>Smt.</option>
@@ -482,12 +504,12 @@ return (
                         <option>col</option>
                         </select>
                         </div>
-                    <div className="col-md-4"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,first_name:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Name</label><input type="text" defaultValue={leadData?.first_name || ''} required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,first_name:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" defaultValue={leadData?.last_name || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
                 </div>
                 <div className="row mt-3" id="leadinfobasic2">
                     <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country_code:e.target.value})}>
-                    <option value="">select</option>
+                    <option value="">{leadData?.country_code[0] || '---select---'}</option>
                    {
                     countrycode.map(item=>
                     (
@@ -496,27 +518,27 @@ return (
                     )
                    }
                     </select></div>
-                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadData?.mobile_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_type:e.target.value})}>
-                    <option>Select Type</option>
+                    <option>{leadData?.mobile_type || '---Select---'}</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
+                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadData?.email[0] || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email_type:e.target.value})}>
-                    <option>Select Type</option>
+                    <option>{leadData?.email_type || '---Select---'}</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>
                         </select></div>
-                     <div className="col-md-8"><label className="labels">Tags</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
+                     <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadData?.tags || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadData?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
                     <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,stage:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.stage || '---Select---'}</option>
                         <option>Incoming</option>
                         <option>Prospect</option>
                         <option>Negotiation</option>
@@ -528,14 +550,14 @@ return (
                     </div>
                     <div className="col-md-6"><label className="labels">Lead Type</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lead_type:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.lead_type || '---Select---'}</option>
                         <option>Hot</option>
                         <option>Warm</option>
                         <option>Cold</option>
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,owner:e.target.value})}>
-                              <option>Select</option>
+                              <option>{leadData?.owner[0] || '---select---'}</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
                               <option>Ramesh Singh</option>
@@ -543,7 +565,7 @@ return (
                               <option>Sukram</option>
                         </select></div>
                     <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,team:e.target.value})}>
-                              <option>Select</option> 
+                              <option>{leadData?.team || '---select---'}</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
                               <option> Post Sales</option>
@@ -551,7 +573,7 @@ return (
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,visible_to:e.target.value})}>
-                                <option>Select</option>
+                                <option>{leadData?.visible_to || '---Select---'}</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
@@ -562,7 +584,7 @@ return (
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Campegin Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                    
                         <div className="col-md-6"><label className="labels">Campaign</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,campaign:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.campaign || '---Select---'}</option>
                         <option>Online Campaign</option>
                         <option>Organic</option>
                         <option>Walk-in</option>
@@ -570,7 +592,7 @@ return (
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,source:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.source || '---Select---'}</option>
                         <option>Facebook</option>
                         <option>Instagram</option>
                         <option>99acres</option>
@@ -583,7 +605,7 @@ return (
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Sub-Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,sub_source:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.sub_source || '---Select---'}</option>
                         <option>Call</option>
                         <option>Sms</option>
                         <option>Email</option>
@@ -594,7 +616,7 @@ return (
                     </div>
                     
                     <div className="col-md-6"><label className="labels">Refrencer Name</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,channel_partner:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.refrencer_name || '---Select---'}</option>
                         <option>Suresh Kumar</option>
                         <option>Rakesh Kumar</option>
                         <option>Admin</option>
@@ -602,7 +624,7 @@ return (
                     </div>
                     <div className="col-md-12"><hr></hr></div>
                     <div className="col-md-6"><label className="labels">Intersted Project</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,intrested_project:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.intrested_project || '---Select---'}</option>
                         <option>Suresh Kumar</option>
                         <option>Rakesh Kumar</option>
                         <option>Admin</option>
@@ -795,7 +817,7 @@ return (
          
          <div className="row mt-2" id="leadinfoprofessional" style={{display:"none"}}>
                      <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,profession_category:e.target.value})}>
-                                  <option>Select</option>    
+                                  <option>{leadData?.profession_category || '---Select---'}</option>    
                                   <option>Self Employed </option>
                                   <option>Govt. Employee  </option>
                                   <option>House Wife</option>
@@ -805,7 +827,7 @@ return (
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,profession_subcategory:e.target.value})} >
-                                <option>Select</option>
+                                <option>{leadData?.profession_subcategory || '---Select---'}</option>
                                 <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
                                 <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
                                 <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
@@ -818,14 +840,14 @@ return (
                         </select>
                     </div>
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,designation:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.designation || '---Select---'}</option>
                         <option>Male</option>
                         <option>Female</option>
                         <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,company_name:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadData?.company_name || '---Select---'}</option>
                         <option>Male</option>
                         <option>Female</option>
                         <option>Others</option>
@@ -1023,37 +1045,37 @@ return (
 
 {/*=====================--------------------- leadinfo personal start-------------------------------------------============================= */}
      <div className="row mt-2" id="leadinfopersonal" style={{display:"none"}}>
-                     <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm"/></div>
+                     <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" defaultValue={leadData?.father_husband_name || ''} className="form-control form-control-sm"/></div>
 
-                            <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
-                            <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
+                            <div className="col-md-3"><label className="labels">H.No</label><input type="text" defaultValue={leadData?.h_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
+                            <div className="col-md-9"><label className="labels">Area</label><input type="text" defaultValue={leadData?.area1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
 
-                            <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">Location</label><input type="text" defaultValue={leadData?.location1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">City</label><input type="text" defaultValue={leadData?.city1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" defaultValue={leadData?.pincode1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
 
-                            <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
-                            <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
+                            <div className="col-md-6"><label className="labels">State</label><input type="text" defaultValue={leadData?.state1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
+                            <div className="col-md-6"><label className="labels">Country</label><input type="text" defaultValue={leadData?.country1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
 
                             <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
                             <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,gender:e.target.value})}>
-                                        <option>Select</option>
+                                        <option>{leadData?.gender || '---Select---'}</option>
                                         <option>Male</option>
                                         <option>Female</option>
                                         <option>Others</option>
                                 </select>
                             </div>
                             <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maritial_status:e.target.value})}>
-                                    <option>Select</option>
+                                    <option>{leadData?.maritial_status || '---Select---'}</option>
                                     <option>Married</option>
                                     <option>Unmarried</option>
                                     <option>Single</option>
                                 </select>
                             </div>
 
-                            <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,birth_date:e.target.value})}/></div>
-                            <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,anniversary_date:e.target.value})}/></div>
+                            <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" defaultValue={leadData?.birth_date || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,birth_date:e.target.value})}/></div>
+                            <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" defaultValue={leadData?.anniversary_date || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,anniversary_date:e.target.value})}/></div>
 
                             <div className="col-md-3"> <label className="labels">Education</label>
                                 
@@ -1062,7 +1084,7 @@ return (
                                         <select className="form-control form-control-sm"
                                             onChange={(event) => handleeducationChange(index, event)}
                                         >
-                                            <option>choose</option>
+                                            <option>{leadData?.education[index] || '---select---'}</option>
                                             <option>Kindergaren</option><option>School</option><option>Primery Education</option><option> Secondary Education</option><option>Master</option><option>Commerce</option>
                                             <option>Vocational Education</option>
                                         </select>
@@ -1077,7 +1099,7 @@ return (
                                             className="form-control form-control-sm"
                                             onChange={(event) => handledegreeChange(index, event)}
                                         >
-                                            <option>choose</option>
+                                            <option>{leadData?.degree[index] || '---Select---'}</option>
                                             <optgroup label='Bachelor’s '>
                                                 <option>Bachelor of Arts (BA) </option><option>Bachelor of Science (BS or BSc) </option><option>Bachelor of Fine Arts (BFA)</option><option> Bachelor of Education (BEd) </option>
                                                 <option> Bachelor of Business Administration (BBA) </option><option>Bachelor of Engineering (BE or BEng) </option><option>Bachelor of Science in Nursing (BSN)</option>
@@ -1110,7 +1132,7 @@ return (
                                         <input
                                             type="text"
                                             className="form-control form-control-sm"
-                                            value={name}
+                                            defaultValue={leadData?.school_college[index] || '---Select---'}
                                             onChange={(event) => handleschool_collegeChange(index, event)}
                                         />
                                         
@@ -1136,7 +1158,7 @@ return (
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleloanchange(index,event)}
                                 >
-                                <option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
+                                <option>{leadData?.loan[index] || '---Select---'}</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
                                 <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                                 </select>
                             ))
@@ -1151,7 +1173,7 @@ return (
                                 className="form-control form-control-sm"
                                 onChange={(event)=>handlebankchange(index,event)}
                                 >
-                                <option>Select</option>
+                                <option>defaultValue={leadData?.bank[index] || '---Select---'}</option>
                                     <option>State Bank of India (SBI) </option><option>Punjab National Bank (PNB)</option><option>Bank of Baroda</option><option>Canara Bank</option>
                                     <option>Union Bank of India</option><option>Bank of India (BOI)</option><option>Indian Bank </option><option>Central Bank of India</option>
                                     <option>Indian Overseas Bank (IOB)</option><option>UCO Bank</option><option>Bank of Maharashtra</option><option></option>
@@ -1178,6 +1200,7 @@ return (
                             leadinfo.amount.map((item,index)=>
                             (
                                 <input type="text" 
+                                defaultValue={leadData?.amount[index] || ''}
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm"
                                 onCanPlay={(event)=>handleamountchange(index,event)} />
@@ -1204,7 +1227,7 @@ return (
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handlesocial_mediachange(index,event)}>
                                 
-                                <option>select</option>
+                                <option>{leadData?.social_media[index] || '---Select---'}</option>
                                 <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                                 </select>
 
@@ -1215,7 +1238,7 @@ return (
                             {
                             leadinfo.url.map((item,index)=>
                             (
-                                <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                                <input type="text" defaultValue={leadData?.url[index] || ''} className="form-control form-control-sm" style={{marginTop:"10px"}} 
                                 onChange={(event)=>handleurlChange(index,event)}/>
                             ))
                             }
@@ -1239,7 +1262,7 @@ return (
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handleincomechange(index,event)}>
                             
-                            <option>select</option>
+                            <option>{leadData?.income[index] || '---Select---'}</option>
                             <option>Personal Income</option><option>Business Income</option>
                             </select>
                             ))
@@ -1250,6 +1273,7 @@ return (
                             leadinfo.amount1.map((item,index)=>
                             (
                                 <input type="text" 
+                                defaultValue={leadData?.amount1[index] || ''}
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleamount1change(index,event)}
@@ -1272,6 +1296,7 @@ return (
                             leadinfo.document_no.map((item,index)=>
                             (
                                 <input type="text" 
+                                defaultValue={leadData?.document_no[index] || ''}
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handledocumentnochange(index,event)}
@@ -1288,25 +1313,55 @@ return (
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handledocumentnamechange(index,event)}>
                             
-                            <option>select</option>
+                            <option>{leadData?.document_name[index] || '---Select---'}</option>
                             <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
                             <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
                             </select>
                             ))
                             }
                             </div>
-                            <div className="col-md-4"><label className="labels">Document Picture</label>
+                            {/* <div className="col-md-4"><label className="labels">Document Picture</label>
                             {
                             leadinfo.document_pic.map((item,index)=>
                             (
                                 <input type="file" 
+                                
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handledocumentpicchange(index,event)}
                                 />
                             ))
                             }
-                            </div>
+                            </div> */}
+                            <div className="col-md-4">
+  <label className="labels">Document Picture</label>
+  {leadinfo.document_pic && leadinfo.document_pic.length >= 0 && leadinfo.document_pic.map((pic, index) => {
+ 
+  return (
+    <div key={index}>
+      <img 
+          src={`${api.defaults.baseURL}${leadinfo.document_pic[index]}`}
+          // Use the correct API URL with forward slash-separated path
+        alt={`Document ${index}`} 
+        style={{ width: "100px", height: "auto" }} 
+      />
+    </div>
+  );
+})}
+  {/* File input for new picture */}
+  {
+                            leadinfo.document_pic.map((item,index)=>
+                            (
+                                <input type="file" 
+                                
+                                style={{marginTop:"10px"}}
+                                className="form-control form-control-sm" 
+                                onChange={(event)=>handledocumentpicchange(index,event)}
+                                />
+                            ))
+                            }
+</div>
+
                             <div className="col-md-1" style={{marginTop:"90px"}}>
                             {
                             leadinfo.action8.map((item,index)=>

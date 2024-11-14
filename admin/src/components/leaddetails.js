@@ -2175,7 +2175,7 @@ const[countall,setcountall]=useState('')
                                     {item && (
                                       <img 
                                         // src={typeof item === 'string' ? item : URL.createObjectURL(item)} 
-                                        src={`http://localhost:5000/${item}`}
+                                        src={`${api.defaults.baseURL}${leadinfo.document_pic[index]}`}
                                         alt="document preview" 
                                         style={{width: "50px", height: "50px", objectFit: "cover", marginBottom: "10px"}}
                                       />
