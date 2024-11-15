@@ -194,7 +194,7 @@ function Fetchcontact() {
 /*-------------------------------------------------------------------searching all contact data by mobile email tags and company end---------------------------------------------------------------------------- */                                                     
       
 const [currentPage, setCurrentPage] = useState(1);
-const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
+const [itemsPerPage, setItemsPerPage] = useState(7); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -484,6 +484,20 @@ const allColumns = [
           </>
         );
       };
+
+      const formatDate1 = (isoString) => {
+        if (!isoString) return "-"; // Fallback for missing date
+        const date = new Date(isoString);
+        const localDate = date.toLocaleDateString();
+        const localTime = date.toLocaleTimeString();
+        return (
+          <>
+            <div>{localDate}</div>
+            <div>{localTime}</div>
+          </>
+        );
+      };
+
 
       
       
@@ -1230,15 +1244,22 @@ const renderPageNumbers1 = () => {
                   
     { id: 'sno', name: '#' },
     { id: 'personaldetails', name: 'Personal Details' },
+    { id: 'address', name: 'Address' },
+    { id: 'employees', name: 'Employees' },
+    { id: 'profession_category', name: ' Category' },
+    { id: 'source', name: 'Source ' },
+    { id: 'team', name: 'Team ' },
+    { id: 'owner', name: 'Ownership' },
+    { id: 'createdAt', name: 'Add On ' },
+  
     { id: 'mobile_type1', name: 'Mobile Type' },
     { id: 'email_type1', name: 'Email Type' },
-    { id: 'profession_category', name: 'Profession Category' },
+ 
     { id: 'profession_subcategory', name: 'Profession Subcategory' },
     { id: 'gst_no', name: 'Gst No' },
     { id: 'industry', name: 'Industry ' },
-    { id: 'source', name: 'Source ' },
-    { id: 'team', name: 'Team ' },
-    { id: 'owner', name: 'Owner' },
+    
+    
     { id: 'visible_to', name: 'Visible To' },
     { id: 'area', name: 'Area' },
     { id: 'location', name: 'Location' },
@@ -1252,7 +1273,7 @@ const renderPageNumbers1 = () => {
   ];
   const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
   const [selectAll1, setSelectAll1] = useState(false); // To track the state of the "Select All" checkbox
-  const [visibleColumns1, setVisibleColumns1] = useState(allcompanyColumns.slice(1, 11));
+  const [visibleColumns1, setVisibleColumns1] = useState(allcompanyColumns.slice(1, 9));
   const [showColumnList1, setShowColumnList1] = useState(false);
 
   const handleAddColumnClick1 = () => {
@@ -1561,9 +1582,9 @@ const mergeAndSave = async (selectedItems) => {
       </div>
      
           <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} style={{ maxHeight: '400px', overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
-      <TableHead>
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TableRow>
           <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <input
@@ -2661,8 +2682,8 @@ const mergeAndSave = async (selectedItems) => {
 
 <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
 <select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange1} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
-  <option value="5">5</option>
-  <option value="10">10</option>
+  <option value="5">10</option>
+  <option value="10">15</option>
   <option value="20">20</option>
   <option value="50">50</option>
 </select>
@@ -2765,7 +2786,18 @@ const mergeAndSave = async (selectedItems) => {
                   key={col.id} 
                   style={{ padding: "10px", fontFamily: "times new roman" }}
                 >
-                  {item[col.id]}
+                  {
+                    col.id=='address' ?
+                    (
+                      <>
+                      {item.area} {item.location} {item.city} <br></br>
+                      {item.state} {item.pincode}
+                      </>
+                    ): col.id === "createdAt" ? (
+                      formatDate(item[col.id]) // Format createdAt date
+                    ) : item[col.id]
+                  }
+               
                 </StyledTableCell>
               ))}
           </StyledTableRow>

@@ -271,7 +271,7 @@ const[countall,setcountall]=useState('')
   /*-------------------pagination code---------------------------pagination code------------------------------------pagination code*/
  
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
+  const [itemsPerPage, setItemsPerPage] = useState(7); // User-defined items per page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -388,7 +388,20 @@ const[countall,setcountall]=useState('')
 
     const allColumns = [
       { id: 'sno', name: '#' },
+      { id: 'score', name: 'Score' },
       { id: 'personaldetails', name: 'Personal Details' },
+      { id: 'requirment', name: 'Requirment' },
+      { id: 'budget', name: 'Budget' },
+      { id: 'location', name: 'Location' },
+      { id: 'matcheddeal', name: 'Matched Deal' },
+      { id: 'stage', name: 'Status' },
+      { id: 'source', name: 'Source' },
+      { id: 'owner', name: 'OwnerShip' },
+      { id: 'activity', name: 'Activity' },
+      { id: 'lastcommunication', name: 'Last Activity' },
+      { id: 'descriptions', name: 'Remarks' },
+      { id: 'createdAt', name: 'Add On' },
+
       { id: 'mobile_type', name: 'Mobile Type' },
       { id: 'email_type', name: 'Email Type' },
       { id: 'tags', name: 'Tags' },
@@ -399,11 +412,11 @@ const[countall,setcountall]=useState('')
       { id: 'team', name: 'Team' },
       { id: 'visible_to', name: 'Visible To' },
       { id: 'campegin', name: 'Campegin' },
-      { id: 'source', name: 'Source' },
+     
       { id: 'sub_source', name: 'Sub_Source' },
       { id: 'refrencer_no', name: 'Refrencer_No' },
       { id: 'intrested_project', name: 'Intrested Project' },
-      { id: 'requirment', name: 'Requirment' },
+   
       { id: 'property_type', name: 'Property Type ' },
       { id: 'purpose', name: 'Purpose' },
       { id: 'nri', name: 'Nri ' },
@@ -476,7 +489,7 @@ const[countall,setcountall]=useState('')
     ];
     const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
     const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 11));
+    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 14));
     const [showColumnList, setShowColumnList] = useState(false);
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -1015,16 +1028,50 @@ const[countall,setcountall]=useState('')
             const [show3, setshow3] = useState(false);
           
             const handleClose3 = () => setshow3(false);
-            const handleShow3=async()=>
-            {
+            // const handleShow3=async()=>
+            // {
+            //   setshow3(true);
+            //   selectedItems.map(async(item)=>
+            //         {
+            //           const resp1=await api.get(`viewbyid/${item}`)// here search contact by id not name
+            //           const emaildata=(resp1.data.lead[0].email)
+            //           setemails((prevProfile)=>([...prevProfile,emaildata]))
+            //         })
+            // }
+
+            const handleShow3 = async () => {
               setshow3(true);
-              selectedItems.map(async(item)=>
-                    {
-                      const resp1=await api.get(`viewbyid/${item}`)// here search contact by id not name
-                      const emaildata=(resp1.data.lead[0].email)
-                      setemails((prevProfile)=>([...prevProfile,emaildata]))
-                    })
-            }
+          
+              const currentDateTime = new Date().toISOString(); // Get the current date and time
+          
+              const updatedData = await Promise.all(
+                selectedItems.map(async (item) => {
+                  const resp1 = await api.get(`viewbyid/${item}`); // Use ID to search contact
+                  const emailData = resp1.data.lead[0].email;
+        
+                  await api.put(`updatelead/${item}`, {
+                    lastcommunication: currentDateTime,
+                  });
+          
+                  // Add the email to the emails array
+                  setemails((prevEmails) => [...prevEmails, emailData]);
+          
+                  // Update the lastcommunication field for each item in the data
+                  return {
+                    ...data.find((lead) => lead._id === item),
+                    lastcommunication: currentDateTime,
+                  };
+                })
+              );
+          
+              // Update the data state with the new lastcommunication values
+              setdata((prevData) =>
+                prevData.map((lead) =>
+                  updatedData.find((updatedlead) => updatedlead._id === lead._id) ||
+                  lead
+                )
+              );
+            };
             const[message,setmessage]=useState("")
             
             const sendmail=async(e)=>
@@ -1049,6 +1096,30 @@ const[countall,setcountall]=useState('')
                 }
               }
 
+
+              const formatRelativeDate = (date) => {
+                const now = new Date();
+                const communicationDate = new Date(date);
+                const differenceInTime = now - communicationDate;
+                const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
+              
+                if (differenceInDays === 0) return 'Today';
+                if (differenceInDays === 1) return '1 day ago';
+                return `${differenceInDays} days ago`;
+              };
+
+              const formatDate = (isoString) => {
+                if (!isoString) return "-"; // Fallback for missing date
+                const date = new Date(isoString);
+                const localDate = date.toLocaleDateString();
+                const localTime = date.toLocaleTimeString();
+                return (
+                  <>
+                    <div>{localDate}</div>
+                    <div>{localTime}</div>
+                  </>
+                );
+              };
   // -------------------------------------===========================send email end========================================-----------------------
           
   return ( 
@@ -1174,10 +1245,10 @@ const[countall,setcountall]=useState('')
               )}
             </div>
 
-      <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-      <TableContainer component={Paper}>
+      <div style={{marginLeft:"80px",marginTop:"0px",backgroundColor:"white"}}>
+      <TableContainer component={Paper} style={{ maxHeight: '400px', overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
-      <TableHead>
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TableRow>
           <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <input
@@ -1211,6 +1282,10 @@ const[countall,setcountall]=useState('')
               />
               {index + 1}
             </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              
+            </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
               onClick={() => handleShow2(item)}
@@ -1224,13 +1299,58 @@ const[countall,setcountall]=useState('')
               <span>{item.email}</span>
             </StyledTableCell>
             {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno')
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
                   style={{ padding: "10px", fontFamily: "times new roman" }}
                 >
-                  {item[col.id]}
+                   {col.id === 'budget' 
+                    ?(
+                      <>
+                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
+                       </>
+                    )
+                    :col.id === 'requirment' 
+                    ?(
+                      <>
+                       {item.requirment}  {item.property_type}  <br></br>  
+                       </>
+                    ): col.id === 'location' 
+                    ?(
+                      <>
+                       {item.location}   <br></br>  
+                       {item.city}  {item.area} <br></br> 
+                       {item.block}  {item.pincode} 
+                       </>
+                    ): col.id === 'stage' 
+                    ?(
+                      <>
+                      {item.stage} <br />
+                      <span 
+                        style={{
+                          color: item.lead_type === 'Hot' ? 'red' :
+                                 item.lead_type === 'Warm' ? 'blue' : 
+                                 item.lead_type === 'Cold' ? 'green' : 'black'
+                        }}
+                      >
+                        {item.lead_type}
+                      </span>
+                    </>
+                    ):  col.id === "owner" ? (
+                      <>
+                        {item.owner.map((owner, index) => (
+                          <span key={index}>
+                            {owner} ({item.team || ""})
+                            <br />
+                          </span>
+                        ))}
+                      </>
+                    ) : col.id === "lastcommunication" ? (
+                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
+                    ) :col.id === "createdAt" ? (
+                      formatDate(item[col.id]) // Format createdAt date
+                    ):  item[col.id]}
                 </StyledTableCell>
               ))}
           </StyledTableRow>
@@ -1634,8 +1754,11 @@ const[countall,setcountall]=useState('')
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,designation:e.target.value})}>
                     <option>{data1.designation}</option>
                     <option>Select</option>
-                        <option>Male</option>
-                        <option>Female</option>
+                    <option>Cashier</option>
+                        <option>Partner</option>
+                        <option>Proprietor</option>
+                        <option>Developer</option>
+                        <option>HR</option>
                         <option>Others</option>
                         </select>
                     </div>

@@ -93,7 +93,8 @@ const lead_info=new mongoose.Schema({
     amount1:{type:Array},
     document_no:{type:Array},
     document_name:{type:Array},
-    document_pic:{type:Array}},{timestamps:true})
+    document_pic:{type:Array},
+    lastcommunication:{type:String}},{timestamps:true})
 
 const leadinfo=mongoose.model('leadinfos',lead_info)
 module.exports=leadinfo

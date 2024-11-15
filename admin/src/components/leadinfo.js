@@ -7,6 +7,7 @@ import '../css/common.css';
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { useLocation } from 'react-router-dom';
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 function Leadinfo() {
 
@@ -15,6 +16,46 @@ function Leadinfo() {
 
   // console.log(leadData);
 
+  const ownersList = [
+    'Suraj',
+    'Suresh Kumar',
+    'Ramesh Singh',
+    'Maanav Sharma',
+    'Sukram'
+];
+
+
+useEffect(()=>{fetchcdata()},[])
+
+const[cdata,setcdata]=useState([]);
+const[totalcompany,settotalcompany]=useState()
+const fetchcdata=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('viewcompany')
+    setcdata(resp.data.developer)
+    const countcompany=Array.isArray(resp.data.developer) ? resp.data.developer : [resp.data.developer]
+    settotalcompany(countcompany.length)
+    // setFilteredData(countcontact);
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+const [owners, setOwners] = useState([]);
+
+const handleOwnerChange = (event) => {
+  const {
+      target: { value },
+  } = event;
+
+  const selectedOwners = typeof value === 'string' ? value.split(',') : value;
+
+  setOwners(selectedOwners);
+  setleadinfo({ ...leadinfo, owner: selectedOwners });
+};
 
 
   
@@ -73,7 +114,7 @@ function Leadinfo() {
                         const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
 
     const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
-        email:"",email_type:"",tags:"",descriptions:"",stage:"",lead_type:"",owner:"",team:"",visible_to:"",campegin:"",source:"",
+        email:"",email_type:"",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:"",purpose:"",nri:"",sub_type:"",unit_type:"",budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
@@ -466,7 +507,7 @@ function Leadinfo() {
                                     });
                                   };
 
-
+                                
                                   
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================
 return ( 
@@ -556,14 +597,32 @@ return (
                         <option>Cold</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,owner:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Owner</label>
+                    {/* <select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,owner:e.target.value})}>
                               <option>{leadData?.owner[0] || '---select---'}</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
                               <option>Ramesh Singh</option>
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
-                        </select></div>
+                        </select> */}
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={owners}
+                    onChange={handleOwnerChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   <MenuItem disabled value="---select---">
+                    {leadData?.owner || '---select---'}
+                </MenuItem>
+                    {ownersList.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={owners.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                        </div>
                     <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,team:e.target.value})}>
                               <option>{leadData?.team || '---select---'}</option> 
                               <option>Sales</option>
@@ -841,19 +900,26 @@ return (
                     </div>
                     <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,designation:e.target.value})}>
                     <option>{leadData?.designation || '---Select---'}</option>
-                        <option>Male</option>
-                        <option>Female</option>
+                    <option>Cashier</option>
+                        <option>Partner</option>
+                        <option>Proprietor</option>
+                        <option>Developer</option>
+                        <option>HR</option>
                         <option>Others</option>
                         </select>
                     </div>
                     <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,company_name:e.target.value})}>
                     <option>{leadData?.company_name || '---Select---'}</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Others</option>
+                    <option>---Select company---</option>
+                      {
+                        cdata.map((item)=>
+                        (
+                          <option>{item.name}</option>
+                        ))
+                      }
                         </select>
                     </div>
-                    <div className="col-md-4" > <label className="labels">Country Code</label>
+                    {/* <div className="col-md-4" > <label className="labels">Country Code</label>
                     
                         <select  required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country_code1:e.target.value})}>
                         <option>phone</option>
@@ -1035,8 +1101,8 @@ return (
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
-                    <div className='col-md-12'><hr></hr></div> 
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>*/}
+                    <div className='col-md-12'><hr></hr></div>  
 
                      </div>
 
@@ -1378,7 +1444,7 @@ return (
                     <div className="col-md-4"><button className="form-control" >Shedule Follow-up</button></div>
                     <div className="col-md-2"><button className="form-control" onClick={leadinfodetails}>Save</button></div>
                     <div className="col-md-2"><button className="form-control">Cancel</button></div>
-                    <div className="col-md-4"><button className="form-control">Save & View Contact</button></div>
+                    <div className="col-md-4"><button className="form-control">Save & View Lead</button></div>
                     </div>
                     </div>
                     </div>
