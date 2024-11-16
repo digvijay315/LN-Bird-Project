@@ -18,7 +18,7 @@ import Paper from '@mui/material/Paper';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function Adddeveloper() {
+function Adddcompany() {
    
         
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -620,17 +620,22 @@ function Adddeveloper() {
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
                     
-                  <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_category:e.target.value})}>
-                                  <option>Select</option>    
-                                  <option>Self Employed </option>
-                                  <option>Govt. Employee  </option>
-                                  <option>House Wife</option>
-                                  <option>Business Man</option>
-                                  <option>Retired</option>
-                                  <option>Student</option>
+                  <div className="col-md-5"><label className="labels">Company Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_category:e.target.value})}>
+                                  <option>---Select---</option>    
+                                  <option>Sole Proprietorship</option>
+                                  <option>Partnership Firm </option>
+                                  <option>Limited Liability Partnership  </option>
+                                  <option>Private Limited Companies</option>
+                                  <option>Public Limited Companies</option>
+                                  <option>One-Person Companies</option>
+                                  <option>Section 8 Company</option>
+                                  <option>Joint-Venture Company</option>
+                                  <option>Government Company</option>
+                                  <option>Non-Government Organization (NGO)</option>
+
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_subcategory:e.target.value})}>
+                    {/* <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_subcategory:e.target.value})}>
                                 <option>Select</option>
                                 <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
                                 <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
@@ -642,18 +647,10 @@ function Adddeveloper() {
                                 <option>Clerk</option> <option>Peon</option> <option>Commision</option> <option>Agent(AAdati)</option>
                                 <option>Shop Keepar</option>
                         </select>
-                    </div>
+                    </div> */}
 
-                    
-                    
-                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setdeveloper({...developer,descriptions:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-
-                    <div className="col-md-8"><label className="labels">GST Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter gst no." onChange={(e)=>setdeveloper({...developer,gst_no:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-
-                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,industry:e.target.value})}>
-                    <option>choose</option>
+                <div className="col-md-6"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,industry:e.target.value})}>
+                    <option>---choose industry---</option>
                           <optgroup label='Agriculture'>
                                 <option>Farming</option><option>horticulture</option><option>forestry</option>
                                 <option>fishing</option><option>Others</option>
@@ -774,6 +771,16 @@ function Adddeveloper() {
                           </optgroup>
                         </select>
                     </div>
+
+                    
+                    
+                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setdeveloper({...developer,descriptions:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-8"><label className="labels">GST Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="enter gst no." onChange={(e)=>setdeveloper({...developer,gst_no:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+
+                
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
@@ -1110,4 +1117,4 @@ function Adddeveloper() {
 );
 }
 
-export default Adddeveloper;
+export default Adddcompany;

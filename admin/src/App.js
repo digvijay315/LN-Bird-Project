@@ -25,7 +25,7 @@ import TableComponent from './components/demo';
 import CallButton from './components/demo';
 import Notification from './components/demo';
 import SuggestionBox from './components/demo';
-import Adddeveloper from './components/adddeveloper';
+import Adddcompany from './components/addcompany.js';
 import Projectform from './components/projectform';
 import Deal from './components/deal';
 import '../src/App.css';
@@ -61,7 +61,7 @@ function App() {
       <Route path='/contactdetails' element={<Fetchcontact/>}></Route>
       <Route path='/inventorydetails' element={<InventoryDetails/>}></Route>
       <Route path='/project' element={<Projectform/>}/>
-      <Route path='/addcompany' element={<Adddeveloper/>}/>
+      <Route path='/addcompany' element={<Adddcompany/>}/>
       <Route path='/deal' element={<Deal/>}/>
       <Route path='/tasks' element={<Tasks/>}/>
       <Route path='/tasksform' element={<Task_form/>}/>
