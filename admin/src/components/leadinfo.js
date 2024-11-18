@@ -25,6 +25,81 @@ function Leadinfo() {
 ];
 
 
+const options = {
+  property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
+  sub_type: {
+    RESIDENTIAL: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
+    COMMERCIAL: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
+    AGRICULTURE: ["LAND", "FARM HOUSE"],
+    INDUSTRIAL: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
+    INSTITUTIONAL: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
+  },
+  unit_type: {
+    PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+    "BUILDER FLOOR": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+    SHOP:["BOOTH","KIOSAK",],
+    SHOWROOM:["SCO","SCF","DSS"],
+    "OFFICE SPACE":["LOCABLE OFFICE","VIRTUAL OFFICE"],
+    "RETAIL STORE":["HYPER MARKET","DEPARTMETAL STORE"],
+    SOHO:["SOHO"],
+    "EXCUTIVE ROOM":["ROOM"],
+    LAND:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
+    "FARM HOUSE":["FARM"],
+    PLOTS:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
+    WAREHOUSE:["WRHSE"],
+    "COLD STORAGE":["CLDSTRG"],
+    "RICE SELLER":["RCSLR"],
+    "BUILDING":["BLDG"],
+    FACTORY:["FCTRY"],
+    SCHOOL:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
+    HOTEL:["HOTEL","GUEST HOUSE","HOMESTAYS"],
+    UNIVERSITIES:["DEEMED","PRIVATE"],
+    HOSPITAL:["NURSING HOME","CLINIC"],
+    COLLEGE:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
+  },
+};
+
+const handleCategoryChange = (event) => {
+  const selectedCategories = event.target.value;
+
+  // Update categories and reset dependent fields
+
+  
+
+  setleadinfo((prevLead)=>({
+    ...prevLead,
+    property_type: selectedCategories,
+    sub_type: [], // Ensure uniqueness
+    unit_type: [], // Ensure uniqueness
+  }));
+};
+
+const handleSubcategoryChange = (event) => {
+  const selectedSubcategories = event.target.value;
+
+  // Update subcategories and dependent unit types
+ 
+  setleadinfo((prevLead) => ({
+    ...prevLead,
+    sub_type: selectedSubcategories,
+    unit_type: [], // Ensure uniqueness
+  }));
+};
+const getAvailableSubcategories = () =>
+  leadinfo.property_type.flatMap((cat) => options.sub_type[cat] || []);
+
+const handleUnitTypeChange = (event) => {
+  const selectedUnitTypes = event.target.value;
+  setleadinfo((prevLead) => ({
+    ...prevLead,
+    unit_type: selectedUnitTypes,
+  }));
+};
+const getAvailableunittype = () =>
+  leadinfo.sub_type.flatMap((cat) => options.unit_type[cat] || []);
+
 useEffect(()=>{fetchcdata()},[])
 
 const[cdata,setcdata]=useState([]);
@@ -105,9 +180,9 @@ const handleOwnerChange = (event) => {
 
 
                         const requirment=["Buy","Rent","Lease"];
-                        const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
+                      
                         const facing=["East","West","South","North","North East","South East","North West","South West"];
-                        const road=["9 mtr road","18 mtr road","24 mtr road"];
+                        const road=["12 mtr road","60 mtr road","100 mtr road"];
                         const transaction_type=["Full White","Collecter Rate","50% White","75% White"];
                         const furnishing=["Furnished","Unfurnished","Semi Furnished"];
                         const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
@@ -116,7 +191,7 @@ const handleOwnerChange = (event) => {
     const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
         email:"",email_type:"",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
         sub_source:"",refrencer_no:"",intrested_project:"",
-        requirment:"",property_type:"",purpose:"",nri:"",sub_type:"",unit_type:"",budget_min:"",budget_max:"",minimum_area:"",
+        requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
         lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:"",road:"",transaction_type:"",
         furnishing:"",
@@ -507,7 +582,47 @@ const handleOwnerChange = (event) => {
                                     });
                                   };
 
+
+                                  const selectlocation=()=>
+                                    {
+                                      document.getElementById("select_location").style.display="flex"
+                                      document.getElementById("search_location1").style.display="none"
+                      
+                                  
+                                        
+                                      document.getElementById("searchlocation").style.color="black"
+                                      document.getElementById("searchlocation").style.backgroundColor="white"
+                           
+                    
+                                      document.getElementById("selectlocation").style.backgroundColor="black"
+                                      document.getElementById("selectlocation").style.color="white"
+                                      document.getElementById("selectlocation").style.borderRadius="50px"
+                                      document.getElementById("selectlocation").style.width="150px"
+                                      document.getElementById("selectlocation").style.textAlign="center"
+                                    
+                                    
                                 
+                                      
+                                    }
+                                    const searchlocation=()=>
+                                      {
+                                        document.getElementById("select_location").style.display="none"
+                                        document.getElementById("search_location1").style.display="flex"
+                                    
+                                    
+                                      
+                                        document.getElementById("selectlocation").style.color="black"
+                                        document.getElementById("selectlocation").style.backgroundColor="white"
+                                 
+                    
+                                        document.getElementById("searchlocation").style.backgroundColor="black"
+                                        document.getElementById("searchlocation").style.color="white"
+                                        document.getElementById("searchlocation").style.borderRadius="50px"
+                                        document.getElementById("searchlocation").style.width="150px"
+                                        document.getElementById("searchlocation").style.textAlign="center"
+                                        
+                                      }
+                                    
                                   
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================
 return ( 
@@ -708,7 +823,8 @@ return (
                        }
                         </select>
                         </div>
-                        <div className="col-md-3"><label className="labels">Property Type</label><select className="form-control form-control-sm" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
+                        <div className="col-md-3"><label className="labels">Property Type</label>
+                        {/* <select className="form-control form-control-sm" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
                     <option>Select</option>
                         {
                             property_type.map(item=>
@@ -717,7 +833,21 @@ return (
                                 )   
                             )
                         }
-                        </select>
+                        </select> */}
+                         <Select
+                         className="form-control form-control-sm" style={{border:"none"}}
+                          multiple
+                          value={leadinfo.property_type}
+                          onChange={handleCategoryChange}
+                          renderValue={(selected) => selected.join(", ")}
+                        >
+                          {options.property_type.map((cat) => (
+                            <MenuItem key={cat} value={cat}>
+                              <Checkbox checked={leadinfo.property_type.includes(cat)} />
+                              <ListItemText primary={cat} />
+                            </MenuItem>
+                          ))}
+                        </Select>
                         </div>
                         
                         <div className="col-md-4"><label className="labels" style={{display:"inline-block"}}>Purpose</label><br></br>
@@ -726,60 +856,114 @@ return (
                         <div className="col-md-2"><label className="labels" >NRI</label><br></br>
                         <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,nri:e.target.value})}/>Yes
                         </div>
-                        <div className="col-md-6"><label className="labels">Sub Type</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,sub_type:e.target.value})}>
-                    <option value="">select</option>
-                    <option value="93">Afghanistan +93</option>
-                    <option value="358">Aland Islands +358</option>
-                    <option value="355">Albania +355</option>
-                    </select>
+                        <div className="col-md-6"><label className="labels">Sub Type</label>
+                        
+                        <Select
+                        className="form-control form-control-sm" style={{border:"none"}}
+                      multiple
+                      value={leadinfo.sub_type}
+                      onChange={handleSubcategoryChange}
+                      renderValue={(selected) => selected.join(", ")}
+                    >
+                      {getAvailableSubcategories().map((sub) => (
+                      <MenuItem key={sub} value={sub}>
+                        <Checkbox checked={leadinfo.sub_type.includes(sub)} />
+                        <ListItemText primary={sub} />
+                      </MenuItem>
+                    ))}
+                    </Select>
                     </div>
                     
-                    <div className="col-md-6"><label className="labels">Unit Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,unit_type:e.target.value})}>
-                    <option>Select</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
-                        </select></div>
+                    <div className="col-md-6"><label className="labels">Unit Type</label>
+                    <Select
+                        className="form-control form-control-sm" style={{border:"none"}}
+                      multiple
+                      value={leadinfo.unit_type}
+                      onChange={handleUnitTypeChange}
+                      renderValue={(selected) => selected.join(", ")}
+                    >
+                      {getAvailableunittype().map((sub) => (
+                      <MenuItem key={sub} value={sub}>
+                        <Checkbox checked={leadinfo.unit_type.includes(sub)} />
+                        <ListItemText primary={sub} />
+                      </MenuItem>
+                    ))}
+                    </Select>
+                        </div>
                         <div className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
                         <option>Select</option>
-                        <option>2500</option>
-                        <option>3000</option>
-                        <option>3500</option>
+                        <option>5000</option>
                         <option>1000000</option>
-                        <option>1500000</option>
-                        <option>2000000</option>
-                        <option>3000000</option>
                         </select></div>
 
                         <div className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
                         <option>Select</option>
-                        <option>5000</option>
-                        <option>8000</option>
-                        <option>1500</option>
-                        <option>5000000</option>
-                        <option>10000000</option>
-                        <option>20000000</option>
+                        <option>1000000</option>
+                        <option>1000000000</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
                         <option>Select</option>
-                        <option>800</option>
-                        <option>1000</option>
-                        <option>1200</option>
+                        <option>10</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
                         <option>Select</option>
-                        <option>2000</option>
-                        <option>2500</option>
-                        <option>3000</option>
+                        <option>10000</option>
+                
                         </select></div>
                         <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
-                        <option>Select Type</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
+                        <option>---Select---</option>
+                        <option>Sq Yard</option>
+                        <option>Marla</option>
+                        <option>Acre</option>
+                        <option>Sq Feet</option>
+                        <option>Kanal</option>
                         </select></div> 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
-                        <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                       
+                        <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                        <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
+                             <div  id='selectlocation' onClick={selectlocation} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"150px",textAlign:"center",transition:"0.5s ease-out"}}>Select Location </div>
+                             <div  id='searchlocation' onClick={searchlocation} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Search Loacation</div>
+                             
+                         </div>
+
+                           <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
+                        <div className="col-md-5"><label className="labels">Country</label>
+                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}>
+                          <option>---select country---</option>
+                          <option>India</option>
+                          </select>
+                        </div>
+                       
+                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}>
+                        <option>---select state---</option>
+                          <option>India</option>
+                          </select>
+                        </div>
+                        <div className="col-md-2"></div>
+
+                        <div className="col-md-5"><label className="labels">City</label>
+                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
+                          <option>---select country---</option>
+                          <option>India</option>
+                          </select>
+                        </div>
+                        <div className="col-md-5"><label className="labels">Area/Project</label>
+                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}>
+                          <option>---select country---</option>
+                          <option>India</option>
+                          </select>
+                        </div>
+                        <div className="col-md-5"><label className="labels">Block</label>
+                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}>
+                          <option>---select country---</option>
+                          <option>India</option>
+                          </select>
+                        </div>
+                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                    </div>
+
+                       <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
                         <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
                         <div className="col-md-4"></div>
                         <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
@@ -791,17 +975,39 @@ return (
                     
                     <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
                     {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
+                    </div>
                     </div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-3"><label className="labels">Specific Unit</label><input type="text" className="form-control" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Specific Unit Details</label><input type="text" className="form-control" /></div>
-                    <div className="col-md-3"><label className="labels">Funding</label>
-                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
+                   
+                    <div className="col-md-4"><label className="labels">Facing</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,facing:e.target.value})}>
+                    <option>Select</option>
+                        {
+                            facing.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )}
+                        </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Road</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,road:e.target.value})}>
+                    <option>Select</option>
+                     {
+                        road.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                     )}
+                        </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Funding</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
                     <option>Select</option>
                    {
                     funding.map(item=>
@@ -812,8 +1018,9 @@ return (
                    }
                         </select>
                     </div>
-                    <div className="col-md-3"><label className="labels">Timeline</label>
-                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
+                   
+                    <div className="col-md-4"><label className="labels">Timeline</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
                     <option>Select</option>
                       {
                         timeline.map(item=>
@@ -824,30 +1031,10 @@ return (
                       }
                         </select>
                     </div>
-                     <div className="col-md-3"><label className="labels">Facing</label>
-                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,facing:e.target.value})}>
-                    <option>Select</option>
-                        {
-                            facing.map(item=>
-                            (
-                                <option>{item}</option>
-                            )
-                        )}
-                        </select>
-                    </div>
-                    <div className="col-md-3"><label className="labels">Road</label>
-                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,road:e.target.value})}>
-                    <option>Select</option>
-                     {
-                        road.map(item=>
-                            (
-                                <option>{item}</option>
-                            )
-                     )}
-                        </select>
-                    </div>
-                     <div className="col-md-3"><label className="labels">Transaction Type</label>
-                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
+                  
+                   
+                     <div className="col-md-4"><label className="labels">Transaction Type</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
                     <option>Select</option>
                      {
                         transaction_type.map(item=>
@@ -858,8 +1045,8 @@ return (
                      }
                         </select>
                     </div>
-                    <div className="col-md-3"><label className="labels">Furnishing</label>
-                    <select className="form-control" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Furnishing</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
                     <option>Select</option>
                        {
                         furnishing.map(item=>
@@ -870,6 +1057,14 @@ return (
                        }
                         </select>
                     </div>     
+                    <div className="col-md-4"><label className="labels">Send Matched Deal</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
+                    <option>---Select---</option>
+                      <option>Whatsapp</option>
+                       <option>Message</option>
+                       <option>Mail</option>
+                        </select>
+                    </div> 
                 </div>
  {/*==========--------------------------============-----------================= leadinfo professional details start=============-------------==============-------------=======------ */}
          
@@ -1145,7 +1340,9 @@ return (
 
                             <div className="col-md-3"> <label className="labels">Education</label>
                                 
-                                    {leadinfo.education.map((name, index) => (
+                                    {
+                                       Array.isArray(leadinfo.education)?
+                                    leadinfo.education.map((name, index) => (
                                         <div key={index} style={{marginTop:"10px"}}>
                                         <select className="form-control form-control-sm"
                                             onChange={(event) => handleeducationChange(index, event)}
@@ -1156,10 +1353,12 @@ return (
                                         </select>
                                         
                                         </div>
-                                    ))}
+                                    )):[]}
                                 </div>
                             <div className="col-md-3"><label className="labels">Degree</label>
-                            {leadinfo.degree.map((name, index) => (
+                            {
+                              Array.isArray(leadinfo.degree)?
+                            leadinfo.degree.map((name, index) => (
                                         <div key={index} style={{marginTop:"10px"}}>
                                         <select
                                             className="form-control form-control-sm"
@@ -1190,10 +1389,12 @@ return (
                                         </select>
                                         
                                         </div>
-                                    ))}
+                                    )):[]}
                             </div>
                             <div className="col-md-4"><label className="labels">School/College/University</label>
-                            {leadinfo.school_college.map((name, index) => (
+                            {
+                               Array.isArray(leadinfo.degree)?
+                            leadinfo.school_college.map((name, index) => (
                                         <div key={index} style={{marginTop:"10px"}}>
                                         <input
                                             type="text"
@@ -1203,20 +1404,22 @@ return (
                                         />
                                         
                                         </div>
-                                    ))}                    
+                                    )):[]}                    
                             </div>
                             <div className="col-md-1" style={{marginTop:"90px"}}>
                             {
+                               Array.isArray(leadinfo.action4)?
                             leadinfo.action4.map((item,index)=>
                             (
                                 <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn4}>+</button></div>
 
                             <div className="col-md-4"><label className="labels">Loan</label>
                             {
+                               Array.isArray(leadinfo.loan)?
                             leadinfo.loan.map((item,index)=>
                             (
                                 <select type="text"
@@ -1227,11 +1430,12 @@ return (
                                 <option>{leadData?.loan[index] || '---Select---'}</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
                                 <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                                 </select>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-3"><label className="labels">Bank</label>
                             {
+                               Array.isArray(leadinfo.degree)?
                             leadinfo.bank.map((item,index)=>
                             (
                                 <select type="text" 
@@ -1257,12 +1461,13 @@ return (
                                     <option>Prathama Bank </option><option>Small Industries Development Bank of India (SIDBI) </option><option></option>
                                     <option>Export-Import Bank of India (EXIM Bank) </option><option>National Bank for Agriculture and Rural Development (NABARD) </option><option></option>
                                 </select>
-                            ))
+                            )):[]
 
                             }
                             </div>
                             <div className="col-md-3"><label className="labels">Amount</label>
                             {
+                               Array.isArray(leadinfo.degree)?
                             leadinfo.amount.map((item,index)=>
                             (
                                 <input type="text" 
@@ -1270,15 +1475,16 @@ return (
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm"
                                 onCanPlay={(event)=>handleamountchange(index,event)} />
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" style={{marginTop:"90px"}}>
                             {
+                               Array.isArray(leadinfo.action5)?
                             leadinfo.action5.map((item,index)=>
                             (
                                 <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
@@ -1286,6 +1492,7 @@ return (
 
                             <div className="col-md-4"><label className="labels">Social Media</label>
                             {
+                               Array.isArray(leadinfo.social_media)?
                             leadinfo.social_media.map((item,index)=>
                             (
                                 <select
@@ -1297,30 +1504,33 @@ return (
                                 <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                                 </select>
 
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-6"><label className="labels">Url</label>
                             {
+                               Array.isArray(leadinfo.url)?
                             leadinfo.url.map((item,index)=>
                             (
                                 <input type="text" defaultValue={leadData?.url[index] || ''} className="form-control form-control-sm" style={{marginTop:"10px"}} 
                                 onChange={(event)=>handleurlChange(index,event)}/>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" style={{marginTop:"90px"}}>
                             {
+                               Array.isArray(leadinfo.action6)?
                             leadinfo.action6.map((item,index)=>
                             (
                                 <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
 
                             <div className="col-md-4"><label className="labels">Income</label>
                             {
+                               Array.isArray(leadinfo.income)?
                             leadinfo.income.map((item,index)=>
                             (
                                 <select
@@ -1331,11 +1541,12 @@ return (
                             <option>{leadData?.income[index] || '---Select---'}</option>
                             <option>Personal Income</option><option>Business Income</option>
                             </select>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-6"><label className="labels">Amount</label>
                             {
+                               Array.isArray(leadinfo.amount1)?
                             leadinfo.amount1.map((item,index)=>
                             (
                                 <input type="text" 
@@ -1344,21 +1555,23 @@ return (
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleamount1change(index,event)}
                                 />
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" style={{marginTop:"90px"}}>
                             {
+                               Array.isArray(leadinfo.action7)?
                             leadinfo.action7.map((item,index)=>
                             (
                                 <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn7}>+</button></div>
 
                             <div className="col-md-3"><label className="labels">Document No.</label>
                             {
+                               Array.isArray(leadinfo.document_no)?
                             leadinfo.document_no.map((item,index)=>
                             (
                                 <input type="text" 
@@ -1367,11 +1580,12 @@ return (
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handledocumentnochange(index,event)}
                                 />
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-3"><label className="labels">Document Name</label>
                             {
+                               Array.isArray(leadinfo.document_name)?
                             leadinfo.document_name.map((item,index)=>
                             (
                                 <select
@@ -1383,7 +1597,7 @@ return (
                             <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
                             <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
                             </select>
-                            ))
+                            )):[]
                             }
                             </div>
                             {/* <div className="col-md-4"><label className="labels">Document Picture</label>
@@ -1400,22 +1614,23 @@ return (
                             }
                             </div> */}
                             <div className="col-md-4">
-  <label className="labels">Document Picture</label>
-  {leadinfo.document_pic && leadinfo.document_pic.length >= 0 && leadinfo.document_pic.map((pic, index) => {
- 
-  return (
-    <div key={index}>
-      <img 
-          src={`${api.defaults.baseURL}${leadinfo.document_pic[index]}`}
-          // Use the correct API URL with forward slash-separated path
-        alt={`Document ${index}`} 
-        style={{ width: "100px", height: "auto" }} 
-      />
-    </div>
-  );
-})}
-  {/* File input for new picture */}
-  {
+                              <label className="labels">Document Picture</label>
+                              {Array.isArray(leadinfo.document_pic) && leadinfo.document_pic.length > 0 
+                                ? leadinfo.document_pic.map((pic, index) => 
+                                  pic ? ( // Ensure the picture URL is valid
+                                    <div key={index}>
+                                      <img 
+                                        src={`${api.defaults.baseURL}${pic}`} 
+                                        alt={`Document ${index}`} 
+                                        style={{ width: "100px", height: "auto" }} 
+                                      />
+                                    </div>
+                                  ) : null // Skip rendering if no valid data
+                                ) 
+                                : []}
+                                {/* File input for new picture */}
+                             {
+                               Array.isArray(leadinfo.document_pic)?
                             leadinfo.document_pic.map((item,index)=>
                             (
                                 <input type="file" 
@@ -1424,16 +1639,17 @@ return (
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handledocumentpicchange(index,event)}
                                 />
-                            ))
+                            )):[]
                             }
-</div>
+                        </div>
 
                             <div className="col-md-1" style={{marginTop:"90px"}}>
                             {
+                               Array.isArray(leadinfo.action8)?
                             leadinfo.action8.map((item,index)=>
                             (
                                 <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall8(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                            ))
+                            )):[]
                             }
                             </div>
                             <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
