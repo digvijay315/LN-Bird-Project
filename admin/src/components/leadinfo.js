@@ -229,8 +229,8 @@ const handleOwnerChange = (event) => {
                         const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
                         const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
 
-    const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
-        email:"",email_type:"",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
+    const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+        email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
@@ -805,8 +805,9 @@ return (
                 </div>
                 <div className="row mt-3" id="leadinfobasic2">
                     <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country_code:e.target.value})}>
-                    <option value="">{leadData?.country_code[0] || '---select---'}</option>
+                    <option value="">{leadData?.country_code[0] || '+91 India'}</option>
                    {
+                   
                     countrycode.map(item=>
                     (
                         <option>{item}</option>
@@ -816,14 +817,14 @@ return (
                     </select></div>
                     <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadData?.mobile_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_type:e.target.value})}>
-                    <option>{leadData?.mobile_type || '---Select---'}</option>
+                    <option>{leadData?.mobile_type || '---Personal---'}</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
                     <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadData?.email[0] || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email_type:e.target.value})}>
-                    <option>{leadData?.email_type || '---Select---'}</option>
+                    <option>{leadData?.email_type || '---Personal---'}</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>

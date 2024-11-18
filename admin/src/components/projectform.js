@@ -58,7 +58,7 @@ function Projectform() {
 
     const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
                                           category:[],sub_category:"",land_area:"",measurment1:"",total_block:"",total_floor:"",
-                                          total_units:"",status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
+                                          total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
                                           approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
                                           team:[],visible_to:"",
                          
@@ -1181,6 +1181,9 @@ function Projectform() {
                   }
                   if (isSelected('Agricultural')) {
                       subcategories.push('Land','Farm House');
+                      document.getElementById("withoutagriculture").style.display="none";
+                      document.getElementById("totalfloors").style.display="none";
+                      document.getElementById("zonelist").style.display="block";
                   }
                   if (isSelected('Industrial')) {
                     subcategories.push('Plot','Ware House','Cold Storage','Rice Seller','Building','Factory');
@@ -1291,6 +1294,31 @@ function Projectform() {
                   }));
               };
         
+              
+              const zoneslist = [
+                'Residential Zone',
+                'Industrial Zone',
+                'Institutional Zone',
+                'MC Limit',
+                'Agriculture Zone (Outside Controlled Area)',
+                'Agriculture Zone (With in Controlled Area)',
+                'No Construction Zone',
+                'Transport & Communication Zone',
+                'Mix Land Use Zone'
+            ];
+             
+              const [zone, setzone] = useState([]);
+
+              const handlezonechange = (event) => {
+                const {
+                    target: { value },
+                } = event;
+        
+                const selectedzone = typeof value === 'string' ? value.split(',') : value;
+        
+                setzone(selectedzone);
+                setproject({ ...project, zone: selectedzone });
+            };
             
             
               
@@ -1402,10 +1430,26 @@ function Projectform() {
                         </select>
                        </div>
                         <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,total_block:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  onChange={(e)=>setproject({...project,total_floor:e.target.value})}/></div>
+                        <div className="col-md-2" id='totalfloors'><label className="labels">TOTAL Floor</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true"  onChange={(e)=>setproject({...project,total_floor:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,total_units:e.target.value})}/></div>
                         <div className="col-md-2"></div>
 
+                        <div className="col-md-10" id='zonelist' style={{display:"none"}}><label className="labels">Zone</label>
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                            multiple
+                            value={zone}
+                            onChange={handlezonechange}
+                            renderValue={(selected) => selected.join(', ')}
+                        >
+                            {zoneslist.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                    <Checkbox checked={zone.indexOf(name) > -1} />
+                                    <ListItemText primary={name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                       </div>
+                     <div className='row' id='withoutagriculture' style={{padding:"20px,0"}}>
                         <div className="col-md-8"><label className="labels">Status</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,status:e.target.value})}>
                               <option>Upcoming</option>
@@ -1522,7 +1566,7 @@ function Projectform() {
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
                     
-            
+                  </div>
                   
                  
                   
