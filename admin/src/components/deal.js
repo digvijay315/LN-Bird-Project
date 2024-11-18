@@ -66,10 +66,10 @@ const[data1,setdata1]=useState([]);
 
        
 
-  React.useState(()=>
+  React.useEffect(()=>
   {fetchdata1()},[])
 
-  React.useState(()=>
+  React.useEffect(()=>
     {fetchdata2()},[])
 
 
