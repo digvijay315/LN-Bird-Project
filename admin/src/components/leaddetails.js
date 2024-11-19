@@ -1314,7 +1314,9 @@ const[countall,setcountall]=useState('')
                     :col.id === 'requirment' 
                     ?(
                       <>
+                     
                        {item.requirment}  {item.property_type}  <br></br>  
+                       {item.sub_type}  <br></br>  {item.unit_type}
                        </>
                     ): col.id === 'location' 
                     ?(
