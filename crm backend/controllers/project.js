@@ -49,4 +49,15 @@ const createProject = async (req, res) => {
               console.log(error)
           }
       }
-   module.exports={createProject,view_project,view_projectbyname}
+
+      const view_projectbycityname=async(req,res)=>
+        {
+            try {
+              const cityname=req.params.city
+                const resp=await addproject.find({city:cityname})
+                res.status(200).send({message:"project details fetch successfully",project:resp})
+            } catch (error) {
+                console.log(error)
+            }
+        }
+   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname}

@@ -215,7 +215,7 @@ const handleOwnerChange = (event) => {
                           TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
                           Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
                           Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
-                          UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+                          UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar","Noida", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
                           WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
                         };
                
@@ -668,21 +668,26 @@ const handleOwnerChange = (event) => {
                                       }
                                     
                                       const[data1,setdata1]=useState([]);
-                                      const fetchdata1=async()=>
+                                      const fetchdatabyprojectcityname=async()=>
                                       {
                                         
                                         try {
-                                          const resp=await api.get('viewproject')
+                                          const city=leadinfo.city2
+                                          console.log(city);
+                                          
+                                          const resp=await api.get(`viewprojectbycityname/${city}`)
+                                          console.log(resp);
+                                          
                                           setdata1(resp.data.project)
                                         } catch (error) {
                                           console.log(error);
                                         }
                                       }
                                       useEffect(() => {
-                                        fetchdata1()
+                                        fetchdatabyprojectcityname()
                                          
                                         
-                                      }, []);
+                                      }, [leadinfo.city2]);
 
                                       const allproject =[]
                                       data1.map((item)=>
@@ -1031,17 +1036,63 @@ return (
                     ))}
                     </Select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
-                        <option>Select</option>
-                        <option>5000</option>
-                        <option>1000000</option>
+                        {leadinfo.requirment === "Rent" && (
+                         <>
+                        <div id="rentbudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <option>---Select---</option>
+                        <option value="5000">5,000/-</option>
+                        <option value="10000">10,000/-</option>
+                        <option value="20000">20,000/-</option>
+                        <option value="30000">30,000/-</option>
+                        <option value="50000">50,000/-</option>
+                        <option value="80000">80,000/-</option>
+                        <option value="100000">1,00,000/-</option>
                         </select></div>
 
-                        <div className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
-                        <option>Select</option>
-                        <option>1000000</option>
-                        <option>1000000000</option>
+                        <div id="rentbudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <option>---Select---</option>
+                        <option value="150000">1,50,000/-</option>
+                        <option value="200000">2,00,000/-</option>
+                        <option value="250000">2,50,000/-</option>
+                        <option value="350000">3,50,000/-</option>
+                        <option value="500000">5,00,000/-</option>
+                        <option value="750000">7,50,000/-</option>
+                        <option value="1000000">10,00,000/-</option>
                         </select></div>
+                        </>
+                       )}
+
+                        {leadinfo.requirment === "Buy" && (
+                       <>
+                        <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <option>---Select---</option>
+                        <option value="1000000">10,00,000/-</option>
+                        <option value="2500000">25,00,000/-</option>
+                        <option value="5000000">50,00,000/-</option>
+                        <option value="7500000">75,00,000/-</option>
+                        <option value="10000000">1,00,00,000/-</option>
+                        <option value="12500000">1,25,00,000/-</option>
+                        <option value="15000000">1,50,00,000/-</option>
+                        <option value="20000000">2,00,00,000/-</option>
+                        <option value="30000000">3,00,00,000/-</option>
+                        </select></div>
+                      
+                      
+                        <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <option>---Select---</option>
+                        <option value="40000000">4,00,00,000/-</option>
+                        <option value="50000000">5,00,00,000/-</option>
+                        <option value="50000000">7,50,00,000/-</option>
+                        <option value="100000000">10,00,00,000/-</option>
+                        <option value="150000000">15,00,00,000/-</option>
+                        <option value="200000000">20,00,00,000/-</option>
+                        <option value="300000000">30,00,00,000/-</option>
+                        <option value="500000000">50,00,00,000/-</option>
+                        <option value="750000000">75,00,00,000/-</option>
+                        <option value="1000000000">100,00,00,000/-</option>
+                        </select></div>
+                        </>
+                      )}
                         <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
                         <option>Select</option>
                         <option>10</option>
@@ -1051,6 +1102,7 @@ return (
                         <option>10000</option>
                 
                         </select></div>
+                   
                         <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
                         <option>---Select---</option>
                         <option>Sq Yard</option>
