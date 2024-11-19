@@ -21,6 +21,7 @@ import {React, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import { type } from 'jquery';
 
 
 
@@ -824,20 +825,20 @@ function Projectform() {
                                     const[block,setblock]=useState({block_name:"",category:[],sub_category:"",land_area:"",
                                                                     measurment:"",total_blocks:"",total_floors:"",total_units:"",
                                                                     status:"",launched_on:"",expected_competion:"",possession:"",
-                                                                    parking_type:"",rera_no:""})
+                                                                    parking_type:"",zone:[],rera_no:""})
 
                                         const addblock = () => {
                        
                                             if (block.block_name ) 
                                               {
-                                                setblock({...block,category:project.category})
+                                                 setblock({...block,category:project.category})
                                                 const updateblocks= [...blocks, block];
                                                 setblocks(updateblocks);
                                                 setproject(prevState => ({
                                                   ...prevState,
                                                   add_block: updateblocks
                                                 }));
-                                                setblock('')
+                                                
                                                 handleClose1()
                                                  } 
                                                  else
@@ -866,7 +867,7 @@ function Projectform() {
 
                                             const[size,setsize]=useState([])
                                             
-                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",
+                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",type:"",
                                                                             total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
                                                                             carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
                                                                             length:"",yard1:"yard",bredth:"",yard2:"yard",total_area:"",yard3:"yard"})
@@ -882,7 +883,7 @@ function Projectform() {
                                                           ...prevState,
                                                           add_size: updatesizes
                                                         }));
-                                                        setsizes('')
+                                                       
                                                         handleClose2()
 
                                                            document.getElementById("choosedestination").value="Select"
@@ -906,6 +907,24 @@ function Projectform() {
                                               setsize(newsizes)
                                             };
 
+                                            const calculateTotalArea = () => {
+                                              // Check if both values are numbers before proceeding
+                                              const length = parseFloat(sizes.length);
+                                              const bredth = parseFloat(sizes.bredth);
+                                          
+                                              if (!isNaN(length) && !isNaN(bredth)) {
+                                                const totalArea = length * bredth; 
+                                                const sizeName = `${sizes.type} (${totalArea} ${sizes.yard3})`// Calculate the total area
+                                                setsizes({
+                                                  ...sizes,
+                                                  total_area: totalArea,
+                                                  size_name: sizeName,  // Set the size_name with the new total_area
+                                                });
+                                              } else {
+                                                setsizes({ ...sizes, total_area: "" }); // Clear if input is invalid
+                                              }
+                                              
+                                            };
 
 
 
@@ -1126,21 +1145,46 @@ function Projectform() {
                           return { ...prevProject, category: [...category, type] };
                       }
                   });
+
+                  setblock(prevblock => {
+                    const { category } = prevblock;
+                    if (category.includes(type)) {
+                        // Remove the type from basic_aminities if already selected
+                        return { ...prevblock, category: category.filter(item => item !== type) };
+                    } else {
+                        // Add the type to basic_aminities if not already selected
+                        return { ...prevblock, category: [...category, type] };
+                    }
+                });
+                setsizes(prevSizes => {
+                  const { category } = prevSizes;
+                  if (category.includes(type)) {
+                      // Remove the type from basic_aminities if already selected
+                      return { ...prevSizes, category: category.filter(item => item !== type) };
+                  } else {
+                      // Add the type to basic_aminities if not already selected
+                      return { ...prevSizes, category: [...category, type] };
+                  }
+              });
+                 
                 };
-                const handleTypeClick1 = (type) => {
-                   document.getElementById("bcat").style.backgroundColor="green"
-                  setblock(prevProject => {
-                    const category = Array.isArray(prevProject.category) ? prevProject.category : [];
-                      // if (category.includes(type)) {
-                      //     // Remove the type from basic_aminities if already selected
-                      //     return { ...prevProject, category: category.filter(item => item !== type) };
-                      // } else {
-                          // Add the type to basic_aminities if not already selected
-                          return { ...prevProject, category: [ ...category,type] };
-                      //}
-                  });
+
+                // console.log(block.category);
+                
+                // const handleTypeClick1 = (type) => {
+                //    document.getElementById("bcat").style.backgroundColor="green"
+                //   setblock(prevProject => {
+                //     const category = Array.isArray(prevProject.category) ? prevProject.category : [];
+                //       // if (category.includes(type)) {
+                //       //     // Remove the type from basic_aminities if already selected
+                //       //     return { ...prevProject, category: category.filter(item => item !== type) };
+                //       // } else {
+                //           // Add the type to basic_aminities if not already selected
+                //           return { ...prevProject, category: [ ...category,type] };
+                //       //}
+                //   });
                
-                };
+                // };
                 // const handleTypeClick2 = (type) => {
                 //   setsizes(prevProject => {
                 //     const category = Array.isArray(prevProject.category) ? prevProject.category : [];
@@ -1318,7 +1362,11 @@ function Projectform() {
         
                 setzone(selectedzone);
                 setproject({ ...project, zone: selectedzone });
+                setblock({...block,zone:selectedzone})
+                
             };
+            console.log(block.zone);
+            
             
             
               
@@ -1711,9 +1759,16 @@ function Projectform() {
             <StyledTableCell >
             {item.block_name}
              </StyledTableCell>
-             <StyledTableCell >
-            {item.category.join(',')}
-             </StyledTableCell>
+             <StyledTableCell>
+              {Array.isArray(item.category) ? (
+                item.category.map((categoryItem, index) => (
+                  <span key={index}>{categoryItem}<br></br></span> // Render each item with a key
+                ))
+              ) : (
+                <span>{item.category}</span> // Render a single category if it's not an array
+              )}
+            </StyledTableCell>
+
              <StyledTableCell >
             {item.sub_category}
              </StyledTableCell>
@@ -1749,7 +1804,7 @@ function Projectform() {
                           <div className="col-md-3" key={type}>
                           <button id='bcat'
                               className='form-control form-control-sm' 
-                              onClick={() => handleTypeClick1(type)} 
+                               
                           >
                               {type}
                           </button>
@@ -1763,6 +1818,46 @@ function Projectform() {
                                 <option>{project.sub_category}</option>
                                 </select>
                     </div>
+                    {
+                    project.category.includes('Agricultural') && (
+                        <>
+                         <div className="col-md-3"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,land_area:e.target.value})}/></div>
+                        <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>measurment</label>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,measurment:e.target.value})}>
+                              <option>Acres.</option>
+                              <option>Mrs.</option>
+                              <option>Sh.</option>
+                              <option>Smt.</option>
+                              <option>Dr.</option>
+                              <option>Er.</option>
+                              <option>Col.</option>
+                              <option>Maj.</option>
+                        </select>
+                       </div>
+                       <div className="col-md-3"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_units:e.target.value})}/></div>
+                       <div className='col-md-3'></div>
+                       <div className="col-md-10" id='zonelist' ><label className="labels">Zone</label>
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                            multiple
+                            value={zone}
+                            onChange={handlezonechange}
+                            renderValue={(selected) => selected.join(', ')}
+                        >
+                            {zoneslist.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                    <Checkbox checked={zone.indexOf(name) > -1} />
+                                    <ListItemText primary={name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                       </div>
+                       <div className="col-md-7" ><label className="labels">Rera Number</label><input type="text"   className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,rera_no:e.target.value})}/></div>
+                        </>
+                      )
+                    }
+                      {
+                     !project.category.includes('Agricultural') && (
+                        <>
                     <div className="col-md-2"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,land_area:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>measurment</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,measurment:e.target.value})}>
@@ -1805,6 +1900,8 @@ function Projectform() {
                        </div>
                        <div className='col-md-6'></div>
                        <div className="col-md-7" ><label className="labels">Rera Number</label><input type="text"   className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,rera_no:e.target.value})}/></div>
+              </>
+                      )}
                 </div>
                 </div>
                 
@@ -1877,7 +1974,7 @@ function Projectform() {
             <div style={{width:"100%"}}>
             <div className="row" id='basicdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Size Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setsizes({...sizes,size_name:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Size Name</label><input type="text" readOnly value={sizes.size_name} required="true" className="form-control form-control-sm" placeholder="first name"/></div>
                     <div className='col-md-4'></div>
 
                     <div className="col-md-8"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setsizes({...sizes,block1:e.target.value})}>
@@ -1929,6 +2026,49 @@ function Projectform() {
                                 <option value={project.sub_category}>{project.sub_category}</option>
                                 </select>
                     </div>   
+                    {
+                              
+                              project.category.includes('Agricultural') && (
+                                  <>
+               
+                    <div className="col-md-4"><label className="labels" >Type</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,type:e.target.value})}>
+                                <option>---select---</option>
+                                <option>Acre</option>
+                                <option>Sq Feet</option>
+                                <option>Plot</option>
+                                <option>All Users</option>
+                                </select>
+                             </div>
+                             <div className='col-md-8'></div>
+
+                                      <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
+                                <option>Yard</option>
+                                <option>Sq Feet</option>
+                                <option>Plot</option>
+                                <option>All Users</option>
+                                </select>
+                             </div>
+                             <div className='col-md-6'></div>
+                
+                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Carpet Area</label><input type='text' onBlur={calculateTotalArea}  className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
+                                <option>Yard</option>
+                                <option>Sq Feet</option>
+                                <option>Plot</option>
+                                <option>All Users</option>
+                                </select>
+                             </div>
+                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Total Area</label><input type='text' className='form-control form-control-sm'  value={sizes.total_area} readOnly /></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
+                                <option>Sq Yard</option>
+                                <option>Plot</option>
+                                <option>All Users</option>
+                                </select>
+                             </div>
+                                  </>
+                              )
+                          }
                     <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
                     <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
@@ -1978,7 +2118,7 @@ function Projectform() {
                              </div>
                              <div className='col-md-6'></div>
                 
-                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Carpet Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
+                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Carpet Area</label><input type='text' onBlur={calculateTotalArea} className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Yard</option>
                                 <option>Sq Feet</option>
@@ -1986,7 +2126,7 @@ function Projectform() {
                                 <option>All Users</option>
                                 </select>
                              </div>
-                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Loading</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_area:e.target.value})}/></div>
+                             <div className="col-md-3"><label className="labels" > Total Area</label><input type='text' readOnly value={sizes.total_area} className='form-control form-control-sm' /></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
@@ -1995,6 +2135,7 @@ function Projectform() {
                              </div>
                              
                             </div>
+                         
                 </div>
                 </div>
                
