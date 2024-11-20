@@ -25,29 +25,56 @@ const [facings, setfacings] = useState([]);
 
 const handlefacingChange = (event) => {
   const {
-      target: { value },
+    target: { value },
   } = event;
 
-  const selectedfacing = typeof value === 'string' ? value.split(',') : value;
-
-  setfacings(selectedfacing);
-  setleadinfo({ ...leadinfo, facing: selectedfacing });
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (facings.length === facing.length) {
+      setfacings([]); // Deselect all options
+      setleadinfo({ ...leadinfo, facing: [] }); // Update facing in leadinfo
+    } else {
+      // Otherwise, select all options
+      setfacings(facing); // Select all options
+      setleadinfo({ ...leadinfo, facing: facing }); // Update facing in leadinfo
+    }
+  } else {
+    // Handle individual selections/deselections
+    const selectedfacing = typeof value === 'string' ? value.split(',') : value;
+    setfacings(selectedfacing); // Update selected facings
+    setleadinfo({ ...leadinfo, facing: selectedfacing }); // Update facing in leadinfo
+  }
 };
 
-const road=["12 mtr road","60 mtr road","100 mtr road"];
+const road=["9 mtr road","12 mtr road","60 mtr road","100 mtr road"];
 
 const [roads, setroads] = useState([]);
 
 const handleroadChange = (event) => {
   const {
-      target: { value },
+    target: { value },
   } = event;
 
-  const selectedroad= typeof value === 'string' ? value.split(',') : value;
-
-  setroads(selectedroad);
-  setleadinfo({ ...leadinfo, road: selectedroad });
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (roads.length === road.length) {
+      setroads([]); // Deselect all options
+      setleadinfo({ ...leadinfo, road: [] }); // Update road in leadinfo
+    } else {
+      // Otherwise, select all options
+      setroads(road); // Select all options
+      setleadinfo({ ...leadinfo, road: road }); // Update road in leadinfo
+    }
+  } else {
+    // Handle individual selections/deselections
+    const selectedroad = typeof value === 'string' ? value.split(',') : value;
+    setroads(selectedroad); // Update selected roads
+    setleadinfo({ ...leadinfo, road: selectedroad }); // Update road in leadinfo
+  }
 };
+
 
 const matchdeal=["What'sApp","Message","Mail"];
 
@@ -55,14 +82,30 @@ const [matchdeals, setmatcheddeals] = useState([]);
 
 const handlematcheddealChange = (event) => {
   const {
-      target: { value },
+    target: { value },
   } = event;
 
-  const selectedmatcheddeal= typeof value === 'string' ? value.split(',') : value;
-
-  setmatcheddeals(selectedmatcheddeal);
-  setleadinfo({ ...leadinfo, matched_deal: setmatcheddeals });
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (matchdeals.length === matchdeal.length) {
+      setmatcheddeals([]); // Deselect all options
+      setleadinfo({ ...leadinfo, matched_deal: [] }); // Update matched_deal in leadinfo
+    } else {
+      // Otherwise, select all options
+      setmatcheddeals(matchdeal); // Select all options
+      setleadinfo({ ...leadinfo, matched_deal: matchdeal }); // Update matched_deal in leadinfo
+    }
+  } else {
+    // If individual items are selected/deselected
+    const selectedmatcheddeal = typeof value === 'string' ? value.split(',') : value;
+    setmatcheddeals(selectedmatcheddeal); // Update selected deals
+    setleadinfo({ ...leadinfo, matched_deal: selectedmatcheddeal }); // Update matched_deal with selected options
+  }
 };
+
+
+
 
 const options = {
   property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
@@ -277,7 +320,7 @@ const handleOwnerChange = (event) => {
                       
                        
                        
-                        const transaction_type=["Full White","Collecter Rate","50% White","75% White"];
+                        const transaction_type=["Full White","Collecter Rate","Flexiable"];
                         const furnishing=["Furnished","Unfurnished","Semi Furnished"];
                         const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
                         const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
@@ -1095,28 +1138,30 @@ const handleOwnerChange = (event) => {
 
                 const [progress, setProgress] = useState(leadinfo.white_portion || 0); // Initialize with deal.whiteportion
 
-const handleMouseMove = (e) => {
-  const progressBar = e.target.getBoundingClientRect();
-  const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
-  const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
-  setProgress(clampedProgress);
-  setleadinfo((prevLead) => ({ ...prevLead, white_portion: clampedProgress })); // Update deal.whiteportion
-};
+                const handleMouseMove = (e) => {
+                  const progressBar = e.target.getBoundingClientRect();
+                  const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
+                  const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
+                  setProgress(clampedProgress);
+                  setleadinfo((prevLead) => ({ ...prevLead, white_portion: clampedProgress })); // Update deal.whiteportion
+                };
 
-const handleMouseDown = (e) => {
-  handleMouseMove(e); // Set initial progress
-  window.addEventListener('mousemove', handleMouseMove);
-  window.addEventListener('mouseup', handleMouseUp);
-};
+                const handleMouseDown = (e) => {
+                  handleMouseMove(e); // Set initial progress
+                  window.addEventListener('mousemove', handleMouseMove);
+                  window.addEventListener('mouseup', handleMouseUp);
+                };
 
-const handleMouseUp = () => {
-  window.removeEventListener('mousemove', handleMouseMove);
-  window.removeEventListener('mouseup', handleMouseUp);
-};
-
-
+                const handleMouseUp = () => {
+                  window.removeEventListener('mousemove', handleMouseMove);
+                  window.removeEventListener('mouseup', handleMouseUp);
+                };
 
 
+
+                console.log(leadinfo.matched_deal);
+                console.log(leadinfo.facing);
+                console.log(leadinfo.road);
 
 
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================
@@ -1585,9 +1630,15 @@ return (
                     onChange={handlefacingChange}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                   <MenuItem disabled value="---select---">
+                   {/* <MenuItem disabled value="---select---">
                     {leadData?.facing || '---select---'}
-                </MenuItem>
+                </MenuItem> */}
+                 <MenuItem value="select-all">
+                    <Checkbox checked={facings.length === facing.length} />
+                    <ListItemText
+                      primary={leadData?.facing || '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                    />
+                  </MenuItem>
                     {facing.map((name) => (
                         <MenuItem key={name} value={name}>
                             <Checkbox checked={facings.indexOf(name) > -1} />
@@ -1603,9 +1654,15 @@ return (
                     onChange={handleroadChange}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                   <MenuItem disabled value="---select---">
+                   {/* <MenuItem disabled value="---select---">
                     {leadData?.road || '---select---'}
-                </MenuItem>
+                </MenuItem> */}
+                <MenuItem value="select-all">
+                    <Checkbox checked={roads.length === road.length} />
+                    <ListItemText
+                      primary={leadData?.road || '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                    />
+                  </MenuItem>
                     {road.map((name) => (
                         <MenuItem key={name} value={name}>
                             <Checkbox checked={roads.indexOf(name) > -1} />
@@ -1673,7 +1730,7 @@ return (
                     
                      
                       {/* Conditionally render the progress bar */}
-                      {leadinfo.transaction_type === "Collecter Rate" && (
+                      {leadinfo.transaction_type === "Flexiable" && (
                         <div className="col-md-8">
                            <label className="labels">White Portion</label>
                         <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
@@ -1692,9 +1749,12 @@ return (
                     onChange={handlematcheddealChange}
                     renderValue={(selected) => selected.join(', ')}
                 >
-                   <MenuItem disabled value="---select---">
-                    {leadData?.matched_deal || '---select---'}
-                </MenuItem>
+                   <MenuItem value="select-all">
+                    <Checkbox checked={matchdeals.length === matchdeal.length} />
+                    <ListItemText
+                      primary={leadData?.matched_deal || '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                    />
+                  </MenuItem>
                     {matchdeal.map((name) => (
                         <MenuItem key={name} value={name}>
                             <Checkbox checked={matchdeals.indexOf(name) > -1} />
