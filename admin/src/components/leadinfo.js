@@ -99,8 +99,14 @@ const handleUnitTypeChange = (event) => {
     unit_type: selectedUnitTypes,
   }));
 };
-const getAvailableunittype = () =>
-  leadinfo.sub_type.flatMap((cat) => options.unit_type[cat] || []);
+
+const getAvailableunittype = () => {
+  // Step 1: Get all options based on selected sub_types
+  let availableOptions = leadinfo.sub_type.flatMap((cat) => options.unit_type[cat] || []);
+
+  // Step 2: Use a Set to remove duplicates and return unique options
+  return Array.from(new Set(availableOptions));
+};
 
 useEffect(()=>{fetchcdata()},[])
 
@@ -235,7 +241,7 @@ const handleOwnerChange = (event) => {
         email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-        maximum_area:"",area_metric:"",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
+        maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
         lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:"",road:"",transaction_type:"",
         furnishing:"",
         profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
@@ -821,6 +827,36 @@ const handleOwnerChange = (event) => {
                                           ? buyBudgetOptions.filter((option) => option.value >= leadinfo.budget_min)
                                           : buyBudgetOptions;
 
+                                          const areaoptions = [
+                                            { value: 10, label: "10" },                 
+                                            { value: 25, label: "25" },
+                                            { value: 50, label: "50" },
+                                            { value: 75, label: "75" },
+                                            { value: 100, label: "100" },
+                                            { value: 125, label: "125" },
+                                            { value: 150, label: "150" },
+                                            { value: 175, label: "175" },
+                                            { value: 200, label: "200" },
+                                            { value: 225, label: "225" },
+                                            { value: 250, label: "250" },
+                                            { value: 300, label: "300" },
+                                            { value: 350, label: "350" },
+                                            { value: 400, label: "400" },
+                                            { value: 450, label: "450" },
+                                            { value: 550, label: "550" },
+                                            { value: 750, label: "750" },
+                                            { value: 1000, label: "1000" },
+                                            { value: 2000, label: "2000" },
+                                            { value: 5000, label: "5000" },
+                                            { value: 7500, label: "7500" },
+                                            { value: 10000, label: "10000" }
+                                          ];
+                                        
+                                          // Filter max budget options based on selected min budget
+                                          const filteredarea = leadinfo.minimum_area
+                                            ? areaoptions.filter((option) => option.value >= leadinfo.minimum_area)
+                                            : areaoptions;
+
 
                                           const onlineCampaignSources = [
                                             "Facebook", "Instagram", "Google", "X", "Linkedin", 
@@ -1350,16 +1386,25 @@ return (
                       )}
                         <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
                         <option>Select</option>
-                        <option>10</option>
-                        </select></div>
+                        {areaoptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                        </select>
+                        </div>
                         <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
                         <option>Select</option>
-                        <option>10000</option>
+                        {filteredarea.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
                 
                         </select></div>
                    
                         <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
-                        <option>---Select---</option>
+                      
                         <option>Sq Yard</option>
                         <option>Marla</option>
                         <option>Acre</option>
