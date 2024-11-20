@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { useLocation } from 'react-router-dom';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 function Leadinfo() {
 
@@ -769,6 +771,250 @@ const handleOwnerChange = (event) => {
                                             return updateblock; // Return the updated state
                                           });
                                         };
+
+
+
+                                        const budgetOptions = [
+                                          { value: 5000, label: "5,000/- (five thousand)" },
+                                          { value: 10000, label: "10,000/- (ten thousand)" },
+                                          { value: 20000, label: "20,000/- (twenty thousand)" },
+                                          { value: 30000, label: "30,000/- (thirty thousand)" },
+                                          { value: 50000, label: "50,000/- (fifty thousand)" },
+                                          { value: 80000, label: "80,000/- (eighty thousand)" },
+                                          { value: 100000, label: "1,00,000/- (one lakh)" },
+                                          { value: 150000, label: "1,50,000/- (one and a half lakh)" },
+                                          { value: 200000, label: "2,00,000/- (two lakh)" },
+                                          { value: 250000, label: "2,50,000/- (two and a half lakh)" },
+                                          { value: 350000, label: "3,50,000/- (three and a half lakh)" },
+                                          { value: 500000, label: "5,00,000/- (five lakh)" },
+                                          { value: 750000, label: "7,50,000/- (seven and a half lakh)" },
+                                          { value: 1000000, label: "10,00,000/- (ten lakh)" },
+                                        ];
+                                      
+                                        // Filter max budget options based on selected min budget
+                                        const filteredMaxBudgetOptions = leadinfo.budget_min
+                                          ? budgetOptions.filter((option) => option.value >= leadinfo.budget_min)
+                                          : budgetOptions;
+
+                                          const buyBudgetOptions = [
+                                            { value: 1000000, label: "10,00,000/- (ten lakh)" },
+                                            { value: 2500000, label: "25,00,000/- (twenty five lakh)" },
+                                            { value: 5000000, label: "50,00,000/- (fifty lakh)" },
+                                            { value: 7500000, label: "75,00,000/- (seventy five lakh)" },
+                                            { value: 10000000, label: "1,00,00,000/- (one crore)" },
+                                            { value: 12500000, label: "1,25,00,000/- (one crore twenty five lakh)" },
+                                            { value: 15000000, label: "1,50,00,000/- (one crore fifty lakh)" },
+                                            { value: 20000000, label: "2,00,00,000/- (two crore)" },
+                                            { value: 30000000, label: "3,00,00,000/- (three crore)" },
+                                            { value: 40000000, label: "4,00,00,000/- (four crore)" },
+                                            { value: 50000000, label: "5,00,00,000/- (five crore)" },
+                                            { value: 75000000, label: "7,50,00,000/- (seven crore fifty lakh)" },
+                                            { value: 100000000, label: "10,00,00,000/- (ten crore)" },
+                                            { value: 150000000, label: "15,00,00,000/- (fifteen crore)" },
+                                            { value: 200000000, label: "20,00,00,000/- (twenty crore)" },
+                                            { value: 300000000, label: "30,00,00,000/- (thirty crore)" },
+                                            { value: 500000000, label: "50,00,00,000/- (fifty crore)" },
+                                            { value: 750000000, label: "75,00,00,000/- (seventy five crore)" },
+                                            { value: 1000000000, label: "100,00,00,000/- (one hundred crore)" },
+                                          ];
+                                          const filteredMaxBudgetOptionsbuy = leadinfo.budget_min
+                                          ? buyBudgetOptions.filter((option) => option.value >= leadinfo.budget_min)
+                                          : buyBudgetOptions;
+
+
+                                          const onlineCampaignSources = [
+                                            "Facebook", "Instagram", "Google", "X", "Linkedin", 
+                                            "99 Acre", "Magicbricks", "Common Floor", "Sulekha", 
+                                            "Housing", "Square Yard", "OLX", "Real Estate India"
+                                          ];
+                                          
+                                          const offlineCampaignSources = [
+                                            "SMS", "Email", "Whatsapp", "Website", "News Paper", "Cold Calling"
+                                          ];
+                                          
+                                          const organicCampaignSources = [
+                                            "Walk-In", "Old Client", "Friends", "Relative", "Hoarding", "Reference", "Channel Partner"
+                                          ];
+
+                                          const getSourceOptions = () => {
+                                            if (leadinfo.campaign === "Online Campaign") {
+                                              return onlineCampaignSources;
+                                            } else if (leadinfo.campaign === "Offline Campaign") {
+                                              return offlineCampaignSources;
+                                            } else if (leadinfo.campaign === "Organic Campaign") {
+                                              return organicCampaignSources;
+                                            } else {
+                                              return [];
+                                            }
+                                          };
+
+
+                                          const[contactdata,setcontactdata]=useState([]);
+                                          const fetchdata=async()=>
+                                          {
+                                            
+                                            try {
+                                              const resp=await api.get('viewcontact')
+                                              setcontactdata(resp.data.contact)
+                                     
+                                            } catch (error) {
+                                              console.log(error);
+                                            }
+                                          
+                                          }
+                                          useEffect(() => {
+                                            if (leadinfo.source) { // You can add more checks here if needed
+                                              fetchdata();
+                                            }
+                                          }, [leadinfo.source]);
+
+
+                                          const [show1, setshow1] = useState(false);
+    
+                                          const handleClose1 = () => setshow1(false);
+                                          const handleShow1=async()=>
+                                          {
+                                            setshow1(true);
+                                           
+                                          }
+
+
+
+                                          const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action1:[],
+                                            email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
+                                    
+                                            profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
+                                            company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+                                    
+                                            father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+                                            birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+                                            social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[] });
+                                        
+                                            const config1 = {
+                                                headers: {
+                                                  'Content-Type': 'multipart/form-data' // Set the Content-Type here
+                                                }
+                                            }
+                                    
+                                            const addcontact=async(e)=>
+                                              {
+                                                  e.preventDefault();
+                                                  try {
+                                          
+                                                      const resp= await api.post('addcontact',contact,config1)
+                                                  if(resp.status===200)
+                                                      {
+                                                          toast.success(resp.data.message,{ autoClose: 2000 })
+                                                          setTimeout(() => {
+                                                            window.location.reload()
+                                                          }, 2000);
+                                                      }
+                                                      
+                                                
+                                                  } catch (error) {
+                                                      toast.error(error.response.data.message,{ autoClose: 2000 })
+                                                  }
+                                              }
+
+
+                                              
+            function addFn1() {
+        
+              setcontact({
+                ...contact,
+                country_code: [...contact.country_code, ''],
+                mobile_no: [...contact.mobile_no, ''],
+                mobile_type: [...contact.mobile_type, ''],
+                action1: [...contact.action1, '']
+              });
+            };
+  
+            const deleteall1=(index)=>
+              {
+               
+                const newcountry_code = contact.country_code.filter((_, i) => i !== index);
+                const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
+                const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
+                const newaction1 = contact.action1.filter((_, i) => i !== index);
+                
+                setcontact({
+                  ...contact,
+                  country_code: newcountry_code,
+                  mobile_no: newmobile_no,
+                  mobile_type: newmobile_type,
+                  action1: newaction1
+                });
+              }
+              const handlecountry_codechange = (index, event) => {
+                const newcountry_code = [...contact.country_code];
+                newcountry_code[index] = event.target.value;
+                setcontact({
+                  ...contact,
+                  country_code: newcountry_code
+                });
+              };
+              const handlemobile_nochange = (index, event) => {
+                const newmobile_no = [...contact.mobile_no];
+                newmobile_no[index] = event.target.value;
+                setcontact({
+                  ...contact,
+                  mobile_no: newmobile_no
+                });
+              };
+              const handlemobile_typechange = (index, event) => {
+                const newmobile_type = [...contact.mobile_type];
+                newmobile_type[index] = event.target.value;
+                setcontact({
+                  ...contact,
+                  mobile_type: newmobile_type
+                });
+              };
+  
+              function addFn2() {
+          
+                setcontact({
+                  ...contact,
+                  email: [...contact.email, ''],
+                  email_type: [...contact.email_type, ''],
+                  action2: [...contact.action2, '']
+                });
+              };
+    
+              const deleteall2=(index)=>
+                {
+                 
+                  const newemail = contact.email.filter((_, i) => i !== index);
+                  const newemail_type = contact.email_type.filter((_, i) => i !== index);
+                  const newaction2 = contact.action2.filter((_, i) => i !== index);
+                  
+                  setcontact({
+                    ...contact,
+                    email: newemail,
+                    email_type: newemail_type,
+                    action2: newaction2
+                  });
+                }
+                const handleemailchange = (index, event) => {
+                  const newemail = [...contact.email];
+                  newemail[index] = event.target.value;
+                  setcontact({
+                    ...contact,
+                    email: newemail
+                  });
+                };
+                const handleemail_typechange = (index, event) => {
+                  const newemail_type = [...contact.email_type];
+                  newemail_type[index] = event.target.value;
+                  setcontact({
+                    ...contact,
+                    email_type: newemail_type
+                  });
+                };
+
+
+
+
+
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================
 return ( 
         <div>
@@ -906,22 +1152,17 @@ return (
                         <div className="col-md-6"><label className="labels">Campaign</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,campaign:e.target.value})}>
                     <option>{leadData?.campaign || '---Select---'}</option>
                         <option>Online Campaign</option>
-                        <option>Organic</option>
-                        <option>Walk-in</option>
-                        <option>Channel Partners</option>
+                        <option>Offline Campaign</option>
+                        <option>Organic Campaign</option>
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,source:e.target.value})}>
                     <option>{leadData?.source || '---Select---'}</option>
-                        <option>Facebook</option>
-                        <option>Instagram</option>
-                        <option>99acres</option>
-                        <option>Magicbricks</option>
-                        <option>Hordings</option>
-                        <option>Whatsapp</option>
-                        <option>Walk-in</option>
-                        <option>Cold Call</option>
-                        <option>Refrencer</option>
+                    {getSourceOptions().map((source, index) => (
+                      <option key={index} value={source}>
+                        {source}
+                      </option>
+                    ))}
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Sub-Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,sub_source:e.target.value})}>
@@ -930,26 +1171,35 @@ return (
                         <option>Sms</option>
                         <option>Email</option>
                         <option>Whatsapp</option>
-                        <option>Channel Partner</option>
-                        <option>Refrencer</option>
                         </select>
                     </div>
+                    {(leadinfo.source === "Reference" || leadinfo.source === "Channel Partner" && leadinfo.campaign === "Organic Campaign") && (
+                     <>
+                     <div className="col-md-5">
+                        <label className="labels">Referrer Name</label>
+                        <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}>
+                          <option>{leadData?.refrencer_name || '---Select---'}</option>
+                         
+                      {
+                        contactdata.map((item)=>
+                        (
+                          <option>{item.title} {item.first_name} {item.last_name}</option>
+                        ))
+                      }
+                        </select>
+                      </div>
+                  <div className="col-md-1" onClick={handleShow1}><label className="labels">Add</label><button className="form-control form-control-sm">+</button></div>
+                  </>
+                    )}
                     
-                    <div className="col-md-6"><label className="labels">Refrencer Name</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,channel_partner:e.target.value})}>
-                    <option>{leadData?.refrencer_name || '---Select---'}</option>
-                        <option>Suresh Kumar</option>
-                        <option>Rakesh Kumar</option>
-                        <option>Admin</option>
-                        </select>
-                    </div>
                     <div className="col-md-12"><hr></hr></div>
-                    <div className="col-md-6"><label className="labels">Intersted Project</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,intrested_project:e.target.value})}>
+                    {/* <div className="col-md-6"><label className="labels">Intersted Project</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,intrested_project:e.target.value})}>
                     <option>{leadData?.intrested_project || '---Select---'}</option>
                         <option>Suresh Kumar</option>
                         <option>Rakesh Kumar</option>
                         <option>Admin</option>
                         </select>
-                    </div>
+                    </div> */}
                     </div>
 {/* ---------------------------------------leadinfo basic details end ------------------------------------------------------------------------*/}
             
@@ -1037,59 +1287,64 @@ return (
                     </Select>
                         </div>
                         {leadinfo.requirment === "Rent" && (
-                         <>
-                        <div id="rentbudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
-                        <option>---Select---</option>
-                        <option value="5000">5,000/-</option>
-                        <option value="10000">10,000/-</option>
-                        <option value="20000">20,000/-</option>
-                        <option value="30000">30,000/-</option>
-                        <option value="50000">50,000/-</option>
-                        <option value="80000">80,000/-</option>
-                        <option value="100000">1,00,000/-</option>
-                        </select></div>
+                          <>
+                            <div id="rentbudgetmin" className="col-md-6">
+                              <label className="labels">Budget Min</label>
+                              <select
+                                className="form-control form-control-sm"
+                                onChange={(e) =>
+                                  setleadinfo({ ...leadinfo, budget_min: e.target.value })
+                                }
+                                value={leadinfo.budget_min}
+                              >
+                                <option>---Select---</option>
+                                {budgetOptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
 
-                        <div id="rentbudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
-                        <option>---Select---</option>
-                        <option value="150000">1,50,000/-</option>
-                        <option value="200000">2,00,000/-</option>
-                        <option value="250000">2,50,000/-</option>
-                        <option value="350000">3,50,000/-</option>
-                        <option value="500000">5,00,000/-</option>
-                        <option value="750000">7,50,000/-</option>
-                        <option value="1000000">10,00,000/-</option>
-                        </select></div>
-                        </>
-                       )}
+                            <div id="rentbudgetmax" className="col-md-6">
+                              <label className="labels">Budget Max</label>
+                              <select
+                                className="form-control form-control-sm"
+                                onChange={(e) =>
+                                  setleadinfo({ ...leadinfo, budget_max: e.target.value })
+                                }
+                                value={leadinfo.budget_max}
+                              >
+                                <option>---Select---</option>
+                                {filteredMaxBudgetOptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </>
+                        )}
 
                         {leadinfo.requirment === "Buy" && (
                        <>
                         <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
                         <option>---Select---</option>
-                        <option value="1000000">10,00,000/-</option>
-                        <option value="2500000">25,00,000/-</option>
-                        <option value="5000000">50,00,000/-</option>
-                        <option value="7500000">75,00,000/-</option>
-                        <option value="10000000">1,00,00,000/-</option>
-                        <option value="12500000">1,25,00,000/-</option>
-                        <option value="15000000">1,50,00,000/-</option>
-                        <option value="20000000">2,00,00,000/-</option>
-                        <option value="30000000">3,00,00,000/-</option>
+                        {buyBudgetOptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
                         </select></div>
                       
                       
                         <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
                         <option>---Select---</option>
-                        <option value="40000000">4,00,00,000/-</option>
-                        <option value="50000000">5,00,00,000/-</option>
-                        <option value="50000000">7,50,00,000/-</option>
-                        <option value="100000000">10,00,00,000/-</option>
-                        <option value="150000000">15,00,00,000/-</option>
-                        <option value="200000000">20,00,00,000/-</option>
-                        <option value="300000000">30,00,00,000/-</option>
-                        <option value="500000000">50,00,00,000/-</option>
-                        <option value="750000000">75,00,00,000/-</option>
-                        <option value="1000000000">100,00,00,000/-</option>
+                        {filteredMaxBudgetOptionsbuy.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
                         </select></div>
                         </>
                       )}
@@ -1890,10 +2145,188 @@ return (
                     </div>
                     </div>
                     </div>
-                    <ToastContainer/>
+                    <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Quick Add Contact</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+            <div className="row" id='basicdetails1'>
+                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                              <option>---Select---</option>
+                              <option>Mr.</option>
+                              <option>Mrs.</option>
+                              <option>Sh.</option>
+                              <option>Smt.</option>
+                              <option>Dr.</option>
+                              <option>Er.</option>
+                              <option>Col.</option>
+                              <option>Maj.</option>
+                        </select>
+                        </div>
+                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                </div>
+                </div>
+                <div className="row mt-3" id='basicdetails2'>
+                <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      contact.country_code.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <option value={item} >---phone---</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       contact.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange(index,event)}>
+                                  <option>---Select---</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action1.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                    
+                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        contact.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.email_type.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange(index,event)}>
+                                <option>---Select---</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action2.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                                    <option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
+                                    <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
+                                    <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
+                                    <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
+                                    <option>Old Client</option><option>Google</option><option>Whatsapp</option>
+                             </select>
+                        </div>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                              <option>Select</option> 
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Owner</label>
+                    {/* <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
+                    <option>Select</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
+                        </select> */}
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={owners}
+                    onChange={handleOwnerChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {ownersList.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={owners.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                        </div>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                                <option>Select</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+            </div>
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={addcontact}>
+                Add Contact
+              </Button>
+              <Button variant="secondary" onClick={handleClose1}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+                    
         </div>
         </div>
         </div>
+        <ToastContainer/>
         </div>
      );
 }
