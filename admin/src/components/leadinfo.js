@@ -18,14 +18,51 @@ function Leadinfo() {
 
   // console.log(leadData);
 
-  const ownersList = [
-    'Suraj',
-    'Suresh Kumar',
-    'Ramesh Singh',
-    'Maanav Sharma',
-    'Sukram'
-];
 
+
+const facing=["East","West","South","North","North East","South East","North West","South West"];
+const [facings, setfacings] = useState([]);
+
+const handlefacingChange = (event) => {
+  const {
+      target: { value },
+  } = event;
+
+  const selectedfacing = typeof value === 'string' ? value.split(',') : value;
+
+  setfacings(selectedfacing);
+  setleadinfo({ ...leadinfo, facing: selectedfacing });
+};
+
+const road=["12 mtr road","60 mtr road","100 mtr road"];
+
+const [roads, setroads] = useState([]);
+
+const handleroadChange = (event) => {
+  const {
+      target: { value },
+  } = event;
+
+  const selectedroad= typeof value === 'string' ? value.split(',') : value;
+
+  setroads(selectedroad);
+  setleadinfo({ ...leadinfo, road: selectedroad });
+};
+
+const matchdeal=["What'sApp","Message","Mail"];
+
+const [matchdeals, setmatcheddeals] = useState([]);
+
+const handlematcheddealChange = (event) => {
+  const {
+      target: { value },
+  } = event;
+
+  const selectedmatcheddeal= typeof value === 'string' ? value.split(',') : value;
+
+  setmatcheddeals(selectedmatcheddeal);
+  setleadinfo({ ...leadinfo, matched_deal: setmatcheddeals });
+};
 
 const options = {
   property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
@@ -126,6 +163,14 @@ const fetchcdata=async(event)=>
   }
 
 }
+
+const ownersList = [
+  'Suraj',
+  'Suresh Kumar',
+  'Ramesh Singh',
+  'Maanav Sharma',
+  'Sukram'
+];
 
 const [owners, setOwners] = useState([]);
 
@@ -230,8 +275,8 @@ const handleOwnerChange = (event) => {
 
                         const requirment=["Buy","Rent","Lease"];
                       
-                        const facing=["East","West","South","North","North East","South East","North West","South West"];
-                        const road=["12 mtr road","60 mtr road","100 mtr road"];
+                       
+                       
                         const transaction_type=["Full White","Collecter Rate","50% White","75% White"];
                         const furnishing=["Furnished","Unfurnished","Semi Furnished"];
                         const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
@@ -242,8 +287,8 @@ const handleOwnerChange = (event) => {
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
-        lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:"",road:"",transaction_type:"",
-        furnishing:"",
+        lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],transaction_type:"",
+        white_portion:"",furnishing:"",matched_deal:[],
         profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
         company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
@@ -1048,6 +1093,29 @@ const handleOwnerChange = (event) => {
                 };
 
 
+                const [progress, setProgress] = useState(leadinfo.white_portion || 0); // Initialize with deal.whiteportion
+
+const handleMouseMove = (e) => {
+  const progressBar = e.target.getBoundingClientRect();
+  const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
+  const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
+  setProgress(clampedProgress);
+  setleadinfo((prevLead) => ({ ...prevLead, white_portion: clampedProgress })); // Update deal.whiteportion
+};
+
+const handleMouseDown = (e) => {
+  handleMouseMove(e); // Set initial progress
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', handleMouseUp);
+};
+
+const handleMouseUp = () => {
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mouseup', handleMouseUp);
+};
+
+
+
 
 
 
@@ -1511,26 +1579,40 @@ return (
                     
                    
                     <div className="col-md-4"><label className="labels">Facing</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,facing:e.target.value})}>
-                    <option>Select</option>
-                        {
-                            facing.map(item=>
-                            (
-                                <option>{item}</option>
-                            )
-                        )}
-                        </select>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={facings}
+                    onChange={handlefacingChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   <MenuItem disabled value="---select---">
+                    {leadData?.facing || '---select---'}
+                </MenuItem>
+                    {facing.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={facings.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
                     </div>
                     <div className="col-md-4"><label className="labels">Road</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,road:e.target.value})}>
-                    <option>Select</option>
-                     {
-                        road.map(item=>
-                            (
-                                <option>{item}</option>
-                            )
-                     )}
-                        </select>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={roads}
+                    onChange={handleroadChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   <MenuItem disabled value="---select---">
+                    {leadData?.road || '---select---'}
+                </MenuItem>
+                    {road.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={roads.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
                     </div>
                     <div className="col-md-4"><label className="labels">Funding</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
@@ -1558,19 +1640,9 @@ return (
                         </select>
                     </div>
                   
+                
                    
-                     <div className="col-md-4"><label className="labels">Transaction Type</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
-                    <option>Select</option>
-                     {
-                        transaction_type.map(item=>
-                            (
-                                <option>{item}</option>
-                            )
-                        )
-                     }
-                        </select>
-                    </div>
+                
                     <div className="col-md-4"><label className="labels">Furnishing</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
                     <option>Select</option>
@@ -1583,14 +1655,55 @@ return (
                        }
                         </select>
                     </div>     
-                    <div className="col-md-4"><label className="labels">Send Matched Deal</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
-                    <option>---Select---</option>
-                      <option>Whatsapp</option>
-                       <option>Message</option>
-                       <option>Mail</option>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-4"><label className="labels">Transaction Type</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
+                    <option>Select</option>
+                     {
+                        transaction_type.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                     }
                         </select>
+                    </div>
+
+                    
+                     
+                      {/* Conditionally render the progress bar */}
+                      {leadinfo.transaction_type === "Collecter Rate" && (
+                        <div className="col-md-8">
+                           <label className="labels">White Portion</label>
+                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
+                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
+                          <div className="progress-percentage">{Math.round(progress)}%</div>
+                        </div>
+                        </div>
+                      )}
+                  
+
+
+                    <div className="col-md-4"><label className="labels">Send Matched Deal</label>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={matchdeals}
+                    onChange={handlematcheddealChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   <MenuItem disabled value="---select---">
+                    {leadData?.matched_deal || '---select---'}
+                </MenuItem>
+                    {matchdeal.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={matchdeals.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
                     </div> 
+                    
                 </div>
  {/*==========--------------------------============-----------================= leadinfo professional details start=============-------------==============-------------=======------ */}
          
