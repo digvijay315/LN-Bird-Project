@@ -20,7 +20,7 @@ import Modal from 'react-bootstrap/Modal';
 import {React, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import { Select, MenuItem, Checkbox, ListItemText,Chip, Box  } from '@mui/material';
 import { type } from 'jquery';
 
 
@@ -37,7 +37,7 @@ function Projectform() {
 
     const add_developer=()=>
     {
-      navigate('/adddeveloper')
+      navigate('/addcompany')
     }
 
     const[data1,setdata1]=useState([]);
@@ -54,11 +54,12 @@ function Projectform() {
     
     }
 
+ 
    
     
 
     const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
-                                          category:[],sub_category:"",land_area:"",measurment1:"",total_block:"",total_floor:"",
+                                          category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
                                           total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
                                           approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
                                           team:[],visible_to:"",
@@ -74,6 +75,24 @@ function Projectform() {
             }
         }
       
+
+        useEffect(()=>
+          {
+            project.add_size.flatMap((item)=>
+            {
+              console.log(item)
+              const acre=item.total_area/4840
+              const kanal=item.total_area/605
+              const marla=kanal/20
+              console.log(acre);
+              console.log(kanal);
+              console.log(marla);
+              
+              
+            })
+          },[project.add_size])
+
+
     const addproject=async(e)=>
     {
       
@@ -750,38 +769,56 @@ function Projectform() {
                 
 
 
-                        function selectsize() {
-                        const size = document.getElementById("subcategory").value;
+                      //   function selectsize() {
+                      //   const size = document.getElementById("subcategory").value;
 
-                        // Always update the state with the selected size
-                        setsizes({ ...sizes, sub_category: size });
+                      //   // Always update the state with the selected size
+                      //   setsizes({ ...sizes, sub_category: size });
 
 
-                        // Check if the category is "Agriculture"
-                        if (project.category === "Agricultural") {
-                            // Hide both apartment size and plot size
-                            document.getElementById("apartmentsize").style.display = "none";
-                            document.getElementById("plotsize").style.display = "none";
-                            return;  // Exit the function early since we don't want to display any sizes for Agriculture
-                        }
+                      //   // Check if the category is "Agriculture"
+                      //   if (project.category === "Agricultural") {
+                      //       // Hide both apartment size and plot size
+                      //       document.getElementById("apartmentsize").style.display = "none";
+                      //       document.getElementById("plotsize").style.display = "none";
+                      //       return;  // Exit the function early since we don't want to display any sizes for Agriculture
+                      //   }
 
-                        // Show apartment size if size is "Apartment"
-                        if (size === "Apartment") {
-                            document.getElementById("apartmentsize").style.display = "flex";
-                            document.getElementById("plotsize").style.display = "none";
-                        } 
-                        // Show plot size if size is "Plot"
-                        else if (size === "Plot") {
-                            document.getElementById("apartmentsize").style.display = "none";
-                            document.getElementById("plotsize").style.display = "flex";
-                        } 
-                        // For other values, hide apartment size and show plot size
-                        else { 
-                            document.getElementById("apartmentsize").style.display = "none";
-                            document.getElementById("plotsize").style.display = "flex";
-                        }
-                      }
+                      //   // Show apartment size if size is "Apartment"
+                      //   if (size === "Apartment") {
+                      //       document.getElementById("apartmentsize").style.display = "flex";
+                      //       document.getElementById("plotsize").style.display = "none";
+                      //   } 
+                      //   // Show plot size if size is "Plot"
+                      //   // else if (size === "Plot") {
+                      //   //     document.getElementById("apartmentsize").style.display = "none";
+                      //   //     document.getElementById("plotsize").style.display = "flex";
+                      //   // } 
+                      //   // For other values, hide apartment size and show plot size
+                      //   else { 
+                      //       document.getElementById("apartmentsize").style.display = "none";
+                      //       document.getElementById("plotsize").style.display = "flex";
+                      //   }
+                      // }
 
+                      const [showPlotSize, setShowPlotSize] = useState(false); // Track the checkbox state
+
+                          // Handle the checkbox change to show/hide plot size section
+                          const handleCheckboxChange2 = (event) => {
+                            setShowPlotSize(event.target.checked);
+                          };
+                          const [showapartmentSize, setShowapartmentSize] = useState(false); // Track the checkbox state
+
+                          // Handle the checkbox change to show/hide plot size section
+                          const handleCheckboxChange3 = (event) => {
+                            setShowapartmentSize(event.target.checked);
+                          };
+                          const [showabuiltup, setSowbuiltup] = useState(false); // Track the checkbox state
+
+                          // Handle the checkbox change to show/hide plot size section
+                          const handleCheckboxChange4 = (event) => {
+                            setSowbuiltup(event.target.checked);
+                          };
 
 
   //==========================------------------------------- size toggle end--------------------------=================================
@@ -935,7 +972,7 @@ function Projectform() {
 
 // ===========================------------------block add and remove code---------------------=================================================
                                     const[blocks,setblocks]=useState([])
-                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:"",land_area:"",
+                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:[],land_area:"",
                                                                     measurment:"",total_blocks:"",total_floors:"",total_units:"",
                                                                     status:"",launched_on:"",expected_competion:"",possession:"",
                                                                     parking_type:"",zone:[],rera_no:""})
@@ -980,7 +1017,7 @@ function Projectform() {
 
                                             const[size,setsize]=useState([])
                                             
-                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",type:"",
+                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:[],type:"",
                                                                             total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
                                                                             carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
                                                                             length:"",yard1:"yard",bredth:"",yard2:"yard",total_area:"",yard3:"yard"})
@@ -1404,6 +1441,43 @@ function Projectform() {
                   return subcategories;
               };
 
+              const handleSubCategoryChange = (event) => {
+                const {
+                  target: { value },
+                } = event;
+                // Ensure the value is an array if multiple options are selected
+                setproject({ ...project, sub_category: typeof value === "string" ? value.split(",") : value });
+                setblock({
+                  ...block, 
+                  sub_category: typeof value === "string" ? value.split(",") : value 
+                });
+                setsizes({
+                  ...sizes, 
+                  sub_category: typeof value === "string" ? value.split(",") : value 
+                });
+              };
+
+              const handleToggle = (value) => {
+                const currentIndex = project.sub_category.indexOf(value);
+                const newChecked = [...project.sub_category];
+            
+                if (currentIndex === -1) {
+                  newChecked.push(value);
+                } else {
+                  newChecked.splice(currentIndex, 1);
+                }
+            
+                setproject({ ...project, sub_category: newChecked });
+                setblock({ 
+                  ...block, 
+                  sub_category: newChecked // Also updating block's sub_category
+                });
+                setsizes({ 
+                  ...sizes, 
+                  sub_category: newChecked // Also updating block's sub_category
+                });
+              };
+            
               
                 
                 const baseprice=()=>
@@ -1531,7 +1605,7 @@ function Projectform() {
                 setblock({...block,zone:selectedzone})
                 
             };
-            console.log(block.zone);
+          
             
             
             
@@ -1619,14 +1693,31 @@ function Projectform() {
                 </div>
             ))}
         </div>
-                    <div className="col-md-6"><label className="labels">Sub Category</label><select id='subcategory' className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,sub_category:e.target.value})}>
-                              <option>Select</option>
-                              {getSubcategories().map((subCategory) => (
-                        <option key={subCategory} value={subCategory}>
-                            {subCategory}
-                        </option>
-                    ))}
-                        </select>
+                    <div className="col-md-6"><label className="labels">Sub Category</label>
+                    
+                    <Select
+                    className='form-control form-control-sm'
+                    style={{border:"none"}}
+          labelId="subcategory-label"
+          id="subcategory"
+          multiple
+          value={project.sub_category}
+          onChange={handleSubCategoryChange}
+          renderValue={(selected) => selected.join(", ")} 
+        >
+          <MenuItem value="">
+            <em>Select</em>
+          </MenuItem>
+          {getSubcategories().map((subCategory) => (
+            <MenuItem key={subCategory} value={subCategory}>
+              <Checkbox
+                checked={project.sub_category.indexOf(subCategory) > -1}
+                onChange={() => handleToggle(subCategory)}
+              />
+              <ListItemText primary={subCategory} />
+            </MenuItem>
+          ))}
+        </Select>
                     </div>
                     <div className="col-md-6"></div>
 
@@ -1979,10 +2070,30 @@ function Projectform() {
                        }
                     </div>
 
-                    <div className="col-md-12"><label className="labels">Sub Category</label><select  className="form-control form-control-sm"  onChange={(e)=>setblock({...block,sub_category:e.target.value})}>
-                                <option>choose</option>
-                                <option>{project.sub_category}</option>
-                                </select>
+                    <div className="col-md-12"><label className="labels">Sub Category</label>
+                    <Select
+                    className='form-control form-control-sm'
+                    style={{border:"none"}}
+                      labelId="subcategory-label"
+                      id="subcategory"
+                      multiple
+                      value={project.sub_category}
+                      onChange={handleSubCategoryChange}
+                      renderValue={(selected) => selected.join(", ")} // Display selected values as a comma-separated list
+                    >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
+                      {getSubcategories().map((subCategory) => (
+                        <MenuItem key={subCategory} value={subCategory}>
+                          <Checkbox
+                            checked={project.sub_category.indexOf(subCategory) > -1}
+                            onChange={() => handleToggle(subCategory)}
+                          />
+                          <ListItemText primary={subCategory} />
+                        </MenuItem>
+                      ))}
+                </Select>
                     </div>
                     {
                     project.category.includes('Agricultural') && (
@@ -2174,10 +2285,31 @@ function Projectform() {
 
                     </div>
 
-                    <div className="col-md-12"><label className="labels">Sub Category</label><select id='subcategory'  className="form-control form-control-sm"  onClick={selectsize} onChange={(e)=>setsizes({...sizes,sub_category:e.target.value})}>
-                                <option>choose</option>
-                                <option value={project.sub_category}>{project.sub_category}</option>
-                                </select>
+                    <div className="col-md-12"><label className="labels">Sub Category</label>
+                    <Select
+                    className='form-control form-control-sm'
+                    style={{border:"none"}}
+                      labelId="subcategory-label"
+                      id="subcategory"
+                      multiple
+                      value={project.sub_category}
+                      
+                      onChange={handleSubCategoryChange}
+                      renderValue={(selected) => selected.join(", ")} // Display selected values as a comma-separated list
+                    >
+                      <MenuItem value="">
+                        <em>Select</em>
+                      </MenuItem>
+                      {getSubcategories().map((subCategory) => (
+                        <MenuItem key={subCategory} value={subCategory}>
+                          <Checkbox
+                            checked={project.sub_category.indexOf(subCategory) > -1}
+                            onChange={() => handleToggle(subCategory)}
+                          />
+                          <ListItemText primary={subCategory} />
+                        </MenuItem>
+                      ))}
+                </Select>
                     </div>   
                      {
                               
@@ -2222,7 +2354,18 @@ function Projectform() {
                                   </>
                               )
                           } 
-                    <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
+
+                    <div className='col-md-6' style={{marginTop:"10px"}}>
+                            <input
+                              type="checkbox"
+                              checked={showapartmentSize}
+                              onChange={handleCheckboxChange3}
+                            />
+                            <label>Show Apartment Size</label>
+                    </div>
+     
+                   {showapartmentSize && (
+                    <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
                     <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Feet</option>
@@ -2259,8 +2402,18 @@ function Projectform() {
                              </div>
                              <div className='col-md-1'></div>
                             </div>
+                     )}
 
-                            <div className='row' id='plotsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
+                            <div  className='col-md-6' style={{marginTop:"10px"}}>
+                        <input
+                          type="checkbox"
+                          checked={showPlotSize}
+                          onChange={handleCheckboxChange2}
+                        />
+                        <label>Show Size</label>
+                      </div>
+                {showPlotSize && (
+                            <div className='row' id='plotsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Yard</option>
@@ -2288,6 +2441,7 @@ function Projectform() {
                              </div>
                              
                             </div>
+      )}
                          
                 </div>
                 </div>
@@ -2670,6 +2824,19 @@ function Projectform() {
 
 
           }
+
+
+                    <div  className='col-md-6' style={{marginTop:"10px"}}>
+                        <input
+                          type="checkbox"
+                          checked={showabuiltup}
+                          onChange={handleCheckboxChange4}
+                        />
+                        <label>Show Builtup Details</label>
+                      </div>
+                      <div className='col-md-6'></div>
+              {showabuiltup && (
+                <>
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
                     <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
@@ -2747,7 +2914,10 @@ function Projectform() {
                     }
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                   
                     </div>
+                    </>
+                    )}
 
                     <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
                     <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
