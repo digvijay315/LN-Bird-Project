@@ -1282,18 +1282,31 @@ function Projectform() {
                     }
                 });
 
-                  setblock(prevblock => {
-                    const { category } = prevblock;
+                setblock(prevblock => {
+                  const { category } = prevblock;
+                  
+                  // If "Agricultural" is selected in the project, only allow "Agricultural" in the block
+                  if (category.includes("Agricultural") || type === "Agricultural") {
+                    // Remove all other categories except "Agricultural"
+                    return { ...prevblock, category: ["Agricultural"] };
+                  } else {
+                    // If "Agricultural" is not selected in the project, allow adding/removing categories
                     if (category.includes(type)) {
-                        // Remove the type from basic_aminities if already selected
-                        return { ...prevblock, category: category.filter(item => item !== type) };
+                      // Remove the type from block if already selected
+                      return { ...prevblock, category: category.filter(item => item !== type) };
                     } else {
-                        // Add the type to basic_aminities if not already selected
-                        return { ...prevblock, category: [...category, type] };
+                      // Add the type to block if not already selected
+                      return { ...prevblock, category: [...category, type] };
                     }
+                  }
                 });
                 setsizes(prevSizes => {
                   const { category } = prevSizes;
+
+                  if (category.includes("Agricultural") || type === "Agricultural") {
+                    // Remove all other categories except "Agricultural"
+                    return { ...prevSizes, category: ["Agricultural"] };
+                  } else {
                   if (category.includes(type)) {
                       // Remove the type from basic_aminities if already selected
                       return { ...prevSizes, category: category.filter(item => item !== type) };
@@ -1301,10 +1314,16 @@ function Projectform() {
                       // Add the type to basic_aminities if not already selected
                       return { ...prevSizes, category: [...category, type] };
                   }
+                }
               });
                  
               setunits(prevUnits => {
                 const { category } = prevUnits;
+
+                if (category.includes("Agricultural") || type === "Agricultural") {
+                  // Remove all other categories except "Agricultural"
+                  return { ...prevUnits, category: ["Agricultural"] };
+                } else {
                 if (category.includes(type)) {
                     // Remove the type from basic_aminities if already selected
                     return { ...prevUnits, category: category.filter(item => item !== type) };
@@ -1312,6 +1331,7 @@ function Projectform() {
                     // Add the type to basic_aminities if not already selected
                     return { ...prevUnits, category: [...category, type] };
                 }
+              }
             });
                 };
 
@@ -2159,7 +2179,7 @@ function Projectform() {
                                 <option value={project.sub_category}>{project.sub_category}</option>
                                 </select>
                     </div>   
-                    {/* {
+                     {
                               
                               project.category.includes('Agricultural') && (
                                   <>
@@ -2174,7 +2194,7 @@ function Projectform() {
                              </div>
                              <div className='col-md-8'></div>
 
-                                      <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
+                                      {/* <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Yard</option>
                                 <option>Sq Feet</option>
@@ -2198,10 +2218,10 @@ function Projectform() {
                                 <option>Plot</option>
                                 <option>All Users</option>
                                 </select>
-                             </div>
+                             </div> */}
                                   </>
                               )
-                          } */}
+                          } 
                     <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
                     <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
