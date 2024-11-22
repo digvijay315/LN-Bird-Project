@@ -536,7 +536,106 @@ function Projectform() {
                     });
                   };
             
+
+                  function addFn5() {
+     
+                    setunits({
+                      ...units,
+                      khewat_no:[...units.khewat_no,''],
+                      killa_no: [...units.killa_no, ''],
+                      share: [...units.share, ''],
+                      action5: [...units.action5, '']
+                    });
+                  };
+                  const deleteall5=(index)=>
+                    {
+                      const newkhewatno = units.khewat_no.filter((_, i) => i !== index);
+                      const newkillano = units.killa_no.filter((_, i) => i !== index);
+                      const newshare = units.share.filter((_, i) => i !== index);
+                      const newaction5=units.action5.filter((_,i) => i !== index);
+                      
+                      setunits({
+                        ...units,
+                        khewat_no:newkhewatno,
+                        killa_no: newkillano,
+                        share: newshare,
+                        action5:newaction5
+                      });
+                    }
+                    const handlekhewatnochange = (index, event) => {
+                      const newkhewatno = [...units.khewat_no];
+                      newkhewatno[index] = event.target.value;
+                      setunits({
+                        ...units,
+                        khewat_no: newkhewatno
+                      });
+                    };
+                    const handlekillanochange = (index, event) => {
+                      const newkillano = [...units.killa_no];
+                      newkillano[index] = event.target.value;
+                      setunits({
+                        ...units,
+                        killa_no: newkillano
+                      });
+                    };
+                    const handlesharenochange = (index, event) => {
+                      const newshare = [...units.share];
+                      newshare[index] = event.target.value;
+                      setunits({
+                        ...units,
+                        share: newshare
+                      });
+                    };
                 
+                    function addFn6() {
+     
+                      setunits({
+                        ...units,
+                        water_source:[...units.water_source,''],
+                        water_level: [...units.water_level, ''],
+                        water_pump_type: [...units.water_pump_type, ''],
+                        action6: [...units.action6, '']
+                      });
+                    };
+                    const deleteall6=(index)=>
+                      {
+                        const newwatersource = units.water_source.filter((_, i) => i !== index);
+                        const newwaterlevel = units.water_level.filter((_, i) => i !== index);
+                        const newpumptype = units.water_pump_type.filter((_, i) => i !== index);
+                        const newaction6=units.action6.filter((_,i) => i !== index);
+                        
+                        setunits({
+                          ...units,
+                          water_source:newwatersource,
+                          water_level: newwaterlevel,
+                          water_pump_type: newpumptype,
+                          action6:newaction6
+                        });
+                      }
+                      const handlewatersourcechange = (index, event) => {
+                        const newwatersource = [...units.water_source];
+                        newwatersource[index] = event.target.value;
+                        setunits({
+                          ...units,
+                          water_source: newwatersource
+                        });
+                      };
+                      const handlewaterlevelchange = (index, event) => {
+                        const newwaterlevel = [...units.water_level];
+                        newwaterlevel[index] = event.target.value;
+                        setunits({
+                          ...units,
+                          water_level: newwaterlevel
+                        });
+                      };
+                      const handlewaterpumpchange = (index, event) => {
+                        const newwaterpump = [...units.water_pump_type];
+                        newwaterpump[index] = event.target.value;
+                        setunits({
+                          ...units,
+                          water_pump_type: newwaterpump
+                        });
+                      };
 
     //==================----------------- add delete and onchange event of array end---------------------------===============================
 
@@ -648,28 +747,42 @@ function Projectform() {
 
 
 // ---------------===============  size toggle start --------------===========================================================================
-                    function selectsize()
-                      {
-                          const size=document.getElementById("subcategory").value;
-                          if(size==="Apartment")
-                              {
-                                  setsizes({...sizes,sub_category:"Apartment"})
-                                  document.getElementById("apartmentsize").style.display="flex"
-                                  document.getElementById("plotsize").style.display="none"
-                              }
-                              if(size==="Plot")
-                                  {
-                                      setsizes({...sizes,sub_category:"Plot"})
-                                      document.getElementById("apartmentsize").style.display="none"
-                                      document.getElementById("plotsize").style.display="flex"
-                                  }   
-                             if(size==="Select") 
-                              {
-                                   document.getElementById("apartmentsize").style.display="none"
-                                      document.getElementById("plotsize").style.display="none"
-                              }
-                              
+                
+
+
+                        function selectsize() {
+                        const size = document.getElementById("subcategory").value;
+
+                        // Always update the state with the selected size
+                        setsizes({ ...sizes, sub_category: size });
+
+
+                        // Check if the category is "Agriculture"
+                        if (project.category === "Agricultural") {
+                            // Hide both apartment size and plot size
+                            document.getElementById("apartmentsize").style.display = "none";
+                            document.getElementById("plotsize").style.display = "none";
+                            return;  // Exit the function early since we don't want to display any sizes for Agriculture
+                        }
+
+                        // Show apartment size if size is "Apartment"
+                        if (size === "Apartment") {
+                            document.getElementById("apartmentsize").style.display = "flex";
+                            document.getElementById("plotsize").style.display = "none";
+                        } 
+                        // Show plot size if size is "Plot"
+                        else if (size === "Plot") {
+                            document.getElementById("apartmentsize").style.display = "none";
+                            document.getElementById("plotsize").style.display = "flex";
+                        } 
+                        // For other values, hide apartment size and show plot size
+                        else { 
+                            document.getElementById("apartmentsize").style.display = "none";
+                            document.getElementById("plotsize").style.display = "flex";
+                        }
                       }
+
+
 
   //==========================------------------------------- size toggle end--------------------------=================================
                       // const[category,setcategory]=useState([])
@@ -935,7 +1048,9 @@ function Projectform() {
 // ==============================----------------------add unit start===========================================---------------------------
                                           const[unit,setunit]=useState([])
                                           const[units,setunits]=useState({unit_no:"",unit_type:"",category:[],block:"",
-                                                                          size:"",direction:"",facing:"",road:"",ownership:"",floor:[''],
+                                                                          size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
+                                                                          water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
+                                                                          direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",type:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:""})
@@ -950,7 +1065,7 @@ function Projectform() {
                                                         ...prevState,
                                                         add_unit: updateunit
                                                       }));
-                                                      setunits('')
+                                                      
                                                       handleClose3()
 
                                                         document.getElementById("choosedestination").value="Select"
@@ -973,6 +1088,7 @@ function Projectform() {
                                             }));
                                             setunit(newunit)
                                           };
+
 
 
 
@@ -1136,15 +1252,35 @@ function Projectform() {
 
                 const handleTypeClick = (type) => {
                   setproject(prevProject => {
-                      const { category } = prevProject;
-                      if (category.includes(type)) {
-                          // Remove the type from basic_aminities if already selected
-                          return { ...prevProject, category: category.filter(item => item !== type) };
-                      } else {
-                          // Add the type to basic_aminities if not already selected
-                          return { ...prevProject, category: [...category, type] };
-                      }
-                  });
+                    const { category } = prevProject;
+                    
+                    // If the category is 'Agricultural'
+                    if (type === "Agricultural") {
+                        if (category.includes("Agricultural")) {
+                            // If already selected, remove it
+                            return { ...prevProject, category: category.filter(item => item !== "Agricultural") };
+                        } else {
+                            // If not selected, add it and remove all other categories
+                            return { ...prevProject, category: ["Agricultural"] };  // Only keep "Agricultural"
+                        }
+                    } else {
+                        // For any other category
+                        if (category.includes("Agricultural")) {
+                            // If "Agricultural" is selected, don't allow selecting others
+                            toast.error("if you select Agricultural then you can't select more category")
+                            return prevProject;  // Return as is, do nothing
+                        } else {
+                            // If "Agricultural" is not selected, allow adding/removing this category
+                            if (category.includes(type)) {
+                                // Remove the category if already selected
+                                return { ...prevProject, category: category.filter(item => item !== type) };
+                            } else {
+                                // Add the category if not already selected
+                                return { ...prevProject, category: [...category, type] };
+                            }
+                        }
+                    }
+                });
 
                   setblock(prevblock => {
                     const { category } = prevblock;
@@ -1167,6 +1303,16 @@ function Projectform() {
                   }
               });
                  
+              setunits(prevUnits => {
+                const { category } = prevUnits;
+                if (category.includes(type)) {
+                    // Remove the type from basic_aminities if already selected
+                    return { ...prevUnits, category: category.filter(item => item !== type) };
+                } else {
+                    // Add the type to basic_aminities if not already selected
+                    return { ...prevUnits, category: [...category, type] };
+                }
+            });
                 };
 
                 // console.log(block.category);
@@ -1804,7 +1950,7 @@ function Projectform() {
                           <div className="col-md-3" key={type}>
                           <button id='bcat'
                               className='form-control form-control-sm' 
-                               
+                               style={{backgroundColor:"green"}}
                           >
                               {type}
                           </button>
@@ -1997,20 +2143,7 @@ function Projectform() {
                           <div className="col-md-3" key={type}>
                             <button 
                               className="form-control form-control-sm"
-                              onClick={() => setsizes(prevSizes => {
-                                const category = Array.isArray(prevSizes.category) ? prevSizes.category : [];  // Ensure category is always an array
-
-                                // Only add 'type' if it's not already in the 'category' array
-                                if (!category.includes(type)) {
-                                  return {
-                                    ...prevSizes, 
-                                    category: [...category, type]  // Add the type to the category array
-                                  };
-                                }
-
-                                // Return the previous state if there's no change
-                                return prevSizes; 
-                              })}
+                              style={{backgroundColor:"green"}}
                             >
                               {type}
                             </button>
@@ -2026,7 +2159,7 @@ function Projectform() {
                                 <option value={project.sub_category}>{project.sub_category}</option>
                                 </select>
                     </div>   
-                    {
+                    {/* {
                               
                               project.category.includes('Agricultural') && (
                                   <>
@@ -2068,7 +2201,7 @@ function Projectform() {
                              </div>
                                   </>
                               )
-                          }
+                          } */}
                     <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black",display:"none"}}>
                     <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
@@ -2271,20 +2404,7 @@ function Projectform() {
                           <div className="col-md-3" key={type}>
                             <button 
                               className="form-control form-control-sm"
-                              onClick={() => setunits(prevunits => {
-                                const category = Array.isArray(prevunits.category) ? prevunits.category : [];  // Ensure category is always an array
-
-                                // Only add 'type' if it's not already in the 'category' array
-                                if (!category.includes(type)) {
-                                  return {
-                                    ...prevunits, 
-                                    category: [...category, type]  // Add the type to the category array
-                                  };
-                                }
-
-                                // Return the previous state if there's no change
-                                return prevunits; 
-                              })}
+                              style={{backgroundColor:"green"}}
                             >
                               {type}
                             </button>
@@ -2314,6 +2434,188 @@ function Projectform() {
                                }
                                 </select>
                     </div>
+                  
+
+                  {
+                      project.category.includes("Agricultural") &&(
+
+                          <>
+
+
+                    <div className="col-md-6"><label className="labels">Land Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,land_type:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>Crop Land</option>
+                                <option>Wood Land</option>
+                                <option>Pasture</option>
+                                </select>
+                    </div>
+                    <div className='col-md-6'></div>
+                    <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Land Details<hr></hr></div>
+
+                    <div className='col-md-3' ><label className='labels'>Khewat No</label>
+                    {
+                      Array.isArray(units.khewat_no) ?
+                      units.khewat_no.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlekhewatnochange(index,event)}/>
+                        
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-3' ><label className='labels'>Killa No</label>
+                    {
+                      Array.isArray(units.killa_no) ?
+                      units.killa_no.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlekillanochange(index,event)}/>
+                       
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-3' ><label className='labels'>Share</label>
+                    {
+                      Array.isArray(units.share) ?
+                      units.share.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlesharenochange(index,event)}/>
+                      )):[]
+                    }
+                    </div>
+
+                  <div className='col-md-1' style={{marginTop:"90px"}}>
+                  {
+                    Array.isArray(units.action5) ?
+                    units.action5.map((item,index)=>
+                    (
+                      
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      
+                    )):[]
+                  }
+                  </div>
+
+                       <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
+                    <div className='col-md-12'>Total Land Area:-</div>
+                       <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Water Details<hr></hr></div>
+
+                       <div className='col-md-3' ><label className='labels'>Water Source</label>
+                    {
+                          Array.isArray(units.water_source) ?
+                      units.water_source.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewatersourcechange(index,event)}>
+                          <option>---select---</option><option>Ground Water</option><option>Canal Water</option><option>Pond Water</option><option>Rain Water</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-3' ><label className='labels'>Water Level</label>
+                    {
+                          Array.isArray(units.water_level) ?
+                      units.water_level.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterlevelchange(index,event)}>
+                          <option>---select---</option><option>100ft.</option><option>200Ft.</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-3' ><label className='labels'>Water Pump Type</label>
+                    {
+                          Array.isArray(units.water_pump_type) ?
+                      units.water_pump_type.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterpumpchange(index,event)}>
+                          <option>---select---</option><option>Submersible Motor(15 HP)</option><option>Sumersible Motor(20 HP)</option>
+                          <option>Monoblock Motor(10HP)</option><option>Diesel Engine Pump</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-1' style={{marginTop:"90px"}}>
+                  {
+                    Array.isArray(units.action6) ?
+                    units.action6.map((item,index)=>
+                    (
+                      
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      
+                    )):[]
+                  }
+                  </div>
+                  <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
+
+                  <div className='col-md-12' style={{color:"green",fontWeight:"bolder"}}>Basic Details<hr></hr></div>
+
+                  <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>Village Link Road</option>
+                                <option>Highway</option>
+                                <option>Expressway</option>
+                                <option>Unconstructed Road</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>1 Side Open</option>
+                                <option>2 Side Open</option>
+                                <option>3 Side Open</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>11 Ft wide</option>
+                                <option>22 Ft Wide</option>
+                                <option>33 Ft Wide</option>
+                                <option>60 Ft Wide</option>
+                                <option>100 Ft Wide</option>
+                                <option>200 Ft Wide</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>10 ft</option>
+                                <option>20 ft</option>
+                                <option>30 ft</option>
+                                <option>50 ft</option>
+                                <option>70 ft</option>
+                                <option>100 ft</option>
+                                <option>200 ft</option>
+                                <option>500 ft</option>
+                                <option>1000 ft</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>Mustraka</option>
+                                <option>Individual</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">No. Of Owner</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                </select>
+                    </div>
+              </>
+            )
+
+
+          }
+
+                      {
+                      !project.category.includes("Agricultural") &&(
+
+                          <>
+
                     <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
@@ -2343,6 +2645,11 @@ function Projectform() {
                                 </select>
                     </div>
                     <div className='col-md-6'></div>
+                    </>
+            )
+
+
+          }
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
                     <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
