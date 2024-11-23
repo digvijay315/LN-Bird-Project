@@ -20,8 +20,8 @@ import Modal from 'react-bootstrap/Modal';
 import {React, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { Select, MenuItem, Checkbox, ListItemText,Chip, Box  } from '@mui/material';
-import { type } from 'jquery';
+import { Select, MenuItem, Checkbox, ListItemText  } from '@mui/material';
+
 
 
 
@@ -76,21 +76,7 @@ function Projectform() {
         }
       
 
-        useEffect(()=>
-          {
-            project.add_size.flatMap((item)=>
-            {
-              console.log(item)
-              const acre=item.total_area/4840
-              const kanal=item.total_area/605
-              const marla=kanal/20
-              console.log(acre);
-              console.log(kanal);
-              console.log(marla);
-              
-              
-            })
-          },[project.add_size])
+     
 
 
     const addproject=async(e)=>
@@ -409,8 +395,8 @@ function Projectform() {
          
               function addFn3() {
      
-                setunits({
-                  ...units,
+                setunits((prevunits)=>({
+                  ...prevunits,
                   floor:[...units.floor,''],
                   cluter_details: [...units.cluter_details, ''],
                   length: [...units.length, ''],
@@ -418,7 +404,7 @@ function Projectform() {
                   total_area: [...units.total_area, ''],
                   measurment2: [...units.measurment2, ''],
                   action3: [...units.action3, '']
-                });
+                }));
               };
               const deleteall3=(index)=>
                 {
@@ -1086,10 +1072,11 @@ function Projectform() {
                                           const[unit,setunit]=useState([])
                                           const[units,setunits]=useState({unit_no:"",unit_type:"",category:[],block:"",
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
+                                                                          total_land_area:"",
                                                                           water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
                                                                           direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",type:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
-                                                                          action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",
+                                                                          action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:""})
 
                                               const addunit = () => {
@@ -1607,6 +1594,67 @@ function Projectform() {
             };
           
             
+            useEffect(() => {
+              // Check if project.add_size is valid and is an array
+              if (project.add_size && Array.isArray(project.add_size)) {
+                project.add_size.forEach((item) => {
+                  console.log("Item:", item);
+            
+                  // Ensure that item.total_area and units.share are valid
+                  if (item.total_area && Array.isArray(units.share) && units.share.length > 0) {
+                    
+                    // Helper function to convert a fraction string like '3/4' to a numeric value
+                    const convertFractionToNumber = (fraction) => {
+                      const [numerator, denominator] = fraction.split('/').map(Number);
+                      return denominator !== 0 ? numerator / denominator : 0;  // Avoid division by zero
+                    };
+            
+                    // Iterate over each value in units.share array (fractions like '3/4', '2/4', etc.)
+                    units.share.forEach((fraction) => {
+                      const shareValue = convertFractionToNumber(fraction);  // Convert fraction to numeric value
+                      console.log(`Share value for fraction ${fraction}:`, shareValue);
+            
+                      // Calculate the effective area using the share value (as a number)
+                      const effectiveArea = item.total_area * shareValue;
+                      console.log(`Effective Area with share ${fraction}:`, effectiveArea);
+                      
+                      // Check for valid effectiveArea
+                      if (isNaN(effectiveArea) || effectiveArea <= 0) {
+                        console.warn("Invalid effectiveArea:", effectiveArea);
+                        return; // Skip calculations if effectiveArea is invalid
+                      }
+            
+                      // Calculate Acre, Kanal, and Marla (optional)
+                      const acre = effectiveArea / 4840; // 1 Acre = 43560 square feet (if total_area is in square feet)
+                      const kanal = effectiveArea / 605;  // 1 Kanal = 605 square feet
+                      const marla = kanal / 20;           // 1 Kanal = 20 Marlas
+            
+                      // Check for valid calculations
+                      if (isNaN(acre) || isNaN(kanal) || isNaN(marla)) {
+                        console.warn("Invalid calculations:", { acre, kanal, marla });
+                        return;
+                      }
+            
+                      console.log("Acre:", acre);
+                      console.log("Kanal:", kanal);
+                      console.log("Marla:", marla);
+            
+                      // Update the units state with the formatted land area string
+                      setunits({
+                        ...units,
+                        total_land_area: `${acre} acre ${kanal} kanal ${marla} marla`
+                      });
+                    });
+                  } else {
+                    console.warn("Invalid total_area or units.share in item", item);
+                  }
+                });
+              } else {
+                console.warn("Invalid project.add_size data");
+              }
+            }, [units.share]); // Runs when units.share changes
+            
+            
             
             
               
@@ -1648,7 +1696,7 @@ function Projectform() {
                 <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
                 <div className='col-md-6'></div>
                     <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,developer_name:e.target.value})}>
-                              <option>Select</option>
+                              <option>---Select---</option>
                               {
                                 data1.map((item)=>
                                 (
@@ -1660,16 +1708,14 @@ function Projectform() {
                         <div className='col-md-1'><label style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={add_developer}>+</button></div>
                         <div className='col-md-5'></div>
                         <div className="col-md-6"><input  type='checkbox' onChange={handleischeckedchange} checked={ischecked} /><label style={{margin:"10px"}}>Is this a Joint Venture?</label></div>
-                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select id='secondarydeveloper'  className="form-control form-control-sm" required="true" disabled={!ischecked} onChange={(e)=>setproject({...project,secondary_developer:e.target.value})}>
-                              <option>Select</option>
-                              <option>Mr.</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                        <div className="col-md-6"><label className="labels">Secondary Developer</label><select id='secondarydeveloper'  className="form-control form-control-sm" required="true"  onChange={(e)=>setproject({...project,secondary_developer:e.target.value})}>
+                        <option>---Select---</option>
+                              {
+                                data1.map((item)=>
+                                (
+                                  <option>{item.name}</option>
+                                ))
+                              }
                         </select>
                         </div>
 
@@ -1758,13 +1804,10 @@ function Projectform() {
                         <div className="col-md-8"><label className="labels">Status</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,status:e.target.value})}>
                               <option>Upcoming</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              <option>Pre Launch</option>
+                              <option>Launched</option>
+                              <option>Under Construction</option>
+                              <option>Ready to Move</option>
                         </select>
                        </div>
                        <div className="col-md-4"></div>
@@ -1775,14 +1818,12 @@ function Projectform() {
 
                        <div className="col-md-6"><label className="labels">Parking Type</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,parking_type:e.target.value})}>
-                              <option>Upcoming</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              <option>Basement Parking</option>
+                              <option>Stilt Parking</option>
+                              <option>Open Parking</option>
+                              <option>Double Basement Parking</option>
+                              <option>Covered Parking</option>
+                              <option> Multi Storey Parking</option>
                         </select>
                        </div>
                        <div className="col-md-6"><label className="labels">Approved Bank</label>
@@ -1812,13 +1853,29 @@ function Projectform() {
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handleapprovalschange(index,event)}>
                         <option>choose</option>
                         <option>Upcoming</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              <option>Rera Certificate</option>
+                              <option>Layout Plan Approval</option>
+                              <option>Storm & Drain Water NOC</option>
+                              <option>Fire NOC</option>
+                              <option>Change of Land Use Approval</option>
+                              <option>Environmental Clearance</option>
+                              <option>Occupation Certificate</option>
+                              <option>Commencement Certificate</option>
+                              <option>Ownership Document</option>
+                              <option>Non-Encumbrance Certificate</option>
+                              <option> Airport Clearance</option>
+                              <option> Development/Construction Certificate</option>
+                              <option>NOC Tree Cutting</option>
+                              <option>Electrical Scheme Approval</option>
+                              <option>Traffic & Coordination NOC</option>
+                              <option>Ancient Monument Approval</option>
+                              <option> Pollution Control Board Approval</option>
+                              <option>Borewell Registration Certificate</option>
+                              <option>Excavation/Mining Approval</option>
+                              <option>Road Access Plan Approval</option>
+                              <option>Labour Deptt. Approval</option>
+                              <option>Permanent Power Connection</option>
+                              <option>Permanent Sewerage Connection</option>
                         </select> 
                       ))
                     }
@@ -2102,13 +2159,10 @@ function Projectform() {
                         <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>measurment</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,measurment:e.target.value})}>
                               <option>Acres.</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              <option>Kanal</option>
+                              <option>Marla</option>
+                              <option>Square Yard</option>
+                              <option>Hectare</option>
                         </select>
                        </div>
                        <div className="col-md-3"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_units:e.target.value})}/></div>
@@ -2139,13 +2193,10 @@ function Projectform() {
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>measurment</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,measurment:e.target.value})}>
                               <option>Acres.</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              <option>Kanal</option>
+                              <option>Marla</option>
+                              <option>Square Yard</option>
+                              <option>Hectare</option>
                         </select>
                        </div>
                         <div className="col-md-2"><label className="labels">Total Blocks</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_blocks:e.target.value})}/></div>
@@ -2153,10 +2204,12 @@ function Projectform() {
                         <div className="col-md-2"><label className="labels">TOTAL Units</label><input type="number" defaultValue={'0'} className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,total_units:e.target.value})}/></div>
                         <div className="col-md-2"></div>
                         <div className="col-md-12"><label className="labels">Status</label><select  className="form-control form-control-sm"  onChange={(e)=>setblock({...block,status:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Upcoming</option>
+                                <option>Pre Launch</option>
+                                <option>Launched</option>
+                                <option>Under Construction</option>
+                                <option>Ready to Move</option>
                                 </select>
                     </div>
                     <div className="col-md-4" ><label className="labels">Launched On</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,launched_on:e.target.value})}/></div>
@@ -2165,14 +2218,13 @@ function Projectform() {
 
                        <div className="col-md-6"><label className="labels">Parking Type</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,parking_type:e.target.value})}>
-                              <option>Upcoming</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
+                              <option>---Select---</option>
+                              <option>Basement Parking</option>
+                              <option>Stilt Parking</option>
+                              <option>Open Parking</option>
+                              <option>Double Basement Parking</option>
+                              <option>Covered Parking</option>
+                              <option> Multi Storey Parking</option>
                         </select>
                        </div>
                        <div className='col-md-6'></div>
@@ -2564,10 +2616,11 @@ function Projectform() {
              
                     <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Corner</option>
+                                <option> Two Side Open</option>
+                                <option>Three Side Open</option>
+                                <option>Ordinary </option>
                                 </select>
                     </div>
                     <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
@@ -2671,7 +2724,7 @@ function Projectform() {
                   </div>
 
                        <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
-                    <div className='col-md-12'>Total Land Area:-</div>
+                    <div className='col-md-12'>Total Land Area:-{units.total_land_area}</div>
                        <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Water Details<hr></hr></div>
 
                        <div className='col-md-3' ><label className='labels'>Water Source</label>
@@ -2791,31 +2844,57 @@ function Projectform() {
                           <>
 
                     <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>East</option>
+                                <option>West</option>
+                                <option>North</option>
+                                <option>South</option>
+                                <option>North East</option>
+                                <option>South East</option>
+                                <option>South West</option>
+                                <option>North West</option>
+                               
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Park</option>
+                                <option>Green Belt</option>
+                                <option>Highway</option>
+                                <option>Commercial</option>
+                                <option>School</option>
+                                <option>Hospital</option>
+                                <option>Mandir</option>
+                                <option>Gurudwara</option>
+                                <option>Crech</option>
+                                <option>Clinic</option>
+                                <option>Community Centre</option>
+                                <option>1 Kanal</option>
+                                <option>14m Marla</option>
+                                <option>10 Marla</option>
+                                <option>8 Marla</option>
+                                <option>6 Marla</option>
+                                <option>4 Marla</option>
+                                <option>2 Marla</option>
+                                <option> 3 Marla</option>
+                                <option> 2 Kanal</option>
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>9 Mtr Wide</option>
+                                <option>12 Mtr Wide</option>
+                                <option> 18 Mtr Wide</option>
+                                <option>24 Mtr Wide</option>
+                                <option> 60 Mtr Wide</option>
                                 </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Freehold</option>
+                                <option>Leasehold</option>
+                                <option>Co-OPerative Society</option>
+                                <option>Sale Agreement(Lal Dora)</option>
                                 </select>
                     </div>
                     <div className='col-md-6'></div>
@@ -2840,7 +2919,16 @@ function Projectform() {
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
                     <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
-                          <option>select</option><option>Duplex</option><option>Single</option>
+                          <option>---Select---</option>
+                          <option>Duplex</option>
+                          <option>Triplex</option>
+                          <option>Independent House</option>
+                          <option>Penthouse</option>
+                          <option>Apartments</option>
+                          <option>Studio Apartments</option>
+                          <option>Bunglow</option>
+                          <option>Farmhouse</option>
+                          <option>Courtyard House</option>
                         </select>
                     </div>
                     <div className='col-md-6'></div>
@@ -2852,7 +2940,16 @@ function Projectform() {
                       units.floor.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
-                          <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
+                          <option>---Select---</option>
+                          <option>Ground Floor</option>
+                          <option>First Floor</option>
+                          <option>Second Floor</option>
+                          <option>Lower Ground</option>
+                          <option>Upper Ground</option>
+                          <option>Third Floor</option>
+                          <option> Fourth Floor</option>
+                          <option>Lower Ground</option>
+                          <option>Lower Ground</option>
                         </select>
                       )):[]
                     }
@@ -2863,7 +2960,22 @@ function Projectform() {
                       units.cluter_details.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
-                          <option>select</option><option>Duplex</option><option>Single</option>
+                          <option>---Select---</option>
+                          <option>Living Room</option>
+                          <option>Lobby</option>
+                          <option>Bedroom</option>
+                          <option>Master Bedroom</option>
+                          <option>Kitchen</option>
+                          <option>Bathroom</option>
+                          <option>Pooja room,</option>
+                          <option>Study Room</option>
+                          <option>Frontward</option>
+                          <option>Backyard</option>
+                          <option>Balcony</option>
+                          <option>Store</option>
+                          <option>Guest Room</option>
+                          <option>Servent Room</option>
+                          <option>Dressing</option>
                         </select>
                       )):[]
                     }
@@ -2873,9 +2985,7 @@ function Projectform() {
                           Array.isArray(units.length) ?
                       units.length.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlelengthchange(index,event)}>
-                          <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
-                        </select>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlelengthchange(index,event)}/>
                       )):[]
                     }
                     </div>
@@ -2884,9 +2994,8 @@ function Projectform() {
                       Array.isArray(units.bredth) ?
                       units.bredth.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlebredthchange(index,event)}>
-                          <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
-                        </select>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlebredthchange(index,event)}/>
+                      
                       )):[]
                     }
                     </div>
@@ -2895,9 +3004,8 @@ function Projectform() {
                       Array.isArray(units.total_area) ?
                       units.total_area.map((item,index)=>
                       (
-                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handletotalarea(index,event)}>
-                          <option>select</option><option>1</option><option>2</option><option>3</option><option>4</option>
-                        </select>
+                        <input className="form-control form-control-sm"  value={units.length[index] && units.bredth[index] ? units.length[index] * units.bredth[index] : ''} style={{marginTop:"10px"}} onChange={(event)=>handletotalarea(index,event)}/>
+                    
                       )):[]
                     }
                     </div>
@@ -2924,12 +3032,17 @@ function Projectform() {
                     
 
                     <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm" onChange={(e)=>setunits({...units,furnishing_details:e.target.value})}>
-                                <option>Select</option>
-                                <option>Apartment</option>
-                                <option>Plot</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Furnished</option>
+                                <option>Unfurnished</option>
+                                <option>Semi Furnished</option>
                                 </select>
                     </div>   
+                    {
+                      (units.furnishing_details==="Furnished" || units.furnishing_details==="Semi Furnished") && (
+                     
+                     <div className='col-md-12'><label>Enter Furnishing Details</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                    )}
                     <div className='col-md-6'></div>
 
                     <div className='col-md-8'><label>Furnished Items</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,furnished_item:e.target.value})}/></div>
@@ -3169,10 +3282,10 @@ function Projectform() {
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Covered Area</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,covered_area:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Covered Area</option>
+                                <option> Carpet Area</option>
+                                <option>Total Area</option>
                                 </select>
                     </div>
                     <div className='col-md-6'><label className='labels'>Base Rate</label><input type='text' className='form-control form-control-sm'></input></div><br></br>
@@ -3199,9 +3312,9 @@ function Projectform() {
 
                     <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,calculation_type:e.target.value})}>
                                 <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>Calculate</option>
+                                <option>Absolute</option>
+                              
                                 </select>
                     </div>
                     <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>blank1</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setprices({...prices,blank1:e.target.value})}></input></div><br></br>
@@ -3239,10 +3352,10 @@ function Projectform() {
                     <div className='col-md-2'></div>
 
                     <div className="col-md-4"><label className="labels">Calculation ype</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,calculation_type1:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>---Select---</option>
+                                <option>Calculate</option>
+                                <option>Absolute</option>
+                               
                                 </select>
                     </div>
                     <div className='col-md-4'><label className='labels' style={{visibility:"hidden"}}>blank4</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setprices({...prices,blank4:e.target.value})}></input></div><br></br>
@@ -3290,7 +3403,7 @@ function Projectform() {
       </tbody>
     </Table>
     </TableContainer>
-    <Modal show={show5} onHide={handleClose5} size='lg'>
+    <Modal show={show5} onHide={handleClose5} size='xl'>
             <Modal.Header>
               <Modal.Title>Add Payment Plan</Modal.Title>
             </Modal.Header>
@@ -3299,7 +3412,7 @@ function Projectform() {
               <div className='col-md-6'><label className='labels'>Payment Plan Name</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setpayments({...payments,payment_planname:e.target.value})}></input></div>
               <div className='col-md-6'></div>
 
-              <div className='col-md-2'><label className='labels'>Step Name</label>
+              <div className='col-md-4'><label className='labels'>Step Name</label>
             {
               payments.step_name.map((item,index)=>
               (
@@ -3307,22 +3420,21 @@ function Projectform() {
               ))
             }
             </div>
-
             <div className='col-md-2'><label className='labels' style={{width:"200px"}}>Calculation Type</label>
             {
               payments.calculation_type.map((item,index)=>
               (
               <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecalculationtypechange(index,event)}>
-                <option>Select</option>
-                <option>My Team</option>
-                <option>My Self</option>
-                <option>All Users</option>
+                <option>---Select---</option>
+                <option>Calculate</option>
+                <option>Absolute</option>
+                
                 </select>
               ))
             }
             </div>
 
-            <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank1</label>
+            <div className='col-md-1'><label className='labels' style={{visibility:"hidden"}}>Blank1</label>
              {
               payments.blank1.map((item,index)=>
               (
@@ -3332,7 +3444,7 @@ function Projectform() {
             }
             </div>
 
-            <div className='col-md-2'><label className='labels' style={{visibility:"hidden"}}>Blank2</label>
+            <div className='col-md-1'><label className='labels' style={{visibility:"hidden"}}>Blank2</label>
             {
               payments.blank2.map((item,index)=>
               (
