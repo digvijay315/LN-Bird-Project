@@ -60,7 +60,10 @@ const blockSchema = new mongoose.Schema({
     furnished_item: {type: String},
     location: {type: String},
     lattitude: {type: String},
-    langitude: {type: String}
+    langitude: {type: String},
+    owner_details: {type: Array},
+    associated_contact: {type: Array},
+    relation: {type: String},
   })
   
 const priceschema = new mongoose.Schema({

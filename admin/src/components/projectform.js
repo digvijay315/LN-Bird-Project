@@ -21,6 +21,9 @@ import {React, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Select, MenuItem, Checkbox, ListItemText  } from '@mui/material';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import { SvgIcon } from "@mui/material";
+import EmailIcon from '@mui/icons-material/Email';
 
 
 
@@ -60,7 +63,7 @@ function Projectform() {
 
     const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
                                           category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
-                                          total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:"",
+                                          total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
                                           approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
                                           team:[],visible_to:"",
                          
@@ -207,26 +210,52 @@ function Projectform() {
                         document.getElementById("aminities1").style.color="black"
                         document.getElementById("prices").style.color="black"
                   }
+
+                  const [activeUnit, setActiveUnit] = useState(1); // Track active unit tab
+
+
+
                                   const unitdetail1=()=>
+                                    
                                     {
+                                      setActiveUnit(1);
                                       document.getElementById("unitdetails1").style.display="flex"
                                       document.getElementById("unitlocation").style.display="none"
+                                      document.getElementById("ownerdetails").style.display="none"
                                   
                                     
-                                      document.getElementById("unitdetail").style.color="green"
-                                      document.getElementById("unitlocationdetails").style.color="black"
+                                      // document.getElementById("unitdetail").style.color="green"
+                                      // document.getElementById("unitlocationdetails").style.color="black"
+                                      // document.getElementById("ownerdetails").style.color="black"
+                                      
                                       
                                     }
                                     const unitdetail2=()=>
                                       {
+                                        setActiveUnit(2);
                                         document.getElementById("unitdetails1").style.display="none"
                                         document.getElementById("unitlocation").style.display="flex"
+                                        document.getElementById("ownerdetails").style.display="none"
                                     
                                       
-                                        document.getElementById("unitdetail").style.color="black"
-                                        document.getElementById("unitlocationdetails").style.color="green"
+                                        // document.getElementById("unitdetail").style.color="black"
+                                        // document.getElementById("unitlocationdetails").style.color="green"
+                                        // document.getElementById("ownerdetails").style.color="black"
                                         
                                       }
+                                      const unitdetail3=()=>
+                                        {
+                                          setActiveUnit(3);
+                                          document.getElementById("unitdetails1").style.display="none"
+                                          document.getElementById("unitlocation").style.display="none"
+                                          document.getElementById("ownerdetails").style.display="flex"
+                                      
+                                        
+                                          // document.getElementById("unitdetail").style.color="black"
+                                          // document.getElementById("unitlocationdetails").style.color="black"
+                                          // document.getElementById("ownerdetails").style.color="green"
+                                          
+                                        }
                   const aminitiesdetails=()=>
                     {
                           document.getElementById("basicdetails1").style.display="none"
@@ -961,7 +990,7 @@ function Projectform() {
                                     const[block,setblock]=useState({block_name:"",category:[],sub_category:[],land_area:"",
                                                                     measurment:"",total_blocks:"",total_floors:"",total_units:"",
                                                                     status:"",launched_on:"",expected_competion:"",possession:"",
-                                                                    parking_type:"",zone:[],rera_no:""})
+                                                                    parking_type:[],zone:[],rera_no:""})
 
                                         const addblock = () => {
                        
@@ -1077,7 +1106,8 @@ function Projectform() {
                                                                           direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",type:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
-                                                                          furnished_item:"",location:"",lattitude:"",langitude:""})
+                                                                          furnished_item:"",location:"",lattitude:"",langitude:"",owner_details:[],associated_contact:[],
+                                                                          relation:""})
 
                                               const addunit = () => {
 
@@ -1656,7 +1686,171 @@ function Projectform() {
             
             
             
-            
+            const parking=["Basement Parking","Stilt Parking","Open Parking","Double Basement Parking","Covered Parking","Multi Storey Parking"];
+       
+const [parkings, setparkings] = useState([]);
+
+const handleparkingChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (parkings.length === parking.length) {
+      setparkings([]); // Deselect all options
+      setproject({ ...project, parking_type: [] }); 
+      setblock({ ...block, parking_type: [] }); 
+    } else {
+      // Otherwise, select all options
+      setparkings(parking); // Select all options
+      setproject({ ...project, parking_type: parking });
+      setblock({ ...block, parking_type: parking }); // Update facing in leadinfo
+    }
+  } else {
+    // Handle individual selections/deselections
+    const selectedparking = typeof value === 'string' ? value.split(',') : value;
+    setparkings(selectedparking); // Update selected facings
+    setproject({ ...project, parking_type: selectedparking });
+    setblock({ ...block, parking_type: selectedparking }); // Update facing in leadinfo
+  }
+};
+
+
+const [input, setInput] = useState('');
+const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+const [showSuggestions, setShowSuggestions] = useState(false);
+const [allSuggestions, setAllSuggestions] = useState([]);
+const [selectedContacts, setSelectedContacts] = useState([]);
+
+useEffect(() => {
+  const fetchSuggestions = async () => {
+    try {
+      const response = await api.get('viewcontact');
+      const data = response.data.contact;
+      
+      // Extract the first_name field from the fetched data
+      // const names = data.map(item => item.first_name);
+      setAllSuggestions(data);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+    }
+  };
+
+  fetchSuggestions();
+}, []);
+
+useEffect(() => {
+  if (input) {
+    const results = allSuggestions.filter(contact =>
+      contact.first_name?.toLowerCase().includes(input.toLowerCase())
+    );
+    setFilteredSuggestions(results);
+    setShowSuggestions(true);
+  } else {
+    setShowSuggestions(false);
+  }
+}, [input,allSuggestions]);
+
+
+
+const handleInputChange = (event) => {
+  setInput(event.target.value);
+  handleClose6()
+};
+
+
+const [show6, setshow6] = useState(false);
+const handleClose6 = () => setshow6(false);
+const handleShow6=async()=>
+{
+  setshow6(true);
+
+}
+
+const [selectedcontact1,setselectedcontact1]=useState([])
+const [selectedcontact2,setselectedcontact2]=useState([])
+const[newcontact,setnewcontact]=useState([])
+
+const[relation,setrelation]=useState("")
+
+const handlerelationchange = (e) => {
+  setrelation(e.target.value);
+};
+
+// const [relation1,setrelation1]=useState("")
+useEffect(() => {
+  
+  
+  if (relation === "Self") {
+    setrelation("")
+    setselectedcontact1(prevContacts => [
+      ...prevContacts,
+      newcontact // Add the new contact (assumed to be an object)
+    ]);
+    setunits(prevDeal => ({
+      ...prevDeal,
+      owner_details: [...prevDeal.owner_details, newcontact] // Append new contact to the existing owner_details array
+    }));
+   
+  }
+   else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+    
+    setselectedcontact2(prevContacts => [
+      ...prevContacts,
+      newcontact // Add the new contact for other relations
+    ]);
+    setunits(prevDeal => ({ ...prevDeal, relation: relation }));
+    setunits(prevDeal => ({
+      ...prevDeal,
+      associated_contact: [...prevDeal.associated_contact, newcontact] // Append new contact to the existing owner_details array
+    }));
+    // setrelation1(relation)
+    setrelation("")
+  }
+}, [relation,newcontact]);
+
+
+
+const handleSuggestionClick = (contact) => {
+  handleShow6();
+  
+  setnewcontact(contact)
+  // Update the selectedContacts array
+  const updatedContacts = [...selectedContacts, contact];
+  setSelectedContacts(updatedContacts);
+
+  setInput(''); // Clear the input after selection
+  setShowSuggestions(false); // Hide suggestions after selection
+  //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+};
+
+
+ 
+const removeContact = (id) => {
+
+  const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+  const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+  const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
+  setSelectedContacts(updatedContacts);
+  setselectedcontact1(updatedContacts1)
+  setselectedcontact2(updatedContacts2)
+  
+  // Update deal.owner_details with the current selected contacts
+  setunits(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+
+};
+
+ console.log(units.owner_details);
+// console.log(units.associated_contact);
+
+
+useEffect(()=>
+{
+  const fullunit=`${units.total_land_area} ${units.category} ${units.land_type}`
+  setunits({...units,unit_no:fullunit})
+},[units.total_land_area])
               
     return ( 
         <div>
@@ -1817,14 +2011,26 @@ function Projectform() {
                        <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,possession:e.target.value})}/></div>
 
                        <div className="col-md-6"><label className="labels">Parking Type</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,parking_type:e.target.value})}>
-                              <option>Basement Parking</option>
-                              <option>Stilt Parking</option>
-                              <option>Open Parking</option>
-                              <option>Double Basement Parking</option>
-                              <option>Covered Parking</option>
-                              <option> Multi Storey Parking</option>
-                        </select>
+                       <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={parkings}
+                    onChange={handleparkingChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                
+                 <MenuItem value="select-all">
+                    <Checkbox checked={parkings.length === parking.length} />
+                    <ListItemText
+                      primary={ '---select all---'} //
+                    />
+                  </MenuItem>
+                    {parking.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={parkings.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
                        </div>
                        <div className="col-md-6"><label className="labels">Approved Bank</label>
                        <Select className="form-control form-control-sm" style={{border:"none"}}
@@ -2216,16 +2422,27 @@ function Projectform() {
                        <div className="col-md-4" ><label className="labels">Expected Competion</label><input type="date" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,expected_competion:e.target.value})}/></div>
                        <div className="col-md-4" ><label className="labels">Possession</label><input type="date"   className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,possession:e.target.value})}/></div>
 
-                       <div className="col-md-6"><label className="labels">Parking Type</label>
-                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,parking_type:e.target.value})}>
-                              <option>---Select---</option>
-                              <option>Basement Parking</option>
-                              <option>Stilt Parking</option>
-                              <option>Open Parking</option>
-                              <option>Double Basement Parking</option>
-                              <option>Covered Parking</option>
-                              <option> Multi Storey Parking</option>
-                        </select>
+                       <div className="col-md-10"><label className="labels">Parking Type</label>
+                       <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={parkings}
+                    onChange={handleparkingChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                
+                 <MenuItem value="select-all">
+                    <Checkbox checked={parkings.length === parking.length} />
+                    <ListItemText
+                      primary={ '---select all---'} //
+                    />
+                  </MenuItem>
+                    {parking.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={parkings.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
                        </div>
                        <div className='col-md-6'></div>
                        <div className="col-md-7" ><label className="labels">Rera Number</label><input type="text"   className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,rera_no:e.target.value})}/></div>
@@ -2373,7 +2590,7 @@ function Projectform() {
                                 <option>Acre</option>
                                 <option>Sq Feet</option>
                                 <option>Plot</option>
-                                <option>All Users</option>
+                                
                                 </select>
                              </div>
                              <div className='col-md-8'></div>
@@ -2466,29 +2683,29 @@ function Projectform() {
                       </div>
                 {showPlotSize && (
                             <div className='row' id='plotsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" >Total Length</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Yard</option>
+                                <option>Sq Yard</option>
                                 <option>Sq Feet</option>
                                 <option>Plot</option>
-                                <option>All Users</option>
+                                
                                 </select>
                              </div>
                              <div className='col-md-6'></div>
                 
-                             <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}> Carpet Area</label><input type='text' onBlur={calculateTotalArea} className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
+                             <div className="col-md-3"><label className="labels" > Total Breadth</label><input type='text' onBlur={calculateTotalArea} className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Yard</option>
+                                <option>Sq Yard</option>
                                 <option>Sq Feet</option>
                                 <option>Plot</option>
-                                <option>All Users</option>
+                              
                                 </select>
                              </div>
                              <div className="col-md-3"><label className="labels" > Total Area</label><input type='text' readOnly value={sizes.total_area} className='form-control form-control-sm' /></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>Sq Yard</option>
                                 <option>Plot</option>
-                                <option>All Users</option>
+                                
                                 </select>
                              </div>
                              
@@ -2605,16 +2822,53 @@ function Projectform() {
             </Modal.Header>
             <Modal.Body>
             
-               <div style={{display:"flex",gap:"30px"}}>
-               <div  id='unitdetail'  style={{cursor:'pointer',fontWeight:"bold"}} onClick={unitdetail1}>Unit </div>
-                <div  id='unitlocationdetails' style={{cursor:'pointer',fontWeight:"bold"}}  onClick={unitdetail2}>Location</div>
-               </div>
+               {/* <div style={{display:"flex",gap:"50px"}}>
+               <div  id='unitdetail'  style={{cursor:'pointer',fontWeight:"bold"}} onClick={unitdetail1}><span>Unit</span> </div>
+                <div  id='unitlocationdetails' style={{cursor:'pointer',fontWeight:"bold"}}  onClick={unitdetail2}><span>Location</span></div>
+                <div  id='ownerdetails' style={{cursor:'pointer',fontWeight:"bold"}}  onClick={unitdetail3}><span>Add Owner</span></div>
+               </div> */}
+               <div style={{ display: "flex", gap: "50px" }}>
+  <div
+    id="unitdetail"
+    style={{
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      backgroundColor: activeUnit === 1 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+    }}
+    onClick={unitdetail1}
+  >
+    <span>Unit</span>
+  </div>
+  <div
+    id="unitlocationdetails"
+    style={{
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      backgroundColor: activeUnit === 2 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+    }}
+    onClick={unitdetail2}
+  >
+    <span>Location</span>
+  </div>
+  <div
+    id="ownerdetails1"
+    style={{
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+    }}
+    onClick={unitdetail3}
+  >
+    <span>Add Owner</span>
+  </div>
+</div>
+
               
               <hr></hr>
             <div style={{width:"100%"}}>
             <div className="row" id='unitdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true" value={units.unit_no} className="form-control form-control-sm" placeholder="first name"/></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>Corner</option>
@@ -3050,7 +3304,7 @@ function Projectform() {
                 </div>
                 </div>
                 <div className="row">
-                <div className="col-md-12" id='unitlocation' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
+                <div className="col-md-12" id='unitlocation' style={{display:"none",lineHeight:"30px"}}>
                  <div className="p-3 py-5">
                 <div className="col-md-12" style={{border:"1px solid black",height:"700px",marginTop:"30px"}}>
                 <div style={{border:"1px solid black",marginTop:"10px"}}>
@@ -3081,6 +3335,122 @@ function Projectform() {
                 </div>
                 </div>
                 </div>
+
+                <div id="ownerdetails" style={{padding:"5px"}}>
+                <div className="row" style={{width:"100%"}}>
+               
+                        <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                        {showSuggestions && input && filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-list">
+                              {filteredSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                  {suggestion.first_name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={handleShow1}>+</button></div>
+                    
+                     <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                     {selectedcontact1.length >= 0 && (
+                      <div className="contact-details">
+                        <table  style={{width:"100%"}}>
+                          
+                          <tbody>
+                          {selectedcontact1.map(contact => (
+                              <StyledTableRow>
+                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                    {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                    <SvgIcon component={EmailIcon} />
+                                    <span>{contact.email}</span>
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  {contact.mobile_no.map((number, index) => (
+                                    <span key={index}>
+                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      {number}<br></br>
+                                    </span>
+                                  ))}
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  S/W/O <br></br>{contact.father_husband_name}
+                                  </StyledTableCell>
+
+                                  <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                  {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                  </StyledTableCell>
+
+                                  <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                    </StyledTableCell>
+
+                                <StyledTableCell>
+                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                   </StyledTableCell>
+                                
+                              </StyledTableRow>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                </div>
+                
+                <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                {selectedcontact2.length >= 0 && (
+                <div className="contact-details">
+                    <table style={{width:"100%"}}>
+                        <tbody>
+                             {
+                              
+                              selectedcontact2.map(contact => (
+                                <StyledTableRow>
+                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {contact.title} {contact.first_name} {contact.last_name}<br />
+                                        <SvgIcon component={EmailIcon} />
+                                        <span>{contact.email}</span>
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {
+                                        Array.isArray(contact.mobile_no) ?
+                                        contact.mobile_no.map((number, index) => (
+                                            <span key={index}>
+                                                <SvgIcon component={PhoneIphoneIcon} />
+                                                {number}<br />
+                                            </span>
+                                        )):[]}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        S/W/O <br />{contact.father_husband_name}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
+                                    </StyledTableCell>
+                                        
+                                    <StyledTableCell>
+                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))} 
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            </div>
+                     </div>
+                  </div>
                
                 
           </Modal.Body>
@@ -3089,6 +3459,34 @@ function Projectform() {
                 Add Unit
               </Button>
               <Button variant="secondary" onClick={handleClose3}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+          <Modal show={show6} onHide={handleClose6} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+            <Modal.Header>
+              <Modal.Title>Choose Relation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+            <div className="row">
+                    <div className="col-md-4"><label className="labels">Relation</label><select className="form-control form-control-sm" required="true" onChange={handlerelationchange}>
+                              <option>Select</option>
+                              <option value="Self">Self</option>
+                              <option value="Son">Son</option>
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Uncle">Uncle</option>
+                              <option value="Other">Other</option>
+                        </select>
+                  </div>
+               </div>
+           </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose6}>
                 Close
               </Button>
             </Modal.Footer>

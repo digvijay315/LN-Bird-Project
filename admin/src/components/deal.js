@@ -976,7 +976,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
               ...prevContacts,
               newcontact // Add the new contact (assumed to be an object)
             ]);
-           setdeal(prevDeal => ({ ...prevDeal, owner_details: newcontact }));
+           setdeal(prevDeal => ({ ...prevDeal.owner_details,newcontact }));
            
           }
            else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
@@ -986,7 +986,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
               newcontact // Add the new contact for other relations
             ]);
             setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
-            setdeal(prevDeal => ({ ...prevDeal, associated_contact: newcontact }));
+            setdeal(prevDeal => ({ ...prevDeal.associated_contact,  newcontact }));
             // setrelation1(relation)
             setrelation("")
           }
@@ -1211,6 +1211,11 @@ const formats = [
   'align',
   'link', 'image'
 ]
+
+console.log(deal.owner_details);
+console.log(deal.associated_contact);
+
+
 
     return ( 
         <div>
