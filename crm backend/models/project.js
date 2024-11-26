@@ -22,6 +22,7 @@ const blockSchema = new mongoose.Schema({
     block1: {type:String},
     category: {type: Array },
     sub_category: { type: String},
+    unit_type:{type:String},
     total_sealable_area: {type: String},
     sq_feet1: {type: String},
     covered_area: {type: String},

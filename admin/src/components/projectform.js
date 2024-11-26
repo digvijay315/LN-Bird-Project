@@ -24,6 +24,7 @@ import { Select, MenuItem, Checkbox, ListItemText  } from '@mui/material';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
+import { Factory, School } from '@mui/icons-material';
 
 
 
@@ -784,37 +785,6 @@ function Projectform() {
                 
 
 
-                      //   function selectsize() {
-                      //   const size = document.getElementById("subcategory").value;
-
-                      //   // Always update the state with the selected size
-                      //   setsizes({ ...sizes, sub_category: size });
-
-
-                      //   // Check if the category is "Agriculture"
-                      //   if (project.category === "Agricultural") {
-                      //       // Hide both apartment size and plot size
-                      //       document.getElementById("apartmentsize").style.display = "none";
-                      //       document.getElementById("plotsize").style.display = "none";
-                      //       return;  // Exit the function early since we don't want to display any sizes for Agriculture
-                      //   }
-
-                      //   // Show apartment size if size is "Apartment"
-                      //   if (size === "Apartment") {
-                      //       document.getElementById("apartmentsize").style.display = "flex";
-                      //       document.getElementById("plotsize").style.display = "none";
-                      //   } 
-                      //   // Show plot size if size is "Plot"
-                      //   // else if (size === "Plot") {
-                      //   //     document.getElementById("apartmentsize").style.display = "none";
-                      //   //     document.getElementById("plotsize").style.display = "flex";
-                      //   // } 
-                      //   // For other values, hide apartment size and show plot size
-                      //   else { 
-                      //       document.getElementById("apartmentsize").style.display = "none";
-                      //       document.getElementById("plotsize").style.display = "flex";
-                      //   }
-                      // }
 
                       const [showPlotSize, setShowPlotSize] = useState(false); // Track the checkbox state
 
@@ -837,23 +807,7 @@ function Projectform() {
 
 
   //==========================------------------------------- size toggle end--------------------------=================================
-                      // const[category,setcategory]=useState([])
-                      // const selectcategory=()=>
-                      // {
-                      //   if(document.getElementById("resd").style.backgroundColor!="green")
-                      //   {
-                      //     document.getElementById("resd").style.backgroundColor="green"
-                      //     setcategory([...category,"Residential"])
-                      //   }
-                      //   else
-                      //   {
-                      //     document.getElementById("resd").style.backgroundColor="none"
-                      //     const newcategory=category.filter((i)=>category[i]!=="Residential")
-                      //     setcategory(newcategory)
-                      //   }
-                      
-                      // }
-                      // console.log(category);
+                 
 
 
 // ======================------------------- both check boxes code start ---------------===============================================
@@ -987,7 +941,7 @@ function Projectform() {
 
 // ===========================------------------block add and remove code---------------------=================================================
                                     const[blocks,setblocks]=useState([])
-                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:[],land_area:"",
+                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:"",land_area:"",
                                                                     measurment:"",total_blocks:"",total_floors:"",total_units:"",
                                                                     status:"",launched_on:"",expected_competion:"",possession:"",
                                                                     parking_type:[],zone:[],rera_no:""})
@@ -1032,7 +986,7 @@ function Projectform() {
 
                                             const[size,setsize]=useState([])
                                             
-                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:[],type:"",
+                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",unit_type:"",type:"",
                                                                             total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
                                                                             carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
                                                                             length:"",yard1:"yard",bredth:"",yard2:"yard",total_area:"",yard3:"yard"})
@@ -1079,7 +1033,7 @@ function Projectform() {
                                           
                                               if (!isNaN(length) && !isNaN(bredth)) {
                                                 const totalArea = length * bredth; 
-                                                const sizeName = `${sizes.type} (${totalArea} ${sizes.yard3})`// Calculate the total area
+                                                const sizeName = `${sizes.type} ${sizes.unit_type} (${totalArea} ${sizes.yard3})`// Calculate the total area
                                                 setsizes({
                                                   ...sizes,
                                                   total_area: totalArea,
@@ -1277,7 +1231,10 @@ function Projectform() {
 
 // -------------------------========================payment plan add and delete end--------------------------===========================
 
-                    const modules = {
+                 
+// =============================code for descriptions formate start================================================================
+
+                  const modules = {
                       toolbar: [
                         [{ 'font': [] }, { 'size': [] }], // font and size
                         [{ 'header': '1'}, { 'header': '2'}, { 'header': [3, 4, 5, 6, false] }], // headers
@@ -1299,10 +1256,19 @@ function Projectform() {
                       'align',
                       'link', 'image'
                     ];
+
+// ====================================formate descriptions end====================================================================
+
+
                 const[ischecked,setischecked]=useState(false)
                 const handleischeckedchange = (e) => {
                   setischecked(e.target.checked); // Update the state based on checkbox status
                 };
+
+
+// ======================code for set category and sub category======================================================================
+
+
 
                 const handleTypeClick = (type) => {
                   setproject(prevProject => {
@@ -1387,58 +1353,16 @@ function Projectform() {
                 }
               }
             });
-                };
+          };
 
-                // console.log(block.category);
-                
-                // const handleTypeClick1 = (type) => {
-                //    document.getElementById("bcat").style.backgroundColor="green"
-                //   setblock(prevProject => {
-                //     const category = Array.isArray(prevProject.category) ? prevProject.category : [];
-                //       // if (category.includes(type)) {
-                //       //     // Remove the type from basic_aminities if already selected
-                //       //     return { ...prevProject, category: category.filter(item => item !== type) };
-                //       // } else {
-                //           // Add the type to basic_aminities if not already selected
-                //           return { ...prevProject, category: [ ...category,type] };
-                //       //}
-                //   });
-               
-                // };
-                // const handleTypeClick2 = (type) => {
-                //   setsizes(prevProject => {
-                //     const category = Array.isArray(prevProject.category) ? prevProject.category : [];
-                    
-                //     // Prevent state update if there's no change (to avoid unnecessary re-renders)
-                //     if (!category.includes(type)) {
-                //       return { ...prevProject, category: [...category, type] };
-                //     }
-                    
-                //     // If 'type' is already in the category, don't change the state
-                //     return prevProject;
-                //   });
-                // };
-                
-                // const handleTypeClick3 = (type) => {
-                //   // document.getElementById("ucat").style.backgroundColor="green"
-                //   setunits(prevProject => {
-                //       const { category } = prevProject;
-                //       // if (category.includes(type)) {
-                //       //     // Remove the type from basic_aminities if already selected
-                //       //     return { ...prevProject, category: category.filter(item => item !== type) };
-                //       // } else {
-                //           // Add the type to basic_aminities if not already selected
-                //           return { ...prevProject, category: [ type] };
-                //       //}
-                //   });
-                // };
+             
 
 
                 const isSelected = (type) => project.category.includes(type);
                 const getSubcategories = () => {
                   const subcategories = [];
                   if (isSelected('Residential')) {
-                      subcategories.push('Plot', 'Indenpendent House','Flat','Apartment','Builder Floor');
+                      subcategories.push('Plot', 'Independent House','Flat/Apartment','Builder Floor');
                   }
                   if (isSelected('Commercial')) {
                     subcategories.push('Shop','Showroom','Office Space','Retail Store','Soho','Excutive Room','Multiplex','Virtual Space','Plot');
@@ -1464,14 +1388,7 @@ function Projectform() {
                 } = event;
                 // Ensure the value is an array if multiple options are selected
                 setproject({ ...project, sub_category: typeof value === "string" ? value.split(",") : value });
-                setblock({
-                  ...block, 
-                  sub_category: typeof value === "string" ? value.split(",") : value 
-                });
-                setsizes({
-                  ...sizes, 
-                  sub_category: typeof value === "string" ? value.split(",") : value 
-                });
+            
               };
 
               const handleToggle = (value) => {
@@ -1485,14 +1402,7 @@ function Projectform() {
                 }
             
                 setproject({ ...project, sub_category: newChecked });
-                setblock({ 
-                  ...block, 
-                  sub_category: newChecked // Also updating block's sub_category
-                });
-                setsizes({ 
-                  ...sizes, 
-                  sub_category: newChecked // Also updating block's sub_category
-                });
+           
               };
             
               
@@ -1623,10 +1533,14 @@ function Projectform() {
                 
             };
           
-            
+
             useEffect(() => {
               // Check if project.add_size is valid and is an array
               if (project.add_size && Array.isArray(project.add_size)) {
+                let totalAcre = 0;  // Store total area in acres
+                let totalKanal = 0; // Store total area in kanal
+                let totalMarla = 0; // Store total area in marla
+            
                 project.add_size.forEach((item) => {
                   console.log("Item:", item);
             
@@ -1654,35 +1568,42 @@ function Projectform() {
                         return; // Skip calculations if effectiveArea is invalid
                       }
             
-                      // Calculate Acre, Kanal, and Marla (optional)
-                      const acre = effectiveArea / 4840; // 1 Acre = 43560 square feet (if total_area is in square feet)
-                      const kanal = effectiveArea / 605;  // 1 Kanal = 605 square feet
-                      const marla = kanal / 20;           // 1 Kanal = 20 Marlas
+                      // Calculate Acre, Kanal, and Marla directly (no conversion to square feet)
+                      const acre = effectiveArea / 4840; // 1 Acre = 4840 square feet
+                      const kanal = (effectiveArea % 4840) / 605;// 1 Kanal = 605 square feet
+                      const marla = Math.floor((effectiveArea % 605) / 30.25);// 1 Kanal = 20 Marlas
             
-                      // Check for valid calculations
-                      if (isNaN(acre) || isNaN(kanal) || isNaN(marla)) {
-                        console.warn("Invalid calculations:", { acre, kanal, marla });
-                        return;
-                      }
-            
-                      console.log("Acre:", acre);
-                      console.log("Kanal:", kanal);
-                      console.log("Marla:", marla);
-            
-                      // Update the units state with the formatted land area string
-                      setunits({
-                        ...units,
-                        total_land_area: `${acre} acre ${kanal} kanal ${marla} marla`
-                      });
+                      // Accumulate the total Acre, Kanal, and Marla values
+                      totalAcre += acre;
+                      totalKanal += kanal;
+                      totalMarla += marla;
                     });
                   } else {
                     console.warn("Invalid total_area or units.share in item", item);
                   }
                 });
+            
+                // Normalize the total Kanal and Marla values
+                const normalizedKanal = Math.floor(totalKanal); 
+                const normalizedMarla = Math.floor(totalMarla);
+            
+                // Adjust the total Acre, Kanal, and Marla based on accumulated values
+                const finalAcre = Math.floor(totalAcre);
+                const finalKanal = Math.floor(normalizedKanal);  // Convert leftover Kanal to Marla
+                const finalMarla = Math.floor(normalizedMarla); // Convert leftover Marla to proper format
+            
+                // Update the total_land_area state with the final result
+                setunits({
+                  ...units,
+                  total_land_area: `${finalAcre} acre ${finalKanal} kanal ${finalMarla} marla`
+                });
+            
               } else {
                 console.warn("Invalid project.add_size data");
               }
-            }, [units.share]); // Runs when units.share changes
+            }, [units.share]);  // Runs when units.share changes
+            
+         
             
             
             
@@ -1760,6 +1681,8 @@ const handleInputChange = (event) => {
   handleClose6()
 };
 
+
+// ==========================add owner tab start=================================================================================
 
 const [show6, setshow6] = useState(false);
 const handleClose6 = () => setshow6(false);
@@ -1842,8 +1765,7 @@ const removeContact = (id) => {
 
 };
 
- console.log(units.owner_details);
-// console.log(units.associated_contact);
+
 
 
 useEffect(()=>
@@ -1851,6 +1773,61 @@ useEffect(()=>
   const fullunit=`${units.total_land_area} ${units.category} ${units.land_type}`
   setunits({...units,unit_no:fullunit})
 },[units.total_land_area])
+
+// ========================================add onwer end==============================================================================
+
+const options = {
+unit_type: {
+  Plot: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+  "Independent House": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+  "Flat/Apartment": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+  "Builder Floor": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+  Shop:["BOOTH","KIOSAK",],
+  Showroom:["SCO","SCF","DSS"],
+  "Office Space":["LOCABLE OFFICE","VIRTUAL OFFICE"],
+  "Retail Store":["HYPER MARKET","DEPARTMETAL STORE"],
+  Soho:["SOHO"],
+  "Excutive Room":["ROOM"],
+  Land:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
+  "Farm House":["FARM"],
+  Plots:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
+  Warehouse:["WRHSE"],
+  "Cold Storage":["CLDSTRG"],
+  "Rice Seller":["RCSLR"],
+  "Building":["BLDG"],
+  Factory:["FCTRY"],
+  School:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
+  Hotel:["HOTEL","GUEST HOUSE","HOMESTAYS"],
+  Universitites:["DEEMED","PRIVATE"],
+  Hospital:["NURSING HOME","CLINIC"],
+  college:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
+}
+}
+
+const [availableunit, setavailableunit] = useState([]);
+
+const handlesizesubcategorychange = (event) => {
+  const selectedSubcategory = event.target.value;
+
+  setsizes((precsize) => ({
+    ...precsize,
+    sub_category: selectedSubcategory,
+    unit_type: "", // Reset designation when subcategory changes
+  }));
+
+  // Update available designations based on selected profession subcategory
+  setavailableunit(options.unit_type[selectedSubcategory] || []);
+};
+
+
+
+
+
+
+
+
+
+
               
     return ( 
         <div>
@@ -2333,31 +2310,23 @@ useEffect(()=>
                        }
                     </div>
 
+                   
                     <div className="col-md-12"><label className="labels">Sub Category</label>
-                    <Select
+                    <select
                     className='form-control form-control-sm'
-                    style={{border:"none"}}
                       labelId="subcategory-label"
                       id="subcategory"
-                      multiple
-                      value={project.sub_category}
-                      onChange={handleSubCategoryChange}
-                      renderValue={(selected) => selected.join(", ")} // Display selected values as a comma-separated list
-                    >
-                      <MenuItem value="">
-                        <em>Select</em>
-                      </MenuItem>
-                      {getSubcategories().map((subCategory) => (
-                        <MenuItem key={subCategory} value={subCategory}>
-                          <Checkbox
-                            checked={project.sub_category.indexOf(subCategory) > -1}
-                            onChange={() => handleToggle(subCategory)}
-                          />
-                          <ListItemText primary={subCategory} />
-                        </MenuItem>
-                      ))}
-                </Select>
-                    </div>
+                      onChange={(e)=>setblock({...block,sub_category:e.target.value})}>
+                      <option>---select---</option>
+                      {
+                        project.sub_category.map((item)=>
+                        (
+                          <option>{item}</option>
+                        ))
+                      }
+                </select>
+                    </div>   
+
                     {
                     project.category.includes('Agricultural') && (
                         <>
@@ -2555,31 +2524,42 @@ useEffect(()=>
                     </div>
 
                     <div className="col-md-12"><label className="labels">Sub Category</label>
-                    <Select
+                    <select
                     className='form-control form-control-sm'
-                    style={{border:"none"}}
                       labelId="subcategory-label"
                       id="subcategory"
-                      multiple
-                      value={project.sub_category}
-                      
-                      onChange={handleSubCategoryChange}
-                      renderValue={(selected) => selected.join(", ")} // Display selected values as a comma-separated list
-                    >
-                      <MenuItem value="">
-                        <em>Select</em>
-                      </MenuItem>
-                      {getSubcategories().map((subCategory) => (
-                        <MenuItem key={subCategory} value={subCategory}>
-                          <Checkbox
-                            checked={project.sub_category.indexOf(subCategory) > -1}
-                            onChange={() => handleToggle(subCategory)}
-                          />
-                          <ListItemText primary={subCategory} />
-                        </MenuItem>
-                      ))}
-                </Select>
+                      onChange={handlesizesubcategorychange}>
+                      <option>---select---</option>
+                      {
+                        project.sub_category.map((item)=>
+                        (
+                          <option>{item}</option>
+                        ))
+                      }
+                </select>
                     </div>   
+
+                    {
+                              
+                              !project.category.includes('Agricultural') && (
+                                  <>
+                    <div className="col-md-6"><label className="labels">Unit Type</label>
+                    <select
+                    className='form-control form-control-sm'
+                      onChange={(e)=>setsizes({...sizes,unit_type:e.target.value})}>
+                      <option>---select---</option>
+                      {
+                        availableunit.map((item)=>
+                        (
+                          <option>{item}</option>
+                        ))
+                      }
+                </select>
+                    </div>  
+                    <div className='col-md-6'></div>
+                    </>
+                              )}
+
                      {
                               
                               project.category.includes('Agricultural') && (
@@ -2588,8 +2568,8 @@ useEffect(()=>
                     <div className="col-md-4"><label className="labels" >Type</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,type:e.target.value})}>
                                 <option>---select---</option>
                                 <option>Acre</option>
-                                <option>Sq Feet</option>
-                                <option>Plot</option>
+                                <option>Kanal</option>
+                                <option>Marla</option>
                                 
                                 </select>
                              </div>
@@ -3336,7 +3316,7 @@ useEffect(()=>
                 </div>
                 </div>
 
-                <div id="ownerdetails" style={{padding:"5px"}}>
+                <div id="ownerdetails" style={{padding:"5px",display:"none"}}>
                 <div className="row" style={{width:"100%"}}>
                
                         <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
