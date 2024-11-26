@@ -1,0 +1,273 @@
+/* Navbar background and styling */
+.navbar {
+    padding: 0.8rem 1rem;
+    background-color: #000 !important; /* Black background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Add subtle shadow */
+  }
+  
+  .navbar-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff !important;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .logo-icon {
+    color: #00d4ff;
+    font-size: 2rem;
+  }
+  
+  /* Navbar links */
+  .nav-link {
+    color: #e0e0e0 !important;
+    transition: color 0.3s, transform 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: #00d4ff !important;
+    transform: scale(1.1);
+  }
+
+  .image1 {
+    filter: brightness(0.8) contrast(1.2);
+    background-color: #ccc;
+}
+  
+.carousel-control-next-icon{
+  color: black;
+  border-radius: 50%;
+  
+}
+
+
+
+  /* Responsive alignment for smaller screens */
+  @media (max-width: 768px) {
+    .nav-link {
+      text-align: center;
+    }
+  }
+  
+
+  /* about section css start---------------------------------------------------------------- */
+
+  .animated-image {
+    max-width: 100%; /* Ensure responsiveness */
+    height: auto; /* Maintain aspect ratio */
+    animation: upDown 2s ease-in-out infinite; /* Apply the animation */
+  }
+  
+  /* Animation for up-down movement */
+  @keyframes upDown {
+    0%, 100% {
+      transform: translateY(0); /* Original position */
+    }
+    50% {
+      transform: translateY(-20px); /* Move up by 20px */
+    }
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+  .quicksand {
+    font-family: "Quicksand", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: "bold";
+    font-style: "normal";
+  }
+
+  /* about section end------------------------------------------------------------------------- */
+
+
+  /* service page css start------------------------------------------------------------------------- */
+
+  /* Service Box Background Color */
+.service-box {
+  background: linear-gradient(135deg, #f7f7f7, #e0e0e0);  /* Gradient background */
+  padding: 15px;
+  border-radius: 8px;
+  color: #fff; /* Ensure text is readable */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-box:hover {
+  transform: translateY(-5px); /* Slight lift effect on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Image Flip Effect */
+.image-container {
+  width: 80px; /* Adjust width to fit design */
+  height: 80px;
+  perspective: 1000px; /* Enable 3D perspective */
+}
+
+.service-image {
+  border-radius: 8px; /* Optional rounded corners */
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+.image-container:hover .service-image {
+  transform: rotateY(180deg); /* Flip effect on hover */
+}
+
+.custom-row {
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  gap: 20px; /* Space between columns */
+  justify-content: space-between; /* Distribute columns evenly */
+}
+
+  /* service page css end--------------------------------------------------------------------------- */
+
+  /* portfolio page css start--------------------------------------------------------------------------- */
+
+  .portfolio-container {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .portfolio-title {
+    color: #0e1970;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: 2px solid #000080;
+    background-color: white;
+    color: #000080;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #000080;
+    color: white;
+  }
+  
+  .btn.active {
+    background-color: #000080;
+    color: white;
+  }
+  
+  .cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-image {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+    color: #0e1970;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-description {
+    color: #555;
+    font-size: 0.9rem;
+  }
+  
+  
+  /* portfolio page css end------------------------------------------------------------------------------ */
+
+  /* feactures section start------------------------------------------------------------------------------ */
+
+   .features-main{
+    background-image: url(https://viavilab.com/codecanyon/mobility/assets/img/service-bg.jpg);
+    height: 60rem;
+   }
+
+   .custom-row1{
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  gap: 20px; /* Space between columns */
+  justify-content: space-between;
+   }
+
+  /* feacture section end------------------------------------------------------------------------------------- */
+
+  /* team css start--------------------------------------------------------------------------------------- */
+
+ .team-member{
+  background-color:"white";
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0px 20px 100px 0px rgba(58, 65, 111, 0.1);
+  height: 23rem;
+  
+ }
+
+ .team-row{
+  display: flex;
+  flex-wrap: nowrap; /* Prevent wrapping */
+  gap: 20px; /* Space between columns */
+  justify-content: space-between;
+
+ }
+  /* team css end------------------------------------------------------------------------------------------- */
+
+  /* happy client start------------------------------------------------------------------------------------ */
+       /* Section styling */
+.stats-section {
+  background-image: linear-gradient(to right, #1152ec, #1152ec), url('https://viavilab.com/codecanyon/mobility/assets/img/wave-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 50px 0;
+  color: white;
+}
+
+/* Individual stat card styling */
+.stats-card {
+  padding: 20px 0;
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.stat-description {
+  font-size: 18px;
+  margin: 0;
+}
+
+  /* happy client end-------------------------------------------------------------------------------------- */
