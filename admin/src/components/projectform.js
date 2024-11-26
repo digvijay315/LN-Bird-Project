@@ -2848,7 +2848,7 @@ const handlesizesubcategorychange = (event) => {
             <div style={{width:"100%"}}>
             <div className="row" id='unitdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true" value={units.unit_no} className="form-control form-control-sm" placeholder="first name"/></div>
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>Corner</option>
