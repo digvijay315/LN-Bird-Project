@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 const blockSchema = new mongoose.Schema({
     block_name: {type: String},
     category: {type:Array},
-    sub_category: {type: String },
+    sub_category: {type: Array },
     land_area: { type: String},
     measurment: {type: String},
     total_blocks: {type: String},
@@ -20,7 +20,7 @@ const blockSchema = new mongoose.Schema({
   const sizeschema = new mongoose.Schema({
     size_name: {type: String},
     block1: {type:String},
-    category: {type: Array },
+    category: {type: String },
     sub_category: { type: String},
     unit_type:{type:String},
     total_sealable_area: {type: String},
@@ -42,7 +42,7 @@ const blockSchema = new mongoose.Schema({
   const unitschema = new mongoose.Schema({
     unit_no: {type: String},
     unit_type: {type:String},
-    category: {type: Array },
+    category: {type: String },
     block: { type: String},
     size: {type: String},
     direction: {type: String},

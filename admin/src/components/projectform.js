@@ -675,9 +675,11 @@ function Projectform() {
     //==================----------------- add delete and onchange event of array end---------------------------===============================
 
 // ==============---------------------------google location code start-----------------====================================================
-
+const [mapLoaded, setMapLoaded] = useState(false);  // Tracks if the first map is loaded
+const [mapLoaded1, setMapLoaded1] = useState(false);
                         const [coordinates, setCoordinates] = useState('');
                         const handleSubmit = async (e) => {
+                          e.preventDefault();
                         try {
                           const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                             params: {
@@ -687,9 +689,12 @@ function Projectform() {
                           });
                 
                           if (response.data.results.length > 0) {
+                          
                             const { lat, lng } = response.data.results[0].geometry.location;
                             setCoordinates({ lat, lng });
                             setproject({...project,lattitude:lat,langitude:lng})
+                            setMapLoaded(true); 
+                            
                           } else {
                             setCoordinates(null);
                             console.log('No results found');
@@ -707,6 +712,93 @@ function Projectform() {
                       const defaultCenter = {
                         lat: coordinates.lat || 37.7749, lng: coordinates.lng || -122.4194
                       };
+
+                      const handleMarkerDragEnd = async (e) => {
+                        const newLat = e.latLng.lat();
+                        const newLng = e.latLng.lng();
+                        setCoordinates({ lat: newLat, lng: newLng });
+                    
+                        // Reverse geocoding to get the location name from lat/lng
+                        try {
+                          const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
+                            params: {
+                              latlng: `${newLat},${newLng}`,
+                              key: "AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc",  // Replace with your API key
+                            },
+                          });
+                    
+                          if (response.data.results.length > 0) {
+                            const locationName = response.data.results[0].formatted_address;
+                            setproject({ ...project, location: locationName, lattitude: newLat, langitude: newLng });
+                          } else {
+                            console.log("No location name found");
+                          }
+                        } catch (error) {
+                          console.error("Error fetching location name:", error);
+                        }
+                      };
+
+
+                      const [coordinates1, setCoordinates1] = useState('');
+                      const handleSubmit1 = async (e) => {
+                        e.preventDefault();
+                      try {
+                        const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                          params: {
+                            address: units.location,
+                            key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'  // Replace with your API key
+                          }
+                        });
+              
+                        if (response.data.results.length > 0) {
+                          const { lat, lng } = response.data.results[0].geometry.location;
+                          setCoordinates1({ lat, lng });
+                          setunits({...units,lattitude:lat,langitude:lng})
+                          setMapLoaded1(true);  // Mark second map as loaded
+                        } else {
+                          setCoordinates1(null);
+                          console.log('No results found');
+                        }
+                        
+                      } catch (error) {
+                        console.error('Error fetching coordinates:', error);
+                      }
+                    }
+                    const mapStyles1 = {
+                      height: "500px",
+                      width: "100%"
+                    }
+                  
+                    const defaultCenter1 = {
+                      lat: coordinates1.lat || 37.7749, lng: coordinates1.lng || -122.4194
+                    };
+
+                    const handleMarkerDragEnd1 = async (e) => {
+                      const newLat = e.latLng.lat();
+                      const newLng = e.latLng.lng();
+                      setCoordinates1({ lat: newLat, lng: newLng });
+                  
+                      // Reverse geocoding to get the location name from lat/lng
+                      try {
+                        const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
+                          params: {
+                            latlng: `${newLat},${newLng}`,
+                            key: "AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc",  // Replace with your API key
+                          },
+                        });
+                  
+                        if (response.data.results.length > 0) {
+                          const locationName = response.data.results[0].formatted_address;
+                          setunits({ ...units, location: locationName, lattitude: newLat, langitude: newLng });
+                        } else {
+                          console.log("No location name found");
+                        }
+                      } catch (error) {
+                        console.error("Error fetching location name:", error);
+                      }
+                    };
+
+                   
 
 // ================================----------------------google location code end-----------------------------================================
                     
@@ -798,6 +890,10 @@ function Projectform() {
                           const handleCheckboxChange3 = (event) => {
                             setShowapartmentSize(event.target.checked);
                           };
+
+                
+
+
                           const [showabuiltup, setSowbuiltup] = useState(false); // Track the checkbox state
 
                           // Handle the checkbox change to show/hide plot size section
@@ -941,7 +1037,7 @@ function Projectform() {
 
 // ===========================------------------block add and remove code---------------------=================================================
                                     const[blocks,setblocks]=useState([])
-                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:"",land_area:"",
+                                    const[block,setblock]=useState({block_name:"",category:[],sub_category:[],land_area:"",
                                                                     measurment:"",total_blocks:"",total_floors:"",total_units:"",
                                                                     status:"",launched_on:"",expected_competion:"",possession:"",
                                                                     parking_type:[],zone:[],rera_no:""})
@@ -950,7 +1046,7 @@ function Projectform() {
                        
                                             if (block.block_name ) 
                                               {
-                                                 setblock({...block,category:project.category})
+                                                 
                                                 const updateblocks= [...blocks, block];
                                                 setblocks(updateblocks);
                                                 setproject(prevState => ({
@@ -981,15 +1077,27 @@ function Projectform() {
                                       }));
                                     };
 
+                                    const handleblockSubCategoryChange = (event) => {
+                                      const {
+                                        target: { value },
+                                      } = event;
+                                      setblock({
+                                        ...block,
+                                        sub_category: typeof value === 'string' ? value.split(',') : value, // Handle multiple selections
+                                      });
+                                    };
+
+                                    
+
 //===================================--------------------------- size add and delete start---------------------------=======================
 
 
                                             const[size,setsize]=useState([])
                                             
-                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:[],sub_category:"",unit_type:"",type:"",
-                                                                            total_sealable_area:"",sq_feet1:"sqfeet",covered_area:"",sq_feet2:"sqfeet",
-                                                                            carpet_area:"",sq_feet3:"sqfeet",loading:"",percentage:"%",
-                                                                            length:"",yard1:"yard",bredth:"",yard2:"yard",total_area:"",yard3:"yard"})
+                                            const[sizes,setsizes]=useState({size_name:"",block1:"",category:"",sub_category:"",unit_type:"",type:"",
+                                                                            total_sealable_area:"",sq_feet1:"Feet",covered_area:"",sq_feet2:"",
+                                                                            carpet_area:"",sq_feet3:"",loading:"",percentage:"%",
+                                                                            length:"",yard1:"yard",bredth:"",yard2:"",total_area:"",yard3:"Sq Yard"})
 
                                                 const addsize = () => {
 
@@ -1045,7 +1153,17 @@ function Projectform() {
                                               
                                             };
 
-
+                                            const totalpercentage=()=>
+                                              {
+                                                const sarea=sizes.total_sealable_area;
+                                                const carea=sizes.carpet_area;
+                                                const reductionPercentage = ((sarea - carea) / sarea) * 100;
+                                              setsizes((prevsizes)=>({
+                                                ...prevsizes,
+                                                loading:reductionPercentage
+                                             }))
+                                            }
+                    
 
 
 // ================================-----------------size add and delete end------------------------=========================================
@@ -1053,7 +1171,7 @@ function Projectform() {
 
 // ==============================----------------------add unit start===========================================---------------------------
                                           const[unit,setunit]=useState([])
-                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:[],block:"",
+                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                                                           total_land_area:"",
                                                                           water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
@@ -1150,7 +1268,7 @@ function Projectform() {
                           const[price,setprice]=useState([])
                           const[prices,setprices]=useState({block:"",category:[],sub_category:"",size:"",
                                                           covered_area:"",base_rate:"",
-                                                          name:"",type:"",calculation_type:"",blank1:"",blank2:"",blank3:"",
+                                                          chargename:"",chargetype:"",calculation_type:"",blank1:"",blank2:"",blank3:"",
                                                           name1:"",type1:"",calculation_type1:"",blank4:""})
 
                               const addprice = () => {
@@ -1185,7 +1303,45 @@ function Projectform() {
                             }));
                           };
 
-
+                          const chargeCategories = {
+                            "Preferred Location Charges": [
+                              "Corner",
+                              "Floor Rise",
+                              "Park Facing",
+                              "Green Facing",
+                              "Highway Facing",
+                              "Wide Road",
+                              "Two Side Open",
+                              "Three Side Open",
+                              "East Facing",
+                              "Roof Right",
+                            ],
+                            "Amenities Charges": [
+                              "Club Membership",
+                              "Power Backup",
+                              "Gas Pipeline Connection",
+                              "External Electrification Charges",
+                              "Infrastructure Development Charges",
+                              "Society Formation Charges",
+                              "Fire Fighting Charges",
+                              "Parking Charges",
+                              "Interior Charges",
+                              "Water & Sewerage Connection",
+                              "Interest Free Maintenance Security",
+                              "Maintenance Charges",
+                            ],
+                            "Govt. Charges": [
+                              "External Development Charges",
+                              "City Development Charges",
+                              "Land Under Construction Charges",
+                              "Extension Fees",
+                              "Enhanced External Development Charges",
+                            ],
+                          };
+                          const handlechargenamechange = (e) => {
+                            const chargename=e.target.value
+                            setprices({...prices,chargename:chargename});
+                          };
 
 // =======================------------------------price add and delete end====================-----------------------------------------
   
@@ -1301,59 +1457,48 @@ function Projectform() {
                         }
                     }
                 });
-
-                setblock(prevblock => {
-                  const { category } = prevblock;
-                  
-                  // If "Agricultural" is selected in the project, only allow "Agricultural" in the block
-                  if (category.includes("Agricultural") || type === "Agricultural") {
-                    // Remove all other categories except "Agricultural"
-                    return { ...prevblock, category: ["Agricultural"] };
-                  } else {
-                    // If "Agricultural" is not selected in the project, allow adding/removing categories
-                    if (category.includes(type)) {
-                      // Remove the type from block if already selected
-                      return { ...prevblock, category: category.filter(item => item !== type) };
-                    } else {
-                      // Add the type to block if not already selected
-                      return { ...prevblock, category: [...category, type] };
-                    }
-                  }
-                });
-                setsizes(prevSizes => {
-                  const { category } = prevSizes;
-
-                  if (category.includes("Agricultural") || type === "Agricultural") {
-                    // Remove all other categories except "Agricultural"
-                    return { ...prevSizes, category: ["Agricultural"] };
-                  } else {
-                  if (category.includes(type)) {
-                      // Remove the type from basic_aminities if already selected
-                      return { ...prevSizes, category: category.filter(item => item !== type) };
-                  } else {
-                      // Add the type to basic_aminities if not already selected
-                      return { ...prevSizes, category: [...category, type] };
-                  }
-                }
-              });
-                 
-              setunits(prevUnits => {
-                const { category } = prevUnits;
-
-                if (category.includes("Agricultural") || type === "Agricultural") {
-                  // Remove all other categories except "Agricultural"
-                  return { ...prevUnits, category: ["Agricultural"] };
-                } else {
-                if (category.includes(type)) {
-                    // Remove the type from basic_aminities if already selected
-                    return { ...prevUnits, category: category.filter(item => item !== type) };
-                } else {
-                    // Add the type to basic_aminities if not already selected
-                    return { ...prevUnits, category: [...category, type] };
-                }
-              }
-            });
           };
+
+         
+          const [selectedType, setSelectedType] = useState(null);
+
+          const handleTypeClick1 = (type) => {
+            setSelectedType(type);
+        setunits((prevunits)=>({
+          ...prevunits,
+          category:type
+        }))
+    };
+
+    const [selectedType1, setSelectedType1] = useState(null);
+
+    const handleTypeClick2 = (type) => {
+      setSelectedType1(type);
+  setsizes((prevsizes)=>({
+    ...prevsizes,
+    category:type
+  }))
+};
+
+
+const selectedType2 = (type) => block.category.includes(type);
+
+const handleTypeClick3 = (type) => {  
+  
+  setblock((prevblock) => {
+    // Check if the type is already in the category array
+    if (prevblock.category.includes(type)) {
+      // Remove the type if already selected
+      return { ...prevblock, category: prevblock.category.filter(item => item !== type) };
+    } else {
+      // Add the type if not already selected
+      return { ...prevblock, category: [...prevblock.category, type] };
+    }
+  });
+};
+
+
+
 
              
 
@@ -2171,6 +2316,7 @@ const handlesizesubcategorychange = (event) => {
                 <div className="row " >
                 <div className="col-md-12" style={{border:"1px solid black",height:"700px"}}>
                 <div style={{border:"1px solid black",marginTop:"10px"}}>
+                {mapLoaded && (
                           <LoadScript
                             googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
                                                                 >
@@ -2181,12 +2327,15 @@ const handlesizesubcategorychange = (event) => {
                                 >
                             <Marker
                               position={{ lat: defaultCenter.lat, lng: defaultCenter.lng }}
+                              draggable={true}
+                              onDragEnd={handleMarkerDragEnd}
                             />
                             </GoogleMap>
                             </LoadScript>
+                )}
                           </div>
                           <div className="row">
-                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" onChange={(e)=>setproject({...project,location:e.target.value})}/></div>
+                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" value={project.location} onChange={(e)=>setproject({...project,location:e.target.value})}/></div>
                           {/* <div className='col-md-5'></div> */}
                           <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit}>Get</button></div>
                           <div className='col-md-5'></div>
@@ -2296,35 +2445,42 @@ const handlesizesubcategorychange = (event) => {
                     <div className="col-md-12"><label className="labels">Category</label></div>
                     <div className="col-md-12" style={{display:"flex",flexWrap:"wrap"}} >
                        {
-                        project.category.map((type)=>
-                        (
+                        project.category.map((type) => (
                           <div className="col-md-3" key={type}>
-                          <button id='bcat'
-                              className='form-control form-control-sm' 
-                               style={{backgroundColor:"green"}}
-                          >
+                            <button 
+                              className="form-control form-control-sm"
+                              onClick={() => handleTypeClick3(type)} 
+                              style={{ backgroundColor: selectedType2(type) ? 'green' : '' }}
+                            >
                               {type}
-                          </button>
-                      </div>
+                            </button>
+                          </div>
                         ))
                        }
                     </div>
 
                    
                     <div className="col-md-12"><label className="labels">Sub Category</label>
-                    <select
-                    className='form-control form-control-sm'
+                    <Select
+                    className="form-control form-control-sm"
                       labelId="subcategory-label"
                       id="subcategory"
-                      onChange={(e)=>setblock({...block,sub_category:e.target.value})}>
-                      <option>---select---</option>
-                      {
-                        project.sub_category.map((item)=>
-                        (
-                          <option>{item}</option>
-                        ))
-                      }
-                </select>
+                      multiple
+                      value={block.sub_category} // Bind the state to the Select component
+                      onChange={handleblockSubCategoryChange} // Handle change to update the state
+                      renderValue={(selected) => selected.join(', ')}
+                      style={{border:"none"}} // Render the selected values as a comma-separated list
+                    >
+                      <MenuItem value="">
+                        <em>---select---</em>
+                      </MenuItem>
+                      {project.sub_category.map((item) => (
+                        <MenuItem key={item} value={item}>
+                          <Checkbox checked={block.sub_category.indexOf(item) > -1} />
+                          <ListItemText primary={item} />
+                        </MenuItem>
+                      ))}
+                    </Select>
                     </div>   
 
                     {
@@ -2463,7 +2619,7 @@ const handlesizesubcategorychange = (event) => {
              {item.block1}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-             {item.category.join(',')}
+             {item.category}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.sub_category}
@@ -2512,7 +2668,8 @@ const handlesizesubcategorychange = (event) => {
                           <div className="col-md-3" key={type}>
                             <button 
                               className="form-control form-control-sm"
-                              style={{backgroundColor:"green"}}
+                              onClick={() => handleTypeClick2(type)} 
+                              style={{  backgroundColor: selectedType1 === type ? 'green' : '', }}
                             >
                               {type}
                             </button>
@@ -2616,37 +2773,28 @@ const handlesizesubcategorychange = (event) => {
                    {showapartmentSize && (
                     <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
                     <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Sq Feet</option>
-                                <option>Sq Yard</option>
-                                <option>Plot</option>
-                                <option>All Users</option>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,sq_feet1:e.target.value})}>
+                                <option>Feet</option>
+                                <option>Yard</option>
+                                <option>Meter</option>
+                                <option>Inch</option>
                                 </select>
                              </div>
                              <div className='col-md-6'></div>
                              <div className="col-md-3"><label className="labels"> Covered Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,covered_area:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Sq Feet</option>
-                                <option>Sq Yard</option>
-                                <option>Plot</option>
-                                <option>All Users</option>
+                                <option>{sizes.sq_feet1}</option>
                                 </select>
                              </div>
                              <div className='col-md-6'></div>
-                             <div className="col-md-3"><label className="labels"> Carpet Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,carpet_area:e.target.value})}/></div>
+                             <div className="col-md-3"><label className="labels"> Carpet Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,carpet_area:e.target.value})} onBlur={totalpercentage}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Sq Feet</option>
-                                <option>Sq Yard</option>
-                                <option>Plot</option>
-                                <option>All Users</option>
+                               <option>{sizes.sq_feet1}</option>
                                 </select>
                              </div>
-                             <div className="col-md-3"><label className="labels"> Loading</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,loading:e.target.value})}/></div>
+                             <div className="col-md-3"><label className="labels"> Loading</label><input type='text' className='form-control form-control-sm' value={sizes.loading}/></div>
                     <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
                                 <option>%</option>
-                                <option>Sq Yard</option>
-                                <option>Plot</option>
-                                <option>All Users</option>
                                 </select>
                              </div>
                              <div className='col-md-1'></div>
@@ -2664,27 +2812,28 @@ const handlesizesubcategorychange = (event) => {
                 {showPlotSize && (
                             <div className='row' id='plotsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
                     <div className="col-md-3"><label className="labels" >Total Length</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Sq Yard</option>
-                                <option>Sq Feet</option>
-                                <option>Plot</option>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,yard1:e.target.value})}>
+                               <option>Yard</option>
+                                <option>Meter</option>
+                                <option>Feet</option>
+                                <option>Inch</option>
                                 
                                 </select>
                              </div>
                              <div className='col-md-6'></div>
                 
-                             <div className="col-md-3"><label className="labels" > Total Breadth</label><input type='text' onBlur={calculateTotalArea} className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
-                                <option>Sq Yard</option>
-                                <option>Sq Feet</option>
-                                <option>Plot</option>
-                              
+                             <div className="col-md-3"><label className="labels" > Total Breadth</label><input type='text'  onBlur={calculateTotalArea} className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" value={sizes.yard1} onChange={(e)=>setsizes({...sizes,yard2:e.target.value})}>
+                                <option>{sizes.yard1}</option>     
                                 </select>
                              </div>
-                             <div className="col-md-3"><label className="labels" > Total Area</label><input type='text' readOnly value={sizes.total_area} className='form-control form-control-sm' /></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm">
+                             <div className="col-md-3"><label className="labels" > Total Area</label><input type='text' value={sizes.total_area} readOnly  className='form-control form-control-sm' /></div>
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,yard3:e.target.value})}>
+                               
                                 <option>Sq Yard</option>
-                                <option>Plot</option>
+                                <option>Sq Meter</option>
+                                <option>Sq Feet</option>
+                                <option>Sq Inch</option>
                                 
                                 </select>
                              </div>
@@ -2756,7 +2905,7 @@ const handlesizesubcategorychange = (event) => {
              {item.block}
              </StyledTableCell>
              <StyledTableCell style={{ fontFamily: "times new roman" }}>
-             {item.category.join(',')}
+             {item.category}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.unit_type}
@@ -2865,7 +3014,8 @@ const handlesizesubcategorychange = (event) => {
                           <div className="col-md-3" key={type}>
                             <button 
                               className="form-control form-control-sm"
-                              style={{backgroundColor:"green"}}
+                              onClick={() => handleTypeClick1(type)} 
+                              style={{  backgroundColor: selectedType === type ? 'green' : '', }}
                             >
                               {type}
                             </button>
@@ -3288,27 +3438,32 @@ const handlesizesubcategorychange = (event) => {
                  <div className="p-3 py-5">
                 <div className="col-md-12" style={{border:"1px solid black",height:"700px",marginTop:"30px"}}>
                 <div style={{border:"1px solid black",marginTop:"10px"}}>
+                
+                  
                           <LoadScript
                             googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
                                                                 >
                                     <GoogleMap
-                              mapContainerStyle={mapStyles}
+                              mapContainerStyle={mapStyles1}
                                 zoom={13}
-                                center={defaultCenter}
+                                center={defaultCenter1}
                                 >
                             <Marker
-                              position={{ lat: defaultCenter.lat, lng: defaultCenter.lng }}
+                              position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                              draggable={true}
+                              onDragEnd={handleMarkerDragEnd1}
                             />
                             </GoogleMap>
                             </LoadScript>
+             
                           </div>
                           <div className="row">
-                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" value={project.location}/></div>
+                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" value={units.location} onChange={(e)=>setunits({...units,location:e.target.value})}/></div>
                           {/* <div className='col-md-5'></div> */}
-                          <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit}>Get</button></div>
+                          <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit1}>Get</button></div>
                           <div className='col-md-4'></div>
-                          <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={project.lattitude} readOnly/></div>
-                          <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={project.langitude} readOnly/></div>
+                          <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.lattitude}  readOnly/></div>
+                          <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.langitude} readOnly/></div>
                           </div>
                           </div>
            
@@ -3612,7 +3767,7 @@ const handlesizesubcategorychange = (event) => {
         {
           project.price_list.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+            <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman"}}  >
              {item.block}
             </StyledTableCell>
             <StyledTableCell >{item.sub_category} </StyledTableCell>
@@ -3638,11 +3793,17 @@ const handlesizesubcategorychange = (event) => {
               <div className='col-md-12'  style={{marginTop:"20px",display:"flex",gap:"30px"}}> <u id='baseprice1' onClick={baseprice} style={{cursor:"pointer",fontWeight:"bold"}}>Base Price</u><u id='charges1' onClick={charges} style={{cursor:"pointer",fontWeight:"bold"}}>Charges</u><u id='taxes1' onClick={taxes} style={{cursor:"pointer",fontWeight:"bold"}}>Taxes</u></div>
               <div className='row' id='baseprice' style={{marginTop:"20px",padding:"30px"}}><hr></hr>
             <div className="col-md-4"><label className="labels">Block</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,block:e.target.value})}>
-                                <option>{block.block_name}</option>
+                                <option>---Select---</option>
+                                {
+                                  project.add_block.map((item)=>
+                                  (
+                                    <option>{item.block_name}</option>
+                                  ))
+                                }
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Category</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,category:e.target.value})}>
-                            
+                            <option>---Select---</option>
                        {
                         project.category.map((type)=>
                         (
@@ -3652,11 +3813,23 @@ const handlesizesubcategorychange = (event) => {
                         </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Sub Category</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,sub_category:e.target.value})}>
-                                <option>{project.sub_category}</option>
+                    <option>---Select---</option>
+                                {
+                                  project.sub_category.map((item)=>
+                                  (
+                                    <option>{item}</option>
+                                  ))
+                                }
                                 </select>
                     </div>
                     <div className="col-md-8"><label className="labels">Size</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,size:e.target.value})}>
-                                <option>{size.size_name}</option>
+                    <option>---Select---</option>
+                                {
+                                  project.add_size.map((item)=>
+                                  (
+                                    <option>{item.size_name}</option>
+                                  ))
+                                }
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Covered Area</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,covered_area:e.target.value})}>
@@ -3672,19 +3845,24 @@ const handlesizesubcategorychange = (event) => {
 
                     <div className='row' id='charges' style={{marginTop:"20px",padding:"30px",display:"none"}}>
                   <div className='col-md-12'><hr></hr></div>
-                  <div className="col-md-4"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,name:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                  <div className="col-md-4"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={handlechargenamechange}>
+                                <option>---Select---</option>
+                                <option>Preferred Location Charges</option>
+                                <option>Amenities Charges</option>
+                                <option>Govt. Charges</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,type:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Type</label>
+                    {prices.chargename && (
+                    <select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,chargetype:e.target.value})}>
                                 <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                {chargeCategories[prices.chargename].map((charge, index) => (
+                                  <option key={index} value={charge}>
+                                    {charge}
+                                  </option>
+                                ))}
                                 </select>
+                    )}
                     </div>
                     <div className='col-md-4'></div>
 
@@ -3715,9 +3893,9 @@ const handlesizesubcategorychange = (event) => {
                   <div className='col-md-12'><hr></hr></div>
                   <div className="col-md-5"><label className="labels">Name</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,name1:e.target.value})}>
                                 <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>Goods and Service Tax(GST)</option>
+                                <option>Registration Charges</option>
+                                <option>Stamp Duty</option>
                                 </select>
                     </div>
                     <div className="col-md-5"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setprices({...prices,type1:e.target.value})}>
