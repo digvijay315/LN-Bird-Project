@@ -1153,14 +1153,19 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                               
                                             };
 
+                                      
+
+                                           
                                             const totalpercentage=()=>
                                               {
                                                 const sarea=sizes.total_sealable_area;
                                                 const carea=sizes.carpet_area;
                                                 const reductionPercentage = ((sarea - carea) / sarea) * 100;
+                                                const sizeName = `${sizes.type} ${sizes.unit_type} (${sizes.total_sealable_area} ${sizes.sq_feet1})`
                                               setsizes((prevsizes)=>({
                                                 ...prevsizes,
-                                                loading:reductionPercentage
+                                                loading:reductionPercentage,
+                                                size_name: sizeName, 
                                              }))
                                             }
                     
@@ -2772,7 +2777,7 @@ const handlesizesubcategorychange = (event) => {
      
                    {showapartmentSize && (
                     <div className='row' id='apartmentsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
-                    <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Total Seleble Area</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,total_sealable_area:e.target.value})} /></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,sq_feet1:e.target.value})}>
                                 <option>Feet</option>
                                 <option>Yard</option>

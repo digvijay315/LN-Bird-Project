@@ -22,8 +22,8 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
-
 import api from "../api";
+
 
 function Dealdetails() {
   const navigate=useNavigate()
@@ -655,6 +655,7 @@ function Dealdetails() {
                   React.useEffect(()=>{fetchcdata()},[])
 
                   const[cdata,setcdata]=useState([]);
+                  const [flattenedUnits, setFlattenedUnits] = useState([]);
                   // const [filteredData, setFilteredData] = useState([]);
                   const[totalproject,settotalproject]=useState()
                   const fetchcdata=async(event)=>
@@ -666,11 +667,29 @@ function Dealdetails() {
                       const countproject=Array.isArray(resp.data.project) ? resp.data.project : [resp.data.project]
                       settotalproject(countproject.length)
                       // setFilteredData(countcontact);
+                      
+                      const flattened = [];
+                        resp.data.project.forEach((project) => {
+                          if (Array.isArray(project.add_unit)) {
+                            // Flatten the add_unit array for each project
+                            const units = project.add_unit.flatMap((unitArray) => unitArray);
+                            flattened.push(...units);  // Add flattened units to the array
+                          } else {
+                            console.error('add_unit is not an array or is undefined');
+                          }
+                        });
+
+                        // Now update the flattenedUnits state with the flattened array
+                        setFlattenedUnits(flattened);
+                
+                      // Log the flattened units
+                    
                     } catch (error) {
                       console.log(error);
                     }
                   
                   }
+                    console.log(flattenedUnits);
 
                   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -679,7 +698,7 @@ function Dealdetails() {
                     setIsFlipped(true);
                     setTimeout(() => {
                       document.getElementById("contactlistview").style.display = "none";
-                      document.getElementById("companylistview").style.display = "block";
+                      document.getElementById("projectlistview").style.display = "block";
                     }, 500);  // Wait for flip animation to complete before hiding/showing the divs
                   };
                 
@@ -687,8 +706,17 @@ function Dealdetails() {
                     // Flip effect for companylistview to contactlistview
                     setIsFlipped(false);
                     setTimeout(() => {
+                      document.getElementById("unitlistview").style.display = "block";
+                      document.getElementById("projectlistview").style.display = "none";
+                    }, 500);  // Wait for flip animation to complete before hiding/showing the divs
+                  };
+
+                  const pagereload3 = () => {
+                    // Flip effect for companylistview to contactlistview
+                    setIsFlipped(false);
+                    setTimeout(() => {
+                      document.getElementById("unitlistview").style.display = "none";
                       document.getElementById("contactlistview").style.display = "block";
-                      document.getElementById("companylistview").style.display = "none";
                     }, 500);  // Wait for flip animation to complete before hiding/showing the divs
                   };
 
@@ -825,6 +853,12 @@ function Dealdetails() {
                     );
                   };
 
+                 
+
+
+                  
+                  
+
                   const allprojectColumns = [
                   
                     { id: 'sno', name: '#' },
@@ -878,6 +912,146 @@ function Dealdetails() {
                   };
 
 
+                  const allunitColumns = [
+                  
+                    { id: 'sno', name: '#' },
+                    { id: 'details', name: 'Details' },
+                    { id: 'status', name: 'Status' },
+                    { id: 'ownerdetails', name: 'Owner Details' },
+                    { id: 'owneraddress', name: ' Owner Address' },
+                    { id: 'associatedcontact', name: 'Associated Contact ' },
+                    { id: 'remarks', name: 'Remarks ' },
+                    { id: 'locationbrief', name: 'Location Brief' },
+                    { id: 'ownership', name: 'OwnerShip' },
+                    { id: 'followup', name: 'Follow Up' },
+                    { id: 'lastconduct', name: 'Last Conduct Date & Time' },
+                  ];
+                  const [selectedItems3, setSelectedItems3] = useState([]); // To track selected rows
+                  const [selectAll3, setSelectAll3] = useState(false); // To track the state of the "Select All" checkbox
+                  const [visibleColumns3, setVisibleColumns3] = useState(allunitColumns.slice(1, 11));
+                  const [showColumnList2, setShowColumnList2] = useState(false);
+
+                  const handleAddColumnClick2 = () => {
+                    setShowColumnList2(!showColumnList2);
+                  };
+                
+                  const handleCheckboxChange2 = (column) => {
+                    if (visibleColumns3.some((col) => col.id === column.id)) {
+                      // Remove column from visibleColumns if it's already present
+                      setVisibleColumns3(visibleColumns3.filter((col) => col.id !== column.id));
+                    } else {
+                      // Add column to visibleColumns
+                      setVisibleColumns3([...visibleColumns3, column]);
+                    }
+                  };
+                  const handleSelectAll3 = () => {
+                
+                    setSelectAll3(!selectAll3);
+                    if (!selectAll3) {
+                      // Add all current page item IDs to selectedItems
+                      setSelectedItems3(currentItems3.map((item) => item._id));
+                    } else {
+                      // Deselect all
+                       setSelectedItems3([]);
+                
+                    }
+                  };
+                
+                  const handleRowSelect3 = (id) => {
+                 
+                    if (selectedItems3.includes(id)) {
+                      setSelectedItems3(selectedItems3.filter((itemId) => itemId !== id));
+                    } else {
+                      setSelectedItems3([...selectedItems3, id]);
+                  
+                    }
+                  };
+
+
+
+
+
+                  const [currentPage2, setCurrentPage2] = useState(1);
+                  const [itemsPerPage2, setItemsPerPage2] = useState(5); // User-defined items per page
+                  const indexOfLastItem2 = currentPage2 * itemsPerPage2;
+                  const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
+                  const currentItems3 = flattenedUnits.slice(indexOfFirstItem2, indexOfLastItem2);
+                  const totalPages2 = Math.ceil(flattenedUnits.length / itemsPerPage2);
+                  
+              
+                  
+                    // Handle items per page change
+                    const handleItemsPerPageChange2 = (e) => {
+                      setItemsPerPage2(Number(e.target.value));
+                      setCurrentPage2(1); // Reset to first page whenever items per page changes
+                    };
+                  
+                  // Function to handle page changes
+                  const paginate2 = (pageNumber) => setCurrentPage2(pageNumber);
+                  
+                  // Function to handle "Next" and "Previous" page changes
+                  const goToNextPage2 = () => {
+                    if (currentPage2 < totalPages2) {
+                      setCurrentPage2(currentPage2 + 1);
+                    }
+                  };
+                  
+                  const goToPreviousPage2 = () => {
+                    if (currentPage2 > 1) {
+                      setCurrentPage2(currentPage2 - 1);
+                    }
+                  };
+                  
+                  const renderPageNumbers2 = () => {
+                    // Define the range of page numbers to display
+                    const maxPageNumbersToShow2 = 5;
+                    const startPage2 = Math.max(1, currentPage2 - Math.floor(maxPageNumbersToShow2 / 2));
+                    const endPage2 = Math.min(totalPages2, startPage2 + maxPageNumbersToShow2 - 1);
+                    
+                    return (
+                      <div
+                        style={{
+                          display: 'flex',
+                         
+                          whiteSpace: 'nowrap',
+                          padding: '10px-15px',
+                          width: '100%', 
+                          position: 'relative'
+                        }}
+                      >
+                        {/* Previous Button */}
+                        {currentPage2 > 1 && (
+                          <button onClick={goToPreviousPage2} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+                            Prev
+                          </button>
+                        )}
+                  
+                        {/* Page Numbers */}
+                        {Array.from({ length: endPage2 - startPage2 + 1 }, (_, i) => startPage2 + i).map((number) => (
+                          <button
+                            key={number}
+                            onClick={() => paginate2(number)}
+                            style={{
+                              width: '30px',
+                              borderRadius: '5px',
+                              marginRight: '5px',
+                              flexShrink: 0, // Prevent buttons from shrinking
+                              backgroundColor: number === currentPage ? 'lightblue' : 'white',
+                            }}
+                          >
+                            {number}
+                          </button>
+                        ))}
+                  
+                        {/* Next Button */}
+                        {currentPage2 < totalPages2 && (
+                          <button onClick={goToNextPage2} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+                            Next
+                          </button>
+                        )}
+                      </div>
+                    );
+                  };
                   
     return (
         <div>
@@ -1325,7 +1499,7 @@ function Dealdetails() {
 
 
 </div>
-          <div id="companylistview" className="flip-card-back" style={{display:"none"}}>
+          <div id="projectlistview" className="flip-card-back" style={{display:"none"}}>
           <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload2}>Project </h3>
@@ -1541,6 +1715,274 @@ function Dealdetails() {
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Company <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
+        </footer>
+      </div>
+
+
+
+          </div>
+
+
+
+
+          <div id="unitlistview" className="flip-card-back1" style={{display:"none"}}>
+          <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+        
+        <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload3}>Inventories</h3>
+        <Tooltip title="Export Data.." arrow>
+            <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
+        </button></Tooltip>
+            <ul class="dropdown-menu" id="exporttoexcel"> 
+            
+            <li  onClick={exportToExcel} >Export Data</li>
+              
+            </ul>
+            
+
+            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
+            <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
+        
+       
+       
+          
+      </div> 
+
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={fetchdatabystage_open}>
+          <h6>Active</h6>
+          <p>{countopen}</p>
+        </div>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={fetchdatabystage_quote}>
+          <h6>Inactive</h6>
+          <p>{countquote}</p>
+        </div>
+       
+      </div>
+
+      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+
+<input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+
+<div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
+
+<Tooltip title="Delete Data.." arrow>
+<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Edit Data.." arrow>
+<img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add to lead.." arrow>
+<img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Call.." arrow>
+<img id="call" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="transfer contact.." arrow>
+<img id="transfercontact" src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="merge contact..." arrow>
+<img id="mergecontact" src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+</Tooltip>    
+
+<Tooltip title="add task..." arrow>
+<img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip> 
+
+<Tooltip title="sequence.." arrow>
+<img id="sequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>  
+
+<Tooltip title="Send Mail.." arrow>
+<img id="mail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Send WhatsApp.." arrow>
+<img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
+</Tooltip>
+<Tooltip title="Send Message.." arrow>
+<img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+</Tooltip>
+</div>
+
+
+<div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
+
+<label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange1} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+  <option value="5">10</option>
+  <option value="10">15</option>
+  <option value="20">20</option>
+  <option value="50">50</option>
+</select>
+
+{renderPageNumbers2()}
+</div>
+  
+
+<div style={{ position: 'relative', display: 'inline-block',marginLeft:"65%"}}>
+        
+          {showColumnList1 && (
+            <div
+              style={{
+                width:"200px",
+                height:"500px",
+                overflow:"scroll",
+               backgroundColor:"gray",
+                position: 'absolute',
+                top: '-40%',
+                left: '-80px',
+                border: '1px solid #ccc',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+                zIndex: 1000,
+              }}
+            >
+              <ul style={{ listStyleType: 'none', margin: 0, padding: '10px' }}>
+                {allprojectColumns.slice(2).map((col) => (
+                  <li key={col.id} style={{ padding: '5px 0' }}>
+                    <input
+                      type="checkbox"
+                      checked={visibleColumns2.some((visibleCol) => visibleCol.id === col.id)}
+                      onChange={() => handleCheckboxChange1(col)}
+                    />{' '}
+                    {col.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+ 
+  
+</div>
+
+
+<div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <input
+              type="checkbox"
+              checked={selectAll3}
+              onChange={handleSelectAll3}
+            />
+          </StyledTableCell>
+          {visibleColumns3.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+         currentItems3.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems3.includes(item._id)}
+                onChange={() => handleRowSelect3(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", fontFamily: "times new roman" }}  >
+              <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
+              {item.category} {item.size} 
+          
+            </StyledTableCell>
+            {visibleColumns3
+              .filter((col) => col.id !== 'details' && col.id !== 'sno')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                  {
+                    col.id=='ownerdetails' ?
+                    (
+                      <>
+                    {item.owner_details.map((item)=>
+                    (
+                      <>
+                     {item.title} {item.first_name} {item.last_name}<br></br>
+                     {Array.isArray(item.mobile_no) ? (
+                        item.mobile_no.map((mobile, idx) => (
+                          <div key={idx}><SvgIcon component={PhoneIphoneIcon} />{mobile}</div>  // Each mobile number gets its own div
+                        ))
+                      ) : (
+                        <div><SvgIcon component={PhoneIphoneIcon} />{item.mobile_no}</div>  // If not an array, just display the mobile_no
+                      )}
+                      </>
+                    ))}
+                      </>
+                    ) :   col.id=='owneraddress' ?
+                    (
+                      <>
+                      {item.owner_details.map((item, index) => (
+                        <div key={index} >
+                          s/h/o:-{item.father_husband_name}<br></br>
+                          {item.h_no} {item.area1} {item.location1} <br></br>
+                          {item.city1} {item.state1} {item.pincode1}
+                        </div>
+                      ))}
+                    </>
+                    ) :  col.id=='associatedcontact' ?
+                    (
+                      <>
+                      {item.associated_contact.map((item)=>
+                      (
+                        <>
+                       {item.title} {item.first_name} {item.last_name}<br></br>
+                       {Array.isArray(item.mobile_no) ? (
+                          item.mobile_no.map((mobile, idx) => (
+                            <div key={idx}><SvgIcon component={PhoneIphoneIcon} />{mobile}</div>  // Each mobile number gets its own div
+                          ))
+                        ) : (
+                          <div><SvgIcon component={PhoneIphoneIcon} />{item.mobile_no}</div>  // If not an array, just display the mobile_no
+                        )}
+                        </>
+                      ))}
+                        </>
+                    ) :  col.id=='locationbrief' ?
+                    (
+                      <>
+                      {item.direction}(Direction)<br></br>
+                      {item.facing}(Facing)<br></br>
+                      {item.road}(Road)
+                    </>
+                    ) : item[col.id]
+                  }
+               
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Inventories <span style={{color:"black",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Residential <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Commercial <span style={{color:"blue",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Agriculture <span style={{color:"orange",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Industrial <span style={{color:"red",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Institutional <span style={{color:"gray",fontSize:"25px"}}>{totalproject}</span></h5>
         </footer>
       </div>
 
