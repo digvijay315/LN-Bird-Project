@@ -13,7 +13,7 @@ const blockSchema = new mongoose.Schema({
     launched_on: {type: Date},
     expected_competion: {type: Date},
     possession: {type: Date},
-    parking_type: {type: String},
+    parking_type: {type: Array},
     rera_no: {type: String}
   });
 
@@ -113,7 +113,7 @@ status:{type:String},
 launched_on:{type:String},
 expected_competion:{type:String},
 possession:{type:String},
-parking_type:{type:String},
+parking_type:{type:Array},
 approved_bank:{type:Array},
 approvals:{type:Array},
 registration_no:{type:Array},
