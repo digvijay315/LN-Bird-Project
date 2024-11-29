@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import api from "../api";
 import { event } from 'jquery'; 
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import axios from 'axios';
 
 
 
@@ -91,6 +92,10 @@ function Addcontact() {
             toast.error(error.response.data.message,{ autoClose: 2000 })
         }
     }
+
+    
+    
+    
 
     useEffect(()=>{fetchcdata()},[])
 
@@ -520,7 +525,7 @@ function Addcontact() {
                         const handledocumentpicchange = (index, event) => {
                           const newdocumentpic = [...contact.document_pic];
                           const files = Array.from(event.target.files);
-                          newdocumentpic[index] = {files:files}
+                          newdocumentpic[index] = files
                           setcontact({
                             ...contact,
                             document_pic: newdocumentpic
@@ -1617,6 +1622,7 @@ const handleOwnerChange = (event) => {
                         <input type="file" 
                         style={{marginTop:"10px"}}
                         className="form-control form-control-sm" 
+                        multiple
                         onChange={(event)=>handledocumentpicchange(index,event)}
                         />
                       ))

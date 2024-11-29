@@ -60,4 +60,20 @@ const createProject = async (req, res) => {
                 console.log(error)
             }
         }
-   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname}
+
+        const remove_project=async(req,res)=>
+          {
+              try {
+                  const _id=req.params._id;
+                  const user=await addproject.find({_id:_id})
+                  if(!user)
+                      {
+                          return res.send({message:"contact not found"})
+                      }
+                  const resp=await addproject.deleteOne({_id:_id})
+                  res.status(200).send({message:"contact deleted successfully"})
+              } catch (error) {
+                  console.log(error)
+              }
+          }
+   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project}

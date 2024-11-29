@@ -15,7 +15,7 @@ const {booking_details,view_booking} = require('../controllers/booking_details')
 const {addpayment_details,view_payment} = require('../controllers/addpayment_details');
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
-const {createProject,view_project, view_projectbyname, view_projectbycityname} = require('../controllers/project');
+const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project} = require('../controllers/project');
 const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal } = require('../controllers/add_deal');
 
 
@@ -48,6 +48,7 @@ router.post('/project',upload.any('pic'),createProject)
 router.get('/viewproject',view_project)
 router.get('/viewprojectbyname/:name',view_projectbyname)
 router.get('/viewprojectbycityname/:city',view_projectbycityname)
+router.delete('/deleteproject/:_id',remove_project)
 
 router.post('/adddeal',upload.any('pic','preview'),add_deal)
 router.get('/viewdeal',view_deal)

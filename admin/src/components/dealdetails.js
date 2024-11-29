@@ -46,13 +46,13 @@ function Dealdetails() {
 
         const deleteSelectedItems = async () => {
           try {
-            if(selectedItems.length===0)
+            if(selectedItems2.length===0)
             {
               toast.error("please select first",{autoClose:"2000"})
               return
             }
-            const resp = selectedItems.map(async (itemId) => {
-              await api.delete(`removedeal/${itemId}`);
+            const resp = selectedItems2.map(async (itemId) => {
+              await api.delete(`deleteproject/${itemId}`);
             });
             
             toast.success('Selected items deleted successfully',{autoClose:"2000"})
@@ -952,6 +952,57 @@ function Dealdetails() {
                     }
                   };
 
+                  useEffect(()=>
+                    {
+                      if(selectedItems2.length===0)
+                        {
+                          document.getElementById("delete2").style.display="none"
+                          document.getElementById("edit").style.display="none"
+                        document.getElementById("mail").style.display="none"
+                         document.getElementById("whatsapp").style.display="none"
+                            document.getElementById("message").style.display="none"
+                            document.getElementById("call").style.display="none"
+                            document.getElementById("addtask").style.display="none"
+                            document.getElementById("addtolead").style.display="none"
+                            document.getElementById("transfercontact").style.display="none"
+                            document.getElementById("sequence").style.display="none"
+                            document.getElementById("mergecontact").style.display="none"
+                           document.getElementById("search2").style.display="flex"
+                        }
+                      if(selectedItems2.length===1)
+                        {
+                          document.getElementById("delete2").style.display="inline-block"
+                        //   document.getElementById("edit").style.display="inline-block"
+                        // document.getElementById("mail").style.display="inline-block"
+                        //  document.getElementById("whatsapp").style.display="inline-block"
+                        //     document.getElementById("message").style.display="inline-block"
+                        //     document.getElementById("call").style.display="inline-block"
+                        //     document.getElementById("addtask").style.display="inline-block"
+                        //     document.getElementById("addtolead").style.display="inline-block"
+                        //     document.getElementById("transfercontact").style.display="inline-block"
+                        //     document.getElementById("sequence").style.display="inline-block"
+                        //     document.getElementById("mergecontact").style.display="none"
+                           document.getElementById("search2").style.display="none"
+                        }
+                     
+              
+                          if(selectedItems2.length>1)
+                            {
+                              document.getElementById("delete2").style.display="inline-block"
+                            //   document.getElementById("edit").style.display="none"
+                            // document.getElementById("mail").style.display="inline-block"
+                            //  document.getElementById("whatsapp").style.display="inline-block"
+                            //     document.getElementById("message").style.display="inline-block"
+                            //     document.getElementById("call").style.display="none"
+                            //     document.getElementById("addtask").style.display="none"
+                            //     document.getElementById("addtolead").style.display="none"
+                            //     document.getElementById("transfercontact").style.display="inline-block"
+                            //     document.getElementById("sequence").style.display="inline-block"
+                            //     document.getElementById("mergecontact").style.display="none"
+                               document.getElementById("search2").style.display="none"
+                            }
+                  
+                    },[selectedItems2])
 
                   const allunitColumns = [
                   
@@ -1565,12 +1616,12 @@ function Dealdetails() {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+<input id="search2" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="delete2" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
