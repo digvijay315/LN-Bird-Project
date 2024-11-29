@@ -658,6 +658,10 @@ function Dealdetails() {
                   const [flattenedUnits, setFlattenedUnits] = useState([]);
                   // const [filteredData, setFilteredData] = useState([]);
                   const[totalproject,settotalproject]=useState()
+                  const[totalupcoming,settotalupcoming]=useState()
+                  const[totalprelaunch,settotalprelaunch]=useState()
+                  const[totalreadytomove,settotalreadytomove]=useState()
+                  const[totalunderconstruction,settotalunderconstrction]=useState()
                   const fetchcdata=async(event)=>
                   {
                     
@@ -666,7 +670,18 @@ function Dealdetails() {
                       setcdata(resp.data.project)
                       const countproject=Array.isArray(resp.data.project) ? resp.data.project : [resp.data.project]
                       settotalproject(countproject.length)
-                      // setFilteredData(countcontact);
+                    
+                      const totalaupcomingproject=resp.data.project.filter(item=>item.status==='Upcoming').length
+                      settotalupcoming(totalaupcomingproject)
+
+                      const totalprelaunchproject=resp.data.project.filter(item=>item.status==='Pre Launch').length
+                      settotalprelaunch(totalprelaunchproject)
+
+                      const totalreadytomoveproject=resp.data.project.filter(item=>item.status==='Ready to Move').length
+                      settotalreadytomove(totalreadytomoveproject)
+
+                      const totalunderconstrctionproject=resp.data.project.filter(item=>item.status==='Under Construction').length
+                      settotalunderconstrction(totalunderconstrctionproject)
                       
                       const flattened = [];
                         resp.data.project.forEach((project) => {
@@ -689,7 +704,33 @@ function Dealdetails() {
                     }
                   
                   }
-                    console.log(flattenedUnits);
+                  
+                  const[totalinventories,settotalinventories]=useState(0)
+                  const [totalResidential, setTotalResidential] = useState(0);
+                  const [totalcommercial, settotalcommercial] = useState(0);
+                  const [totalagriculture, settotalagriculture] = useState(0);
+                  const [totalindustrial, settotalindustrial] = useState(0);
+                  const [totalinstitutional, settotalinstitutional] = useState(0);
+                  useEffect(()=>
+                  {
+                    const tinventories=flattenedUnits.length
+                    settotalinventories(tinventories)
+
+                    const residentialCount = flattenedUnits.filter(unit => unit.category === 'Residential').length;
+                    setTotalResidential(residentialCount);
+
+                    const commercialcount = flattenedUnits.filter(unit => unit.category === 'Commercial').length;
+                    settotalcommercial(commercialcount);
+
+                    const agriculturecount = flattenedUnits.filter(unit => unit.category === 'Agriculture').length;
+                    settotalagriculture(agriculturecount);
+
+                    const insdustrialcount = flattenedUnits.filter(unit => unit.category === 'Industrial').length;
+                    settotalindustrial(insdustrialcount);
+
+                    const institutionalcount = flattenedUnits.filter(unit => unit.category === 'Institutional').length;
+                    settotalinstitutional(institutionalcount);
+                  },[flattenedUnits])
 
                   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -836,7 +877,7 @@ function Dealdetails() {
                               borderRadius: '5px',
                               marginRight: '5px',
                               flexShrink: 0, // Prevent buttons from shrinking
-                              backgroundColor: number === currentPage ? 'lightblue' : 'white',
+                              backgroundColor: number === currentPage1 ? 'lightblue' : 'white',
                             }}
                           >
                             {number}
@@ -1036,7 +1077,7 @@ function Dealdetails() {
                               borderRadius: '5px',
                               marginRight: '5px',
                               flexShrink: 0, // Prevent buttons from shrinking
-                              backgroundColor: number === currentPage ? 'lightblue' : 'white',
+                              backgroundColor: number === currentPage2 ? 'lightblue' : 'white',
                             }}
                           >
                             {number}
@@ -1674,27 +1715,27 @@ function Dealdetails() {
                   style={{ padding: "10px", fontFamily: "times new roman" }}
                 >
                   {
-                    col.id=='location' ?
+                    col.id==='location' ?
                     (
                       <>
                       {item.area} {item.location} {item.city} <br></br>
                       {item.state} {item.pincode}
                       </>
-                    ) :   col.id=='unit_type' ?
+                    ) :   col.id==='unit_type' ?
                     (
                       <>
                       "{item.add_size.map((unit, index) => (
                         <div key={index} style={{display:"inline-block"}}>{unit.unit_type},</div>// You need to return a valid JSX element
                       ))}"
                     </>
-                    ) :  col.id=='block' ?
+                    ) :  col.id==='block' ?
                     (
                       <>
                       {item.add_block.map((block, index) => (
                         <div key={index} style={{backgroundColor:"blue",color:"white",display:"inline-block",marginRight: "10px", }}>{block.block_name} </div>// You need to return a valid JSX element
                       ))}
                     </>
-                    ) :  col.id=='category' ?
+                    ) :  col.id==='category' ?
                     (
                       <>
                       {item.category}<br></br>
@@ -1712,9 +1753,13 @@ function Dealdetails() {
       </tbody>
     </Table>
   </TableContainer>
-    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Company <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Project <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Ready To Move <span style={{color:"blue",fontSize:"25px"}}>{totalreadytomove}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Under Construction <span style={{color:"red",fontSize:"25px"}}>{totalunderconstruction}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Pre Launch <span style={{color:"gray",fontSize:"25px"}}>{totalprelaunch}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Upcoming <span style={{color:"pink",fontSize:"25px"}}>{totalupcoming}</span></h5>
         </footer>
       </div>
 
@@ -1813,7 +1858,7 @@ function Dealdetails() {
 <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
 
 <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange1} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange2} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
   <option value="5">10</option>
   <option value="10">15</option>
   <option value="20">20</option>
@@ -1913,7 +1958,7 @@ function Dealdetails() {
                   style={{ padding: "10px", fontFamily: "times new roman" }}
                 >
                   {
-                    col.id=='ownerdetails' ?
+                    col.id==='ownerdetails' ?
                     (
                       <>
                     {item.owner_details.map((item)=>
@@ -1930,7 +1975,7 @@ function Dealdetails() {
                       </>
                     ))}
                       </>
-                    ) :   col.id=='owneraddress' ?
+                    ) :   col.id==='owneraddress' ?
                     (
                       <>
                       {item.owner_details.map((item, index) => (
@@ -1941,7 +1986,7 @@ function Dealdetails() {
                         </div>
                       ))}
                     </>
-                    ) :  col.id=='associatedcontact' ?
+                    ) :  col.id==='associatedcontact' ?
                     (
                       <>
                       {item.associated_contact.map((item)=>
@@ -1958,7 +2003,7 @@ function Dealdetails() {
                         </>
                       ))}
                         </>
-                    ) :  col.id=='locationbrief' ?
+                    ) :  col.id==='locationbrief' ?
                     (
                       <>
                       {item.direction}(Direction)<br></br>
@@ -1977,12 +2022,12 @@ function Dealdetails() {
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Inventories <span style={{color:"black",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Residential <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Commercial <span style={{color:"blue",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Agriculture <span style={{color:"orange",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Industrial <span style={{color:"red",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Institutional <span style={{color:"gray",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Inventories <span style={{color:"black",fontSize:"25px"}}>{totalinventories}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Residential <span style={{color:"green",fontSize:"25px"}}>{totalResidential}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Commercial <span style={{color:"blue",fontSize:"25px"}}>{totalcommercial}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Agriculture <span style={{color:"orange",fontSize:"25px"}}>{totalagriculture}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Industrial <span style={{color:"red",fontSize:"25px"}}>{totalindustrial}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Institutional <span style={{color:"gray",fontSize:"25px"}}>{totalinstitutional}</span></h5>
         </footer>
       </div>
 
