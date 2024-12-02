@@ -20,22 +20,19 @@ const inventory_details = async (req, res) => {
         number, date, linkded_contact
       } = req.body;
   
-     
       // Check if there are files to upload
-      const preview = req.files ? req.files.map(file => file.path) : [];
-     
-      
+      //const preview = req.files ? req.files.map(file => file.path) : [];  // Get local file paths
+  
       const images = [];
-      for (let file of preview) {
-        try {
-          // Upload each file to Cloudinary
-          const result = await cloudinary.uploader.upload(file);
+      for (let file of req.files) {
+        
+       
+  
+          const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);
-          fs.unlinkSync(file); // Remove file from the local server
-        } catch (uploadError) {
-          console.error('Error uploading file:', uploadError);
-          return res.status(500).send({ message: 'Error uploading file to Cloudinary', error: uploadError });
-        }
+          //fs.unlinkSync(file.path);
+        
+        
       }
   
       // Create a new inventory record with uploaded image URLs
@@ -53,6 +50,8 @@ const inventory_details = async (req, res) => {
       res.status(500).send({ message: 'Error saving inventory details', error });
     }
   };
+  
+  
     const view_inventory=async(req,res)=>
         {
             try {

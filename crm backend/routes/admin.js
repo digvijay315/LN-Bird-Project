@@ -21,7 +21,7 @@ const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal } = req
 
 const router=express.Router()
 
-router.post('/addcontact',upload.any('document_pic'),add_contact)
+router.post('/addcontact',upload.array('document_pic'),add_contact)
 router.get('/viewcontact',view_contact)
 router.get('/viewcontactbyid/:_id',view_contact_Byid)
 router.get('/viewcontactbyname/:first_name',view_contact_ByName)

@@ -37,6 +37,7 @@ import Bookingdetails from './components/bookingdetails.js';
 import Marketing from './components/marketing.js';
 import Dealdetails from './components/dealdetails.js';
 import FlipViewComponent from './components/demo';
+import AddContactForm from './components/demo';
 
 function App() {
   return (
@@ -77,6 +78,7 @@ function App() {
     {/* <Projectform/> */}
   {/* <BankSelector/> */}
   {/* <FlipViewComponent/> */}
+  {/* <AddContactForm/> */}
    </div>
    </BrowserRouter>
   );

@@ -678,32 +678,120 @@ function Projectform() {
 const [mapLoaded, setMapLoaded] = useState(false);  // Tracks if the first map is loaded
 const [mapLoaded1, setMapLoaded1] = useState(false);
                         const [coordinates, setCoordinates] = useState('');
-                        const handleSubmit = async (e) => {
-                          e.preventDefault();
+                      //   const handleSubmit = async (e) => {
+                      //     e.preventDefault();
+                      //   try {
+                      //     const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                      //       params: {
+                      //         address: project.location,
+                      //         key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'  // Replace with your API key
+                      //       }
+                      //     });
+                
+                      //     if (response.data.results.length > 0) {
+                          
+                      //       const { lat, lng } = response.data.results[0].geometry.location;
+                      //       setCoordinates({ lat, lng });
+                      //       setproject({...project,lattitude:lat,langitude:lng})
+                      //       setMapLoaded(true); 
+                            
+                      //     } else {
+                      //       setCoordinates(null);
+                      //       console.log('No results found');
+                      //     }
+                          
+                      //   } catch (error) {
+                      //     console.error('Error fetching coordinates:', error);
+                      //   }
+                      // }
+
+                      const handleSubmit = async (e) => {
+                        e.preventDefault();
                         try {
+                          // Geocode the address entered by the user
                           const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                             params: {
                               address: project.location,
-                              key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'  // Replace with your API key
+                              key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc' // Replace with your API key
                             }
                           });
-                
+                      
+                          // Check if we have results from the geocoding response
                           if (response.data.results.length > 0) {
-                          
                             const { lat, lng } = response.data.results[0].geometry.location;
                             setCoordinates({ lat, lng });
-                            setproject({...project,lattitude:lat,langitude:lng})
-                            setMapLoaded(true); 
+                            setproject(prevProject => ({
+                              ...prevProject,
+                              lattitude: lat,
+                              langitude: lng
+                            }));
+                      
+                            // Extract address components from the response
+                            const addressComponents = response.data.results[0].address_components;
+                            console.log('Geocode Response:', response.data);
+                            let address = '';
+                            let street = '';
+                            let locality = '';
+                            let city = '';
+                            let zip = '';
+                            let state = '';
+                            let country = '';
+                      
+                            // Loop through address components to populate the fields
+                            addressComponents.forEach(component => {
+                              const types = component.types;
+                      
+                              if (types.includes('administrative_area_level_3') || types.includes('political')) {
+                                address += component.long_name + ' ';
+                              }
+                              if (types.includes('sublocality_level_1') || types.includes('sublocality')) {
+                                street += component.long_name + ' ';
+                              }
+                              if (types.includes('administrative_area_level_2')) {
+                                locality = component.long_name;
+                              }
+                              if (types.includes('administrative_area_level_1')) {
+                                state = component.long_name;
+                              }
+                              if (types.includes('locality')) {
+                                city = component.long_name;
+                              }
+                              if (types.includes('postal_code')) {
+                                zip = component.long_name;
+                              }
+                              if (types.includes('country')) {
+                                country = component.long_name;
+                              }
+                            });
+                      
+                            // Update the state with the extracted address components
+                            setproject(prevProject => ({
+                              ...prevProject,
+                              address,
+                              street: street.trim(),
+                              locality,
+                              city,
+                              zip,
+                              state,
+                              country,
+                              location: response.data.results[0].formatted_address
+                            }));
+                      
+                            // Optionally mark the map as loaded (if you use a map component)
                             
+                      
                           } else {
-                            setCoordinates(null);
+                            // Handle case when no results are found
+                            setCoordinates1(null);
                             console.log('No results found');
                           }
-                          
+                      
                         } catch (error) {
+                          // Handle errors, such as invalid API key or issues with the network
                           console.error('Error fetching coordinates:', error);
                         }
-                      }
+                      };
+
                       const mapStyles = {
                         height: "500px",
                         width: "100%"
@@ -740,30 +828,123 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
 
                       const [coordinates1, setCoordinates1] = useState('');
-                      const handleSubmit1 = async (e) => {
-                        e.preventDefault();
+                
+                    const handleSubmit1 = async (e) => {
+                      e.preventDefault();
                       try {
                         const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
                           params: {
                             address: units.location,
-                            key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'  // Replace with your API key
+                            key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
                           }
                         });
-              
+                    
                         if (response.data.results.length > 0) {
                           const { lat, lng } = response.data.results[0].geometry.location;
                           setCoordinates1({ lat, lng });
-                          setunits({...units,lattitude:lat,langitude:lng})
-                          setMapLoaded1(true);  // Mark second map as loaded
+                          setunits(prevUnits => ({
+                            ...prevUnits,
+                            lattitude: lat,
+                            langitude: lng
+                          }));
+                          const addressComponents = response.data.results[0].address_components;
+                          let uaddress = '';
+                          let ustreet = '';
+                          let ulocality = '';
+                          let ucity = '';
+                          let uzip = '';
+                          let ustate = '';
+                          let ucountry = '';
+                    
+                          // Extract address components
+                          addressComponents.forEach(component => {
+                            const types = component.types;
+                            if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                            if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                            if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                            if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                            if (types.includes('locality')) ucity = component.long_name;
+                            if (types.includes('postal_code')) uzip = component.long_name;
+                            if (types.includes('country')) ucountry = component.long_name;
+                          });
+                    
+                          // Update units state with the extracted information
+                          setunits(prevUnits => ({
+                            ...prevUnits,
+                            uaddress,
+                            ustreet: ustreet.trim(),
+                            ulocality,
+                            ucity,
+                            uzip,
+                            ustate,
+                            ucountry,
+                            location: response.data.results[0].formatted_address
+                          }));
+                          setMapLoaded1(true);
                         } else {
-                          setCoordinates1(null);
+                          setCoordinates1({ lat: null, lng: null });
                           console.log('No results found');
                         }
-                        
+                    
                       } catch (error) {
                         console.error('Error fetching coordinates:', error);
                       }
-                    }
+                    };
+                    
+                    const handleMarkerDragEnd1 = async (e) => {
+                      const newLat = e.latLng.lat();
+                      const newLng = e.latLng.lng();
+                      setCoordinates1({ lat: newLat, lng: newLng });
+                    
+                      try {
+                        const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                          params: {
+                            latlng: `${newLat},${newLng}`,
+                            key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+                          }
+                        });
+                    
+                        if (response.data.results.length > 0) {
+                          const addressComponents = response.data.results[0].address_components;
+                          let uaddress = '';
+                          let ustreet = '';
+                          let ulocality = '';
+                          let ucity = '';
+                          let uzip = '';
+                          let ustate = '';
+                          let ucountry = '';
+                    
+                          addressComponents.forEach(component => {
+                            const types = component.types;
+                            if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                            if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                            if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                            if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                            if (types.includes('locality')) ucity = component.long_name;
+                            if (types.includes('postal_code')) uzip = component.long_name;
+                            if (types.includes('country')) ucountry = component.long_name;
+                          });
+                    
+                          setunits(prevUnits => ({
+                            ...prevUnits,
+                            uaddress,
+                            ustreet: ustreet.trim(),
+                            ulocality,
+                            ucity,
+                            uzip,
+                            ustate,
+                            ucountry,
+                            location: response.data.results[0].formatted_address
+                          }));
+                    
+                        } else {
+                          console.log("No location name found");
+                        }
+                      } catch (error) {
+                        console.error("Error fetching location name:", error);
+                      }
+                    };
+                   
                     const mapStyles1 = {
                       height: "500px",
                       width: "100%"
@@ -772,34 +953,6 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                     const defaultCenter1 = {
                       lat: coordinates1.lat || 37.7749, lng: coordinates1.lng || -122.4194
                     };
-
-                    const handleMarkerDragEnd1 = async (e) => {
-                      const newLat = e.latLng.lat();
-                      const newLng = e.latLng.lng();
-                      setCoordinates1({ lat: newLat, lng: newLng });
-                  
-                      // Reverse geocoding to get the location name from lat/lng
-                      try {
-                        const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
-                          params: {
-                            latlng: `${newLat},${newLng}`,
-                            key: "AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc",  // Replace with your API key
-                          },
-                        });
-                  
-                        if (response.data.results.length > 0) {
-                          const locationName = response.data.results[0].formatted_address;
-                          setunits({ ...units, location: locationName, lattitude: newLat, langitude: newLng });
-                        } else {
-                          console.log("No location name found");
-                        }
-                      } catch (error) {
-                        console.error("Error fetching location name:", error);
-                      }
-                    };
-
-                   
-
 // ================================----------------------google location code end-----------------------------================================
                     
 
@@ -1183,7 +1336,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",type:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
-                                                                          furnished_item:"",location:"",lattitude:"",langitude:"",owner_details:[],associated_contact:[],
+                                                                          furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
+                                                                          ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",mowner_details:[],associated_contact:[],
                                                                           relation:""})
 
                                               const addunit = () => {
@@ -1971,7 +2125,55 @@ const handlesizesubcategorychange = (event) => {
 
 
 
+const statesAndCities = {
+  AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+  ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+  Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+  Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+  Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+  Goa: ["North Goa", "South Goa"],
+  Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+  Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+  HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+  Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+  Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+  Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+  MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+  Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+  Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+  Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+  Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+  Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+  Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+  Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+  Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+  Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+  TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+  Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+  Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+  UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+  WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+};
 
+
+const states = Object.keys(statesAndCities);
+const cities = statesAndCities[project.state] || [];
+
+const ustates = Object.keys(statesAndCities);
+const ucities = statesAndCities[units.ustate] || [];
+
+
+const asianCountries = [
+  "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
+  "Brunei", "Burma (Myanmar)", "Cambodia", "China", "Cyprus", "Georgia", 
+  "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", 
+  "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", 
+  "Maldives", "Mongolia", "Nepal", "North Korea", "Oman", "Pakistan", 
+  "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+  "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", 
+  "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
+  "Vietnam", "Yemen"
+];
 
 
 
@@ -2319,8 +2521,8 @@ const handlesizesubcategorychange = (event) => {
         <div className="col-md-12" id='location' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
                 <div className="row " >
-                <div className="col-md-12" style={{border:"1px solid black",height:"700px"}}>
-                <div style={{border:"1px solid black",marginTop:"10px"}}>
+                <div className="col-md-12" style={{border:"1px solid black",padding:"10px"}}>
+                {/* <div style={{border:"1px solid black",marginTop:"10px"}}>
                 {mapLoaded && (
                           <LoadScript
                             googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
@@ -2338,7 +2540,7 @@ const handlesizesubcategorychange = (event) => {
                             </GoogleMap>
                             </LoadScript>
                 )}
-                          </div>
+                          </div> */}
                           <div className="row">
                           <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" value={project.location} onChange={(e)=>setproject({...project,location:e.target.value})}/></div>
                           {/* <div className='col-md-5'></div> */}
@@ -2351,22 +2553,33 @@ const handlesizesubcategorychange = (event) => {
                           
                           <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
                     <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,address:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" value={project.address} className="form-control form-control-sm" onChange={(e)=>setproject({...project,address:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,street:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" value={project.street} className="form-control form-control-sm" onChange={(e)=>setproject({...project,street:e.target.value})}/></div>
                     <div className="col-md-4"></div>
-                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,locality:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">CITY</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,city:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,zip:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" value={project.locality} className="form-control form-control-sm" onChange={(e)=>setproject({...project,locality:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">CITY</label>
+                    <select type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,city:e.target.value})}>
+                   <option>{project.city} </option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                    </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" value={project.zip} className="form-control form-control-sm" onChange={(e)=>setproject({...project,zip:e.target.value})}/></div>
                     <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setproject({...project,state:e.target.value})}>
-                                <option>Select</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
+                                <option>{project.state}</option>
+                                {states.map((state) => (
+                                <option key={state} value={state}>
+                                  {state}
+                                </option>
+                                 ))}
                                 </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setproject({...project,country:e.target.value})}>
-                                <option>Select</option>
+                                <option>{project.country}</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
@@ -3441,7 +3654,7 @@ const handlesizesubcategorychange = (event) => {
                 <div className="row">
                 <div className="col-md-12" id='unitlocation' style={{display:"none",lineHeight:"30px"}}>
                  <div className="p-3 py-5">
-                <div className="col-md-12" style={{border:"1px solid black",height:"700px",marginTop:"30px"}}>
+                <div className="col-md-12" style={{border:"1px solid black",marginTop:"30px",padding:"10px"}}>
                 <div style={{border:"1px solid black",marginTop:"10px"}}>
                 
                   
@@ -3469,6 +3682,40 @@ const handlesizesubcategorychange = (event) => {
                           <div className='col-md-4'></div>
                           <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.lattitude}  readOnly/></div>
                           <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.langitude} readOnly/></div>
+                          <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
+                   
+                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" value={units.uaddress} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uaddress:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" value={units.ustreet} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustreet:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" value={units.ulocality} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ulocality:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">CITY</label>
+                    <select type="text"  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ucity:e.target.value})}>
+                    <option>{units.ucity}</option>
+                    {ucities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                    </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" value={units.uzip} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uzip:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustate:e.target.value})}>
+                                <option>{units.ustate}</option>
+                                {ustates.map((state) => (
+                                <option key={state} value={state}>
+                                  {state}
+                                </option>
+                                 ))}
+                                </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ucountry:e.target.value})}>
+                                <option>{units.ucountry}</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
                           </div>
                           </div>
            
