@@ -34,30 +34,40 @@ const AddContactForm = () => {
 //     event.target.value = '';
 //   };
   
+// const handledocumentpicchange = (event) => {
+//     const newFile = event.target.files[0];  // Get the first file selected
+  
+//     // If there's already a file in the state, don't add a new one unless it's a different file
+//     if (newFile) {
+//       // Check if the selected file is already in the state (based on file name and size)
+//       const isDuplicate = contact.document_pic.some(
+//         (existingFile) =>
+//           existingFile.name === newFile.name && existingFile.size === newFile.size
+//       );
+  
+//       if (!isDuplicate) {
+//         // If it's not a duplicate, replace the existing file with the new one
+//         setContact((prevState) => ({
+//           ...prevState,
+//           document_pic: [newFile], // Only store one file at a time
+//         }));
+//       }
+//     }
+  
+//     // Reset the file input to allow re-uploading the same file (if needed)
+//     event.target.value = '';
+//   };
+  
+
+
+// Handle file selection and update the state
 const handledocumentpicchange = (event) => {
-    const newFile = event.target.files[0];  // Get the first file selected
-  
-    // If there's already a file in the state, don't add a new one unless it's a different file
-    if (newFile) {
-      // Check if the selected file is already in the state (based on file name and size)
-      const isDuplicate = contact.document_pic.some(
-        (existingFile) =>
-          existingFile.name === newFile.name && existingFile.size === newFile.size
-      );
-  
-      if (!isDuplicate) {
-        // If it's not a duplicate, replace the existing file with the new one
-        setContact((prevState) => ({
-          ...prevState,
-          document_pic: [newFile], // Only store one file at a time
-        }));
-      }
-    }
-  
-    // Reset the file input to allow re-uploading the same file (if needed)
-    event.target.value = '';
-  };
-  
+  const files = Array.from(event.target.files);  // Convert file list to an array
+  setContact((prevState) => ({
+    ...prevState,
+    document_pic: files,  // Store the files in state
+  }));
+};
   // Handles form submission
   const addcontact = async (e) => {
    
@@ -67,35 +77,22 @@ const handledocumentpicchange = (event) => {
   
       // Manually append all contact data (excluding files)
       for (let key in contact) {
-        if (Array.isArray(contact[key])) {
-          contact[key].forEach((value) => {
-            formData.append(key, value);
-          });
-        } else if (contact[key]) {
-          formData.append(key, contact[key]);
+        if (key !== 'document_pic') { // Skip document_pic here
+          if (Array.isArray(contact[key])) {
+            contact[key].forEach((value) => {
+              formData.append(key, value);
+            });
+          } else if (contact[key]) {
+            formData.append(key, contact[key]);
+          }
         }
       }
   
-      // Deduplicate files before adding to FormData
-      const fileSet = new Set();
-      const uniqueFiles = [];
-  
-      contact.document_pic.forEach((file) => {
-        const fileKey = `${file.name}-${file.size}`;
-        if (!fileSet.has(fileKey)) {
-          uniqueFiles.push(file);
-          fileSet.add(fileKey); // Mark file as added
-        }
-      });
-  
-      // Append unique files to FormData
-      uniqueFiles.forEach((file) => {
-        formData.append('document_pic', file);
-      });
-  
-      // Debug: Log the FormData contents
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ": " + pair[1]);
+      // Append document_pic (files) to FormData if it exists
+      if (contact.document_pic && contact.document_pic.length > 0) {
+        contact.document_pic.forEach((file) => {
+          formData.append('document_pic', file); // Add file(s) to FormData
+        });
       }
   
       // Submit the FormData
@@ -170,19 +167,23 @@ const handledocumentpicchange = (event) => {
           required
         />
       </div>
+    
 
       {/* Document Upload */}
-      {/* <div>
-        <label>Document:</label>
-        <input
-          type="file"
-          name="document_pic"
-          onChange={handledocumentpicchange}
-          multiple // Allow multiple file selection if needed
-          required
-        />
-      </div> */}
-      <input type='file' name='document_pic' onChange={handledocumentpicchange}/>
+      <div>
+          <label>Document:</label>
+          <input
+            type="file"
+            style={{ marginTop: "10px" }}
+            className="form-control form-control-sm"
+            multiple
+            onChange={handledocumentpicchange}
+            accept="image/*,capture=camera"
+          />
+         
+        </div>
+      
+   
 
       <button type="button" onClick={addcontact}>Submit</button>
     </div>

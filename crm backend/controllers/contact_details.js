@@ -68,8 +68,9 @@ const add_contact = async (req, res) => {
         // 'req.files' will contain the uploaded files
         const images = [];
 
+
         // Loop through each file in 'req.files' and upload them to Cloudinary
-        if (req.files && req.files.length > 0) {
+        if (req.files) {
             for (let file of req.files) {
                 const result = await cloudinary.uploader.upload(file.path);
                 images.push(result.secure_url);  // Store the URL of the uploaded image
@@ -77,7 +78,7 @@ const add_contact = async (req, res) => {
                 // fs.unlinkSync(file.path);
             }
         }
-console.log(req.files);
+// console.log(req.files);
 
         // Create a new contact with the uploaded Cloudinary URLs
         const newAddContact = new addcontact({

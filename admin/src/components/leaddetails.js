@@ -568,19 +568,37 @@ const[countall,setcountall]=useState('')
       document.getElementById("delete").style.display="none"
       document.getElementById("edit").style.display="none"
       document.getElementById("mail").style.display="none"
-       document.getElementById("whatsapp").style.display="none"
-          document.getElementById("message").style.display="none"
+      document.getElementById("whatsapp").style.display="none"
+      document.getElementById("message").style.display="none"
+      document.getElementById("addtask").style.display="none"
+      document.getElementById("transferlead").style.display="none"
+      document.getElementById("adduser").style.display="none"
+      document.getElementById("removeuser").style.display="none"
+      document.getElementById("call").style.display="none"
+      document.getElementById("addtag").style.display="none"
+      document.getElementById("addremarks").style.display="none"
+      document.getElementById("adddocument").style.display="none"
+      document.getElementById("updatestage").style.display="none"
       document.getElementById("search").style.display="flex"
       if (selectedItems.includes(id)) {
         setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
       } else {
         setSelectedItems([...selectedItems, id]);
         document.getElementById("delete").style.display="inline-block"
-         document.getElementById("edit").style.display="inline-block"
-       document.getElementById("mail").style.display="inline-block"
+        document.getElementById("edit").style.display="inline-block"
+        document.getElementById("mail").style.display="inline-block"
         document.getElementById("whatsapp").style.display="inline-block"
-           document.getElementById("message").style.display="inline-block"
-       document.getElementById("search").style.display="none"
+        document.getElementById("message").style.display="inline-block" 
+        document.getElementById("addtask").style.display="inline-block"
+        document.getElementById("transferlead").style.display="inline-block"
+        document.getElementById("adduser").style.display="inline-block"
+        document.getElementById("removeuser").style.display="inline-block"
+        document.getElementById("call").style.display="inline-block"
+        document.getElementById("addtag").style.display="inline-block"
+        document.getElementById("addremarks").style.display="inline-block"
+        document.getElementById("adddocument").style.display="inline-block"
+        document.getElementById("updatestage").style.display="inline-block"
+        document.getElementById("search").style.display="none"
       }
     };
 
@@ -1121,7 +1139,45 @@ const[countall,setcountall]=useState('')
                 );
               };
   // -------------------------------------===========================send email end========================================-----------------------
-          
+  const [show4, setshow4] = useState(false);
+
+  const handleClose4 = () => setshow4(false);
+  const handleShow4=async()=>{
+     setshow4(true); 
+
+   
+    
+    }
+
+
+    const[updatestage,setupdatestage]=useState("")
+
+const updatestageoflead = async () => {
+  try {
+    const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
+    const data = { stage: updatestage };  // Send only the stage field in the request body
+
+    const resp = await api.put(`updatelead/${id}`, data);  // Send the request with only stage in the body
+
+    toast.success("Stage updated", { autoClose: 2000 });
+
+    // After success, navigate to the lead details page or reload
+    setTimeout(() => {
+      navigate('/leaddetails');
+    }, 2000);
+    setTimeout(() => {
+      window.location.reload();  // If necessary, reload the page
+    }, 2000);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
+
+
   return ( 
     <div>
       <Header1/>
@@ -1186,6 +1242,42 @@ const[countall,setcountall]=useState('')
 
 <Tooltip title="Edit Data.." arrow>
 <img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add to task.." arrow>
+<img id="addtask"  src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={()=>navigate('/tasksform')}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Transfer Lead.." arrow>
+<img id="transferlead"  src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add User.." arrow>
+<img id="adduser"  src="https://cdn-icons-png.flaticon.com/512/9187/9187607.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Remove User.." arrow>
+<img id="removeuser"  src="https://cdn.icon-icons.com/icons2/217/PNG/512/male-user-remove_25351.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Call.." arrow>
+<img id="call"  src="https://static.vecteezy.com/system/resources/previews/016/314/381/non_2x/call-icon-free-png.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add Tag.." arrow>
+<img id="addtag"  src="https://png.pngtree.com/png-clipart/20230805/original/pngtree-hospital-tag-icon-add-tag-offer-vector-picture-image_9758849.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add Remarks/Note.." arrow>
+<img id="addremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add Document.." arrow>
+<img id="adddocument"  src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Update Stage.." arrow>
+<img id="updatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow4}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Send Mail.." arrow>
@@ -2405,6 +2497,42 @@ const[countall,setcountall]=useState('')
               </Button>
             </Modal.Footer>
           </Modal>
+
+          <Modal show={show4} onHide={handleClose4} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Update Stage</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+   
+  
+   <div className="row mt-2">
+   <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm" onChange={(e)=>setupdatestage(e.target.value)}>
+                        
+                        <option>---Select---</option>
+                        <option>Incoming</option>
+                        <option>Prospect</option>
+                        <option>Negotiation</option>
+                        <option>Booked</option>
+                        <option>Won</option>
+                        <option>Lost</option>
+                        <option>Closed</option>
+                        </select>
+                    </div>
+   </div>
+</div>
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatestageoflead}>
+                Update Stage
+              </Button>
+              <Button variant="secondary" onClick={handleClose4}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
           <ToastContainer/>
    </div>
    

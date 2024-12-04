@@ -178,6 +178,27 @@ const lead_info=async(req,res)=>
                         }
                     }
 
+                    const update_leadstage=async(req,res)=>
+                        {
+                            try {
+                                const id=req.params._id;
+                                const user=await leadinfo.findOne({_id:id})
+                                if(!user)
+                                    {
+                                        return res.send({message:"lead not found"})
+                                    }
+                                
+                                 const updatedFields = {
+                                  stage:req.body.stage   
+                                };
+                                const resp=await leadinfo.findByIdAndUpdate(id,updatedFields,{ new: true })
+                                res.status(200).send({message:"stage update successfully"})
+                            } catch (error) {
+                                console.log(error)
+                            }
+                        }
+
+
     module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid,view_lead_Bycompany,
-                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage }
+                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage }
     
