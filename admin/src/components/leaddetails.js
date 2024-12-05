@@ -1185,7 +1185,19 @@ const[countall,setcountall]=useState('')
   const [show4, setshow4] = useState(false);
 
   const handleClose4 = () => setshow4(false);
-  const handleShow4=async()=>{ setshow4(true); }
+  const handleShow4=async()=>
+    {
+      { 
+        setshow4(true);
+        try {
+          const resp=await api.get(`viewbyid/${selectedItems}`)
+          setleaddata(resp.data.lead[0])
+          setOwners1(resp.data.lead[0].owner);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
 
 
     const[updatestage,setupdatestage]=useState(leaddata.stage)
@@ -1269,6 +1281,124 @@ const handleClose6 = () => setshow6(false);
       }
     }
   
+
+   
+
+    const [show7, setshow7] = useState(false);
+
+    const[leaddocument,setleaddocument]=useState({document_no:[''],document_name:[''],document_pic:[''],action81:[]})
+
+    function addFn81() {
+                  
+      setleaddocument({
+        ...leaddocument,
+        document_no: [...leaddocument.document_no, ''],
+        document_name: [...leaddocument.document_name, ''],
+        document_pic: [...leaddocument.document_pic, ''],
+        action81: [...leaddocument.action81, '']
+      });
+    };
+    const deleteall81=(index)=>
+      {
+       
+        const newdocumentno = leaddocument.document_no.filter((_, i) => i !== index);
+        const newdocumentname = leaddocument.document_name.filter((_, i) => i !== index);
+        const newdocumentpic = leaddocument.document_pic.filter((_, i) => i !== index);
+        const newaction8=leaddocument.action81.filter((_,i) => i !== index);
+        
+        setleaddocument({
+          ...leaddocument,
+          document_no: newdocumentno,
+          document_name: newdocumentname,
+          document_pic: newdocumentpic,
+          action81:newaction8
+        });
+      }
+      const handledocumentnochange1 = (index, event) => {
+        const newdocumentno = [...leaddocument.document_no];
+        newdocumentno[index] = event.target.value;
+        setleaddocument({
+          ...leaddocument,
+          document_no: newdocumentno
+        });
+      };
+      const handledocumentnamechange1 = (index, event) => {
+        const newdocumentname = [...leaddocument.document_name];
+        newdocumentname[index] = event.target.value;
+        setleaddocument({
+          ...leaddocument,
+          document_name: newdocumentname
+        });
+      };
+      const handledocumentpicchange1 = (index, event) => {
+        const newdocumentpic = [...leaddocument.document_pic];
+        const files = Array.from(event.target.files);
+        newdocumentpic[index] = {files:files}
+        setleaddocument({
+          ...leaddocument,
+          document_pic: newdocumentpic
+        });
+      };
+
+
+const handleClose7 = () => setshow7(false);
+const handleShow7=async()=>
+  { 
+    setshow7(true);
+    try {
+      const resp=await api.get(`viewbyid/${selectedItems}`)
+      setleaddata(resp.data.lead[0])
+      setOwners1(resp.data.lead[0].owner);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const updatedocumentoflead = async () => {
+    try {
+      const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
+
+      const formData = new FormData();
+  
+      // Manually append all contact data (excluding files)
+      for (let key in leaddocument) {
+        if (key !== 'document_pic') { // Skip document_pic here
+          if (Array.isArray(leaddocument[key])) {
+            leaddocument[key].forEach((value) => {
+              formData.append(key, value);
+            });
+          } else if (leaddocument[key]) {
+            formData.append(key, leaddocument[key]);
+          }
+        }
+      }
+  
+      // Append document_pic (files) to FormData if it exists
+      if (leaddocument.document_pic && leaddocument.document_pic.length > 0) {
+        leaddocument.document_pic.forEach((file) => {
+          formData.append('document_pic', file); // Add file(s) to FormData
+        });
+      }
+      
+      const resp = await api.put(`adddocumentinlead/${id}`, leaddocument, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Ensure proper content-type for form-data
+        },
+      });
+  
+      toast.success("Lead Updated Successfully...", { autoClose: 2000 });
+  
+      // After success, navigate to the lead details page or reload
+      setTimeout(() => {
+        navigate('/leaddetails');
+      }, 2000);
+      setTimeout(() => {
+        window.location.reload();  // If necessary, reload the page
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   
    
   
@@ -1381,7 +1511,7 @@ const handleClose6 = () => setshow6(false);
 </Tooltip>
 
 <Tooltip title="Add Document.." arrow>
-<img id="adddocument"  src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="adddocument"  src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" onClick={handleShow7}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Update Stage.." arrow>
@@ -2500,7 +2630,7 @@ const handleClose6 = () => setshow6(false);
                                     {item && (
                                       <img 
                                         // src={typeof item === 'string' ? item : URL.createObjectURL(item)} 
-                                        src={`${api.defaults.baseURL}${leadinfo.document_pic[index]}`}
+                                        src={`${item}`}
                                         alt="document preview" 
                                         style={{width: "50px", height: "50px", objectFit: "cover", marginBottom: "10px"}}
                                       />
@@ -2634,7 +2764,13 @@ const handleClose6 = () => setshow6(false);
    
   
    <div className="row mt-2">
-   <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm" onChange={(e)=>setupdatestage(e.target.value)}>
+   <div className="col-md-6"><label className="labels">From</label><select className="form-control form-control-sm" onChange={(e)=>setupdatestage(e.target.value)}>
+                      
+                        <option>{leaddata.stage}</option>
+                        </select>
+                    </div>
+<div className="col-md-6"></div>
+   <div className="col-md-6"><label className="labels">To</label><select className="form-control form-control-sm" onChange={(e)=>setupdatestage(e.target.value)}>
                         
                         <option>---Select---</option>
                         <option>Incoming</option>
@@ -2755,6 +2891,116 @@ const handleClose6 = () => setshow6(false);
               </Button>
             </Modal.Footer>
           </Modal>
+
+
+          <Modal show={show7} onHide={handleClose7} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Add Documents</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="row">
+            <div className="col-md-3"><label className="labels">Document No.</label>
+                            {
+                               Array.isArray(leaddocument.document_no)?
+                               leaddocument.document_no.map((item,index)=>
+                            (
+                                <input type="text" 
+                                style={{marginTop:"10px"}}
+                                className="form-control form-control-sm" 
+                                onChange={(event)=>handledocumentnochange1(index,event)}
+                                />
+                            )):[]
+                            }
+                            </div>
+                            <div className="col-md-3"><label className="labels">Document Name</label>
+                            {
+                               Array.isArray(leaddocument.document_name)?
+                            leaddocument.document_name.map((item,index)=>
+                            (
+                                <select
+                                className='form-control form-control-sm'
+                                style={{marginTop:"10px"}}
+                                onChange={(event)=>handledocumentnamechange1(index,event)}>
+                            
+                            {/* <option>{leaddata?.document_name[index] || '---Select---'}</option> */}
+                             <option>---Select---</option>
+                            <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
+                            <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
+                            </select>
+                            )):[]
+                            }
+                            </div>
+                            {/* <div className="col-md-4"><label className="labels">Document Picture</label>
+                            {
+                            leadinfo.document_pic.map((item,index)=>
+                            (
+                                <input type="file" 
+                                
+                                style={{marginTop:"10px"}}
+                                className="form-control form-control-sm" 
+                                onChange={(event)=>handledocumentpicchange(index,event)}
+                                />
+                            ))
+                            }
+                            </div> */}
+                            <div className="col-md-4">
+                              <label className="labels">Document Picture</label>
+                              {Array.isArray(leaddocument.document_pic)
+                                ? leaddocument.document_pic.map((pic, index) => 
+                                 
+                                  <input type="file" 
+                                
+                                  style={{marginTop:"10px"}}
+                                  className="form-control form-control-sm" 
+                                  onChange={(event)=>handledocumentpicchange1(index,event)}
+                                  />
+                                ) 
+                                : []}
+                            
+                             {/* {
+                               Array.isArray(leadinfo.document_pic)?
+                            leadinfo.document_pic.map((item,index)=>
+                            (
+                                <input type="file" 
+                                
+                                style={{marginTop:"10px"}}
+                                className="form-control form-control-sm" 
+                                onChange={(event)=>handledocumentpicchange(index,event)}
+                                />
+                            )):[]
+                            } */}
+                        </div>
+
+                            <div className="col-md-1" style={{marginTop:"90px"}}>
+                            {
+                               Array.isArray(leaddocument.action81)?
+                               leaddocument.action81.map((item,index)=>
+                            (
+                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall81(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                            )):[]
+                            }
+                            </div>
+                            <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn81}>+</button></div>
+                      </div>
+            
+              
+       
+
+
+  
+
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatedocumentoflead}>
+                Add Document
+              </Button>
+              <Button variant="secondary" onClick={handleClose7}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
 
 
 

@@ -1,5 +1,16 @@
 const leadinfo= require('../models/leadinfo.js');
 
+const cloudinary=require('cloudinary').v2
+const fs=require('fs')
+const path=require('path')
+
+require('dotenv').config()
+cloudinary.config({
+    cloud_name:process.env.CLOUD_NAME,
+    api_key:process.env.API_KEY,
+    api_secret:process.env.API_SECRET
+})
+
 const lead_info=async(req,res)=>
     {
         try {
@@ -200,7 +211,60 @@ const lead_info=async(req,res)=>
                             }
                         }
 
-
+                        const update_leaddocument = async (req, res) => {
+                            try {
+                              const id = req.params._id;  // Get lead ID from URL parameter
+                              const user = await leadinfo.findOne({ _id: id });  // Find the lead by ID
+                          
+                              if (!user) {
+                                return res.send({ message: "Lead not found" });
+                              }
+                          
+                              // Initialize arrays to hold new data
+                              const newDocumentNo = req.body.document_no || [];
+                              const newDocumentName = req.body.document_name || [];
+                              const newDocumentPic = [];
+                          
+                              // Process files (if any)
+                              if (req.files) {
+                                // Upload files to Cloudinary and get the URLs
+                                for (let file of req.files) {
+                                  const result = await cloudinary.uploader.upload(file.path);
+                                  newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+                                  // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+                                  // fs.unlinkSync(file.path);
+                                }
+                              }
+                          
+                              // Retrieve the current document fields (if any) from the user document
+                              const oldDocumentNo = user.document_no || [];
+                              const oldDocumentName = user.document_name || [];
+                              const oldDocumentPic = user.document_pic || [];
+                          
+                              // Combine old and new document fields
+                              const updatedDocumentNo = [...oldDocumentNo, ...newDocumentNo];  // Append new document numbers to the existing ones
+                              const updatedDocumentName = [...oldDocumentName, ...newDocumentName];  // Append new document names to the existing ones
+                              const updatedDocumentPic = [...oldDocumentPic, ...newDocumentPic];  // Append new document pictures to the existing ones
+                          
+                              // Prepare updated fields object
+                              const updatedFields = {
+                                ...req.body,  // Keep other fields intact from the request body
+                                document_no: updatedDocumentNo,  // Updated document_no array
+                                document_name: updatedDocumentName,  // Updated document_name array
+                                document_pic: updatedDocumentPic,  // Updated document_pic array
+                              };
+                          
+                              // Update the lead document in the database
+                              const resp = await leadinfo.findByIdAndUpdate(id, updatedFields, { new: true });
+                          
+                              // Return a success message
+                              res.status(200).send({ message: "Lead updated successfully" });
+                            } catch (error) {
+                              console.error(error);  // Log error for debugging
+                              res.status(500).send({ message: "An error occurred while updating the lead" });
+                            }
+                          };
+                          
     module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid,view_lead_Bycompany,
-                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage }
+                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage,update_leaddocument }
     
