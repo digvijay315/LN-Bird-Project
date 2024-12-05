@@ -21,6 +21,7 @@ import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 function Leadfetch() {
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -1139,23 +1140,21 @@ const[countall,setcountall]=useState('')
                 );
               };
   // -------------------------------------===========================send email end========================================-----------------------
+  
+  const[leaddata,setleaddata]=useState([]);
+
   const [show4, setshow4] = useState(false);
 
   const handleClose4 = () => setshow4(false);
-  const handleShow4=async()=>{
-     setshow4(true); 
-
-   
-    
-    }
+  const handleShow4=async()=>{ setshow4(true); }
 
 
-    const[updatestage,setupdatestage]=useState("")
+    const[updatestage,setupdatestage]=useState(leaddata.stage)
 
 const updatestageoflead = async () => {
   try {
     const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
-    const data = { stage: updatestage };  // Send only the stage field in the request body
+    const data = { stage: updatestage,owner:leadowner,descriptions:note };  // Send only the stage field in the request body
 
     const resp = await api.put(`updatelead/${id}`, data);  // Send the request with only stage in the body
 
@@ -1172,6 +1171,76 @@ const updatestageoflead = async () => {
     console.log(error);
   }
 };
+
+
+const [owners1, setOwners1] = useState([]);
+const [show5, setshow5] = useState(false);
+
+const handleClose5 = () => setshow5(false);
+const handleShow5=async()=>
+  { 
+    setshow5(true);
+    try {
+      const resp=await api.get(`viewbyid/${selectedItems}`)
+      setleaddata(resp.data.lead[0])
+      setOwners1(resp.data.lead[0].owner);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+const ownersList = [
+  'Suraj',
+  'Suresh Kumar',
+  'Ramesh Singh',
+  'Maanav Sharma',
+  'Sukram'
+];
+
+const [owners, setOwners] = useState([]);
+const[leadowner,setleadowner]=useState(leaddata.owner)
+
+const handleOwnerChange = (event) => {
+  const {
+      target: { value },
+  } = event;
+
+  const selectedOwners = typeof value === 'string' ? value.split(',') : value;
+
+  setOwners(selectedOwners);
+  setleadowner(selectedOwners);
+};
+
+const[note,setnote]=useState(leaddata.descriptions)
+
+
+const [show6, setshow6] = useState(false);
+
+const handleClose6 = () => setshow6(false);
+
+   const handleShow6=async()=>
+    { 
+      setshow6(true);
+      try {
+        const resp=await api.get(`viewbyid/${selectedItems}`)
+        setleaddata(resp.data.lead[0])
+        setOwners1(resp.data.lead[0].owner);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  
+  
+   
+  
+
+
+
+
+
+
+
+
 
 
 
@@ -1249,7 +1318,7 @@ const updatestageoflead = async () => {
 </Tooltip>
 
 <Tooltip title="Transfer Lead.." arrow>
-<img id="transferlead"  src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="transferlead"  src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png" onClick={handleShow5}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add User.." arrow>
@@ -1269,7 +1338,7 @@ const updatestageoflead = async () => {
 </Tooltip>
 
 <Tooltip title="Add Remarks/Note.." arrow>
-<img id="addremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="addremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow6}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Document.." arrow>
@@ -2531,6 +2600,104 @@ const updatestageoflead = async () => {
               </Button>
             </Modal.Footer>
           </Modal>
+
+
+          <Modal show={show5} onHide={handleClose5} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Transfer Lead</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div className="col-md-6"><label className="labels">From</label>
+                  
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={owners1}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {leaddata.owner?.map((owner, index) => (
+                    <MenuItem key={index} value={owner}>
+                      <Checkbox checked={owners1.indexOf(owner) > -1} /> {/* Check if this owner is selected */}
+                      <ListItemText primary={owner} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+              <div className="col-md-6"></div>
+
+              <div className="col-md-6"><label className="labels">To</label>
+                  
+                  <Select className="form-control form-control-sm" style={{border:"none"}}
+                  multiple
+                  value={owners}
+                  onChange={handleOwnerChange}
+                  renderValue={(selected) => selected.join(', ')}
+              >
+                
+                  {ownersList.map((name) => (
+                      <MenuItem key={name} value={name}>
+
+                          <Checkbox checked={owners.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                      </MenuItem>
+                  ))}
+              </Select>
+            </div>
+          <div className="col-md-6"><label className="labels">Lead Stage</label><select className="form-control form-control-sm" onChange={(e)=>setupdatestage(e.target.value)}>       
+                        <option>{leaddata.stage}</option>
+                        <option>Incoming</option>
+                        <option>Prospect</option>
+                        <option>Negotiation</option>
+                        <option>Booked</option>
+                        <option>Won</option>
+                        <option>Lost</option>
+                        <option>Closed</option>
+                        </select>
+            </div>
+            <div className="col-md-6"><label className="labels">Note</label>
+            <input type="textarea" className="form-control form-control-sm" style={{height:"100px"}} placeholder={leaddata.descriptions} onChange={(e)=>setnote(e.target.value)}/>       
+            </div>
+
+
+  
+
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatestageoflead}>
+                Transfer
+              </Button>
+              <Button variant="secondary" onClick={handleClose5}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+          <Modal show={show6} onHide={handleClose6} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Add Note/Remarks</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+         
+
+     
+            <div className="col-md-6"><label className="labels">Note</label>
+            <input type="textarea" className="form-control form-control-sm" style={{height:"100px"}} placeholder={leaddata.descriptions} onChange={(e)=>setnote(e.target.value)}/>       
+            </div>
+
+
+  
+
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatestageoflead}>
+                Add Note
+              </Button>
+              <Button variant="secondary" onClick={handleClose6}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
 
 
           <ToastContainer/>

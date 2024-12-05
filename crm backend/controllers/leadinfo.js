@@ -189,7 +189,9 @@ const lead_info=async(req,res)=>
                                     }
                                 
                                  const updatedFields = {
-                                  stage:req.body.stage   
+                                  stage:req.body.stage,
+                                  owner:req.body.owner,
+                                  descriptions:req.body.descriptions   
                                 };
                                 const resp=await leadinfo.findByIdAndUpdate(id,updatedFields,{ new: true })
                                 res.status(200).send({message:"stage update successfully"})

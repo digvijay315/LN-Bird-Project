@@ -1337,7 +1337,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
-                                                                          ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",mowner_details:[],associated_contact:[],
+                                                                          ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
                                                                           relation:""})
 
                                               const addunit = () => {
