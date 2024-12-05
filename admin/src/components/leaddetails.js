@@ -22,6 +22,7 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import { useDropzone } from 'react-dropzone';
 
 function Leadfetch() {
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -1091,14 +1092,52 @@ const[countall,setcountall]=useState('')
                 )
               );
             };
+
+            const templates = {
+              template1: "Hello, \n\nI hope this email finds you well. I wanted to follow up on our previous conversation regarding property. Please let me know if you have any questions.\n\nBest regards,\nDigvijay Kumar",
+              template2: "Hi there, \n\nI just wanted to remind you about the upcoming event on [date]. It will be held at Noida. Please feel free to reach out if you need any additional information.\n\nSincerely,\nDigvijay Kumar",
+              template3: `Dear sir, \n\nWe are excited to inform you that your application has been approved. Please find attached the documents with further details about the next steps.\n\nBest regards,\nDigvijay Kumar`
+            };
             const[message,setmessage]=useState("")
+            const[subject,setsubject]=useState("")
+            const [selectedTemplate, setSelectedTemplate] = useState('');
+            const [attachments, setAttachments] = useState([]);
+
+            const { getRootProps, getInputProps } = useDropzone({
+              onDrop: (acceptedFiles) => {
+                setAttachments(acceptedFiles); // Store selected files
+              },
+            });
+
+            const handleTemplateSelect = (e) => {
+              const templateKey = e.target.value; // Get selected template key
+              setSelectedTemplate(templateKey); // Set the selected template
+              const selectedTemplateContent = templates[templateKey] || ''; // Get the template content
+          
+              // Convert '\n' to '<br>' for HTML email formatting
+              const htmlFormattedMessage = selectedTemplateContent.replace(/\n/g, '<br>');
+              
+              // Set the message state with the formatted message (HTML-friendly)
+              setmessage(htmlFormattedMessage); 
+            };
             
             const sendmail=async(e)=>
               {
                 e.preventDefault();
+                const formData = new FormData();
+    
+    // Add the subject, message, and recipient email to form data
+                    formData.append('subject', subject);
+                    formData.append('message', message);
+                    formData.append('emails', emails);
+                    
+                    // Append the files to form data
+                    attachments.forEach((file) => {
+                      formData.append('attachments', file);
+                    });
                 try {
                   
-                  const resp=await api.post(`contact/sendmail`,{emails,message})
+                  const resp=await api.post(`contact/sendmail`,formData)
                   if(resp.status===200)
                   {
                     toast.success("Mail Sent Successfully",{ autoClose: 2000 })
@@ -1158,7 +1197,7 @@ const updatestageoflead = async () => {
 
     const resp = await api.put(`updatelead/${id}`, data);  // Send the request with only stage in the body
 
-    toast.success("Stage updated", { autoClose: 2000 });
+    toast.success("Lead Updated Successfully...", { autoClose: 2000 });
 
     // After success, navigate to the lead details page or reload
     setTimeout(() => {
@@ -2552,8 +2591,27 @@ const handleClose6 = () => setshow6(false);
    
   
    <div className="row mt-2">
-       <div className="col-md-12"><label className="labels">Email</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={emails} /></div>
-       <div className="col-md-12"><label className="labels">Message</label><textarea className="form-control form-control-sm"  placeholder="Enter Your Message" onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
+       <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={emails} /></div>
+       <div className="col-md-12"><label className="labels">Subject</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setsubject(e.target.value)}/></div>
+       <div className="col-md-12"><label className="labels">Compose</label><textarea className="form-control form-control-sm" value={message}  placeholder="Enter Your Message" style={{height:"100px"}} onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
+       <div className="col-md-4"><label className="labels">Templates</label>
+       <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect}>
+          <option value="">---Select Template---</option>
+          <option value="template1">Template 1</option>
+          <option value="template2">Template 2</option>
+          <option value="template3">Template 3</option>
+        </select>
+       </div>
+
+       <div className="col-md-4" {...getRootProps()} style={{ border: '2px dashed #ccc', padding: '10px', cursor: 'pointer',margin:"10px" }}>
+        <input {...getInputProps()} />
+        <p>Drag & drop files here, or click to select files</p>
+        <ul>
+          {attachments.length > 0 && attachments.map((file, index) => (
+            <li key={index}>{file.name}</li>
+          ))}
+        </ul>
+      </div>
    </div>
 </div>
           </Modal.Body>

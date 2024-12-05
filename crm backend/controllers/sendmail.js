@@ -1,12 +1,43 @@
 const nodemailer = require('nodemailer');
 
+const cloudinary=require('cloudinary').v2
+const fs=require('fs')
+const path=require('path')
+
+require('dotenv').config()
+cloudinary.config({
+    cloud_name:process.env.CLOUD_NAME,
+    api_key:process.env.API_KEY,
+    api_secret:process.env.API_SECRET
+})
+
 const send_mail = async (req, res) => {
     try {
-        const { emails, message } = req.body;
+        const { emails, message, subject } = req.body; 
+        const files = req.files;
+        const cloudinaryAttachments = [];
 
         if (!emails ) {
             return res.status(400).send('No recipients provided.');
         }
+
+        // Upload files to Cloudinary and get URLs
+        for (const file of files) {
+          try {
+            // Upload the file to Cloudinary
+            const result = await cloudinary.uploader.upload(file.path);
+            
+            // Create an attachment object with the Cloudinary URL
+            cloudinaryAttachments.push({
+              filename: file.originalname,
+              path: result.secure_url, // Use the URL returned by Cloudinary
+            });
+          } catch (error) {
+            console.error('Error uploading to Cloudinary:', error);
+            return res.status(500).send('Error uploading files');
+          }
+        }
+      
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -18,8 +49,9 @@ const send_mail = async (req, res) => {
 
         const mailOptions = {
             from: 'digvijaykumar.315@gmail.com',
-            subject: 'Test Email from Nodemailer',
-            text: JSON.stringify(message)
+            subject: subject,
+            html: message,
+            attachments: cloudinaryAttachments,
         };
 
         // Send emails

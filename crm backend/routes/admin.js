@@ -31,7 +31,7 @@ router.get('/viewcontactbytags/:tags',view_contact_Bytags)
 router.get('/viewcontactbycompany/:company_name',view_contact_Bycompany)
 router.put('/updatecontact/:_id',upload.any('document_pic'),update_contact)
 router.delete('/deletecontact/:_id',remove_contact)
-router.post('/contact/sendmail',send_mail)
+router.post('/contact/sendmail',upload.array('attachments', 10),send_mail)
 
 router.post('/leadinfo',upload.any('document_pic'),lead_info)
 router.get('/leadinfo',leadinfo_find)
