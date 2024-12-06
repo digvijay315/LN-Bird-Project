@@ -30,7 +30,18 @@ const lead_info=async(req,res)=>
                 //         return res.status(400).send("email id already taken")
                 //     }
 
-                const documentpic=req.files ? req.files.map(file => file.path) : [];
+                // const documentpic=req.files ? req.files.map(file => file.path) : [];
+                const newDocumentPic = [];
+
+                if (req.files) {
+                    // Upload files to Cloudinary and get the URLs
+                    for (let file of req.files) {
+                      const result = await cloudinary.uploader.upload(file.path);
+                      newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+                      // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+                      // fs.unlinkSync(file.path);
+                    }
+                  }
             
                 const newleadinfo=new leadinfo({title,first_name,last_name,country_code,mobile_no,mobile_type,email,email_type,tags,descriptions,stage,lead_type,
                     owner,team,visible_to,campegin,source,sub_source,refrencer_no,intrested_project,requirment,property_type,purpose,nri,
@@ -40,7 +51,7 @@ const lead_info=async(req,res)=>
                     company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url, 
                     father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,birth_date,
                     anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,income,amount1,
-                    document_no,document_name,document_pic:documentpic,lastcommunication})
+                    document_no,document_name,document_pic:newDocumentPic,lastcommunication})
                 
                     const resp=await newleadinfo.save();
                     res.status(200).send({message:"lead information saved",lead:resp})
@@ -177,10 +188,22 @@ const lead_info=async(req,res)=>
                                 {
                                     return res.send({message:"lead not found"})
                                 }
-                             const document_pic = req.files && req.files.length > 0 ? req.files.map(file => file.path) : user.document_pic;
+                                
+                                const newDocumentPic = [];
+                          
+                                // Process files (if any)
+                                if (req.files) {
+                                  // Upload files to Cloudinary and get the URLs
+                                  for (let file of req.files) {
+                                    const result = await cloudinary.uploader.upload(file.path);
+                                    newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+                                    // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+                                    // fs.unlinkSync(file.path);
+                                  }
+                                }
                              const updatedFields = {
                                 ...req.body,
-                                document_pic // Update preview field with new images if provided
+                                document_pic:newDocumentPic // Update preview field with new images if provided
                             };
                             const resp=await leadinfo.findByIdAndUpdate(id,updatedFields,{ new: true })
                             res.status(200).send({message:"lead update successfully"})

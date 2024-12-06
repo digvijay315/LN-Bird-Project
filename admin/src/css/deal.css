@@ -1,4 +1,4 @@
-#projectmessage{
+#projectmessage,#unitmessage{
     transition: transform .2s;
     background-color: transparent;
     
@@ -288,6 +288,170 @@
     
 }
 #dealuploadpicture:hover
+{
+    transform: scale(1.1);
+    
+}
+
+
+#unitdelete{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitdelete:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitmail{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitmail:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitwhatsapp{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitwhatsapp:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitmessage{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitmessage:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitedit{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitedit:hover
+{
+    transform: scale(1.1);
+    
+}
+
+#unitaddremoveowner{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitaddremoveowner:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitmatchedlead{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitmatchedlead:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitcall{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitcall:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitaddtag{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitaddtag:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitaddremarks{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitaddremarks:hover
+{
+    transform: scale(1.1);
+    
+}
+
+#unitupdatestage{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitupdatestage:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitpreview{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitpreview:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitadddocument{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitadddocument:hover
+{
+    transform: scale(1.1);
+    
+}
+#unituploadpicture{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unituploadpicture:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitaddunit{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitaddunit:hover
+{
+    transform: scale(1.1);
+    
+}
+#unitcreatedeal{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#unitcreatedeal:hover
 {
     transform: scale(1.1);
     

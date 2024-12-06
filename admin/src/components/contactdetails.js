@@ -2469,12 +2469,22 @@ const mergeAndSave = async (selectedItems) => {
                       Array.isArray(contact.document_pic)?
                       contact.document_pic.map((item,index)=>
                       (
-                        
+                        <div key={index} style={{marginTop:"10px"}}>
+                        {/* Show the image if it's available */}
+                        {item && (
+                          <img 
+                            // src={typeof item === 'string' ? item : URL.createObjectURL(item)} 
+                            src={`${item}`}
+                            alt="document preview" 
+                            style={{width: "50px", height: "50px", objectFit: "cover", marginBottom: "10px"}}
+                          />
+                        )}
                         <input type="file"
                         style={{marginTop:"10px"}}
                         className="form-control form-control-sm" 
                         onChange={(event)=>handledocumentpicchange(index,event)}
                         />
+                        </div>
                       )):[]
                     }
                     </div>

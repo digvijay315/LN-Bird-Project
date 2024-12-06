@@ -927,142 +927,7 @@ function Dealdetails() {
                     }
                   };
 
-                  useEffect(()=>
-                    {
-                      if(selectedItems.length===0)
-                      {
-                        document.getElementById("dealdelete").style.display="none"
-                        document.getElementById("dealedit").style.display="none"
-                        document.getElementById("dealmail").style.display="none"
-                         document.getElementById("dealwhatsapp").style.display="none"
-                            document.getElementById("dealmessage").style.display="none"
-                            document.getElementById("dealaddtask").style.display="none"
-                            document.getElementById("dealcreatebooking").style.display="none"
-                            document.getElementById("dealaddremoveowner").style.display="none"
-                            document.getElementById("dealmatchedlead").style.display="none"
-                            document.getElementById("dealcall").style.display="none"
-                            document.getElementById("dealaddtag").style.display="none"
-                            document.getElementById("dealaddremarks").style.display="none"
-                            document.getElementById("dealpublishon").style.display="none"
-                            document.getElementById("dealupdatestage").style.display="none"
-                            document.getElementById("dealpreview").style.display="none"
-                            document.getElementById("dealadddocument").style.display="none"
-                            document.getElementById("dealuploadpicture").style.display="none"
-                          document.getElementById("dealsearch").style.display="flex"
-                          document.getElementById("dealtoggelsearch").style.display="flex"
-                      }
-                      if(selectedItems.length===1)
-                      {
-                        document.getElementById("dealdelete").style.display="inline-block"
-                        document.getElementById("dealedit").style.display="inline-block"
-                      document.getElementById("dealmail").style.display="inline-block"
-                       document.getElementById("dealwhatsapp").style.display="inline-block"
-                          document.getElementById("dealmessage").style.display="inline-block"
-                          document.getElementById("dealaddtask").style.display="inline-block"
-                          document.getElementById("dealcreatebooking").style.display="inline-block"
-                          document.getElementById("dealaddremoveowner").style.display="inline-block"
-                          document.getElementById("dealmatchedlead").style.display="inline-block"
-                          document.getElementById("dealcall").style.display="inline-block"
-                          document.getElementById("dealaddtag").style.display="inline-block"
-                          document.getElementById("dealaddremarks").style.display="inline-block"
-                          document.getElementById("dealpublishon").style.display="inline-block"
-                          document.getElementById("dealupdatestage").style.display="inline-block"
-                          document.getElementById("dealpreview").style.display="inline-block"
-                          document.getElementById("dealadddocument").style.display="inline-block"
-                          document.getElementById("dealuploadpicture").style.display="inline-block"
-                      document.getElementById("dealsearch").style.display="none"
-                        document.getElementById("dealtoggelsearch").style.display="none"
-                      }
-
-                      if(selectedItems.length>1)
-                      {
-                        document.getElementById("dealdelete").style.display="inline-block"
-                        document.getElementById("dealedit").style.display="none"
-                      document.getElementById("dealmail").style.display="inline-block"
-                       document.getElementById("dealwhatsapp").style.display="inline-block"
-                          document.getElementById("dealmessage").style.display="inline-block"
-                          document.getElementById("dealaddtask").style.display="none"
-                          document.getElementById("dealcreatebooking").style.display="none"
-                          document.getElementById("dealaddremoveowner").style.display="none"
-                          document.getElementById("dealmatchedlead").style.display="none"
-                          document.getElementById("dealcall").style.display="none"
-                          document.getElementById("dealaddtag").style.display="none"
-                          document.getElementById("dealaddremarks").style.display="none"
-                          document.getElementById("dealpublishon").style.display="none"
-                          document.getElementById("dealupdatestage").style.display="none"
-                          document.getElementById("dealpreview").style.display="none"
-                          document.getElementById("dealadddocument").style.display="none"
-                          document.getElementById("dealuploadpicture").style.display="none"
-                          document.getElementById("dealsearch").style.display="none"
-                        document.getElementById("dealtoggelsearch").style.display="none"
-                      }
-
-                      if(selectedItems2.length===0)
-                        {
-                          document.getElementById("projectdelete").style.display="none"
-                          document.getElementById("projectedit").style.display="none"
-                          document.getElementById("projectmail").style.display="none"
-                           document.getElementById("projectwhatsapp").style.display="none"
-                              document.getElementById("projectmessage").style.display="none"
-          
-                              document.getElementById("projectaddremoveuser").style.display="none"
-                              document.getElementById("projectmatchedlead").style.display="none"
-                        
-                              document.getElementById("projectaddtag").style.display="none"
-                           
-                              document.getElementById("projectpublishon").style.display="none"
-                              
-                              document.getElementById("projectpreview").style.display="none"
-                              document.getElementById("projectadddocument").style.display="none"
-                              document.getElementById("projectuploadpicture").style.display="none"
-                            document.getElementById("projectsearch").style.display="flex"
-                            
-                        }
-                      if(selectedItems2.length===1)
-                        {
-                          document.getElementById("projectdelete").style.display="inline-block"
-                          document.getElementById("projectedit").style.display="inline-block"
-                          document.getElementById("projectmail").style.display="inline-block"
-                           document.getElementById("projectwhatsapp").style.display="inline-block"
-                              document.getElementById("projectmessage").style.display="inline-block"
-          
-                              document.getElementById("projectaddremoveuser").style.display="inline-block"
-                              document.getElementById("projectmatchedlead").style.display="inline-block"
-                        
-                              document.getElementById("projectaddtag").style.display="inline-block"
-                           
-                              document.getElementById("projectpublishon").style.display="inline-block"
-                              
-                              document.getElementById("projectpreview").style.display="inline-block"
-                              document.getElementById("projectadddocument").style.display="inline-block"
-                              document.getElementById("projectuploadpicture").style.display="inline-block"
-                            document.getElementById("projectsearch").style.display="none"
-                     
-                        }
-                     
-              
-                          if(selectedItems2.length>1)
-                            {
-                              document.getElementById("projectdelete").style.display="inline-block"
-                              document.getElementById("projectedit").style.display="none"
-                              document.getElementById("projectmail").style.display="inline-block"
-                               document.getElementById("projectwhatsapp").style.display="inline-block"
-                                  document.getElementById("projectmessage").style.display="inline-block"
-              
-                                  document.getElementById("projectaddremoveuser").style.display="none"
-                                  document.getElementById("projectmatchedlead").style.display="none"
-                            
-                                  document.getElementById("projectaddtag").style.display="none"
-                               
-                                  document.getElementById("projectpublishon").style.display="none"
-                                  
-                                  document.getElementById("projectpreview").style.display="none"
-                                  document.getElementById("projectadddocument").style.display="none"
-                                  document.getElementById("projectuploadpicture").style.display="none"
-                                document.getElementById("projectsearch").style.display="none"
-                            }
-                  
-                    },[selectedItems,selectedItems2])
+                 
 
                   const allunitColumns = [
                   
@@ -1204,6 +1069,415 @@ function Dealdetails() {
                       </div>
                     );
                   };
+
+                  const[dealdata,setdealdata]=useState([])
+                  const[note,setnote]=useState(dealdata.descriptions)
+
+
+                  const [show6, setshow6] = useState(false);
+                  
+                  const handleClose6 = () => setshow6(false);
+                  
+                     const handleShow6=async()=>
+                      { 
+                        setshow6(true);
+                        try {
+                          const resp=await api.get(`viewdealbyid/${selectedItems}`)
+                          setdealdata(resp.data.deal)
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }
+
+                      const updatedealdata = async () => {
+                        try {
+                          const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
+                          const data = {remarks:note,stage:updatestage };  // Send only the stage field in the request body
+                      
+                          const resp = await api.put(`updatedealbysingle/${id}`, data);  // Send the request with only stage in the body
+                      
+                          toast.success("Deal Updated Successfully...", { autoClose: 2000 });
+                      
+                          // After success, navigate to the lead details page or reload
+                          setTimeout(() => {
+                            navigate('/dealdetails');
+                          }, 2000);
+                          setTimeout(() => {
+                            window.location.reload();  // If necessary, reload the page
+                          }, 2000);
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      };
+
+
+                      const [show5, setshow5] = useState(false);
+                      const[updatestage,setupdatestage]=useState(dealdata.stage)
+
+                      const handleClose5 = () => setshow5(false);
+                      const handleShow5=async()=>
+                        { 
+                          setshow5(true);
+                          try {
+                            const resp=await api.get(`viewdealbyid/${selectedItems}`)
+                            setdealdata(resp.data.deal)
+                           
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        }
+
+
+
+                        useEffect(()=>
+                          {
+                            if(selectedItems.length===0)
+                            {
+                              document.getElementById("dealdelete").style.display="none"
+                              document.getElementById("dealedit").style.display="none"
+                              document.getElementById("dealmail").style.display="none"
+                               document.getElementById("dealwhatsapp").style.display="none"
+                                  document.getElementById("dealmessage").style.display="none"
+                                  document.getElementById("dealaddtask").style.display="none"
+                                  document.getElementById("dealcreatebooking").style.display="none"
+                                  document.getElementById("dealaddremoveowner").style.display="none"
+                                  document.getElementById("dealmatchedlead").style.display="none"
+                                  document.getElementById("dealcall").style.display="none"
+                                  document.getElementById("dealaddtag").style.display="none"
+                                  document.getElementById("dealaddremarks").style.display="none"
+                                  document.getElementById("dealpublishon").style.display="none"
+                                  document.getElementById("dealupdatestage").style.display="none"
+                                  document.getElementById("dealpreview").style.display="none"
+                                  document.getElementById("dealadddocument").style.display="none"
+                                  document.getElementById("dealuploadpicture").style.display="none"
+                                document.getElementById("dealsearch").style.display="flex"
+                                document.getElementById("dealtoggelsearch").style.display="flex"
+                            }
+                            if(selectedItems.length===1)
+                            {
+                              document.getElementById("dealdelete").style.display="inline-block"
+                              document.getElementById("dealedit").style.display="inline-block"
+                            document.getElementById("dealmail").style.display="inline-block"
+                             document.getElementById("dealwhatsapp").style.display="inline-block"
+                                document.getElementById("dealmessage").style.display="inline-block"
+                                document.getElementById("dealaddtask").style.display="inline-block"
+                                document.getElementById("dealcreatebooking").style.display="inline-block"
+                                document.getElementById("dealaddremoveowner").style.display="inline-block"
+                                document.getElementById("dealmatchedlead").style.display="inline-block"
+                                document.getElementById("dealcall").style.display="inline-block"
+                                document.getElementById("dealaddtag").style.display="inline-block"
+                                document.getElementById("dealaddremarks").style.display="inline-block"
+                                document.getElementById("dealpublishon").style.display="inline-block"
+                                document.getElementById("dealupdatestage").style.display="inline-block"
+                                document.getElementById("dealpreview").style.display="inline-block"
+                                document.getElementById("dealadddocument").style.display="inline-block"
+                                document.getElementById("dealuploadpicture").style.display="inline-block"
+                            document.getElementById("dealsearch").style.display="none"
+                              document.getElementById("dealtoggelsearch").style.display="none"
+                            }
+      
+                            if(selectedItems.length>1)
+                            {
+                              document.getElementById("dealdelete").style.display="inline-block"
+                              document.getElementById("dealedit").style.display="none"
+                            document.getElementById("dealmail").style.display="inline-block"
+                             document.getElementById("dealwhatsapp").style.display="inline-block"
+                                document.getElementById("dealmessage").style.display="inline-block"
+                                document.getElementById("dealaddtask").style.display="none"
+                                document.getElementById("dealcreatebooking").style.display="none"
+                                document.getElementById("dealaddremoveowner").style.display="none"
+                                document.getElementById("dealmatchedlead").style.display="none"
+                                document.getElementById("dealcall").style.display="none"
+                                document.getElementById("dealaddtag").style.display="none"
+                                document.getElementById("dealaddremarks").style.display="none"
+                                document.getElementById("dealpublishon").style.display="none"
+                                document.getElementById("dealupdatestage").style.display="none"
+                                document.getElementById("dealpreview").style.display="none"
+                                document.getElementById("dealadddocument").style.display="none"
+                                document.getElementById("dealuploadpicture").style.display="none"
+                                document.getElementById("dealsearch").style.display="none"
+                              document.getElementById("dealtoggelsearch").style.display="none"
+                            }
+      
+                            if(selectedItems2.length===0)
+                              {
+                                document.getElementById("projectdelete").style.display="none"
+                                document.getElementById("projectedit").style.display="none"
+                                document.getElementById("projectmail").style.display="none"
+                                 document.getElementById("projectwhatsapp").style.display="none"
+                                    document.getElementById("projectmessage").style.display="none"
+                
+                                    document.getElementById("projectaddremoveuser").style.display="none"
+                                    document.getElementById("projectmatchedlead").style.display="none"
+                              
+                                    document.getElementById("projectaddtag").style.display="none"
+                                 
+                                    document.getElementById("projectpublishon").style.display="none"
+                                    
+                                    document.getElementById("projectpreview").style.display="none"
+                                    document.getElementById("projectadddocument").style.display="none"
+                                    document.getElementById("projectuploadpicture").style.display="none"
+                                  document.getElementById("projectsearch").style.display="flex"
+                                  
+                              }
+                            if(selectedItems2.length===1)
+                              {
+                                document.getElementById("projectdelete").style.display="inline-block"
+                                document.getElementById("projectedit").style.display="inline-block"
+                                document.getElementById("projectmail").style.display="inline-block"
+                                 document.getElementById("projectwhatsapp").style.display="inline-block"
+                                    document.getElementById("projectmessage").style.display="inline-block"
+                
+                                    document.getElementById("projectaddremoveuser").style.display="inline-block"
+                                    document.getElementById("projectmatchedlead").style.display="inline-block"
+                              
+                                    document.getElementById("projectaddtag").style.display="inline-block"
+                                 
+                                    document.getElementById("projectpublishon").style.display="inline-block"
+                                    
+                                    document.getElementById("projectpreview").style.display="inline-block"
+                                    document.getElementById("projectadddocument").style.display="inline-block"
+                                    document.getElementById("projectuploadpicture").style.display="inline-block"
+                                  document.getElementById("projectsearch").style.display="none"
+                           
+                              }
+                           
+                    
+                                if(selectedItems2.length>1)
+                                  {
+                                    document.getElementById("projectdelete").style.display="inline-block"
+                                    document.getElementById("projectedit").style.display="none"
+                                    document.getElementById("projectmail").style.display="inline-block"
+                                     document.getElementById("projectwhatsapp").style.display="inline-block"
+                                        document.getElementById("projectmessage").style.display="inline-block"
+                    
+                                        document.getElementById("projectaddremoveuser").style.display="none"
+                                        document.getElementById("projectmatchedlead").style.display="none"
+                                  
+                                        document.getElementById("projectaddtag").style.display="none"
+                                     
+                                        document.getElementById("projectpublishon").style.display="none"
+                                        
+                                        document.getElementById("projectpreview").style.display="none"
+                                        document.getElementById("projectadddocument").style.display="none"
+                                        document.getElementById("projectuploadpicture").style.display="none"
+                                      document.getElementById("projectsearch").style.display="none"
+                                  }
+                                  if(selectedItems3.length===0)
+                                    {
+                                      document.getElementById("unitdelete").style.display="none"
+                                      document.getElementById("unitedit").style.display="none"
+                                      document.getElementById("unitmail").style.display="none"
+                                       document.getElementById("unitwhatsapp").style.display="none"
+                                          document.getElementById("unitmessage").style.display="none"
+                                           document.getElementById("unitcreatedeal").style.display="none"
+                                            document.getElementById("unitaddunit").style.display="none"
+                                         
+                                          document.getElementById("unitaddremoveowner").style.display="none"
+                                          document.getElementById("unitmatchedlead").style.display="none"
+                                          document.getElementById("unitcall").style.display="none"
+                                          document.getElementById("unitaddtag").style.display="none"
+                                          document.getElementById("unitaddremarks").style.display="none"
+                                         
+                                          document.getElementById("unitupdatestage").style.display="none"
+                                          document.getElementById("unitpreview").style.display="none"
+                                          document.getElementById("unitadddocument").style.display="none"
+                                          document.getElementById("unituploadpicture").style.display="none"
+                                        document.getElementById("unitsearch").style.display="flex"
+                                       
+                                    }
+                                    if(selectedItems3.length===1)
+                                      {
+                                        document.getElementById("unitdelete").style.display="inline-block"
+                                        document.getElementById("unitedit").style.display="inline-block"
+                                        document.getElementById("unitmail").style.display="inline-block"
+                                         document.getElementById("unitwhatsapp").style.display="inline-block"
+                                            document.getElementById("unitmessage").style.display="inline-block"
+                                             document.getElementById("unitcreatedeal").style.display="inline-block"
+                                              document.getElementById("unitaddunit").style.display="inline-block"
+                                           
+                                            document.getElementById("unitaddremoveowner").style.display="inline-block"
+                                            document.getElementById("unitmatchedlead").style.display="inline-block"
+                                            document.getElementById("unitcall").style.display="inline-block"
+                                            document.getElementById("unitaddtag").style.display="inline-block"
+                                            document.getElementById("unitaddremarks").style.display="inline-block"
+                                           
+                                            document.getElementById("unitupdatestage").style.display="inline-block"
+                                            document.getElementById("unitpreview").style.display="inline-block"
+                                            document.getElementById("unitadddocument").style.display="inline-block"
+                                            document.getElementById("unituploadpicture").style.display="inline-block"
+                                          document.getElementById("unitsearch").style.display="none"
+                                         
+                                      }
+                                      if(selectedItems3.length>1)
+                                        {
+                                          document.getElementById("unitdelete").style.display="inline-block"
+                                          document.getElementById("unitedit").style.display="none"
+                                          document.getElementById("unitmail").style.display="inline-block"
+                                           document.getElementById("unitwhatsapp").style.display="inline-block"
+                                              document.getElementById("unitmessage").style.display="inline-block"
+                                               document.getElementById("unitcreatedeal").style.display="none"
+                                                document.getElementById("unitaddunit").style.display="none"
+                                             
+                                              document.getElementById("unitaddremoveowner").style.display="none"
+                                              document.getElementById("unitmatchedlead").style.display="none"
+                                              document.getElementById("unitcall").style.display="none"
+                                              document.getElementById("unitaddtag").style.display="none"
+                                              document.getElementById("unitaddremarks").style.display="none"
+                                             
+                                              document.getElementById("unitupdatestage").style.display="none"
+                                              document.getElementById("unitpreview").style.display="none"
+                                              document.getElementById("unitadddocument").style.display="none"
+                                              document.getElementById("unituploadpicture").style.display="none"
+                                            document.getElementById("unitsearch").style.display="none"
+                                           
+                                        }
+                        
+                          },[selectedItems,selectedItems2,selectedItems3])
+
+
+
+
+                          const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+                            expected_price:"",quote_price:"",security_deposite:"",
+                          maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
+                          deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
+                          owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
+                          website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
+
+
+                          const [show7, setshow7] = useState(false);
+                          const handleClose7 = () => setshow7(false);
+                          const handleShow7=async()=>
+                          {
+                            setshow7(true);
+                          
+                          }
+
+                          const [input, setInput] = useState('');
+        const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+        const [showSuggestions, setShowSuggestions] = useState(false);
+        const [allSuggestions, setAllSuggestions] = useState([]);
+        const [selectedContacts, setSelectedContacts] = useState([]);
+  
+        React.useEffect(() => {
+          const fetchSuggestions = async () => {
+            try {
+              const response = await api.get('viewcontact');
+              const data = response.data.contact;
+              
+              // Extract the first_name field from the fetched data
+              // const names = data.map(item => item.first_name);
+              setAllSuggestions(data);
+            } catch (error) {
+              console.error('Error fetching suggestions:', error);
+            }
+          };
+      
+          fetchSuggestions();
+        }, []);
+
+        React.useEffect(() => {
+          if (input) {
+            const results = allSuggestions.filter(contact =>
+              contact.first_name?.toLowerCase().includes(input.toLowerCase())
+            );
+            setFilteredSuggestions(results);
+            setShowSuggestions(true);
+          } else {
+            setShowSuggestions(false)
+          }
+        }, [input,allSuggestions]);
+
+       
+      
+        const handleInputChange = (event) => {
+          setInput(event.target.value);
+          handleClose2()
+        };
+        
+        
+        const [show2, setshow2] = useState(false);
+        const handleClose2 = () => setshow2(false);
+        const handleShow2=async()=>
+        {
+          setshow2(true);
+        
+        }
+
+        const [selectedcontact1,setselectedcontact1]=useState([])
+        const [selectedcontact2,setselectedcontact2]=useState([])
+        const[newcontact,setnewcontact]=useState([])
+        
+        const[relation,setrelation]=useState("")
+
+        const handlerelationchange = (e) => {
+          setrelation(e.target.value);
+        };
+
+        const [relation1,setrelation1]=useState("")
+        React.useEffect(() => {
+          
+          
+          if (relation === "Self") {
+            setrelation("")
+            setselectedcontact1(prevContacts => [
+              ...prevContacts,
+              newcontact // Add the new contact (assumed to be an object)
+            ]);
+           setdeal(prevDeal => ({ ...prevDeal.owner_details,newcontact }));
+           
+          }
+           else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+            
+            setselectedcontact2(prevContacts => [
+              ...prevContacts,
+              newcontact // Add the new contact for other relations
+            ]);
+            setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
+            setdeal(prevDeal => ({ ...prevDeal.associated_contact,  newcontact }));
+            setrelation1(relation)
+            setrelation("")
+          }
+        }, [relation,newcontact]);
+
+
+       
+        const handleSuggestionClick = (contact) => {
+          handleShow2();
+          
+          setnewcontact(contact)
+          // Update the selectedContacts array
+          const updatedContacts = [...selectedContacts, contact];
+          setSelectedContacts(updatedContacts);
+        
+          setInput(''); // Clear the input after selection
+          setShowSuggestions(false); // Hide suggestions after selection
+          //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+        };
+
+       
+         
+        const removeContact = (id) => {
+    
+          const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+          const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+          const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
+          setSelectedContacts(updatedContacts);
+          setselectedcontact1(updatedContacts1)
+          setselectedcontact2(updatedContacts2)
+          
+          // Update deal.owner_details with the current selected contacts
+          setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+
+        };
+
+
+
+
+
+
+
                   
     return (
         <div>
@@ -1302,11 +1576,11 @@ function Dealdetails() {
 </Tooltip>
 
 <Tooltip title="Create Booking.." arrow>
-<img id="dealcreatebooking"  src="https://www.housecallpro.com/wp-content/uploads/2024/01/schedule-mono-300x300-1.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealcreatebooking"  src="https://www.housecallpro.com/wp-content/uploads/2024/01/schedule-mono-300x300-1.png" onClick={()=>{navigate('/bookingdetails')}}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Owner/Property Owner/Associate Contact/Remove Owner.." arrow>
-<img id="dealaddremoveowner"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddremoveowner"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg" onClick={handleShow7}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Matched Lead.." arrow>
@@ -1322,7 +1596,7 @@ function Dealdetails() {
 </Tooltip>
 
 <Tooltip title="Add Remarks/Note.." arrow>
-<img id="dealaddremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow6}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Publish On.." arrow>
@@ -1330,7 +1604,7 @@ function Dealdetails() {
 </Tooltip>
 
 <Tooltip title="Update Stage.." arrow>
-<img id="dealupdatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealupdatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Preview.." arrow>
@@ -1966,51 +2240,65 @@ function Dealdetails() {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+<input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="unitdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
-<img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="unitedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
-
-<Tooltip title="Add to lead.." arrow>
-<img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-
-<Tooltip title="Call.." arrow>
-<img id="call" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-
-<Tooltip title="transfer contact.." arrow>
-<img id="transfercontact" src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-
-<Tooltip title="merge contact..." arrow>
-<img id="mergecontact" src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
-</Tooltip>    
-
 <Tooltip title="add task..." arrow>
-<img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="unitaddtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip> 
-
-<Tooltip title="sequence.." arrow>
-<img id="sequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>  
-
+<Tooltip title="add unit..." arrow>
+<img id="unitaddunit" src="https://png.pngtree.com/png-vector/20190505/ourmid/pngtree-vector-add-icon-png-image_1023418.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip> 
+<Tooltip title="create deal..." arrow>
+<img id="unitcreatedeal" src="https://static.vecteezy.com/system/resources/previews/049/672/081/non_2x/two-people-shaking-hands-in-a-circle-free-png.png" onClick={()=>navigate('/deal')}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip> 
+<Tooltip title="Add Property Owner/ Owner/Associate Contact/Remove Owner.." arrow>
+<img id="unitaddremoveowner"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Matched Lead.." arrow>
+<img id="unitmatchedlead"  src="https://www.clipartmax.com/png/middle/474-4745675_martial-arts-lead-management-lead-management-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Call.." arrow>
+<img id="unitcall"  src="https://static.vecteezy.com/system/resources/previews/016/314/381/non_2x/call-icon-free-png.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
 <Tooltip title="Send Mail.." arrow>
-<img id="mail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="unitmail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 <Tooltip title="Send WhatsApp.." arrow>
-<img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
+<img id="unitwhatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
 </Tooltip>
 <Tooltip title="Send Message.." arrow>
-<img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+<img id="unitmessage"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip>
+<Tooltip title="Add Remarks/Note.." arrow>
+<img id="unitaddremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow6}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Add Tag.." arrow>
+<img id="unitaddtag"  src="https://png.pngtree.com/png-clipart/20230805/original/pngtree-hospital-tag-icon-add-tag-offer-vector-picture-image_9758849.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Update Stage/status.." arrow>
+<img id="unitupdatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+<Tooltip title="Preview.." arrow>
+<img id="unitpreview"  src="https://cdn-icons-png.flaticon.com/512/143/143594.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Add Document.." arrow>
+<img id="unitadddocument"  src="https://icons.iconarchive.com/icons/graphicloads/long-shadow-documents/256/document-add-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Upload Picture.." arrow>
+<img id="unituploadpicture"  src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279796.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
 </div>
 
 
@@ -2198,6 +2486,245 @@ function Dealdetails() {
          
 
           </div>
+
+          <Modal show={show6} onHide={handleClose6} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Add Note/Remarks</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+         
+
+     
+            <div className="col-md-6"><label className="labels">Note</label>
+            <input type="textarea" className="form-control form-control-sm" style={{height:"100px"}} placeholder={dealdata.remarks} onChange={(e)=>setnote(e.target.value)}/>       
+            </div>
+
+
+  
+
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatedealdata}>
+                Add Note
+              </Button>
+              <Button variant="secondary" onClick={handleClose6}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+          <Modal show={show5} onHide={handleClose5} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Update Stage</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div className="col-md-6"><label className="labels">From</label>
+                  
+            <select  className="form-control form-control-sm" required="true">
+                    <option>{dealdata.stage}</option>
+                        </select>
+              </div>
+              <div className="col-md-6"></div>
+
+        
+          <div className="col-md-6"><label className="labels">To</label><select className="form-control form-control-sm" onChange={(e)=>setupdatestage(e.target.value)}>       
+                       
+                      <option>---Select---</option>
+                        <option>Open</option>
+                        <option>Quote</option>
+                        <option>Negotiation </option>
+                        <option>Booked </option>
+                        <optgroup label="Closed">
+                          <option>Won</option><option>Lost</option><option>Reject</option>
+                        </optgroup>
+                        </select>
+            </div>
+           
+            
+
+
+  
+
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatedealdata}>
+                Update
+              </Button>
+              <Button variant="secondary" onClick={handleClose5}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+          <Modal show={show7} onHide={handleClose7} size='xl'>
+            <Modal.Header>
+              <Modal.Title>Add Property Owner</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+        
+
+            <div  style={{padding:"5px"}}>
+                <div className="row" style={{width:"100%"}}>
+               
+                        <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                        {showSuggestions && input && filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-list">
+                              {filteredSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                  {suggestion.first_name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={handleShow1}>+</button></div>
+                    
+                     <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                     {selectedcontact1.length >= 0 && (
+                      <div className="contact-details">
+                        <table  style={{width:"100%"}}>
+                          
+                          <tbody>
+                          {selectedcontact1.map(contact => (
+                              <StyledTableRow>
+                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                    {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                    <SvgIcon component={EmailIcon} />
+                                    <span>{contact.email}</span>
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  {contact.mobile_no.map((number, index) => (
+                                    <span key={index}>
+                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      {number}<br></br>
+                                    </span>
+                                  ))}
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  S/W/O <br></br>{contact.father_husband_name}
+                                  </StyledTableCell>
+
+                                  <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                  {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                  </StyledTableCell>
+
+                                  <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                    </StyledTableCell>
+
+                                <StyledTableCell>
+                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                   </StyledTableCell>
+                                
+                              </StyledTableRow>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                </div>
+                
+                <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                {selectedcontact2.length >= 0 && (
+                <div className="contact-details">
+                    <table style={{width:"100%"}}>
+                        <tbody>
+                             {
+                              
+                              selectedcontact2.map(contact => (
+                                <StyledTableRow>
+                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {contact.title} {contact.first_name} {contact.last_name}<br />
+                                        <SvgIcon component={EmailIcon} />
+                                        <span>{contact.email}</span>
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        {
+                                        Array.isArray(contact.mobile_no) ?
+                                        contact.mobile_no.map((number, index) => (
+                                            <span key={index}>
+                                                <SvgIcon component={PhoneIphoneIcon} />
+                                                {number}<br />
+                                            </span>
+                                        )):[]}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        S/W/O <br />{contact.father_husband_name}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                        permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <span style={{color:"orange",fontWeight:"bolder"}}>{relation1}</span>
+                                    </StyledTableCell>
+                                        
+                                    <StyledTableCell>
+                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))} 
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            </div>
+                     </div>
+                  </div>
+            
+
+
+  
+
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatedealdata}>
+                Update
+              </Button>
+              <Button variant="secondary" onClick={handleClose7}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+            <Modal.Header>
+              <Modal.Title>Choose Relation</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+            <div className="row">
+                    <div className="col-md-4"><label className="labels">Relation</label><select className="form-control form-control-sm" required="true" onChange={handlerelationchange}>
+                              <option>Select</option>
+                              <option value="Self">Self</option>
+                              <option value="Son">Son</option>
+                              <option value="Father">Father</option>
+                              <option value="Mother">Mother</option>
+                              <option value="Uncle">Uncle</option>
+                              <option value="Other">Other</option>
+                        </select>
+                  </div>
+               </div>
+           </div>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose2}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+
         <ToastContainer/>
         </div>
      );

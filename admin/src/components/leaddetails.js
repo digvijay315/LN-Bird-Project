@@ -1358,27 +1358,27 @@ const handleShow7=async()=>
     try {
       const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
 
-      const formData = new FormData();
+      // const formData = new FormData();
   
-      // Manually append all contact data (excluding files)
-      for (let key in leaddocument) {
-        if (key !== 'document_pic') { // Skip document_pic here
-          if (Array.isArray(leaddocument[key])) {
-            leaddocument[key].forEach((value) => {
-              formData.append(key, value);
-            });
-          } else if (leaddocument[key]) {
-            formData.append(key, leaddocument[key]);
-          }
-        }
-      }
+      // // Manually append all contact data (excluding files)
+      // for (let key in leaddocument) {
+      //   if (key !== 'document_pic') { // Skip document_pic here
+      //     if (Array.isArray(leaddocument[key])) {
+      //       leaddocument[key].forEach((value) => {
+      //         formData.append(key, value);
+      //       });
+      //     } else if (leaddocument[key]) {
+      //       formData.append(key, leaddocument[key]);
+      //     }
+      //   }
+      // }
   
-      // Append document_pic (files) to FormData if it exists
-      if (leaddocument.document_pic && leaddocument.document_pic.length > 0) {
-        leaddocument.document_pic.forEach((file) => {
-          formData.append('document_pic', file); // Add file(s) to FormData
-        });
-      }
+      // // Append document_pic (files) to FormData if it exists
+      // if (leaddocument.document_pic && leaddocument.document_pic.length > 0) {
+      //   leaddocument.document_pic.forEach((file) => {
+      //     formData.append('document_pic', file); // Add file(s) to FormData
+      //   });
+      // }
       
       const resp = await api.put(`adddocumentinlead/${id}`, leaddocument, {
         headers: {

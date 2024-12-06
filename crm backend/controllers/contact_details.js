@@ -62,22 +62,21 @@ const add_contact = async (req, res) => {
             company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
             father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
             birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
-            income, amount1, document_no, document_name, relation, lastcommunication
+            income, amount1, document_no, document_name,document_pic, relation, lastcommunication
         } = req.body;
 
         // 'req.files' will contain the uploaded files
-        const images = [];
+        const newDocumentPic = [];
 
-
-        // Loop through each file in 'req.files' and upload them to Cloudinary
         if (req.files) {
+            // Upload files to Cloudinary and get the URLs
             for (let file of req.files) {
-                const result = await cloudinary.uploader.upload(file.path);
-                images.push(result.secure_url);  // Store the URL of the uploaded image
-                // Optionally delete the file after upload if using diskStorage
-                // fs.unlinkSync(file.path);
+              const result = await cloudinary.uploader.upload(file.path);
+              newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+              // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+              // fs.unlinkSync(file.path);
             }
-        }
+          }
 // console.log(req.files);
 
         // Create a new contact with the uploaded Cloudinary URLs
@@ -87,7 +86,7 @@ const add_contact = async (req, res) => {
             company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
             father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
             birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
-            income, amount1, document_no, document_name, document_pic: images, relation, lastcommunication
+            income, amount1, document_no, document_name, document_pic: newDocumentPic, relation, lastcommunication
         });
 
         // Save to database
@@ -220,11 +219,21 @@ const add_contact = async (req, res) => {
                                 return res.send({message:"lead not found"})
                             }
 
-                        const document_pic = req.files && req.files.length > 0 ? req.files.map(file => file.path) : user.document_pic;
+                            const newDocumentPic = [];
+
+                            if (req.files) {
+                                // Upload files to Cloudinary and get the URLs
+                                for (let file of req.files) {
+                                  const result = await cloudinary.uploader.upload(file.path);
+                                  newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+                                  // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+                                  // fs.unlinkSync(file.path);
+                                }
+                              }
                         
                         const updatedFields = {
                             ...req.body,
-                            document_pic // Update preview field with new images if provided
+                            document_pic:newDocumentPic // Update preview field with new images if provided
                         };
                         const resp=await addcontact.findByIdAndUpdate(id,updatedFields,{ new: true })
                         res.status(200).send({message:"lead update successfully"})
