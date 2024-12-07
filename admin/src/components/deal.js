@@ -468,14 +468,13 @@ React.useEffect(() => {
 
 
 function addFn() {
-    
   setdeal({
     ...deal,
-    s_no1: [...deal.s_no1, ''],
-    url: [...deal.url, ''],
-    action1: [...deal.action1, '']
+    s_no1: [...(deal.s_no1 || []), ''],  // Ensure s_no1 is an array
+    url: [...(deal.url || []), ''],        // Ensure url is an array
+    action1: [...(deal.action1 || []), ''] // Ensure action1 is an array
   });
-};
+}
 const handlesno1change = (index, event) => {
   const newsno1 = [...deal.s_no1];
   newsno1[index] = event.target.value;
@@ -539,13 +538,13 @@ function addFn1() {
     
   setdeal({
     ...deal,
-    s_no: [...deal.s_no, ''],
-    preview: [...deal.preview, ''],
-    descriptions: [...deal.descriptions, ''],
-    category: [...deal.category, ''],
-    action: [...deal.action, '']
+    s_no: [...(deal.s_no || []), ''],           // Ensure s_no is an array
+    preview: [...(deal.preview || []), ''],       // Ensure preview is an array
+    descriptions: [...(deal.descriptions || []), ''], // Ensure descriptions is an array
+    category: [...(deal.category || []), ''],     // Ensure category is an array
+    action: [...(deal.action || []), '']          // Ensure action is an array
   });
-};
+}
 
 const deleteall=(index)=>
 {
@@ -976,7 +975,10 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
               ...prevContacts,
               newcontact // Add the new contact (assumed to be an object)
             ]);
-           setdeal(prevDeal => ({ ...prevDeal.owner_details,newcontact }));
+            setdeal(prevDeal => ({
+              ...prevDeal,
+              owner_details: [...(prevDeal.owner_details || []), newcontact] // Append new contact to the existing owner_details array
+            }));
            
           }
            else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
@@ -985,8 +987,11 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
               ...prevContacts,
               newcontact // Add the new contact for other relations
             ]);
-            setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
-            setdeal(prevDeal => ({ ...prevDeal.associated_contact,  newcontact }));
+            setdeal(prevDeal => ({
+              ...prevDeal,
+              associated_contact: [...(prevDeal.associated_contact || []), newcontact] // Append new contact to the existing owner_details array
+            }));
+            // setdeal(prevDeal => ({ ...prevDeal.associated_contact,  newcontact }));
             // setrelation1(relation)
             setrelation("")
           }

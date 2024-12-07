@@ -132,6 +132,25 @@ const add_deal=async(req,res)=>
                                 console.log(error)
                             }
                         }
+                        const update_dealbyowner=async(req,res)=>
+                            {
+                                try {
+                                    const id=req.params._id;
+                                    const user=await adddeal.findOne({_id:id})
+                                    if(!user)
+                                        {
+                                            return res.send({message:"deal not found"})
+                                        }
+                                    
+                                     const updatedFields = {
+                                       ...req.body
+                                    };
+                                    const resp=await adddeal.findByIdAndUpdate(id,updatedFields,{ new: true })
+                                    res.status(200).send({message:"lead update successfully"})
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                            }
         
     
-    module.exports={add_deal,view_deal,view_deal_Bystage,remove_deal,update_deal,view_deal_Byid,update_dealbysingle};
+    module.exports={add_deal,view_deal,view_deal_Bystage,remove_deal,update_deal,view_deal_Byid,update_dealbysingle,update_dealbyowner};

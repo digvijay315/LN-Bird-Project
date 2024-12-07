@@ -179,38 +179,44 @@ const lead_info=async(req,res)=>
                         console.log(error)
                     }
                 }
-                const update_lead=async(req,res)=>
-                    {
-                        try {
-                            const id=req.params._id;
-                            const user=await leadinfo.findOne({_id:id})
-                            if(!user)
-                                {
-                                    return res.send({message:"lead not found"})
-                                }
-                                
-                                const newDocumentPic = [];
-                          
-                                // Process files (if any)
-                                if (req.files) {
-                                  // Upload files to Cloudinary and get the URLs
-                                  for (let file of req.files) {
-                                    const result = await cloudinary.uploader.upload(file.path);
-                                    newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
-                                    // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
-                                    // fs.unlinkSync(file.path);
-                                  }
-                                }
-                             const updatedFields = {
-                                ...req.body,
-                                document_pic:newDocumentPic // Update preview field with new images if provided
-                            };
-                            const resp=await leadinfo.findByIdAndUpdate(id,updatedFields,{ new: true })
-                            res.status(200).send({message:"lead update successfully"})
-                        } catch (error) {
-                            console.log(error)
+                const update_lead = async (req, res) => {
+                    try {
+                        const id = req.params._id;
+                        const user = await leadinfo.findOne({ _id: id });
+                
+                        if (!user) {
+                            return res.send({ message: "Lead not found" });
                         }
+                
+                        // Create an object to hold fields to be updated
+                        const updatedFields = { ...req.body };
+                
+                        // Only process files if they are provided
+                        if (req.files) {
+                            const newDocumentPic = [];
+                            // Upload files to Cloudinary and get the URLs
+                            for (let file of req.files) {
+                                const result = await cloudinary.uploader.upload(file.path);
+                                newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+                            }
+                
+                            // Only update the document_pic field if new images are uploaded
+                            if (newDocumentPic.length > 0) {
+                                updatedFields.document_pic = newDocumentPic; // Update document_pic with new images
+                            }
+                        }
+                
+                        // Update the lead document with the new data
+                        const resp = await leadinfo.findByIdAndUpdate(id, updatedFields, { new: true });
+                
+                        res.status(200).send({ message: "Lead updated successfully" });
+                
+                    } catch (error) {
+                        console.log(error);
+                        res.status(500).send({ message: "Server error" });
                     }
+                };
+                
 
                     const update_leadstage=async(req,res)=>
                         {

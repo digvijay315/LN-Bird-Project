@@ -16,7 +16,7 @@ const {addpayment_details,view_payment} = require('../controllers/addpayment_det
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
 const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project} = require('../controllers/project');
-const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle } = require('../controllers/add_deal');
+const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner } = require('../controllers/add_deal');
 
 
 const router=express.Router()
@@ -59,6 +59,7 @@ router.get('/viewdealbystage/:stage',view_deal_Bystage)
 router.delete('/removedeal/:_id',remove_deal)
 router.put('/updatedeal/:_id',upload.any('pic','preview'),update_deal)
 router.put('/updatedealbysingle/:_id',upload.any('pic','preview'),update_dealbysingle)
+router.put('/updatedealbyowner/:_id',update_dealbyowner)
 
 router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 

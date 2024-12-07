@@ -45,7 +45,28 @@ function Dealdetails() {
         
         }
 
-        const deleteSelectedItems = async () => {
+        const deletedealSelectedItems = async () => {
+          try {
+            if(selectedItems.length===0)
+            {
+              toast.error("please select first",{autoClose:"2000"})
+              return
+            }
+            const resp = selectedItems.map(async (itemId) => {
+              await api.delete(`removedeal/${itemId}`);
+            });
+            
+            toast.success('Selected items deleted successfully',{autoClose:"2000"})
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+
+        const deleteprojectSelectedItems = async () => {
           try {
             if(selectedItems2.length===0)
             {
@@ -1338,12 +1359,7 @@ function Dealdetails() {
 
 
 
-                          const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-                            expected_price:"",quote_price:"",security_deposite:"",
-                          maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
-                          deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
-                          owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
-                          website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
+                          const[deal,setdeal]=useState({owner_details:[],associated_contact:[],relation:"",})
 
 
                           const [show7, setshow7] = useState(false);
@@ -1425,7 +1441,10 @@ function Dealdetails() {
               ...prevContacts,
               newcontact // Add the new contact (assumed to be an object)
             ]);
-           setdeal(prevDeal => ({ ...prevDeal.owner_details,newcontact }));
+            setdeal(prevDeal => ({
+              ...prevDeal,
+              owner_details: [...(prevDeal.owner_details || []), newcontact] // Append new contact to the existing owner_details array
+            }));
            
           }
            else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
@@ -1435,7 +1454,10 @@ function Dealdetails() {
               newcontact // Add the new contact for other relations
             ]);
             setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
-            setdeal(prevDeal => ({ ...prevDeal.associated_contact,  newcontact }));
+            setdeal(prevDeal => ({
+              ...prevDeal,
+              associated_contact: [...(prevDeal.associated_contact || []), newcontact] // Append new contact to the existing owner_details array
+            }));
             setrelation1(relation)
             setrelation("")
           }
@@ -1471,6 +1493,30 @@ function Dealdetails() {
           setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
 
         };
+
+        const updatedealownerdata = async () => {
+          try {
+            const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
+            //const data = {remarks:note,stage:updatestage };  // Send only the stage field in the request body
+        
+            const resp = await api.put(`updatedealbyowner/${id}`, deal);  // Send the request with only stage in the body
+        
+            toast.success("Deal Updated Successfully...", { autoClose: 2000 });
+        
+            // After success, navigate to the lead details page or reload
+            setTimeout(() => {
+              navigate('/dealdetails');
+            }, 2000);
+            setTimeout(() => {
+              window.location.reload();  // If necessary, reload the page
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+
+
 
 
 
@@ -1554,7 +1600,7 @@ function Dealdetails() {
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="dealdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems}    style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="dealdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deletedealSelectedItems}    style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
@@ -2004,7 +2050,7 @@ function Dealdetails() {
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="projectdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="projectdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteprojectSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
@@ -2245,7 +2291,7 @@ function Dealdetails() {
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="unitdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="unitdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg"  style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
@@ -2560,7 +2606,7 @@ function Dealdetails() {
 
           <Modal show={show7} onHide={handleClose7} size='xl'>
             <Modal.Header>
-              <Modal.Title>Add Property Owner</Modal.Title>
+              <Modal.Title>Update Property Owner</Modal.Title>
             </Modal.Header>
             <Modal.Body>
         
@@ -2687,7 +2733,7 @@ function Dealdetails() {
 
           </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={updatedealdata}>
+            <Button variant="secondary" onClick={updatedealownerdata}>
                 Update
               </Button>
               <Button variant="secondary" onClick={handleClose7}>
