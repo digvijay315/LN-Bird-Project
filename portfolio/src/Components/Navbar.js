@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Navbar.css"; // Your custom CSS
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Menubar = () => {
   return (
 <nav className="navbar navbar-expand-lg bg-black">
   <div className="container">
@@ -26,14 +27,14 @@ const Navbar = () => {
     <div className="collapse navbar-collapse" id="navbarNav">
       <ul className="navbar-nav ms-auto">
         <li className="nav-item">
-          <a className="nav-link text-white" href="#">
+          <Link className="nav-link text-white" to={'/'}>
             Home
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link text-white" href="#">
+          <Link className="nav-link text-white" to={'/aboutus'}>
             About Us
-          </a>
+          </Link>
         </li>
         <li className="nav-item">
           <a className="nav-link text-white" href="#">
@@ -41,14 +42,14 @@ const Navbar = () => {
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link text-white" href="#">
-            Portfolio
-          </a>
+          <Link className="nav-link text-white" to={'/gallary'}>
+            Gallary
+          </Link>
         </li>
         <li className="nav-item">
-          <a className="nav-link text-white" href="#">
-            Features
-          </a>
+          <Link className="nav-link text-white" to={'/projects'}>
+          Projects
+          </Link>
         </li>
         <li className="nav-item">
           <a className="nav-link text-white" href="#">
@@ -78,4 +79,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Menubar;

@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import "./Home.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Menubar from './Navbar';
 
 
 function Home() {
@@ -66,7 +67,7 @@ function Home() {
   return (
     <div>
 <div>
-    <Navbar/>
+    <Menubar/>
 </div>
 <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-indicators">
