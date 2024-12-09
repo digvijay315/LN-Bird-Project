@@ -58,8 +58,8 @@ function Addcontact() {
     
 
     const navigate=useNavigate(); 
-    const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:['India +91'],mobile_no:[''],mobile_type:[''],action1:[],
-        email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
+    const [contact,setcontact]=useState({title:"Mr.",first_name:"",last_name:"",country_code:['India +91'],mobile_no:[''],mobile_type:['Personal'],action1:[],
+        email:[''],email_type:['Personal'],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
 
         profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"India +91",company_phone:"",
         company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"India",industry:"",company_social_media:[''],company_url:[''],action3:[],
@@ -94,7 +94,274 @@ function Addcontact() {
     }
 
     
+    const professtiondetails = {
+      profession_category: ["Govt. Employed", "Private Employee","Self Employed","Retired","Business Man","Student","House Wife"],
     
+      profession_subcategory: {
+        "Govt. Employed": ["Teacher", "Scientist","Doctor","Nurse","Clerk","Engineer","Accountant","Architect","Auditor","Police",
+                            "Mechanic","Security","Driver","Officer","Peon","Chef","Pilot","IT Person","Analyst","Sales Person",
+                            "Banker","Legal"],
+        "Private Employee": ["Officer", "Accountant", "Human Resources (HR)", "Sales Person", "Manager", "IT Person", 
+                                "Analyst", "Scientist", "Technicians", "Designer", "Author", "Videographer", "Director", 
+                                "Telle Caller", "Legel", "Executive Officer", "Operators", "Security", "Journalists", 
+                                "Doctor", "Nurse", "Teacher", "Facility", "Driver", "Contractor", "Consultant", "Chef", 
+                                "Artist", "Engineer", "Banker", "Legal", "Clerk", "Architect", "Auditor", "Mechanic", 
+                                "Peon", "Pilot"],
+      
+        "Self Employed": ["Designer", "Photographer","Videographer","Independent Artist","Illustrator","Writer","Digital Content Creator",
+                          "Social Media Influencer","Podcaster","Music Producer","Management Consultant","Financial Advisor","IT Consultant",
+                          "Business Strategist","Marketing Consultant","Life Coach","Career Counselor","Freelance Software Developer","Web Developer",
+                          "Data Analyst","App Developer","UX/UI Designer","Cybersecurity Consultant","Private Practitioner (Doctor)","Physiotherapist",
+                          "Dietitian or Nutritionist","Yoga Instructor","Personal Trainer","Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)",
+                          "Private Tutor","Test Preparation Coach","Online Educator","Language Trainer","Corporate Trainer","Independent Lawyer",
+                          "Chartered Accountant (CA)","Tax Consultant","Auditor","Financial Planner","Tailor","Carpenter","Blacksmith",
+                          "Jewelry Maker","Ceramic Artist","Real Estate Agent","Broker","Sales Representative","Freelance Chef","Event Planner",
+                          "Makeup Artist","Hairstylist","Wedding Photographer","Independent Farmer","Organic Produce Supplier","Horticulturist"],
+        
+        Retired: ["Teacher", "Scientist", "Doctor", "Nurse", "Clerk", "Engineer", "Accountant", "Architect", "Auditor", "Police",
+                  "Mechanic", "Security", "Driver", "Officer", "Peon", "Chef", "Pilot", "IT Person", "Analyst", "Sales Person", "Banker",
+                  "Legal", "Manager", "Operators", "Human Resources (HR)", "Freelance Graphic Designer", "Photographer", "Videographer",
+                  "Independent Artist", "Illustrator", "Writer (Author, Blogger, or Copywriter)", "Digital Content Creator", "Social Media Influencer",
+                  "Podcaster", "Music Producer", "Management Consultant", "Financial Advisor", "IT Consultant", "Business Strategist", "Marketing Consultant",
+                  "Life Coach", "Career Counselor", "Freelance Software Developer", "Web Developer", "Data Analyst", "App Developer", "UX/UI Designer",
+                  "Cybersecurity Consultant", "Private Practitioner (Doctor)", "Physiotherapist", "Dietitian or Nutritionist", "Yoga Instructor",
+                  "Personal Trainer", "Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)", "Private Tutor", "Test Preparation Coach",
+                  "Online Educator", "Language Trainer", "Corporate Trainer", "Independent Lawyer", "Chartered Accountant (CA)", "Tax Consultant",
+                  "Auditor", "Financial Planner", "Tailor", "Carpenter", "Blacksmith", "Jewelry Maker", "Ceramic Artist", "Real Estate Agent",
+                  "Property Consultant", "Broker", "Sales Representative", "Freelance Chef", "Event Planner", "Makeup Artist", "Hairstylist",
+                  "Wedding Photographer", "Independent Farmer", "Organic Produce Supplier", "Horticulturist"
+        ],
+    
+        Student:["Investor"],
+    
+        "House Wife":["Investor"],
+        
+        "Business Man": ["Entrepreneurs", "Start-up Founders", "Retailer", "Wholesaler", "Importer/Exporter", "Distributor", "Trader",
+                          "Real Estate Developer", "Real Estate Investor", "Real Estate Agent", "Manufacturer", "Industrialist", "Financer",
+                          "Stock Trader", "Hotel Owner", "Resort Owner", "Travel Agency", "Restaurant Owner", "Agriculturist", "Dairy Business Owner",
+                          "IT Person", "Coaching Centre Owner", "Training Institute Owner", "Online Tutor", "Private Tutor", "Hospital Owner",
+                          "Wellness Centre Owner", "Fitness Centre Owner", "Advertising Agency Owner", "Film Producer", "Media House Owner",
+                          "Designer", "Transporter", "Courier Servicer", "Renewable Energy and Environment", "Boutique", "Salon Owner",
+                          "Security Service Provider", "Legal Firm Owner", "Digital Business", "Infrastructure Developer", "Poultry Farm Owner",
+                          "Handicrafts Business Owner", "Investment Banker", "Loan Consultant", "IT Company Owner", "Cloud Service Provider",
+                          "Emigration", "Catering", "Baker", "Car Dealership Owner", "Bike Dealership Owner", "Bike Rental Business Owner",
+                          "Workshop Owner", "Environmental Consultant", "Cold Storage Business Owner", "Film Studio Owner", "Sports Organizer",
+                          "Event Organizer", "Cloth Merchant"
+        ]
+        
+      },
+      designation: {
+        Teacher: ["Primary Teacher (PRT)","Trained Graduate Teacher (TGT)","Post Graduate Teacher (PGT)","Assistant Professor",
+                  "Professor","Principal","Education Officer","Laboratory Technicians","Corporate Trainers","E-learning Specialists",
+                  "Academic Counselors","Kindergarten Teacher","Subject Teacher","Senior Educator","Head of Department"],
+        Scientist: ["Junior Scientist","Scientist B/C/D","Senior Scientist","Chief Scientist","Director","Data Scientists",
+                    "Research Scientists","Product Developers","Research Associate","Senior Research Scientist","Lead Scientist"],
+        Doctor: ["Doctors","Medical Officer (MO)","Senior Medical Officer (SMO)","Specialist Doctor","Chief Medical Officer (CMO)","Director of Health Services",
+                "Physical Therapists","Dietitians","Resident Doctor","Consultant","Senior Specialist","Medical Director"],
+        Nurse:["Nurses","Auxiliary Nurse Midwife (ANM)","Staff Nurse","Nursing Superintendent","Chief Nursing Officer","Staff Nurse",
+                "Charge Nurse","Nursing Director"],
+        Clerk:["Lower Division Clerk (LDC)","Upper Division Clerk (UDC)","Assistant Section Officer (ASO)","Section Officer (SO)",
+                "Data Entry Clerk","Office Assistant","Administrative Clerk"],
+        Engineer:["Junior Engineer (JE)","Assistant Engineer (AE)","Executive Engineer (EE)","Chief Engineer",],
+        Accountant:["Junior Accountant","Senior Accountant","Accounts Officer","Senior Accounts Officer","Controller of Accounts",
+                    "Accountants","Payroll Specialists","Tax Consultants","Junior Accountant","Senior Accountant","Finance Controller",
+                    "Chief Financial Officer (CFO)","Accountants", "Financial Analysts","Auditors","Payroll Specialists","Tax Consultants"],
+        Architect:["Assistant Architect","Architect","Senior Architect","Chief Architect","Architectural Intern","Project Architect",
+                    "Design Director"],
+        Auditor:["Junior Auditor","Senior Auditor","Audit Officer","Senior Audit Officer","Principal Auditor","Auditors","Internal Auditor",
+                  "Risk Auditor","Audit Manager"],
+        Police:["Constable","Head Constable","Assistant Sub-Inspector (ASI)","Sub-Inspector (SI)","Inspector","Deputy Superintendent of Police (DSP)",
+                "Superintendent of Police (SP)","Inspector General of Police (IGP)","Director General of Police (DGP)"],
+        Mechanic:["Junior Mechanic","Senior Mechanic","Workshop Superintendent","Service Technician","Workshop Supervisor"],
+        Security:["Security Guard","Security Supervisor","Security Officer","Chief Security Officer","Safety Officers"],
+        Driver:["Driver (Light/Heavy Vehicle)","Senior Driver","Motor Vehicle Inspector","Drivers","Delivery Agents","Company Driver",
+                "Heavy Vehicle Driver","Personal Driver"],
+        Officer:["Probationary Officer (PO)","Administrative Officer","Gazetted Officer (Class A, B, C)","Deputy Secretary",
+                "Under Secretary","Joint Secretary","Secretary","Administrative Assistants","Chief Executive Officer (CEO)",
+                "Chief Financial Officer (CFO)","Chief Operating Officer (COO)","Vice Presidents (VPs)","Directors","Entrepreneurs",
+              "Administrative Assistants","Office Managers","Executive Assistants","Receptionists","PData Entry Operators"],
+        Peon:["Office Attendant","Multi-Tasking Staff (MTS)","Office Helper","Support Staff"],
+        Chef:["Cook","Head Cook","Catering Supervisor","Chefs","Commis Chef","Sous Chef","Executive Chef"],
+        Pilot:["Commercial Pilot","Helicopter Pilot","Fighter Pilot","Co-Pilot","Chief Pilot"],
+        "IT Person":["Junior Programmer","Software Developer","Software Engineer","Senior Software Engineer","IT Officer",
+                    "Software Developers","System Administrators","IT Support Specialists","Junior Developer","Full Stack Developer"
+                    ],
+        "Sales Person":["Sales Assistant","Sales Supervisor","Marketing Executive","Sales Executives","Sales Associate","Sales Manager"],
+        Analyst:["Data Analyst","Research Analyst","Financial Analyst","System Analyst","Intelligence Analyst","Financial Analysts",
+                  "Cybersecurity Analysts","Supply Chain Analysts","Business Analyst","Senior Analyst","Supply Chain Analysts","Quality Inspector"],
+        Banker:["Bank Clerk","Senior Clerk","Probationary Officer (PO)","Assistant Manager","Branch Manager","Regional Manager",
+                "Chief Manager","Assistant General Manager (AGM)","General Manager (GM)","Managing Director (MD)","Relationship Manager",
+                "Loan Officer","Branch Manager","Investment Analyst"],
+        Legal:["Civil Judge (Junior Division)","Civil Judge (Senior Division)","District Judge","High Court Judge","Supreme Court Judge",
+                "Chief Justice","Legal Officer","Public Prosecutor","Solicitor General","Legal Advisors","Compliance Officers",
+                "Contract Specialists","Risk Managers","Legal Associate","Corporate Lawyer","Compliance Manager","Legal Consultant",
+              ],
+    
+        Designer:["Proprietor","Graphic Designers","UX/UI Designers","Instructional Designers","Freelance Designers/Writers",
+                  "Senior Designer","Creative Director"], Photographer:["Proprietor"],Videographer:["Proprietor","Video Editors"],"Independent Artist":["Proprietor"],
+        Illustrator:["Proprietor"],Writer:["Proprietor"],"Digital Content Creator":["Proprietor"],"Social Media Influencer":["Proprietor"],
+        Podcaster:["Proprietor"],"Music Producer":["Proprietor"],"Management Consultant":["Proprietor"],"Financial Advisor":["Proprietor"],
+        "IT Consultant":["Proprietor"],"Business Strategist":["Proprietor"],"Marketing Consultant":["Proprietor"],"Life Coach":["Proprietor"],
+        "Career Counselor":["Proprietor"],"Freelance Software Developer":["Proprietor"],"Web Developer":["Proprietor"],"Data Analyst":["Proprietor"],
+        "App Developer":["Proprietor"],"UX/UI Designer":["Proprietor"],"Cybersecurity Consultant":["Proprietor"],"Private Practitioner (Doctor)":["Proprietor"],
+        Physiotherapist:["Proprietor"],"Dietitian or Nutritionist":["Proprietor"],"Yoga Instructor":["Proprietor"],"Personal Trainer":["Proprietor"],
+        "Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)":["Proprietor"],"Private Tutor":["Proprietor"],"Test Preparation Coach":["Proprietor"],
+        "Online Educator":["Proprietor"],"Language Trainer":["Proprietor"],"Corporate Trainer":["Proprietor"],"Independent Lawyer":["Proprietor"],
+        "Chartered Accountant (CA)":["Proprietor"],"Tax Consultant":["Proprietor"],"Auditor":["Proprietor"],"Financial Planner":["Proprietor"],
+        "Tailor":["Proprietor"],"Carpenter":["Proprietor"],"Blacksmith":["Proprietor"],"Jewelry Maker":["Proprietor"],"Ceramic Artist":["Proprietor"],
+        "Real Estate Agent":["Proprietor"],"Broker":["Proprietor"],"Sales Representative":["Proprietor"],"Freelance Chef":["Proprietor"],
+        "Event Planner":["Proprietor"],"Makeup Artist":["Proprietor"],"Hairstylist":["Proprietor"],"Wedding Photographer":["Proprietor"],
+        "Independent Farmer":["Proprietor"],"Organic Produce Supplier":["Proprietor"],"Horticulturist":["Proprietor"],
+    
+        "Software Developer":["Software Developer"],
+        Manager:[],
+        Operators:["Data Entry Operators","Operations Managers","Machine Operators"],
+        "Human Resources (HR)":["HR Executives","Talent Acquisition Specialists","Employee Relations Managers","Training and Development Specialists",
+                                "HR Business Partners","HR Executives","Talent Acquisition Specialists","Employee Relations Managers","Training and Development Specialists","HR Business Partners"],
+        Manager:["Marketing Managers","Brand Managers","Business Development Managers","Digital Marketing Specialists",
+                  "Logistics Coordinators","Procurement Specialists","Inventory Managers","Client Relationship Managers","Social Media Managers",
+                  "Event Planners","Facility Managers","Hotel Managers","Front Desk Executives","Event Coordinators","Start-up Employees",
+                  "Team Manager","Operations Manager","General Manager","Operations Managers","Logistics Coordinators","Procurement Specialists",
+                  "Inventory Managers","Innovation Managers","Customer Support Executives","Sales Manager","Public Relations Specialists",
+                "Office Managers","Executive Assistants","Receptionists","Innovation Managers","Customer Support Executives",
+                  "Plant Managers","Quality Inspectors","Fleet Managers","Marketing Managers","Brand Managers","Business Development Managers","Digital Marketing Specialists"],
+        Author:["Content Writers","Editors"],
+        Director:["Art Directors"],
+        "Tele Caller":["Call Center Agents"],
+        Technicians:["Technical Support Specialists","Maintenance Technicians","Lab Technicians","Technical Lead","Laboratory Technicians"],
+        Jounalists:["Journalists","Public Relations Specialists"],
+        Hospitality:["Housekeeping Staff"],
+        Contractor:["Independent Contractors"],
+        Consultant:["Management Consultants"],
+        Artist:["Creative Artists","Musicians"],
+        Engineer:["Junior Engineer","Project Engineer","Senior Engineer","Engineering Manager"],
+        "Freelance Graphic Designer":["Proprietor"],Photographer:["Proprietor"],Videographer:["Proprietor"],"Independent Artist":["Proprietor"],
+        Illustrator:["Proprietor"],"Writer (Author, Blogger, or Copywriter)":["Proprietor"],"Digital Content Creator":["Proprietor"],
+        "Social Media Influencer":["Proprietor"],Podcaster:["Proprietor"],"Music Producer":["Proprietor"],"Management Consultant":["Proprietor"],
+        "Financial Advisor":["Proprietor"],"IT Consultant":["Proprietor"],"Business Strategist":["Proprietor"],"Marketing Consultant":["Proprietor"],
+        "Life Coach":["Proprietor"],"Career Counselor":["Proprietor"],"Freelance Software Developer":["Proprietor"],"Web Developer":["Proprietor"],
+        "Data Analyst":["Proprietor"],"App Developer":["Proprietor"],"UX/UI Designer":["Proprietor"],"Cybersecurity Consultant":["Proprietor"],
+        "Private Practitioner (Doctor)":["Proprietor"],Physiotherapist:["Proprietor"],"Dietitian or Nutritionist":["Proprietor"],
+        "Yoga Instructor":["Proprietor"],"Personal Trainer":["Proprietor"],"Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)":["Proprietor"],
+        "Private Tutor":["Proprietor"],"Test Preparation Coach":["Proprietor"],"Online Educator":["Proprietor"],"Language Trainer":["Proprietor"],
+        "Corporate Trainer":["Proprietor"],"Independent Lawyer":["Proprietor"],"Chartered Accountant (CA)":["Proprietor"],"Tax Consultant":["Proprietor"],
+        Auditor:["Proprietor","Internal Auditor","Risk Auditor","Audit Manager"],"Financial Planner":["Proprietor"],Tailor:["Proprietor"],Carpenter:["Proprietor"],Blacksmith:["Proprietor"],
+        "Jewelry Maker":["Proprietor"],"Ceramic Artist":["Proprietor"],"Real Estate Agent":["Proprietor"],"Property Consultant":["Proprietor"],
+        Broker:["Proprietor"],"Sales Representative":["Proprietor"],"Freelance Chef":["Proprietor"],"Event Planner":["Proprietor"],
+        "Makeup Artist":["Proprietor"],Hairstylist:["Proprietor"],"Wedding Photographer":["Proprietor"],"Independent Farmer":["Proprietor"],
+        "Organic Produce Supplier":["Proprietor"],Horticulturist:["Proprietor"],
+        Investor:["Angel Investor", "Venture Capitalist", "Portfolio Manager"],
+        Entrepreneurs:["Founder", "Co-Founder", "CEO", "Managing Director"],
+        "Start-up Founders":["Founder", "Co-Founder, CEO", "Visionary Leader"],
+        Retailer:["Shop Owner", "Retail Manager", "Proprietor", "Franchise Owner"],
+        Wholesaler:["Wholesale Business Owner", "Distribution Head", "Supply Chain Owner"],
+        "Importer/Exporter":["Import/Export Manager", "Trade Consultant", "Supply Chain Owner"],
+        Distributor:["Chief Trading Officer", "Trading Business Owner", "Independent Trader"],
+        Trader:["Wholesale Business Owner", "Distribution Head", "Supply Chain Owner"],
+        "Real Estate Developer":["Real Estate Developer", "Managing Partner", "Property Consultant"],
+        "Real Eastate Investor":["Property Investor", "Real Estate Strategist", "Investment Manager"],
+        "Real Estate Agent":["Real Estate Consultant", "Real Estate Advisor", "Realtor"],
+        Manufacturer:["Factory Owner", "Production Head", "Chief Manufacturing Officer"],
+        Industrialist:["Business Tycoon", "Industry Leader", "Managing Director"],
+        Financer:["Chief Financial Officer (CFO)", "Financial Advisor", "Investment Consultant"],
+        "Stock Trader":["Equity Investor", "Day Trader", "Portfolio Manager"],
+        "Hotel Owner":["Hospitality Owner", "General Manager (GM)", "Managing Director"],
+        "Resort Owner":["Resort Manager", "Owner and Operator", "Hospitality Director"],
+        "Travel Agency":["Travel Consultant", "Tourism Business Owner", "Founder"],
+        "Restaurant Owner":["Restaurant Manager", "Food Entrepreneur", "Culinary Director"],
+        Agriculturist:["Farm Owner", "Agriculture Consultant", "Rural Entrepreneur"],
+        "Dairy Business Owner":["Dairy Farmer", "Milk Processing Entrepreneur", "Managing Partner"],
+        "IT Person":["IT Consultant", "Software Solutions Owner","IT Entrepreneur","Software Developers","System Administrators",
+                    "IT Support Specialists","Data Scientists","Cybersecurity Analysts","Junior Developer","Full Stack Developer",
+                    "Senior Software Engineer","Technical Lead"],
+        "Coaching Centre Owner":["Education Entrepreneur", "Coaching Director", "Academic Manager"],
+        "Training Institute Owner":["Training Consultant", "Institute Director", "Founder"],
+        "Online Tutor":["Founder and Educator", "Academic Content Creator"],
+        "Private Tutor":["Independent Tutor", "Education Consultant"],
+        "Hospital Owner":["Healthcare Entrepreneur", "Medical Director", "Hospital Administrator"],
+        "Wellness Centre Owner":["Wellness Consultant", "Health and Fitness Director", "Gym Owner"],
+        "Fitness Centre Owner":["Gym Owner", "Fitness Director", "Health Entrepreneur"],
+        "Advertising Agency Owner":["Creative Director", "Marketing Strategist", "Founder"],
+        "Film Producer":["Producer", "Film Studio Owner", "Creative Producer"],
+        "Media House Owner":["Media Entrepreneur","Chief Editor", "Publisher"],
+        Designer:	["Creative Director", "Fashion Entrepreneur"],
+        Transporter:	["Logistics Manager", "Transport Business Owner"],
+        "Courier Servicer":["Courier Business Owner", "Operations Manager"],
+        "Renewable Energy and Environment":["Renewable Energy Consultant", "Sustainable Entrepreneur"],
+        Boutique:["Fashion Boutique Owner", "Creative Head"],
+        "Salon Owner":["Salon Manager", "Beauty Entrepreneur"],
+        "Security Service Provider":["Security Agency Owner", "Operations Head"],
+        "Legal Firm Owner":["Advocate and Owner", "Managing Partner"],
+        "Digital Business":["Founder", "Digital Marketing Consultant"],
+        "Infrastructure Developer":["Real Estate Developer", "Project Consultant"],
+        Agriculturist:["Agribusiness Entrepreneur", "Food Processing Director"],
+        "Poultry Farm Owner":	["Poultry Business Owner", "Farm Manager"],
+        "Handicrafts Business Owner":["Artisan Entrepreneur", "Creative Entrepreneur"],
+        "Investment Banker":["Investment Advisor", "Wealth Manager"],
+        "Loan Cosultant":	["Financial Consultant", "Loan Advisor"],
+        "IT Company Owner":["IT Entrepreneur", "Chief Technology Officer (CTO)"],
+        "Cloud Service Provider":["Cloud Solutions Architect", "IT Entrepreneur"],
+        Emigration:	["Immigration Consultant", "Visa Solutions Provider"],
+        Catering:	["Catering Business Owner", "Culinary Director"],
+        Baker:["Bakery Owner", "Culinary Entrepreneur"],
+        "Car Dealership Owner":["Dealership Manager", "Auto Entrepreneur"],
+        "Bike Dealership Owner":	["Franchise Owner"],
+        "Bike Rental Business Owner":["Rental Business Owner", "Operations Head"],
+        "Workshop Owner":["Mechanic Entrepreneur", "Service Manager"],
+        "Environmental Consultant":["Sustainability Consultant", "Environmental Advisor"],
+        "Cold Storage Business Owner":["Logistics Entrepreneur", "Warehouse Manager"],
+        "Film Studio Owner":	["Film Producer", "Studio Head"],
+        "Sports Organizer":	["Event Manager", "Sports Entrepreneur"],
+        "Event Organizer":	["Founder, Director", "Creative Planner"],
+        "Cloth Merchant":	["Textile Business Owner", "Retail Manager"],
+        ExecutiveOfficer:["Chief Executive Officer (CEO)","Entrepreneurs","Chief Financial Officer (CFO)","Chief Operating Officer (COO)","Vice Presidents (VPs)","Directors",],
+        Facility:["Housekeeping Staff"]
+    
+    
+      },
+    };
+    
+    const [availableSubcategories, setAvailableSubcategories] = useState([]);
+    const [availableDesignations, setAvailableDesignations] = useState([]);
+    
+    // Handle profession category change
+    const handleProfessionCategoryChange = (event) => {
+      const selectedCategory = event.target.value;
+    
+      setcontact((prevLead) => ({
+        ...prevLead,
+        profession_category: selectedCategory,
+        profession_subcategory: "", // Reset subcategory when category changes
+        designation: "", // Reset designation when category changes
+      }));
+    
+      // Update available subcategories based on selected profession category
+      setAvailableSubcategories(professtiondetails.profession_subcategory[selectedCategory] || []);
+    };
+    
+    // Handle profession subcategory change
+    const handleProfessionSubcategoryChange = (event) => {
+      const selectedSubcategory = event.target.value;
+    
+      setcontact((prevLead) => ({
+        ...prevLead,
+        profession_subcategory: selectedSubcategory,
+        designation: "", // Reset designation when subcategory changes
+      }));
+    
+      // Update available designations based on selected profession subcategory
+      setAvailableDesignations(professtiondetails.designation[selectedSubcategory] || []);
+    };
+    
+    // Handle designation change
+    const handleDesignationChange = (event) => {
+      const selectedDesignation = event.target.value;
+    
+      setcontact((prevLead) => ({
+        ...prevLead,
+        designation: selectedDesignation,
+      }));
+    };
     
 
     useEffect(()=>{fetchcdata()},[])
@@ -137,29 +404,29 @@ function Addcontact() {
             document.getElementById("basicdetails2").style.display="flex"
             document.getElementById("basic").style.color="green"
             document.getElementById("other").style.color="black"
-             document.getElementById("professional").style.color="black"
+            //  document.getElementById("professional").style.color="black"
             document.getElementById("otherdetails").style.display="none"
-            document.getElementById("profession").style.display="none"
+            // document.getElementById("profession").style.display="none"
           }
-          const professionaldetails=()=>
-            {
-              document.getElementById("basicdetails1").style.display="none"
-              document.getElementById("basicdetails2").style.display="none"
-              document.getElementById("otherdetails").style.display="none"
-              document.getElementById("profession").style.display="flex"
-               document.getElementById("basic").style.color="black"
-               document.getElementById("other").style.color="black"
-                 document.getElementById("professional").style.color="green"
+          // const professionaldetails=()=>
+          //   {
+          //     document.getElementById("basicdetails1").style.display="none"
+          //     document.getElementById("basicdetails2").style.display="none"
+          //     document.getElementById("otherdetails").style.display="none"
+          //     document.getElementById("profession").style.display="flex"
+          //      document.getElementById("basic").style.color="black"
+          //      document.getElementById("other").style.color="black"
+          //        document.getElementById("professional").style.color="green"
                
-            }
+          //   }
           const otherdetails=()=>
             {
               document.getElementById("basicdetails1").style.display="none"
               document.getElementById("basicdetails2").style.display="none"
-               document.getElementById("profession").style.display="none"
+              //  document.getElementById("profession").style.display="none"
                  document.getElementById("otherdetails").style.display="flex"
                document.getElementById("basic").style.color="black"
-                document.getElementById("professional").style.color="black"
+                // document.getElementById("professional").style.color="black"
                document.getElementById("other").style.color="green"
             }
           
@@ -543,41 +810,42 @@ function Addcontact() {
   {
       document.getElementById("basicdetails1").style.display="none";
       document.getElementById("basicdetails2").style.display="none";
-      document.getElementById("profession").style.display="flex";
+      document.getElementById("otherdetails").style.display="flex";
 
-      document.getElementById("professional").style.color="green";
+      document.getElementById("other").style.color="green";
       document.getElementById("basic").style.color="black";
 
    
   }
-  function next2()
-  {
+  // function next2()
+  // {
 
-      document.getElementById("profession").style.display="none";
-      document.getElementById("otherdetails").style.display="flex";
+  //     document.getElementById("profession").style.display="none";
+  //     document.getElementById("otherdetails").style.display="flex";
 
-      document.getElementById("professional").style.color="black";
-      document.getElementById("other").style.color="green";
+  //     document.getElementById("professional").style.color="black";
+  //     document.getElementById("other").style.color="green";
 
    
-  }
+  // }
 
-  function prev1()
+  // function prev1()
+  // {
+  //   document.getElementById("basicdetails1").style.display="flex";
+  //   document.getElementById("basicdetails2").style.display="flex";
+  //   document.getElementById("profession").style.display="none";
+
+  //   document.getElementById("professional").style.color="black";
+  //   document.getElementById("basic").style.color="green";
+     
+  // }
+  function prev2()
   {
     document.getElementById("basicdetails1").style.display="flex";
     document.getElementById("basicdetails2").style.display="flex";
-    document.getElementById("profession").style.display="none";
-
-    document.getElementById("professional").style.color="black";
-    document.getElementById("basic").style.color="green";
-     
-  }
-  function prev2()
-  {
-    document.getElementById("profession").style.display="flex";
     document.getElementById("otherdetails").style.display="none";
 
-    document.getElementById("professional").style.color="green";
+    document.getElementById("basic").style.color="green";
     document.getElementById("other").style.color="black";
      
   }
@@ -671,7 +939,7 @@ const handleOwnerChange = (event) => {
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
                     <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
-                              <option>---Select---</option>
+                              
                               <option>Mr.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -719,7 +987,7 @@ const handleOwnerChange = (event) => {
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                          onChange={(event)=>handlemobile_typechange(index,event)}>
-                                  <option>---Select---</option>
+                                  
                                   <option>Personal</option>
                                   <option>Official</option>
                                   <option>Home</option>
@@ -759,7 +1027,7 @@ const handleOwnerChange = (event) => {
                         (
                           <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                           onChange={(event)=>handleemail_typechange(index,event)}>
-                                <option>Select Type</option>
+                                
                                 <option>Personal</option>
                                 <option>Official</option>
                                 <option>Business</option>
@@ -836,11 +1104,11 @@ const handleOwnerChange = (event) => {
               
                </div>
          
-             <div style={{display: isChecked ? "none" : "flex",gap:"100px"}}>
+             <div style={{display: isChecked ? "none" : "flex",gap:"80px"}}>
               
-               <span  id='basic' onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details</span>
-                <span  id='professional' onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details</span >
-                <span   id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Personal Details</span > 
+               <span  id='basic' onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold",width:"200px"}}>Basic Details|</span>
+                {/* <span  id='professional' onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details</span > */}
+                <span   id='other' onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold",width:"200px"}}>Personal Details|</span > 
                
 						    <span style={{marginLeft:"200px",width:"31%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></span>
 					</div>
@@ -857,7 +1125,7 @@ const handleOwnerChange = (event) => {
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
                     <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
-                              <option>---Select---</option>
+                             
                               <option>Mr.</option>
                               <option>Mrs.</option>
                               <option>Sh.</option>
@@ -906,7 +1174,7 @@ const handleOwnerChange = (event) => {
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                          onChange={(event)=>handlemobile_typechange(index,event)}>
-                                  <option>---Select---</option>
+                                 
                                   <option>Personal</option>
                                   <option>Official</option>
                                   <option>Home</option>
@@ -946,7 +1214,7 @@ const handleOwnerChange = (event) => {
                         (
                           <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
                           onChange={(event)=>handleemail_typechange(index,event)}>
-                                <option>---Select---</option>
+                               
                                 <option>Personal</option>
                                 <option>Official</option>
                                 <option>Business</option>
@@ -972,7 +1240,64 @@ const handleOwnerChange = (event) => {
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                   
+           
+                    <div className="col-md-12" style={{marginTop:"10px"}}><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Profession Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+               
+                    <div className="col-md-5"><label className="labels">Profession Category</label>
+                    <select className="form-control form-control-sm" onChange={handleProfessionCategoryChange}>
+                                  <option>---Select profession category---</option>    
+                               
+                                {professtiondetails.profession_category.map((category) => (
+                                <option key={category} value={category}>
+                                  {category}
+                                </option>
+                              ))}
+                        </select>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label>
+                    <select className="form-control form-control-sm" onChange={handleProfessionSubcategoryChange}>
+                                <option>---Select profession sub-category---</option>
+                                {availableSubcategories.map((subcategory) => (
+                                <option key={subcategory} value={subcategory}>
+                                  {subcategory}
+                                </option>
+                              ))}
+                        </select>
+                    </div>
+                    <div className="col-md-5"><label className="labels">Designation</label>
+                    <select className="form-control form-control-sm" onChange={handleDesignationChange}>
+                    <option>---Select designation---</option>
+                    {availableDesignations.map((designation) => (
+                      <option key={designation} value={designation}>
+                              {designation}
+                            </option>
+                        ))}
+                        </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Company/Organisation/Department Name</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
+                    <option>---Select company---</option>
+                      {
+                        cdata.map((item)=>
+                        (
+                          <option>{item.name}</option>
+                        ))
+                      }
+                        </select>
+                    </div>
+                    <div className="col-md-1"><label className="labels">Add</label><button className="form-control form-control-sm" onClick={()=>{navigate('/addcompany')}}>+</button></div>
+             
+              {/* <div className="row mt-4">
+                    <div className="col-md-2"   onClick={prev1}><button className="form-control form-control-sm" >Prev</button></div>
+                    <div className="col-md-2" onClick={next2}  style={{marginLeft:"65%"}}><button className="form-control form-control-sm" >Next</button></div>
+                </div> */}
+            
+         
+
+
+
+                    <div className="col-md-12" style={{marginTop:"10px"}}><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
                     <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
                                     <option>---Select source---</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
@@ -1027,7 +1352,7 @@ const handleOwnerChange = (event) => {
                   
   {/* -----------------------------------------professional Details start------------------------------------------------------------------- */}
 
-        <div className="col-md-12" id='profession' style={{display: "none",marginTop:"-80px",lineHeight:"30px"}}>
+        {/* <div className="col-md-12" id='profession' style={{display: "none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
                 <div className="row " >
@@ -1082,7 +1407,7 @@ const handleOwnerChange = (event) => {
                     <div className="col-md-2" onClick={next2}  style={{marginLeft:"65%"}}><button className="form-control form-control-sm" >Next</button></div>
                 </div>
              </div>
-           </div>
+           </div> */}
  {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
 
  {/*-------------------------------------------------- personal details start--------------------------------------------------------- */

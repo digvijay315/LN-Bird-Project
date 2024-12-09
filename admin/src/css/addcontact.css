@@ -164,3 +164,75 @@ button:hover{
     opacity: 1;
   } 
   
+
+  #companydelete{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companydelete:hover
+{
+    transform: scale(1.1);
+    
+}
+
+  #companyedit{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companyedit:hover
+{
+    transform: scale(1.1);
+    
+}
+#companycall{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companycall:hover
+{
+    transform: scale(1.1);
+    
+}
+#companymessage{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companymessage:hover
+{
+    transform: scale(1.1);
+    
+}
+#companywhatsapp{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companywhatsapp:hover
+{
+    transform: scale(1.1);
+    
+}
+#companymail{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companymail:hover
+{
+    transform: scale(1.1);
+    
+}
+#companysequence{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#companysequence:hover
+{
+    transform: scale(1.1);
+    
+}

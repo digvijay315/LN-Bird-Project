@@ -39,6 +39,20 @@ const createProject = async (req, res) => {
             console.log(error)
         }
     }
+    const view_project_Byid=async(req,res)=>
+      {
+          try {
+              const _id=req.params._id;
+              const resp= await addproject.findOne({_id:_id})
+              if(!resp)
+                  {
+                     return res.send("project details not available")
+                  }
+              res.status(200).send({message:"project found and here are contact details:",project:resp})
+          } catch (error) {
+              console.log(error)
+          }
+      }
     const view_projectbyname=async(req,res)=>
       {
           try {
@@ -76,4 +90,4 @@ const createProject = async (req, res) => {
                   console.log(error)
               }
           }
-   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project}
+   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid}

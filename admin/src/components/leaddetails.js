@@ -273,7 +273,7 @@ const[countall,setcountall]=useState('')
   /*-------------------pagination code---------------------------pagination code------------------------------------pagination code*/
  
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(7); // User-defined items per page
+  const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -2263,6 +2263,7 @@ const handleallblockchange = (event) => {
             <ul class="dropdown-menu">
               <li className="form-control">Won <span style={{fontSize:"30px",color:"green",fontWeight:"bolder"}}><sup>{countwon}</sup></span></li>
               <li className="form-control">Lost <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup>{countlost}</sup></span></li>
+              <li className="form-control">Unqualified  <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup>{countlost}</sup></span></li>
             </ul>
          
         </div>  
@@ -2495,7 +2496,14 @@ const handleallblockchange = (event) => {
   </TableContainer>
   <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Lead <span style={{color:"green",fontSize:"25px"}}>{countall}</span></h5>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Lead <span style={{color:"green",fontSize:"25px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Untouched Lead <span style={{color:"red",fontSize:"25px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>No Followups Lead <span style={{color:"gray",fontSize:"25px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Returning Lead <span style={{color:"black",fontSize:"25px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Returning No Followup Lead <span style={{color:"#D11414",fontSize:"25px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Over Due Task Lead <span style={{color:"#04A9A9",fontSize:"25px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Unassigned Lead<span style={{color:"#A90490",fontSize:"25px"}}>{countall}</span></h6>
+          
         </footer>
   </div>
          

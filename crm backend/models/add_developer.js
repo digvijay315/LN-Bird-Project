@@ -7,11 +7,10 @@ mobile_no1:{type:Array},
 mobile_type1:{type:Array},
 email1:{type:Array},
 email_type1:{type:Array},
-profession_category:{type:String},
-profession_subcategory:{type:String},
+company_type:{type:String},
+industry:{type:String},
 descriptions:{type:String},
 gst_no:{type:String},
-industry:{type:String},
 source:{type:String},
 team:{type:String},
 owner:{type:String},
@@ -25,6 +24,7 @@ country:{type:String},
 website:{type:String},
 company_social_media1:{type:Array},
 company_url1:{type:Array},
+employee:{type:Array}
 },{timestamps:true})
 
 const adddeveloper=mongoose.model('add_developer',add_developer)

@@ -327,12 +327,12 @@ function Adddcompany() {
 //-----------------------------=================================== add developer start------------------------------------=====================
 
         const [developer,setdeveloper]=useState({name:"",country_code1:[''],mobile_no1:[''],mobile_type1:[''],action11:[],email1:[''],email_type1:[''],
-          action22:[],profession_category:"",profession_subcategory:"",descriptions:"",gst_no:"",
-          industry:"",source:"",team:"",owner:"",visible_to:"",
-
-          area:"",location:"",city:"",pin_code:"",state:"",country:"",website:"",company_social_media1:[''],
-          company_url1:[''],action33:[],});
+          action22:[],company_type:"",industry:"",descriptions:"",gst_no:"",
+          source:"",team:"",owner:"",visible_to:"",area:"",location:"",city:"",pin_code:"",state:"",country:"",website:"",company_social_media1:[''],
+          company_url1:[''],action33:[],employee:[]});
     
+      
+                    
           const adddeveloper=async(e)=>
             {
                 e.preventDefault();
@@ -620,7 +620,7 @@ function Adddcompany() {
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
                     
-                  <div className="col-md-5"><label className="labels">Company Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_category:e.target.value})}>
+                  <div className="col-md-5"><label className="labels">Company Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,company_type:e.target.value})}>
                                   <option>---Select---</option>    
                                   <option>Sole Proprietorship</option>
                                   <option>Partnership Firm </option>
@@ -1102,7 +1102,7 @@ function Adddcompany() {
  
     
                    
-                    <ToastContainer/>
+                   
                 </div>
                 <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
                     <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
@@ -1111,6 +1111,7 @@ function Adddcompany() {
                     </div>
             </div>
         </div>
+        <ToastContainer/>
     </div>
 
 

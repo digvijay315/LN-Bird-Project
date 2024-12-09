@@ -3,7 +3,7 @@ const {add_contact,view_contact, view_contact_Byid, remove_contact, update_conta
 const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage, update_leadstage, update_leaddocument} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
-const {add_developer,view_developer} = require('../controllers/add_developer');
+const {add_developer,view_developer, view_developer_Byid, update_developer, remove_developer} = require('../controllers/add_developer');
 const { add_tower, view_tower } = require('../controllers/add_tower');
 const add_project = require('../controllers/add_project');
 const lead_info_requirment = require('../controllers/leadinfo_requirment');
@@ -15,7 +15,7 @@ const {booking_details,view_booking} = require('../controllers/booking_details')
 const {addpayment_details,view_payment} = require('../controllers/addpayment_details');
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
-const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project} = require('../controllers/project');
+const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project, view_project_Byid} = require('../controllers/project');
 const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner } = require('../controllers/add_deal');
 
 
@@ -48,6 +48,7 @@ router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)
 
 router.post('/project',upload.any('pic'),createProject)
 router.get('/viewproject',view_project)
+router.get('/viewprojectbyid/:_id',view_project_Byid)
 router.get('/viewprojectbyname/:name',view_projectbyname)
 router.get('/viewprojectbycityname/:city',view_projectbycityname)
 router.delete('/deleteproject/:_id',remove_project)
@@ -94,6 +95,9 @@ router.put('/updateinventory/:_id',upload.any('preview',10),update_inventory)
 
 router.post('/addcompany',add_developer)
 router.get('/viewcompany',view_developer)
+router.get('/viewcompanybyid/:_id',view_developer_Byid)
+router.put('/updatecompany/:_id',update_developer)
+router.delete('/removecompany/:_id',remove_developer)
 router.post('/addproperty/addtower',add_tower)
 router.get('/addproperty/viewtower',view_tower)
 router.post('/addproperty/addproject')

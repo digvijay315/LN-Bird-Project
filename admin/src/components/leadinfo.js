@@ -602,7 +602,7 @@ const handleOwnerChange = (event) => {
         email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-        maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
+        maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
         lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],transaction_type:"",
         white_portion:"",furnishing:"",matched_deal:[],
         profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
@@ -1070,19 +1070,24 @@ const handleOwnerChange = (event) => {
                                     
                                     
                                       const fetchdatabyprojectname = async (projectNames) => {
-                                    
                                         try {
-                                          
-                                            const resp = await api.get(`viewprojectbyname/${projectNames}`);
-                                            const allFetchedUnits= resp.data.project; 
-                                            setunits(allFetchedUnits);// Assuming resp.data.project is an array of units for that project
-                                          
+                                          // Initialize a temporary array to hold all fetched units
+                                          const allUnits = [];
                                       
-                                        
+                                          // Fetch the data sequentially for each project
+                                          for (const projectName of projectNames) {
+                                            const resp = await api.get(`viewprojectbyname/${projectName}`);
+                                            const allFetchedUnits = resp.data.project; // Assuming resp.data.project is an array of units
+                                            allUnits.push(...allFetchedUnits); // Accumulate the fetched units
+                                          }
+                                      
+                                          // Update the state with the accumulated units
+                                          setunits(allUnits);
                                         } catch (error) {
                                           console.log(error);
                                         }
                                       };
+                                      
                                       
                                       useEffect(() => {
                                         if (units.length >= 0) {
@@ -1277,8 +1282,8 @@ const handleOwnerChange = (event) => {
 
 
 
-                                          const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action1:[],
-                                            email:[''],email_type:[''],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
+                                          const [contact,setcontact]=useState({title:"Mr.",first_name:"",last_name:"",country_code:['India +91'],mobile_no:[''],mobile_type:['Personal'],action1:[],
+                                            email:[''],email_type:['Personal'],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
                                     
                                             profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
                                             company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
@@ -1463,8 +1468,7 @@ return (
                 <div className="row mt-2" id="leadinfobasic1">
                     
                     <div className="col-md-3"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
-                        <option>{leadData?.title|| ''}</option>
-                        <option>Mr.</option>
+                        <option>{leadData?.title|| 'Mr.'}</option>
                         <option>Mrs.</option>
                         <option>Smt.</option>
                         <option>Dr.</option>
@@ -1512,10 +1516,15 @@ return (
                         <option>Incoming</option>
                         <option>Prospect</option>
                         <option>Negotiation</option>
+                        <option>Oppurtunity</option>
                         <option>Booked</option>
-                        <option>Won</option>
-                        <option>Lost</option>
-                        <option>Closed</option>
+                        <optgroup label="Closed" style={{fontWeight:"bolder",color:"blue"}}>
+                        <option style={{color:"green"}}>Won</option>
+                        <option style={{color:"red"}}>Lost</option>
+                        <option style={{color:"gray"}}>Unqualified </option>
+                        </optgroup>
+                       
+                      
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Lead Type</label>
@@ -1849,29 +1858,50 @@ return (
                   </select>
                         </div>
                         <div className="col-md-5"><label className="labels">Area/Project</label>
-                        <select className="form-control form-control-sm" onChange={handleprojectchange}>
-                        <option>---choose---</option>
-                        {
-                          allproject.map((project)=>
-                          (
-                            <option>{project}</option>
-                          ))
-                        }
-                        </select>
+                        <Select
+                        className="form-control form-control-sm"
+                      multiple
+                      value={leadinfo.area2}
+                      onChange={handleprojectchange}
+                      style={{border:"none"}}
+                      renderValue={(selected) => selected.join(', ')}
+                      label="Area/Project"
+                      
+                    >
+                      <MenuItem disabled value="">
+                        <em>---choose---</em>
+                      </MenuItem>
+                      {allproject.map((project) => (
+                        <MenuItem key={project} value={project}>
+                          <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
+                          <ListItemText primary={project} />
+                        </MenuItem>
+                      ))}
+                    </Select>
                         </div>
                         <div className="col-md-5"><label className="labels">Block</label>
-                        <select className="form-control form-control-sm"  onChange={handleallblockchange} >
-                        <option>---choose---</option>
-                    {
-                      allblocks.map((block)=>
-                      (
-                        <option>{block.block_name}</option>
-                      ))
-                    }
+                        <Select
+                        className="form-control form-control-sm"
+                      multiple
+                      value={leadinfo.block}
+                      onChange={handleallblockchange}
+                      style={{border:"none"}}
+                      renderValue={(selected) => selected.join(', ')}
+                      label="Block"
                       
-  
-                </select>
-                        </div>
+                    >
+                      <MenuItem disabled value="">
+                        <em>---choose---</em>
+                      </MenuItem>
+                      {allblocks.map((project) => (
+                        <MenuItem key={project} value={project.block_name}>
+                          <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
+                          <ListItemText primary={project.block_name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    </div>
+                 
                         <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
                     </div>
 

@@ -157,7 +157,7 @@ function Dealdetails() {
 
 
       const [currentPage, setCurrentPage] = useState(1);
-      const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
+      const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
       const indexOfLastItem = currentPage * itemsPerPage;
       const indexOfFirstItem = indexOfLastItem - itemsPerPage;
       const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -811,7 +811,7 @@ function Dealdetails() {
 
 
                   const [currentPage1, setCurrentPage1] = useState(1);
-                  const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
+                  const [itemsPerPage1, setItemsPerPage1] = useState(8); // User-defined items per page
                   const indexOfLastItem1 = currentPage1 * itemsPerPage1;
                   const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
                   const currentItems2 = cdata.slice(indexOfFirstItem1, indexOfLastItem1);
@@ -1010,7 +1010,7 @@ function Dealdetails() {
 
 
                   const [currentPage2, setCurrentPage2] = useState(1);
-                  const [itemsPerPage2, setItemsPerPage2] = useState(5); // User-defined items per page
+                  const [itemsPerPage2, setItemsPerPage2] = useState(8); // User-defined items per page
                   const indexOfLastItem2 = currentPage2 * itemsPerPage2;
                   const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
                   const currentItems3 = flattenedUnits.slice(indexOfFirstItem2, indexOfLastItem2);

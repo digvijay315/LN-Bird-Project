@@ -542,73 +542,7 @@ const allColumns = [
         }
       };
 
-      useEffect(()=>
-      {
-        if(selectedItems.length===0)
-          {
-            document.getElementById("delete").style.display="none"
-            document.getElementById("edit").style.display="none"
-          document.getElementById("mail").style.display="none"
-           document.getElementById("whatsapp").style.display="none"
-              document.getElementById("message").style.display="none"
-              document.getElementById("call").style.display="none"
-              document.getElementById("addtask").style.display="none"
-              document.getElementById("addtolead").style.display="none"
-              document.getElementById("transfercontact").style.display="none"
-              document.getElementById("sequence").style.display="none"
-              document.getElementById("mergecontact").style.display="none"
-             document.getElementById("search").style.display="flex"
-          }
-        if(selectedItems.length===1)
-          {
-            document.getElementById("delete").style.display="inline-block"
-            document.getElementById("edit").style.display="inline-block"
-          document.getElementById("mail").style.display="inline-block"
-           document.getElementById("whatsapp").style.display="inline-block"
-              document.getElementById("message").style.display="inline-block"
-              document.getElementById("call").style.display="inline-block"
-              document.getElementById("addtask").style.display="inline-block"
-              document.getElementById("addtolead").style.display="inline-block"
-              document.getElementById("transfercontact").style.display="inline-block"
-              document.getElementById("sequence").style.display="inline-block"
-              document.getElementById("mergecontact").style.display="none"
-             document.getElementById("search").style.display="none"
-          }
-          if(selectedItems.length===2)
-            {
-           
-
-              document.getElementById("delete").style.display="inline-block"
-              document.getElementById("edit").style.display="none"
-            document.getElementById("mail").style.display="inline-block"
-             document.getElementById("whatsapp").style.display="inline-block"
-                document.getElementById("message").style.display="inline-block"
-                document.getElementById("call").style.display="none"
-                document.getElementById("addtask").style.display="none"
-                document.getElementById("addtolead").style.display="none"
-                document.getElementById("transfercontact").style.display="inline-block"
-                document.getElementById("sequence").style.display="inline-block"
-                document.getElementById("mergecontact").style.display="inline-block"
-               document.getElementById("search").style.display="none"
-            }
-
-            if(selectedItems.length>2)
-              {
-                document.getElementById("delete").style.display="inline-block"
-                document.getElementById("edit").style.display="none"
-              document.getElementById("mail").style.display="inline-block"
-               document.getElementById("whatsapp").style.display="inline-block"
-                  document.getElementById("message").style.display="inline-block"
-                  document.getElementById("call").style.display="none"
-                  document.getElementById("addtask").style.display="none"
-                  document.getElementById("addtolead").style.display="none"
-                  document.getElementById("transfercontact").style.display="inline-block"
-                  document.getElementById("sequence").style.display="inline-block"
-                  document.getElementById("mergecontact").style.display="none"
-                 document.getElementById("search").style.display="none"
-              }
-    
-      },[selectedItems])
+   
       
     /*-------------------------------------------------------------------custome table end---------------------------------------------------------------------------- */                                                     
     
@@ -658,7 +592,7 @@ const allColumns = [
             try {
               const resp=await api.get(`viewcontactbyid/${selectedItems}`)//here search contact by id
               setshow1(true);
-              console.log(resp);
+             
               
               setcontact(resp.data.contact)
               setdata1(resp.data.contact)
@@ -673,7 +607,7 @@ const allColumns = [
          
         }
       
-        console.log(data1);
+        
        
        
         const basicdetails=()=>
@@ -1160,7 +1094,7 @@ const professions = [
 
 
   const [currentPage1, setCurrentPage1] = useState(1);
-const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
+const [itemsPerPage1, setItemsPerPage1] = useState(8); // User-defined items per page
 const indexOfLastItem1 = currentPage1 * itemsPerPage1;
 const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
 const currentItems1 = cdata.slice(indexOfFirstItem1, indexOfLastItem1);
@@ -1246,7 +1180,7 @@ const renderPageNumbers1 = () => {
     { id: 'personaldetails', name: 'Personal Details' },
     { id: 'address', name: 'Address' },
     { id: 'employees', name: 'Employees' },
-    { id: 'profession_category', name: ' Category' },
+    { id: 'company_type', name: ' Category' },
     { id: 'source', name: 'Source ' },
     { id: 'team', name: 'Team ' },
     { id: 'owner', name: 'Ownership' },
@@ -1392,6 +1326,358 @@ const mergeAndSave = async (selectedItems) => {
   }
 };
 
+
+useEffect(()=>
+  {
+    if(selectedItems.length===0)
+      {
+        document.getElementById("delete").style.display="none"
+        document.getElementById("edit").style.display="none"
+      document.getElementById("mail").style.display="none"
+       document.getElementById("whatsapp").style.display="none"
+          document.getElementById("message").style.display="none"
+          document.getElementById("call").style.display="none"
+          document.getElementById("addtask").style.display="none"
+          document.getElementById("addtolead").style.display="none"
+          document.getElementById("transfercontact").style.display="none"
+          document.getElementById("sequence").style.display="none"
+          document.getElementById("mergecontact").style.display="none"
+         document.getElementById("search").style.display="flex"
+      }
+    if(selectedItems.length===1)
+      {
+        document.getElementById("delete").style.display="inline-block"
+        document.getElementById("edit").style.display="inline-block"
+      document.getElementById("mail").style.display="inline-block"
+       document.getElementById("whatsapp").style.display="inline-block"
+          document.getElementById("message").style.display="inline-block"
+          document.getElementById("call").style.display="inline-block"
+          document.getElementById("addtask").style.display="inline-block"
+          document.getElementById("addtolead").style.display="inline-block"
+          document.getElementById("transfercontact").style.display="inline-block"
+          document.getElementById("sequence").style.display="inline-block"
+          document.getElementById("mergecontact").style.display="none"
+         document.getElementById("search").style.display="none"
+      }
+      if(selectedItems.length===2)
+        {
+       
+
+          document.getElementById("delete").style.display="inline-block"
+          document.getElementById("edit").style.display="none"
+        document.getElementById("mail").style.display="inline-block"
+         document.getElementById("whatsapp").style.display="inline-block"
+            document.getElementById("message").style.display="inline-block"
+            document.getElementById("call").style.display="none"
+            document.getElementById("addtask").style.display="none"
+            document.getElementById("addtolead").style.display="none"
+            document.getElementById("transfercontact").style.display="inline-block"
+            document.getElementById("sequence").style.display="inline-block"
+            document.getElementById("mergecontact").style.display="inline-block"
+           document.getElementById("search").style.display="none"
+        }
+
+        if(selectedItems.length>2)
+          {
+            document.getElementById("delete").style.display="inline-block"
+            document.getElementById("edit").style.display="none"
+          document.getElementById("mail").style.display="inline-block"
+           document.getElementById("whatsapp").style.display="inline-block"
+              document.getElementById("message").style.display="inline-block"
+              document.getElementById("call").style.display="none"
+              document.getElementById("addtask").style.display="none"
+              document.getElementById("addtolead").style.display="none"
+              document.getElementById("transfercontact").style.display="inline-block"
+              document.getElementById("sequence").style.display="inline-block"
+              document.getElementById("mergecontact").style.display="none"
+             document.getElementById("search").style.display="none"
+          }
+          if(selectedItems1.length===0)
+            {
+              document.getElementById("companydelete").style.display="none"
+              document.getElementById("companyedit").style.display="none"
+            document.getElementById("companymail").style.display="none"
+             document.getElementById("companywhatsapp").style.display="none"
+                document.getElementById("companymessage").style.display="none"
+                document.getElementById("companycall").style.display="none"
+             
+                document.getElementById("companysequence").style.display="none"
+              
+               document.getElementById("companysearch").style.display="flex"
+            }
+            if(selectedItems1.length===1)
+              {
+                document.getElementById("companydelete").style.display="inline-block"
+                document.getElementById("companyedit").style.display="inline-block"
+              document.getElementById("companymail").style.display="inline-block"
+               document.getElementById("companywhatsapp").style.display="inline-block"
+                  document.getElementById("companymessage").style.display="inline-block"
+                  document.getElementById("companycall").style.display="inline-block"
+               
+                  document.getElementById("companysequence").style.display="inline-block"
+                
+                 document.getElementById("companysearch").style.display="none"
+              }
+              if(selectedItems1.length>1)
+                {
+                  document.getElementById("companydelete").style.display="inline-block"
+                  document.getElementById("companyedit").style.display="none"
+                document.getElementById("companymail").style.display="inline-block"
+                 document.getElementById("companywhatsapp").style.display="inline-block"
+                    document.getElementById("companymessage").style.display="inline-block"
+                    document.getElementById("companycall").style.display="none"
+                 
+                    document.getElementById("companysequence").style.display="inline-block"
+                  
+                   document.getElementById("companysearch").style.display="none"
+                }
+
+  },[selectedItems,selectedItems1])
+
+
+  const [developer,setdeveloper]=useState({name:"",country_code1:[''],mobile_no1:[''],mobile_type1:[''],action11:[],email1:[''],email_type1:[''],
+    action22:[],company_type:"",industry:"",descriptions:"",gst_no:"",
+    source:"",team:"",owner:"",visible_to:"",area:"",location:"",city:"",pin_code:"",state:"",country:"",website:"",company_social_media1:[''],
+    company_url1:[''],action33:[],employee:[]});
+
+
+  const [show4, setshow4] = useState(false);
+
+        const handleClose4 = () => setshow4(false);
+        
+        const[cdata1,setcdata1]=useState([])
+        const handleShow4=async()=>
+        {
+          if(selectedItems1.length===1)
+          {
+            setshow4(true);
+            try {
+              const resp=await api.get(`viewcompanybyid/${selectedItems1}`)
+          
+              
+               setdeveloper(resp.data.developer)
+              // setdata1(resp.data.contact)
+            } catch (error) {
+              console.log(error);
+            }
+          }
+          else
+          {
+            toast.error("please select only one")
+          }
+         
+        }
+
+
+        function addFn11() {
+        
+          setdeveloper({
+            ...developer,
+            country_code1: [...(developer.country_code1 || []), ''],
+            mobile_no1: [...(developer.mobile_no1 || []), ''],
+            mobile_type1: [...(developer.mobile_type1 || []), ''],
+            action11: [...(developer.action11 || []), '']
+          });
+        };
+
+        const deleteall11=(index)=>
+          {
+           
+            const newcountry_code = developer.country_code1.filter((_, i) => i !== index);
+            const newmobile_no = developer.mobile_no1.filter((_, i) => i !== index);
+            const newmobile_type = developer.mobile_type1.filter((_, i) => i !== index);
+            const newaction1 = developer.action11.filter((_, i) => i !== index);
+            
+            setdeveloper({
+              ...developer,
+              country_code1: newcountry_code,
+              mobile_no1: newmobile_no,
+              mobile_type1: newmobile_type,
+              action11: newaction1
+            });
+          }
+          const handlecountry_codechange1 = (index, event) => {
+            const newcountry_code1 = [...developer.country_code1];
+            newcountry_code1[index] = event.target.value;
+            setdeveloper({
+              ...developer,
+              country_code1: newcountry_code1
+            });
+          };
+          const handlemobile_nochange1 = (index, event) => {
+            const newmobile_no = [...developer.mobile_no1];
+            newmobile_no[index] = event.target.value;
+            setdeveloper({
+              ...developer,
+              mobile_no1: newmobile_no
+            });
+          };
+          const handlemobile_typechange1 = (index, event) => {
+            const newmobile_type = [...developer.mobile_type1];
+            newmobile_type[index] = event.target.value;
+            setdeveloper({
+              ...developer,
+              mobile_type1: newmobile_type
+            });
+          };
+
+          function addFn22() {
+            setdeveloper({
+              ...developer,
+              // Ensure these properties are arrays before spreading
+              email1: [...(developer.email1 || []), ''],
+              email_type1: [...(developer.email_type1 || []), ''],
+              action22: [...(developer.action22 || []), ''],
+            });
+          }
+          
+
+          const deleteall22=(index)=>
+            {
+             
+              const newemail = developer.email1.filter((_, i) => i !== index);
+              const newemail_type = developer.email_type1.filter((_, i) => i !== index);
+              const newaction2 = developer.action22.filter((_, i) => i !== index);
+              
+              setdeveloper({
+                ...developer,
+                email1: newemail,
+                email_type1: newemail_type,
+                action22: newaction2
+              });
+            }
+            const handleemailchange1 = (index, event) => {
+              const newemail = [...developer.email1];
+              newemail[index] = event.target.value;
+              setdeveloper({
+                ...developer,
+                email1: newemail
+              });
+            };
+            const handleemail_typechange1 = (index, event) => {
+              const newemail_type = [...developer.email_type1];
+              newemail_type[index] = event.target.value;
+              setdeveloper({
+                ...developer,
+                email_type1: newemail_type
+              });
+            };
+          function addFn33() {
+ 
+            setdeveloper({
+              ...developer,
+              company_social_media1: [...(developer.company_social_media1 || []), ''],
+              company_url1: [...(developer.company_url1 || []), ''],
+              action33: [...(developer.action33 || []), '']
+            });
+          };
+          const deleteall33=(index)=>
+            {
+             
+              const newcomapnysocialmedia = developer.company_social_media1.filter((_, i) => i !== index);
+              const newcompanyurl = developer.company_url1.filter((_, i) => i !== index);
+              const newaction3=developer.action33.filter((_,i) => i !== index);
+              
+              setdeveloper({
+                ...developer,
+                company_social_media1: newcomapnysocialmedia,
+                company_url1: newcompanyurl,
+                action33:newaction3
+              });
+            }
+            const handlecompanysocialmediachange1 = (index, event) => {
+              const newcomapnysocialmedia = [...developer.company_social_media1];
+              newcomapnysocialmedia[index] = event.target.value;
+              setdeveloper({
+                ...developer,
+                company_social_media1: newcomapnysocialmedia
+              });
+            };
+            const handlecompanyurlchange1 = (index, event) => {
+              const newcompanyurl = [...developer.company_url1];
+              newcompanyurl[index] = event.target.value;
+              setdeveloper({
+                ...developer,
+                company_url1: newcompanyurl
+              });
+            };
+
+
+            const basicdetails1=()=>
+              {
+                document.getElementById("basicdetails1").style.display="flex"
+             
+                document.getElementById("basic").style.color="green"
+                document.getElementById("other").style.color="black"
+                 document.getElementById("professional").style.color="black"
+                document.getElementById("otherdetails").style.display="none"
+                document.getElementById("profession").style.display="none"
+              }
+              const professionaldetails1=()=>
+                {
+                  document.getElementById("basicdetails1").style.display="none"
+                 
+                  document.getElementById("otherdetails").style.display="none"
+                  document.getElementById("profession").style.display="flex"
+                   document.getElementById("basic").style.color="black"
+                   document.getElementById("other").style.color="black"
+                     document.getElementById("professional").style.color="green"
+                   
+                }
+              const otherdetails1=()=>
+                {
+                  document.getElementById("basicdetails1").style.display="none"
+                
+                   document.getElementById("profession").style.display="none"
+                     document.getElementById("otherdetails").style.display="flex"
+                   document.getElementById("basic").style.color="black"
+                    document.getElementById("professional").style.color="black"
+                   document.getElementById("other").style.color="green"
+                }
+
+
+              
+              const updatecompany=async()=>
+                {
+                  try {
+                
+                    const resp=await api.put(`updatecompany/${selectedItems1}`,developer)
+                    toast.success("company updated",{ autoClose: 2000 })
+                    setTimeout(() => {
+                      navigate('/contactdetails')
+                    }, 2000);
+                    // setTimeout(() => {
+                    //   handleClose1()
+                    // }, 2000);
+                    setTimeout(() => {
+                      window.location.reload()
+                    }, 2000);
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+
+                const deleteSelectedItems1 = async () => {
+                  try {
+                    if(selectedItems.length1===0)
+                    {
+                      toast.error("please select first",{autoClose:"2000"})
+                      return
+                    }
+                    const resp = selectedItems1.map(async (itemId) => {
+                      await api.delete(`removecompany/${itemId}`);
+                    });
+                    
+                    toast.success('Selected items deleted successfully',{autoClose:"2000"})
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 2000);
+                  } catch (error) {
+                    console.log(error);
+                  }
+                };
+     
+                
 
 
 
@@ -1700,6 +1986,8 @@ const mergeAndSave = async (selectedItems) => {
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Customer  <span style={{color:"#A92904",fontSize:"25px"}}>{totalcontact}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Prospect  <span style={{color:"#A90490",fontSize:"25px"}}>{totalcontact}</span></h5>
         </footer>
       </div>
        
@@ -2640,50 +2928,35 @@ const mergeAndSave = async (selectedItems) => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+<input id="companysearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="companydelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems1} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
-<img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-
-<Tooltip title="Add to lead.." arrow>
-<img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="companyedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow4}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Call.." arrow>
-<img id="call" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+<img id="companycall" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
-<Tooltip title="transfer contact.." arrow>
-<img id="transfercontact" src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-
-<Tooltip title="merge contact..." arrow>
-<img id="mergecontact" src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
-</Tooltip>    
-
-<Tooltip title="add task..." arrow>
-<img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip> 
 
 <Tooltip title="sequence.." arrow>
-<img id="sequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="companysequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>  
 
 <Tooltip title="Send Mail.." arrow>
-<img id="mail" onClick={handleShow3} src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="companymail" onClick={handleShow3} src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 <Tooltip title="Send WhatsApp.." arrow>
-<img id="whatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
+<img id="companywhatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
 </Tooltip>
 <Tooltip title="Send Message.." arrow>
-<img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+<img id="companymessage"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip>
 </div>
 
@@ -2818,6 +3091,8 @@ const mergeAndSave = async (selectedItems) => {
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Company <span style={{color:"green",fontSize:"25px"}}>{totalcompany}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Govt. Company/Organisation <span style={{color:"green",fontSize:"25px"}}>{totalcompany}</span></h5>
+          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Private Company <span style={{color:"green",fontSize:"25px"}}>{totalcompany}</span></h5>
         </footer>
       </div>
 
@@ -2825,6 +3100,647 @@ const mergeAndSave = async (selectedItems) => {
 
           </div>
           </div>
+
+
+          <Modal show={show4} onHide={handleClose4} size='xl'>
+            <Modal.Header>
+              <Modal.Title></Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+
+
+            
+          
+    
+        
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Update Company</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
+                </div><hr></hr>
+               
+         
+             <div style={{display:"flex"}}>
+               <div style={{display:"flex",gap:"30px"}}>
+               <div  id='basic' onClick={basicdetails1} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}><span>Basic Details</span></div>
+                <div  id='professional' onClick={professionaldetails1} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}><span>Address</span></div>
+                <div  id='other' onClick={otherdetails1} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}><span>Employee</span></div> 
+               </div>
+						   <div style={{marginLeft:"31%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
+					</div>
+                    <hr></hr>
+                
+                
+            
+ {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
+               
+                <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
+            
+                    <div className="col-md-8"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" value={developer.name} onChange={(e)=>setdeveloper({...developer,name:e.target.value})}/></div>
+                    <div className='col-md-4'></div>
+             
+                <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      developer.country_code1.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
+                        <option>{developer.country_code1[index]}</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       developer.mobile_no1.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          value={developer.mobile_no1[index]}
+                          onChange={(event)=>handlemobile_nochange1(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       developer.mobile_type1.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange1(index,event)}>
+                                  <option>{developer.mobile_type1[index]}</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(developer.action11) ?
+                       developer.action11.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        )):[]
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn11}>+</button></div>
+                    
+                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        developer.email1.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          value={developer.email1[index]}
+                          onChange={(event)=>handleemailchange1(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       developer.email_type1.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange1(index,event)}>
+                                <option>{developer.email_type1[index]}</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(developer.action22) ?
+                       developer.action22.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        )):[]
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
+                    
+                  <div className="col-md-5"><label className="labels">Company Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,company_type:e.target.value})}>
+                                  <option>{developer.company_type}</option>    
+                                  <option>Sole Proprietorship</option>
+                                  <option>Partnership Firm </option>
+                                  <option>Limited Liability Partnership  </option>
+                                  <option>Private Limited Companies</option>
+                                  <option>Public Limited Companies</option>
+                                  <option>One-Person Companies</option>
+                                  <option>Section 8 Company</option>
+                                  <option>Joint-Venture Company</option>
+                                  <option>Government Company</option>
+                                  <option>Non-Government Organization (NGO)</option>
+
+                        </select>
+                    </div>
+                    {/* <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_subcategory:e.target.value})}>
+                                <option>Select</option>
+                                <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
+                                <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
+                                <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
+                                <option>Chef</option> <option>Teacher</option> <option>Scientist</option> <option>Software Developer</option>
+                                <option>Designer</option> <option>Author</option> <option>Nurse</option> <option>Baker</option>
+                                <option>Engineer</option> <option>Carpenter</option> <option>Construction</option> <option>Worker</option>
+                                <option>Sales Person</option> <option>Pilot</option> <option>Professor</option> <option>Author</option>
+                                <option>Clerk</option> <option>Peon</option> <option>Commision</option> <option>Agent(AAdati)</option>
+                                <option>Shop Keepar</option>
+                        </select>
+                    </div> */}
+
+                <div className="col-md-6"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,industry:e.target.value})}>
+                    <option>{developer.industry}</option>
+                          <optgroup label='Agriculture'>
+                                <option>Farming</option><option>horticulture</option><option>forestry</option>
+                                <option>fishing</option><option>Others</option>
+                          </optgroup>
+                          <optgroup label='Mining'>
+                                <option>Extraction of minerals</option><option>oil</option><option>gas</option>
+                                <option>other natural resources.</option>
+                          </optgroup>
+                          <optgroup label='Fishing and Hunting'>
+                                <option>Commercial fishing</option><option>aquaculture</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Forestry'>
+                                <option>Logging</option><option>timber production</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Manufacturing'>
+                                <option>Production of goods from raw materials (e.g., automotive, 
+                                  electronics, textiles, food processing)</option>
+                          </optgroup>
+                          <optgroup label='Construction'>
+                                <option>Building infrastructure</option><option>residential and commercial properties</option><option>roads</option>
+                                <option>bridges</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Utilities'>
+                                <option>Production and distribution of electricity</option><option>water</option><option>gas</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Refining'>
+                                <option>Processing raw materials like oil</option><option>metals</option><option>into usable products</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Retail'>
+                                <option>Selling goods directly to consumers</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Hospitality'>
+                                <option>Hotels</option><option>restaurants</option><option>tourism</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Healthcare'>
+                                <option>Hospitals</option><option>clinics</option><option>medical services</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Education'>
+                                <option>Schools</option><option>colleges</option><option>universities</option>
+                                <option>training centers</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Finance and Insurance'>
+                                <option>Banks</option><option>investment firms</option><option>insurance companies</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Transportation'>
+                                <option>Airlines</option><option>railways</option><option>shipping</option>
+                                <option>logistics</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Telecommunications'>
+                                <option>Internet services</option><option>phone companies</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Entertainment'>
+                                <option>Film</option><option>television</option><option>music</option>
+                                <option>gaming</option><option>sports</option><option>others</option>
+                          </optgroup>
+                          <optgroup label='Real Estate'>
+                                <option>Property sales</option><option>rentals</option><option>management</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Information Technology'>
+                                <option>Software development</option><option>data processing</option><option>IT services</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Research and Development'>
+                                <option>Innovation</option><option>scientific research</option><option>product development</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Consultancy'>
+                                <option>Professional advice in management</option><option>law</option><option>finance</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Media and Communication'>
+                                <option>Publishing</option><option>broadcasting</option><option>online media</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Government'>
+                                <option>Public administration</option><option>defense</option><option>public services</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Non-Profit Organizations'>
+                                <option>NGOs</option><option>charities</option><option>foundations</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Education (Executive)'>
+                                <option>High-level educational services</option><option>executive education</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='High-Level Decision-Making'>
+                                <option>Top management roles in large organizations</option><option>think tanks</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Green Industry'>
+                                <option>Renewable energy</option><option>environmental services</option><option>sustainability</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Biotechnology'>
+                                <option>Genetic engineering</option><option>pharmaceuticals</option><option>life sciences</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Creative Industries'>
+                                <option>Advertising</option><option>design</option><option>fashion</option><option>arts</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='E-commerce'>
+                                <option>Online</option><option>retail</option><option>digital marketplaces</option>
+                                <option>others</option>
+                          </optgroup>
+                          <optgroup label='Aerospace'>
+                                <option>Aircraft manufacturing</option><option>space exploration</option><option>satellite services</option>
+                                <option>others</option>
+                          </optgroup>
+                        </select>
+                    </div>
+
+                    
+                    
+                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' value={developer.descriptions} style={{height:"100px"}} onChange={(e)=>setdeveloper({...developer,descriptions:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-8"><label className="labels">GST Number</label><input type="text" value={developer.gst_no} required="true" className="form-control form-control-sm" placeholder="enter gst no." onChange={(e)=>setdeveloper({...developer,gst_no:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+
+                
+                    
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,source:e.target.value})}>
+                                    <option>{developer.source}</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
+                                    <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
+                                    <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
+                                    <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
+                                    <option>Old Client</option><option>Google</option><option>Whatsapp</option>
+                             </select>
+                        </div>
+                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,team:e.target.value})}>
+                              <option>{developer.team}</option> 
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,owner:e.target.value})}>
+                            <option>{developer.owner}</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
+                        </select></div>
+                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,visible_to:e.target.value})}>
+                                <option>{developer.visible_to}</option>
+                                <option>My Team</option>
+                                <option>My Self</option>
+                                <option>All Users</option>
+                                </select>
+                    </div>
+                    </div>
+               
+       
+
+   {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
+                  
+  {/* -----------------------------------------address Details start------------------------------------------------------------------- */}
+
+        <div className="col-md-12" id='profession' style={{display:"none",lineHeight:"30px"}}>
+            <div className="p-3 py-5">
+               
+                <div className="row " >
+              
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}> Address</label></div>
+                    <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                    <div className="col-md-8"><label className="labels">Area</label><input type="text" value={developer.area} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,area:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Location</label><input type="text" value={developer.location} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,location:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">City</label><input type="text" value={developer.city} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,city:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" value={developer.pin_code} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,pin_code:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">State</label><input type="text" value={developer.state} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,state:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Country</label><input type="text" value={developer.country} className="form-control form-control-sm"  onChange={(e)=>setdeveloper({...developer,country:e.target.value})}/></div>
+                    </div>
+                    
+                    <div className='col-md-5'></div>
+                    <div className="col-md-8"><label className="labels">Website</label><input type="text" value={developer.website} className="form-control form-control-sm"  onChange={(e)=>setdeveloper({...developer,website:e.target.value})}/></div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
+                    {
+                      developer.company_social_media1.map((item,index)=>
+                      (
+                        <select
+                         className='form-control form-control-sm'
+                          style={{marginTop:"10px"}}
+                          onChange={(event)=>handlecompanysocialmediachange1(index,event)}>
+                        
+                        <option>{developer.company_social_media1[index]}</option>
+                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
+                        </select>
+
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-6"><label className="labels">Url</label>
+                    {
+                      developer.company_url1.map((item,index)=>
+                      (
+                        <input type="text" value={developer.company_url1[index]} className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                        onChange={(event)=>handlecompanyurlchange1(index,event)}/>
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(developer.action33) ?
+                      developer.action33.map((item,index)=>
+                      (
+                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall33(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      )):[]
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn33}>+</button></div>
+                    <div className='col-md-12'><hr></hr></div> 
+              </div>
+            
+             </div>
+           </div>
+ {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
+
+ {/*-------------------------------------------------- employee details start--------------------------------------------------------- */}
+ {/* <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
+            <div className="p-3 py-5">
+               
+                <div className="row " >
+                <div className="col-md-8"><label className="labels" style={{fontSize:"16px"}}> Search Contact</label><input className='form-control form-control-sm' type='search' placeholder='enter name for search'/></div>
+                <div className="col-md-1" ><label className="labels" style={{width:"150px"}}>Quick Add Contact</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}> Employee List</label></div>
+                 
+             </div>
+         </div>
+     </div> */}
+                        <div className="col-md-12" id="otherdetails" style={{display:"none",  lineHeight:"30px"}}>
+                    <div className="p-3 py-5">
+                        <div className="row">
+                        <div className="col-md-9">
+                            <label className="labels" style={{fontSize:"16px"}}>Search Contact</label>
+                            <input className="form-control form-control-sm" id='searchcontact' type="search" placeholder="enter email or mobile no for search" onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+                        </div>
+                        <div className="col-md-1"></div>
+                        <div className="col-md-1">
+                            <label className="labels" style={{fontSize:"16px",width:"150px"}}>Quick Add Contact</label>
+                            <button className="form-control form-control-sm" onClick={handleShow1}>+</button>
+                        </div>
+                        <div className="col-md-10" style={{marginTop:"50px"}}>
+                            <label className="labels" style={{fontSize:"16px", marginTop:"10px"}}>Employee List</label>
+                        </div>
+                        <div className="col-md-2" style={{marginTop:"50px"}}>
+                            <label className="labels" style={{fontSize:"16px", marginTop:"10px"}}>Total Employee:</label>
+                           <span style={{color:"green",fontWeight:"bold",fontSize:"20px"}}>{totalcontact}</span> 
+                        </div>
+                        <div className='col-md-12'><hr></hr></div>
+                        <div className="row" style={{margin:"5px",padding:"10px"}}>
+                        <div style={{marginLeft:"20px",marginTop:"10px",backgroundColor:"white"}}>
+          <TableContainer component={Paper} style={{height:"400px",overflowY:"scroll"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+     
+      <tbody>
+        {
+         
+        data.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+             <img src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' alt='' style={{height:"30px"}}/>
+             
+            </StyledTableCell>
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+              {item.title} {item.first_name} {item.last_name}<br></br>
+              {item.designation}
+            </StyledTableCell>
+           
+                <StyledTableCell >
+                {item.mobile_no.join(',')}<br></br>
+                {item.email.join(',')}
+                </StyledTableCell>
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+
+    <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Quick Add Contact</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div style={{width:"100%"}}>
+            <div className="row" id='basicdetails1'>
+                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                              <option>Select</option>
+                              <option>Mr.</option>
+                              <option>Mrs.</option>
+                              <option>Sh.</option>
+                              <option>Smt.</option>
+                              <option>Dr.</option>
+                              <option>Er.</option>
+                              <option>Col.</option>
+                              <option>Maj.</option>
+                        </select>
+                        </div>
+                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                </div>
+                </div>
+                <div className="row mt-3" id='basicdetails2'>
+                <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      contact.country_code.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <option value={item} >phone</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       contact.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange(index,event)}>
+                                  <option>Select Type</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action1.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                    
+                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        contact.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       contact.email_type.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange(index,event)}>
+                                <option>Select Type</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       contact.action2.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,designation:e.target.value})}>
+                    <option>Select</option>
+                        <option>Developer</option>
+                        <option>HR</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
+                    <option>Select</option>
+                        <option>TCS</option>
+                        <option>Microsoft</option>
+                        <option>Others</option>
+                        </select>
+                    </div>
+            </div>
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" >
+                Add Contact
+              </Button>
+              <Button variant="secondary" onClick={handleClose1}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+  </TableContainer>
+   
+      
+     </div>
+     </div>
+ </div>
+
+{/*-------------------------==================== employee details end --------------------==============================================*/}
+                
+ 
+    
+                   
+                   
+                </div>
+                {/* <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
+                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={adddeveloper}>Save</button></div>
+                    </div> */}
+            </div>
+       
+
+
+            </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatecompany}>
+                Update Company
+              </Button>
+              <Button variant="secondary" onClick={handleClose4}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
           <ToastContainer/>
         </div>
      );
