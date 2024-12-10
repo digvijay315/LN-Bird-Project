@@ -25,6 +25,7 @@ import api from "../api";
 // import { IconButton } from '@mui/material';
 import'../css/addcontact.css';
 import Tooltip from '@mui/material/Tooltip';
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 
 
@@ -616,29 +617,19 @@ const allColumns = [
             document.getElementById("basicdetails2").style.display="flex"
             document.getElementById("basic").style.color="green"
             document.getElementById("other").style.color="black"
-             document.getElementById("professional").style.color="black"
+            
             document.getElementById("otherdetails").style.display="none"
-            document.getElementById("profession").style.display="none"
+           
           }
-          const professionaldetails=()=>
-            {
-              document.getElementById("basicdetails1").style.display="none"
-              document.getElementById("basicdetails2").style.display="none"
-              document.getElementById("otherdetails").style.display="none"
-              document.getElementById("profession").style.display="flex"
-               document.getElementById("basic").style.color="black"
-               document.getElementById("other").style.color="black"
-                 document.getElementById("professional").style.color="green"
-               
-            }
+     
           const otherdetails=()=>
             {
               document.getElementById("basicdetails1").style.display="none"
               document.getElementById("basicdetails2").style.display="none"
-               document.getElementById("profession").style.display="none"
+             
                  document.getElementById("otherdetails").style.display="flex"
                document.getElementById("basic").style.color="black"
-                document.getElementById("professional").style.color="black"
+                
                document.getElementById("other").style.color="green"
             }
 
@@ -1261,17 +1252,7 @@ const addtotask=(selecteditems)=>
 
   
 }
-const addtolead = async (selectedItems) => {
-  // const navigate = useNavigate(); // Initialize navigate
-  
-  try {
-    const resp1 = await api.get(`viewcontactbyid/${selectedItems}`);
-    // Passing resp1 data to LeadInfo component as state
-    navigate('/leadinfo', { state: { leaddata: resp1.data.contact } });
-  } catch (error) {
-    console.error("Error fetching lead data:", error);
-  }
-};
+
 
 
 
@@ -1678,7 +1659,803 @@ useEffect(()=>
                 };
      
                 
+                const professtiondetails = {
+                  profession_category: ["Govt. Employed", "Private Employee","Self Employed","Retired","Business Man","Student","House Wife"],
+                
+                  profession_subcategory: {
+                    "Govt. Employed": ["Teacher", "Scientist","Doctor","Nurse","Clerk","Engineer","Accountant","Architect","Auditor","Police",
+                                        "Mechanic","Security","Driver","Officer","Peon","Chef","Pilot","IT Person","Analyst","Sales Person",
+                                        "Banker","Legal"],
+                    "Private Employee": ["Officer", "Accountant", "Human Resources (HR)", "Sales Person", "Manager", "IT Person", 
+                                            "Analyst", "Scientist", "Technicians", "Designer", "Author", "Videographer", "Director", 
+                                            "Telle Caller", "Legel", "Executive Officer", "Operators", "Security", "Journalists", 
+                                            "Doctor", "Nurse", "Teacher", "Facility", "Driver", "Contractor", "Consultant", "Chef", 
+                                            "Artist", "Engineer", "Banker", "Legal", "Clerk", "Architect", "Auditor", "Mechanic", 
+                                            "Peon", "Pilot"],
+                  
+                    "Self Employed": ["Designer", "Photographer","Videographer","Independent Artist","Illustrator","Writer","Digital Content Creator",
+                                      "Social Media Influencer","Podcaster","Music Producer","Management Consultant","Financial Advisor","IT Consultant",
+                                      "Business Strategist","Marketing Consultant","Life Coach","Career Counselor","Freelance Software Developer","Web Developer",
+                                      "Data Analyst","App Developer","UX/UI Designer","Cybersecurity Consultant","Private Practitioner (Doctor)","Physiotherapist",
+                                      "Dietitian or Nutritionist","Yoga Instructor","Personal Trainer","Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)",
+                                      "Private Tutor","Test Preparation Coach","Online Educator","Language Trainer","Corporate Trainer","Independent Lawyer",
+                                      "Chartered Accountant (CA)","Tax Consultant","Auditor","Financial Planner","Tailor","Carpenter","Blacksmith",
+                                      "Jewelry Maker","Ceramic Artist","Real Estate Agent","Broker","Sales Representative","Freelance Chef","Event Planner",
+                                      "Makeup Artist","Hairstylist","Wedding Photographer","Independent Farmer","Organic Produce Supplier","Horticulturist"],
+                    
+                    Retired: ["Teacher", "Scientist", "Doctor", "Nurse", "Clerk", "Engineer", "Accountant", "Architect", "Auditor", "Police",
+                              "Mechanic", "Security", "Driver", "Officer", "Peon", "Chef", "Pilot", "IT Person", "Analyst", "Sales Person", "Banker",
+                              "Legal", "Manager", "Operators", "Human Resources (HR)", "Freelance Graphic Designer", "Photographer", "Videographer",
+                              "Independent Artist", "Illustrator", "Writer (Author, Blogger, or Copywriter)", "Digital Content Creator", "Social Media Influencer",
+                              "Podcaster", "Music Producer", "Management Consultant", "Financial Advisor", "IT Consultant", "Business Strategist", "Marketing Consultant",
+                              "Life Coach", "Career Counselor", "Freelance Software Developer", "Web Developer", "Data Analyst", "App Developer", "UX/UI Designer",
+                              "Cybersecurity Consultant", "Private Practitioner (Doctor)", "Physiotherapist", "Dietitian or Nutritionist", "Yoga Instructor",
+                              "Personal Trainer", "Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)", "Private Tutor", "Test Preparation Coach",
+                              "Online Educator", "Language Trainer", "Corporate Trainer", "Independent Lawyer", "Chartered Accountant (CA)", "Tax Consultant",
+                              "Auditor", "Financial Planner", "Tailor", "Carpenter", "Blacksmith", "Jewelry Maker", "Ceramic Artist", "Real Estate Agent",
+                              "Property Consultant", "Broker", "Sales Representative", "Freelance Chef", "Event Planner", "Makeup Artist", "Hairstylist",
+                              "Wedding Photographer", "Independent Farmer", "Organic Produce Supplier", "Horticulturist"
+                    ],
+                
+                    Student:["Investor"],
+                
+                    "House Wife":["Investor"],
+                    
+                    "Business Man": ["Entrepreneurs", "Start-up Founders", "Retailer", "Wholesaler", "Importer/Exporter", "Distributor", "Trader",
+                                      "Real Estate Developer", "Real Estate Investor", "Real Estate Agent", "Manufacturer", "Industrialist", "Financer",
+                                      "Stock Trader", "Hotel Owner", "Resort Owner", "Travel Agency", "Restaurant Owner", "Agriculturist", "Dairy Business Owner",
+                                      "IT Person", "Coaching Centre Owner", "Training Institute Owner", "Online Tutor", "Private Tutor", "Hospital Owner",
+                                      "Wellness Centre Owner", "Fitness Centre Owner", "Advertising Agency Owner", "Film Producer", "Media House Owner",
+                                      "Designer", "Transporter", "Courier Servicer", "Renewable Energy and Environment", "Boutique", "Salon Owner",
+                                      "Security Service Provider", "Legal Firm Owner", "Digital Business", "Infrastructure Developer", "Poultry Farm Owner",
+                                      "Handicrafts Business Owner", "Investment Banker", "Loan Consultant", "IT Company Owner", "Cloud Service Provider",
+                                      "Emigration", "Catering", "Baker", "Car Dealership Owner", "Bike Dealership Owner", "Bike Rental Business Owner",
+                                      "Workshop Owner", "Environmental Consultant", "Cold Storage Business Owner", "Film Studio Owner", "Sports Organizer",
+                                      "Event Organizer", "Cloth Merchant"
+                    ]
+                    
+                  },
+                  designation: {
+                    Teacher: ["Primary Teacher (PRT)","Trained Graduate Teacher (TGT)","Post Graduate Teacher (PGT)","Assistant Professor",
+                              "Professor","Principal","Education Officer","Laboratory Technicians","Corporate Trainers","E-learning Specialists",
+                              "Academic Counselors","Kindergarten Teacher","Subject Teacher","Senior Educator","Head of Department"],
+                    Scientist: ["Junior Scientist","Scientist B/C/D","Senior Scientist","Chief Scientist","Director","Data Scientists",
+                                "Research Scientists","Product Developers","Research Associate","Senior Research Scientist","Lead Scientist"],
+                    Doctor: ["Doctors","Medical Officer (MO)","Senior Medical Officer (SMO)","Specialist Doctor","Chief Medical Officer (CMO)","Director of Health Services",
+                            "Physical Therapists","Dietitians","Resident Doctor","Consultant","Senior Specialist","Medical Director"],
+                    Nurse:["Nurses","Auxiliary Nurse Midwife (ANM)","Staff Nurse","Nursing Superintendent","Chief Nursing Officer","Staff Nurse",
+                            "Charge Nurse","Nursing Director"],
+                    Clerk:["Lower Division Clerk (LDC)","Upper Division Clerk (UDC)","Assistant Section Officer (ASO)","Section Officer (SO)",
+                            "Data Entry Clerk","Office Assistant","Administrative Clerk"],
+                    Engineer:["Junior Engineer (JE)","Assistant Engineer (AE)","Executive Engineer (EE)","Chief Engineer",],
+                    Accountant:["Junior Accountant","Senior Accountant","Accounts Officer","Senior Accounts Officer","Controller of Accounts",
+                                "Accountants","Payroll Specialists","Tax Consultants","Junior Accountant","Senior Accountant","Finance Controller",
+                                "Chief Financial Officer (CFO)","Accountants", "Financial Analysts","Auditors","Payroll Specialists","Tax Consultants"],
+                    Architect:["Assistant Architect","Architect","Senior Architect","Chief Architect","Architectural Intern","Project Architect",
+                                "Design Director"],
+                    Auditor:["Junior Auditor","Senior Auditor","Audit Officer","Senior Audit Officer","Principal Auditor","Auditors","Internal Auditor",
+                              "Risk Auditor","Audit Manager"],
+                    Police:["Constable","Head Constable","Assistant Sub-Inspector (ASI)","Sub-Inspector (SI)","Inspector","Deputy Superintendent of Police (DSP)",
+                            "Superintendent of Police (SP)","Inspector General of Police (IGP)","Director General of Police (DGP)"],
+                    Mechanic:["Junior Mechanic","Senior Mechanic","Workshop Superintendent","Service Technician","Workshop Supervisor"],
+                    Security:["Security Guard","Security Supervisor","Security Officer","Chief Security Officer","Safety Officers"],
+                    Driver:["Driver (Light/Heavy Vehicle)","Senior Driver","Motor Vehicle Inspector","Drivers","Delivery Agents","Company Driver",
+                            "Heavy Vehicle Driver","Personal Driver"],
+                    Officer:["Probationary Officer (PO)","Administrative Officer","Gazetted Officer (Class A, B, C)","Deputy Secretary",
+                            "Under Secretary","Joint Secretary","Secretary","Administrative Assistants","Chief Executive Officer (CEO)",
+                            "Chief Financial Officer (CFO)","Chief Operating Officer (COO)","Vice Presidents (VPs)","Directors","Entrepreneurs",
+                          "Administrative Assistants","Office Managers","Executive Assistants","Receptionists","PData Entry Operators"],
+                    Peon:["Office Attendant","Multi-Tasking Staff (MTS)","Office Helper","Support Staff"],
+                    Chef:["Cook","Head Cook","Catering Supervisor","Chefs","Commis Chef","Sous Chef","Executive Chef"],
+                    Pilot:["Commercial Pilot","Helicopter Pilot","Fighter Pilot","Co-Pilot","Chief Pilot"],
+                    "IT Person":["Junior Programmer","Software Developer","Software Engineer","Senior Software Engineer","IT Officer",
+                                "Software Developers","System Administrators","IT Support Specialists","Junior Developer","Full Stack Developer"
+                                ],
+                    "Sales Person":["Sales Assistant","Sales Supervisor","Marketing Executive","Sales Executives","Sales Associate","Sales Manager"],
+                    Analyst:["Data Analyst","Research Analyst","Financial Analyst","System Analyst","Intelligence Analyst","Financial Analysts",
+                              "Cybersecurity Analysts","Supply Chain Analysts","Business Analyst","Senior Analyst","Supply Chain Analysts","Quality Inspector"],
+                    Banker:["Bank Clerk","Senior Clerk","Probationary Officer (PO)","Assistant Manager","Branch Manager","Regional Manager",
+                            "Chief Manager","Assistant General Manager (AGM)","General Manager (GM)","Managing Director (MD)","Relationship Manager",
+                            "Loan Officer","Branch Manager","Investment Analyst"],
+                    Legal:["Civil Judge (Junior Division)","Civil Judge (Senior Division)","District Judge","High Court Judge","Supreme Court Judge",
+                            "Chief Justice","Legal Officer","Public Prosecutor","Solicitor General","Legal Advisors","Compliance Officers",
+                            "Contract Specialists","Risk Managers","Legal Associate","Corporate Lawyer","Compliance Manager","Legal Consultant",
+                          ],
+                
+                    Designer:["Proprietor","Graphic Designers","UX/UI Designers","Instructional Designers","Freelance Designers/Writers",
+                              "Senior Designer","Creative Director"], Photographer:["Proprietor"],Videographer:["Proprietor","Video Editors"],"Independent Artist":["Proprietor"],
+                    Illustrator:["Proprietor"],Writer:["Proprietor"],"Digital Content Creator":["Proprietor"],"Social Media Influencer":["Proprietor"],
+                    Podcaster:["Proprietor"],"Music Producer":["Proprietor"],"Management Consultant":["Proprietor"],"Financial Advisor":["Proprietor"],
+                    "IT Consultant":["Proprietor"],"Business Strategist":["Proprietor"],"Marketing Consultant":["Proprietor"],"Life Coach":["Proprietor"],
+                    "Career Counselor":["Proprietor"],"Freelance Software Developer":["Proprietor"],"Web Developer":["Proprietor"],"Data Analyst":["Proprietor"],
+                    "App Developer":["Proprietor"],"UX/UI Designer":["Proprietor"],"Cybersecurity Consultant":["Proprietor"],"Private Practitioner (Doctor)":["Proprietor"],
+                    Physiotherapist:["Proprietor"],"Dietitian or Nutritionist":["Proprietor"],"Yoga Instructor":["Proprietor"],"Personal Trainer":["Proprietor"],
+                    "Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)":["Proprietor"],"Private Tutor":["Proprietor"],"Test Preparation Coach":["Proprietor"],
+                    "Online Educator":["Proprietor"],"Language Trainer":["Proprietor"],"Corporate Trainer":["Proprietor"],"Independent Lawyer":["Proprietor"],
+                    "Chartered Accountant (CA)":["Proprietor"],"Tax Consultant":["Proprietor"],"Auditor":["Proprietor"],"Financial Planner":["Proprietor"],
+                    "Tailor":["Proprietor"],"Carpenter":["Proprietor"],"Blacksmith":["Proprietor"],"Jewelry Maker":["Proprietor"],"Ceramic Artist":["Proprietor"],
+                    "Real Estate Agent":["Proprietor"],"Broker":["Proprietor"],"Sales Representative":["Proprietor"],"Freelance Chef":["Proprietor"],
+                    "Event Planner":["Proprietor"],"Makeup Artist":["Proprietor"],"Hairstylist":["Proprietor"],"Wedding Photographer":["Proprietor"],
+                    "Independent Farmer":["Proprietor"],"Organic Produce Supplier":["Proprietor"],"Horticulturist":["Proprietor"],
+                
+                    "Software Developer":["Software Developer"],
+                    Manager:[],
+                    Operators:["Data Entry Operators","Operations Managers","Machine Operators"],
+                    "Human Resources (HR)":["HR Executives","Talent Acquisition Specialists","Employee Relations Managers","Training and Development Specialists",
+                                            "HR Business Partners","HR Executives","Talent Acquisition Specialists","Employee Relations Managers","Training and Development Specialists","HR Business Partners"],
+                    Manager:["Marketing Managers","Brand Managers","Business Development Managers","Digital Marketing Specialists",
+                              "Logistics Coordinators","Procurement Specialists","Inventory Managers","Client Relationship Managers","Social Media Managers",
+                              "Event Planners","Facility Managers","Hotel Managers","Front Desk Executives","Event Coordinators","Start-up Employees",
+                              "Team Manager","Operations Manager","General Manager","Operations Managers","Logistics Coordinators","Procurement Specialists",
+                              "Inventory Managers","Innovation Managers","Customer Support Executives","Sales Manager","Public Relations Specialists",
+                            "Office Managers","Executive Assistants","Receptionists","Innovation Managers","Customer Support Executives",
+                              "Plant Managers","Quality Inspectors","Fleet Managers","Marketing Managers","Brand Managers","Business Development Managers","Digital Marketing Specialists"],
+                    Author:["Content Writers","Editors"],
+                    Director:["Art Directors"],
+                    "Tele Caller":["Call Center Agents"],
+                    Technicians:["Technical Support Specialists","Maintenance Technicians","Lab Technicians","Technical Lead","Laboratory Technicians"],
+                    Jounalists:["Journalists","Public Relations Specialists"],
+                    Hospitality:["Housekeeping Staff"],
+                    Contractor:["Independent Contractors"],
+                    Consultant:["Management Consultants"],
+                    Artist:["Creative Artists","Musicians"],
+                    Engineer:["Junior Engineer","Project Engineer","Senior Engineer","Engineering Manager"],
+                    "Freelance Graphic Designer":["Proprietor"],Photographer:["Proprietor"],Videographer:["Proprietor"],"Independent Artist":["Proprietor"],
+                    Illustrator:["Proprietor"],"Writer (Author, Blogger, or Copywriter)":["Proprietor"],"Digital Content Creator":["Proprietor"],
+                    "Social Media Influencer":["Proprietor"],Podcaster:["Proprietor"],"Music Producer":["Proprietor"],"Management Consultant":["Proprietor"],
+                    "Financial Advisor":["Proprietor"],"IT Consultant":["Proprietor"],"Business Strategist":["Proprietor"],"Marketing Consultant":["Proprietor"],
+                    "Life Coach":["Proprietor"],"Career Counselor":["Proprietor"],"Freelance Software Developer":["Proprietor"],"Web Developer":["Proprietor"],
+                    "Data Analyst":["Proprietor"],"App Developer":["Proprietor"],"UX/UI Designer":["Proprietor"],"Cybersecurity Consultant":["Proprietor"],
+                    "Private Practitioner (Doctor)":["Proprietor"],Physiotherapist:["Proprietor"],"Dietitian or Nutritionist":["Proprietor"],
+                    "Yoga Instructor":["Proprietor"],"Personal Trainer":["Proprietor"],"Alternative Medicine Practitioner (e.g., Homeopath, Naturopath)":["Proprietor"],
+                    "Private Tutor":["Proprietor"],"Test Preparation Coach":["Proprietor"],"Online Educator":["Proprietor"],"Language Trainer":["Proprietor"],
+                    "Corporate Trainer":["Proprietor"],"Independent Lawyer":["Proprietor"],"Chartered Accountant (CA)":["Proprietor"],"Tax Consultant":["Proprietor"],
+                    Auditor:["Proprietor","Internal Auditor","Risk Auditor","Audit Manager"],"Financial Planner":["Proprietor"],Tailor:["Proprietor"],Carpenter:["Proprietor"],Blacksmith:["Proprietor"],
+                    "Jewelry Maker":["Proprietor"],"Ceramic Artist":["Proprietor"],"Real Estate Agent":["Proprietor"],"Property Consultant":["Proprietor"],
+                    Broker:["Proprietor"],"Sales Representative":["Proprietor"],"Freelance Chef":["Proprietor"],"Event Planner":["Proprietor"],
+                    "Makeup Artist":["Proprietor"],Hairstylist:["Proprietor"],"Wedding Photographer":["Proprietor"],"Independent Farmer":["Proprietor"],
+                    "Organic Produce Supplier":["Proprietor"],Horticulturist:["Proprietor"],
+                    Investor:["Angel Investor", "Venture Capitalist", "Portfolio Manager"],
+                    Entrepreneurs:["Founder", "Co-Founder", "CEO", "Managing Director"],
+                    "Start-up Founders":["Founder", "Co-Founder, CEO", "Visionary Leader"],
+                    Retailer:["Shop Owner", "Retail Manager", "Proprietor", "Franchise Owner"],
+                    Wholesaler:["Wholesale Business Owner", "Distribution Head", "Supply Chain Owner"],
+                    "Importer/Exporter":["Import/Export Manager", "Trade Consultant", "Supply Chain Owner"],
+                    Distributor:["Chief Trading Officer", "Trading Business Owner", "Independent Trader"],
+                    Trader:["Wholesale Business Owner", "Distribution Head", "Supply Chain Owner"],
+                    "Real Estate Developer":["Real Estate Developer", "Managing Partner", "Property Consultant"],
+                    "Real Eastate Investor":["Property Investor", "Real Estate Strategist", "Investment Manager"],
+                    "Real Estate Agent":["Real Estate Consultant", "Real Estate Advisor", "Realtor"],
+                    Manufacturer:["Factory Owner", "Production Head", "Chief Manufacturing Officer"],
+                    Industrialist:["Business Tycoon", "Industry Leader", "Managing Director"],
+                    Financer:["Chief Financial Officer (CFO)", "Financial Advisor", "Investment Consultant"],
+                    "Stock Trader":["Equity Investor", "Day Trader", "Portfolio Manager"],
+                    "Hotel Owner":["Hospitality Owner", "General Manager (GM)", "Managing Director"],
+                    "Resort Owner":["Resort Manager", "Owner and Operator", "Hospitality Director"],
+                    "Travel Agency":["Travel Consultant", "Tourism Business Owner", "Founder"],
+                    "Restaurant Owner":["Restaurant Manager", "Food Entrepreneur", "Culinary Director"],
+                    Agriculturist:["Farm Owner", "Agriculture Consultant", "Rural Entrepreneur"],
+                    "Dairy Business Owner":["Dairy Farmer", "Milk Processing Entrepreneur", "Managing Partner"],
+                    "IT Person":["IT Consultant", "Software Solutions Owner","IT Entrepreneur","Software Developers","System Administrators",
+                                "IT Support Specialists","Data Scientists","Cybersecurity Analysts","Junior Developer","Full Stack Developer",
+                                "Senior Software Engineer","Technical Lead"],
+                    "Coaching Centre Owner":["Education Entrepreneur", "Coaching Director", "Academic Manager"],
+                    "Training Institute Owner":["Training Consultant", "Institute Director", "Founder"],
+                    "Online Tutor":["Founder and Educator", "Academic Content Creator"],
+                    "Private Tutor":["Independent Tutor", "Education Consultant"],
+                    "Hospital Owner":["Healthcare Entrepreneur", "Medical Director", "Hospital Administrator"],
+                    "Wellness Centre Owner":["Wellness Consultant", "Health and Fitness Director", "Gym Owner"],
+                    "Fitness Centre Owner":["Gym Owner", "Fitness Director", "Health Entrepreneur"],
+                    "Advertising Agency Owner":["Creative Director", "Marketing Strategist", "Founder"],
+                    "Film Producer":["Producer", "Film Studio Owner", "Creative Producer"],
+                    "Media House Owner":["Media Entrepreneur","Chief Editor", "Publisher"],
+                    Designer:	["Creative Director", "Fashion Entrepreneur"],
+                    Transporter:	["Logistics Manager", "Transport Business Owner"],
+                    "Courier Servicer":["Courier Business Owner", "Operations Manager"],
+                    "Renewable Energy and Environment":["Renewable Energy Consultant", "Sustainable Entrepreneur"],
+                    Boutique:["Fashion Boutique Owner", "Creative Head"],
+                    "Salon Owner":["Salon Manager", "Beauty Entrepreneur"],
+                    "Security Service Provider":["Security Agency Owner", "Operations Head"],
+                    "Legal Firm Owner":["Advocate and Owner", "Managing Partner"],
+                    "Digital Business":["Founder", "Digital Marketing Consultant"],
+                    "Infrastructure Developer":["Real Estate Developer", "Project Consultant"],
+                    Agriculturist:["Agribusiness Entrepreneur", "Food Processing Director"],
+                    "Poultry Farm Owner":	["Poultry Business Owner", "Farm Manager"],
+                    "Handicrafts Business Owner":["Artisan Entrepreneur", "Creative Entrepreneur"],
+                    "Investment Banker":["Investment Advisor", "Wealth Manager"],
+                    "Loan Cosultant":	["Financial Consultant", "Loan Advisor"],
+                    "IT Company Owner":["IT Entrepreneur", "Chief Technology Officer (CTO)"],
+                    "Cloud Service Provider":["Cloud Solutions Architect", "IT Entrepreneur"],
+                    Emigration:	["Immigration Consultant", "Visa Solutions Provider"],
+                    Catering:	["Catering Business Owner", "Culinary Director"],
+                    Baker:["Bakery Owner", "Culinary Entrepreneur"],
+                    "Car Dealership Owner":["Dealership Manager", "Auto Entrepreneur"],
+                    "Bike Dealership Owner":	["Franchise Owner"],
+                    "Bike Rental Business Owner":["Rental Business Owner", "Operations Head"],
+                    "Workshop Owner":["Mechanic Entrepreneur", "Service Manager"],
+                    "Environmental Consultant":["Sustainability Consultant", "Environmental Advisor"],
+                    "Cold Storage Business Owner":["Logistics Entrepreneur", "Warehouse Manager"],
+                    "Film Studio Owner":	["Film Producer", "Studio Head"],
+                    "Sports Organizer":	["Event Manager", "Sports Entrepreneur"],
+                    "Event Organizer":	["Founder, Director", "Creative Planner"],
+                    "Cloth Merchant":	["Textile Business Owner", "Retail Manager"],
+                    ExecutiveOfficer:["Chief Executive Officer (CEO)","Entrepreneurs","Chief Financial Officer (CFO)","Chief Operating Officer (COO)","Vice Presidents (VPs)","Directors",],
+                    Facility:["Housekeeping Staff"]
+                
+                
+                  },
+                };
+                
+                const [availableSubcategories, setAvailableSubcategories] = useState([]);
+                const [availableDesignations, setAvailableDesignations] = useState([]);
+                
+                // Handle profession category change
+                const handleProfessionCategoryChange = (event) => {
+                  const selectedCategory = event.target.value;
+                
+                  setcontact((prevLead) => ({
+                    ...prevLead,
+                    profession_category: selectedCategory,
+                    profession_subcategory: "", // Reset subcategory when category changes
+                    designation: "", // Reset designation when category changes
+                  }));
+                
+                  // Update available subcategories based on selected profession category
+                  setAvailableSubcategories(professtiondetails.profession_subcategory[selectedCategory] || []);
+                };
+                
+                // Handle profession subcategory change
+                const handleProfessionSubcategoryChange = (event) => {
+                  const selectedSubcategory = event.target.value;
+                
+                  setcontact((prevLead) => ({
+                    ...prevLead,
+                    profession_subcategory: selectedSubcategory,
+                    designation: "", // Reset designation when subcategory changes
+                  }));
+                
+                  // Update available designations based on selected profession subcategory
+                  setAvailableDesignations(professtiondetails.designation[selectedSubcategory] || []);
+                };
+                
+                // Handle designation change
+                const handleDesignationChange = (event) => {
+                  const selectedDesignation = event.target.value;
+                
+                  setcontact((prevLead) => ({
+                    ...prevLead,
+                    designation: selectedDesignation,
+                  }));
+                };
 
+
+
+
+                const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+                  email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
+                  sub_source:"",refrencer_no:"",intrested_project:"",
+                  requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+                  maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+                  lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],transaction_type:"",
+                  white_portion:"",furnishing:"",matched_deal:[],
+                  profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+                  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+          
+                  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+                  birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+                  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
+                 })
+
+                 const requirment=["Buy","Rent","Lease"];
+                 const transaction_type=["Full White","Collecter Rate","Flexiable"];
+                 const furnishing=["Furnished","Unfurnished","Semi Furnished"];
+                 const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
+                 const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
+
+                 const options = {
+                  property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
+                  sub_type: {
+                    RESIDENTIAL: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
+                    COMMERCIAL: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
+                    AGRICULTURE: ["LAND", "FARM HOUSE"],
+                    INDUSTRIAL: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
+                    INSTITUTIONAL: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
+                  },
+                  unit_type: {
+                    PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+                    "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+                    "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+                    "BUILDER FLOOR": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+                    SHOP:["BOOTH","KIOSAK",],
+                    SHOWROOM:["SCO","SCF","DSS"],
+                    "OFFICE SPACE":["LOCABLE OFFICE","VIRTUAL OFFICE"],
+                    "RETAIL STORE":["HYPER MARKET","DEPARTMETAL STORE"],
+                    SOHO:["SOHO"],
+                    "EXCUTIVE ROOM":["ROOM"],
+                    LAND:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
+                    "FARM HOUSE":["FARM"],
+                    PLOTS:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
+                    WAREHOUSE:["WRHSE"],
+                    "COLD STORAGE":["CLDSTRG"],
+                    "RICE SELLER":["RCSLR"],
+                    "BUILDING":["BLDG"],
+                    FACTORY:["FCTRY"],
+                    SCHOOL:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
+                    HOTEL:["HOTEL","GUEST HOUSE","HOMESTAYS"],
+                    UNIVERSITIES:["DEEMED","PRIVATE"],
+                    HOSPITAL:["NURSING HOME","CLINIC"],
+                    COLLEGE:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
+                  },
+                };
+                
+                const handleCategoryChange = (event) => {
+                  const selectedCategories = event.target.value;
+                
+                  // Update categories and reset dependent fields
+                
+                  
+                
+                  setleadinfo((prevLead)=>({
+                    ...prevLead,
+                    property_type: selectedCategories,
+                    sub_type: [], // Ensure uniqueness
+                    unit_type: [], // Ensure uniqueness
+                  }));
+                };
+                
+                const handleSubcategoryChange = (event) => {
+                  const selectedSubcategories = event.target.value;
+                
+                  // Update subcategories and dependent unit types
+                 
+                  setleadinfo((prevLead) => ({
+                    ...prevLead,
+                    sub_type: selectedSubcategories,
+                    unit_type: [], // Ensure uniqueness
+                  }));
+                };
+                const getAvailableSubcategories = () => {
+                  return (leadinfo.property_type || []).flatMap((cat) => options.sub_type[cat] || []);
+                };
+                
+                
+                const handleUnitTypeChange = (event) => {
+                  const selectedUnitTypes = event.target.value;
+                  setleadinfo((prevLead) => ({
+                    ...prevLead,
+                    unit_type: selectedUnitTypes,
+                  }));
+                };
+                
+                const getAvailableunittype = () => {
+                  // Step 1: Ensure leadinfo.sub_type is always an array
+                  let availableOptions = (leadinfo.sub_type || []).flatMap((cat) => options.unit_type[cat] || []);
+                  
+                  // Step 2: Remove duplicates by using Set and return unique options
+                  return Array.from(new Set(availableOptions));
+                };
+                
+
+
+                const budgetOptions = [
+                  { value: 5000, label: "5,000/- (five thousand)" },
+                  { value: 10000, label: "10,000/- (ten thousand)" },
+                  { value: 20000, label: "20,000/- (twenty thousand)" },
+                  { value: 30000, label: "30,000/- (thirty thousand)" },
+                  { value: 50000, label: "50,000/- (fifty thousand)" },
+                  { value: 80000, label: "80,000/- (eighty thousand)" },
+                  { value: 100000, label: "1,00,000/- (one lakh)" },
+                  { value: 150000, label: "1,50,000/- (one and a half lakh)" },
+                  { value: 200000, label: "2,00,000/- (two lakh)" },
+                  { value: 250000, label: "2,50,000/- (two and a half lakh)" },
+                  { value: 350000, label: "3,50,000/- (three and a half lakh)" },
+                  { value: 500000, label: "5,00,000/- (five lakh)" },
+                  { value: 750000, label: "7,50,000/- (seven and a half lakh)" },
+                  { value: 1000000, label: "10,00,000/- (ten lakh)" },
+                ];
+              
+                // Filter max budget options based on selected min budget
+                const filteredMaxBudgetOptions = leadinfo.budget_min
+                  ? budgetOptions.filter((option) => option.value >= leadinfo.budget_min)
+                  : budgetOptions;
+
+                  const buyBudgetOptions = [
+                    { value: 1000000, label: "10,00,000/- (ten lakh)" },
+                    { value: 2500000, label: "25,00,000/- (twenty five lakh)" },
+                    { value: 5000000, label: "50,00,000/- (fifty lakh)" },
+                    { value: 7500000, label: "75,00,000/- (seventy five lakh)" },
+                    { value: 10000000, label: "1,00,00,000/- (one crore)" },
+                    { value: 12500000, label: "1,25,00,000/- (one crore twenty five lakh)" },
+                    { value: 15000000, label: "1,50,00,000/- (one crore fifty lakh)" },
+                    { value: 20000000, label: "2,00,00,000/- (two crore)" },
+                    { value: 30000000, label: "3,00,00,000/- (three crore)" },
+                    { value: 40000000, label: "4,00,00,000/- (four crore)" },
+                    { value: 50000000, label: "5,00,00,000/- (five crore)" },
+                    { value: 75000000, label: "7,50,00,000/- (seven crore fifty lakh)" },
+                    { value: 100000000, label: "10,00,00,000/- (ten crore)" },
+                    { value: 150000000, label: "15,00,00,000/- (fifteen crore)" },
+                    { value: 200000000, label: "20,00,00,000/- (twenty crore)" },
+                    { value: 300000000, label: "30,00,00,000/- (thirty crore)" },
+                    { value: 500000000, label: "50,00,00,000/- (fifty crore)" },
+                    { value: 750000000, label: "75,00,00,000/- (seventy five crore)" },
+                    { value: 1000000000, label: "100,00,00,000/- (one hundred crore)" },
+                  ];
+                  const filteredMaxBudgetOptionsbuy = leadinfo.budget_min
+                  ? buyBudgetOptions.filter((option) => option.value >= leadinfo.budget_min)
+                  : buyBudgetOptions;
+
+                  const areaoptions = [
+                    { value: 10, label: "10" },                 
+                    { value: 25, label: "25" },
+                    { value: 50, label: "50" },
+                    { value: 75, label: "75" },
+                    { value: 100, label: "100" },
+                    { value: 125, label: "125" },
+                    { value: 150, label: "150" },
+                    { value: 175, label: "175" },
+                    { value: 200, label: "200" },
+                    { value: 225, label: "225" },
+                    { value: 250, label: "250" },
+                    { value: 300, label: "300" },
+                    { value: 350, label: "350" },
+                    { value: 400, label: "400" },
+                    { value: 450, label: "450" },
+                    { value: 550, label: "550" },
+                    { value: 750, label: "750" },
+                    { value: 1000, label: "1000" },
+                    { value: 2000, label: "2000" },
+                    { value: 5000, label: "5000" },
+                    { value: 7500, label: "7500" },
+                    { value: 10000, label: "10000" }
+                  ];
+                
+                  // Filter max budget options based on selected min budget
+                  const filteredarea = leadinfo.minimum_area
+                    ? areaoptions.filter((option) => option.value >= leadinfo.minimum_area)
+                    : areaoptions;
+
+
+                    const asianCountries = [
+                      "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
+                      "Brunei", "Burma (Myanmar)", "Cambodia", "China", "Cyprus", "Georgia", 
+                      "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", 
+                      "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", 
+                      "Maldives", "Mongolia", "Nepal", "North Korea", "Oman", "Pakistan", 
+                      "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+                      "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", 
+                      "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
+                      "Vietnam", "Yemen"
+                    ];
+                    const statesAndCities = {
+                      AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+                      ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+                      Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+                      Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+                      Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+                      Goa: ["North Goa", "South Goa"],
+                      Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+                      Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+                      HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+                      Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+                      Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+                      Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+                      MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+                      Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+                      Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+                      Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+                      Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+                      Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+                      Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+                      Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+                      Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+                      Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+                      TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+                      Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+                      Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+                      UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar","Noida", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+                      WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+                    };
+
+
+                    const states = Object.keys(statesAndCities);
+                    const cities = statesAndCities[leadinfo.state2] || [];
+
+                    const facing=["East","West","South","North","North East","South East","North West","South West"];
+const [facings, setfacings] = useState([]);
+
+const handlefacingChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (facings.length === facing.length) {
+      setfacings([]); // Deselect all options
+      setleadinfo({ ...leadinfo, facing: [] }); // Update facing in leadinfo
+    } else {
+      // Otherwise, select all options
+      setfacings(facing); // Select all options
+      setleadinfo({ ...leadinfo, facing: facing }); // Update facing in leadinfo
+    }
+  } else {
+    // Handle individual selections/deselections
+    const selectedfacing = typeof value === 'string' ? value.split(',') : value;
+    setfacings(selectedfacing); // Update selected facings
+    setleadinfo({ ...leadinfo, facing: selectedfacing }); // Update facing in leadinfo
+  }
+};
+
+const road=["9 mtr road","12 mtr road","60 mtr road","100 mtr road"];
+
+const [roads, setroads] = useState([]);
+
+const handleroadChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (roads.length === road.length) {
+      setroads([]); // Deselect all options
+      setleadinfo({ ...leadinfo, road: [] }); // Update road in leadinfo
+    } else {
+      // Otherwise, select all options
+      setroads(road); // Select all options
+      setleadinfo({ ...leadinfo, road: road }); // Update road in leadinfo
+    }
+  } else {
+    // Handle individual selections/deselections
+    const selectedroad = typeof value === 'string' ? value.split(',') : value;
+    setroads(selectedroad); // Update selected roads
+    setleadinfo({ ...leadinfo, road: selectedroad }); // Update road in leadinfo
+  }
+};
+
+
+const matchdeal=["What'sApp","Message","Mail"];
+
+const [matchdeals, setmatcheddeals] = useState([]);
+
+const handlematcheddealChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // If "Select All" is clicked
+  if (value.includes('select-all')) {
+    // If all options are already selected, deselect them (uncheck all)
+    if (matchdeals.length === matchdeal.length) {
+      setmatcheddeals([]); // Deselect all options
+      setleadinfo({ ...leadinfo, matched_deal: [] }); // Update matched_deal in leadinfo
+    } else {
+      // Otherwise, select all options
+      setmatcheddeals(matchdeal); // Select all options
+      setleadinfo({ ...leadinfo, matched_deal: matchdeal }); // Update matched_deal in leadinfo
+    }
+  } else {
+    // If individual items are selected/deselected
+    const selectedmatcheddeal = typeof value === 'string' ? value.split(',') : value;
+    setmatcheddeals(selectedmatcheddeal); // Update selected deals
+    setleadinfo({ ...leadinfo, matched_deal: selectedmatcheddeal }); // Update matched_deal with selected options
+  }
+};
+
+
+const [progress, setProgress] = useState(leadinfo.white_portion || 0); // Initialize with deal.whiteportion
+
+const handleMouseMove = (e) => {
+  const progressBar = e.target.getBoundingClientRect();
+  const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
+  const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
+  setProgress(clampedProgress);
+  setleadinfo((prevLead) => ({ ...prevLead, white_portion: clampedProgress })); // Update deal.whiteportion
+};
+
+const handleMouseDown = (e) => {
+  handleMouseMove(e); // Set initial progress
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', handleMouseUp);
+};
+
+const handleMouseUp = () => {
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mouseup', handleMouseUp);
+};
+
+                const [show5, setshow5] = useState(false);
+
+                const handleClose5 = () => setshow5(false);
+                
+                // const handleShow5=async()=>
+                // {
+                //   if(selectedItems.length===1)
+                //   {
+                //     try {
+                //       const resp=await api.get(`viewcontactbyid/${selectedItems}`)//here search contact by id
+                //       setshow5(true);
+                    
+                    
+                //     } catch (error) {
+                //       console.log(error);
+                //     }
+                //   }
+                //   else
+                //   {
+                //     toast.error("please select only one")
+                //   }
+                 
+                // }
+
+                const handleShow5 = async () => {
+                  // const navigate = useNavigate(); // Initialize navigate
+                  setshow5(true);
+                  try {
+                    const resp1 = await api.get(`viewcontactbyid/${selectedItems}`);
+                    setleadinfo(resp1.data.contact)
+                  
+                  } catch (error) {
+                    console.error("Error fetching lead data:", error);
+                  }
+                };
+
+
+                const[data11,setdata11]=useState([]);
+                const fetchdatabyprojectcityname=async()=>
+                {
+                  
+                  try {
+                    const city=leadinfo.city2
+                    console.log(city);
+                    
+                    const resp=await api.get(`viewprojectbycityname/${city}`)
+                    console.log(resp);
+                    
+                    setdata11(resp.data.project)
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+                useEffect(() => {
+                  fetchdatabyprojectcityname()
+                   
+                  
+                }, [leadinfo.city2]);
+
+                const allproject =[]
+                data11.map((item)=>
+                (
+                    allproject.push(item.name)
+                ))
+
+                const [units, setunits] = useState([]);
+              
+                const [allblocks, setallblocks] = useState([]);
+              
+              
+                const fetchdatabyprojectname = async (projectNames) => {
+                  try {
+                    // Initialize a temporary array to hold all fetched units
+                    const allUnits = [];
+                
+                    // Fetch the data sequentially for each project
+                    for (const projectName of projectNames) {
+                      const resp = await api.get(`viewprojectbyname/${projectName}`);
+                      const allFetchedUnits = resp.data.project; // Assuming resp.data.project is an array of units
+                      allUnits.push(...allFetchedUnits); // Accumulate the fetched units
+                    }
+                
+                    // Update the state with the accumulated units
+                    setunits(allUnits);
+                  } catch (error) {
+                    console.log(error);
+                  }
+                };
+                
+                
+                useEffect(() => {
+                  if (units.length >= 0) {
+                   
+                    const collectedblocks=units.flatMap(item=>item.add_block)
+           
+                    setallblocks(collectedblocks) 
+                   
+                  }
+                }, [units]);
+                const handleprojectchange = (event) => {
+                                     
+                                      
+                  const selectproject = event.target.value
+                
+              
+                  setleadinfo((prev) => {
+                    const updateproject = { ...prev, area2: selectproject };
+                     fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+                    return updateproject; // Return the updated state
+                  });
+                };
+              
+              
+         
+              
+              
+                const handleallblockchange = (event) => {
+                   
+                  
+                    const selectblocks = event.target.value
+                  
+                     
+                    setleadinfo((prev) => {
+                      const updateblock = { ...prev, block: selectblocks };
+                      return updateblock; // Return the updated state
+                    });
+                  };
+
+
+                  const selectlocation=()=>
+                    {
+                      document.getElementById("select_location").style.display="flex"
+                      document.getElementById("search_location1").style.display="none"
+      
+                  
+                        
+                      document.getElementById("searchlocation").style.color="black"
+                      document.getElementById("searchlocation").style.backgroundColor="white"
+           
+    
+                      document.getElementById("selectlocation").style.backgroundColor="black"
+                      document.getElementById("selectlocation").style.color="white"
+                      document.getElementById("selectlocation").style.borderRadius="50px"
+                      document.getElementById("selectlocation").style.width="150px"
+                      document.getElementById("selectlocation").style.textAlign="center"
+                    
+                    
+                
+                      
+                    }
+                    const searchlocation=()=>
+                      {
+                        document.getElementById("select_location").style.display="none"
+                        document.getElementById("search_location1").style.display="flex"
+                    
+                    
+                      
+                        document.getElementById("selectlocation").style.color="black"
+                        document.getElementById("selectlocation").style.backgroundColor="white"
+                 
+    
+                        document.getElementById("searchlocation").style.backgroundColor="black"
+                        document.getElementById("searchlocation").style.color="white"
+                        document.getElementById("searchlocation").style.borderRadius="50px"
+                        document.getElementById("searchlocation").style.width="150px"
+                        document.getElementById("searchlocation").style.textAlign="center"
+                        
+                      }
+
+
+                      const addtolead = async (selectedItems) => {
+                        // const navigate = useNavigate(); // Initialize navigate
+                        
+                        try {
+                          const resp=await api.post('leadinfo',leadinfo,config)
+                          if(resp.status===200)
+                            {
+                                toast.success(resp.data.message)
+                                setTimeout(() => {
+                                    navigate('/leaddetails')
+                                }, 2000);
+                            }
+                        } catch (error) {
+                          console.error("Error fetching lead data:", error);
+                        }
+                      };
+
+
+
+console.log(leadinfo);
 
 
 
@@ -1781,7 +2558,7 @@ useEffect(()=>
       </Tooltip>
 
       <Tooltip title="Add to lead.." arrow>
-      <img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png" onClick={()=>addtolead(selectedItems)}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
 
       <Tooltip title="Call.." arrow>
@@ -1992,9 +2769,9 @@ useEffect(()=>
       </div>
        
       <Modal show={show1} onHide={handleClose1} size='xl'>
-            <Modal.Header>
-              <Modal.Title>Update Contact</Modal.Title>
-            </Modal.Header>
+            {/* <Modal.Header>
+              <Modal.Title></Modal.Title>
+            </Modal.Header> */}
             <Modal.Body>
            
             
@@ -2007,17 +2784,16 @@ useEffect(()=>
         <div className="col-md-12 border">
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Add Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
+                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Update Contact</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
                 </div><hr></hr>
                
          
              <div style={{display:"flex"}}>
-               <div style={{display:"flex",gap:"50px"}}>
-               <div  id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Basic Details   |</span></div>
-                <div  id='professional'><span onClick={professionaldetails} style={{cursor:'pointer',fontWeight:"bold"}}>Professional Details |</span></div>
-                <div  id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold"}}>Personal Details |</span></div> 
+               <div style={{display:"flex",gap:"100px"}}>
+               <div  id='basic'><span onClick={basicdetails} style={{cursor:'pointer',fontWeight:"bold",width:"200px"}}>Basic Details|</span></div>
+                <div  id='other'><span onClick={otherdetails} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}>Personal Detail|</span></div> 
                </div>
-						    <div style={{marginLeft:"200px",width:"31%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
+						    <div style={{marginLeft:"450px",width:"18%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
 					</div>
                 
                 
@@ -2154,6 +2930,52 @@ useEffect(()=>
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm'defaultValue={data1.descriptions} onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,descriptions:e.target.value}))}/></div>
                     <div className="col-md-2"></div>
 
+                    <div className="col-md-12" style={{marginTop:"10px"}}><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Profession Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+               
+               <div className="col-md-5"><label className="labels">Profession Category</label>
+               <select className="form-control form-control-sm" onChange={handleProfessionCategoryChange}>
+                             <option>{contact.profession_category}</option>    
+                          
+                           {professtiondetails.profession_category.map((category) => (
+                           <option key={category} value={category}>
+                             {category}
+                           </option>
+                         ))}
+                   </select>
+               </div>
+               <div className="col-md-7"><label className="labels">Profession Sub-Category</label>
+               <select className="form-control form-control-sm" onChange={handleProfessionSubcategoryChange}>
+                           <option>{contact.profession_subcategory}</option>
+                           {availableSubcategories.map((subcategory) => (
+                           <option key={subcategory} value={subcategory}>
+                             {subcategory}
+                           </option>
+                         ))}
+                   </select>
+               </div>
+               <div className="col-md-5"><label className="labels">Designation</label>
+               <select className="form-control form-control-sm" onChange={handleDesignationChange}>
+               <option>{contact.designation}</option>
+               {availableDesignations.map((designation) => (
+                 <option key={designation} value={designation}>
+                         {designation}
+                       </option>
+                   ))}
+                   </select>
+               </div>
+               <div className="col-md-6"><label className="labels">Company/Organisation/Department Name</label>
+               <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
+               <option>{contact.company_name}</option>
+                 {
+                   cdata.map((item)=>
+                   (
+                     <option>{item.name}</option>
+                   ))
+                 }
+                   </select>
+               </div>
+               <div className="col-md-1"><label className="labels">Add</label><button className="form-control form-control-sm" onClick={()=>{navigate('/addcompany')}}>+</button></div>
+
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
                     <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,source:e.target.value}))} >
@@ -2193,262 +3015,20 @@ useEffect(()=>
                                 <option>All Users</option>
                                 </select>
                     </div>
+
+          
                        </div>
                   </div>
              </div> 
 
    {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
                   
-  {/* -----------------------------------------professional Details start------------------------------------------------------------------- */}
 
-        <div className="col-md-12" id='profession' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
-            <div className="p-3 py-5">
-                <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
-                <div className="row " >
-                    <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,profession_category:e.target.value}))}>
-                                  <option>{data1.profession_category}</option> 
-                                  <option>---Select---</option>    
-                                  <option>Self Employed </option>
-                                  <option>Govt. Employee  </option>
-                                  <option>House Wife</option>
-                                  <option>Business Man</option>
-                                  <option>Retired</option>
-                                  <option>Student</option>
-                        </select>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,profession_subcategory:e.target.value}))}>
-                                <option>{data1.profession_subcategory}</option> 
-                                <option>---Select---</option>
-                                <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
-                                <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
-                                <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
-                                <option>Chef</option> <option>Teacher</option> <option>Scientist</option> <option>Software Developer</option>
-                                <option>Designer</option> <option>Author</option> <option>Nurse</option> <option>Baker</option>
-                                <option>Engineer</option> <option>Carpenter</option> <option>Construction</option> <option>Worker</option>
-                                <option>Sales Person</option> <option>Pilot</option> <option>Professor</option> <option>Author</option>
-                                <option>Clerk</option> <option>Peon</option> <option>Commision</option> <option>Agent(AAdati)</option>
-                                <option>Shop Keepar</option>
-                        </select>
-                    </div>
-                    <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,designation:e.target.value}))}>
-                        <option>{data1.designation}</option> 
-                        <option>---Select---</option>
-                        <option>Cashier</option>
-                        <option>Partner</option>
-                        <option>Proprietor</option>
-                        <option>Developer</option>
-                        <option>HR</option>
-                        <option>Others</option>
-                        </select>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_name:e.target.value}))}>
-                        <option>{data1.company_name}</option> 
-                        <option>---Select---</option>
-                        <option>Dharam Construction</option>
-                        <option>Somya Enterprises</option>
-                        <option>Bharat Properties</option>
-                        <option>State Bank Of India</option>
-                        <option>Microsoft</option>
-                        <option>Others</option>
-                        </select>
-                    </div>
-                    <div className="col-md-4" > <label className="labels">Country Code</label>
-                    
-                        <select  required="true" className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country_code1:e.target.value}))}>
-                        <option>{data1.country_code1}</option>
-                        {
-                          countrycode.map((item)=>
-                          (
-                            <option>{item}</option>
-                          ))
-                        }
-                        </select> 
-                    </div>
-                    <div className="col-md-6" > <label className="labels">Company Phone</label><input type='text' defaultValue={data1.company_phone} className='form-control form-control-sm' onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_phone:e.target.value}))}/></div>
-                    <div className="col-md-8" > <label className="labels">Company Email</label><input type='text' defaultValue={data1.company_email} className='form-control form-control-sm' onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,company_email:e.target.value}))}/></div>
-                    <div className="col-md-4" ></div>
-
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Company Address</label></div>
-                    <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                    <div className="col-md-8"><label className="labels">Area</label><input type="text" defaultValue={data1.area} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,area:e.target.value}))}/></div>
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4"><label className="labels">Location</label><input type="text" defaultValue={data1.location} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,location:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" defaultValue={data1.city} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,city:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" defaultValue={data1.pincode} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,pincode:e.target.value}))}/></div>
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" defaultValue={data1.state} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,state:e.target.value}))}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" defaultValue={data1.country} className="form-control form-control-sm"  onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country:e.target.value}))}/></div>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,industry:e.target.value}))}>
-                    <option>{data1.industry}</option>
-                    <option>choose</option>
-                          <optgroup label='Agriculture'>
-                                <option>Farming</option><option>horticulture</option><option>forestry</option>
-                                <option>fishing</option><option>Others</option>
-                          </optgroup>
-                          <optgroup label='Mining'>
-                                <option>Extraction of minerals</option><option>oil</option><option>gas</option>
-                                <option>other natural resources.</option>
-                          </optgroup>
-                          <optgroup label='Fishing and Hunting'>
-                                <option>Commercial fishing</option><option>aquaculture</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Forestry'>
-                                <option>Logging</option><option>timber production</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Manufacturing'>
-                                <option>Production of goods from raw materials (e.g., automotive, 
-                                  electronics, textiles, food processing)</option>
-                          </optgroup>
-                          <optgroup label='Construction'>
-                                <option>Building infrastructure</option><option>residential and commercial properties</option><option>roads</option>
-                                <option>bridges</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Utilities'>
-                                <option>Production and distribution of electricity</option><option>water</option><option>gas</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Refining'>
-                                <option>Processing raw materials like oil</option><option>metals</option><option>into usable products</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Retail'>
-                                <option>Selling goods directly to consumers</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Hospitality'>
-                                <option>Hotels</option><option>restaurants</option><option>tourism</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Healthcare'>
-                                <option>Hospitals</option><option>clinics</option><option>medical services</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Education'>
-                                <option>Schools</option><option>colleges</option><option>universities</option>
-                                <option>training centers</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Finance and Insurance'>
-                                <option>Banks</option><option>investment firms</option><option>insurance companies</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Transportation'>
-                                <option>Airlines</option><option>railways</option><option>shipping</option>
-                                <option>logistics</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Telecommunications'>
-                                <option>Internet services</option><option>phone companies</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Entertainment'>
-                                <option>Film</option><option>television</option><option>music</option>
-                                <option>gaming</option><option>sports</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Real Estate'>
-                                <option>Property sales</option><option>rentals</option><option>management</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Information Technology'>
-                                <option>Software development</option><option>data processing</option><option>IT services</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Research and Development'>
-                                <option>Innovation</option><option>scientific research</option><option>product development</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Consultancy'>
-                                <option>Professional advice in management</option><option>law</option><option>finance</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Media and Communication'>
-                                <option>Publishing</option><option>broadcasting</option><option>online media</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Government'>
-                                <option>Public administration</option><option>defense</option><option>public services</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Non-Profit Organizations'>
-                                <option>NGOs</option><option>charities</option><option>foundations</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Education (Executive)'>
-                                <option>High-level educational services</option><option>executive education</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='High-Level Decision-Making'>
-                                <option>Top management roles in large organizations</option><option>think tanks</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Green Industry'>
-                                <option>Renewable energy</option><option>environmental services</option><option>sustainability</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Biotechnology'>
-                                <option>Genetic engineering</option><option>pharmaceuticals</option><option>life sciences</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Creative Industries'>
-                                <option>Advertising</option><option>design</option><option>fashion</option><option>arts</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='E-commerce'>
-                                <option>Online</option><option>retail</option><option>digital marketplaces</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Aerospace'>
-                                <option>Aircraft manufacturing</option><option>space exploration</option><option>satellite services</option>
-                                <option>others</option>
-                          </optgroup>
-                        </select>
-                    </div>
-                    <div className='col-md-5'></div>
-                    <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
-                    {
-                      Array.isArray(contact.company_social_media)?
-                      contact.company_social_media.map((item,index)=>
-                      (
-                        <select
-                         className='form-control form-control-sm'
-                          style={{marginTop:"10px"}}
-                          onChange={(event)=>handlecompanysocialmediachange(index,event)}>
-                         <option>{data1.company_social_media[index]}</option>
-                        <option>select</option>
-                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
-                        </select>
-
-                      )):[]
-                    }
-                    </div>
-                    <div className="col-md-6"><label className="labels">Url</label>
-                    {
-                      Array.isArray(contact.url)?
-                      contact.company_url.map((item,index)=>
-                      (
-                        <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} defaultValue={data1.company_url[index]}
-                        onChange={(event)=>handlecompanyurlchange(index,event)}/>
-                      )):[]
-                    }
-                    </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
-                    {
-                      Array.isArray(contact.action3)?
-                      contact.action3.map((item,index)=>
-                      (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                      )):[]
-                    }
-                    </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
-                    <div className='col-md-12'><hr></hr></div> 
-              </div>
-             </div>
-           </div>
- {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
 
  {/*-------------------------------------------------- personal details start--------------------------------------------------------- */
  
  }
-        <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px"}}>
+        <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-40px"}}>
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center experience"><span>Personal Details</span></div><hr></hr>
                 <div className="row " >
@@ -3014,10 +3594,10 @@ useEffect(()=>
 
 
 <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto', }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
-        <TableRow>
+        <TableRow >
           <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <input
               type="checkbox"
@@ -3252,19 +3832,7 @@ useEffect(()=>
 
                         </select>
                     </div>
-                    {/* <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,profession_subcategory:e.target.value})}>
-                                <option>Select</option>
-                                <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
-                                <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
-                                <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
-                                <option>Chef</option> <option>Teacher</option> <option>Scientist</option> <option>Software Developer</option>
-                                <option>Designer</option> <option>Author</option> <option>Nurse</option> <option>Baker</option>
-                                <option>Engineer</option> <option>Carpenter</option> <option>Construction</option> <option>Worker</option>
-                                <option>Sales Person</option> <option>Pilot</option> <option>Professor</option> <option>Author</option>
-                                <option>Clerk</option> <option>Peon</option> <option>Commision</option> <option>Agent(AAdati)</option>
-                                <option>Shop Keepar</option>
-                        </select>
-                    </div> */}
+                 
 
                 <div className="col-md-6"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,industry:e.target.value})}>
                     <option>{developer.industry}</option>
@@ -3633,12 +4201,13 @@ useEffect(()=>
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
+                      Array.isArray(contact.action1) ?
                        contact.action1.map((item,index)=>
                         (
                           <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
                           
-                        ))
+                        )):[]
                     }
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
@@ -3672,12 +4241,13 @@ useEffect(()=>
                   
                    <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
+                      Array.isArray(contact.action2) ?
                        contact.action2.map((item,index)=>
                         (
                           <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
                           
-                        ))
+                        )):[]
                     }
                     </div>
                   <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
@@ -3707,6 +4277,8 @@ useEffect(()=>
             </Modal.Footer>
           </Modal>
 
+
+        
   </TableContainer>
    
       
@@ -3721,11 +4293,7 @@ useEffect(()=>
                    
                    
                 </div>
-                {/* <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
-                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={adddeveloper}>Save</button></div>
-                    </div> */}
+              
             </div>
        
 
@@ -3740,6 +4308,450 @@ useEffect(()=>
               </Button>
             </Modal.Footer>
           </Modal>
+
+
+          <Modal show={show5} onHide={handleClose5} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Add To Lead</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <div className="row mt-2" id="leadinforequirment" >
+                <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
+                    <option>Select</option>
+                       {
+                        requirment.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+                        </select>
+                        </div>
+                        <div className="col-md-3"><label className="labels">Property Type</label>
+                   
+                         <Select
+                         className="form-control form-control-sm" style={{border:"none"}}
+                          multiple
+                          value={leadinfo.property_type || []}
+                          onChange={handleCategoryChange}
+                          renderValue={(selected) => selected.join(", ")}
+                        >
+                          {options.property_type.map((cat) => (
+                            <MenuItem key={cat} value={cat}>
+                              <Checkbox checked={leadinfo.property_type?.includes(cat)|| false} />
+                              <ListItemText primary={cat} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        </div>
+                        
+                        <div className="col-md-4"><label className="labels" style={{display:"inline-block"}}>Purpose</label><br></br>
+                        <input type="radio" name="purpose" value={"End use"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>End use<input type="radio" name="purpose" value={"Investor"} style={{marginLeft:"20px",marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>Investor
+                        </div>
+                        <div className="col-md-2"><label className="labels" >NRI</label><br></br>
+                        <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,nri:e.target.value})}/>Yes
+                        </div>
+                        <div className="col-md-6"><label className="labels">Sub Type</label>
+                        
+                        <Select
+                        className="form-control form-control-sm" style={{border:"none"}}
+                      multiple
+                      value={leadinfo.sub_type || []}
+                      onChange={handleSubcategoryChange}
+                      renderValue={(selected) => selected.join(", ")}
+                    >
+                      {getAvailableSubcategories().map((sub) => (
+                      <MenuItem key={sub} value={sub}>
+                        <Checkbox checked={leadinfo.sub_type.includes(sub)} />
+                        <ListItemText primary={sub} />
+                      </MenuItem>
+                    ))}
+                    </Select>
+                    </div>
+                    
+                    <div className="col-md-6"><label className="labels">Unit Type</label>
+                    <Select
+                        className="form-control form-control-sm" style={{border:"none"}}
+                      multiple
+                      value={leadinfo.unit_type || []}
+                      onChange={handleUnitTypeChange}
+                      renderValue={(selected) => selected.join(", ")}
+                    >
+                      {getAvailableunittype().map((sub) => (
+                      <MenuItem key={sub} value={sub}>
+                        <Checkbox checked={leadinfo.unit_type.includes(sub)} />
+                        <ListItemText primary={sub} />
+                      </MenuItem>
+                    ))}
+                    </Select>
+                        </div>
+                        {leadinfo.requirment === "Rent" && (
+                          <>
+                            <div id="rentbudgetmin" className="col-md-6">
+                              <label className="labels">Budget Min</label>
+                              <select
+                                className="form-control form-control-sm"
+                                onChange={(e) =>
+                                  setleadinfo({ ...leadinfo, budget_min: e.target.value })
+                                }
+                                value={leadinfo.budget_min}
+                              >
+                                <option>---Select---</option>
+                                {budgetOptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div id="rentbudgetmax" className="col-md-6">
+                              <label className="labels">Budget Max</label>
+                              <select
+                                className="form-control form-control-sm"
+                                onChange={(e) =>
+                                  setleadinfo({ ...leadinfo, budget_max: e.target.value })
+                                }
+                                value={leadinfo.budget_max}
+                              >
+                                <option>---Select---</option>
+                                {filteredMaxBudgetOptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </>
+                        )}
+
+                        {leadinfo.requirment === "Buy" && (
+                       <>
+                        <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <option>---Select---</option>
+                        {buyBudgetOptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                        </select></div>
+                      
+                      
+                        <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <option>---Select---</option>
+                        {filteredMaxBudgetOptionsbuy.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                        </select></div>
+                        </>
+                      )}
+                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
+                        <option>Select</option>
+                        {areaoptions.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
+                        <option>Select</option>
+                        {filteredarea.map((option) => (
+                                  <option key={option.value} value={option.value}>
+                                    {option.label}
+                                  </option>
+                                ))}
+                
+                        </select></div>
+                   
+                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
+                      
+                        <option>Sq Yard</option>
+                        <option>Marla</option>
+                        <option>Acre</option>
+                        <option>Sq Feet</option>
+                        <option>Kanal</option>
+                        </select></div> 
+                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
+                       
+                        <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                        <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
+                             <div  id='selectlocation' onClick={selectlocation} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"150px",textAlign:"center",transition:"0.5s ease-out"}}>Select Location </div>
+                             <div  id='searchlocation' onClick={searchlocation} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Search Loacation</div>
+                             
+                         </div>
+
+                           <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
+                        <div className="col-md-5"><label className="labels">Country</label>
+                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}>
+                        <option>India</option>
+                    {asianCountries.map((country, index) => (
+                      <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
+                        {country}
+                      </option>
+                    ))}
+                          </select>
+                        </div>
+                       
+                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}>
+                        <option value="">--Select State--</option>
+                      {states.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                          </select>
+                        </div>
+                        <div className="col-md-2"></div>
+
+                        <div className="col-md-5"><label className="labels">City</label>
+                        {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
+                          <option>---select country---</option>
+                          <option>India</option>
+                          </select> */}
+                             <select
+                    className="form-control form-control-sm"
+                    value={leadinfo.city2}
+                    onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}
+                    disabled={!leadinfo.state2 || cities.length === 0} // Disable if no state or invalid state
+                  >
+                    <option value="">--Select City--</option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                        </div>
+                        <div className="col-md-5"><label className="labels">Area/Project</label>
+                        <Select
+                        className="form-control form-control-sm"
+                      multiple
+                      value={leadinfo.area2 || []}
+                      onChange={handleprojectchange}
+                      style={{border:"none"}}
+                      renderValue={(selected) => selected.join(', ')}
+                      label="Area/Project"
+                      
+                    >
+                      <MenuItem disabled value="">
+                        <em>---choose---</em>
+                      </MenuItem>
+                      {allproject.map((project) => (
+                        <MenuItem key={project} value={project}>
+                          <Checkbox checked={(leadinfo.area2 || []).indexOf(project) > -1} />
+                          <ListItemText primary={project} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                        </div>
+                        <div className="col-md-5"><label className="labels">Block</label>
+                        <Select
+                        className="form-control form-control-sm"
+                      multiple
+                      value={leadinfo.block || []}
+                      onChange={handleallblockchange}
+                      style={{border:"none"}}
+                      renderValue={(selected) => selected.join(', ')}
+                      label="Block"
+                      
+                    >
+                      <MenuItem disabled value="">
+                        <em>---choose---</em>
+                      </MenuItem>
+                      {allblocks.map((project) => (
+                        <MenuItem key={project} value={project.block_name}>
+                          <Checkbox checked={(leadinfo.block || []).indexOf(project.block_name) > -1} />
+                          <ListItemText primary={project.block_name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    </div>
+                 
+                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                    </div>
+
+                       <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
+                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                        <div className="col-md-4"></div>
+                        <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                        <div className="col-md-4"></div>
+                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    
+                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
+                    </div>
+                    </div>
+                    
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    
+                   
+                    <div className="col-md-4"><label className="labels">Facing</label>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={facings || []}
+                    onChange={handlefacingChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   {/* <MenuItem disabled value="---select---">
+                    {leadData?.facing || '---select---'}
+                </MenuItem> */}
+                 <MenuItem value="select-all">
+                    <Checkbox checked={facings.length === facing.length} />
+                    <ListItemText
+                      primary={ '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                    />
+                  </MenuItem>
+                    {facing.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={facings.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Road</label>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={roads || []}
+                    onChange={handleroadChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   {/* <MenuItem disabled value="---select---">
+                    {leadData?.road || '---select---'}
+                </MenuItem> */}
+                <MenuItem value="select-all">
+                    <Checkbox checked={roads.length === road.length} />
+                    <ListItemText
+                      primary={ '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                    />
+                  </MenuItem>
+                    {road.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={roads.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Funding</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
+                    <option>Select</option>
+                   {
+                    funding.map(item=>
+                        (
+                            <option>{item}</option>
+                        )
+                    )
+                   }
+                        </select>
+                    </div>
+                   
+                    <div className="col-md-4"><label className="labels">Timeline</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
+                    <option>Select</option>
+                      {
+                        timeline.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                      }
+                        </select>
+                    </div>
+                  
+                
+                   
+                
+                    <div className="col-md-4"><label className="labels">Furnishing</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
+                    <option>Select</option>
+                       {
+                        furnishing.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+                        </select>
+                    </div>     
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-4"><label className="labels">Transaction Type</label>
+                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
+                    <option>Select</option>
+                     {
+                        transaction_type.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                     }
+                        </select>
+                    </div>
+
+                    
+                     
+                      {/* Conditionally render the progress bar */}
+                      {leadinfo.transaction_type === "Flexiable" && (
+                        <div className="col-md-8">
+                           <label className="labels">White Portion</label>
+                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
+                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
+                          <div className="progress-percentage">{Math.round(progress)}%</div>
+                        </div>
+                        </div>
+                      )}
+                  
+
+
+                    <div className="col-md-4"><label className="labels">Send Matched Deal</label>
+                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={matchdeals || []}
+                    onChange={handlematcheddealChange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                   <MenuItem value="select-all">
+                    <Checkbox checked={matchdeals.length === matchdeal.length} />
+                    <ListItemText
+                      primary={ '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                    />
+                  </MenuItem>
+                    {matchdeal.map((name) => (
+                        <MenuItem key={name} value={name}>
+                            <Checkbox checked={matchdeals.indexOf(name) > -1} />
+                            <ListItemText primary={name} />
+                        </MenuItem>
+                    ))}
+                </Select>
+                    </div> 
+                    
+                </div>
+
+
+
+            </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary"  onClick={addtolead} >
+                Add To Lead
+              </Button>
+              <Button variant="secondary" onClick={handleClose5}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
 
           <ToastContainer/>
         </div>

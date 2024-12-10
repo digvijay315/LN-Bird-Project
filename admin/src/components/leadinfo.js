@@ -636,7 +636,7 @@ const handleOwnerChange = (event) => {
                 }
             } catch (error) {
                 
-                toast.error(error.response.data)
+                toast.error(error)
             }
         }
 
@@ -1120,16 +1120,7 @@ const handleOwnerChange = (event) => {
                                       };
                                     
                                     
-                                    // const handleallunitschange = (event) => {
-                                       
-                                    //   const selectunit = event.target.value
-                                      
-                                        
-                                    //     setdeal((prev) => {
-                                    //       const updateunit = { ...prev, unit_number: selectunit };
-                                    //       return updateunit; // Return the updated state
-                                    //     });
-                                    //   };
+                               
                                     
                                     
                                       const handleallblockchange = (event) => {
@@ -1651,16 +1642,7 @@ return (
                         </select>
                         </div>
                         <div className="col-md-3"><label className="labels">Property Type</label>
-                        {/* <select className="form-control form-control-sm" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
-                    <option>Select</option>
-                        {
-                            property_type.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )   
-                            )
-                        }
-                        </select> */}
+                  
                          <Select
                          className="form-control form-control-sm" style={{border:"none"}}
                           multiple

@@ -1349,66 +1349,7 @@ const handleOwnerChange = (event) => {
         </div> 
 
    {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
-                  
-  {/* -----------------------------------------professional Details start------------------------------------------------------------------- */}
-
-        {/* <div className="col-md-12" id='profession' style={{display: "none",marginTop:"-80px",lineHeight:"30px"}}>
-            <div className="p-3 py-5">
-                <div className="d-flex justify-content-between align-items-center experience"><span>Profession Details</span></div><hr></hr>
-                <div className="row " >
-                    <div className="col-md-5"><label className="labels">Profession Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,profession_category:e.target.value})}>
-                                  <option>---Select profession category---</option>    
-                                  <option>Self Employed </option>
-                                  <option>Govt. Employee  </option>
-                                  <option>House Wife</option>
-                                  <option>Business Man</option>
-                                  <option>Retired</option>
-                                  <option>Student</option>
-                        </select>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,profession_subcategory:e.target.value})}>
-                                <option>---Select profession sub-category---</option>
-                                <option>Banker</option><option>Broker</option><option>Builder</option><option>Clerk</option>
-                                <option>Doctor</option><option>Contractor</option><option>Exporter</option><option>Accountant</option>
-                                <option>Advocate</option> <option>Archietect</option> <option>Artist</option> <option>Farmer</option>
-                                <option>Chef</option> <option>Teacher</option> <option>Scientist</option> <option>Software Developer</option>
-                                <option>Designer</option> <option>Author</option> <option>Nurse</option> <option>Baker</option>
-                                <option>Engineer</option> <option>Carpenter</option> <option>Construction</option> <option>Worker</option>
-                                <option>Sales Person</option> <option>Pilot</option> <option>Professor</option> <option>Author</option>
-                                <option>Clerk</option> <option>Peon</option> <option>Commision</option> <option>Agent(AAdati)</option>
-                                <option>Shop Keepar</option>
-                        </select>
-                    </div>
-                    <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,designation:e.target.value})}>
-                    <option>---Select designation---</option>
-                        <option>Cashier</option>
-                        <option>Partner</option>
-                        <option>Proprietor</option>
-                        <option>Developer</option>
-                        <option>HR</option>
-                        <option>Others</option>
-                        </select>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
-                    <option>---Select company---</option>
-                      {
-                        cdata.map((item)=>
-                        (
-                          <option>{item.name}</option>
-                        ))
-                      }
-                        </select>
-                    </div>
-                   
-              </div>
-              <div className="row mt-4">
-                    <div className="col-md-2"   onClick={prev1}><button className="form-control form-control-sm" >Prev</button></div>
-                    <div className="col-md-2" onClick={next2}  style={{marginLeft:"65%"}}><button className="form-control form-control-sm" >Next</button></div>
-                </div>
-             </div>
-           </div> */}
- {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
+ 
 
  {/*-------------------------------------------------- personal details start--------------------------------------------------------- */
  

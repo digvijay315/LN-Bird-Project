@@ -38,6 +38,7 @@ import Marketing from './components/marketing.js';
 import Dealdetails from './components/dealdetails.js';
 import FlipViewComponent from './components/demo';
 import AddContactForm from './components/demo';
+import Sortaddcontact from './components/sortaddcontact.js';
 
 function App() {
   return (
@@ -72,6 +73,7 @@ function App() {
       <Route path='/bookingdetailsdata' element={<Bookingdetails/>}/>
       <Route path='/marketing' element={<Marketing/>}/>
       <Route path='/dealdetails' element={<Dealdetails/>}/>
+      <Route path='/sortaddcontact' element={<Sortaddcontact/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

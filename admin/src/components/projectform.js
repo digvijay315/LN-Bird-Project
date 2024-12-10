@@ -3208,6 +3208,28 @@ const asianCountries = [
   >
     <span>Add Owner</span>
   </div>
+  <div
+    id="adddocuments"
+    style={{
+      cursor: 'pointer',
+      fontWeight: 'bold',
+    //  backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+    }}
+    
+  >
+    <span>Add Documents</span>
+  </div>
+  <div
+    id="upload"
+    style={{
+      cursor: 'pointer',
+      fontWeight: 'bold',
+    //  backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+    }}
+    
+  >
+    <span>Upload</span>
+  </div>
 </div>
 
               
@@ -3736,7 +3758,7 @@ const asianCountries = [
                               ))}
                             </ul>
                           )}
-                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={handleShow1}>+</button></div>
+                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button></div>
                     
                      <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
                      {selectedcontact1.length >= 0 && (

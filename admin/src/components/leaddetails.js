@@ -2571,13 +2571,16 @@ const handleallblockchange = (event) => {
 
                     <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,stage:e.target.value})}>
                     <option>{leadinfo?.stage || '---Select---'}</option>
-                        <option>Incoming</option>
+                    <option>Incoming</option>
                         <option>Prospect</option>
                         <option>Negotiation</option>
+                        <option>Oppurtunity</option>
                         <option>Booked</option>
-                        <option>Won</option>
-                        <option>Lost</option>
-                        <option>Closed</option>
+                        <optgroup label="Closed" style={{fontWeight:"bolder",color:"blue"}}>
+                        <option style={{color:"green"}}>Won</option>
+                        <option style={{color:"red"}}>Lost</option>
+                        <option style={{color:"gray"}}>Unqualified </option>
+                        </optgroup>
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Lead Type</label>
