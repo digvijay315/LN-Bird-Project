@@ -1107,33 +1107,63 @@ const handleOwnerChange = (event) => {
                                       
                                       
                                       const handleprojectchange = (event) => {
-                                     
-                                      
-                                        const selectproject = event.target.value
-                                      
+                                        const selectproject = event.target.value;
                                     
-                                        setleadinfo((prev) => {
-                                          const updateproject = { ...prev, area2: selectproject };
-                                           fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-                                          return updateproject; // Return the updated state
-                                        });
+                                        // If the "Select All" option is selected
+                                        if (selectproject.includes('select-all')) {
+                                          // If all projects are already selected, deselect all
+                                          if (leadinfo.area2.length === allproject.length) {
+                                            setleadinfo((prev) => {
+                                              const updateproject = { ...prev, area2: [] }; // Deselect all
+                                              return updateproject;
+                                            });
+                                          } else {
+                                            // Select all projects
+                                            setleadinfo((prev) => {
+                                              const updateproject = { ...prev, area2: allproject }; // Select all
+                                              fetchdatabyprojectname(allproject); // Fetch data with the selected projects
+                                              return updateproject;
+                                            });
+                                          }
+                                        } else {
+                                          // Handle individual project selection/deselection
+                                          setleadinfo((prev) => {
+                                            const updateproject = { ...prev, area2: selectproject };
+                                            fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+                                            return updateproject;
+                                          });
+                                        }
                                       };
-                                    
                                     
                                
                                     
-                                    
                                       const handleallblockchange = (event) => {
-                                         
-                                        
-                                          const selectblocks = event.target.value
-                                        
-                                           
+                                        const selectblocks = event.target.value;
+                                    
+                                        // If the "Select All" option is selected
+                                        if (selectblocks.includes("select-all")) {
+                                          // If all blocks are selected, deselect all
+                                          if (leadinfo.block.length === allblocks.length) {
+                                            setleadinfo((prev) => {
+                                              const updateblock = { ...prev, block: [] }; // Deselect all
+                                              return updateblock;
+                                            });
+                                          } else {
+                                            // Select all blocks
+                                            const allBlockNames = allblocks.map(project => project.block_name);
+                                            setleadinfo((prev) => {
+                                              const updateblock = { ...prev, block: allBlockNames }; // Select all
+                                              return updateblock;
+                                            });
+                                          }
+                                        } else {
+                                          // Handle individual block selection or deselection
                                           setleadinfo((prev) => {
                                             const updateblock = { ...prev, block: selectblocks };
-                                            return updateblock; // Return the updated state
+                                            return updateblock;
                                           });
-                                        };
+                                        }
+                                      }
 
 
 
@@ -1839,50 +1869,58 @@ return (
                     ))}
                   </select>
                         </div>
-                        <div className="col-md-5"><label className="labels">Area/Project</label>
-                        <Select
+                        <div className="col-md-5">
+                      <label className="labels">Area/Project</label>
+                      <Select
                         className="form-control form-control-sm"
-                      multiple
-                      value={leadinfo.area2}
-                      onChange={handleprojectchange}
-                      style={{border:"none"}}
-                      renderValue={(selected) => selected.join(', ')}
-                      label="Area/Project"
-                      
-                    >
-                      <MenuItem disabled value="">
-                        <em>---choose---</em>
-                      </MenuItem>
-                      {allproject.map((project) => (
-                        <MenuItem key={project} value={project}>
-                          <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
-                          <ListItemText primary={project} />
+                        multiple
+                        value={leadinfo.area2}
+                        onChange={handleprojectchange}
+                        style={{ border: 'none' }}
+                        renderValue={(selected) => selected.join(', ')}
+                        label="Area/Project"
+                      >
+                        {/* "Select All" MenuItem */}
+                        <MenuItem value="select-all">
+                          <Checkbox checked={leadinfo.area2.length === allproject.length} />
+                          <ListItemText primary="--- Select All ---" />
                         </MenuItem>
-                      ))}
-                    </Select>
-                        </div>
-                        <div className="col-md-5"><label className="labels">Block</label>
-                        <Select
-                        className="form-control form-control-sm"
-                      multiple
-                      value={leadinfo.block}
-                      onChange={handleallblockchange}
-                      style={{border:"none"}}
-                      renderValue={(selected) => selected.join(', ')}
-                      label="Block"
-                      
-                    >
-                      <MenuItem disabled value="">
-                        <em>---choose---</em>
-                      </MenuItem>
-                      {allblocks.map((project) => (
-                        <MenuItem key={project} value={project.block_name}>
-                          <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
-                          <ListItemText primary={project.block_name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
+
+                        {/* Individual Project MenuItems */}
+                        {allproject.map((project) => (
+                          <MenuItem key={project} value={project}>
+                            <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
+                            <ListItemText primary={project} />
+                          </MenuItem>
+                        ))}
+                      </Select>
                     </div>
+                        <div className="col-md-5">
+                        <label className="labels">Block</label>
+                        <Select
+                          className="form-control form-control-sm"
+                          multiple
+                          value={leadinfo.block}
+                          onChange={handleallblockchange}
+                          style={{ border: "none" }}
+                          renderValue={(selected) => selected.join(', ')}
+                          label="Block"
+                        >
+                          {/* "Select All" MenuItem */}
+                          <MenuItem value="select-all">
+                            <Checkbox checked={leadinfo.block.length === allblocks.length} />
+                            <ListItemText primary="--- Select All ---" />
+                          </MenuItem>
+
+                          {/* Individual Block MenuItems */}
+                          {allblocks.map((project) => (
+                            <MenuItem key={project.block_name} value={project.block_name}>
+                              <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
+                              <ListItemText primary={project.block_name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </div>
                  
                         <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
                     </div>

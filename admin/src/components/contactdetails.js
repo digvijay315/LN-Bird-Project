@@ -2466,7 +2466,7 @@ console.log(leadinfo);
             <Sidebar1/>
             <div className={`flip-container ${isFlipped ? 'flipped' : ''}`}>
             <div id="contactlistview" className="flip-card-front">
-      <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+      <div style={{marginTop:"60px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Contact </h3>
         <Tooltip title="Export Data.." arrow>

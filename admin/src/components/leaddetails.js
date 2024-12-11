@@ -498,6 +498,7 @@ const[countall,setcountall]=useState('')
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
+        lineHeight:"15px"
       },
       [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
@@ -1583,16 +1584,32 @@ useEffect(() => {
 
 
 const handleprojectchange = (event) => {
+  const selectproject = event.target.value;
 
-
-  const selectproject = event.target.value
-
-
-  setleadinfo((prev) => {
-    const updateproject = { ...prev, area2: selectproject };
-     fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-    return updateproject; // Return the updated state
-  });
+  // If the "Select All" option is selected
+  if (selectproject.includes('select-all')) {
+    // If all projects are already selected, deselect all
+    if (leadinfo.area2.length === allproject.length) {
+      setleadinfo((prev) => {
+        const updateproject = { ...prev, area2: [] }; // Deselect all
+        return updateproject;
+      });
+    } else {
+      // Select all projects
+      setleadinfo((prev) => {
+        const updateproject = { ...prev, area2: allproject }; // Select all
+        fetchdatabyprojectname(allproject); // Fetch data with the selected projects
+        return updateproject;
+      });
+    }
+  } else {
+    // Handle individual project selection/deselection
+    setleadinfo((prev) => {
+      const updateproject = { ...prev, area2: selectproject };
+      fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updateproject;
+    });
+  }
 };
 
 
@@ -1608,18 +1625,34 @@ const handleprojectchange = (event) => {
 //   };
 
 
-const handleallblockchange = (event) => {
-   
-  
-    const selectblocks = event.target.value
-  
      
+const handleallblockchange = (event) => {
+  const selectblocks = event.target.value;
+
+  // If the "Select All" option is selected
+  if (selectblocks.includes("select-all")) {
+    // If all blocks are selected, deselect all
+    if (leadinfo.block.length === allblocks.length) {
+      setleadinfo((prev) => {
+        const updateblock = { ...prev, block: [] }; // Deselect all
+        return updateblock;
+      });
+    } else {
+      // Select all blocks
+      const allBlockNames = allblocks.map(project => project.block_name);
+      setleadinfo((prev) => {
+        const updateblock = { ...prev, block: allBlockNames }; // Select all
+        return updateblock;
+      });
+    }
+  } else {
+    // Handle individual block selection or deselection
     setleadinfo((prev) => {
       const updateblock = { ...prev, block: selectblocks };
-      return updateblock; // Return the updated state
+      return updateblock;
     });
-  };
-
+  }
+}
 
   const asianCountries = [
     "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
@@ -2221,7 +2254,7 @@ const handleallblockchange = (event) => {
     <div>
       <Header1/>
       <Sidebar1/>
-      <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+      <div style={{marginTop:"60px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={()=>window.location.reload()}>Leads</h3>
         <Tooltip title="Export Data.." arrow>
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
@@ -2377,11 +2410,11 @@ const handleallblockchange = (event) => {
               )}
             </div>
 
-      <div style={{marginLeft:"80px",marginTop:"0px",backgroundColor:"white"}}>
-      <TableContainer component={Paper} style={{ maxHeight: '400px', overflow: 'auto' }}>
+      <div style={{marginLeft:"80px",marginTop:"-20px",backgroundColor:"white",top:"100px",position:"sticky",zIndex:10}}>
+      <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
-      <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
-        <TableRow>
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow >
           <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <input
               type="checkbox"
@@ -2913,30 +2946,58 @@ const handleallblockchange = (event) => {
                     ))}
                   </select>
                         </div>
-                        <div className="col-md-5"><label className="labels">Area/Project</label>
-                        <select className="form-control form-control-sm" onChange={handleprojectchange}>
-                        <option>{leadinfo.area2}</option>
-                        {
-                          allproject.map((project)=>
-                          (
-                            <option>{project}</option>
-                          ))
-                        }
-                        </select>
-                        </div>
-                        <div className="col-md-5"><label className="labels">Block</label>
-                        <select className="form-control form-control-sm"  onChange={handleallblockchange} >
-                        <option>{leadinfo.block}</option>
-                    {
-                      allblocks.map((block)=>
-                      (
-                        <option>{block.block_name}</option>
-                      ))
-                    }
-                      
-  
-                </select>
-                        </div>
+                        <div className="col-md-5">
+                      <label className="labels">Area/Project</label>
+                      <Select
+                        className="form-control form-control-sm"
+                        multiple
+                        value={leadinfo.area2}
+                        onChange={handleprojectchange}
+                        style={{ border: 'none' }}
+                        renderValue={(selected) => selected.join(', ')}
+                        label="Area/Project"
+                      >
+                        {/* "Select All" MenuItem */}
+                        <MenuItem value="select-all">
+                          <Checkbox checked={leadinfo.area2.length === allproject.length} />
+                          <ListItemText primary="--- Select All ---" />
+                        </MenuItem>
+
+                        {/* Individual Project MenuItems */}
+                        {allproject.map((project) => (
+                          <MenuItem key={project} value={project}>
+                            <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
+                            <ListItemText primary={project} />
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </div>
+                    <div className="col-md-5">
+                        <label className="labels">Block</label>
+                        <Select
+                          className="form-control form-control-sm"
+                          multiple
+                          value={leadinfo.block}
+                          onChange={handleallblockchange}
+                          style={{ border: "none" }}
+                          renderValue={(selected) => selected.join(', ')}
+                          label="Block"
+                        >
+                          {/* "Select All" MenuItem */}
+                          <MenuItem value="select-all">
+                            <Checkbox checked={leadinfo.block.length === allblocks.length} />
+                            <ListItemText primary="--- Select All ---" />
+                          </MenuItem>
+
+                          {/* Individual Block MenuItems */}
+                          {allblocks.map((project) => (
+                            <MenuItem key={project.block_name} value={project.block_name}>
+                              <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
+                              <ListItemText primary={project.block_name} />
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </div>
                         <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" value={leadinfo.specific_unit} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
                     </div>
 

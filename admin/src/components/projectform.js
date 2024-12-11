@@ -223,6 +223,7 @@ function Projectform() {
                                       document.getElementById("unitdetails1").style.display="flex"
                                       document.getElementById("unitlocation").style.display="none"
                                       document.getElementById("ownerdetails").style.display="none"
+                                           document.getElementById("uploadmedia").style.display="none"
                                   
                                     
                                       // document.getElementById("unitdetail").style.color="green"
@@ -237,6 +238,7 @@ function Projectform() {
                                         document.getElementById("unitdetails1").style.display="none"
                                         document.getElementById("unitlocation").style.display="flex"
                                         document.getElementById("ownerdetails").style.display="none"
+                                        document.getElementById("uploadmedia").style.display="none"
                                     
                                       
                                         // document.getElementById("unitdetail").style.color="black"
@@ -250,13 +252,20 @@ function Projectform() {
                                           document.getElementById("unitdetails1").style.display="none"
                                           document.getElementById("unitlocation").style.display="none"
                                           document.getElementById("ownerdetails").style.display="flex"
+                                          document.getElementById("uploadmedia").style.display="none"
                                       
-                                        
-                                          // document.getElementById("unitdetail").style.color="black"
-                                          // document.getElementById("unitlocationdetails").style.color="black"
-                                          // document.getElementById("ownerdetails").style.color="green"
-                                          
+                                           
                                         }
+                                        const unitdetail5=()=>
+                                          {
+                                            setActiveUnit(5);
+                                            document.getElementById("unitdetails1").style.display="none"
+                                            document.getElementById("unitlocation").style.display="none"
+                                            document.getElementById("ownerdetails").style.display="none"
+                                              document.getElementById("uploadmedia").style.display="inline-block"
+                                        
+                                             
+                                          }
                   const aminitiesdetails=()=>
                     {
                           document.getElementById("basicdetails1").style.display="none"
@@ -1338,7 +1347,130 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
                                                                           ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
-                                                                          relation:""})
+                                                                          relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[]})
+
+
+                                                                          function addFnunit1() {
+                                                                            setunits({
+                                                                              ...units,
+                                                                              s_no1: [...(units.s_no1 || []), ''],  // Ensure s_no1 is an array
+                                                                              url: [...(units.url || []), ''],        // Ensure url is an array
+                                                                              action11: [...(units.action11 || []), ''] // Ensure action1 is an array
+                                                                            });
+                                                                          }
+
+                                                                          const deleteallunit1=(index)=>
+                                                                            {
+                                                                              // handleDeletesno(index)
+                                                                              // handleDeletepreview(index)
+                                                                              const newsno1 = units.s_no1.filter((_, i) => i !== index);
+                                                                              const newurl = units.url.filter((_, i) => i !== index);
+                                                                              const newaction1 = units.action11.filter((_, i) => i !== index);
+                                                                              setunits({
+                                                                                ...units,
+                                                                                s_no1: newsno1,
+                                                                                url: newurl,
+                                                                                action11: newaction1
+                                                                              });
+                                                                            }
+
+
+                                                                          const handlesno1change = (index, event) => {
+                                                                            const newsno1 = [...units.s_no1];
+                                                                            newsno1[index] = event.target.value;
+                                                                            setunits({
+                                                                              ...units,
+                                                                              s_no1: newsno1
+                                                                            });
+                                                                          };
+                                                                          const handleurlChange = (index, event) => {
+                                                                            const newurl = [...units.url];
+                                                                            newurl[index] = event.target.value;
+                                                                            setunits({
+                                                                              ...units,
+                                                                              url: newurl
+                                                                            });
+                                                                          };
+
+
+                                                                          function addFnunit() {
+                                                                              
+                                                                            setunits({
+                                                                              ...units,
+                                                                              s_no: [...(units.s_no || []), ''],           // Ensure s_no is an array
+                                                                              preview: [...(units.preview || []), ''],       // Ensure preview is an array
+                                                                              descriptions: [...(units.descriptions || []), ''], // Ensure descriptions is an array
+                                                                              category: [...(units.category || []), ''],     // Ensure category is an array
+                                                                              action10: [...(units.action10 || []), '']          // Ensure action is an array
+                                                                            });
+                                                                          }
+                                                                          
+                                                                          const deleteallunit=(index)=>
+                                                                          {
+                                                                            // handleDeletesno(index)
+                                                                            // handleDeletepreview(index)
+                                                                            const newsno = units.s_no.filter((_, i) => i !== index);
+                                                                            const newpreview = units.preview.filter((_, i) => i !== index);
+                                                                            const newdescription = units.descriptions.filter((_, i) => i !== index);
+                                                                            const newcategory = units.category.filter((_, i) => i !== index);
+                                                                            const newaction = units.action10.filter((_, i) => i !== index);
+                                                                            setunits({
+                                                                              ...units,
+                                                                              s_no: newsno,
+                                                                              preview: newpreview,
+                                                                              descriptions: newdescription,
+                                                                              category: newcategory,
+                                                                              action10: newaction
+                                                                            });
+                                                                          }
+
+
+                                                                          
+                                                                          const handlesnochange = (index, event) => {
+                                                                            const newsno = [...units.s_no];
+                                                                            newsno[index] = event.target.value;
+                                                                            setunits({
+                                                                              ...units,
+                                                                              s_no: newsno
+                                                                            });
+                                                                          };
+                                                                          const handlepreviewchange = (index, event) => {
+                                                                            
+                                                                            const newpreview = [...units.preview];
+                                                                            const files = Array.from(event.target.files);
+                                                                            const previewUrls = files.map(file => URL.createObjectURL(file));
+                                                                            newpreview[index] = {
+                                                                              files: files,
+                                                                              previewUrls: previewUrls
+                                                                            };
+                                                                            setunits({
+                                                                              ...units,
+                                                                              preview: newpreview
+                                                                            });
+                                                                          };
+                                                                          
+                                                                          
+                                                                          const handledescriptionchange = (index, event) => {
+                                                                            const newdescription = [...units.descriptions];
+                                                                            newdescription[index] = event.target.value;
+                                                                            setunits({
+                                                                              ...units,
+                                                                              descriptions: newdescription
+                                                                            });
+                                                                          };
+                                                                          const handlecategorychange = (index, event) => {
+                                                                            const newcategory = [...units.category];
+                                                                            newcategory[index] = event.target.value;
+                                                                            setunits({
+                                                                              ...units,
+                                                                              category: newcategory
+                                                                            });
+                                                                          };
+                                                                          
+                                                                          
+                                                                      
+                                                                     
+
 
                                               const addunit = () => {
 
@@ -3224,9 +3356,9 @@ const asianCountries = [
     style={{
       cursor: 'pointer',
       fontWeight: 'bold',
-    //  backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+      backgroundColor: activeUnit === 5 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
     }}
-    
+    onClick={unitdetail5}
   >
     <span>Upload</span>
   </div>
@@ -3858,8 +3990,187 @@ const asianCountries = [
                 </div>
             )}
             </div>
-                     </div>
-                  </div>
+            </div>
+            </div>
+
+
+            <div id="uploadmedia" style={{padding:"5px",display:"none"}}>
+               
+               <div className="d-flex justify-content-between align-items-center mb-3">
+                     <h6 className="text-right">Upload Images</h6>
+                 </div><hr></hr>
+                 <div className="row mt-2">
+                 <table style={{marginLeft:"25px"}}>
+                 <thead >
+                   <tr>
+                     <th style={{width:"100px"}}>#</th>
+                     <th style={{width:"400px",textAlign:"center"}}>Preview</th>
+                     <th style={{width:"300px",textAlign:"center"}}>Description</th>
+                     <th style={{width:"300px",textAlign:"center"}}>Category</th>
+                     <th style={{width:"150px",textAlign:"center"}}>Action</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       <tr>
+                       <td>
+                       {
+                       Array.isArray(units.s_no)?
+                       units.s_no.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                   <input 
+                                     type="text"
+                                     className="form-control form-control-sm"
+                                     
+                                     onChange={(event) => handlesnochange(index, event)}
+                                   />
+                                   
+                                 </div>
+                               )):[]}
+                       </td>
+                       <td>
+                       {
+                       Array.isArray(units.preview)?
+                       units.preview.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                   <input 
+                                   name="preview"
+                                     type="file"
+                                     className="form-control form-control-sm"
+                                     multiple
+                                     onChange={(event) => handlepreviewchange(index, event)}
+                                   />
+                                     {name.previewUrls && name.previewUrls.map((url, idx) => (
+                                         <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                                       ))}
+                                 </div>
+                               )):[]}
+                       </td>
+                       <td>
+                       {Array.isArray(units.descriptions)?
+                       units.descriptions.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                   <input 
+                                     type="text"
+                                     className="form-control form-control-sm"
+                                   
+                                     onChange={(event) => handledescriptionchange(index, event)}
+                                   />
+                                   
+                                 </div>
+                               )):[]}
+                       </td>
+                       <td>
+                       {Array.isArray(units.category)?
+                       units.category.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                   <select className="form-control form-control-sm" required="true" onChange={(event) => handlecategorychange(index, event)}>
+                                       <option>select</option>
+                                       <option>Bedroom</option>
+                                       <option>Hall</option>
+                                       <option>Kitchen</option>
+                                       <option>Balcony</option>
+                                       <option>Washroom</option>
+                                       <option>Pooja Room</option>
+                                       <option>Dining Room</option>
+                                       <option>Drawing Room</option>
+                                       </select>
+                                 </div>
+                               )):[]}
+                       </td>
+                       <td>
+                       {Array.isArray(units.action10)?
+                       units.action10.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                 
+                                   <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                 </div>
+                               )):[]}
+                       </td>
+
+                       </tr>
+                     </tbody>
+               </table>
+                   </div>
+                   <div className="row mt-4">
+                   <div className="col-md-3" style={{marginLeft:"70%"}} onClick={addFnunit}><button className="form-control form-control-sm">Add Image</button></div>
+                 </div>
+                 <div className="d-flex justify-content-between align-items-center mb-3">
+                     <h6 className="text-right">Upload Videos</h6>
+                 </div><hr></hr>
+                 <div className="row mt-2">
+                 <table style={{marginLeft:"25px"}}>
+                 <thead >
+                   <tr>
+                     <th style={{width:"100px",textAlign:"center"}}>SR.NO.</th>
+                     <th style={{width:"950px",textAlign:"center"}}>URL</th>
+                     <th style={{width:"150px",textAlign:"center"}}>Action</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       <tr>
+                       <td>
+                       {Array.isArray(units.s_no1)?
+                       units.s_no1.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                   <input 
+                                     type="text"
+                                     className="form-control form-control-sm"
+                                     value={name}
+                                     onChange={(event) => handlesno1change(index, event)}
+                                   />
+                               
+                                 </div>
+                               )):[]}
+                       </td>
+                       <td>
+                       {Array.isArray(units.url)?
+                       units.url.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                   <input 
+                                     type="text"
+                                     className="form-control form-control-sm"
+                                     value={name}
+                                     onChange={(event) => handleurlChange(index, event)}
+                                   />
+                                   
+                                 </div>
+                               )):[]}
+                               
+                       </td>
+                       <td>
+                       {Array.isArray(units.action11)?
+                       units.action11.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                 
+                                   <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                 </div>
+                               )):[]}
+                       </td>
+                       </tr>
+                     </tbody>
+               </table>
+              
+               </div>
+                 <div className="row mt-4">
+                 <div className="col-md-3" style={{marginLeft:"70%"}} onClick={addFnunit1}><button className="form-control form-control-sm">Add Video Link</button></div>
+                
+                 
+                 <div className="col-md-12"><hr></hr></div>
+           
+                               
+                             
+                                
+                                 <div className="col-md-2"></div>
+                 
+                                 </div>
+               </div>
+
+
+
+
+
+                     
+               
                
                 
           </Modal.Body>
