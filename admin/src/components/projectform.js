@@ -219,11 +219,14 @@ function Projectform() {
                                   const unitdetail1=()=>
                                     
                                     {
+                                      setModalSize('lg');
                                       setActiveUnit(1);
                                       document.getElementById("unitdetails1").style.display="flex"
                                       document.getElementById("unitlocation").style.display="none"
                                       document.getElementById("ownerdetails").style.display="none"
-                                           document.getElementById("uploadmedia").style.display="none"
+                                      document.getElementById("uploadmedia").style.display="none"
+                                      document.getElementById("documentform").style.display="none"
+                                           
                                   
                                     
                                       // document.getElementById("unitdetail").style.color="green"
@@ -234,11 +237,13 @@ function Projectform() {
                                     }
                                     const unitdetail2=()=>
                                       {
+                                        setModalSize('lg');
                                         setActiveUnit(2);
                                         document.getElementById("unitdetails1").style.display="none"
                                         document.getElementById("unitlocation").style.display="flex"
                                         document.getElementById("ownerdetails").style.display="none"
                                         document.getElementById("uploadmedia").style.display="none"
+                                        document.getElementById("documentform").style.display="none"
                                     
                                       
                                         // document.getElementById("unitdetail").style.color="black"
@@ -248,24 +253,42 @@ function Projectform() {
                                       }
                                       const unitdetail3=()=>
                                         {
+                                          setModalSize('lg');
                                           setActiveUnit(3);
                                           document.getElementById("unitdetails1").style.display="none"
                                           document.getElementById("unitlocation").style.display="none"
                                           document.getElementById("ownerdetails").style.display="flex"
                                           document.getElementById("uploadmedia").style.display="none"
+                                          document.getElementById("documentform").style.display="none"
                                       
                                            
                                         }
+
+                                        const unitdetail4=()=>
+                                          {
+                                            setModalSize('xl');
+                                            setActiveUnit(4);
+                                            document.getElementById("unitdetails1").style.display="none"
+                                            document.getElementById("unitlocation").style.display="none"
+                                            document.getElementById("ownerdetails").style.display="none"
+                                            document.getElementById("documentform").style.display="inline-block"
+                                            document.getElementById("uploadmedia").style.display="none"
+                                           
+                                          }
+
                                         const unitdetail5=()=>
                                           {
+                                            setModalSize('lg');
                                             setActiveUnit(5);
                                             document.getElementById("unitdetails1").style.display="none"
                                             document.getElementById("unitlocation").style.display="none"
                                             document.getElementById("ownerdetails").style.display="none"
-                                              document.getElementById("uploadmedia").style.display="inline-block"
+                                            document.getElementById("documentform").style.display="none"
+                                            document.getElementById("uploadmedia").style.display="inline-block"
                                         
                                              
                                           }
+                                     
                   const aminitiesdetails=()=>
                     {
                           document.getElementById("basicdetails1").style.display="none"
@@ -507,6 +530,86 @@ function Projectform() {
                   });
                 };
               
+          
+                function addFn12() {
+                  
+     
+                  setunits({
+                    ...units,
+                    document_no:[...units.document_no,''],
+                    document_name: [...units.document_name, ''],
+                    document_Date: [...units.document_Date, ''],
+                    pic: [...units.pic, ''],
+                    linkded_contact: [...units.linkded_contact, ''],
+                    action12: [...units.action12, '']
+                  });
+                }
+              
+                const deleteall12=(index)=>
+                  {
+                    const newdocument_no = units.document_no.filter((_, i) => i !== index);
+                    const newdocumentname = units.document_name.filter((_, i) => i !== index);
+                    const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
+                    const newpic = units.pic.filter((_, i) => i !== index);
+                    const newlinkedcontact = units.linkded_contact.filter((_, i) => i !== index);
+                    const newaction12=units.action12.filter((_,i) => i !== index);
+                    
+                    setunits({
+                      ...units,
+                      document_no:newdocument_no,
+                      document_name: newdocumentname,
+                      document_Date: newdocumentdate,
+                      pic: newpic,
+                      linkded_contact: newlinkedcontact,
+                      action12:newaction12
+                    });
+                  }
+                  const handledocumentnochange = (index, event) => {
+                    const newdocumentno = [...units.document_no];
+                    newdocumentno[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      document_no: newdocumentno
+                    });
+                  };
+                  const handledocumentnamechange = (index, event) => {
+                    const newdocumentname = [...units.document_name];
+                    newdocumentname[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      document_name: newdocumentname
+                    });
+                  };
+                  const handledocumentdatechange = (index, event) => {
+                    const newdocumentdate = [...units.document_Date];
+                    newdocumentdate[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      document_Date: newdocumentdate
+                    });
+                  };
+                  const handlelinkedcontactchange = (index, event) => {
+                    const newlinkedcontact = [...units.linkded_contact];
+                    newlinkedcontact[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      linkded_contact: newlinkedcontact
+                    });
+                  };
+                  const handlepicchange1 = (index, event) => {
+                    const newpic1 = [...units.pic];
+                    const files = Array.from(event.target.files);
+                    newpic1[index] = {files:files}
+                    setunits({
+                      ...units,
+                      pic: newpic1
+                    });
+                  };
+               
+
+
+
+
                 function addFn4() {
      
                   setpayments({
@@ -1007,6 +1110,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                         setshow2(true);
                        
                       }
+
+                      const [modalSize, setModalSize] = useState('lg');
                       const [show3, setshow3] = useState(false);
     
                       const handleClose3 = () => setshow3(false);
@@ -1347,7 +1452,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
                                                                           ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
-                                                                          relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[]})
+                                                                          relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
+                                                                          document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
 
 
                                                                           function addFnunit1() {
@@ -2308,6 +2414,73 @@ const asianCountries = [
 ];
 
 
+const handleSuggestionClick1 = (contact, index) => {
+  setShowSuggestions(false); 
+  const fullContact = `${contact.title} ${contact.first_name} ${contact.last_name}`;
+  setunits((prevUnits) => {
+    const updatedLinkedContacts = [...prevUnits.linkded_contact];
+    updatedLinkedContacts[index] = fullContact; // Update the specific contact at the index
+    return {
+      ...prevUnits,
+      linkded_contact: updatedLinkedContacts,
+    };
+  });
+  
+}
+
+
+// useEffect(() => {
+//   // Check if units.linkded_contact is an array and has at least one element
+//   if (Array.isArray(units.linkded_contact) && units.linkded_contact.length > 0) {
+//     // Convert the array of contacts to lowercase and check if any match
+//     const results = allSuggestions.filter(contact =>
+//       units.linkded_contact.some(linkedContact =>
+//         linkedContact?.toLowerCase().includes(contact.first_name?.toLowerCase())
+//       )
+//     );
+//     setFilteredSuggestions(results);
+//     setShowSuggestions(true);
+//   } else {
+//     setShowSuggestions(false);
+//   }
+// }, [units.linkded_contact, allSuggestions]);
+
+useEffect(() => {
+  console.log('Checking units.linkded_contact:', units.linkded_contact);
+  console.log('Checking allSuggestions:', allSuggestions);
+
+  // Ensure that units.linkded_contact is an array before proceeding
+  if (Array.isArray(units.linkded_contact)) {
+    // Filter out empty strings from units.linkded_contact and only filter when there's some text
+    const validContacts = units.linkded_contact.filter(contact => contact.trim() !== '');
+
+    if (validContacts.length > 0) {
+      // Partial matching logic: check if the input text is a substring of any first_name in allSuggestions
+      const results = allSuggestions.filter(contact =>
+        validContacts.some(linkedContact =>
+          typeof linkedContact === 'string' &&
+          linkedContact.trim().toLowerCase() // Matching against lowercase version of the input text
+            .split(" ").some(word => contact.first_name?.toLowerCase().includes(word)) // Matching against each word
+        )
+      );
+
+      console.log('Filtered Results:', results);  // Log filtered results
+
+      setFilteredSuggestions(results);
+      setShowSuggestions(results.length > 0);  // Show suggestions only if results exist
+    } else {
+      setShowSuggestions(false);
+    }
+  } else {
+    // If units.linkded_contact is not an array, reset or handle it as needed
+    console.warn('Expected an array for units.linkded_contact, but received:', units.linkded_contact);
+    setShowSuggestions(false); // Hide suggestions if data is malformed
+  }
+}, [units.linkded_contact, allSuggestions]);
+
+
+
+console.log(project.add_unit);
 
 
 
@@ -3295,7 +3468,7 @@ const asianCountries = [
     </Table>
     </TableContainer>
 
-    <Modal show={show3} onHide={handleClose3} size='lg'>
+    <Modal show={show3} onHide={handleClose3} size={modalSize}>
             <Modal.Header>
               <Modal.Title>Add Unit</Modal.Title>
             </Modal.Header>
@@ -3345,9 +3518,9 @@ const asianCountries = [
     style={{
       cursor: 'pointer',
       fontWeight: 'bold',
-    //  backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+      backgroundColor: activeUnit === 4 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
     }}
-    
+    onClick={unitdetail4}
   >
     <span>Add Documents</span>
   </div>
@@ -4149,7 +4322,7 @@ const asianCountries = [
                        </tr>
                      </tbody>
                </table>
-              
+
                </div>
                  <div className="row mt-4">
                  <div className="col-md-3" style={{marginLeft:"70%"}} onClick={addFnunit1}><button className="form-control form-control-sm">Add Video Link</button></div>
@@ -4165,7 +4338,145 @@ const asianCountries = [
                                  </div>
                </div>
 
+               <div id="documentform" style={{padding:"5px",display:"none"}}>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                </div><hr></hr>
 
+             
+
+                <div className="row mt-2">
+
+                <div className='col-md-3' ><label className='labels'>Document Name</label>
+                    {
+                      Array.isArray(units.document_name) ?
+                      units.document_name.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" onChange={(event)=>handledocumentnamechange(index,event)} style={{marginTop:"5px"}}>
+                        <option>Choose</option>
+                        <option>Aadhar Card</option>
+                        <option>Pan Card</option>
+                        <option>Voter Id</option>
+                        <option>Passport</option>
+                        <option>Driving Licence</option>
+                        <option>Other</option>
+                        </select>
+                        
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-2' ><label className='labels'>Document No</label>
+                    {
+                      Array.isArray(units.document_no) ?
+                      units.document_no.map((item,index)=>
+                      (
+                        <input type="text" className="form-control form-control-sm"onChange={(event)=>handledocumentnochange(index,event)} style={{marginTop:"5px"}} />
+                        
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-2' ><label className='labels'>Date</label>
+                    {
+                      Array.isArray(units.document_Date) ?
+                      units.document_Date.map((item,index)=>
+                      (
+                        <input type="date" className="form-control form-control-sm"onChange={(event)=>handledocumentdatechange(index,event)} style={{marginTop:"5px"}} />
+                        
+                      )):[]
+                    }
+                    </div>
+
+                    {/* <div className='col-md-2' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Linked Contact</label>
+                    {
+                      Array.isArray(units.linkded_contact) ?
+                      units.linkded_contact.map((item,index)=>
+                      (
+                        <input type="text" className="form-control form-control-sm" value={units.linkded_contact} onChange={(event)=>handlelinkedcontactchange(index,event)} style={{marginTop:"5px"}} />
+                        
+                      )):[]
+                    }
+                    </div> */}
+                        
+
+                        {/* <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={documents.linkded_contact}  placeholder="Type here For Search in Contact" required="true" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div> */}
+                        {showSuggestions  && filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-list">
+                              {filteredSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick1(suggestion,index)}>
+                                  {suggestion.title} {suggestion.first_name} {suggestion.last_name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
+
+                      <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
+                    {
+                      Array.isArray(units.pic) ?
+                      units.pic.map((item,index)=>
+                      (
+                        <input type="file" className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
+                        
+                      )):[]
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"70px"}}>
+                    {
+                       units.action12.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                        
+                        <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={addFn12}>+</button></div>
+                        {/* <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+     
+    <TableHead>
+        <TableRow>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Serial</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman"}}>Document Name</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Linked Contact</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Number</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Date</StyledTableCell>
+          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         Array.isArray(project.add_unit)?
+         project.add_unit.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell >
+             {index+1}
+            </StyledTableCell>
+            <StyledTableCell  >
+            {item.document_name}
+            </StyledTableCell>
+            <StyledTableCell  >
+            {item.linkded_contact}
+            </StyledTableCell>
+            <StyledTableCell  >
+            {item.document_no}
+            </StyledTableCell>
+            <StyledTableCell >
+            {item.document_Date}
+            </StyledTableCell>
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+            <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+            </StyledTableCell>
+          </StyledTableRow>
+        )):[]}
+      </tbody>
+    </Table>
+    </TableContainer> */}
+                  
+                  </div>
+              </div>
 
 
 
