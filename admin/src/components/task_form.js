@@ -895,13 +895,10 @@ const handleallunitschange2 = (event) => {
                         </div>
                         <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
-                        {
-                            status.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )
-                            )
-                        }
+                       <option>Read</option>
+                       <option>Delivered</option>
+                       <option>Bounced</option>
+                       <option>Undelivered</option>
                         </select>
                         </div>
                     <div className="col-md-4"></div>
@@ -1063,13 +1060,9 @@ const handleallunitschange2 = (event) => {
                     
                     <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
-                        {
-                            status.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )
-                            )
-                        }
+                       <option>Conducted</option>
+                       <option>Did Not Visit</option>
+                       <option>Not Intersted</option>
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Select Intersted Inventory</label><select className="form-control form-control-sm" required="true" >
@@ -1174,7 +1167,10 @@ const handleallunitschange2 = (event) => {
 
                     <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,reason:e.target.value})}>
                     <option>Select</option>
-                        <option>Mr.</option>
+                        <option>Negotiation</option>
+                        <option>Discuss</option>
+                        <option>Agreement</option>
+                        <option>Token</option>
                         </select>
                         </div>
                     <div className="col-md-8"></div>
@@ -1231,24 +1227,17 @@ const handleallunitschange2 = (event) => {
                     
                     <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
-                        {
-                            status.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )
-                            )
-                        }
+                      <option>Conducted</option>
+                      <option>Cancelled</option>
+                      <option> Postponed</option>
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
-                        {
-                            result.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )
-                            )
-                        }
+                      <option>Deal Done</option>
+                      <option>Negotiation Uncomplete</option>
+                      <option>Deal Not Done</option>
+                      <option>Site Visit</option>
                         </select>
                         </div>
                     <div className="col-md-4"></div>
