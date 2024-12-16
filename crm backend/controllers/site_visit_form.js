@@ -4,10 +4,11 @@ const site_visit_form=async(req,res)=>
     {
         try {
             const{activity_type,title,executive,project,sitevisit_type,inventory,lead,confirmation,remark,participants,
-                    complete, title2,first_name,last_name,mobile_no,email,stage}=req.body;
+                    complete, title2,first_name,last_name,mobile_no,email,stage,status,intrested_inventory,
+                    date,feedback}=req.body;
 
                 const newsitevisitform=new sitevisit_form({activity_type,title,executive,project,sitevisit_type,inventory,lead,confirmation,remark,participants,
-                    complete, title2,first_name,last_name,mobile_no,email,stage})
+                    complete, title2,first_name,last_name,mobile_no,email,stage,status,intrested_inventory,date,feedback})
                     const resp=await newsitevisitform.save(); 
                     res.status(200).send({message:"site visit details saved",site_visit:resp})
         } catch (error) {

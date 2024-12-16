@@ -17,6 +17,8 @@ const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeve
 const send_mail = require('../controllers/sendmail');
 const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project, view_project_Byid} = require('../controllers/project');
 const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner } = require('../controllers/add_deal');
+ const uploadFields = require('../middlewares/multifile');
+const upload1 = require('../middlewares/multifile');
 
 
 const router=express.Router()
@@ -53,7 +55,7 @@ router.get('/viewprojectbyname/:name',view_projectbyname)
 router.get('/viewprojectbycityname/:city',view_projectbycityname)
 router.delete('/deleteproject/:_id',remove_project)
 
-router.post('/adddeal',upload.any('pic','preview'),add_deal)
+router.post('/adddeal',uploadFields,add_deal)
 router.get('/viewdeal',view_deal)
 router.get('/viewdealbyid/:_id',view_deal_Byid)
 router.get('/viewdealbystage/:stage',view_deal_Bystage)

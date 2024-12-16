@@ -461,7 +461,8 @@ const handleallunitschange2 = (event) => {
         }
 
         const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],sitevisit_type:"",
-                            inventory:[],lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
+                            inventory:[],lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",
+                            last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_inventory:"",date:"",feedback:""})
 
 
     const sitevisitdetails=async()=>
@@ -470,9 +471,12 @@ const handleallunitschange2 = (event) => {
             const title1 = document.getElementById("sitevisittitle").innerText;
     
             // Update state
-            const updatedMailTask = { ...sitevisit, title: title1 };
+            const updatedsiteTask = { ...sitevisit, title: title1 };
             try {
-                const resp=await api.post('sitevisit',updatedMailTask)
+                const resp=await api.post('sitevisit',updatedsiteTask)
+
+                const data = { stage: updatestage};
+                const resp1 = await api.put(`updatelead/${leadid}`, data);
                 if(resp.status===200)
                 {
                     toast.success(resp.data.message)
@@ -582,6 +586,52 @@ const handleallunitschange2 = (event) => {
                     }
     }
    
+const[leadid,setleadid]=useState("")
+    const handleLeadChange = (e) => {
+        const selectedLead = data.find(item => item._id === e.target.value);
+        setleadid(selectedLead._id)
+        if (selectedLead) {
+            const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+            setsitevisit(prevState => ({
+                ...prevState,
+                lead: fullName,
+                title2: selectedLead.title,
+                first_name: selectedLead.first_name,
+                last_name: selectedLead.last_name,
+                mobile_no: selectedLead.mobile_no,
+                email: selectedLead.email,
+                stage: selectedLead.stage
+            }));
+        }
+
+    }
+
+    const[updatestage,setupdatestage]=useState("")
+    const handleleadstatuschange =  (e) => {
+        const newStatus = e.target.value;
+    
+        // Update the status first
+        setsitevisit((prevState) => {
+            return {
+                ...prevState,
+                status: newStatus
+            };
+        });
+    
+        // Now check if status is "Conducted" and update the stage
+        if (newStatus === "Conducted") {
+            setupdatestage("Opportunity");
+        }
+        else if (newStatus === "Did Not Visit" || "Not Intersted>") {
+            setupdatestage("Prospect");
+        }
+    };
+  
+   
+    
+
+
+
 
     
 
@@ -637,24 +687,24 @@ const handleallunitschange2 = (event) => {
                
                 <div className="col-md-4"><label className="labels">Select Lead</label>
                 <select
-    className="form-control form-control-sm"
-    required
-    onChange={(e) => {
-      const selectedLead = data.find(item => item._id === e.target.value);
-      if (selectedLead) {
-        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
-        setcalltask(prevState => ({
-          ...prevState,
-          lead: fullName,
-          title2: selectedLead.title,
-          first_name: selectedLead.first_name,
-          last_name: selectedLead.last_name,
-          mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email,
-          stage:selectedLead.stage
-        }));
-      }
-    }}
+                className="form-control form-control-sm"
+                required
+                onChange={(e) => {
+                const selectedLead = data.find(item => item._id === e.target.value);
+                if (selectedLead) {
+                    const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                    setcalltask(prevState => ({
+                    ...prevState,
+                    lead: fullName,
+                    title2: selectedLead.title,
+                    first_name: selectedLead.first_name,
+                    last_name: selectedLead.last_name,
+                    mobile_no:selectedLead.mobile_no,
+                    email:selectedLead.email,
+                    stage:selectedLead.stage
+                    }));
+                }
+                }}
   >
                     <option>Select</option>
                         {
@@ -978,11 +1028,11 @@ const handleallunitschange2 = (event) => {
                     renderValue={(selected) => selected.join(', ')}
                 >
                     {allUnits.map((unit) => (
-        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-            <Checkbox checked={allunit.indexOf(unit.unit_no) > -1} />
-            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
-        </MenuItem>
-    ))}
+                    <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
+                        <Checkbox checked={allunit.indexOf(unit.unit_no) > -1} />
+                        <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+                    </MenuItem>
+                 ))}
                 </Select>
                         </div>
                         <div className="col-md-4"></div>
@@ -990,25 +1040,9 @@ const handleallunitschange2 = (event) => {
                          
                         <div className="col-md-4"><label className="labels">Select Lead</label>
                         <select
-    className="form-control form-control-sm"
-    required
-    onChange={(e) => {
-      const selectedLead = data.find(item => item._id === e.target.value);
-      if (selectedLead) {
-        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
-        setsitevisit(prevState => ({
-          ...prevState,
-          lead: fullName,
-          title2: selectedLead.title,
-          first_name: selectedLead.first_name,
-          last_name: selectedLead.last_name,
-          mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email,
-          stage:selectedLead.stage
-        }));
-      }
-    }}
-  >
+                        className="form-control form-control-sm"
+                        required
+                        onChange={handleLeadChange}>
                     <option>Select</option>
                         {
                             data.map((item)=>
@@ -1058,28 +1092,33 @@ const handleallunitschange2 = (event) => {
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
                     <option>Select</option>
                        <option>Conducted</option>
                        <option>Did Not Visit</option>
                        <option>Not Intersted</option>
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Select Intersted Inventory</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
                         {
-                            result.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )
+                            sitevisit.status==="Conducted" &&(
+
+                                <div className="col-md-4"><label className="labels">Select Intersted Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,intrested_inventory:e.target.value})} >
+                                <option>Select</option>
+                                    {
+                                        allUnits.map((item)=>
+                                        (
+                                            <option>{item.unit_no}</option>
+                                        ))
+                                    }
+                                    </select>
+                                    </div>
                             )
                         }
-                        </select>
-                        </div>
+                     
                     <div className="col-md-4"></div>
               
                 
-                <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" /></div>
+                <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
                 <div className="col-md-8"></div>
 
                     <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
@@ -1090,7 +1129,7 @@ const handleallunitschange2 = (event) => {
        
 
                     <div className="col-md-2"></div>
-                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={sitevisitdetails}>Submit</button></div>
+                    <div className="col-md-2" style={{marginLeft:"50%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={sitevisitdetails}>Submit</button></div>
                     <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
                    
                     

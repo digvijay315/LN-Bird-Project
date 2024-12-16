@@ -32,6 +32,7 @@ maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
 owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
 website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
+
 const config = {
 headers: {
 'Content-Type': 'multipart/form-data' // Set the Content-Type here
@@ -396,8 +397,17 @@ React.useEffect(() => {
               e.preventDefault();
          
                 try {
+
+                  const formData = new FormData();
+  
+                  formData.append('available_for', deal.available_for);
+              
                  
-                        const resp= await api.post('adddeal',deal,config)
+                        const resp= await api.post('adddeal',formData,{
+                          headers: {
+                            'Content-Type': 'multipart/form-data',
+                          },
+                        })
                           if(resp.status===200)
                               {
                                 toast.success(resp.data.message,{ autoClose: 2000 })
@@ -1252,7 +1262,7 @@ console.log(deal.associated_contact);
                 </div><hr></hr>
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Available For</label><select id="availablefor" className="form-control form-control-sm" required="true" onChange={available_for} >
+                    <div className="col-md-4"><label className="labels">Available For</label><select name="availablefor" id="availablefor" className="form-control form-control-sm" required="true" onChange={available_for} >
                     <option>Select</option>
                         <option>Sale</option>
                         <option>Rent</option>
@@ -1260,7 +1270,7 @@ console.log(deal.associated_contact);
                         </select>
                         </div>
                         
-                        <div className="col-md-4"><label className="labels">Stage</label><select  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,stage:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Stage</label><select name="stage"  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,stage:e.target.value})}>
                     <option>Select</option>
                         <option>Open</option>
                         <option>Quote</option>
@@ -1274,7 +1284,7 @@ console.log(deal.associated_contact);
                         <div className="col-md-4"></div>
 
                         <div className="col-md-4"><label className="labels">Project</label>
-                        <select className="form-control form-control-sm" onChange={handleprojectchange}>
+                        <select className="form-control form-control-sm" name="project" onChange={handleprojectchange}>
                         <option>choose</option>
                         {
                           allproject.map((project)=>
@@ -1285,7 +1295,7 @@ console.log(deal.associated_contact);
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Block</label>
-                        <select className="form-control form-control-sm"  onChange={handleallblockchange} >
+                        <select className="form-control form-control-sm" name="block" onChange={handleallblockchange} >
                         <option>choose</option>
                     {
                       allblocks.map((block)=>
@@ -1298,7 +1308,7 @@ console.log(deal.associated_contact);
                 </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Unit No.</label>
-                        <select className="form-control form-control-sm" onChange={handleallunitschange}  >
+                        <select className="form-control form-control-sm" name="unit_no" onChange={handleallunitschange}  >
                       <option>choose</option>
                       {
                         allUnits.map((units)=>

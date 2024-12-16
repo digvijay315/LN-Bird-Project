@@ -1,35 +1,159 @@
 
 const adddeal = require('../models/deal.js');
 const path = require('path');
+const cloudinary = require('cloudinary').v2;
 
-const add_deal=async(req,res)=>
-    {
-        try {
-            const{project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
-                    maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
-                    team,user,visible_to,owner_details,associated_contact,relation,document_details,s_no,descriptions,category,s_no1,url,
-                    website,social_media,send_matchedlead,matchedleads,matchinglead,remarks}=req.body;
 
-                    const pics = req.files ? req.files.map(item => item.path) : [];
-                    const preview=req.files ? req.files.map((item=>item.path)):[]
+
+require('dotenv').config()
+cloudinary.config({
+    cloud_name:process.env.CLOUD_NAME,
+    api_key:process.env.API_KEY,
+    api_secret:process.env.API_SECRET
+})
+
+// const add_deal=async(req,res)=>
+//     {
+//         try {
+//             const{project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
+//                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
+//                     team,user,visible_to,owner_details,associated_contact,relation,document_details,s_no,descriptions,category,s_no1,url,
+//                     website,social_media,send_matchedlead,matchedleads,matchinglead,remarks}=req.body;
+                    
+//                     console.log(req.files.pic);
+//                     console.log(req.files.preview);
+
+// const newDocumentPic1=[]
+// const newDocumentPic2=[]
+//                      if (req.files.pic) {
+//                                 // Upload files to Cloudinary and get the URLs
+//                                 for (let file of req.files.pic) {
+//                                   const result = await cloudinary.uploader.upload(file.path);
+//                                   newDocumentPic1.push(result.secure_url);  // Store the URL of the uploaded image
+//                                   // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+//                                   // fs.unlinkSync(file.path);
+//                                 }
+//                               }
+
+//                               if (req.files.preview) {
+//                                 // Upload files to Cloudinary and get the URLs
+//                                 for (let file of req.files.preview) {
+//                                   const result = await cloudinary.uploader.upload(file.path);
+//                                   newDocumentPic2.push(result.secure_url);  // Store the URL of the uploaded image
+//                                   // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+//                                   // fs.unlinkSync(file.path);
+//                                 }
+//                               }
+                    
+                    
+
+//                     // const pics = req.files ? req.files.map(item => item.path) : [];
+//                     // const preview=req.files ? req.files.map((item=>item.path)):[]
                  
                     
-                    const updatedDocumentDetails = document_details ? document_details.map((doc, index) => ({
-                        ...doc,
-                        pic: pics[index] || doc.pic // Add pic from files if available
-                    })):[];
+//                     const updatedDocumentDetails = document_details ? document_details.map((doc, index) => ({
+//                         ...doc,
+//                         pic: pics[index] || doc.pic // Add pic from files if available
+//                     })):[];
            
-                const new_add_deal= new adddeal({project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
-                    maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
-                    team,user,visible_to,owner_details,associated_contact,relation,document_details:updatedDocumentDetails,
-                    s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead,matchedleads,matchinglead,remarks})
+//                 const new_add_deal= new adddeal({project_category,project_subcategory,location,available_for,stage,project,block,unit_number,floors,expected_price,quote_price,security_deposite,
+//                     maintainence_charge,rent_escltion,rent_period,fitout_perioud,deal_type,transaction_type,source,white_portion,
+//                     team,user,visible_to,owner_details,associated_contact,relation,document_details:updatedDocumentDetails,
+//                     s_no,preview,descriptions,category,s_no1,url,website,social_media,send_matchedlead,matchedleads,matchinglead,remarks})
             
-            const resp=await new_add_deal.save()
-            res.status(200).send({message:"deal added ",deal:resp})
-        } catch (error) {
-            console.log(error)
+//             const resp=await new_add_deal.save()
+//             res.status(200).send({message:"deal added ",deal:resp})
+//         } catch (error) {
+//             console.log(error)
+//         }
+//     }
+
+const add_deal = async (req, res) => {
+    try {
+
+
+
+      const adddocument_details = [];
+      let i = 0;
+  
+      // Loop to process add_Content fields
+      while (req.body[`document_details[${i}].document_name`]) {
+        const document_name = req.body[`document_details[${i}].document_name`];
+    
+  
+        const imagefiles = [];
+  console.log(req.files);
+  
+       
+        if (req.files) {
+
+       
+          const imagefield = req.files.filter(file => file.fieldname === `document_details[${i}].pic`);
+          
+          if (imagefield.length > 0) {
+            for (let file of imagefield) {
+              const result = await cloudinary.uploader.upload(file.path);
+            
+              imagefiles.push(result.secure_url);  
+            }
+          }
+        }
+  
+   
+        adddocument_details.push({
+            document_name,
+          
+          pic: imagefiles, 
+        });
+  
+        i++;
+      }
+            console.log(adddocument_details);
+
+
+  
+      const images = [];
+ 
+  
+      // Process image files
+      if (req.files) {
+        const imageField = req.files.filter(file => file.fieldname === 'preview');
+        for (let file of imageField) {
+          const result = await cloudinary.uploader.upload(file.path);
+          images.push(result.secure_url);
         }
     }
+  
+    
+
+    const {
+        project_category, project_subcategory, location, available_for, stage, project, block, unit_number, floors, expected_price,
+        quote_price, security_deposite, maintainence_charge, rent_escltion, rent_period, fitout_perioud, deal_type, transaction_type,
+        source, white_portion, team, user, visible_to, owner_details, associated_contact, relation, s_no, descriptions,
+        category, s_no1, url, website, social_media, send_matchedlead, matchedleads, matchinglead, remarks
+      } = req.body;
+  
+
+      const new_add_deal = new adddeal({
+        project_category, project_subcategory, location, available_for, stage, project, block, unit_number, floors, expected_price,
+        quote_price, security_deposite, maintainence_charge, rent_escltion, rent_period, fitout_perioud, deal_type, transaction_type,
+        source, white_portion, team, user, visible_to, owner_details, associated_contact, relation, document_details: adddocument_details,
+        s_no, descriptions, category, s_no1, url, website, social_media, send_matchedlead, matchedleads, matchinglead, remarks,
+        preview: images  // Store Cloudinary URLs directly in the preview field
+      });
+  
+      // Save the deal to the database
+      const resp = await new_add_deal.save();
+      res.status(200).send({ message: 'Deal added successfully', deal: resp });
+  
+    } catch (error) {
+      console.error('Error adding deal:', error);
+      res.status(500).send({ message: 'Error occurred while adding deal', error: error.message });
+    }
+  };
+
+  
+
 
     const view_deal=async(req,res)=>
         {

@@ -15,9 +15,13 @@ complete:{type:String},
 title2:{type:String},
 first_name:{type:String},
 last_name:{type:String},
-mobile_no:{type:String},
-email:{type:String},
-stage:{type:String}
+mobile_no:{type:Array},
+email:{type:Array},
+stage:{type:String},
+status:{type:String},
+intrested_inventory:{type:String},
+date:{type:String},
+feedback:{type:String}
 },{timestamps:true})
 
 const sitevisit_form=mongoose.model('sitevisit_form',site_visitform)

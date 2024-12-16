@@ -77,7 +77,7 @@ const add_contact = async (req, res) => {
               // fs.unlinkSync(file.path);
             }
           }
-// console.log(req.files);
+
 
         // Create a new contact with the uploaded Cloudinary URLs
         const newAddContact = new addcontact({

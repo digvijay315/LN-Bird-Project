@@ -245,7 +245,6 @@ function Dealdetails() {
       const allColumns = [
         { id: 'sno', name: '#' },
         { id: 'details', name: 'Details' },
-        { id: 'unit_number', name: 'Unit Number' },
         { id: 'owner_details', name: 'Owner Details' },
         { id: 'associated_contact', name: 'Associated Contact' },
         { id: 'expected_price', name: 'Expectation' },
@@ -310,7 +309,7 @@ function Dealdetails() {
       ];
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
       const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 12));
+      const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 11));
       const [showColumnList, setShowColumnList] = useState(false);
 
       const handleAddColumnClick = () => {
@@ -1736,6 +1735,7 @@ function Dealdetails() {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span><br></br>
              {item.project_category}<br></br>
              {item.project_subcategory}<br></br>
              {item.location}
@@ -2440,7 +2440,8 @@ function Dealdetails() {
             <StyledTableCell 
               style={{ padding: "10px", fontFamily: "times new roman" }}  >
               <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
-              {item.category} {item.size} 
+              {item.category} {item.size} <br></br>
+              {item.category} {item.size}
           
             </StyledTableCell>
             {visibleColumns3
