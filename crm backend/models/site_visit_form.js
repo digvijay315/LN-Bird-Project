@@ -19,7 +19,7 @@ mobile_no:{type:Array},
 email:{type:Array},
 stage:{type:String},
 status:{type:String},
-intrested_inventory:{type:String},
+intrested_inventory:{type:Array},
 date:{type:String},
 feedback:{type:String}
 },{timestamps:true})

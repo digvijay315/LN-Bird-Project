@@ -1291,7 +1291,7 @@ function Dealdetails() {
                                        document.getElementById("unitwhatsapp").style.display="none"
                                           document.getElementById("unitmessage").style.display="none"
                                            document.getElementById("unitcreatedeal").style.display="none"
-                                            document.getElementById("unitaddunit").style.display="none"
+                                            // document.getElementById("unitaddunit").style.display="none"
                                          
                                           document.getElementById("unitaddremoveowner").style.display="none"
                                           document.getElementById("unitmatchedlead").style.display="none"
@@ -1314,7 +1314,7 @@ function Dealdetails() {
                                          document.getElementById("unitwhatsapp").style.display="inline-block"
                                             document.getElementById("unitmessage").style.display="inline-block"
                                              document.getElementById("unitcreatedeal").style.display="inline-block"
-                                              document.getElementById("unitaddunit").style.display="inline-block"
+                                              // document.getElementById("unitaddunit").style.display="inline-block"
                                            
                                             document.getElementById("unitaddremoveowner").style.display="inline-block"
                                             document.getElementById("unitmatchedlead").style.display="inline-block"
@@ -1337,7 +1337,7 @@ function Dealdetails() {
                                            document.getElementById("unitwhatsapp").style.display="inline-block"
                                               document.getElementById("unitmessage").style.display="inline-block"
                                                document.getElementById("unitcreatedeal").style.display="none"
-                                                document.getElementById("unitaddunit").style.display="none"
+                                                // document.getElementById("unitaddunit").style.display="none"
                                              
                                               document.getElementById("unitaddremoveowner").style.display="none"
                                               document.getElementById("unitmatchedlead").style.display="none"
@@ -2300,9 +2300,9 @@ function Dealdetails() {
 <Tooltip title="add task..." arrow>
 <img id="unitaddtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip> 
-<Tooltip title="add unit..." arrow>
+{/* <Tooltip title="add unit..." arrow>
 <img id="unitaddunit" src="https://png.pngtree.com/png-vector/20190505/ourmid/pngtree-vector-add-icon-png-image_1023418.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip> 
+</Tooltip>  */}
 <Tooltip title="create deal..." arrow>
 <img id="unitcreatedeal" src="https://static.vecteezy.com/system/resources/previews/049/672/081/non_2x/two-people-shaking-hands-in-a-circle-free-png.png" onClick={()=>navigate('/deal')}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip> 

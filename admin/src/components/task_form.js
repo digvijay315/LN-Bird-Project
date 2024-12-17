@@ -272,11 +272,22 @@ const fetchdatabyprojectname = async (projectNames) => {
 };
 
 useEffect(() => {
-  if (units.length > 0) {
-    const collectedUnits = units.flatMap(item => item.add_unit); // Collect all add_unit arrays
-    setallUnits(collectedUnits); // Set allUnits with the collected units
-  }
-}, [units]);
+    if (units.length > 0) {
+      // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
+      const collectedUnits = units.flatMap(item => item.add_unit);
+  
+      // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
+      const uniqueUnits = [
+        ...new Map(collectedUnits.map(unit => [unit.unit_no, unit])).values()
+      ];
+  
+      // Alternatively, if you want to ensure uniqueness using unit_id (or other identifiers), use:
+      // const uniqueUnits = [...new Map(collectedUnits.map(unit => [unit.unit_id, unit])).values()];
+  
+      setallUnits(uniqueUnits); // Set allUnits with the unique units
+    }
+  }, [units]);
+  
 
 const handleprojectchange = (event) => {
   const {
@@ -308,6 +319,23 @@ const handleallunitschange = (event) => {
       return updatedSiteVisit; // Return the updated state
     });
   };
+
+  const[allunit1,setallunit1]=useState([])
+const handleallunitschange1 = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectunits = typeof value === 'string' ? value.split(',') : value;
+  
+    setallunit1(selectunits);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, intrested_inventory: selectunits };
+    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
 
 
   const [units2, setunits2] = useState([]);
@@ -431,7 +459,6 @@ const handleallunitschange2 = (event) => {
 
 
 
-
   
   const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
             reason:"",project:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
@@ -462,7 +489,7 @@ const handleallunitschange2 = (event) => {
 
         const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],sitevisit_type:"",
                             inventory:[],lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",
-                            last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_inventory:"",date:"",feedback:""})
+                            last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_inventory:[],date:"",feedback:""})
 
 
     const sitevisitdetails=async()=>
@@ -476,7 +503,20 @@ const handleallunitschange2 = (event) => {
                 const resp=await api.post('sitevisit',updatedsiteTask)
 
                 const data = { stage: updatestage};
+                const data1 = { newstage: updatestage1};
+                
                 const resp1 = await api.put(`updatelead/${leadid}`, data);
+
+                for (let i = 0; i < sitevisit.project.length; i++) {
+                    const project = sitevisit.project[i];
+                    const unit_number = sitevisit.intrested_inventory && sitevisit.intrested_inventory[i] ? 
+                    sitevisit.intrested_inventory[i] : 
+                    sitevisit.inventory[i];
+              
+                    console.log(`Calling API: updatedealstage/${project}/${unit_number}`);
+                    // Send the API request for each project and inventory
+                    const resp2 = await api.put(`updatedealstage/${project}/${unit_number}`, data1);
+                }
                 if(resp.status===200)
                 {
                     toast.success(resp.data.message)
@@ -607,6 +647,7 @@ const[leadid,setleadid]=useState("")
     }
 
     const[updatestage,setupdatestage]=useState("")
+    const[updatestage1,setupdatestage1]=useState("")
     const handleleadstatuschange =  (e) => {
         const newStatus = e.target.value;
     
@@ -621,9 +662,11 @@ const[leadid,setleadid]=useState("")
         // Now check if status is "Conducted" and update the stage
         if (newStatus === "Conducted") {
             setupdatestage("Opportunity");
+            setupdatestage1("Quote");
         }
         else if (newStatus === "Did Not Visit" || "Not Intersted>") {
             setupdatestage("Prospect");
+            setupdatestage1("Open");
         }
     };
   
@@ -631,6 +674,7 @@ const[leadid,setleadid]=useState("")
     
 
 
+    console.log(updatestage1)
 
 
     
@@ -893,11 +937,11 @@ const[leadid,setleadid]=useState("")
                     renderValue={(selected) => selected.join(', ')}
                 >
                     {allUnits3.map((unit) => (
-        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-            <Checkbox checked={allunit3.indexOf(unit.unit_no) > -1} />
-            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
-        </MenuItem>
-    ))}
+                        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
+                            <Checkbox checked={allunit3.indexOf(unit.unit_no) > -1} />
+                            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+                        </MenuItem>
+                    ))}
                 </Select>
                         </div>
                     <div className="col-md-4"></div>
@@ -1102,7 +1146,8 @@ const[leadid,setleadid]=useState("")
                         {
                             sitevisit.status==="Conducted" &&(
 
-                                <div className="col-md-4"><label className="labels">Select Intersted Inventory</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,intrested_inventory:e.target.value})} >
+                                <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+                                {/* <select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,intrested_inventory:e.target.value})} >
                                 <option>Select</option>
                                     {
                                         allUnits.map((item)=>
@@ -1110,7 +1155,20 @@ const[leadid,setleadid]=useState("")
                                             <option>{item.unit_no}</option>
                                         ))
                                     }
-                                    </select>
+                                    </select> */}
+                                           <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={allunit1}
+                    onChange={handleallunitschange1}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {allUnits.map((unit) => (
+                            <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
+                                <Checkbox checked={allunit1.indexOf(unit.unit_no) > -1} />
+                                <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+                            </MenuItem>
+                        ))}
+                        </Select>
                                     </div>
                             )
                         }

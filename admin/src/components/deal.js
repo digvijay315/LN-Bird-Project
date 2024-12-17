@@ -397,13 +397,7 @@ React.useEffect(() => {
               e.preventDefault();
          
                 try {
-
-                  const formData = new FormData();
-  
-                  formData.append('available_for', deal.available_for);
-              
-                 
-                        const resp= await api.post('adddeal',formData,{
+                        const resp= await api.post('adddeal',deal,{
                           headers: {
                             'Content-Type': 'multipart/form-data',
                           },
