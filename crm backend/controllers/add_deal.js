@@ -222,42 +222,31 @@ const add_deal=async(req,res)=>
 
                     const update_dealbyprojectandunit = async (req, res) => {
                         try {
-                          const { project, unit_number } = req.params;  // Extract project and unit from URL params
+                          const { project, block,unit_number } = req.params;  // Extract project and unit from URL params
                           const { newstage } = req.body;  // Extract new stage from request body
                       
-                          console.log(`Received stage: ${newstage} for project: ${project}, unit_number: ${unit_number}`);
-                          
-                          // Find all deals for the given project
-                          const deals = await adddeal.find({ project: project });
+                          console.log(`Received stage: ${newstage} for project: ${project}, block: ${block}, unit_number: ${unit_number}`);
                       
-                          // If no deals are found for the given project
-                          if (deals.length === 0) {
-                            return res.status(404).send({ message: "Deal not found for the specified project" });
+                          // Update all matching deals in a single operation
+                          const result = await adddeal.updateMany(
+                            { project: project, unit_number: unit_number, block: block },
+                            { $set: { stage: newstage } }
+                          );
+                      
+                          // If no deals were updated
+                          if (result.matchedCount === 0) {
+                            return res.status(400).send({ message: "No deal found with the specified unit number and block" });
                           }
                       
-                          // Filter deals that match the unit number
-                          const dealsToUpdate = deals.filter(deal => deal.unit_number == unit_number);
+                          // Return success message with the count of updated deals
+                          return res.status(200).send({ message: `${result.modifiedCount} deal(s) updated successfully` });
                       
-                          // If no deal with the matching unit number is found
-                          if (dealsToUpdate.length === 0) {
-                            return res.status(400).send({ message: "No deal found with the specified unit number" });
-                          }
-                      
-                          // Iterate through each matching deal and update the stage
-                          for (const deal of dealsToUpdate) {
-                            deal.stage = newstage || deal.stage;  // Update stage if a new stage is provided
-                      
-                            // Save the updated deal
-                            await deal.save();
-                          }
-                      
-                          // Return success message
-                          return res.status(200).send({ message: `${dealsToUpdate.length} deal(s) updated successfully` });
                         } catch (error) {
                           console.error(error);
                           return res.status(500).send({ message: "Internal Server Error" });
                         }
                       };
+                      
                       
                       
 

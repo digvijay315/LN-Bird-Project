@@ -63,7 +63,7 @@ router.delete('/removedeal/:_id',remove_deal)
 router.put('/updatedeal/:_id',upload.any('pic','preview'),update_deal)
 router.put('/updatedealbysingle/:_id',upload.any('pic','preview'),update_dealbysingle)
 router.put('/updatedealbyowner/:_id',update_dealbyowner)
-router.put('/updatedealstage/:project/:unit_number',update_dealbyprojectandunit)
+router.put('/updatedealstage/:project/:block/:unit_number',update_dealbyprojectandunit)
 
 router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 

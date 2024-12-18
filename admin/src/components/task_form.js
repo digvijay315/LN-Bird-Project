@@ -54,20 +54,25 @@ function Task_form() {
     const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
 
     
-
+    const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],inventory:[],subject:"",remarks:"",
+        complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
    
 
+    const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
+            reason:"",project:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
    
-   
+    const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],sitevisit_type:"",
+                inventory:[],lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",
+                last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
     
-    
-        const calltaskdetails=async()=>
-        {
-           
+       
+
+// ================================all post methods start=============================================================================
+
+       
+            const calltaskdetails=async()=>
+            {
             const title1 = document.getElementById("title").innerText;
-
-            
-        
             // Update state
             const updatedCallTask = { ...calltask, title: title1 };
             
@@ -87,8 +92,7 @@ function Task_form() {
         }
     }
 
-    const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],inventory:[],subject:"",remarks:"",
-        complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
+   
 
 
         const mailtaskdetails=async()=>
@@ -114,7 +118,80 @@ function Task_form() {
                 }
             }
 
+            const meetingtaskdetails=async()=>
+                {
+                 
+                    const title1 = document.getElementById("meetingtitle").innerText;
+            
+                    // Update state
+                    const updatedMailTask = { ...meetingtask, title: title1 };
+                    try {
+                        const resp=await api.post('meetingtask',updatedMailTask)
+                        if(resp.status===200)
+                        {
+                            toast.success(resp.data.message)
+                            setTimeout(() => {
+                                window.location.reload();
+                              }, 2000); // 2000 milliseconds = 2 seconds
+                            
+                        }
+                    } catch (error) {
+                        
+                        toast.error(error.message)
+                    }
+                }
+        
+              
+        
+        
+            const sitevisitdetails=async()=>
+                {
+                 
+                    const title1 = document.getElementById("sitevisittitle").innerText;
+            
+                    // Update state
+                    const updatedsiteTask = { ...sitevisit, title: title1 };
+                    try {
+                        const resp=await api.post('sitevisit',updatedsiteTask)
+        
+                        const data = { stage: updatestage};
+                        const data1 = { newstage: updatestage1};
+                        
+                        const resp1 = await api.put(`updatelead/${leadid}`, data);
+        
+                        for (let i = 0; i < sitevisit.intrested_project.length; i++) {
+                            const project = sitevisit.intrested_project[i];
+                            
+                            const block = sitevisit.intrested_block && sitevisit.intrested_block[i] ? 
+                            sitevisit.intrested_block[i] : 
+                            [];
 
+                            const unit_number = sitevisit.intrested_inventory && sitevisit.intrested_inventory[i] ? 
+                            sitevisit.intrested_inventory[i] : 
+                            [];
+                      
+                            console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+                            // Send the API request for each project and inventory
+                            const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+                        }
+                        if(resp.status===200)
+                        {
+                            toast.success(resp.data.message)
+                            setTimeout(() => {
+                                window.location.reload();
+                              }, 2000); // 2000 milliseconds = 2 seconds
+                            
+                        }
+                    } catch (error) {
+                        
+                        toast.error(error.message)
+                    }
+                }
+
+//========================================all post methods end =======================================================================       
+
+
+    // ========================---------------------fetching lead data----------------------------------------------===================
     const[data,setdata]=useState([]);
   const fetchdata=async()=>
   {
@@ -127,6 +204,10 @@ function Task_form() {
     }
   
   }
+
+//  ==================================== fetching lead data end=======================================================================
+
+
   const [units1,setunits1]=useState([])
   const[data1,setdata1]=useState([]);
   const fetchdata1=async()=>
@@ -203,11 +284,7 @@ function Task_form() {
 
 
 
-const allproject =[]
-data1.map((item)=>
-{
-    allproject.push(item.name)
-})
+
     
     
     
@@ -250,10 +327,36 @@ data1.map((item)=>
 //     }
 //   }, [units]);
 
+
+// ===============================this project data is for sitevisit task============================================================
   
+
+const allproject =[]
+data1.map((item)=>
+{
+    allproject.push(item.name)
+})
+
+
 const [units, setunits] = useState([]);
 const [allUnits, setallUnits] = useState([]);
 const [projects, setprojects] = useState([]);
+
+const handleprojectchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectproject = typeof value === 'string' ? value.split(',') : value;
+  
+    setprojects(selectproject);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, project: selectproject };
+      fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
 
 const fetchdatabyprojectname = async (projectNames) => {
 
@@ -274,35 +377,19 @@ const fetchdatabyprojectname = async (projectNames) => {
 useEffect(() => {
     if (units.length > 0) {
       // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
+   
       const collectedUnits = units.flatMap(item => item.add_unit);
   
       // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
       const uniqueUnits = [
         ...new Map(collectedUnits.map(unit => [unit.unit_no, unit])).values()
       ];
-  
-      // Alternatively, if you want to ensure uniqueness using unit_id (or other identifiers), use:
-      // const uniqueUnits = [...new Map(collectedUnits.map(unit => [unit.unit_id, unit])).values()];
-  
       setallUnits(uniqueUnits); // Set allUnits with the unique units
     }
   }, [units]);
   
 
-const handleprojectchange = (event) => {
-  const {
-    target: { value },
-  } = event;
 
-  const selectproject = typeof value === 'string' ? value.split(',') : value;
-
-  setprojects(selectproject);
-  setsitevisit((prev) => {
-    const updatedSiteVisit = { ...prev, project: selectproject };
-    fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-    return updatedSiteVisit; // Return the updated state
-  });
-};
 
 const[allunit,setallunit]=useState([])
 const handleallunitschange = (event) => {
@@ -315,6 +402,87 @@ const handleallunitschange = (event) => {
      setallunit(selectunits);
     setsitevisit((prev) => {
       const updatedSiteVisit = { ...prev, inventory: selectunits };
+    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+
+
+
+
+  const [siteunits, setsiteunits] = useState([]);
+const [siteallUnits, setsiteallUnits] = useState([]);
+const [siteallblock, setsiteallblock] = useState([]);
+const [siteprojects, setsiteprojects] = useState([]);
+
+const handlesiteprojectchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectproject = typeof value === 'string' ? value.split(',') : value;
+  
+    setsiteprojects(selectproject);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, intrested_project: selectproject };
+      fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+
+const fetchdatabysiteprojectname = async (projectNames) => {
+
+  try {
+    const fetchPromises = projectNames.map(async (projectName) => {
+      const resp = await api.get(`viewprojectbyname/${projectName}`);
+      return resp.data.project; // Assuming resp.data.project is an array of units for that project
+    });
+
+    const results = await Promise.all(fetchPromises);
+    const allFetchedUnits = results.flat();
+    setsiteunits(allFetchedUnits); // Set the units to the flattened result
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+console.log(siteunits);
+
+useEffect(() => {
+    if (siteunits.length > 0) {
+      // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
+      const collectedblocks = siteunits.flatMap(item => item.add_block);
+      const collectedUnits = siteunits.flatMap(item => item.add_unit);
+  
+      // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
+      const uniqueUnits = [
+        ...new Map(collectedUnits.map(unit => [unit.unit_no, unit])).values()
+      ];
+      const uniqueblock = [
+        ...new Map(collectedblocks.map(block => [block.block_name, block])).values()
+      ];
+      setsiteallUnits(uniqueUnits);// Set allUnits with the unique units
+      setsiteallblock(uniqueblock)
+    }
+  }, [siteunits]);
+
+console.log(siteallUnits);
+console.log(sitevisit.intrested_project);
+
+
+const[allblock,setallblock]=useState([])
+const handleallblockchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectblock = typeof value === 'string' ? value.split(',') : value;
+  
+    setallblock(selectblock);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, intrested_block: selectblock };
     //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
       return updatedSiteVisit; // Return the updated state
     });
@@ -338,9 +506,26 @@ const handleallunitschange1 = (event) => {
 
 
 
+//== ================================this project data is for meeting task=============================================================
+
   const [units2, setunits2] = useState([]);
 const [allUnits2, setallUnits2] = useState([]);
 const [projects2, setprojects2] = useState([]);
+
+const handleprojectchange2 = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectproject = typeof value === 'string' ? value.split(',') : value;
+  
+    setprojects2(selectproject);
+    setmeetingtask((prev) => {
+      const updatedSiteVisit = { ...prev, project: selectproject };
+      fetchdatabyprojectname2(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
 
 const fetchdatabyprojectname2 = async (projectNames) => {
 
@@ -365,20 +550,7 @@ useEffect(() => {
   }
 }, [units2]);
 
-const handleprojectchange2 = (event) => {
-  const {
-    target: { value },
-  } = event;
 
-  const selectproject = typeof value === 'string' ? value.split(',') : value;
-
-  setprojects2(selectproject);
-  setmeetingtask((prev) => {
-    const updatedSiteVisit = { ...prev, project: selectproject };
-    fetchdatabyprojectname2(selectproject); // Fetch data with the updated project names
-    return updatedSiteVisit; // Return the updated state
-  });
-};
 
 const[allunit2,setallunit2]=useState([])
 const handleallunitschange2 = (event) => {
@@ -460,77 +632,10 @@ const handleallunitschange2 = (event) => {
 
 
   
-  const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
-            reason:"",project:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
-
-
-    const meetingtaskdetails=async()=>
-        {
-         
-            const title1 = document.getElementById("meetingtitle").innerText;
-    
-            // Update state
-            const updatedMailTask = { ...meetingtask, title: title1 };
-            try {
-                const resp=await api.post('meetingtask',updatedMailTask)
-                if(resp.status===200)
-                {
-                    toast.success(resp.data.message)
-                    setTimeout(() => {
-                        window.location.reload();
-                      }, 2000); // 2000 milliseconds = 2 seconds
-                    
-                }
-            } catch (error) {
-                
-                toast.error(error.message)
-            }
-        }
-
-        const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],sitevisit_type:"",
-                            inventory:[],lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",
-                            last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_inventory:[],date:"",feedback:""})
-
-
-    const sitevisitdetails=async()=>
-        {
-         
-            const title1 = document.getElementById("sitevisittitle").innerText;
-    
-            // Update state
-            const updatedsiteTask = { ...sitevisit, title: title1 };
-            try {
-                const resp=await api.post('sitevisit',updatedsiteTask)
-
-                const data = { stage: updatestage};
-                const data1 = { newstage: updatestage1};
-                
-                const resp1 = await api.put(`updatelead/${leadid}`, data);
-
-                for (let i = 0; i < sitevisit.project.length; i++) {
-                    const project = sitevisit.project[i];
-                    const unit_number = sitevisit.intrested_inventory && sitevisit.intrested_inventory[i] ? 
-                    sitevisit.intrested_inventory[i] : 
-                    sitevisit.inventory[i];
-              
-                    console.log(`Calling API: updatedealstage/${project}/${unit_number}`);
-                    // Send the API request for each project and inventory
-                    const resp2 = await api.put(`updatedealstage/${project}/${unit_number}`, data1);
-                }
-                if(resp.status===200)
-                {
-                    toast.success(resp.data.message)
-                    setTimeout(() => {
-                        window.location.reload();
-                      }, 2000); // 2000 milliseconds = 2 seconds
-                    
-                }
-            } catch (error) {
-                
-                toast.error(error.message)
-            }
-        }
   
+
+
+   
     const [show1, setshow1] = useState(false);
     
     const handleClose1 = () => setshow1(false);
@@ -674,7 +779,7 @@ const[leadid,setleadid]=useState("")
     
 
 
-    console.log(updatestage1)
+ 
 
 
     
@@ -1145,31 +1250,58 @@ const[leadid,setleadid]=useState("")
                         </div>
                         {
                             sitevisit.status==="Conducted" &&(
+                                <>
+
+                                <div className="col-md-4"><label className="labels">Select Project</label> 
+                                <Select className="form-control form-control-sm" style={{border:"none"}}
+                            multiple
+                            value={siteprojects}
+                            onChange={handlesiteprojectchange}
+                            renderValue={(selected) => selected.join(', ')}
+                        >
+                            {allproject.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                    <Checkbox checked={siteprojects.indexOf(name) > -1} />
+                                    <ListItemText primary={name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                                </div>
+
+                                <div className="col-md-4"><label className="labels">Select Intersted Block</label>
+                             
+                             <Select className="form-control form-control-sm" style={{border:"none"}}
+                             multiple
+                             value={allblock}
+                             onChange={handleallblockchange}
+                             renderValue={(selected) => selected.join(', ')}
+                         >
+                             {siteallblock.map((block) => (
+                                     <MenuItem key={block._id} value={block.block_name}> {/* Ensure unit_no is the value you want */}
+                                         <Checkbox checked={allblock.indexOf(block.block_name) > -1} />
+                                         <ListItemText primary={block.block_name} /> {/* Render unit_no or other relevant property */}
+                                     </MenuItem>
+                                 ))}
+                                 </Select>
+                                 </div>
 
                                 <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
-                                {/* <select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,intrested_inventory:e.target.value})} >
-                                <option>Select</option>
-                                    {
-                                        allUnits.map((item)=>
-                                        (
-                                            <option>{item.unit_no}</option>
-                                        ))
-                                    }
-                                    </select> */}
-                                           <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allunit1}
-                    onChange={handleallunitschange1}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allUnits.map((unit) => (
-                            <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-                                <Checkbox checked={allunit1.indexOf(unit.unit_no) > -1} />
-                                <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
-                            </MenuItem>
-                        ))}
-                        </Select>
+                             
+                                <Select className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                                value={allunit1}
+                                onChange={handleallunitschange1}
+                                renderValue={(selected) => selected.join(', ')}
+                            >
+                                {siteallUnits.map((unit) => (
+                                        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
+                                            <Checkbox checked={allunit1.indexOf(unit.unit_no) > -1} />
+                                            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+                                        </MenuItem>
+                                    ))}
+                                    </Select>
                                     </div>
+                                    </>
                             )
                         }
                      

@@ -1738,7 +1738,7 @@ function Dealdetails() {
             <span style={{fontWeight:"bolder"}}>{item.unit_number}</span><br></br>
              {item.project_category}<br></br>
              {item.project_subcategory}<br></br>
-             {item.location}
+             {item.project}
             </StyledTableCell>
             
             {visibleColumns
@@ -2441,7 +2441,7 @@ function Dealdetails() {
               style={{ padding: "10px", fontFamily: "times new roman" }}  >
               <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
-              {item.category} {item.size}
+              {item.uaddress} {item.ucity} 
           
             </StyledTableCell>
             {visibleColumns3
