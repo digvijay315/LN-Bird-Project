@@ -26,6 +26,10 @@ function Task_form() {
             {
                 fetchcontactdata()
             },[])
+            useEffect(()=>
+                {
+                    fetchdealdata()
+                },[])
    
     
         const[contactdata,setcontactdata]=useState([]);
@@ -41,6 +45,19 @@ function Task_form() {
         
         }
 
+        const[dealdata,setdealdata]=useState([])
+        const fetchdealdata=async(event)=>
+            {
+              
+              try {
+                const resp=await api.get('viewdeal')
+                const all=(resp.data.deal)
+                setdealdata(all)
+              } catch (error) {
+                console.log(error);
+              }
+            
+            }
 
     const activity=["Call","Email","Meeting","Site Visit"]
     const reason=["Meeting","Site Visit","Discuss","For Requirment","etc"]
@@ -61,8 +78,8 @@ function Task_form() {
     const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
             reason:"",project:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
    
-    const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],sitevisit_type:"",
-                inventory:[],lead:"",confirmation:"",remark:"",participants:"",complete:"",stage:"",title2:"",first_name:"",
+    const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
+                inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
                 last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
     
        
@@ -331,15 +348,34 @@ function Task_form() {
 // ===============================this project data is for sitevisit task============================================================
   
 
+
+
+
 const allproject =[]
-data1.map((item)=>
-{
-    allproject.push(item.name)
-})
+dealdata.map((item) => {
+    if (!allproject.includes(item.project)) {
+      allproject.push(item.project);
+    }
+  });
+
+  const alldealblock =[]
+dealdata.map((item) => {
+    if (!alldealblock.includes(item.block)) {
+        alldealblock.push(item.block);
+    }
+  });
+
+  const alldealunit =[]
+dealdata.map((item) => {
+    if (!alldealunit.includes(item.unit_number)) {
+        alldealunit.push(item.unit_number);
+    }
+  });
 
 
 const [units, setunits] = useState([]);
 const [allUnits, setallUnits] = useState([]);
+const [allBlocks, setallBlocks] = useState([]);
 const [projects, setprojects] = useState([]);
 
 const handleprojectchange = (event) => {
@@ -362,8 +398,8 @@ const fetchdatabyprojectname = async (projectNames) => {
 
   try {
     const fetchPromises = projectNames.map(async (projectName) => {
-      const resp = await api.get(`viewprojectbyname/${projectName}`);
-      return resp.data.project; // Assuming resp.data.project is an array of units for that project
+      const resp = await api.get(`viewdealbyproject/${projectName}`);
+      return resp.data.deal; // Assuming resp.data.project is an array of units for that project
     });
 
     const results = await Promise.all(fetchPromises);
@@ -373,22 +409,51 @@ const fetchdatabyprojectname = async (projectNames) => {
     console.log(error);
   }
 };
+console.log(units);
 
 useEffect(() => {
     if (units.length > 0) {
-      // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
-   
-      const collectedUnits = units.flatMap(item => item.add_unit);
+      // Collect only the unit_number and block from the units array
+      const collectedUnits = units.map(item => item.unit_number);
+      const collecteblocks = units.map(item => item.block);
   
-      // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
+      // Create a Map to filter out duplicates based on unit_number and get unique unit_numbers
       const uniqueUnits = [
-        ...new Map(collectedUnits.map(unit => [unit.unit_no, unit])).values()
+        ...new Map(collectedUnits.map(unit_number => [unit_number, unit_number])).values()
       ];
-      setallUnits(uniqueUnits); // Set allUnits with the unique units
+  
+      // Create a Map to filter out duplicates based on block and get unique blocks
+      const uniqueblocks = [
+        ...new Map(collecteblocks.map(block => [block, block])).values()
+      ];
+  
+      // Set the state with the unique unit_numbers and blocks
+      setallUnits(uniqueUnits);
+      setallBlocks(uniqueblocks); // Set allBlocks with the unique blocks
     }
   }, [units]);
   
+  
+  
+  
 
+
+
+  const[allblocks,setallblocks]=useState([])
+const handleblockchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectblock = typeof value === 'string' ? value.split(',') : value;
+  
+    setallblocks(selectblock);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, block: selectblock };
+    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
 
 
 const[allunit,setallunit]=useState([])
@@ -436,8 +501,8 @@ const fetchdatabysiteprojectname = async (projectNames) => {
 
   try {
     const fetchPromises = projectNames.map(async (projectName) => {
-      const resp = await api.get(`viewprojectbyname/${projectName}`);
-      return resp.data.project; // Assuming resp.data.project is an array of units for that project
+      const resp = await api.get(`viewdealbyproject/${projectName}`);
+      return resp.data.deal; // Assuming resp.data.project is an array of units for that project
     });
 
     const results = await Promise.all(fetchPromises);
@@ -453,15 +518,15 @@ console.log(siteunits);
 useEffect(() => {
     if (siteunits.length > 0) {
       // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
-      const collectedblocks = siteunits.flatMap(item => item.add_block);
-      const collectedUnits = siteunits.flatMap(item => item.add_unit);
+      const collectedblocks = siteunits.flatMap(item => item.block);
+      const collectedUnits = siteunits.flatMap(item => item.unit_number);
   
       // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
       const uniqueUnits = [
-        ...new Map(collectedUnits.map(unit => [unit.unit_no, unit])).values()
+        ...new Map(collectedUnits.map(unit => [unit, unit])).values()
       ];
       const uniqueblock = [
-        ...new Map(collectedblocks.map(block => [block.block_name, block])).values()
+        ...new Map(collectedblocks.map(block => [block, block])).values()
       ];
       setsiteallUnits(uniqueUnits);// Set allUnits with the unique units
       setsiteallblock(uniqueblock)
@@ -469,7 +534,7 @@ useEffect(() => {
   }, [siteunits]);
 
 console.log(siteallUnits);
-console.log(sitevisit.intrested_project);
+console.log(sitevisit.block);
 
 
 const[allblock,setallblock]=useState([])
@@ -973,7 +1038,7 @@ const[leadid,setleadid]=useState("")
 
                     <div className="row" id="email" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Call {mailtask.lead} For Meeting at {mailtask.due_date}</p></div> 
+                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail {mailtask.lead} For Meeting at {mailtask.due_date} for {mailtask.subject} of {mailtask.inventory}</p></div> 
 
                     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
                     <option>Select </option>
@@ -1128,8 +1193,7 @@ const[leadid,setleadid]=useState("")
                   
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For 722_Aero
-                        City on September 4,2023 at 5:32 AM</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
@@ -1138,6 +1202,20 @@ const[leadid,setleadid]=useState("")
                         <option>Vivek</option>
                         </select>
                         </div>
+
+                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
+                    <option>Select </option>
+                       {
+                        visittype.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+                        </select>
+                        </div>
+                        <div className="col-md-4"></div>
+
                         <div className="col-md-4"><label className="labels">Select Project</label> 
                         <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
@@ -1156,18 +1234,20 @@ const[leadid,setleadid]=useState("")
                        
 
 
-                        <div className="col-md-4"></div>
-                    
-                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
-                    <option>Select </option>
-                       {
-                        visittype.map(item=>
-                            (
-                                <option>{item}</option>
-                            )
-                        )
-                       }
-                        </select>
+                        <div className="col-md-4"><label className="labels">Select Block</label>
+                        <Select className="form-control form-control-sm" style={{border:"none"}}
+                    multiple
+                    value={allblocks}
+                    onChange={handleblockchange}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {allBlocks.map((block) => (
+                    <MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
+                        <Checkbox checked={allblocks.indexOf(block) > -1} />
+                        <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
+                    </MenuItem>
+                 ))}
+                </Select>
                         </div>
                         <div className="col-md-4"><label className="labels">Select Inventory</label>
                         <Select className="form-control form-control-sm" style={{border:"none"}}
@@ -1177,14 +1257,17 @@ const[leadid,setleadid]=useState("")
                     renderValue={(selected) => selected.join(', ')}
                 >
                     {allUnits.map((unit) => (
-                    <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-                        <Checkbox checked={allunit.indexOf(unit.unit_no) > -1} />
-                        <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+                    <MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
+                        <Checkbox checked={allunit.indexOf(unit) > -1} />
+                        <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
                     </MenuItem>
                  ))}
                 </Select>
                         </div>
-                        <div className="col-md-4"></div>
+                    
+                    
+                      
+                      
 
                          
                         <div className="col-md-4"><label className="labels">Select Lead</label>
@@ -1224,6 +1307,24 @@ const[leadid,setleadid]=useState("")
                        }
                         </select>
                         </div>
+                        <div className="col-md-6"></div>
+
+                        <div className="col-md-6"><label className="labels">Remind Me?</label> 
+                    <label class="switch">
+                    <input type="checkbox" onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
+                        <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    {
+                        sitevisit.remind_me && (
+                            <>
+                            <div className="col-md-4"></div>
+                            <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+                            </>
+                        )
+                    }
                   
                     <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
                     <label class="switch">
@@ -1248,18 +1349,19 @@ const[leadid,setleadid]=useState("")
                        <option>Not Intersted</option>
                         </select>
                         </div>
+                        <div className="col-md-8"></div>
                         {
                             sitevisit.status==="Conducted" &&(
                                 <>
 
-                                <div className="col-md-4"><label className="labels">Select Project</label> 
+                                <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
                                 <Select className="form-control form-control-sm" style={{border:"none"}}
                             multiple
                             value={siteprojects}
                             onChange={handlesiteprojectchange}
                             renderValue={(selected) => selected.join(', ')}
                         >
-                            {allproject.map((name) => (
+                            {sitevisit.project.map((name) => (
                                 <MenuItem key={name} value={name}>
                                     <Checkbox checked={siteprojects.indexOf(name) > -1} />
                                     <ListItemText primary={name} />
@@ -1277,9 +1379,9 @@ const[leadid,setleadid]=useState("")
                              renderValue={(selected) => selected.join(', ')}
                          >
                              {siteallblock.map((block) => (
-                                     <MenuItem key={block._id} value={block.block_name}> {/* Ensure unit_no is the value you want */}
-                                         <Checkbox checked={allblock.indexOf(block.block_name) > -1} />
-                                         <ListItemText primary={block.block_name} /> {/* Render unit_no or other relevant property */}
+                                     <MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
+                                         <Checkbox checked={allblock.indexOf(block) > -1} />
+                                         <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
                                      </MenuItem>
                                  ))}
                                  </Select>
@@ -1294,9 +1396,9 @@ const[leadid,setleadid]=useState("")
                                 renderValue={(selected) => selected.join(', ')}
                             >
                                 {siteallUnits.map((unit) => (
-                                        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-                                            <Checkbox checked={allunit1.indexOf(unit.unit_no) > -1} />
-                                            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
+                                        <MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
+                                            <Checkbox checked={allunit1.indexOf(unit) > -1} />
+                                            <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
                                         </MenuItem>
                                     ))}
                                     </Select>
@@ -1305,7 +1407,7 @@ const[leadid,setleadid]=useState("")
                             )
                         }
                      
-                    <div className="col-md-4"></div>
+                    
               
                 
                 <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>

@@ -857,11 +857,11 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                 address += component.long_name + ' ';
                               }
                               if (types.includes('sublocality_level_1') || types.includes('sublocality')) {
-                                street += component.long_name + ' ';
+                                locality += component.long_name + ' ';
                               }
-                              if (types.includes('administrative_area_level_2')) {
-                                locality = component.long_name;
-                              }
+                              // if (types.includes('administrative_area_level_2')) {
+                              //   locality = component.long_name;
+                              // }
                               if (types.includes('administrative_area_level_1')) {
                                 state = component.long_name;
                               }

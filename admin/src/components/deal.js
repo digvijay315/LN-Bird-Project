@@ -389,6 +389,57 @@ React.useEffect(() => {
        
 
 
+
+          // const add_deal=async(e)=>
+          //   {
+          //       e.preventDefault();
+           
+          //         try {
+                    
+          //           const formdata=new FormData()
+          //           formdata.append("available_for",deal.available_for)
+  
+          //           if (deal.document_details && deal.document_details.length > 0) {
+          //             deal.document_details.forEach((chapter, index) => {
+          //               formdata.append(`document_details[${index}].document_name`, chapter.document_name);
+                
+          //               // Append video files for the chapter (if any)
+          //               if (chapter.pic && chapter.pic.length > 0) {
+          //                 chapter.pic.forEach((file, picIndex) => {
+          //                   // Append each file with unique field names for better handling in multer
+          //                   formdata.append(`document_details[${index}].pic[${picIndex}]`, file);  
+          //                 });
+          //               }
+          //             });
+          //           }
+                    
+  
+          //           if (deal.preview && deal.preview.length > 0) {
+          //             deal.preview.forEach((file, previewIndex) => {
+          //               formdata.append(`preview[${previewIndex}]`, file);  // Same field name as in multer config
+          //             });
+          //           }
+  
+          //           console.log(formdata)
+                    
+  
+          //           const resp= await api.post('adddeal',formdata,{
+          //                   headers: {
+          //                     'Content-Type': 'multipart/form-data',
+          //                   },
+          //                 })
+          //                   if(resp.status===200)
+          //                       {
+          //                         toast.success(resp.data.message,{ autoClose: 2000 })
+          //                         setTimeout(() => {
+          //                           navigate('/dealdetails')
+          //                         }, 2000);
+                                  
+          //                        }
+          //               } catch (error) {
+          //                       toast.error(error.response.data.message,{ autoClose: 2000 })
+          //               }
+          //              }
      
           
           
@@ -1337,7 +1388,7 @@ console.log(deal.associated_contact);
                     <option value="">sq yard</option>
                     </select></div>
                     
-                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{formatCurrency(result)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" name="expected_price" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
                    <div id="divforprice1" className="col-md-5" style={{display:"none"}}></div>
 
 
@@ -1360,16 +1411,16 @@ console.log(deal.associated_contact);
                     <option value="">sq yard</option>
                     </select></div>
                     
-                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{formatCurrency(result1)}<br></br>{resultText1}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{formatCurrency(result1)}<br></br>{resultText1}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" name="quote_price" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
                    <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
 
-                    <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
                     <option>Select</option>
                         <option>Hot</option>
                         <option>Warm</option>
                         <option>Cold</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
                         <option>Cash</option>
                         <option>Online</option>
@@ -1380,7 +1431,7 @@ console.log(deal.associated_contact);
                         </select></div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                     <option>Select</option>
                         <option>99 Acre</option>
                         <option>News Paper</option>
@@ -1396,14 +1447,14 @@ console.log(deal.associated_contact);
                        
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
                     <option>Select</option>
                               <option>Sales</option>
                               <option>Marketing</option>
                               <option> Post Sales</option>
                               <option> Pre Sales</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
                     <option>Select</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
@@ -1411,7 +1462,7 @@ console.log(deal.associated_contact);
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
                     <option>Select</option>
                         <option>Only Me</option>
                         <option>Team</option>
@@ -1424,7 +1475,7 @@ console.log(deal.associated_contact);
                      
                      
                         <div className="row" id="rent" style={{display:"none"}}>
-                        <div className="col-md-4"><label className="labels">Floors</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,floors:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Floors</label><select className="form-control form-control-sm" name="floors" onChange={(e)=>setdeal({...deal,floors:e.target.value})}>
                     <option>Select</option>
                         <option>Ground</option>
                         <option>1st</option>
@@ -1452,7 +1503,7 @@ console.log(deal.associated_contact);
                  <option value="">sq yard</option>
                  </select></div>
                  
-                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext"><br></br>{formatCurrency(result2)}<br></br>{resultText2}</span></label><input type="text" id="rtotalprice" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
+                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext"><br></br>{formatCurrency(result2)}<br></br>{resultText2}</span></label><input type="text" id="rtotalprice" style={{display:"none"}} className="form-control form-control-sm" name="expected_price" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
                 <div id="rdivforprice1" className="col-md-5" style={{display:"none"}}></div>
 
 
@@ -1475,27 +1526,27 @@ console.log(deal.associated_contact);
                  <option value="">sq yard</option>
                  </select></div>
                  
-                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext1"><br></br>{formatCurrency(result3)}<br></br>{resultText3}</span></label><input type="text" id="rtotalprice1" style={{display:"none"}} className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
+                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext1"><br></br>{formatCurrency(result3)}<br></br>{resultText3}</span></label><input type="text" id="rtotalprice1" style={{display:"none"}} className="form-control form-control-sm" name="quote_price" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
                 <div id="rdivforprice11" className="col-md-5" style={{display:"none"}}></div>
 
                 
-                    <div className="col-md-3"><label className="labels">Security Deposite</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,security_deposite:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Maintanance Charge</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,maintainence_charge:e.target.value})}/></div>
-                    <div className="col-md-2"><label className="labels">Rent Esclation</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,rent_escltion:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Security Deposite</label><input type="text" required="true" className="form-control form-control-sm" name="security_deposite" onChange={(e)=>setdeal({...deal,security_deposite:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Maintanance Charge</label><input type="text" required="true" className="form-control form-control-sm" name="maintainence_charge" onChange={(e)=>setdeal({...deal,maintainence_charge:e.target.value})}/></div>
+                    <div className="col-md-2"><label className="labels">Rent Esclation</label><select className="form-control form-control-sm" name="rent_escltion" onChange={(e)=>setdeal({...deal,rent_escltion:e.target.value})}>
                     <option>Select</option>
                         <option>99 Acre</option>
                         <option>News Paper</option>
                         <option>Walkin</option>
                         <option>Olx</option>
                         </select></div>
-                        <div className="col-md-2"><label className="labels">Rent Period</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,rent_period:e.target.value})}>
+                        <div className="col-md-2"><label className="labels">Rent Period</label><select className="form-control form-control-sm" name="rent_period" onChange={(e)=>setdeal({...deal,rent_period:e.target.value})}>
                     <option>Select</option>
                         <option>06 months</option>
                         <option>11 months</option>
                         <option>24 months</option>
                         <option>36 months</option>
                         </select></div>
-                        <div className="col-md-2"><label className="labels">Fitout Period</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,fitout_perioud:e.target.value})}>
+                        <div className="col-md-2"><label className="labels">Fitout Period</label><select className="form-control form-control-sm" name="fitout_perioud" onChange={(e)=>setdeal({...deal,fitout_perioud:e.target.value})}>
                     <option>Select</option>
                         <option>06 months</option>
                         <option>11 months</option>
@@ -1503,13 +1554,13 @@ console.log(deal.associated_contact);
                         <option>36 months</option>
                         </select></div>
 
-                        <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
                     <option>Select</option>
                         <option>Hot</option>
                         <option>Warm</option>
                         <option>Cold</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
                     <option>Cash</option>
                         <option>Collecter Rate</option>
@@ -1520,7 +1571,7 @@ console.log(deal.associated_contact);
                         </select></div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                     <option>Select</option>
                     <option>99 Acre</option>
                         <option>News Paper</option>
@@ -1537,14 +1588,14 @@ console.log(deal.associated_contact);
                         
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
                     <option>Select</option>
                                <option>Sales</option>
                               <option>Marketing</option>
                               <option> Post Sales</option>
                               <option> Pre Sales</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
                     <option>Select</option>
                     <option>Suraj</option> 
                               <option>Suresh Kumar</option>
@@ -1552,7 +1603,7 @@ console.log(deal.associated_contact);
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
                         </select></div>
-                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
                     <option>Select</option>
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -1874,7 +1925,8 @@ console.log(deal.associated_contact);
               <div className="d-flex justify-content-between align-items-center mb-3">
                 </div><hr></hr>
                 <div className="row mt-2">
-                        <div className="col-md-2"><label className="labels">Document Name</label><select className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_name:e.target.value})}>
+                        <div className="col-md-2"><label className="labels">Document Name</label>
+                        <select className="form-control form-control-sm" name="document_name" onChange={(e)=>setdocuments({...documents,document_name:e.target.value})}>
                           <option>Choose</option>
                           <option>Aadhar Card</option>
                           <option>Pan Card</option>
@@ -1884,9 +1936,9 @@ console.log(deal.associated_contact);
                           <option>Other</option>
                           </select>
                          </div>
-                        <div className="col-md-2"><label className="labels">Document No</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setdocuments({...documents,document_no:e.target.value})} /></div>
-                        <div className="col-md-2"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setdocuments({...documents,document_Date:e.target.value})}/></div>
-                        <div className="col-md-2" id="suggestion-box" style={{ position: 'relative' }}><label className="labels">Linked Contact</label><input type="text" className="form-control form-control-sm" value={documents.linkded_contact} onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">Document No</label><input type="text" name="document_no" className="form-control form-control-sm"onChange={(e)=>setdocuments({...documents,document_no:e.target.value})} /></div>
+                        <div className="col-md-2"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" name="document_Date" onChange={(e)=>setdocuments({...documents,document_Date:e.target.value})}/></div>
+                        <div className="col-md-2" id="suggestion-box" style={{ position: 'relative' }}><label className="labels">Linked Contact</label><input type="text" className="form-control form-control-sm" name="linkded_contact" value={documents.linkded_contact} onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div>
 
 
 
@@ -1981,6 +2033,7 @@ console.log(deal.associated_contact);
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
+                                        name="s_no"
                                         className="form-control form-control-sm"
                                         
                                         onChange={(event) => handlesnochange(index, event)}
@@ -2013,6 +2066,7 @@ console.log(deal.associated_contact);
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
+                                        name="descriptions"
                                         className="form-control form-control-sm"
                                       
                                         onChange={(event) => handledescriptionchange(index, event)}
@@ -2025,7 +2079,7 @@ console.log(deal.associated_contact);
                           {Array.isArray(deal.category)?
                           deal.category.map((name, index) => (
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
-                                      <select className="form-control form-control-sm" required="true" onChange={(event) => handlecategorychange(index, event)}>
+                                      <select className="form-control form-control-sm" name="category" required="true" onChange={(event) => handlecategorychange(index, event)}>
                                           <option>select</option>
                                           <option>Bedroom</option>
                                           <option>Hall</option>
@@ -2076,6 +2130,7 @@ console.log(deal.associated_contact);
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
+                                        name="s_no1"
                                         className="form-control form-control-sm"
                                         value={name}
                                         onChange={(event) => handlesno1change(index, event)}
@@ -2090,6 +2145,7 @@ console.log(deal.associated_contact);
                                     <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
                                       <input 
                                         type="text"
+                                        name="url"
                                         className="form-control form-control-sm"
                                         value={name}
                                         onChange={(event) => handleurlChange(index, event)}
@@ -2119,7 +2175,7 @@ console.log(deal.associated_contact);
                     <div className="col-md-12"><label className="labels">Publish On</label></div>
                     <div className="col-md-12"><hr></hr></div>
                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
-                                      <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
+                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
                                           <option>select</option>
                                           <option>Own Website</option>
                                           <option>99 Acre</option>
@@ -2129,7 +2185,7 @@ console.log(deal.associated_contact);
                                           </select>
                                     </div>
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
-                                      <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
+                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
                                           <option>select</option>
                                           <option>Facebook</option>
                                           <option>Instagram</option>
@@ -2139,7 +2195,7 @@ console.log(deal.associated_contact);
                                           </select>
                                     </div>
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
-                                      <select className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
+                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
                                           <option>select</option>
                                           <option>Message</option>
                                           <option>What's App</option>
