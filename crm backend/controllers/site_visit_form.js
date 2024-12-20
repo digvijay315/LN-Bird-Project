@@ -28,5 +28,36 @@ const site_visit_form=async(req,res)=>
                 console.log(error)
             }
         }
-    module.exports={site_visit_form,view_site};
+
+        const view_sitevisittask_Byid=async(req,res)=>
+            {
+                try {
+                    const _id=req.params._id;
+                    const resp= await sitevisit_form.findOne({_id:_id})
+                    if(!resp)
+                        {
+                           return res.send("lead info not available")
+                        }
+                    res.status(200).send({message:"sitevisit task found and here are lead details:",sitevisit:resp})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+
+        const remove_sitevisittask=async(req,res)=>
+            {
+                try {
+                    const id=req.params._id;
+                    const user=await sitevisit_form.findOne({_id:id})
+                    if(!user)
+                        {
+                            return res.send({message:"deal not found"})
+                        }
+                    const resp=await sitevisit_form.deleteOne({_id:id})
+                    res.status(200).send({message:"task deleted successfully"})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+    module.exports={site_visit_form,view_site,remove_sitevisittask,view_sitevisittask_Byid};
     

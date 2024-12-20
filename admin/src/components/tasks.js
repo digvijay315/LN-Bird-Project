@@ -2,7 +2,7 @@ import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ToastContainer,toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
@@ -25,7 +25,7 @@ import api from "../api";
 // import { IconButton } from '@mui/material';
 import'../css/addcontact.css';
 import Tooltip from '@mui/material/Tooltip';
-
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 
 function Tasks() {
@@ -151,7 +151,7 @@ function Tasks() {
               return
             }
             const resp = selectedItems.map(async (itemId) => {
-              await axios.delete(`http://localhost:5000/deletecontact/${itemId}`);
+              await api.delete(`removesitevisittask/${itemId}`);
             });
             
             toast.success('Selected items deleted successfully',{autoClose:"2000"})
@@ -412,7 +412,7 @@ const sitevisitcolumns = [
         { id: 'feedback', name: 'Feedback' },
         { id: 'stage', name: 'Stage' },
         { id: 'status', name: 'Status' },
-        { id: 'action', name: 'Action' },
+
       ];
       
       const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
@@ -583,7 +583,7 @@ const handleischeckedchange=(e)=>
   setischecked(e.target.checked)
 }
 
-const sitevisit=()=>
+const Sitevisit=()=>
 {
   document.getElementById("followup").style.display="none"
   document.getElementById("followup1").style.backgroundColor="white"
@@ -628,6 +628,367 @@ const followup=()=>
     }
         
 
+
+         useEffect(()=>
+                              {
+                                if(selectedItems.length===0)
+                                {
+                                  document.getElementById("siteaction").style.display="none"
+                                 
+                                }
+                                if(selectedItems.length===1)
+                                {
+                                  document.getElementById("siteaction").style.display="inline-block"
+                                }
+          
+                                if(selectedItems.length>1)
+                                {
+                                  document.getElementById("siteaction").style.display="inline-block"
+                                
+                                }
+                              },[selectedItems])
+
+
+
+      const [show1, setshow1] = useState(false);
+    
+                  const handleClose1 = () => setshow1(false);
+                  const handleShow1=async()=>
+                  {
+                    setshow1(true);
+                   
+                  }
+
+                  const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
+                    inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
+                    last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
+
+
+
+    const fetchsitevisitdata=async(event)=>
+    {
+    
+      
+      try {
+        const resp=await api.get(`viewsitevisitbyid/${selectedItems}`)
+        console.log(resp);
+        
+        setsitevisit(resp.data.sitevisit[0])
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+   useEffect(()=>{fetchsitevisitdata()},[])
+console.log(sitevisit);
+
+console.log(selectedItems);
+
+                    const activity=["Call","Email","Meeting","Site Visit"]
+                    const reason=["Meeting","Site Visit","Discuss","For Requirment","etc"]
+                    const direction=["Incoming","Outgoing"]
+                    const visittype=["Site Visit","Home Visit","Online"]
+                    const status=["Answered","Missed","Not Pic","Busy","Cut Call","Number Not Reachable","Switch Off","Incoming","Not Available","Number Invalid"]
+                    const result=["Interested","Not Interested","Postponed","Low Budget","Location Mismatch"]
+                    const location=["Home","Office","Company","Site"]
+                    
+
+
+                    const[dealdata,setdealdata]=useState([])
+                    const fetchdealdata=async(event)=>
+                        {
+                          
+                          try {
+                            const resp=await api.get('viewdeal')
+                            const all=(resp.data.deal)
+                            setdealdata(all)
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        
+                        }
+
+                        useEffect(()=>
+                          {
+                              fetchdealdata()
+                          },[])
+                          
+                          
+
+
+                    const [projects, setprojects] = useState([]);
+                    const [units, setunits] = useState([]);
+                    const [allBlocks, setallBlocks] = useState([]);
+                    const [allUnits, setallUnits] = useState([]);
+
+                    const handleprojectchange = (event) => {
+                        const {
+                          target: { value },
+                        } = event;
+                      
+                        const selectproject = typeof value === 'string' ? value.split(',') : value;
+                      
+                        setprojects(selectproject);
+                        setsitevisit((prev) => {
+                          const updatedSiteVisit = { ...prev, project: selectproject };
+                          fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+                          return updatedSiteVisit; // Return the updated state
+                        });
+                      };
+
+                      const fetchdatabyprojectname = async (projectNames) => {
+
+                        try {
+                          const fetchPromises = projectNames.map(async (projectName) => {
+                            const resp = await api.get(`viewdealbyproject/${projectName}`);
+                            return resp.data.deal; // Assuming resp.data.project is an array of units for that project
+                          });
+                      
+                          const results = await Promise.all(fetchPromises);
+                          const allFetchedUnits = results.flat();
+                          setunits(allFetchedUnits); // Set the units to the flattened result
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      };
+
+                      const allproject =[]
+    dealdata.map((item) => {
+    if (!allproject.includes(item.project)) {
+      allproject.push(item.project);
+    }
+  });
+
+  useEffect(() => {
+    if (units.length > 0) {
+      // Collect only the unit_number and block from the units array
+      const collectedUnits = units.map(item => item.unit_number);
+      const collecteblocks = units.map(item => item.block);
+  
+      // Create a Map to filter out duplicates based on unit_number and get unique unit_numbers
+      const uniqueUnits = [
+        ...new Map(collectedUnits.map(unit_number => [unit_number, unit_number])).values()
+      ];
+  
+      // Create a Map to filter out duplicates based on block and get unique blocks
+      const uniqueblocks = [
+        ...new Map(collecteblocks.map(block => [block, block])).values()
+      ];
+  
+      // Set the state with the unique unit_numbers and blocks
+      setallUnits(uniqueUnits);
+      setallBlocks(uniqueblocks); // Set allBlocks with the unique blocks
+    }
+  }, [units]);
+
+
+  const[allblocks,setallblocks]=useState([])
+const handleblockchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectblock = typeof value === 'string' ? value.split(',') : value;
+  
+    setallblocks(selectblock);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, block: selectblock };
+    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+  const[allunit,setallunit]=useState([])
+const handleallunitschange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectunits = typeof value === 'string' ? value.split(',') : value;
+  
+     setallunit(selectunits);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, inventory: selectunits };
+    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+  const[leadid,setleadid]=useState("")
+  const handleLeadChange = (e) => {
+      const selectedLead = data.find(item => item._id === e.target.value);
+      setleadid(selectedLead._id)
+      if (selectedLead) {
+          const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+          setsitevisit(prevState => ({
+              ...prevState,
+              lead: fullName,
+              title2: selectedLead.title,
+              first_name: selectedLead.first_name,
+              last_name: selectedLead.last_name,
+              mobile_no: selectedLead.mobile_no,
+              email: selectedLead.email,
+              stage: selectedLead.stage
+          }));
+      }
+
+  }
+
+  const[updatestage,setupdatestage]=useState("")
+    const[updatestage1,setupdatestage1]=useState("")
+
+
+  const handleleadstatuschange =  (e) => {
+    const newStatus = e.target.value;
+
+    // Update the status first
+    setsitevisit((prevState) => {
+        return {
+            ...prevState,
+            status: newStatus
+        };
+    });
+
+    // Now check if status is "Conducted" and update the stage
+    if (newStatus === "Conducted") {
+        setupdatestage("Opportunity");
+        setupdatestage1("Quote");
+    }
+    else if (newStatus === "Did Not Visit" || "Not Intersted>") {
+        setupdatestage("Prospect");
+        setupdatestage1("Open");
+    }
+};
+
+const [siteprojects, setsiteprojects] = useState([]);
+const [siteunits, setsiteunits] = useState([]);
+
+const handlesiteprojectchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectproject = typeof value === 'string' ? value.split(',') : value;
+  
+    setsiteprojects(selectproject);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, intrested_project: selectproject };
+      fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+  const fetchdatabysiteprojectname = async (projectNames) => {
+
+    try {
+      const fetchPromises = projectNames.map(async (projectName) => {
+        const resp = await api.get(`viewdealbyproject/${projectName}`);
+        return resp.data.deal; // Assuming resp.data.project is an array of units for that project
+      });
+  
+      const results = await Promise.all(fetchPromises);
+      const allFetchedUnits = results.flat();
+      setsiteunits(allFetchedUnits); // Set the units to the flattened result
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const[allblock,setallblock]=useState([])
+const handleallblockchange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // Convert value to an array if it's a string (for multiple selection)
+  const selectblock = typeof value === 'string' ? value.split(',') : value;
+
+  // Update the allblock state with full block.block-project combinations (for selected blocks)
+  setallblock(selectblock);
+
+  // Update the sitevisit state with only block.block values (not both block.block and block.project)
+  setsitevisit((prev) => {
+    const updatedSiteVisit = { 
+      ...prev, 
+      intrested_block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
+    };
+    return updatedSiteVisit;
+  });
+};
+
+const[alldealblocks,setalldealblocks]=useState([])
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      sitevisit.intrested_project.some((project) => project === item.project)
+    );
+    setalldealblocks(dealblocks)
+  }, [sitevisit.intrested_project]);
+
+  const[allunit1,setallunit1]=useState([])
+  const handleallunitschange1 = (event) => {
+    const { target: { value } } = event;
+  
+    // Convert value to an array if it's a string (for multiple selection)
+    const selectunits = typeof value === 'string' ? value.split(',') : value;
+  
+    // Extract only the unit_number from the selected values (split by '-')
+    const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+  
+    // Update allunit1 state with the selected unit numbers
+    setallunit1(selectunits);
+  
+    // Update the sitevisit state with selected units in intrested_inventory
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, intrested_inventory: unitNumbers }; // Store only unit numbers
+      return updatedSiteVisit;
+    });
+  };
+  
+
+  const [alldealunits, setalldealunits] = useState([]);
+
+useEffect(() => {
+  const dealblocks = dealdata.filter((item) =>
+    sitevisit.intrested_project.some((project) => project === item.project) &&
+    sitevisit.intrested_block.some((block) => block === item.block) // Add the condition for interested blocks
+  );
+  setalldealunits(dealblocks);
+}, [sitevisit.intrested_project, sitevisit.intrested_block]); // Depend on both interested_project and interested_block
+
+
+const[contactdata,setcontactdata]=useState([]);
+const fetchcontactdata=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('viewcontact')
+    setcontactdata(resp.data.contact)
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+useEffect(()=>
+  {
+      fetchcontactdata()
+  },[])
+
+  const handleToggle3 = (e) => {
+    const isChecked = e.target.checked; // Get the checked state
+    setsitevisit({ ...sitevisit, complete: isChecked }); // Update the calltask state
+
+    // Open the modal only if the checkbox is checked
+    if (isChecked) {
+       document.getElementById("sitevisitdetails").style.display="block"
+    }
+    else{
+        document.getElementById("sitevisitdetails").style.display="none"
+    }
+};
+
+
+
     return ( 
         <div>
             <Header1/>
@@ -646,7 +1007,7 @@ const followup=()=>
               
             </ul>
             <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px",textAlign:"center"}} onClick={followup}>Follow Up </label>
-            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={sitevisit}>Site Visit </label>
+            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={Sitevisit}>Site Visit </label>
             <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={meeting}>Meeting </label>
 
             <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"40%"}}>Play Task</button>
@@ -666,8 +1027,25 @@ const followup=()=>
         <div style={{cursor:"pointer"}}>All</div>
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
-      <input type="checkbox" onChange={handleischeckedchange}/>
-      <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+      {/* <input type="checkbox" onChange={handleischeckedchange}/>
+      <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
+           <div id="siteaction" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
+     
+     <Tooltip title="Delete Task.." arrow>
+     <img id="dealdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems}   style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px"}} alt=""/>
+     </Tooltip>
+     
+     <Tooltip title="Edit Task.." arrow>
+     <img id="dealedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+     
+     <Tooltip title="Complete Task.." arrow>
+     <img id="completetask"  src="https://static.vecteezy.com/system/resources/previews/019/513/217/non_2x/tasks-the-woman-marks-the-completed-tasks-on-the-tablet-vector.jpg" onClick={handleShow1}   style={{height:"45px",width:"45px",cursor:"pointer",marginTop:"0px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+   
+     
+     </div>
+     
       <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
            {/* <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button> */}
            <label className="labels" style={{width:"350px"}}>Sorted By Due Date</label>
@@ -782,6 +1160,8 @@ const followup=()=>
         </footer>
       </div>
 
+
+
       <div id="sitevisit" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -834,7 +1214,14 @@ const followup=()=>
             </StyledTableCell>
            
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
-                 {item.project}
+                {
+                  Array.isArray(item.project) ? 
+                    item.project.map((project, index) => (
+                      <div key={index}>{project}</div>  // Replace <div> with the appropriate tag you want
+                    )) : 
+                    <div>{item.project}</div>  // Render directly if it's not an array
+                }
+
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
                  
@@ -860,9 +1247,9 @@ const followup=()=>
                 <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
                 
                 </StyledTableCell>
-                <StyledTableCell>
+                {/* <StyledTableCell>
               <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
-            </StyledTableCell>
+            </StyledTableCell> */}
             
           </StyledTableRow>
         ))}
@@ -987,8 +1374,310 @@ const followup=()=>
       </div>
        
    
+  {/* =================================sitevisit complete task model=========================================================== */}
 
+         <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Complete Site-Visit Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+
+
+                  <div className="row" id="sitevisit" >
+
+<div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
+
+    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
+<option>{sitevisit.executive} </option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+
+    <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
+<option>Select </option>
+   {
+    visittype.map(item=>
+        (
+            <option>{item}</option>
+        )
+    )
+   }
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+
+    <div className="col-md-4"><label className="labels">Select Project</label> 
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+multiple
+value={projects}
+onChange={handleprojectchange}
+renderValue={(selected) => selected.join(', ')}
+>
+{allproject.map((name) => (
+    <MenuItem key={name} value={name}>
+        <Checkbox checked={projects.indexOf(name) > -1} />
+        <ListItemText primary={name} />
+    </MenuItem>
+))}
+</Select>
+    </div>
+   
+
+
+    <div className="col-md-4"><label className="labels">Select Block</label>
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+multiple
+value={allblocks}
+onChange={handleblockchange}
+renderValue={(selected) => selected.join(', ')}
+>
+{allBlocks.map((block) => (
+<MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
+    <Checkbox checked={allblocks.indexOf(block) > -1} />
+    <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
+</MenuItem>
+))}
+</Select>
+    </div>
+    <div className="col-md-4"><label className="labels">Select Inventory</label>
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+multiple
+value={allunit}
+onChange={handleallunitschange}
+renderValue={(selected) => selected.join(', ')}
+>
+{allUnits.map((unit) => (
+<MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
+    <Checkbox checked={allunit.indexOf(unit) > -1} />
+    <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
+</MenuItem>
+))}
+</Select>
+    </div>
+
+
+  
+  
+
+     
+    <div className="col-md-4"><label className="labels">Select Lead</label>
+    <select
+    className="form-control form-control-sm"
+    required
+    onChange={handleLeadChange}>
+<option>Select</option>
+    {
+        data.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
         
+    }
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
+<option>Select </option>
+   <option>Confirmed</option>
+   <option>Tentative</option>
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+
+    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
+
+
+    <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
+<option>Select</option>
+   {
+    contactdata.map((item)=>
+    (
+        <option>{item.title} {item.first_name} {item.last_name} ({item.company_name})</option>
+    )) 
+   }
+    </select>
+    </div>
+    <div className="col-md-6"></div>
+
+    <div className="col-md-6"><label className="labels">Remind Me?</label> 
+<label class="switch">
+<input type="checkbox" onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
+    <span class="slider round"></span>
+    </label>
+</div>
+
+{
+    sitevisit.remind_me && (
+        <>
+        <div className="col-md-4"></div>
+        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+        </>
+    )
+}
+
+<div className="col-md-6"><label className="labels">Mark As Completed?</label> 
+<label class="switch">
+<input type="checkbox" onChange={handleToggle3}/>
+    <span class="slider round"></span>
+    </label>
+</div>
+
+
+
+<div className="p-3 py-5" id="sitevisitdetails" style={{width:"100%",display:"none"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Site Visit</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+<option>Select</option>
+   <option>Conducted</option>
+   <option>Did Not Visit</option>
+   <option>Not Intersted</option>
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+    {
+        sitevisit.status==="Conducted" &&(
+            <>
+
+            <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+            <Select className="form-control form-control-sm" style={{border:"none"}}
+        multiple
+        value={siteprojects}
+        onChange={handlesiteprojectchange}
+        renderValue={(selected) => selected.join(', ')}
+    >
+        {sitevisit.project.map((name) => (
+            <MenuItem key={name} value={name}>
+                <Checkbox checked={siteprojects.indexOf(name) > -1} />
+                <ListItemText primary={name} />
+            </MenuItem>
+        ))}
+    </Select>
+            </div>
+
+            <div className="col-md-4">
+<label className="labels">Select Interested Block</label>
+<Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={allblock}  // Value contains the full block.block-project combinations
+onChange={handleallblockchange}  // Handle the change when blocks are selected/deselected
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+>
+{alldealblocks
+.filter((value, index, self) =>
+// Ensure unique combinations of block.block and block.project
+index === self.findIndex((t) => (
+  t.block === value.block && t.project === value.project
+))
+)
+.map((block) => {
+// Create a unique identifier by combining block.block and block.project
+const uniqueBlockKey = `${block.block}-${block.project}`;
+
+return (
+  <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+    <Checkbox 
+      checked={allblock.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+    />
+    <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+  </MenuItem>
+);
+})
+}
+</Select>
+</div>
+
+
+
+            <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+         
+            <Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={allunit1} // Holds selected units
+onChange={handleallunitschange1} // Handle changes for unit selection
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+>
+{alldealunits
+.filter((value, index, self) =>
+// Ensure unique combinations of project, block, and unit
+index === self.findIndex((t) => (
+t.project === value.project &&
+t.block === value.block &&
+t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+))
+)
+.map((unit) => {
+// Create a unique key for project-block-unit combination
+const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+return (
+<MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+<Checkbox checked={allunit1.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+<ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+</MenuItem>
+);
+})}
+</Select>
+
+
+                </div>
+                </>
+        )
+    }
+ 
+
+
+
+<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+
+
+</div>
+</div>
+
+
+<div className="col-md-2"></div>
+<div className="col-md-2" style={{marginLeft:"50%",marginTop:"20px"}}><button className="form-control form-control-sm" >Submit</button></div>
+<div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+
+
+{/* <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
+<div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div> */}
+
+</div>
+
+
+
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose1}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={handleClose1}>
+                      Complete Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+
+
 
    
           <ToastContainer/>

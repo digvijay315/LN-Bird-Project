@@ -9,6 +9,7 @@ import Modal from 'react-bootstrap/Modal';
 import api from "../api";
 import { Inventory } from "@mui/icons-material";
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+// import Select from 'react-select';
 
 
 function Task_form() {
@@ -161,49 +162,65 @@ function Task_form() {
               
         
         
-            const sitevisitdetails=async()=>
-                {
-                 
-                    const title1 = document.getElementById("sitevisittitle").innerText;
-            
-                    // Update state
-                    const updatedsiteTask = { ...sitevisit, title: title1 };
-                    try {
-                        const resp=await api.post('sitevisit',updatedsiteTask)
-        
-                        const data = { stage: updatestage};
-                        const data1 = { newstage: updatestage1};
-                        
-                        const resp1 = await api.put(`updatelead/${leadid}`, data);
-        
-                        for (let i = 0; i < sitevisit.intrested_project.length; i++) {
-                            const project = sitevisit.intrested_project[i];
-                            
-                            const block = sitevisit.intrested_block && sitevisit.intrested_block[i] ? 
-                            sitevisit.intrested_block[i] : 
-                            [];
-
-                            const unit_number = sitevisit.intrested_inventory && sitevisit.intrested_inventory[i] ? 
-                            sitevisit.intrested_inventory[i] : 
-                            [];
-                      
-                            console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
-                            // Send the API request for each project and inventory
-                            const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+                const sitevisitdetails = async () => {
+                  const title1 = document.getElementById("sitevisittitle").innerText;
+                
+                  // Update state
+                  const updatedsiteTask = { ...sitevisit, title: title1 };
+                
+                  try {
+                    // First API request to post sitevisit details
+                    const resp = await api.post('sitevisit', updatedsiteTask);
+                
+                    const data = { stage: updatestage };
+                    const data1 = { newstage: updatestage1 };
+                
+                   if(leadid)
+                   {
+                    const resp1 = await api.put(`updatelead/${leadid}`, data);
+                   }
+                   
+                
+                    // Loop through interested projects, blocks, and inventories
+                    for (let i = 0; i < sitevisit.intrested_project.length; i++) {
+                      const project = sitevisit.intrested_project[i];
+                
+                      // Ensure block and unit number exist at the corresponding index
+                      const block = sitevisit.intrested_block && sitevisit.intrested_block[i] ? sitevisit.intrested_block[i] : null;
+                      const unit_number = sitevisit.intrested_inventory && sitevisit.intrested_inventory[i] ? sitevisit.intrested_inventory[i] : null;
+                
+                      // Only proceed if both block and unit_number are defined
+                      if (block && unit_number) {
+                        console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+                
+                        try {
+                          // Send the API request for each valid project/block/unit combination
+                          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+                          console.log('API response:', resp2.data); // Log response for debugging
+                        } catch (error) {
+                          // Handle errors in the API call for individual project/block/unit combinations
+                          console.error(`API request failed for ${project}, ${block}, ${unit_number}:`, error.message);
                         }
-                        if(resp.status===200)
-                        {
-                            toast.success(resp.data.message)
-                            setTimeout(() => {
-                                window.location.reload();
-                              }, 2000); // 2000 milliseconds = 2 seconds
-                            
-                        }
-                    } catch (error) {
-                        
-                        toast.error(error.message)
+                      } else {
+                        console.warn(`Skipping API call for ${project} as block or unit is missing`);
+                      }
                     }
-                }
+                
+                    // Check for successful sitevisit response
+                    if (resp.status === 200) {
+                      toast.success(resp.data.message);
+                
+                      // Reload the page after a brief delay
+                      setTimeout(() => {
+                        window.location.reload();
+                      }, 2000); // 2000 milliseconds = 2 seconds
+                    }
+                  } catch (error) {
+                    // Catch any errors from the main API requests (sitevisit and lead updates)
+                    toast.error("Please select Project Block and Unit sequencely or Missing Lead...");
+                  }
+                };
+                
 
 //========================================all post methods end =======================================================================       
 
@@ -496,6 +513,17 @@ const handlesiteprojectchange = (event) => {
     });
   };
 
+  const[alldealblocks,setalldealblocks]=useState([])
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      sitevisit.intrested_project.some((project) => project === item.project)
+    );
+    setalldealblocks(dealblocks)
+  }, [sitevisit.intrested_project]);
+  
+ 
+
+
 
 const fetchdatabysiteprojectname = async (projectNames) => {
 
@@ -539,36 +567,67 @@ console.log(sitevisit.block);
 
 const[allblock,setallblock]=useState([])
 const handleallblockchange = (event) => {
-    const {
-      target: { value },
-    } = event;
-  
-    const selectblock = typeof value === 'string' ? value.split(',') : value;
-  
-    setallblock(selectblock);
-    setsitevisit((prev) => {
-      const updatedSiteVisit = { ...prev, intrested_block: selectblock };
-    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-      return updatedSiteVisit; // Return the updated state
-    });
-  };
+  const {
+    target: { value },
+  } = event;
+
+  // Convert value to an array if it's a string (for multiple selection)
+  const selectblock = typeof value === 'string' ? value.split(',') : value;
+
+  // Update the allblock state with full block.block-project combinations (for selected blocks)
+  setallblock(selectblock);
+
+  // Update the sitevisit state with only block.block values (not both block.block and block.project)
+  setsitevisit((prev) => {
+    const updatedSiteVisit = { 
+      ...prev, 
+      intrested_block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
+    };
+    return updatedSiteVisit;
+  });
+};
+
+
+
+
+
+
+const [alldealunits, setalldealunits] = useState([]);
+
+useEffect(() => {
+  const dealblocks = dealdata.filter((item) =>
+    sitevisit.intrested_project.some((project) => project === item.project) &&
+    sitevisit.intrested_block.some((block) => block === item.block) // Add the condition for interested blocks
+  );
+  setalldealunits(dealblocks);
+}, [sitevisit.intrested_project, sitevisit.intrested_block]); // Depend on both interested_project and interested_block
+
+console.log(alldealunits);
+
 
   const[allunit1,setallunit1]=useState([])
-const handleallunitschange1 = (event) => {
-    const {
-      target: { value },
-    } = event;
+  const handleallunitschange1 = (event) => {
+    const { target: { value } } = event;
   
+    // Convert value to an array if it's a string (for multiple selection)
     const selectunits = typeof value === 'string' ? value.split(',') : value;
   
+    // Extract only the unit_number from the selected values (split by '-')
+    const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+  
+    // Update allunit1 state with the selected unit numbers
     setallunit1(selectunits);
+  
+    // Update the sitevisit state with selected units in intrested_inventory
     setsitevisit((prev) => {
-      const updatedSiteVisit = { ...prev, intrested_inventory: selectunits };
-    //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-      return updatedSiteVisit; // Return the updated state
+      const updatedSiteVisit = { ...prev, intrested_inventory: unitNumbers }; // Store only unit numbers
+      return updatedSiteVisit;
     });
   };
+  
+  
 
+console.log(sitevisit.intrested_inventory);
 
 
 //== ================================this project data is for meeting task=============================================================
@@ -1370,38 +1429,75 @@ const[leadid,setleadid]=useState("")
                         </Select>
                                 </div>
 
-                                <div className="col-md-4"><label className="labels">Select Intersted Block</label>
-                             
-                             <Select className="form-control form-control-sm" style={{border:"none"}}
-                             multiple
-                             value={allblock}
-                             onChange={handleallblockchange}
-                             renderValue={(selected) => selected.join(', ')}
-                         >
-                             {siteallblock.map((block) => (
-                                     <MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
-                                         <Checkbox checked={allblock.indexOf(block) > -1} />
-                                         <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
-                                     </MenuItem>
-                                 ))}
-                                 </Select>
-                                 </div>
+                                <div className="col-md-4">
+              <label className="labels">Select Interested Block</label>
+              <Select
+                className="form-control form-control-sm"
+                style={{ border: "none" }}
+                multiple
+                value={allblock}  // Value contains the full block.block-project combinations
+                onChange={handleallblockchange}  // Handle the change when blocks are selected/deselected
+                renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+              >
+                {alldealblocks
+                  .filter((value, index, self) =>
+                    // Ensure unique combinations of block.block and block.project
+                    index === self.findIndex((t) => (
+                      t.block === value.block && t.project === value.project
+                    ))
+                  )
+                  .map((block) => {
+                    // Create a unique identifier by combining block.block and block.project
+                    const uniqueBlockKey = `${block.block}-${block.project}`;
+
+                    return (
+                      <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+                        <Checkbox 
+                          checked={allblock.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+                        />
+                        <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+                      </MenuItem>
+                    );
+                  })
+                }
+              </Select>
+</div>
+
+
 
                                 <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
                              
-                                <Select className="form-control form-control-sm" style={{border:"none"}}
-                                multiple
-                                value={allunit1}
-                                onChange={handleallunitschange1}
-                                renderValue={(selected) => selected.join(', ')}
-                            >
-                                {siteallUnits.map((unit) => (
-                                        <MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
-                                            <Checkbox checked={allunit1.indexOf(unit) > -1} />
-                                            <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
-                                        </MenuItem>
-                                    ))}
-                                    </Select>
+                                <Select
+  className="form-control form-control-sm"
+  style={{ border: "none" }}
+  multiple
+  value={allunit1} // Holds selected units
+  onChange={handleallunitschange1} // Handle changes for unit selection
+  renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+>
+  {alldealunits
+    .filter((value, index, self) =>
+      // Ensure unique combinations of project, block, and unit
+      index === self.findIndex((t) => (
+        t.project === value.project &&
+        t.block === value.block &&
+        t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+      ))
+    )
+    .map((unit) => {
+      // Create a unique key for project-block-unit combination
+      const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+      return (
+        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+          <Checkbox checked={allunit1.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        </MenuItem>
+      );
+    })}
+</Select>
+
+
                                     </div>
                                     </>
                             )

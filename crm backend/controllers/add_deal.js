@@ -246,7 +246,7 @@ console.log(req.files);
                           const { project, block,unit_number } = req.params;  // Extract project and unit from URL params
                           const { newstage } = req.body;  // Extract new stage from request body
                       
-                          console.log(`Received stage: ${newstage} for project: ${project}, block: ${block}, unit_number: ${unit_number}`);
+                        //   console.log(`Received stage: ${newstage} for project: ${project}, block: ${block}, unit_number: ${unit_number}`);
                       
                           // Update all matching deals in a single operation
                           const result = await adddeal.updateMany(
