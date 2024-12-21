@@ -656,6 +656,8 @@ const followup=()=>
                   const handleShow1=async()=>
                   {
                     setshow1(true);
+                    fetchsitevisitdata()
+                    fetchleaddata()
                    
                   }
 
@@ -664,6 +666,7 @@ const followup=()=>
                     last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
 
 
+                   
 
     const fetchsitevisitdata=async(event)=>
     {
@@ -673,16 +676,26 @@ const followup=()=>
         const resp=await api.get(`viewsitevisitbyid/${selectedItems}`)
         console.log(resp);
         
-        setsitevisit(resp.data.sitevisit[0])
+        setsitevisit(resp.data.sitevisit)
       } catch (error) {
         console.log(error);
       }
     }
 
-   useEffect(()=>{fetchsitevisitdata()},[])
-console.log(sitevisit);
+    const[leaddata,setleaddata]=useState([]);
+    const fetchleaddata=async()=>
+    {
+      
+      try {
+        const resp=await api.get('leadinfo')
+        setleaddata(resp.data.lead)
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
 
-console.log(selectedItems);
+    
 
                     const activity=["Call","Email","Meeting","Site Visit"]
                     const reason=["Meeting","Site Visit","Discuss","For Requirment","etc"]
@@ -816,7 +829,7 @@ const handleallunitschange = (event) => {
 
   const[leadid,setleadid]=useState("")
   const handleLeadChange = (e) => {
-      const selectedLead = data.find(item => item._id === e.target.value);
+      const selectedLead = leaddata.find(item => item._id === e.target.value);
       setleadid(selectedLead._id)
       if (selectedLead) {
           const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
@@ -986,6 +999,82 @@ useEffect(()=>
         document.getElementById("sitevisitdetails").style.display="none"
     }
 };
+
+
+// const updatesite_visit=async()=>
+// {
+//   try {
+//     const resp=await api.put(`updatesitevisittask/${selectedItems}`,sitevisit)
+//     if(resp.status===200)
+//     {
+//       toast.success("Task Completed Successfully",{autoClose:2000})
+//     }
+//   } catch (error) {
+//     console.log(error);
+    
+//   }
+// }
+
+
+
+const sitevisitdetails = async () => {
+  const title1 = document.getElementById("sitevisittitle").innerText;
+  
+  // Update site visit task
+  const updatedsiteTask = { ...sitevisit, title: title1 };
+
+  try {
+    const data1 = { newstage: updatestage1 };
+
+    // Loop through each selected project-block-unit combination
+    let isValidCombination = true;
+    for (let i = 0; i < allunit1.length; i++) {
+      const selectedCombination = allunit1[i];
+      const [unit_number, block, project] = selectedCombination.split('-');
+
+      // Check if the unit_number, block, and project exist
+      if (unit_number && block && project) {
+        console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+
+        try {
+          // Call API for each valid combination
+          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+        } catch (error) {
+          // Handle API errors for the individual combination
+          toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+          isValidCombination = false; // Set to false if the combination fails
+        }
+      } else {
+        // If any part is missing, skip the combination
+        toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+        isValidCombination = false;
+      }
+    }
+
+    // Post site visit data if the combination is valid
+    if (isValidCombination) {
+      const resp = await api.put(`updatesitevisittask/${selectedItems}`, updatedsiteTask);
+
+      // If successful, show a success toast and reload
+      if (resp.status === 200) {
+        toast.success("Task Completed", { autoClose: 2000 });
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
+    } else {
+      toast.error("Some project/block/unit combinations were invalid. Please check your data.");
+    }
+
+  } catch (error) {
+    // Handle any errors during the process
+    toast.error("An error occurred. Please check your data and try again.");
+  }
+};
+
+
+
 
 
 
@@ -1390,6 +1479,7 @@ useEffect(()=>
 
     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
 <option>{sitevisit.executive} </option>
+<option>---select---</option>
 <option>Rajesh</option>
     <option>Suresh</option>
     <option>Vivek</option>
@@ -1397,7 +1487,8 @@ useEffect(()=>
     </div>
 
     <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
-<option>Select </option>
+<option>{sitevisit.sitevisit_type} </option>
+<option>---select---</option>
    {
     visittype.map(item=>
         (
@@ -1412,13 +1503,13 @@ useEffect(()=>
     <div className="col-md-4"><label className="labels">Select Project</label> 
     <Select className="form-control form-control-sm" style={{border:"none"}}
 multiple
-value={projects}
+value={sitevisit.project}
 onChange={handleprojectchange}
 renderValue={(selected) => selected.join(', ')}
 >
 {allproject.map((name) => (
     <MenuItem key={name} value={name}>
-        <Checkbox checked={projects.indexOf(name) > -1} />
+        <Checkbox checked={sitevisit.project.indexOf(name) > -1} />
         <ListItemText primary={name} />
     </MenuItem>
 ))}
@@ -1430,13 +1521,13 @@ renderValue={(selected) => selected.join(', ')}
     <div className="col-md-4"><label className="labels">Select Block</label>
     <Select className="form-control form-control-sm" style={{border:"none"}}
 multiple
-value={allblocks}
+value={sitevisit.block}
 onChange={handleblockchange}
 renderValue={(selected) => selected.join(', ')}
 >
 {allBlocks.map((block) => (
 <MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
-    <Checkbox checked={allblocks.indexOf(block) > -1} />
+    <Checkbox checked={sitevisit.block.indexOf(block) > -1} />
     <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
 </MenuItem>
 ))}
@@ -1445,13 +1536,13 @@ renderValue={(selected) => selected.join(', ')}
     <div className="col-md-4"><label className="labels">Select Inventory</label>
     <Select className="form-control form-control-sm" style={{border:"none"}}
 multiple
-value={allunit}
+value={sitevisit.inventory}
 onChange={handleallunitschange}
 renderValue={(selected) => selected.join(', ')}
 >
 {allUnits.map((unit) => (
 <MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
-    <Checkbox checked={allunit.indexOf(unit) > -1} />
+    <Checkbox checked={sitevisit.inventory.indexOf(unit) > -1} />
     <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
 </MenuItem>
 ))}
@@ -1468,9 +1559,10 @@ renderValue={(selected) => selected.join(', ')}
     className="form-control form-control-sm"
     required
     onChange={handleLeadChange}>
-<option>Select</option>
+      <option>{sitevisit.lead}</option>
+<option>---Select---</option>
     {
-        data.map((item)=>
+        leaddata.map((item)=>
         (
             <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
             
@@ -1480,18 +1572,20 @@ renderValue={(selected) => selected.join(', ')}
     </select>
     </div>
     <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
-<option>Select </option>
+    <option>{sitevisit.confirmation}</option>
+<option>---Select---</option>
    <option>Confirmed</option>
    <option>Tentative</option>
     </select>
     </div>
     <div className="col-md-4"></div>
 
-    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
+    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={sitevisit.remark} style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
 
 
     <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
-<option>Select</option>
+    <option>{sitevisit.participants}</option>
+<option>---Select---</option>
    {
     contactdata.map((item)=>
     (
@@ -1504,7 +1598,7 @@ renderValue={(selected) => selected.join(', ')}
 
     <div className="col-md-6"><label className="labels">Remind Me?</label> 
 <label class="switch">
-<input type="checkbox" onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
+<input type="checkbox" checked={sitevisit.remind_me} onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
     <span class="slider round"></span>
     </label>
 </div>
@@ -1513,8 +1607,8 @@ renderValue={(selected) => selected.join(', ')}
     sitevisit.remind_me && (
         <>
         <div className="col-md-4"></div>
-        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
-        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" value={sitevisit.start_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" value={sitevisit.end_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
         </>
     )
 }
@@ -1651,12 +1745,7 @@ return (
 
 
 <div className="col-md-2"></div>
-<div className="col-md-2" style={{marginLeft:"50%",marginTop:"20px"}}><button className="form-control form-control-sm" >Submit</button></div>
-<div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
 
-
-{/* <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
-<div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div> */}
 
 </div>
 
@@ -1668,7 +1757,7 @@ return (
                     <Button variant="secondary" onClick={handleClose1}>
                       Close
                     </Button>
-                    <Button variant="secondary" onClick={handleClose1}>
+                    <Button variant="secondary" onClick={sitevisitdetails}>
                       Complete Task
                     </Button>
                   </Modal.Footer>

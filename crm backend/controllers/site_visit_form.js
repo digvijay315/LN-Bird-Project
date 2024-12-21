@@ -59,5 +59,29 @@ const site_visit_form=async(req,res)=>
                     console.log(error)
                 }
             }
-    module.exports={site_visit_form,view_site,remove_sitevisittask,view_sitevisittask_Byid};
+
+            const update_sitevisittask=async(req,res)=>
+                {
+                    try {
+                        const id=req.params._id;
+                        const user=await sitevisit_form.findOne({_id:id})
+                        if(!user)
+                            {
+                                return res.send({message:"task not found"})
+                            }
+                          
+                        
+                         const updatedFields = {
+                            ...req.body,
+                        };
+                        const resp=await sitevisit_form.findByIdAndUpdate(id,updatedFields,{ new: true })
+                        res.status(200).send({message:"lead update successfully"})
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
+
+
+
+    module.exports={site_visit_form,view_site,remove_sitevisittask,view_sitevisittask_Byid,update_sitevisittask};
     

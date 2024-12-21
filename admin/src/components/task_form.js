@@ -172,8 +172,6 @@ function Task_form() {
                     // First API request to post sitevisit details
                     const resp = await api.post('sitevisit', updatedsiteTask);
                 
-                    const data = { stage: updatestage };
-                    const data1 = { newstage: updatestage1 };
                 
                    if(leadid)
                    {
@@ -181,32 +179,6 @@ function Task_form() {
                    }
                    
                 
-                    // Loop through interested projects, blocks, and inventories
-                    for (let i = 0; i < sitevisit.intrested_project.length; i++) {
-                      const project = sitevisit.intrested_project[i];
-                
-                      // Ensure block and unit number exist at the corresponding index
-                      const block = sitevisit.intrested_block && sitevisit.intrested_block[i] ? sitevisit.intrested_block[i] : null;
-                      const unit_number = sitevisit.intrested_inventory && sitevisit.intrested_inventory[i] ? sitevisit.intrested_inventory[i] : null;
-                
-                      // Only proceed if both block and unit_number are defined
-                      if (block && unit_number) {
-                        console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
-                
-                        try {
-                          // Send the API request for each valid project/block/unit combination
-                          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
-                          console.log('API response:', resp2.data); // Log response for debugging
-                        } catch (error) {
-                          // Handle errors in the API call for individual project/block/unit combinations
-                          console.error(`API request failed for ${project}, ${block}, ${unit_number}:`, error.message);
-                        }
-                      } else {
-                        console.warn(`Skipping API call for ${project} as block or unit is missing`);
-                      }
-                    }
-                
-                    // Check for successful sitevisit response
                     if (resp.status === 200) {
                       toast.success(resp.data.message);
                 
