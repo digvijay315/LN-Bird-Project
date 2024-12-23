@@ -7,13 +7,18 @@ import axios from "axios";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import api from "../api";
-import { Inventory } from "@mui/icons-material";
+import { Inventory, Try } from "@mui/icons-material";
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
-// import Select from 'react-select';
+import { useLocation } from 'react-router-dom';
 
 
 function Task_form() {
 
+
+
+
+  
+  
     useEffect(()=>
     {
         fetchdata()
@@ -84,6 +89,48 @@ function Task_form() {
                 last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
     
        
+
+                const Location=useLocation()
+                const id=Location.state
+                // const getid=id.id[0]
+                const getid = id?.id.map((item) => item); 
+              
+               
+                
+              const[selecteddeal,setselecteddeal]=useState([])
+                const getselecteddeal=async()=>
+                {
+                  try {
+                    const resp=await api.get(`viewdealbyid/${getid}`)
+                    setselecteddeal(resp.data.deal)
+                    setsitevisit({
+                      ...sitevisit,
+                      project: Array.isArray(resp.data.deal.project)
+                        ? resp.data.deal.project // If it's already an array, use it
+                        : [resp.data.deal.project],
+                         // If it's not an array, wrap it in an array
+                         block: Array.isArray(resp.data.deal.block)
+                         ? resp.data.deal.block // If it's already an array, use it
+                         : [resp.data.deal.block],
+                          // If it's not an array, wrap it in an array
+                          inventory: Array.isArray(resp.data.deal.unit_number)
+                          ? resp.data.deal.unit_number // If it's already an array, use it
+                          : [resp.data.deal.unit_number]
+                           // If it's not an array, wrap it in an array
+                    });
+                  } catch (error) {
+                    console.log(error);
+                    
+                  }
+                }
+              
+               useEffect(()=>
+              {
+                if(getid && getid.length>0)
+                {
+                  getselecteddeal()
+                }
+              },[getid])
 
 // ================================all post methods start=============================================================================
 
@@ -398,7 +445,7 @@ const fetchdatabyprojectname = async (projectNames) => {
     console.log(error);
   }
 };
-console.log(units);
+// console.log(units);
 
 useEffect(() => {
     if (units.length > 0) {
@@ -513,7 +560,7 @@ const fetchdatabysiteprojectname = async (projectNames) => {
   }
 };
 
-console.log(siteunits);
+// console.log(siteunits);
 
 useEffect(() => {
     if (siteunits.length > 0) {
@@ -533,8 +580,8 @@ useEffect(() => {
     }
   }, [siteunits]);
 
-console.log(siteallUnits);
-console.log(sitevisit.block);
+// console.log(siteallUnits);
+// console.log(sitevisit.block);
 
 
 const[allblock,setallblock]=useState([])
@@ -574,7 +621,7 @@ useEffect(() => {
   setalldealunits(dealblocks);
 }, [sitevisit.intrested_project, sitevisit.intrested_block]); // Depend on both interested_project and interested_block
 
-console.log(alldealunits);
+// console.log(alldealunits);
 
 
   const[allunit1,setallunit1]=useState([])
@@ -599,7 +646,7 @@ console.log(alldealunits);
   
   
 
-console.log(sitevisit.intrested_inventory);
+// console.log(sitevisit.intrested_inventory);
 
 
 //== ================================this project data is for meeting task=============================================================
@@ -1247,55 +1294,69 @@ const[leadid,setleadid]=useState("")
                         </div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-4"><label className="labels">Select Project</label> 
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={projects}
-                    onChange={handleprojectchange}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allproject.map((name) => (
-                        <MenuItem key={name} value={name}>
-                            <Checkbox checked={projects.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                        </MenuItem>
-                    ))}
-                </Select>
-                        </div>
-                       
+
+      
+
+    
+   
+      <div className="col-md-4">
+        <label className="labels">Select Project</label> 
+        <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={projects}
+          onChange={handleprojectchange}
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {allproject.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={projects.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      <div className="col-md-4">
+        <label className="labels">Select Block</label>
+        <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={allblocks}
+          onChange={handleblockchange}
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {allBlocks.map((block) => (
+            <MenuItem key={block} value={block}>
+              <Checkbox checked={allblocks.indexOf(block) > -1} />
+              <ListItemText primary={block} />
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+
+      <div className="col-md-4">
+        <label className="labels">Select Inventory</label>
+        <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={allunit}
+          onChange={handleallunitschange}
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {allUnits.map((unit) => (
+            <MenuItem key={unit} value={unit}>
+              <Checkbox checked={allunit.indexOf(unit) > -1} />
+              <ListItemText primary={unit} />
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
 
 
-                        <div className="col-md-4"><label className="labels">Select Block</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allblocks}
-                    onChange={handleblockchange}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allBlocks.map((block) => (
-                    <MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
-                        <Checkbox checked={allblocks.indexOf(block) > -1} />
-                        <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
-                    </MenuItem>
-                 ))}
-                </Select>
-                        </div>
-                        <div className="col-md-4"><label className="labels">Select Inventory</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allunit}
-                    onChange={handleallunitschange}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allUnits.map((unit) => (
-                    <MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
-                        <Checkbox checked={allunit.indexOf(unit) > -1} />
-                        <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
-                    </MenuItem>
-                 ))}
-                </Select>
-                        </div>
-                    
                     
                       
                       

@@ -648,6 +648,9 @@ const followup=()=>
                                 }
                               },[selectedItems])
 
+                              
+
+// ==================================site visit update with deal update start=============================================================
 
 
       const [show1, setshow1] = useState(false);
@@ -1074,7 +1077,7 @@ const sitevisitdetails = async () => {
 };
 
 
-
+// ===============================site visit task update with deal update end===========================================================
 
 
 

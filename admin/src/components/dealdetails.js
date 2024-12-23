@@ -1516,7 +1516,189 @@ function Dealdetails() {
 
 
 
+        
+// ===================================add to task for sitevisit start============================================================
 
+const [show8, setshow8] = useState(false);
+    
+const handleClose8 = () => setshow8(false);
+const handleShow8=async()=>
+{
+  setshow8(true);
+}
+
+
+const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
+  inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
+  last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
+
+  const[contactdata,setcontactdata]=useState([]);
+  const fetchcontactdata=async(event)=>
+  {
+    
+    try {
+      const resp=await api.get('viewcontact')
+      setcontactdata(resp.data.contact)
+    } catch (error) {
+      console.log(error);
+    }
+  
+  }
+
+  useEffect(()=>
+    {
+        fetchcontactdata()
+    },[])
+
+    const handleToggle3 = (e) => {
+      const isChecked = e.target.checked; // Get the checked state
+      setsitevisit({ ...sitevisit, complete: isChecked }); // Update the calltask state
+  
+      // Open the modal only if the checkbox is checked
+      if (isChecked) {
+         document.getElementById("sitevisitdetails").style.display="block"
+      }
+      else{
+          document.getElementById("sitevisitdetails").style.display="none"
+      }
+  };
+
+
+  const[leadid,setleadid]=useState("")
+    const handleLeadChange = (e) => {
+        const selectedLead = Leaddata.find(item => item._id === e.target.value);
+        setleadid(selectedLead._id)
+        if (selectedLead) {
+            const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+            setsitevisit(prevState => ({
+                ...prevState,
+                lead: fullName,
+                title2: selectedLead.title,
+                first_name: selectedLead.first_name,
+                last_name: selectedLead.last_name,
+                mobile_no: selectedLead.mobile_no,
+                email: selectedLead.email,
+                stage: selectedLead.stage
+            }));
+        }
+
+    }
+  const[updatestage2,setupdatestage2]=useState("")
+    const[updatestage1,setupdatestage1]=useState("")
+    const handleleadstatuschange =  (e) => {
+        const newStatus = e.target.value;
+    
+        // Update the status first
+        setsitevisit((prevState) => {
+            return {
+                ...prevState,
+                status: newStatus
+            };
+        });
+    
+        // Now check if status is "Conducted" and update the stage
+        if (newStatus === "Conducted") {
+            setupdatestage2("Opportunity");
+            setupdatestage1("Quote");
+        }
+        else if (newStatus === "Did Not Visit" || "Not Intersted>") {
+            setupdatestage2("Prospect");
+            setupdatestage1("Open");
+        }
+    };
+
+
+    const[Leaddata,setLeaddata]=useState([]);
+    const fetchLeaddata=async()=>
+    {
+      
+      try {
+        const resp=await api.get('leadinfo')
+        setLeaddata(resp.data.lead)
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+    useEffect(()=>
+    {fetchLeaddata()},[])
+
+
+
+    const[selecteddeal,setselecteddeal]=useState([])
+    const getselecteddeal=async()=>
+    {
+      try {
+        const resp=await api.get(`viewdealbyid/${selectedItems}`)
+        setselecteddeal(resp.data.deal)
+        setsitevisit((prevState)=>({
+          ...prevState,
+          project: Array.isArray(resp.data.deal.project)
+            ? resp.data.deal.project // If it's already an array, use it
+            : [resp.data.deal.project],
+             // If it's not an array, wrap it in an array
+             block: Array.isArray(resp.data.deal.block)
+             ? resp.data.deal.block // If it's already an array, use it
+             : [resp.data.deal.block],
+              // If it's not an array, wrap it in an array
+              inventory: Array.isArray(resp.data.deal.unit_number)
+              ? resp.data.deal.unit_number // If it's already an array, use it
+              : [resp.data.deal.unit_number]
+               // If it's not an array, wrap it in an array
+        }));
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    useEffect(()=>
+    {
+      getselecteddeal()
+    },[selectedItems])
+
+    const sitevisitdetails = async () => {
+      const title1 = document.getElementById("sitevisittitle").innerText;
+    
+      // Update state
+      const updatedsiteTask = { ...sitevisit, title: title1 };
+      const updatedData = {
+        stage: 'Quote'  // Directly add 'Quote' to the request data
+      };
+    
+      try {
+        // First API request to post sitevisit details
+        const resp = await api.post('sitevisit', updatedsiteTask);
+    
+       if(leadid)
+       {
+        
+        const resp1 = await api.put(`updatelead/${leadid}`, updatedData);
+        console.log(resp1);
+        
+       }
+       
+    
+        if (resp.status === 200) {
+          toast.success(resp.data.message);
+    
+          // Reload the page after a brief delay
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000); // 2000 milliseconds = 2 seconds
+        }
+      } catch (error) {
+        // Catch any errors from the main API requests (sitevisit and lead updates)
+        toast.error("Please select Project Block and Unit sequencely or Missing Lead...");
+      }
+    };
+
+
+
+
+
+
+// ===============================================add to task for sitevisit end=========================================================
 
 
 
@@ -1617,7 +1799,7 @@ function Dealdetails() {
 </Tooltip>
 
 <Tooltip title="Add to task.." arrow>
-<img id="dealaddtask"  src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={()=>navigate('/tasksform')}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddtask"  src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={handleShow8}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Create Booking.." arrow>
@@ -2770,6 +2952,186 @@ function Dealdetails() {
             </Modal.Footer>
           </Modal>
 
+
+
+{/* ========================================add to task model for sitevisit=========================================================== */}
+
+
+<Modal show={show8} onHide={handleClose8} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Create Site Visit Task</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+        
+
+
+            <div className="row" id="sitevisit">
+
+<div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
+
+    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
+<option>Select </option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+
+    <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
+<option>Select </option>
+  <option>Site Visit</option>
+  <option>Home Visit</option>
+  <option>Online</option>
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+
+
+
+
+
+
+        <div className="col-md-4"> <label className="labels">Select Project</label>  <input type="text"  className="form-control form-control-sm" value={sitevisit.project} /></div>
+
+<div className="col-md-4"><label className="labels">Select Block</label><input type="text" className="form-control form-control-sm" value={sitevisit.block}/></div>
+
+
+
+<div className="col-md-4"><label className="labels">Select Inventory</label><input type="text" className="form-control form-control-sm" value={sitevisit.inventory}/></div>
+
+
+    <div className="col-md-4"><label className="labels">Select Lead</label>
+    <select
+    className="form-control form-control-sm"
+    required
+    onChange={handleLeadChange}>
+<option>Select</option>
+    {
+        Leaddata.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
+<option>Select </option>
+   <option>Confirmed</option>
+   <option>Tentative</option>
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+
+    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
+
+
+    <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
+<option>Select</option>
+   {
+    contactdata.map((item)=>
+    (
+        <option>{item.title} {item.first_name} {item.last_name} ({item.company_name})</option>
+    )) 
+   }
+    </select>
+    </div>
+    <div className="col-md-6"></div>
+
+    <div className="col-md-6"><label className="labels">Remind Me?</label> 
+<label class="switch">
+<input type="checkbox" onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
+    <span class="slider round"></span>
+    </label>
+</div>
+
+{
+    sitevisit.remind_me && (
+        <>
+        <div className="col-md-4"></div>
+        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+        </>
+    )
+}
+
+<div className="col-md-6"><label className="labels">Mark As Completed?</label> 
+<label class="switch">
+<input type="checkbox" onChange={handleToggle3}/>
+    <span class="slider round"></span>
+    </label>
+</div>
+
+
+
+<div className="p-3 py-5" id="sitevisitdetails" style={{width:"100%",display:"none"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Site Visit</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+<option>Select</option>
+   <option>Conducted</option>
+   <option>Did Not Visit</option>
+   <option>Not Intersted</option>
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+    {
+        sitevisit.status==="Conducted" &&(
+            <>
+
+            <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+            <input type="text" className="form-control form-control-sm"/></div>
+
+            <div className="col-md-4">
+<label className="labels">Select Interested Block</label>
+<input type="text" className="form-control form-control-sm"/></div>
+
+
+
+            <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+         
+            <input type="text" className="form-control form-control-sm"/>
+
+
+
+
+
+                </div>
+                </>
+        )
+    }
+ 
+
+
+
+<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+
+
+</div>
+</div>
+</div>
+
+
+
+
+</Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={sitevisitdetails}>
+                Add Task
+              </Button>
+              <Button variant="secondary" onClick={handleClose8}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
 
         <ToastContainer/>

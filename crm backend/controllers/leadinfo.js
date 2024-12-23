@@ -187,7 +187,7 @@ const lead_info=async(req,res)=>
                         if (!user) {
                             return res.send({ message: "Lead not found" });
                         }
-                
+                      
                         // Create an object to hold fields to be updated
                         const updatedFields = { ...req.body };
                 
@@ -222,6 +222,8 @@ const lead_info=async(req,res)=>
                         {
                             try {
                                 const id=req.params._id;
+                                
+                                
                                 const user=await leadinfo.findOne({_id:id})
                                 if(!user)
                                     {
