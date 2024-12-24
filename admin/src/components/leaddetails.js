@@ -77,6 +77,7 @@ React.useEffect(()=>{fetchdatabystage_prospectcount()},[])
 React.useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
 React.useEffect(()=>{fetchdatabystage_woncount()},[]) 
 React.useEffect(()=>{fetchdatabystage_lostcount()},[])
+React.useEffect(()=>{fetchdatabystage_opportunitycount()},[])
 
 
 
@@ -241,6 +242,29 @@ const[countall,setcountall]=useState('')
                     console.log(error);
                   }
                 }
+
+                const fetchdatabystage_opportunity=async()=>
+                  {
+                    
+                    try {
+                      const resp=await api.get(`viewleadbystage/Opportunity`);
+                      setdata(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+                    } catch (error) {
+                      console.log(error);
+                    }
+                  }
+                  const[countopportunity,setcountopportunity]=useState('')
+                  const fetchdatabystage_opportunitycount=async()=>
+                    {
+                      
+                      try {
+                        const resp=await api.get(`viewleadbystage/Opportunity`);
+                        const incoming=(Array.isArray(resp.data.lead) ? resp.data.lead : [resp.data.lead]);
+                        setcountopportunity(incoming.length);
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }
 
 //=====================----------------------------- all stage code end-----------------------===========================================
       
@@ -2280,9 +2304,9 @@ const handleallblockchange = (event) => {
           <h6>PROSPECT</h6>
           <p>{countprospect}</p>
         </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={fetchdatabystage_opportunity}>
           <h6>OPPORTUNITY</h6>
-          <p></p>
+          <p>{countopportunity}</p>
         </div>
         <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}onClick={fetchdatabystage_Negotiation}>
           <h6>NEGOTIATION</h6>

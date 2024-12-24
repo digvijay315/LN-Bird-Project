@@ -63,8 +63,6 @@ cloudinary.config({
 const add_deal = async (req, res) => {
     try {
 
-console.log(req.body);
-console.log(req.files);
 
 
 
@@ -76,8 +74,8 @@ console.log(req.files);
       while (req.body[`document_details[${i}].document_name`]) {
         const document_name = req.body[`document_details[${i}].document_name`];
         const document_no = req.body[`document_details[${i}].document_no`];
-        const document_date = req.body[`document_details[${i}].document_date`];
-        const linked_contact = req.body[`document_details[${i}].linked_contact`];
+        const document_Date = req.body[`document_details[${i}].document_Date`];
+        const linkded_contact = req.body[`document_details[${i}].linkded_contact`];
     
   
         const imagefiles = [];
@@ -87,7 +85,7 @@ console.log(req.files);
         if (req.files) {
 
        
-          const imagefield = req.files.filter(file => file.fieldname === `document_details[${i}].pic`);
+          const imagefield = req.files.filter(file => file.fieldname.includes('pic'));
           
           if (imagefield.length > 0) {
             for (let file of imagefield) {
@@ -101,9 +99,9 @@ console.log(req.files);
    
         adddocument_details.push({
             document_name,
-          document_date,
+          document_Date,
           document_no,
-          linked_contact,
+          linkded_contact,
           pic: imagefiles, 
         });
   
@@ -120,7 +118,7 @@ console.log(req.files);
       if (req.files) {
         console.log(req.files);
         
-        const imageField = req.files.filter(file => file.fieldname === 'preview');
+        const imageField = req.files.filter(file => file.fieldname.includes('preview'));
         for (let file of imageField) {
           const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);

@@ -1271,7 +1271,7 @@ const[leadid,setleadid]=useState("")
                   
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.block.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
@@ -1392,7 +1392,7 @@ const[leadid,setleadid]=useState("")
                         <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
                     <option>Select</option>
                        {
-                        contactdata.map((item)=>
+                        contactdata.filter((item)=>item.profession_category==="Self Employed" && item.profession_subcategory==="Real Estate Agent" || item.profession_category==="Private Employee" && item.profession_subcategory==="Sales Person").map((item)=>
                         (
                             <option>{item.title} {item.first_name} {item.last_name} ({item.company_name})</option>
                         )) 
@@ -1565,7 +1565,7 @@ const[leadid,setleadid]=useState("")
                 
                     <div className="row" id="meeting" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For Negotiation of {meetingtask.location_address}   on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.project}, {meetingtask.inventory} on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
                         
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
@@ -1668,6 +1668,9 @@ const[leadid,setleadid]=useState("")
 
                     <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
                     <div className="col-md-2"></div>
+
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+                    <div className="col-md-8"></div>
                     
                   
                     <div className="col-md-6"><label className="labels">Completed?</label> 
@@ -1676,7 +1679,12 @@ const[leadid,setleadid]=useState("")
                         <span class="slider round"></span>
                         </label>
                     </div>
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+
+                    
+                       
+                  
+
+                   
                    
                     <div className="p-3 py-5" id="meetingdetails" style={{display:"none",width:"100%"}}>
                 <div className="d-flex justify-content-between align-items-center mb-3">

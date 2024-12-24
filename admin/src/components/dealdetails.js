@@ -2967,7 +2967,7 @@ const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",exec
 
             <div className="row" id="sitevisit">
 
-<div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
+<div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.block.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
 
     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
 <option>Select </option>

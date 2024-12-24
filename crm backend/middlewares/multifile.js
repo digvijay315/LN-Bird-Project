@@ -16,18 +16,18 @@ const storage = multer.diskStorage({
 // File filter for accepting specific file types
 const fileFilter = (req, file, cb) => {
     const fileTypes = {
-      image: ['image/jpeg', 'image/png'],
+      image: ['image/jpeg', 'image/png','image/jpg'],
   
     };
 
     // Check for image files
-    if (file.fieldname === 'preview' && fileTypes.image.includes(file.mimetype)) {
-      return cb(null, true); // Accept image files
-    } 
+    if (file.fieldname.includes('preview') && fileTypes.image.includes(file.mimetype)) {
+      return cb(null, true); // Accept image files for preview
+    }
 
     else if (file.fieldname.includes('pic') && fileTypes.image.includes(file.mimetype)) {
-      return cb(null, true); // Accept video files
-    } 
+      return cb(null, true); // Accept image files for document details
+    }
     // Reject file if it doesn't match the allowed types
     else {
       console.log('Rejected File:', file);  // Log rejected file for debugging

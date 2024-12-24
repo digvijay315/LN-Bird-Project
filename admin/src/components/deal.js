@@ -390,81 +390,114 @@ React.useEffect(() => {
 
 
 
-          // const add_deal=async(e)=>
-          //   {
-          //       e.preventDefault();
+          const add_deal=async(e)=>
+            {
+                e.preventDefault();
            
-          //         try {
+                  try {
                     
-          //           const formdata=new FormData()
-          //           formdata.append("available_for",deal.available_for)
-  
-          //           if (deal.document_details && deal.document_details.length > 0) {
-          //             deal.document_details.forEach((chapter, index) => {
-          //               formdata.append(`document_details[${index}].document_name`, chapter.document_name);
-                
-          //               // Append video files for the chapter (if any)
-          //               if (chapter.pic && chapter.pic.length > 0) {
-          //                 chapter.pic.forEach((file, picIndex) => {
-          //                   // Append each file with unique field names for better handling in multer
-          //                   formdata.append(`document_details[${index}].pic[${picIndex}]`, file);  
-          //                 });
-          //               }
-          //             });
-          //           }
+                    const formdata=new FormData()
+                    Object.keys(deal).forEach(key => {
+                      // Skip 'preview' and 'document_details' because we will handle them separately
+                      if (key === "preview" || key === "document_details") {
+                        return;
+                      }
+                    
+                      // Manually handle owner_details and associated_contact (arrays of objects)
+                      if (key === "owner_details" || key === "associated_contact") {
+                        deal[key].forEach((item, index) => {
+                          // Loop over each object in owner_details or associated_contact
+                          Object.keys(item).forEach(subKey => {
+                            formdata.append(`${key}[${index}].${subKey}`, item[subKey]);
+                          });
+                        });
+                      } else {
+                        // If it's an array of simple values (e.g., project_category), append each item
+                        if (Array.isArray(deal[key])) {
+                          deal[key].forEach((item, index) => {
+                            formdata.append(`${key}[${index}]`, item);
+                          });
+                        } else {
+                          // If it's a single value, append it directly
+                          formdata.append(key, deal[key]);
+                        }
+                      }
+                    });
                     
   
-          //           if (deal.preview && deal.preview.length > 0) {
-          //             deal.preview.forEach((file, previewIndex) => {
-          //               formdata.append(`preview[${previewIndex}]`, file);  // Same field name as in multer config
-          //             });
-          //           }
-  
-          //           console.log(formdata)
+                    if (deal.document_details && deal.document_details.length > 0) {
+                      deal.document_details.forEach((document, index) => {
+                        formdata.append(`document_details[${index}].document_name`, document.document_name);
+                        formdata.append(`document_details[${index}].document_no`, document.document_no);
+                        formdata.append(`document_details[${index}].document_Date`, document.document_Date);
+                        formdata.append(`document_details[${index}].linkded_contact`, document.linkded_contact);
+                    
+                        // Handle the pic files inside each document
+                        if (document.pic && document.pic.length > 0) {
+                          document.pic.forEach((file, picIndex) => {
+                            formdata.append(`document_details[${index}].pic[${picIndex}]`, file);
+                          });
+                        }
+                      });
+                    }
+                    
+                    
+                    
                     
   
-          //           const resp= await api.post('adddeal',formdata,{
-          //                   headers: {
-          //                     'Content-Type': 'multipart/form-data',
-          //                   },
-          //                 })
-          //                   if(resp.status===200)
-          //                       {
-          //                         toast.success(resp.data.message,{ autoClose: 2000 })
-          //                         setTimeout(() => {
-          //                           navigate('/dealdetails')
-          //                         }, 2000);
+                    if (deal.preview && deal.preview.length > 0) {
+                      deal.preview.forEach((previewData, previewIndex) => {
+                        previewData.files.forEach((file, fileIndex) => {
+                          formdata.append(`preview[${previewIndex}].files[${fileIndex}]`, file);
+                        });
+                      });
+                    }
+  
+                    console.log(formdata)
+                    
+  
+                    const resp= await api.post('adddeal',formdata,{
+                            headers: {
+                              'Content-Type': 'multipart/form-data',
+                            },
+                          })
+                            if(resp.status===200)
+                                {
+                                  toast.success(resp.data.message,{ autoClose: 2000 })
+                                  setTimeout(() => {
+                                    navigate('/dealdetails')
+                                  }, 2000);
                                   
-          //                        }
-          //               } catch (error) {
-          //                       toast.error(error.response.data.message,{ autoClose: 2000 })
-          //               }
-          //              }
+                                 }
+                        } catch (error) {
+                                toast.error(error.response.data.message,{ autoClose: 2000 })
+                        }
+                       }
      
           
           
-          const add_deal=async(e)=>
-          {
-              e.preventDefault();
+          // const add_deal=async(e)=>
+          // {
+          //     e.preventDefault();
          
-                try {
-                        const resp= await api.post('adddeal',deal,{
-                          headers: {
-                            'Content-Type': 'multipart/form-data',
-                          },
-                        })
-                          if(resp.status===200)
-                              {
-                                toast.success(resp.data.message,{ autoClose: 2000 })
-                                setTimeout(() => {
-                                  navigate('/dealdetails')
-                                }, 2000);
+          //       try {
+          //               const resp= await api.post('adddeal',deal,{
+          //                 headers: {
+          //                   'Content-Type': 'multipart/form-data',
+          //                 },
+          //               })
+          //                 if(resp.status===200)
+          //                     {
+          //                       toast.success(resp.data.message,{ autoClose: 2000 })
+          //                       setTimeout(() => {
+          //                         navigate('/dealdetails')
+          //                       }, 2000);
                                 
-                               }
-                      } catch (error) {
-                              toast.error(error.response.data.message,{ autoClose: 2000 })
-                      }
-                     }
+          //                      }
+          //             } catch (error) {
+          //                     toast.error(error.response.data.message,{ autoClose: 2000 })
+          //             }
+          //            }
 // =======================================add deal end=================================================================================
 
 //================== add document and remove document inside deal start==================================================================
@@ -478,7 +511,7 @@ React.useEffect(() => {
                                                                     const files = Array.from(e.target.files); // Get selected files
                                                                     setdocuments((prevDocs) => ({
                                                                       ...prevDocs,
-                                                                      pics: files, // Update pics in state
+                                                                      pic: files, // Update pics in state
                                                                     }));
                                                                   };
 
@@ -556,19 +589,22 @@ const handlesnochange = (index, event) => {
   });
 };
 const handlepreviewchange = (index, event) => {
-  
   const newpreview = [...deal.preview];
   const files = Array.from(event.target.files);
   const previewUrls = files.map(file => URL.createObjectURL(file));
+  
+  // Update the preview state with the selected files and preview URLs
   newpreview[index] = {
-    files: files,
-    previewUrls: previewUrls
+    files: files,  // The actual file objects
+    previewUrls: previewUrls  // The URLs for previewing the images
   };
+  
   setdeal({
     ...deal,
-    preview: newpreview
+    preview: newpreview  // Update the preview array in the state
   });
 };
+
 
 
 const handledescriptionchange = (index, event) => {
