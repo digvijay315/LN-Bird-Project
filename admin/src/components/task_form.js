@@ -36,6 +36,10 @@ function Task_form() {
                 {
                     fetchdealdata()
                 },[])
+                useEffect(()=>
+                  {
+                      fetchsitevisitdata()
+                  },[])
    
     
         const[contactdata,setcontactdata]=useState([]);
@@ -65,6 +69,23 @@ function Task_form() {
             
             }
 
+            const[sitevisitdata,setsitevisitdata]=useState([]);
+            const fetchsitevisitdata=async(event)=>
+            {
+              
+              try {
+                const resp=await api.get('viewsitevisit')
+                const result = resp.data?.sitevisit?.flatMap((item) => item.intrested_inventory) || [];
+                setsitevisitdata(result)
+              } catch (error) {
+                console.log(error);
+              }
+            
+            }
+
+            console.log(sitevisitdata);
+            
+
     const activity=["Call","Email","Meeting","Site Visit"]
     const reason=["Meeting","Site Visit","Discuss","For Requirment","etc"]
     const direction=["Incoming","Outgoing"]
@@ -82,7 +103,7 @@ function Task_form() {
    
 
     const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
-            reason:"",project:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
+            reason:"",project:[],block:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
    
     const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
                 inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
@@ -187,11 +208,48 @@ function Task_form() {
                 {
                  
                     const title1 = document.getElementById("meetingtitle").innerText;
-            
+                   
+                    const data = { stage: updatestagemeeting };
                     // Update state
-                    const updatedMailTask = { ...meetingtask, title: title1 };
+                    const updatemeetingtask = { ...meetingtask, title: title1 };
                     try {
-                        const resp=await api.post('meetingtask',updatedMailTask)
+                        const resp=await api.post('meetingtask',updatemeetingtask)
+
+                        const data1 = { newstage: updatestagemeeting1 };
+
+    // Loop through each selected project-block-unit combination
+    let isValidCombination = true;
+    for (let i = 0; i < meetingtask.inventory.length; i++) {
+      const selectedCombination = meetingtask.inventory[i];
+      const [unit_number, block, project] = selectedCombination.split('-');
+      console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+
+      // Check if the unit_number, block, and project exist
+      if (unit_number && block && project) {
+        console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+
+        try {
+          // Call API for each valid combination
+          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+        } catch (error) {
+          // Handle API errors for the individual combination
+          toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+          isValidCombination = false; // Set to false if the combination fails
+        }
+      } else {
+        // If any part is missing, skip the combination
+        toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+        isValidCombination = false;
+      }
+    }
+
+    
+    
+
+                        if(leadidmeeting)
+                          {
+                           const resp1 = await api.put(`updatelead/${leadidmeeting}`,data );
+                          }
                         if(resp.status===200)
                         {
                             toast.success(resp.data.message)
@@ -212,6 +270,7 @@ function Task_form() {
                 const sitevisitdetails = async () => {
                   const title1 = document.getElementById("sitevisittitle").innerText;
                 
+                  
                   // Update state
                   const updatedsiteTask = { ...sitevisit, title: title1 };
                 
@@ -220,10 +279,6 @@ function Task_form() {
                     const resp = await api.post('sitevisit', updatedsiteTask);
                 
                 
-                   if(leadid)
-                   {
-                    const resp1 = await api.put(`updatelead/${leadid}`, data);
-                   }
                    
                 
                     if (resp.status === 200) {
@@ -394,19 +449,6 @@ dealdata.map((item) => {
     }
   });
 
-  const alldealblock =[]
-dealdata.map((item) => {
-    if (!alldealblock.includes(item.block)) {
-        alldealblock.push(item.block);
-    }
-  });
-
-  const alldealunit =[]
-dealdata.map((item) => {
-    if (!alldealunit.includes(item.unit_number)) {
-        alldealunit.push(item.unit_number);
-    }
-  });
 
 
 const [units, setunits] = useState([]);
@@ -512,9 +554,9 @@ const handleallunitschange = (event) => {
 
 
 
-  const [siteunits, setsiteunits] = useState([]);
-const [siteallUnits, setsiteallUnits] = useState([]);
-const [siteallblock, setsiteallblock] = useState([]);
+  // const [siteunits, setsiteunits] = useState([]);
+// const [siteallUnits, setsiteallUnits] = useState([]);
+// const [siteallblock, setsiteallblock] = useState([]);
 const [siteprojects, setsiteprojects] = useState([]);
 
 const handlesiteprojectchange = (event) => {
@@ -527,10 +569,25 @@ const handlesiteprojectchange = (event) => {
     setsiteprojects(selectproject);
     setsitevisit((prev) => {
       const updatedSiteVisit = { ...prev, intrested_project: selectproject };
-      fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
+      // fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
       return updatedSiteVisit; // Return the updated state
     });
   };
+
+  const alldealblock =[]
+  dealdata.map((item) => {
+      if (!alldealblock.includes(item.block)) {
+          alldealblock.push(item.block);
+      }
+    });
+  
+    const alldealunit =[]
+  dealdata.map((item) => {
+      if (!alldealunit.includes(item.unit_number)) {
+          alldealunit.push(item.unit_number);
+      }
+    });
+  
 
   const[alldealblocks,setalldealblocks]=useState([])
   useEffect(() => {
@@ -544,41 +601,41 @@ const handlesiteprojectchange = (event) => {
 
 
 
-const fetchdatabysiteprojectname = async (projectNames) => {
+// const fetchdatabysiteprojectname = async (projectNames) => {
 
-  try {
-    const fetchPromises = projectNames.map(async (projectName) => {
-      const resp = await api.get(`viewdealbyproject/${projectName}`);
-      return resp.data.deal; // Assuming resp.data.project is an array of units for that project
-    });
+//   try {
+//     const fetchPromises = projectNames.map(async (projectName) => {
+//       const resp = await api.get(`viewdealbyproject/${projectName}`);
+//       return resp.data.deal; // Assuming resp.data.project is an array of units for that project
+//     });
 
-    const results = await Promise.all(fetchPromises);
-    const allFetchedUnits = results.flat();
-    setsiteunits(allFetchedUnits); // Set the units to the flattened result
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     const results = await Promise.all(fetchPromises);
+//     const allFetchedUnits = results.flat();
+//     setsiteunits(allFetchedUnits); // Set the units to the flattened result
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 
 // console.log(siteunits);
 
-useEffect(() => {
-    if (siteunits.length > 0) {
-      // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
-      const collectedblocks = siteunits.flatMap(item => item.block);
-      const collectedUnits = siteunits.flatMap(item => item.unit_number);
+// useEffect(() => {
+//     if (siteunits.length > 0) {
+//       // Collect all add_unit arrays and ensure uniqueness by using unit_no or unit_id
+//       const collectedblocks = siteunits.flatMap(item => item.block);
+//       const collectedUnits = siteunits.flatMap(item => item.unit_number);
   
-      // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
-      const uniqueUnits = [
-        ...new Map(collectedUnits.map(unit => [unit, unit])).values()
-      ];
-      const uniqueblock = [
-        ...new Map(collectedblocks.map(block => [block, block])).values()
-      ];
-      setsiteallUnits(uniqueUnits);// Set allUnits with the unique units
-      setsiteallblock(uniqueblock)
-    }
-  }, [siteunits]);
+//       // Create a Map to filter out duplicates based on unit_no (or any other unique property like unit_id)
+//       const uniqueUnits = [
+//         ...new Map(collectedUnits.map(unit => [unit, unit])).values()
+//       ];
+//       const uniqueblock = [
+//         ...new Map(collectedblocks.map(block => [block, block])).values()
+//       ];
+//       // setsiteallUnits(uniqueUnits);// Set allUnits with the unique units
+//       // setsiteallblock(uniqueblock)
+//     }
+//   }, [siteunits]);
 
 // console.log(siteallUnits);
 // console.log(sitevisit.block);
@@ -639,7 +696,7 @@ useEffect(() => {
   
     // Update the sitevisit state with selected units in intrested_inventory
     setsitevisit((prev) => {
-      const updatedSiteVisit = { ...prev, intrested_inventory: unitNumbers }; // Store only unit numbers
+      const updatedSiteVisit = { ...prev, intrested_inventory: selectunits }; // Store only unit numbers
       return updatedSiteVisit;
     });
   };
@@ -651,8 +708,10 @@ useEffect(() => {
 
 //== ================================this project data is for meeting task=============================================================
 
-  const [units2, setunits2] = useState([]);
-const [allUnits2, setallUnits2] = useState([]);
+  // const [units2, setunits2] = useState([]);
+// const [allUnits2, setallUnits2] = useState([]);
+
+const[leadidmeeting,setleadidmeeting]=useState("")
 const [projects2, setprojects2] = useState([]);
 
 const handleprojectchange2 = (event) => {
@@ -665,37 +724,102 @@ const handleprojectchange2 = (event) => {
     setprojects2(selectproject);
     setmeetingtask((prev) => {
       const updatedSiteVisit = { ...prev, project: selectproject };
-      fetchdatabyprojectname2(selectproject); // Fetch data with the updated project names
+      // fetchdatabyprojectname2(selectproject); // Fetch data with the updated project names
       return updatedSiteVisit; // Return the updated state
     });
   };
 
-const fetchdatabyprojectname2 = async (projectNames) => {
 
-  try {
-    const fetchPromises = projectNames.map(async (projectName) => {
-      const resp = await api.get(`viewprojectbyname/${projectName}`);
-      return resp.data.project; // Assuming resp.data.project is an array of units for that project
+  const[alldealblocksmeeting,setalldealblocksmeeting]=useState([])
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      meetingtask.project.some((project) => project === item.project)
+    );
+    setalldealblocksmeeting(dealblocks)
+  }, [meetingtask.project]);
+
+  const[allblockmeeting,setallblockmeeting]=useState([])
+  const handleallblockchangemeeting = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    // Convert value to an array if it's a string (for multiple selection)
+    const selectblock = typeof value === 'string' ? value.split(',') : value;
+  
+    // Update the allblock state with full block.block-project combinations (for selected blocks)
+    setallblockmeeting(selectblock);
+  
+    // Update the sitevisit state with only block.block values (not both block.block and block.project)
+    setmeetingtask((prev) => {
+      const updatemeetingtask = { 
+        ...prev, 
+        block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
+      };
+      return updatemeetingtask;
     });
+  };
 
-    const results = await Promise.all(fetchPromises);
-    const allFetchedUnits = results.flat();
-    setunits2(allFetchedUnits); // Set the units to the flattened result
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const [alldealunitsmeeting, setalldealunitsmeeting] = useState([]);
 
-useEffect(() => {
-  if (units2.length > 0) {
-    const collectedUnits = units2.flatMap(item => item.add_unit); // Collect all add_unit arrays
-    setallUnits2(collectedUnits); // Set allUnits with the collected units
-  }
-}, [units2]);
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      meetingtask.project.some((project) => project === item.project) &&
+      meetingtask.block.some((block) => block === item.block) // Add the condition for interested blocks
+    );
+    setalldealunitsmeeting(dealblocks);
+  }, [meetingtask.project, meetingtask.block]); // Depend on both interested_project and interested_block
+  
+  // console.log(alldealunits);
+  
+  
+    const[allunit1meeting,setallunit1meeting]=useState([])
+    const handleallunitschange1meeting = (event) => {
+      const { target: { value } } = event;
+    
+      // Convert value to an array if it's a string (for multiple selection)
+      const selectunits = typeof value === 'string' ? value.split(',') : value;
+    
+      // Extract only the unit_number from the selected values (split by '-')
+      const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+    
+      // Update allunit1 state with the selected unit numbers
+      setallunit1meeting(selectunits);
+    
+      // Update the sitevisit state with selected units in intrested_inventory
+      setmeetingtask((prev) => {
+        const updatemeetingtask = { ...prev, inventory: selectunits }; // Store only unit numbers
+        return updatemeetingtask;
+      });
+    };
+
+    //=============================== meetingtask all project,block and inventory end===================================================
+// const fetchdatabyprojectname2 = async (projectNames) => {
+
+//   try {
+//     const fetchPromises = projectNames.map(async (projectName) => {
+//       const resp = await api.get(`viewprojectbyname/${projectName}`);
+//       return resp.data.project; // Assuming resp.data.project is an array of units for that project
+//     });
+
+//     const results = await Promise.all(fetchPromises);
+//     const allFetchedUnits = results.flat();
+//     setunits2(allFetchedUnits); // Set the units to the flattened result
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
+
+// useEffect(() => {
+//   if (units2.length > 0) {
+//     const collectedUnits = units2.flatMap(item => item.add_unit); // Collect all add_unit arrays
+//     setallUnits2(collectedUnits); // Set allUnits with the collected units
+//   }
+// }, [units2]);
 
 
 
-const[allunit2,setallunit2]=useState([])
+
 const handleallunitschange2 = (event) => {
     const {
       target: { value },
@@ -703,7 +827,7 @@ const handleallunitschange2 = (event) => {
   
     const selectunits = typeof value === 'string' ? value.split(',') : value;
   
-     setallunit2(selectunits);
+  
     setmeetingtask((prev) => {
       const updatedSiteVisit = { ...prev, inventory: selectunits };
     //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
@@ -772,8 +896,7 @@ const handleallunitschange2 = (event) => {
 
 
 
-
-
+  
   
   
 
@@ -912,12 +1035,40 @@ const[leadid,setleadid]=useState("")
             setupdatestage("Opportunity");
             setupdatestage1("Quote");
         }
-        else if (newStatus === "Did Not Visit" || "Not Intersted>") {
+        else if (newStatus === "Did Not Visit" || newStatus==="Not Intersted>") {
             setupdatestage("Prospect");
             setupdatestage1("Open");
         }
     };
   
+
+    const[updatestagemeeting,setupdatestagemeeting]=useState("")
+    const[updatestagemeeting1,setupdatestagemeeting1]=useState("")
+    const handlereasonchangemeeting =  (e) => {
+        const newreason = e.target.value;
+    
+        // Update the status first
+        setmeetingtask((prevState) => {
+            return {
+                ...prevState,
+                reason: newreason
+            };
+        });
+    
+        // Now check if status is "Conducted" and update the stage
+        if (newreason === "Negotiation") {
+          setupdatestagemeeting("Negotiation");
+          setupdatestagemeeting1("Negotiation");
+        }
+        else if (newreason === "Agreement" || newreason === "Token") {
+          setupdatestagemeeting("Booked");
+          setupdatestagemeeting1("Booked");
+      }
+        else if (newreason === "Discuss") {
+          setupdatestagemeeting("Prospect & Opurtunity");
+          setupdatestagemeeting1("Qoute");
+        }
+    };
    
     
 
@@ -1581,6 +1732,8 @@ const[leadid,setleadid]=useState("")
     onChange={(e) => {
       const selectedLead = data.find(item => item._id === e.target.value);
       if (selectedLead) {
+        setleadidmeeting(selectedLead._id)
+        
         const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
         setmeetingtask(prevState => ({
           ...prevState,
@@ -1625,7 +1778,7 @@ const[leadid,setleadid]=useState("")
                     <div className="col-md-4"></div>
                   
 
-                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,reason:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
                     <option>Select</option>
                         <option>Negotiation</option>
                         <option>Discuss</option>
@@ -1635,36 +1788,127 @@ const[leadid,setleadid]=useState("")
                         </div>
                     <div className="col-md-8"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Project</label>
-                    <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={projects2}
-                    onChange={handleprojectchange2}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allproject.map((name) => (
-                        <MenuItem key={name} value={name}>
-                            <Checkbox checked={projects2.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                        </MenuItem>
-                    ))}
-                </Select>
-                        </div>
+                    {
+                      meetingtask.reason==="Discuss" && (
+                        <>
+
+                      
+
+                            <div className="col-md-4">
+        <label className="labels">Select Project</label> 
+        <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={projects2}
+          onChange={handleprojectchange2}
+          renderValue={(selected) => selected.join(', ')}
+        >
+          {allproject.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={projects2.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </div>
+
+
+<div className="col-md-4">
+              <label className="labels">Select Block</label>
+              <Select
+                className="form-control form-control-sm"
+                style={{ border: "none" }}
+                multiple
+                value={allblockmeeting}  // Value contains the full block.block-project combinations
+                onChange={handleallblockchangemeeting}  // Handle the change when blocks are selected/deselected
+                renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+              >
+                {alldealblocksmeeting
+                  .filter((value, index, self) =>
+                    // Ensure unique combinations of block.block and block.project
+                    index === self.findIndex((t) => (
+                      t.block === value.block && t.project === value.project
+                    ))
+                  )
+                  .map((block) => {
+                    // Create a unique identifier by combining block.block and block.project
+                    const uniqueBlockKey = `${block.block}-${block.project}`;
+
+                    return (
+                      <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+                        <Checkbox 
+                          checked={allblockmeeting.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+                        />
+                        <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+                      </MenuItem>
+                    );
+                  })
+                }
+              </Select>
+        </div>
+
+            <div className="col-md-4"><label className="labels">Select Inventory</label>
+                             
+                             <Select
+                        className="form-control form-control-sm"
+                        style={{ border: "none" }}
+                        multiple
+                        value={allunit1meeting} // Holds selected units
+                        onChange={handleallunitschange1meeting} // Handle changes for unit selection
+                        renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+                        >
+                        {alldealunitsmeeting
+                        .filter((value, index, self) =>
+                          // Ensure unique combinations of project, block, and unit
+                          index === self.findIndex((t) => (
+                            t.project === value.project &&
+                            t.block === value.block &&
+                            t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+                          ))
+                        )
+                        .map((unit) => {
+                          // Create a unique key for project-block-unit combination
+                          const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+                          return (
+                            <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+                              <Checkbox checked={allunit1meeting.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+                              <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+                            </MenuItem>
+                          );
+                        })}
+                        </Select>
+
+
+                                 </div>
+                            </>
+
+                      )
+                    }
+
+                    {
+                      meetingtask.reason !=="Discuss" && (
+
                         <div className="col-md-4"><label className="labels">Inventory</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allunit2}
+                        <select className="form-control form-control-sm"
                     onChange={handleallunitschange2}
-                    renderValue={(selected) => selected.join(', ')}
                 >
-                    {allUnits2.map((unit) => (
-        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-            <Checkbox checked={allunit2.indexOf(unit.unit_no) > -1} />
-            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
-        </MenuItem>
-    ))}
-                </Select>
+                  <option>---select---</option>
+                  {
+                    sitevisitdata.map((item)=>
+                    (
+                      <option>{item}</option>
+                    ))
+                  }
+   
+                </select>
                         </div>
+
+                      )
+                    }
+
+                   
 
                     <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
                     <div className="col-md-2"></div>

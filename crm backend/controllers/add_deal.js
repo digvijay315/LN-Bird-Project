@@ -2,6 +2,7 @@
 const adddeal = require('../models/deal.js');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
+const fs = require('fs'); 
 
 
 
@@ -90,8 +91,14 @@ const add_deal = async (req, res) => {
           if (imagefield.length > 0) {
             for (let file of imagefield) {
               const result = await cloudinary.uploader.upload(file.path);
-            
               imagefiles.push(result.secure_url);  
+              fs.unlink(file.path, (err) => {
+                if (err) {
+                  console.error(`Failed to delete file: ${file.path}`, err);
+                } else {
+                  console.log(`Successfully deleted file: ${file.path}`);
+                }
+              });
             }
           }
         }
@@ -122,6 +129,13 @@ const add_deal = async (req, res) => {
         for (let file of imageField) {
           const result = await cloudinary.uploader.upload(file.path);
           images.push(result.secure_url);
+          fs.unlink(file.path, (err) => {
+            if (err) {
+              console.error(`Failed to delete file: ${file.path}`, err);
+            } else {
+              console.log(`Successfully deleted file: ${file.path}`);
+            }
+          });
         }
     }
   
@@ -241,6 +255,9 @@ const add_deal = async (req, res) => {
 
                     const update_dealbyprojectandunit = async (req, res) => {
                         try {
+                         
+                     
+                          
                           const { project, block,unit_number } = req.params;  // Extract project and unit from URL params
                           const { newstage } = req.body;  // Extract new stage from request body
                       
@@ -248,7 +265,7 @@ const add_deal = async (req, res) => {
                       
                           // Update all matching deals in a single operation
                           const result = await adddeal.updateMany(
-                            { project: project, unit_number: unit_number, block: block },
+                            { project: project, block: block, unit_number: unit_number },
                             { $set: { stage: newstage } }
                           );
                       

@@ -80,7 +80,7 @@ router.post('/meetingtask',meeting_task_form)
 router.get('/viewmeetingtask',viewmeeting_task)
 
 router.post('/sitevisit',site_visit_form)
-router.get('/viesitevisit',view_site)
+router.get('/viewsitevisit',view_site)
 router.delete('/removesitevisittask/:_id',remove_sitevisittask)
 router.get('/viewsitevisitbyid/:_id',view_sitevisittask_Byid)
 router.put('/updatesitevisittask/:_id',update_sitevisittask)

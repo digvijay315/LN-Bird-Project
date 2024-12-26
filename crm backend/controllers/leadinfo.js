@@ -183,6 +183,9 @@ const lead_info=async(req,res)=>
                     try {
                         const id = req.params._id;
                         const user = await leadinfo.findOne({ _id: id });
+                console.log(req.body);
+                
+                
                 
                         if (!user) {
                             return res.send({ message: "Lead not found" });
@@ -222,7 +225,7 @@ const lead_info=async(req,res)=>
                         {
                             try {
                                 const id=req.params._id;
-                                
+                                console.log(req.body);
                                 
                                 const user=await leadinfo.findOne({_id:id})
                                 if(!user)

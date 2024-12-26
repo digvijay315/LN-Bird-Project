@@ -115,7 +115,7 @@ function Tasks() {
     {
       
       try {
-        const resp=await api.get('viesitevisit')
+        const resp=await api.get('viewsitevisit')
         const incoming=resp.data.sitevisit
         setsitedata([...incoming])
       } catch (error) {
@@ -217,6 +217,8 @@ const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
 const currentItems1 = meetingdata.slice(indexOfFirstItem1, indexOfLastItem1);
 const totalPages1 = Math.ceil(meetingdata.length / itemsPerPage1);
 
+// ============================site visit task pagination==============================================================
+
 const [currentPage2, setCurrentPage2] = useState(1);
 const [itemsPerPage2, setItemsPerPage2] = useState(5); // User-defined items per page
 const indexOfLastItem2 = currentPage2 * itemsPerPage2;
@@ -227,31 +229,31 @@ const totalPages2 = Math.ceil(sitedata.length / itemsPerPage2);
 
   // Handle items per page change
   const handleItemsPerPageChange = (e) => {
-    setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1); // Reset to first page whenever items per page changes
+    setItemsPerPage2(Number(e.target.value));
+    setCurrentPage2(1); // Reset to first page whenever items per page changes
   };
 
 // Function to handle page changes
-const paginate = (pageNumber) => setCurrentPage(pageNumber);
+const paginate2 = (pageNumber) => setCurrentPage2(pageNumber);
 
 // Function to handle "Next" and "Previous" page changes
-const goToNextPage = () => {
-  if (currentPage < totalPages) {
-    setCurrentPage(currentPage + 1);
+const goToNextPage2 = () => {
+  if (currentPage2 < totalPages2) {
+    setCurrentPage2(currentPage2 + 1);
   }
 };
 
-const goToPreviousPage = () => {
-  if (currentPage > 1) {
-    setCurrentPage(currentPage - 1);
+const goToPreviousPage2 = () => {
+  if (currentPage2 > 1) {
+    setCurrentPage2(currentPage2 - 1);
   }
 };
 
-const renderPageNumbers = () => {
+const renderPageNumbers2 = () => {
   // Define the range of page numbers to display
-  const maxPageNumbersToShow = 5;
-  const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
-  const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+  const maxPageNumbersToShow2 = 5;
+  const startPage2 = Math.max(1, currentPage2 - Math.floor(maxPageNumbersToShow2 / 2));
+  const endPage2 = Math.min(totalPages2, startPage2 + maxPageNumbersToShow2 - 1);
 
 
   
@@ -268,17 +270,17 @@ const renderPageNumbers = () => {
       }}
     >
       {/* Previous Button */}
-      {currentPage > 1 && (
-        <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+      {currentPage2 > 1 && (
+        <button onClick={goToPreviousPage2} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
           Prev
         </button>
       )}
 
       {/* Page Numbers */}
-      {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((number) => (
+      {Array.from({ length: endPage2 - startPage2 + 1 }, (_, i) => startPage2 + i).map((number) => (
         <button
           key={number}
-          onClick={() => paginate(number)}
+          onClick={() => paginate2(number)}
           style={{
             width: '30px',
             borderRadius: '5px',
@@ -292,8 +294,8 @@ const renderPageNumbers = () => {
       ))}
 
       {/* Next Button */}
-      {currentPage < totalPages && (
-        <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+      {currentPage2 < totalPages2 && (
+        <button onClick={goToNextPage2} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
           Next
         </button>
       )}
@@ -955,7 +957,7 @@ const[alldealblocks,setalldealblocks]=useState([])
   
     // Update the sitevisit state with selected units in intrested_inventory
     setsitevisit((prev) => {
-      const updatedSiteVisit = { ...prev, intrested_inventory: unitNumbers }; // Store only unit numbers
+      const updatedSiteVisit = { ...prev, intrested_inventory: selectunits }; // Store only unit numbers
       return updatedSiteVisit;
     });
   };
@@ -1020,14 +1022,26 @@ useEffect(()=>
 
 
 
+
 const sitevisitdetails = async () => {
   const title1 = document.getElementById("sitevisittitle").innerText;
+const id=selectedItems[0]
+console.log(id);
+
   
   // Update site visit task
   const updatedsiteTask = { ...sitevisit, title: title1 };
 
   try {
     const data1 = { newstage: updatestage1 };
+    const stage = { stage: updatestage };
+
+    if(id)
+      {
+       const resp1 = await api.put(`updatelead/${id}`,stage );
+      }
+      
+      
 
     // Loop through each selected project-block-unit combination
     let isValidCombination = true;
@@ -1156,7 +1170,7 @@ const sitevisitdetails = async () => {
         <option value="50">50</option>
       </select>
     
-    {renderPageNumbers()}
+    {renderPageNumbers2()}
     </div>
         
 

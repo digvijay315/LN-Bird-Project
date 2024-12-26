@@ -16,8 +16,8 @@ due_date:{type:String},
 title2:{type:String},
 first_name:{type:String},
 last_name:{type:String},
-mobile_no:{type:String},
-email:{type:String},
+mobile_no:{type:Array},
+email:{type:Array},
 stage:{type:String}
 },{timestamps:true})
 
