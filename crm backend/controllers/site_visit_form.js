@@ -75,7 +75,7 @@ const site_visit_form=async(req,res)=>
                             ...req.body,
                         };
                         const resp=await sitevisit_form.findByIdAndUpdate(id,updatedFields,{ new: true })
-                        res.status(200).send({message:"lead update successfully"})
+                        res.status(200).send({message:"sitevisit task update successfully"})
                     } catch (error) {
                         console.log(error)
                     }

@@ -162,6 +162,26 @@ function Tasks() {
             console.log(error);
           }
         };
+
+        const deleteSelectedItems2 = async () => {
+          try {
+            if(selectedItems2.length===0)
+            {
+              toast.error("please select first",{autoClose:"2000"})
+              return
+            }
+            const resp = selectedItems2.map(async (itemId) => {
+              await api.delete(`removemeetingtask/${itemId}`);
+            });
+            
+            toast.success('Selected items deleted successfully',{autoClose:"2000"})
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
      
 /*-------------------------------------------------------------------delete  contact data end---------------------------------------------------------------------------- */                                                     
 
@@ -401,6 +421,8 @@ const renderPageNumbers2 = () => {
 
 /*-------------------------------------------------------------------custome table settings start---------------------------------------------------------------------------- */                                                     
       
+
+// =================================site visit table start===========================================================================
  
 const sitevisitcolumns = [
         { id: 'sno', name: '#' },
@@ -458,6 +480,30 @@ const sitevisitcolumns = [
         }
       };
 
+      useEffect(()=>
+        {
+          if(selectedItems.length===0)
+          {
+            document.getElementById("siteaction").style.display="none"
+             document.getElementById("meetingaction").style.display="none"
+           
+          }
+          if(selectedItems.length===1)
+          {
+            document.getElementById("siteaction").style.display="inline-block"
+             document.getElementById("meetingaction").style.display="none"
+          }
+
+          if(selectedItems.length>1)
+          {
+            document.getElementById("siteaction").style.display="inline-block"
+             document.getElementById("meetingaction").style.display="none"
+          
+          }
+        },[selectedItems])
+
+  //=============================== site visit task table end==================================================================
+
       const followupcolumns = [
         { id: 'sno', name: '#' },
         { id: 'details', name: 'Details' },
@@ -498,6 +544,9 @@ const sitevisitcolumns = [
         }
       };
 
+
+
+  //=================================== this is for meeting task==================================================================
       
       const meetingcolumns = [
         { id: 'sno', name: '#' },
@@ -509,7 +558,7 @@ const sitevisitcolumns = [
         { id: 'scheduled_for', name: 'Scheduled For' },
         { id: 'stage', name: 'Stage' },
         { id: 'status', name: 'Status' },
-        { id: 'action', name: 'Action' },
+       
       ];
       const [selectedItems2, setSelectedItems2] = useState([]); // To track selected rows
       const [selectAll2, setSelectAll2] = useState(false); // To track the state of the "Select All" checkbox
@@ -539,7 +588,30 @@ const sitevisitcolumns = [
         }
       };
 
-    /*-------------------------------------------------------------------custome table end---------------------------------------------------------------------------- */                                                     
+      useEffect(()=>
+        {
+          if(selectedItems2.length===0)
+          {
+            document.getElementById("meetingaction").style.display="none"
+                document.getElementById("siteaction").style.display="none"
+           
+          }
+          if(selectedItems2.length===1)
+          {
+            document.getElementById("meetingaction").style.display="inline-block"
+             document.getElementById("siteaction").style.display="none"
+          }
+
+          if(selectedItems2.length>1)
+          {
+            document.getElementById("meetingaction").style.display="inline-block"
+             document.getElementById("siteaction").style.display="none"
+          
+          }
+        },[selectedItems2])
+
+
+    /*-------------------------------------------------------------------meeting task end---------------------------------------------------------------------------- */                                                     
     
     
       const pagereload=()=>
@@ -631,24 +703,7 @@ const followup=()=>
         
 
 
-         useEffect(()=>
-                              {
-                                if(selectedItems.length===0)
-                                {
-                                  document.getElementById("siteaction").style.display="none"
-                                 
-                                }
-                                if(selectedItems.length===1)
-                                {
-                                  document.getElementById("siteaction").style.display="inline-block"
-                                }
-          
-                                if(selectedItems.length>1)
-                                {
-                                  document.getElementById("siteaction").style.display="inline-block"
-                                
-                                }
-                              },[selectedItems])
+       
 
                               
 
@@ -1034,11 +1089,11 @@ console.log(id);
 
   try {
     const data1 = { newstage: updatestage1 };
-    const stage = { stage: updatestage };
+    const stage = { stage:updatestage };
 
     if(id)
       {
-       const resp1 = await api.put(`updatelead/${id}`,stage );
+       const resp1 = await api.put(`updateleadbystagebyemail/${sitevisit.email}`,stage );
       }
       
       
@@ -1094,6 +1149,301 @@ console.log(id);
 // ===============================site visit task update with deal update end===========================================================
 
 
+//============================================ meeting task complete form start=======================================================
+
+const [show4, setshow4] = useState(false);
+    
+                  const handleClose4 = () => setshow4(false);
+                  const handleShow4=async()=>
+                  {
+                    setshow4(true);
+                    fetchmeetingdata()
+                    // fetchleaddata()
+                  }
+                  const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
+                    reason:"",project:[],block:[],inventory:[],remark:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
+                    complete:"",status:"",meeting_result:"",date:"",feedback:""
+                  })
+
+                    const fetchmeetingdata=async(event)=>
+                      {
+                      
+                        
+                        try {
+                          const resp=await api.get(`viewmeetingtaskbyid/${selectedItems2}`)
+                          console.log(resp);
+                          
+                          setmeetingtask(resp.data.meetingtask)
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }
+
+                    
+
+
+                    const[leadidmeeting,setleadidmeeting]=useState("")
+const [projects2, setprojects2] = useState([]);
+
+const handleprojectchange2 = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectproject = typeof value === 'string' ? value.split(',') : value;
+  
+    setprojects2(selectproject);
+    setmeetingtask((prev) => {
+      const updatedSiteVisit = { ...prev, project: selectproject };
+      // fetchdatabyprojectname2(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+
+  const[alldealblocksmeeting,setalldealblocksmeeting]=useState([])
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      meetingtask.project.some((project) => project === item.project)
+    );
+    setalldealblocksmeeting(dealblocks)
+  }, [meetingtask.project]);
+
+  const[allblockmeeting,setallblockmeeting]=useState([])
+  const handleallblockchangemeeting = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    // Convert value to an array if it's a string (for multiple selection)
+    const selectblock = typeof value === 'string' ? value.split(',') : value;
+  
+    // Update the allblock state with full block.block-project combinations (for selected blocks)
+    setallblockmeeting(selectblock);
+  
+    // Update the sitevisit state with only block.block values (not both block.block and block.project)
+    setmeetingtask((prev) => {
+      const updatemeetingtask = { 
+        ...prev, 
+        block: selectblock // Store only block.block in sitevisit
+      };
+      return updatemeetingtask;
+    });
+  };
+
+  const [alldealunitsmeeting, setalldealunitsmeeting] = useState([]);
+
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      meetingtask.project.some((project) => project === item.project) &&
+      meetingtask.block.some((block) => block.split('-')[0] === item.block)// Add the condition for interested blocks
+    );
+    setalldealunitsmeeting(dealblocks);
+  }, [meetingtask.project, meetingtask.block]); // Depend on both interested_project and interested_block
+  
+  // console.log(alldealunits);
+  
+  
+    const[allunit1meeting,setallunit1meeting]=useState([])
+    const handleallunitschange1meeting = (event) => {
+      const { target: { value } } = event;
+    
+      // Convert value to an array if it's a string (for multiple selection)
+      const selectunits = typeof value === 'string' ? value.split(',') : value;
+    
+      // Extract only the unit_number from the selected values (split by '-')
+      const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+    
+      // Update allunit1 state with the selected unit numbers
+      setallunit1meeting(selectunits);
+    
+      // Update the sitevisit state with selected units in intrested_inventory
+      setmeetingtask((prev) => {
+        const updatemeetingtask = { ...prev, inventory: selectunits }; // Store only unit numbers
+        return updatemeetingtask;
+      });
+    };
+
+
+    const[updatestagemeeting,setupdatestagemeeting]=useState("")
+    const[updatestagemeeting1,setupdatestagemeeting1]=useState("")
+    const handlereasonchangemeeting =  (e) => {
+        const newreason = e.target.value;
+    
+        // Update the status first
+        setmeetingtask((prevState) => {
+            return {
+                ...prevState,
+                reason: newreason
+            };
+        });
+    
+        // Now check if status is "Conducted" and update the stage
+        if (newreason === "Negotiation") {
+          setupdatestagemeeting("Negotiation");
+          setupdatestagemeeting1("Negotiation");
+        }
+        else if (newreason === "Agreement" || newreason === "Token") {
+          setupdatestagemeeting("Booked");
+          setupdatestagemeeting1("Booked");
+      }
+        else if (newreason === "Discuss") {
+          setupdatestagemeeting("Prospect & Opurtunity");
+          setupdatestagemeeting1("Qoute");
+        }
+    };
+
+    const handleallunitschange2 = (event) => {
+      const {
+        target: { value },
+      } = event;
+    
+      const selectunits = typeof value === 'string' ? value.split(',') : value;
+    
+    
+      setmeetingtask((prev) => {
+        const updatedSiteVisit = { ...prev, inventory: selectunits };
+      //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+        return updatedSiteVisit; // Return the updated state
+      });
+    };
+
+    const[sitevisitdata,setsitevisitdata]=useState([]);
+    const fetchsitevisitdataformeeting=async(event)=>
+    {
+      
+      try {
+        const resp=await api.get('viewsitevisit')
+        const result = resp.data?.sitevisit?.flatMap((item) => item.intrested_inventory) || [];
+        setsitevisitdata(result)
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+    useEffect(()=>
+      {
+        fetchsitevisitdataformeeting()
+      },[])
+
+    const handleToggle2 = (e) => {
+      const isChecked = e.target.checked; // Get the checked state
+      setmeetingtask({ ...meetingtask, complete: isChecked }); // Update the calltask state
+  
+      // Open the modal only if the checkbox is checked
+      if (isChecked) {
+         document.getElementById("meetingdetails").style.display="block"
+      }
+      else{
+          document.getElementById("meetingdetails").style.display="none"
+      }
+  };
+
+
+  const[leaddatameeting,setleaddatameeting]=useState([]);
+  const fetchleaddatameeting=async()=>
+  {
+    
+    try {
+      const resp=await api.get('leadinfo')
+      setleaddatameeting(resp.data.lead)
+    } catch (error) {
+      console.log(error);
+    }
+  
+  }
+  useEffect(()=>
+    {
+      fetchleaddatameeting()
+    },[])
+
+    const[leadupdatestage,setleadupdatestage]=useState("")
+    const[dealupdatestage,setdealupdatestage]=useState("")
+useEffect(()=>
+{
+  if(meetingtask.meeting_result==="Deal Done")
+  {
+    setleadupdatestage("Booked")
+    setdealupdatestage("Booking")
+  }
+
+},[meetingtask.meeting_result])
+
+
+    const meetingdetails = async () => {
+      const title1 = document.getElementById("meetingtitle").innerText;
+    const id=selectedItems2[0]
+    console.log(id);
+    
+      
+      // Update site visit task
+      const updatemeetingtask = { ...meetingtask, title: title1 };
+    
+      try {
+        const data1 = { newstage: dealupdatestage };
+        const stage = { stage:leadupdatestage };
+    
+        if(id)
+          {
+           const resp1 = await api.put(`updateleadbystagebyemail/${meetingtask.email}`,stage );
+          }
+          
+          
+    
+        // Loop through each selected project-block-unit combination
+        let isValidCombination = true;
+        for (let i = 0; i < meetingtask.inventory.length; i++) {
+          const selectedCombination = meetingtask.inventory[i];
+          const [unit_number, block, project] = selectedCombination.split('-');
+    
+          // Check if the unit_number, block, and project exist
+          if (unit_number && block && project) {
+            console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+    
+            try {
+              // Call API for each valid combination
+              const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+            } catch (error) {
+              // Handle API errors for the individual combination
+              toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+              isValidCombination = false; // Set to false if the combination fails
+            }
+          } else {
+            // If any part is missing, skip the combination
+            toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+            isValidCombination = false;
+          }
+        }
+    
+        // Post site visit data if the combination is valid
+        if (isValidCombination) {
+          const resp = await api.put(`updatemeetingtask/${selectedItems2}`, updatemeetingtask);
+    
+          // If successful, show a success toast and reload
+          if (resp.status === 200) {
+            toast.success("Task Completed", { autoClose: 2000 });
+    
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        } else {
+          toast.error("Some project/block/unit combinations were invalid. Please check your data.");
+        }
+    
+      } catch (error) {
+        // Handle any errors during the process
+        toast.error("An error occurred. Please check your data and try again.");
+      }
+    };
+
+
+
+
+    
+// =====================================meeting task complete form end===============================================================
+
 
     return ( 
         <div>
@@ -1135,7 +1485,7 @@ console.log(id);
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       {/* <input type="checkbox" onChange={handleischeckedchange}/>
       <input id="search" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
-           <div id="siteaction" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
+           <div id="siteaction" style={{position:"absolute",marginLeft:"1%",gap:"20px",display:"none"}}>
      
      <Tooltip title="Delete Task.." arrow>
      <img id="dealdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems}   style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px"}} alt=""/>
@@ -1147,6 +1497,23 @@ console.log(id);
      
      <Tooltip title="Complete Task.." arrow>
      <img id="completetask"  src="https://static.vecteezy.com/system/resources/previews/019/513/217/non_2x/tasks-the-woman-marks-the-completed-tasks-on-the-tablet-vector.jpg" onClick={handleShow1}   style={{height:"45px",width:"45px",cursor:"pointer",marginTop:"0px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+   
+     
+     </div>
+
+     <div id="meetingaction" style={{position:"absolute",marginLeft:"1%",gap:"20px",display:"none"}}>
+     
+     <Tooltip title="Delete Task.." arrow>
+     <img id="dealdelete" src="https://png.pngtree.com/png-vector/20220926/ourmid/pngtree-delete-button-3d-icon-png-image_6217492.png" onClick={deleteSelectedItems2}   style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px"}} alt=""/>
+     </Tooltip>
+     
+     <Tooltip title="Edit Task.." arrow>
+     <img id="dealedit" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/UniversalEditButton3.svg/1200px-UniversalEditButton3.svg.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+     
+     <Tooltip title="Complete Task.." arrow>
+     <img id="completetask"  src="https://cdn-icons-png.flaticon.com/512/1632/1632670.png" onClick={handleShow4}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
    
      
@@ -1179,6 +1546,9 @@ console.log(id);
         
       </div>
      
+     {/*================================= this list view is for followup =========================================================*/}
+
+
           <div id="followup" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -1266,6 +1636,11 @@ console.log(id);
         </footer>
       </div>
 
+
+{/*====================================followup list view end===================================================================== */}
+
+
+{/* =========================================list view of site visit============================================================== */}
 
 
       <div id="sitevisit" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
@@ -1368,6 +1743,13 @@ console.log(id);
         </footer>
       </div>
 
+
+{/*================================== list view of site visit end===================================================================== */}
+
+
+{/*======================================= meeting list view start================================================================= */}
+
+
       <div id="meeting" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -1461,12 +1843,7 @@ console.log(id);
                >
                
                </StyledTableCell>
-               <StyledTableCell 
-                 
-                 style={{ padding: "10px", fontFamily: "times new roman" }}
-               >
-                 <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
-               </StyledTableCell>
+         
               
           </StyledTableRow>
         ))}
@@ -1479,6 +1856,9 @@ console.log(id);
         </footer>
       </div>
        
+    {/*============================================= meeting task list view end====================================================== */}
+
+
    
   {/* =================================sitevisit complete task model=========================================================== */}
 
@@ -1781,7 +2161,300 @@ return (
                 </Modal>
 
 
+{/* =============================meeting task complete modal=============================================================== */}
 
+
+<Modal show={show4} onHide={handleClose4} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Complete Meeting Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+
+
+                  <div className="row" id="meeting">
+
+<div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.project}, {meetingtask.inventory} on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+    
+    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
+<option>{meetingtask.executive}</option>
+<option>---Select---</option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+    
+        <div className="col-md-4"><label className="labels">Select Lead</label> <select
+        className="form-control form-control-sm"
+        required
+        onChange={(e) => {
+        const selectedLead = leaddatameeting.find(item => item._id === e.target.value);
+        if (selectedLead) {
+        setleadidmeeting(selectedLead._id)
+
+          const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+          setmeetingtask(prevState => ({
+          ...prevState,
+          lead: fullName,
+          title2: selectedLead.title,
+          first_name: selectedLead.first_name,
+          last_name: selectedLead.last_name,
+          mobile_no:selectedLead.mobile_no,
+          email:selectedLead.email,
+          stage:selectedLead.stage
+          }));
+          }
+          }}
+          >
+            <option>{meetingtask.lead}</option>
+<option>---Select---</option>
+    {
+        leaddatameeting.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+    
+    <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
+<option>{meetingtask.location_type}</option>
+<option>---Select---</option>
+    {
+        location.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" value={meetingtask.location_address} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
+<div className="col-md-4"></div>
+
+
+<div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
+<option>{meetingtask.reason}</option>
+<option>---Select---</option>
+    <option>Negotiation</option>
+    <option>Discuss</option>
+    <option>Agreement</option>
+    <option>Token</option>
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+{
+  meetingtask.reason==="Discuss" && (
+    <>
+
+  
+
+        <div className="col-md-4">
+      <label className="labels">Select Project</label> 
+      <Select
+      className="form-control form-control-sm"
+      style={{ border: "none" }}
+      multiple
+      value={meetingtask.project}
+      onChange={handleprojectchange2}
+      renderValue={(selected) => selected.join(', ')}
+      >
+      {allproject.map((name) => (
+      <MenuItem key={name} value={name}>
+      <Checkbox checked={meetingtask.project.indexOf(name) > -1} />
+      <ListItemText primary={name} />
+      </MenuItem>
+      ))}
+      </Select>
+      </div>
+
+
+<div className="col-md-4">
+<label className="labels">Select Block</label>
+<Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={meetingtask.block}  // Value contains the full block.block-project combinations
+onChange={handleallblockchangemeeting}  // Handle the change when blocks are selected/deselected
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+>
+{alldealblocksmeeting
+.filter((value, index, self) =>
+// Ensure unique combinations of block.block and block.project
+index === self.findIndex((t) => (
+  t.block === value.block && t.project === value.project
+))
+)
+.map((block) => {
+// Create a unique identifier by combining block.block and block.project
+const uniqueBlockKey = `${block.block}-${block.project}`;
+
+return (
+  <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+    <Checkbox 
+      checked={meetingtask.block.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+    />
+    <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+  </MenuItem>
+);
+})
+}
+</Select>
+</div>
+
+<div className="col-md-4"><label className="labels">Select Inventory</label>
+         
+         <Select
+    className="form-control form-control-sm"
+    style={{ border: "none" }}
+    multiple
+    value={meetingtask.inventory} // Holds selected units
+    onChange={handleallunitschange1meeting} // Handle changes for unit selection
+    renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+    >
+    {alldealunitsmeeting
+    .filter((value, index, self) =>
+      // Ensure unique combinations of project, block, and unit
+      index === self.findIndex((t) => (
+        t.project === value.project &&
+        t.block === value.block &&
+        t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+      ))
+    )
+    .map((unit) => {
+      // Create a unique key for project-block-unit combination
+      const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+      return (
+        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+          <Checkbox checked={meetingtask.inventory.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        </MenuItem>
+      );
+    })}
+    </Select>
+
+
+             </div>
+        </>
+
+  )
+}
+
+{
+  meetingtask.reason !=="Discuss" && (
+
+    <div className="col-md-4"><label className="labels">Inventory</label>
+    <select className="form-control form-control-sm"
+onChange={handleallunitschange2}
+>
+  <option>{meetingtask.inventory}</option>
+<option>---select---</option>
+{
+sitevisitdata.map((item)=>
+(
+  <option>{item}</option>
+))
+}
+
+</select>
+    </div>
+
+  )
+}
+
+
+
+<div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={meetingtask.remark} style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
+<div className="col-md-2"></div>
+
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={meetingtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+
+<div className="col-md-6"><label className="labels">Completed?</label> 
+<label class="switch">
+<input type="checkbox" onChange={handleToggle2} />
+    <span class="slider round"></span>
+    </label>
+</div>
+
+
+   
+
+
+
+
+<div className="p-3 py-5" id="meetingdetails" style={{display:"none",width:"100%"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Meeting Task</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
+<option>{meetingtask.status}</option>
+<option>---Select---</option>
+  <option>Conducted</option>
+  <option>Cancelled</option>
+  <option> Postponed</option>
+    </select>
+    </div>
+
+    {
+      meetingtask.status==="Conducted" && 
+      (
+        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,meeting_result:e.target.value}))}>
+        <option>{meetingtask.meeting_result}</option>
+        <option>---Select---</option>
+          <option>Deal Done</option>
+          <option>Negotiation Uncomplete</option>
+          <option>Deal Not Done</option>
+          <option>Site Visit</option>
+            </select>
+            </div>
+      )
+     
+    }
+    {
+      meetingtask.meeting_result==="Deal Done" && (
+      <div className="col-md-3"><label className="labels" style={{visibility:"none"}}>.</label><button style={{backgroundColor:"greenyellow"}} className="form-control form-control-sm"  onClick={() => window.open('/bookingdetails', '_blank')}> Create Booking</button></div>
+      )
+    }
+
+<div className="col-md-1"></div>
+</div>
+<div className="row mt-3">
+<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" value={meetingtask.date} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={meetingtask.feedback} style={{height:"100px"}} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
+ </div>
+
+    </div>
+    
+
+
+    </div> 
+
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose4}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={meetingdetails}>
+                      Complete Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
 
 
 

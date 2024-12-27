@@ -183,7 +183,7 @@ const lead_info=async(req,res)=>
                     try {
                         const id = req.params._id;
                         const user = await leadinfo.findOne({ _id: id });
-                console.log(req.body);
+              
                 
                 
                 
@@ -298,7 +298,27 @@ const lead_info=async(req,res)=>
                               res.status(500).send({ message: "An error occurred while updating the lead" });
                             }
                           };
+
+                          const update_leadstagebyemail=async(req,res)=>
+                            {
+                                try {
+                                    const email=req.params.email;
+                                   
+                                    
+                                    const user=await leadinfo.findOne({email:email})
+                                    if(!user)
+                                        {
+                                            return res.send({message:"lead not found"})
+                                        }
+                                    
+                                   
+                                    const resp=await leadinfo.findOneAndUpdate({email},req.body)
+                                    res.status(200).send({message:"stage update successfully"})
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                            }
                           
     module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid,view_lead_Bycompany,
-                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage,update_leaddocument }
+                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage,update_leaddocument,update_leadstagebyemail }
     

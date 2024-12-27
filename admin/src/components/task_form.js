@@ -103,7 +103,8 @@ function Task_form() {
    
 
     const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
-            reason:"",project:[],block:[],inventory:[],remark:"",complete:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
+            reason:"",project:[],block:[],inventory:[],remark:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
+            complete:"",status:"",meeting_result:"",date:"",feedback:""})
    
     const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
                 inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
@@ -754,7 +755,7 @@ const handleprojectchange2 = (event) => {
     setmeetingtask((prev) => {
       const updatemeetingtask = { 
         ...prev, 
-        block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
+        block: selectblock // Store only block.block in sitevisit
       };
       return updatemeetingtask;
     });
@@ -765,7 +766,7 @@ const handleprojectchange2 = (event) => {
   useEffect(() => {
     const dealblocks = dealdata.filter((item) =>
       meetingtask.project.some((project) => project === item.project) &&
-      meetingtask.block.some((block) => block === item.block) // Add the condition for interested blocks
+      meetingtask.block.some((block) => block.split('-')[0] === item.block)// Add the condition for interested blocks
     );
     setalldealunitsmeeting(dealblocks);
   }, [meetingtask.project, meetingtask.block]); // Depend on both interested_project and interested_block

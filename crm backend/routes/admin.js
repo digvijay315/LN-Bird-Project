@@ -1,6 +1,6 @@
 const express=require('express');
 const {add_contact,view_contact, view_contact_Byid, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany, view_contact_ByName} = require('../controllers/contact_details');
-const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage, update_leadstage, update_leaddocument} = require('../controllers/leadinfo');
+const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage, update_leadstage, update_leaddocument, update_leadstagebyemail} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
 const {add_developer,view_developer, view_developer_Byid, update_developer, remove_developer} = require('../controllers/add_developer');
@@ -9,7 +9,7 @@ const add_project = require('../controllers/add_project');
 const lead_info_requirment = require('../controllers/leadinfo_requirment');
 const {mail_task_form,view_mail} = require('../controllers/mail_task_form');
 const {call_task_form,view_call} = require('../controllers/call_task_form');
-const {meeting_task_form,viewmeeting_task} = require('../controllers/meeting_task_form');
+const {meeting_task_form,viewmeeting_task, remove_meetingtask, view_meetingtask_Byid, update_meetingtask} = require('../controllers/meeting_task_form');
 const {site_visit_form,view_site, remove_sitevisittask, view_sitevisittask_Byid, update_sitevisittask} = require('../controllers/site_visit_form');
 const {booking_details,view_booking} = require('../controllers/booking_details');
 const {addpayment_details,view_payment} = require('../controllers/addpayment_details');
@@ -43,6 +43,7 @@ router.delete('/removelead/:_id',remove_lead)
 router.put('/updatelead/:_id',upload.any('document_pic'),update_lead)
 router.put('/adddocumentinlead/:_id',upload.any('document_pic'),update_leaddocument)
 router.put('/updateleadbystage/:_id',update_leadstage)
+router.put('/updateleadbystagebyemail/:email',update_leadstagebyemail)
 router.get('/viewleadbycompany/:company_name',view_lead_Bycompany)
 router.get('/viewleadbystage/:stage',view_lead_Bystage)
 router.get('/viewleadbyemail/:email',view_lead_Byemail)
@@ -78,6 +79,9 @@ router.get('/viewcalltask',view_call)
 
 router.post('/meetingtask',meeting_task_form)
 router.get('/viewmeetingtask',viewmeeting_task)
+router.get('/viewmeetingtaskbyid/:_id',view_meetingtask_Byid)
+router.delete('/removemeetingtask/:_id',remove_meetingtask)
+router.put('/updatemeetingtask/:_id',update_meetingtask)
 
 router.post('/sitevisit',site_visit_form)
 router.get('/viewsitevisit',view_site)
