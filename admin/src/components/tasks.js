@@ -1519,10 +1519,10 @@ useEffect(()=>
      
      </div>
      
-      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
+      {/* <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}> */}
            {/* <Button className="form-control form-control-sm" style={{width:"120px",backgroundColor:"transparent"}}>Play Task</Button> */}
-           <label className="labels" style={{width:"350px"}}>Sorted By Due Date</label>
-           </div>
+           {/* <label className="labels" style={{width:"350px"}}>Sorted By Due Date</label>
+           </div> */}
 
     
     
