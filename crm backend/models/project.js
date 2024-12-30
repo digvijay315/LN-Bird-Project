@@ -49,6 +49,7 @@ const blockSchema = new mongoose.Schema({
     facing: {type: String},
     road: {type: String},
     ownership: {type: String},
+    stage: {type: String},
     floor: {type: Array},
     cluter_details: {type: Array},
     length: {type: Array},

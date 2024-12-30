@@ -1447,7 +1447,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                                                           total_land_area:"",
                                                                           water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
-                                                                          direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",status:"",type:"",floor:[''],
+                                                                          direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
@@ -3826,7 +3826,7 @@ console.log(project.add_unit);
                                 <option>Sale Agreement(Lal Dora)</option>
                                 </select>
                     </div>
-                    <div className='col-md-6'><label className="labels">Status</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,status:e.target.value})}>
+                    <div className='col-md-6'><label className="labels">Stage</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,stage:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>Active</option>
                                 <option>Inactive</option>
