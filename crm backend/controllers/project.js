@@ -90,4 +90,28 @@ const createProject = async (req, res) => {
                   console.log(error)
               }
           }
-   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid}
+
+          const update_project=async(req,res)=>
+            {
+                try {
+                    const id=req.params._id;
+                    const user=await addproject.findOne({_id:id})
+                    if(!user)
+                        {
+                            return res.send({message:"deal not found"})
+                        }
+                        const pics = req.files ? req.files.map(item => item.path) : [];
+                        const preview=req.files ? req.files.map((item=>item.path)):[]
+                    
+                     const updatedFields = {
+                        ...req.body,
+                        preview,
+                        pics // Update preview field with new images if provided
+                    };
+                    const resp=await addproject.findByIdAndUpdate(id,updatedFields,{ new: true })
+                    res.status(200).send({message:"lead update successfully"})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,update_project}

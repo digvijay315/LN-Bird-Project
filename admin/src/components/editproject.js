@@ -106,8 +106,8 @@ viewprojectbyid()
       
         e.preventDefault();
         try {
-            const resp= await api.post('project',project,config)
-        if(resp.status===201)
+            const resp= await api.put(`updateproject/${id}`,project,config)
+        if(resp.status===200)
             {
                 toast.success("Project Saved",{ autoClose: 2000 })
                 setTimeout(() => {
@@ -1213,6 +1213,14 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                       const [checkedItems, setCheckedItems] = useState(Array(checkboxItems.length).fill(false));
                       const [selectAll, setSelectAll] = useState(false);
                     
+                      useEffect(() => {
+                        const initialCheckedItems = checkboxItems.map(item => project.basic_aminities.includes(item));
+                        setCheckedItems(initialCheckedItems);
+                        // Update selectAll based on whether all items are selected
+                        setSelectAll(initialCheckedItems.every(checked => checked));
+                      }, [project.basic_aminities]); 
+
+
                       // Toggle individual checkboxes
                       const handleCheckboxChange = (index) => {
                         const updatedCheckedItems = [...checkedItems];
@@ -1278,6 +1286,16 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                       const [checkedItems1, setCheckedItems1] = useState(Array(checkboxItems1.length).fill(false));
                       const [selectAll1, setSelectAll1] = useState(false);
                     
+
+                        
+                      useEffect(() => {
+                        const initialCheckedItems = checkboxItems1.map(item => project.features_aminities.includes(item));
+                        setCheckedItems1(initialCheckedItems);
+                        // Update selectAll based on whether all items are selected
+                        setSelectAll1(initialCheckedItems.every(checked => checked));
+                      }, [project.features_aminities]); 
+
+
                       // Toggle individual checkboxes
                       const handleCheckboxChange1 = (index) => {
                         const updatedCheckedItems1 = [...checkedItems1];
@@ -4872,7 +4890,7 @@ console.log(project.add_unit);
         {
           project.Payment_plan.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "14px" }}  >
               {index+1}
             </StyledTableCell>
             <StyledTableCell >{item.payment_planname} </StyledTableCell>
@@ -4995,7 +5013,7 @@ console.log(project.add_unit);
                 <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
                     <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
                     <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Project</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addproject}>Save</button></div>
+                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addproject}>Update</button></div>
                     </div>
             </div>
         </div>
