@@ -1784,14 +1784,20 @@ const handleformchange=()=>
                   // document.getElementById("email").style.display="none"
                   document.getElementById("sitevisit").style.display="flex"
                     document.getElementById("meeting").style.display="none"
+
+                       document.getElementById("sitevisitaddtask").style.display="flex"
+                        document.getElementById("meetingaddtask").style.display="none"
               }
                if(tasks==="Meeting")
-              //     {
+                  {
               //         document.getElementById("call").style.display="none"
               //         document.getElementById("email").style.display="none"
                       document.getElementById("sitevisit").style.display="none"
                        document.getElementById("meeting").style.display="flex"
-              //     }
+
+                        document.getElementById("sitevisitaddtask").style.display="none"
+                         document.getElementById("meetingaddtask").style.display="flex"
+                  }
   }
 
 
@@ -1799,6 +1805,85 @@ const handleformchange=()=>
     reason:"",project:[],block:[],inventory:[],remark:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
     complete:"",status:"",meeting_result:"",date:"",feedback:""})
 
+
+    const meetingtaskdetails=async()=>
+      {
+       
+          const title1 = document.getElementById("meetingtitle").innerText;
+         
+          const data = { stage: updatestagemeeting };
+          // Update state
+          const updatemeetingtask = { ...meetingtask, title: title1 };
+          try {
+              const resp=await api.post('meetingtask',updatemeetingtask)
+
+              const data1 = { newstage: updatestagemeeting1 };
+
+// Loop through each selected project-block-unit combination
+          // let isValidCombination = true;
+          // for (let i = 0; i < meetingtask.inventory.length; i++) {
+          // const selectedCombination = meetingtask.inventory[i];
+          // const [unit_number, block, project] = selectedCombination.split('-');
+          // console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+
+          // // Check if the unit_number, block, and project exist
+          // if (unit_number && block && project) {
+          // console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+
+          // try {
+          // // Call API for each valid combination
+          // const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+          // } catch (error) {
+          // // Handle API errors for the individual combination
+          // toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+          // isValidCombination = false; // Set to false if the combination fails
+          // }
+          // } else {
+          // // If any part is missing, skip the combination
+          // toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+          // isValidCombination = false;
+          // }
+          // }
+
+          if(meetingtask.project && meetingtask.block && meetingtask.inventory)
+          {
+            const project=meetingtask.project[0]
+            const block=meetingtask.block[0]
+            const unit_number=meetingtask.inventory[0]
+            try {
+          // Call API for each valid combination
+          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+          } catch (error) {
+          // Handle API errors for the individual combination
+          toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+        
+          }
+          } else {
+          // If any part is missing, skip the combination
+          toast.warn(`Skipping API call for invalid combination`);
+         
+          }
+          
+
+
+
+              if(leadidmeeting)
+                {
+                 const resp1 = await api.put(`updatelead/${leadidmeeting}`,data );
+                }
+              if(resp.status===200)
+              {
+                  toast.success(resp.data.message)
+                  setTimeout(() => {
+                      window.location.reload();
+                    }, 2000); // 2000 milliseconds = 2 seconds
+                  
+              }
+          } catch (error) {
+              
+              toast.error(error.message)
+          }
+      }
 
 
                   
@@ -3252,7 +3337,7 @@ const handleformchange=()=>
 className="form-control form-control-sm"
 required
 onChange={(e) => {
-const selectedLead = data.find(item => item._id === e.target.value);
+const selectedLead = leaddata.find(item => item._id === e.target.value);
 if (selectedLead) {
 setleadidmeeting(selectedLead._id)
 
@@ -3419,8 +3504,11 @@ sitevisitdata.map((item)=>
 
 </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={sitevisitdetails}>
-                Add Task
+            <Button variant="secondary" id="sitevisitaddtask" onClick={sitevisitdetails} style={{display:"none"}}>
+                Add Task 
+              </Button>
+              <Button variant="secondary" id="meetingaddtask" onClick={meetingtaskdetails} style={{display:"none"}}>
+                Add Task 
               </Button>
               <Button variant="secondary" onClick={handleClose8}>
                 Close
