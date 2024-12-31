@@ -39,6 +39,7 @@ import Dealdetails from './components/dealdetails.js';
 import FlipViewComponent from './components/demo';
 import AddContactForm from './components/demo';
 import Sortaddcontact from './components/sortaddcontact.js';
+import EditProjectform from './components/editproject.js';
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
       <Route path='/marketing' element={<Marketing/>}/>
       <Route path='/dealdetails' element={<Dealdetails/>}/>
       <Route path='/sortaddcontact' element={<Sortaddcontact/>}/>
+      <Route path='/editproject' element={<EditProjectform/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

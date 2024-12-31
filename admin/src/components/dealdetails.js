@@ -1800,6 +1800,41 @@ const handleformchange=()=>
                   }
   }
 
+  const[sitevisitdata,setsitevisitdata]=useState([]);
+  const fetchsitevisitdata=async(event)=>
+  {
+    
+    try {
+      const resp=await api.get('viewsitevisit')
+      const result = resp.data?.sitevisit?.flatMap((item) => item.intrested_inventory) || [];
+      setsitevisitdata(result)
+    } catch (error) {
+      console.log(error);
+    }
+  
+  }
+
+  useEffect(()=>
+    {
+        fetchsitevisitdata()
+    },[])
+
+
+    const handleallunitschange2 = (event) => {
+      const {
+        target: { value },
+      } = event;
+    
+      const selectunits = typeof value === 'string' ? value.split(',') : value;
+    
+    
+      setmeetingtask((prev) => {
+        const updatedSiteVisit = { ...prev, inventory: selectunits };
+      //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+        return updatedSiteVisit; // Return the updated state
+      });
+    };
+
 
   const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
     reason:"",project:[],block:[],inventory:[],remark:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
@@ -1820,31 +1855,36 @@ const handleformchange=()=>
               const data1 = { newstage: updatestagemeeting1 };
 
 // Loop through each selected project-block-unit combination
-          // let isValidCombination = true;
-          // for (let i = 0; i < meetingtask.inventory.length; i++) {
-          // const selectedCombination = meetingtask.inventory[i];
-          // const [unit_number, block, project] = selectedCombination.split('-');
-          // console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+if(meetingtask.reason==="Negotiation")
+{
+          let isValidCombination = true;
+          for (let i = 0; i < meetingtask.inventory.length; i++) {
+          const selectedCombination = meetingtask.inventory[i];
+          const [unit_number, block, project] = selectedCombination.split('-');
+          console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
 
-          // // Check if the unit_number, block, and project exist
-          // if (unit_number && block && project) {
-          // console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+          // Check if the unit_number, block, and project exist
+          if (unit_number && block && project) {
+          console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
 
-          // try {
-          // // Call API for each valid combination
-          // const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
-          // } catch (error) {
-          // // Handle API errors for the individual combination
-          // toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
-          // isValidCombination = false; // Set to false if the combination fails
-          // }
-          // } else {
-          // // If any part is missing, skip the combination
-          // toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
-          // isValidCombination = false;
-          // }
-          // }
-
+          try {
+          // Call API for each valid combination
+          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+          } catch (error) {
+          // Handle API errors for the individual combination
+          toast.error(`API request faileddddddddddd for ${project} - ${block} - ${unit_number}`);
+          isValidCombination = false; // Set to false if the combination fails
+          }
+          } else {
+          // If any part is missing, skip the combination
+          toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+          isValidCombination = false;
+          }
+          }
+        }
+        
+if(meetingtask.reason==="Discuss")
+{
           if(meetingtask.project && meetingtask.block && meetingtask.inventory)
           {
             const project=meetingtask.project[0]
@@ -1863,7 +1903,7 @@ const handleformchange=()=>
           toast.warn(`Skipping API call for invalid combination`);
          
           }
-          
+        }
 
 
 
@@ -2098,7 +2138,7 @@ const handleformchange=()=>
               {index + 1}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span><br></br>
+            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>, {item.block}<br></br>
              {item.project_category}<br></br>
              {item.project_subcategory}<br></br>
              {item.project}
@@ -2383,6 +2423,10 @@ const handleformchange=()=>
 
 
 </div>
+
+{/* =========================================project list view start ============================================================*/}
+
+
           <div id="projectlistview" className="flip-card-back" style={{display:"none"}}>
           <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
@@ -2417,7 +2461,7 @@ const handleformchange=()=>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
-<img id="projectedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="projectedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png"  onClick={() => navigate('/editproject', { state: { id: selectedItems2 } })}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Send Mail.." arrow>
@@ -3418,7 +3462,7 @@ stage:selectedLead.stage
   )
 }
 
-{/* {
+{
   meetingtask.reason !=="Discuss" && (
 
     <div className="col-md-4"><label className="labels">Inventory</label>
@@ -3437,7 +3481,7 @@ sitevisitdata.map((item)=>
     </div>
 
   )
-} */}
+}
 
 
 

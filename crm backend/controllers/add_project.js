@@ -38,6 +38,17 @@ const add_project=async(req,res)=>
                 console.log(error)
             }
         }
+        const view_projectbyid=async(req,res)=>
+            {
+                try {
+                    const _id=req.params._id;
+                    const resp=await addproject.findOne({_id:_id})
+                    res.status(200).send({message:"project details fetch successfully",project:resp})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
+    
 
     
-    module.exports={add_project,view_project};
+    module.exports={add_project,view_project,view_projectbyid};

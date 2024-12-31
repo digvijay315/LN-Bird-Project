@@ -106,14 +106,14 @@ const[data1,setdata1]=useState([]);
       const collectedUnits = units.flatMap(item => 
         item.add_unit.filter(unit => unit.stage === 'active' && unit.block===deal.block) // Filter units where stage is 'active'
       );
-      console.log(collectedUnits);
-      console.log(deal.block);
+      // console.log(collectedUnits);
+      // console.log(deal.block);
       
       
       const collectedblocks=units.flatMap(item=>item.add_block)
       const collectcategory=units.flatMap(item=>item.category) 
       const collectsubcategory=units.flatMap(item=>item.sub_category) // Collect all add_unit arrays
-      const fulllocation = units.flatMap(item => `${item.location}, ${item.address} ${item.street} ${item.locality} ${item.city}`).join(' ');
+      const fulllocation = units.flatMap(item => `${item.add_location}, ${item.address} ${item.street} ${item.locality} ${item.city}`).join(' ');
       setallUnits(collectedUnits);
       setallblocks(collectedblocks) 
       setdeal({...deal,project_category:collectcategory,project_subcategory:collectsubcategory,location:fulllocation})// Set allUnits with the collected units
