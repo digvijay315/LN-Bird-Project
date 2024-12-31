@@ -103,7 +103,13 @@ const[data1,setdata1]=useState([]);
   
   React.useEffect(() => {
     if (units.length >= 0) {
-      const collectedUnits = units.flatMap(item => item.add_unit);
+      const collectedUnits = units.flatMap(item => 
+        item.add_unit.filter(unit => unit.stage === 'active' && unit.block===deal.block) // Filter units where stage is 'active'
+      );
+      console.log(collectedUnits);
+      console.log(deal.block);
+      
+      
       const collectedblocks=units.flatMap(item=>item.add_block)
       const collectcategory=units.flatMap(item=>item.category) 
       const collectsubcategory=units.flatMap(item=>item.sub_category) // Collect all add_unit arrays
@@ -112,7 +118,7 @@ const[data1,setdata1]=useState([]);
       setallblocks(collectedblocks) 
       setdeal({...deal,project_category:collectcategory,project_subcategory:collectsubcategory,location:fulllocation})// Set allUnits with the collected units
     }
-  }, [units]);
+  }, [units,deal.block]);
 
  
  

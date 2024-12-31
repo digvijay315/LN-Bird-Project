@@ -1647,6 +1647,21 @@ const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",exec
               : [resp.data.deal.unit_number]
                // If it's not an array, wrap it in an array
         }));
+        setmeetingtask((prevState)=>({
+          ...prevState,
+          project: Array.isArray(resp.data.deal.project)
+            ? resp.data.deal.project // If it's already an array, use it
+            : [resp.data.deal.project],
+             // If it's not an array, wrap it in an array
+             block: Array.isArray(resp.data.deal.block)
+             ? resp.data.deal.block // If it's already an array, use it
+             : [resp.data.deal.block],
+              // If it's not an array, wrap it in an array
+              inventory: Array.isArray(resp.data.deal.unit_number)
+              ? resp.data.deal.unit_number // If it's already an array, use it
+              : [resp.data.deal.unit_number]
+               // If it's not an array, wrap it in an array
+        }));
       } catch (error) {
         console.log(error);
         
@@ -1701,7 +1716,88 @@ const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",exec
 // ===============================================add to task for sitevisit end=========================================================
 
 
+const activity=["Call","Email","Meeting","Site Visit"]
+const location=["Home","Office","Company","Site"]
+const[leadidmeeting,setleadidmeeting]=useState("")
 
+const[updatestagemeeting,setupdatestagemeeting]=useState("")
+const[updatestagemeeting1,setupdatestagemeeting1]=useState("")
+const handlereasonchangemeeting =  (e) => {
+    const newreason = e.target.value;
+
+    // Update the status first
+    setmeetingtask((prevState) => {
+        return {
+            ...prevState,
+            reason: newreason
+        };
+    });
+
+    // Now check if status is "Conducted" and update the stage
+    if (newreason === "Negotiation") {
+      setupdatestagemeeting("Negotiation");
+      setupdatestagemeeting1("Negotiation");
+    }
+    else if (newreason === "Agreement" || newreason === "Token") {
+      setupdatestagemeeting("Booked");
+      setupdatestagemeeting1("Booked");
+  }
+    else if (newreason === "Discuss") {
+      setupdatestagemeeting("Prospect & Opurtunity");
+      setupdatestagemeeting1("Qoute");
+    }
+};
+
+const handleToggle2 = (e) => {
+  const isChecked = e.target.checked; // Get the checked state
+  setmeetingtask({ ...meetingtask, complete: isChecked }); // Update the calltask state
+
+  // Open the modal only if the checkbox is checked
+  if (isChecked) {
+     document.getElementById("meetingdetails").style.display="block"
+  }
+  else{
+      document.getElementById("meetingdetails").style.display="none"
+  }
+};
+
+const handleformchange=()=>
+  {
+      const tasks=document.getElementById("forms").value;
+      // if(tasks==="Call")
+      // {
+      //     document.getElementById("call").style.display="flex"
+      //     document.getElementById("email").style.display="none"
+      //     document.getElementById("sitevisit").style.display="none"
+      //     document.getElementById("meeting").style.display="none"
+      // }
+      // if(tasks==="Email")
+      //     {
+      //         document.getElementById("call").style.display="none"
+      //         document.getElementById("email").style.display="flex"
+      //         document.getElementById("sitevisit").style.display="none"
+      //          document.getElementById("meeting").style.display="none"
+      //     }
+          if(tasks==="Site Visit")
+              {
+                  // document.getElementById("call").style.display="none"
+                  // document.getElementById("email").style.display="none"
+                  document.getElementById("sitevisit").style.display="flex"
+                    document.getElementById("meeting").style.display="none"
+              }
+               if(tasks==="Meeting")
+              //     {
+              //         document.getElementById("call").style.display="none"
+              //         document.getElementById("email").style.display="none"
+                      document.getElementById("sitevisit").style.display="none"
+                       document.getElementById("meeting").style.display="flex"
+              //     }
+  }
+
+
+  const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
+    reason:"",project:[],block:[],inventory:[],remark:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
+    complete:"",status:"",meeting_result:"",date:"",feedback:""})
 
 
 
@@ -2963,9 +3059,24 @@ const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",exec
             </Modal.Header>
             <Modal.Body>
         
+            <div className="row mt-2">
+                    
+                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control form-control-sm" id="forms" required="true" onChange={handleformchange}>
+                    <option>Select</option>
+                        {
+                            activity.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-8"></div>
+                        </div>
+{/* =============================================this task for site visit ========================================================*/}
 
-
-            <div className="row" id="sitevisit">
+            <div className="row" id="sitevisit" style={{display:"none"}}>
 
 <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.block.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
 
@@ -3119,8 +3230,192 @@ const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",exec
 </div>
 </div>
 
+{/*======================================= site visit task end ========================================================================*/}
 
 
+
+{/*============================================= meeting task start=============================================================== */}
+
+<div className="row" id="meeting" style={{display:"none"}}>
+
+<div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.project}, {meetingtask.inventory} on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+    
+    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
+<option>Select </option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+    
+<div className="col-md-4"><label className="labels">Select Lead</label> <select
+className="form-control form-control-sm"
+required
+onChange={(e) => {
+const selectedLead = data.find(item => item._id === e.target.value);
+if (selectedLead) {
+setleadidmeeting(selectedLead._id)
+
+const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+setmeetingtask(prevState => ({
+...prevState,
+lead: fullName,
+title2: selectedLead.title,
+first_name: selectedLead.first_name,
+last_name: selectedLead.last_name,
+mobile_no:selectedLead.mobile_no,
+email:selectedLead.email,
+stage:selectedLead.stage
+}));
+}
+}}
+>
+<option>Select</option>
+    {
+        leaddata.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+    
+    <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
+<option>Select</option>
+    {
+        location.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
+<div className="col-md-4"></div>
+
+
+<div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
+<option>Select</option>
+    <option>Negotiation</option>
+    <option>Discuss</option>
+    <option>Agreement</option>
+    <option>Token</option>
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+{
+  meetingtask.reason==="Discuss" && (
+    <>
+
+<div className="col-md-4"> <label className="labels">Select Project</label>  <input type="text"  className="form-control form-control-sm" value={meetingtask.project} /></div>
+
+<div className="col-md-4"><label className="labels">Select Block</label><input type="text" className="form-control form-control-sm" value={meetingtask.block}/></div>
+
+
+
+<div className="col-md-4"><label className="labels">Select Inventory</label><input type="text" className="form-control form-control-sm" value={meetingtask.inventory}/></div>
+
+    
+
+
+
+
+
+        </>
+
+  )
+}
+
+{/* {
+  meetingtask.reason !=="Discuss" && (
+
+    <div className="col-md-4"><label className="labels">Inventory</label>
+    <select className="form-control form-control-sm"
+onChange={handleallunitschange2}
+>
+<option>---select---</option>
+{
+sitevisitdata.map((item)=>
+(
+  <option>{item}</option>
+))
+}
+
+</select>
+    </div>
+
+  )
+} */}
+
+
+
+<div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
+<div className="col-md-2"></div>
+
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+
+<div className="col-md-6"><label className="labels">Completed?</label> 
+<label class="switch">
+<input type="checkbox" onChange={handleToggle2} />
+    <span class="slider round"></span>
+    </label>
+</div>
+
+
+   
+
+
+
+
+<div className="p-3 py-5" id="meetingdetails" style={{display:"none",width:"100%"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Meeting Task</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
+<option>Select</option>
+  <option>Conducted</option>
+  <option>Cancelled</option>
+  <option> Postponed</option>
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" >
+<option>Select</option>
+  <option>Deal Done</option>
+  <option>Negotiation Uncomplete</option>
+  <option>Deal Not Done</option>
+  <option>Site Visit</option>
+    </select>
+    </div>
+<div className="col-md-4"></div>
+</div>
+<div className="row mt-3">
+<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" /></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+ </div>
+
+    </div>
+    
+{/* <div className="col-md-2"  style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={meetingtaskdetails}>Submit</button></div>
+<div className="col-md-2"  style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div> */}
+
+    </div> 
+
+
+
+    {/*============================= meeting task end ================================================================================*/}
 
 </Modal.Body>
             <Modal.Footer>
