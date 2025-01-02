@@ -8,7 +8,7 @@ const { add_tower, view_tower } = require('../controllers/add_tower');
 const add_project = require('../controllers/add_project');
 const lead_info_requirment = require('../controllers/leadinfo_requirment');
 const {mail_task_form,view_mail} = require('../controllers/mail_task_form');
-const {call_task_form,view_call} = require('../controllers/call_task_form');
+const {call_task_form,view_call, update_calltask, remove_calltask, view_calltask_Byid} = require('../controllers/call_task_form');
 const {meeting_task_form,viewmeeting_task, remove_meetingtask, view_meetingtask_Byid, update_meetingtask} = require('../controllers/meeting_task_form');
 const {site_visit_form,view_site, remove_sitevisittask, view_sitevisittask_Byid, update_sitevisittask} = require('../controllers/site_visit_form');
 const {booking_details,view_booking} = require('../controllers/booking_details');
@@ -23,6 +23,8 @@ const upload1 = require('../middlewares/multifile');
 
 const router=express.Router()
 
+//============================== all routing for contact start=============================================================
+
 router.post('/addcontact',upload.any('document_pic'),add_contact)
 router.get('/viewcontact',view_contact)
 router.get('/viewcontactbyid/:_id',view_contact_Byid)
@@ -34,6 +36,11 @@ router.get('/viewcontactbycompany/:company_name',view_contact_Bycompany)
 router.put('/updatecontact/:_id',upload.any('document_pic'),update_contact)
 router.delete('/deletecontact/:_id',remove_contact)
 router.post('/contact/sendmail',upload.array('attachments', 10),send_mail)
+
+//======================================= all routing for contact end=========================================================
+
+
+// ==============================================all routing for lead start=================================================
 
 router.post('/leadinfo',upload.any('document_pic'),lead_info)
 router.get('/leadinfo',leadinfo_find)
@@ -48,6 +55,8 @@ router.get('/viewleadbycompany/:company_name',view_lead_Bycompany)
 router.get('/viewleadbystage/:stage',view_lead_Bystage)
 router.get('/viewleadbyemail/:email',view_lead_Byemail)
 router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)
+
+//============================================= all routing for lead end=======================================================
 
 router.post('/project',upload.any('pic'),createProject)
 router.get('/viewproject',view_project)
@@ -74,11 +83,16 @@ router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 
 router.post('/leadinforequirment',lead_info_requirment)
 
+//============================ route for all task======================================================================
+
 router.post('/mailtask',mail_task_form)
 router.get('/viewmailtask',view_mail)
 
 router.post('/calltask',call_task_form)
 router.get('/viewcalltask',view_call)
+router.get('/viewcalltaskbyid/:_id',view_calltask_Byid)
+router.put('/updatecalltask/:_id',update_calltask)
+router.delete('/removecallask/:_id',remove_calltask)
 
 router.post('/meetingtask',meeting_task_form)
 router.get('/viewmeetingtask',viewmeeting_task)
@@ -91,6 +105,8 @@ router.get('/viewsitevisit',view_site)
 router.delete('/removesitevisittask/:_id',remove_sitevisittask)
 router.get('/viewsitevisitbyid/:_id',view_sitevisittask_Byid)
 router.put('/updatesitevisittask/:_id',update_sitevisittask)
+
+// =======================================route for all task end=============================================================================
 
 router.post('/bookingdetails',booking_details)
 router.get('/viewbookingdetails',view_booking)

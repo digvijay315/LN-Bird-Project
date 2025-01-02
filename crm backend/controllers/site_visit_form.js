@@ -4,11 +4,11 @@ const site_visit_form=async(req,res)=>
     {
         try {
             const{activity_type,title,executive,project,sitevisit_type,inventory,block,lead,confirmation,remark,participants,
-                remind_me,start_date,end_date,complete, title2,first_name,last_name,mobile_no,email,stage,status,intrested_inventory,
+                remind_me,start_date,end_date,complete, title2,first_name,last_name,mobile_no,email,stage,lead_id,status,intrested_inventory,
                 intrested_project,intrested_block,date,feedback}=req.body;
 
                 const newsitevisitform=new sitevisit_form({activity_type,title,executive,project,sitevisit_type,inventory,block,lead,confirmation,remark,participants,
-                    remind_me,start_date,end_date,complete, title2,first_name,last_name,mobile_no,email,stage,status,intrested_inventory,
+                    remind_me,start_date,end_date,complete, title2,first_name,last_name,mobile_no,email,stage,lead_id,status,intrested_inventory,
                     intrested_project,intrested_block,date,feedback})
 
                     const resp=await newsitevisitform.save(); 

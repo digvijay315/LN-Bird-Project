@@ -1,5 +1,6 @@
 
 const addcontact = require('../models/add_contact');
+const adddeal = require('../models/deal.js');
 
 const cloudinary=require('cloudinary').v2
 const fs=require('fs')
@@ -236,11 +237,51 @@ const add_contact = async (req, res) => {
                             document_pic:newDocumentPic // Update preview field with new images if provided
                         };
                         const resp=await addcontact.findByIdAndUpdate(id,updatedFields,{ new: true })
+
+                        await updateDealsWithUpdatedContact(id, resp);
+
                         res.status(200).send({message:"lead update successfully"})
                     } catch (error) {
                         console.log(error)
                     }
                 }
+
+                const updateDealsWithUpdatedContact = async (id, resp) => {
+                    try {
+                      // Find and update deals where the contact._id exists in either owner_details or associated_contact
+                      const updatedDeals = await adddeal.updateMany(
+                        {
+                          $or: [
+                            { 'owner_details._id': id }, // Match contact in owner_details
+                            { 'associated_contact._id': id } // Match contact in associated_contact
+                          ]
+                        },
+                        {
+                          $set: {
+                            // Update the specific contact data inside the arrays, without replacing the whole array
+                            'owner_details.$[owner]': resp,    // Update matched contact in owner_details
+                            'associated_contact.$[assoc]': resp // Update matched contact in associated_contact
+                          }
+                        },
+                        {
+                          arrayFilters: [
+                            { 'owner._id': id },    // Filter for matching contact in owner_details
+                            { 'assoc._id': id }     // Filter for matching contact in associated_contact
+                          ]
+                        }
+                      );
+                  
+                      console.log(`Deals updated where contact id: ${id} was referenced. Deals updated: ${updatedDeals.nModified}`);
+                    } catch (error) {
+                      console.error('Error updating related deals:', error);
+                    }
+                  };
+                  
+                  
+                  
+
+                
+
     module.exports={add_contact,view_contact,view_contact_Byid,remove_contact,update_contact,
                     view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany,
                 view_contact_ByName};

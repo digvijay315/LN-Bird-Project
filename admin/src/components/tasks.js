@@ -163,6 +163,27 @@ function Tasks() {
           }
         };
 
+        const deleteSelectedItems1 = async () => {
+          try {
+            if(selectedItems1.length===0)
+            {
+              toast.error("please select first",{autoClose:"2000"})
+              return
+            }
+            const resp = selectedItems1.map(async (itemId) => {
+              await api.delete(`removecallask/${itemId}`);
+            });
+            
+            toast.success('Selected items deleted successfully',{autoClose:"2000"})
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+
         const deleteSelectedItems2 = async () => {
           try {
             if(selectedItems2.length===0)
@@ -514,7 +535,7 @@ const sitevisitcolumns = [
         { id: 'scheduled_for', name: 'Scheduled For' },
         { id: 'stage', name: 'Stage' },
         { id: 'status', name: 'Status' },
-        { id: 'action', name: 'Action' },
+     
       ];
       const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
       const [selectAll1, setSelectAll1] = useState(false); // To track the state of the "Select All" checkbox
@@ -543,6 +564,31 @@ const sitevisitcolumns = [
         
         }
       };
+
+      useEffect(()=>
+        {
+          if(selectedItems1.length===0)
+          {
+            document.getElementById("siteaction").style.display="none"
+            document.getElementById("meetingaction").style.display="none"
+            document.getElementById("followupaction").style.display="none"
+           
+          }
+          if(selectedItems1.length===1)
+          {
+            document.getElementById("siteaction").style.display="none"
+            document.getElementById("meetingaction").style.display="none"
+            document.getElementById("followupaction").style.display="inline-block"
+          }
+
+          if(selectedItems1.length>1)
+          {
+            document.getElementById("siteaction").style.display="none"
+            document.getElementById("meetingaction").style.display="none"
+            document.getElementById("followupaction").style.display="inline-block"
+          
+          }
+        },[selectedItems1])
 
 
 
@@ -723,7 +769,7 @@ const followup=()=>
 
                   const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
                     inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
-                    last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
+                    last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
 
 
                    
@@ -901,7 +947,8 @@ const handleallunitschange = (event) => {
               last_name: selectedLead.last_name,
               mobile_no: selectedLead.mobile_no,
               email: selectedLead.email,
-              stage: selectedLead.stage
+              stage: selectedLead.stage,
+              lead_id:selectedLead._id
           }));
       }
 
@@ -1093,7 +1140,7 @@ console.log(id);
 
     if(id)
       {
-       const resp1 = await api.put(`updateleadbystagebyemail/${sitevisit.email}`,stage );
+       const resp1 = await api.put(`updatelead/${sitevisit.lead_id}`,stage );
       }
       
       
@@ -1445,6 +1492,94 @@ useEffect(()=>
 // =====================================meeting task complete form end===============================================================
 
 
+// ================================call task complete form start==================================================================
+
+const [show5, setshow5] = useState(false);
+    
+                  const handleClose5 = () => setshow5(false);
+                  const handleShow5=async()=>
+                  {
+                    setshow5(true);
+                    fetchcalldata()
+                    // fetchleaddata()
+                  }
+
+                  const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",
+                    first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
+                    result:"",intrested_inventory:"",feedback:""})
+
+
+                  const fetchcalldata=async(event)=>
+                    {
+                      try {
+                        const resp=await api.get(`viewcalltaskbyid/${selectedItems1}`)
+                        setcalltask(resp.data.calltask)
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    }
+
+                    const[leaddatacall,setleaddatacall]=useState([]);
+                    const fetchleaddatacall=async()=>
+                    {
+                      
+                      try {
+                        const resp=await api.get('leadinfo')
+                        setleaddatacall(resp.data.lead)
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    
+                    }
+                    useEffect(()=>
+                      {
+                        fetchleaddatacall()
+                      },[])
+
+
+                    const handleToggle = (e) => {
+                      const isChecked = e.target.checked; // Get the checked state
+                      setcalltask({ ...calltask, complete: isChecked }); // Update the calltask state
+                  
+                      // Open the modal only if the checkbox is checked
+                      if (isChecked) {
+                         document.getElementById("calldetails").style.display="flex"
+                      }
+                      else{
+                          document.getElementById("calldetails").style.display="none"
+                      }
+                  };
+
+                  const handler1=()=>
+                    {
+                        document.getElementById("date1").style.color="black"
+                    }
+
+                    const calltaskdetails=async()=>
+                      {
+                      const title1 = document.getElementById("calltitle").innerText;
+                      // Update state
+                      const updatedCallTask = { ...calltask, title: title1 };
+                      
+                      try {
+                      const resp=await api.put(`updatecalltask/${selectedItems1}`,updatedCallTask)
+                      if(resp.status===200)
+                      {
+                      toast.success(resp.data.message)
+                      setTimeout(() => {
+                      window.location.reload();
+                      }, 2000); // 2000 milliseconds = 2 seconds
+          
+                      }
+                  } catch (error) {
+          
+                      toast.error(error.message)
+                  }
+              }
+          
+
+
+
     return ( 
         <div>
             <Header1/>
@@ -1514,6 +1649,23 @@ useEffect(()=>
      
      <Tooltip title="Complete Task.." arrow>
      <img id="completetask"  src="https://cdn-icons-png.flaticon.com/512/1632/1632670.png" onClick={handleShow4}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+   
+     
+     </div>
+
+     <div id="followupaction" style={{position:"absolute",marginLeft:"1%",gap:"20px",display:"none"}}>
+     
+     <Tooltip title="Delete Task.." arrow>
+     <img id="dealdelete" src="https://cdn3d.iconscout.com/3d/premium/thumb/delete-button-3d-icon-download-in-png-blend-fbx-gltf-file-formats--remove-cancel-pack-user-interface-icons-6307914.png?f=webp" onClick={deleteSelectedItems1}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px"}} alt=""/>
+     </Tooltip>
+     
+     <Tooltip title="Edit Task.." arrow>
+     <img id="dealedit" src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+     
+     <Tooltip title="Complete Task.." arrow>
+     <img id="completetask"  src="https://www.shareicon.net/data/2015/06/12/53127_task_256x256.png" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
    
      
@@ -1619,11 +1771,9 @@ useEffect(()=>
              {item.stage}
             </StyledTableCell>
             <StyledTableCell>
-             
+            {item.status}
             </StyledTableCell>
-            <StyledTableCell>
-              <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
-            </StyledTableCell>
+      
             
           </StyledTableRow>
         ))}
@@ -2456,6 +2606,186 @@ sitevisitdata.map((item)=>
                   </Modal.Footer>
                 </Modal>
 
+{/* ====================================call task complete modal================================================================ */}
+
+<Modal show={show5} onHide={handleClose5} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Complete Call Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+                  <div className="row" id="call" style={{padding:"10px"}}>
+                        
+                        <div className="col-md-12"><label className="labels">Title</label><p id="calltitle">Call {calltask.lead} For Meeting at {calltask.due_date}</p></div>
+                        <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
+                    <option>{calltask.reason}</option>
+                    <option>---Select---</option>
+                        {
+                            reason.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+              
+               
+                <div className="col-md-4"><label className="labels">Select Lead</label>
+                <select
+                className="form-control form-control-sm"
+                required
+                onChange={(e) => {
+                const selectedLead = leaddatacall.find(item => item._id === e.target.value);
+                if (selectedLead) {
+                    const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                    setcalltask(prevState => ({
+                    ...prevState,
+                    lead: fullName,
+                    title2: selectedLead.title,
+                    first_name: selectedLead.first_name,
+                    last_name: selectedLead.last_name,
+                    mobile_no:selectedLead.mobile_no,
+                    email:selectedLead.email,
+                    stage:selectedLead.stage
+                    }));
+                }
+                }}
+  >
+                    <option>{calltask.lead}</option>
+                    <option>---Select---</option>
+                        {
+                            leaddatacall.map((item)=>
+                            (
+                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+                                
+                            ))
+                            
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
+                        <option>{calltask.executive}</option>
+                        <option>---Select---</option>
+                        <option>Rajesh</option>
+                        <option>Suresh</option>
+                        <option>Vivek</option>
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-10"><label className="labels">Remark</label><textarea value={calltask.remarks} className='form-control form-control-sm' onChange={(e)=>setcalltask({...calltask,remarks:e.target.value})}/></div>
+
+                  
+                    <div className="col-md-2"></div>
+
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={calltask.due_date} className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Completed?</label> 
+                    <label class="switch">
+                    <input type="checkbox" onChange={handleToggle}/>
+                        <span class="slider round"></span>
+                        </label>
+                    </div>
+                  <div className="col-md-2"></div>
+
+                  <div style={{width:"100%"}}>
+            <div className="row" id='calldetails' style={{display:"none"}}>
+           
+        <div className="col-12">
+            
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right">Complete Call Task</h4>
+                </div><hr></hr>
+                
+                <div className="row mt-2">
+                    
+                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,direction:e.target.value}))} >
+                    <option>{calltask.direction}</option>
+                    <option>---Select---</option>
+                        {
+                            direction.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,status:e.target.value}))}>
+                    <option>{calltask.status}</option>
+                    <option>---Select---</option>
+                        {
+                            status.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+                
+               
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" value={calltask.date} className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
+                <div className="col-md-4"><label className="labels">Duration</label><input type="time" value={calltask.duration} className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...calltask,duration:e.target.value}))}/></div>
+                <div className="col-md-4"> </div>
+
+                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,result:e.target.value}))}>
+                    <option>{calltask.result}</option>
+                    <option>---Select---</option>
+                       {
+                        result.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+                       </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,intrested_inventory:e.target.value}))}>
+                    <option>{calltask.intrested_inventory}</option>
+                    <option>---Select---</option>
+                        {
+                          sitevisitdata.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={calltask.feedback}  style={{height:"100px"}} onChange={(e)=>setcalltask((prevState)=>({...calltask,feedback:e.target.value}))}/></div>
+                    <div className="col-md-12"><br></br></div>
+                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+                     
+                    {/* <div className="row mt-4"  style={{marginLeft:"70%"}}>
+                    <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
+                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
+                    </div> */}
+                    </div>
+                    
+        </div>
+        </div>
+                    
+                    {/* <div className="row">
+                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={calltaskdetails}>Submit</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    </div> */}
+                    </div>
+                    </div>
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose5}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={calltaskdetails}>
+                      Complete Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
 
 
    

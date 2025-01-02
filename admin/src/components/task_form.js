@@ -95,7 +95,9 @@ function Task_form() {
     const location=["Home","Office","Company","Site"]
     
     
-    const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
+    const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",
+      first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
+      result:"",intrested_inventory:"",feedback:""})
 
     
     const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],inventory:[],subject:"",remarks:"",
@@ -108,7 +110,7 @@ function Task_form() {
    
     const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
                 inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
-                last_name:"",mobile_no:"",email:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
+                last_name:"",mobile_no:[],email:[],lead_id:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
     
        
 
@@ -1012,7 +1014,8 @@ const[leadid,setleadid]=useState("")
                 last_name: selectedLead.last_name,
                 mobile_no: selectedLead.mobile_no,
                 email: selectedLead.email,
-                stage: selectedLead.stage
+                stage: selectedLead.stage,
+                lead_id:selectedLead._id
             }));
         }
 

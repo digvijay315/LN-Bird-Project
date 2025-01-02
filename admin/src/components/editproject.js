@@ -1350,7 +1350,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                             if (block.block_name ) 
                                               {
                                                  
-                                                const updateblocks= [...blocks, block];
+                                                const updateblocks= [...blocks,...project.add_block, block];
                                                 setblocks(updateblocks);
                                                 setproject(prevState => ({
                                                   ...prevState,
@@ -1407,7 +1407,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                     if (sizes.size_name ) 
                                                       {
                                                        
-                                                        const updatesizes= [...size, sizes];
+                                                        const updatesizes= [...size,...project.add_size, sizes];
                                                         setsize(updatesizes);
                                                         setproject(prevState => ({
                                                           ...prevState,
@@ -1618,7 +1618,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
                                                   if (units.unit_no ) 
                                                     {
-                                                      const updateunit= [...unit, units];
+                                                      const updateunit= [...unit,...project.add_unit, units];
                                                       setunit(updateunit);
                                                       setproject(prevState => ({
                                                         ...prevState,
