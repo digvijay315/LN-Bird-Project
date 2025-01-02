@@ -104,9 +104,9 @@ const[data1,setdata1]=useState([]);
   React.useEffect(() => {
     if (units.length >= 0) {
       const collectedUnits = units.flatMap(item => 
-        item.add_unit.filter(unit => unit.stage === 'active' && unit.block===deal.block) // Filter units where stage is 'active'
+        item.add_unit.filter(unit => unit.stage === 'Active' && unit.block===deal.block) // Filter units where stage is 'active'
       );
-      // console.log(collectedUnits);
+       console.log(collectedUnits);
       // console.log(deal.block);
       
       
