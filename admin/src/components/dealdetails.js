@@ -24,6 +24,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
 import api from "../api";
 import '../css/deal.css';
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 
 function Dealdetails() {
@@ -1526,34 +1527,48 @@ const handleformchange=()=>
        if(tasks==="Call")
        {
           document.getElementById("call").style.display="flex"
-      //     document.getElementById("email").style.display="none"
+          document.getElementById("email").style.display="none"
            document.getElementById("sitevisit").style.display="none"
            document.getElementById("meeting").style.display="none"
+
+             document.getElementById("calladdtask").style.display="flex"
+             document.getElementById("mailaddtask").style.display="none"
+             document.getElementById("sitevisitaddtask").style.display="none"
+             document.getElementById("meetingaddtask").style.display="none"
        }
-      // if(tasks==="Email")
-      //     {
-      //         document.getElementById("call").style.display="none"
-      //         document.getElementById("email").style.display="flex"
-      //         document.getElementById("sitevisit").style.display="none"
-      //          document.getElementById("meeting").style.display="none"
-      //     }
+      if(tasks==="Email")
+          {
+              document.getElementById("call").style.display="none"
+              document.getElementById("email").style.display="flex"
+              document.getElementById("sitevisit").style.display="none"
+               document.getElementById("meeting").style.display="none"
+
+                 document.getElementById("mailaddtask").style.display="flex"
+                 document.getElementById("sitevisitaddtask").style.display="none"
+                 document.getElementById("meetingaddtask").style.display="none"
+                  document.getElementById("calladdtask").style.display="none"
+          }
           if(tasks==="Site Visit")
               {
                    document.getElementById("call").style.display="none"
-                  // document.getElementById("email").style.display="none"
+                   document.getElementById("email").style.display="none"
                   document.getElementById("sitevisit").style.display="flex"
                     document.getElementById("meeting").style.display="none"
 
                        document.getElementById("sitevisitaddtask").style.display="flex"
                         document.getElementById("meetingaddtask").style.display="none"
+                         document.getElementById("calladdtask").style.display="none"
+                       document.getElementById("mailaddtask").style.display="none"
               }
                if(tasks==="Meeting")
                   {
                        document.getElementById("call").style.display="none"
-              //         document.getElementById("email").style.display="none"
+                       document.getElementById("email").style.display="none"
                       document.getElementById("sitevisit").style.display="none"
                        document.getElementById("meeting").style.display="flex"
 
+                       document.getElementById("calladdtask").style.display="none"
+                       document.getElementById("mailaddtask").style.display="none"
                         document.getElementById("sitevisitaddtask").style.display="none"
                          document.getElementById("meetingaddtask").style.display="flex"
                   }
@@ -1705,7 +1720,27 @@ const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",exec
               ? resp.data.deal.unit_number // If it's already an array, use it
               : [resp.data.deal.unit_number]
                // If it's not an array, wrap it in an array
+               
         }));
+
+        setmailtask((prevState)=>({
+          ...prevState,
+          project: Array.isArray(resp.data.deal.project)
+            ? resp.data.deal.project // If it's already an array, use it
+            : [resp.data.deal.project],
+             // If it's not an array, wrap it in an array
+             block: Array.isArray(resp.data.deal.block)
+             ? resp.data.deal.block // If it's already an array, use it
+             : [resp.data.deal.block],
+              // If it's not an array, wrap it in an array
+              inventory: Array.isArray(resp.data.deal.unit_number)
+              ? resp.data.deal.unit_number // If it's already an array, use it
+              : [resp.data.deal.unit_number]
+               // If it's not an array, wrap it in an array
+               
+        }));
+
+        
       } catch (error) {
         console.log(error);
         
@@ -1996,6 +2031,76 @@ if(meetingtask.reason==="Discuss")
     }
 }
 
+
+// =============================add to task for mail start============================================================================
+
+
+const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],block:[],inventory:[],subject:"",remarks:"",
+  complete:"",due_date:"",direction:"",status:"",date:"",feedback:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",})
+
+
+  const mailtaskdetails=async()=>
+    {
+     
+        const title1 = document.getElementById("mailtitle").innerText;
+
+        // Update state
+        const updatedMailTask = { ...mailtask, title: title1 };
+        try {
+            const resp=await api.post('mailtask',updatedMailTask)
+            if(resp.status===200)
+            {
+                toast.success(resp.data.message)
+                setTimeout(() => {
+                    window.location.reload();
+                  }, 2000); // 2000 milliseconds = 2 seconds
+                
+            }
+        } catch (error) {
+            
+            toast.error(error.message)
+        }
+    }
+
+    const handleToggle1 = (e) => {
+      const isChecked = e.target.checked; // Get the checked state
+      setmailtask({ ...mailtask, complete: isChecked }); // Update the calltask state
+  
+      // Open the modal only if the checkbox is checked
+      if (isChecked) {
+         document.getElementById("maildetails").style.display="block"
+      }
+      else{
+          document.getElementById("maildetails").style.display="none"
+      }
+  };
+
+
+
+
+
+
+const[leaddatamail,setleaddatamail]=useState([]);
+const fetchleaddatamail=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('leadinfo')
+    const all=(resp.data.lead)
+    setleaddatamail(all)
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+useEffect(()=>
+{
+fetchleaddatamail()
+},[])
+
+
+// ============================================add to task mail end====================================================================
 
 
 
@@ -3775,10 +3880,10 @@ sitevisitdata.map((item)=>
         </div>
         </div>
                     
-                    <div className="row">
+                    {/* <div className="row">
                     <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={calltaskdetails}>Submit</button></div>
                     <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    </div>
+                    </div> */}
                     </div>
                     </div>
 
@@ -3792,6 +3897,130 @@ sitevisitdata.map((item)=>
 {/*============================================ mail task start =====================================================================*/}
 
 
+
+<div className="row" id="email" style={{padding:"10px",display:"none"}}>
+
+<div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail {mailtask.lead} For Meeting at {mailtask.due_date} for {mailtask.subject} of {mailtask.inventory}</p></div> 
+
+<div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
+<option>Select </option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+
+<div className="col-md-4"><label className="labels">Select Lead</label>     <select
+className="form-control form-control-sm"
+required
+onChange={(e) => {
+const selectedLead = leaddatamail.find(item => item._id === e.target.value);
+if (selectedLead) {
+const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+setmailtask(prevState => ({
+...prevState,
+lead: fullName,
+title2: selectedLead.title,
+first_name: selectedLead.first_name,
+last_name: selectedLead.last_name,
+mobile_no:selectedLead.mobile_no,
+email:selectedLead.email,
+stage:selectedLead.stage
+}));
+}
+}}
+>
+<option>Select</option>
+    {
+        leaddatamail.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+
+    <div className="col-md-4"> <label className="labels">Select Project</label>  <input type="text"  className="form-control form-control-sm" value={mailtask.project} /></div>
+
+<div className="col-md-4"><label className="labels">Select Block</label><input type="text" className="form-control form-control-sm" value={mailtask.block}/></div>
+
+
+
+<div className="col-md-4"><label className="labels">Select Inventory</label><input type="text" className="form-control form-control-sm" value={mailtask.inventory}/></div>
+
+
+<div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
+<option>Select</option>
+    <option>Payment Reminder</option>
+    <option>Agreement Reminder</option>
+    <option>Feedback</option>
+    <option>Matched inventory update</option>
+    <option>Document Required for Submision</option>
+    </select>
+    </div>
+
+<div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
+    <div className="col-md-2"></div>
+
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
+
+
+<div className="col-md-6"><label className="labels">Completed?</label> 
+<label class="switch" onChange={handleToggle1}>
+<input type="checkbox" />
+    <span class="slider round"></span>
+    </label>
+</div>
+
+<div className="p-3 py-5" id="maildetails" style={{display:"none"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Mail Task</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+<option>Select</option>
+    {
+        direction.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+<option>Select</option>
+   <option>Read</option>
+   <option>Delivered</option>
+   <option>Bounced</option>
+   <option>Undelivered</option>
+    </select>
+    </div>
+<div className="col-md-4"></div>
+</div>
+<div className="row mt-3">
+<div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" /></div>
+<div className="col-md-8"> </div>
+
+<div className="col-md-4"></div>
+
+<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+<div className="col-md-12"><br></br></div>
+<div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+ </div>
+
+</div>
+
+{/* <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={mailtaskdetails}>Submit</button></div>
+<div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div> */}
+</div>
 
 
 
@@ -3807,6 +4036,12 @@ sitevisitdata.map((item)=>
                 Add Task 
               </Button>
               <Button variant="secondary" id="meetingaddtask" onClick={meetingtaskdetails} style={{display:"none"}}>
+                Add Task 
+              </Button>
+              <Button variant="secondary" id="calladdtask" onClick={calltaskdetails} style={{display:"none"}}>
+                Add Task 
+              </Button>
+              <Button variant="secondary" id="mailaddtask" onClick={mailtaskdetails} style={{display:"none"}}>
                 Add Task 
               </Button>
               <Button variant="secondary" onClick={handleClose8}>

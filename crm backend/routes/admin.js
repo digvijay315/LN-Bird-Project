@@ -7,7 +7,7 @@ const {add_developer,view_developer, view_developer_Byid, update_developer, remo
 const { add_tower, view_tower } = require('../controllers/add_tower');
 const add_project = require('../controllers/add_project');
 const lead_info_requirment = require('../controllers/leadinfo_requirment');
-const {mail_task_form,view_mail} = require('../controllers/mail_task_form');
+const {mail_task_form,view_mail, remove_mailtask, view_mailtask_Byid, update_mailtask} = require('../controllers/mail_task_form');
 const {call_task_form,view_call, update_calltask, remove_calltask, view_calltask_Byid} = require('../controllers/call_task_form');
 const {meeting_task_form,viewmeeting_task, remove_meetingtask, view_meetingtask_Byid, update_meetingtask} = require('../controllers/meeting_task_form');
 const {site_visit_form,view_site, remove_sitevisittask, view_sitevisittask_Byid, update_sitevisittask} = require('../controllers/site_visit_form');
@@ -87,6 +87,9 @@ router.post('/leadinforequirment',lead_info_requirment)
 
 router.post('/mailtask',mail_task_form)
 router.get('/viewmailtask',view_mail)
+router.delete('/removemailask/:_id',remove_mailtask)
+router.get('/viewmailtaskbyid/:_id',view_mailtask_Byid)
+router.put('/updatecalltask/:_id',update_mailtask)
 
 router.post('/calltask',call_task_form)
 router.get('/viewcalltask',view_call)

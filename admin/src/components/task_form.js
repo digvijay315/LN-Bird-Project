@@ -100,8 +100,8 @@ function Task_form() {
       result:"",intrested_inventory:"",feedback:""})
 
     
-    const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],inventory:[],subject:"",remarks:"",
-        complete:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:""})
+    const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],block:[],inventory:[],subject:"",remarks:"",
+        complete:"",due_date:"",direction:"",status:"",date:"",feedback:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",})
    
 
     const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
@@ -1075,9 +1075,90 @@ const[leadid,setleadid]=useState("")
     };
    
     
+// ==================================mail task onchange event and all function start================================================
+
+const [mailprojects, setmailprojects] = useState([]);
+const handlesiteprojectchangemail = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  const selectproject = typeof value === 'string' ? value.split(',') : value;
+
+  setmailprojects(selectproject);
+  setmailtask((prev) => {
+    const updatedmail = { ...prev, project: selectproject };
+    // fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
+    return updatedmail; // Return the updated state
+  });
+};
+
+const[alldealblocksmail,setalldealblocksmail]=useState([])
+useEffect(() => {
+  const dealblocks = dealdata.filter((item) =>
+    mailtask.project.some((project) => project === item.project)
+  );
+  setalldealblocksmail(dealblocks)
+}, [mailtask.project]);
+
+const[allblockmail,setallblockmail]=useState([])
+const handleallblockchangemail = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // Convert value to an array if it's a string (for multiple selection)
+  const selectblock = typeof value === 'string' ? value.split(',') : value;
+
+  // Update the allblock state with full block.block-project combinations (for selected blocks)
+  setallblockmail(selectblock);
+
+  // Update the sitevisit state with only block.block values (not both block.block and block.project)
+  setmailtask((prev) => {
+    const updatemailtask = { 
+      ...prev, 
+      block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
+    };
+    return updatemailtask;
+  });
+};
 
 
- 
+
+const [alldealunitsmail, setalldealunitsmail] = useState([]);
+
+useEffect(() => {
+  const dealblocks = dealdata.filter((item) =>
+    mailtask.project.some((project) => project === item.project) &&
+    mailtask.block.some((block) => block === item.block) // Add the condition for interested blocks
+  );
+  setalldealunitsmail(dealblocks);
+}, [mailtask.project, mailtask.block]); // Depend on both interested_project and interested_block
+
+// console.log(alldealunits);
+
+
+  const[allunitmail,setallunitmail]=useState([])
+  const handleallunitschangemail = (event) => {
+    const { target: { value } } = event;
+  
+    // Convert value to an array if it's a string (for multiple selection)
+    const selectunits = typeof value === 'string' ? value.split(',') : value;
+  
+    // Extract only the unit_number from the selected values (split by '-')
+    const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+  
+    // Update allunit1 state with the selected unit numbers
+    setallunitmail(selectunits);
+  
+    // Update the sitevisit state with selected units in intrested_inventory
+    setmailtask((prev) => {
+      const updatemailtask = { ...prev, inventory: selectunits }; // Store only unit numbers
+      return updatemailtask;
+    });
+  };
+
+
 
 
     
@@ -1316,38 +1397,95 @@ const[leadid,setleadid]=useState("")
                         </div>
                         <div className="col-md-8"></div>
 
-                        <div className="col-md-4"><label className="labels">Select Project</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={projects3}
-                    onChange={handleprojectchange3}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allproject.map((name) => (
-                        <MenuItem key={name} value={name}>
-                            <Checkbox checked={projects3.indexOf(name) > -1} />
-                            <ListItemText primary={name} />
-                        </MenuItem>
-                    ))}
-                </Select>
-                        </div>
+                        <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+                                <Select className="form-control form-control-sm" style={{border:"none"}}
+                            multiple
+                            value={mailprojects}
+                            onChange={handlesiteprojectchangemail}
+                            renderValue={(selected) => selected.join(', ')}
+                        >
+                            {allproject.map((name) => (
+                                <MenuItem key={name} value={name}>
+                                    <Checkbox checked={mailprojects.indexOf(name) > -1} />
+                                    <ListItemText primary={name} />
+                                </MenuItem>
+                            ))}
+                        </Select>
+                                </div>
 
-                        <div className="col-md-4"><label className="labels">Select Inventory</label>
-                        <Select className="form-control form-control-sm" style={{border:"none"}}
-                    multiple
-                    value={allunit3}
-                    onChange={handleallunitschange3}
-                    renderValue={(selected) => selected.join(', ')}
-                >
-                    {allUnits3.map((unit) => (
-                        <MenuItem key={unit._id} value={unit.unit_no}> {/* Ensure unit_no is the value you want */}
-                            <Checkbox checked={allunit3.indexOf(unit.unit_no) > -1} />
-                            <ListItemText primary={unit.unit_no} /> {/* Render unit_no or other relevant property */}
-                        </MenuItem>
-                    ))}
-                </Select>
-                        </div>
-                    <div className="col-md-4"></div>
+                                <div className="col-md-4">
+              <label className="labels">Select Interested Block</label>
+              <Select
+                className="form-control form-control-sm"
+                style={{ border: "none" }}
+                multiple
+                value={allblockmail}  // Value contains the full block.block-project combinations
+                onChange={handleallblockchangemail}  // Handle the change when blocks are selected/deselected
+                renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+              >
+                {alldealblocksmail
+                  .filter((value, index, self) =>
+                    // Ensure unique combinations of block.block and block.project
+                    index === self.findIndex((t) => (
+                      t.block === value.block && t.project === value.project
+                    ))
+                  )
+                  .map((block) => {
+                    // Create a unique identifier by combining block.block and block.project
+                    const uniqueBlockKey = `${block.block}-${block.project}`;
+
+                    return (
+                      <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+                        <Checkbox 
+                          checked={allblockmail.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+                        />
+                        <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+                      </MenuItem>
+                    );
+                  })
+                }
+              </Select>
+</div>
+
+
+
+                                <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+                             
+                                <Select
+  className="form-control form-control-sm"
+  style={{ border: "none" }}
+  multiple
+  value={allunitmail} // Holds selected units
+  onChange={handleallunitschangemail} // Handle changes for unit selection
+  renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+>
+  {alldealunitsmail
+    .filter((value, index, self) =>
+      // Ensure unique combinations of project, block, and unit
+      index === self.findIndex((t) => (
+        t.project === value.project &&
+        t.block === value.block &&
+        t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+      ))
+    )
+    .map((unit) => {
+      // Create a unique key for project-block-unit combination
+      const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+      return (
+        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+          <Checkbox checked={allunitmail.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        </MenuItem>
+      );
+    })}
+</Select>
+
+
+                                    </div>
+
+                      
+                 
 
                     <div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
                     <option>Select</option>

@@ -173,6 +173,10 @@ function Tasks() {
             const resp = selectedItems1.map(async (itemId) => {
               await api.delete(`removecallask/${itemId}`);
             });
+
+            const resp1 = selectedItems1.map(async (itemId) => {
+              await api.delete(`removemailask/${itemId}`);
+            });
             
             toast.success('Selected items deleted successfully',{autoClose:"2000"})
             setTimeout(() => {
@@ -1504,7 +1508,7 @@ const [show5, setshow5] = useState(false);
                     // fetchleaddata()
                   }
 
-                  const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",
+                  const [calltask,setcalltask]=useState({activity_type:"",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",
                     first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
                     result:"",intrested_inventory:"",feedback:""})
 
@@ -1577,6 +1581,160 @@ const [show5, setshow5] = useState(false);
                   }
               }
           
+
+// ======================================mail task complete form start=============================================================
+
+
+const [show6, setshow6] = useState(false);
+    
+                  const handleClose6 = () => setshow6(false);
+                  const handleShow6=async()=>
+                  {
+                    setshow6(true);
+                    fetchmaildata()
+                    // fetchleaddata()
+                  }
+
+const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],block:[],inventory:[],subject:"",remarks:"",
+  complete:"",due_date:"",direction:"",status:"",date:"",feedback:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",})
+
+
+  const fetchmaildata=async(event)=>
+    {
+      try {
+        const resp=await api.get(`viewmailtaskbyid/${selectedItems1}`)
+        setmailtask(resp.data.mailtask)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+console.log(mailtask.block);
+
+
+    const [mailprojects, setmailprojects] = useState([]);
+const handlesiteprojectchangemail = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  const selectproject = typeof value === 'string' ? value.split(',') : value;
+
+  setmailprojects(selectproject);
+  setmailtask((prev) => {
+    const updatedmail = { ...prev, project: selectproject };
+    // fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
+    return updatedmail; // Return the updated state
+  });
+};
+
+const[alldealblocksmail,setalldealblocksmail]=useState([])
+useEffect(() => {
+  const dealblocks = dealdata.filter((item) =>
+    mailtask.project.some((project) => project === item.project)
+  );
+  setalldealblocksmail(dealblocks)
+}, [mailtask.project]);
+
+const[allblockmail,setallblockmail]=useState([])
+const handleallblockchangemail = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  // Convert value to an array if it's a string (for multiple selection)
+  const selectblock = typeof value === 'string' ? value.split(',') : value;
+
+  // Update the allblock state with full block.block-project combinations (for selected blocks)
+  setallblockmail(selectblock);
+
+  // Update the sitevisit state with only block.block values (not both block.block and block.project)
+  setmailtask((prev) => {
+    const updatemailtask = { 
+      ...prev, 
+      block: selectblock // Store only block.block in sitevisit
+    };
+    return updatemailtask;
+  });
+};
+
+
+
+const [alldealunitsmail, setalldealunitsmail] = useState([]);
+
+useEffect(() => {
+  const dealblocks = dealdata.filter((item) =>
+    mailtask.project.some((project) => project === item.project) &&
+    mailtask.block.some((block) => block === item.block) // Add the condition for interested blocks
+  );
+  setalldealunitsmail(dealblocks);
+}, [mailtask.project, mailtask.block]); // Depend on both interested_project and interested_block
+
+// console.log(alldealunits);
+
+
+  const[allunitmail,setallunitmail]=useState([])
+  const handleallunitschangemail = (event) => {
+    const { target: { value } } = event;
+  
+    // Convert value to an array if it's a string (for multiple selection)
+    const selectunits = typeof value === 'string' ? value.split(',') : value;
+  
+    // Extract only the unit_number from the selected values (split by '-')
+    const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+  
+    // Update allunit1 state with the selected unit numbers
+    setallunitmail(selectunits);
+  
+    // Update the sitevisit state with selected units in intrested_inventory
+    setmailtask((prev) => {
+      const updatemailtask = { ...prev, inventory: selectunits }; // Store only unit numbers
+      return updatemailtask;
+    });
+  };
+
+
+  const handleToggle1 = (e) => {
+    const isChecked = e.target.checked; // Get the checked state
+    setmailtask({ ...mailtask, complete: isChecked }); // Update the calltask state
+
+    // Open the modal only if the checkbox is checked
+    if (isChecked) {
+       document.getElementById("maildetails").style.display="block"
+    }
+    else{
+        document.getElementById("maildetails").style.display="none"
+    }
+};
+
+const mailtaskdetails=async()=>
+  {
+   
+      const title1 = document.getElementById("mailtitle").innerText;
+
+      // Update state
+      const updatedMailTask = { ...mailtask, title: title1 };
+      try {
+          const resp=await api.post('mailtask',updatedMailTask)
+          if(resp.status===200)
+          {
+              toast.success(resp.data.message)
+              setTimeout(() => {
+                  window.location.reload();
+                }, 2000); // 2000 milliseconds = 2 seconds
+              
+          }
+      } catch (error) {
+          
+          toast.error(error.message)
+      }
+    }
+
+
+
+
+
+
+  //======================================== mail task complete form end==============================================================
 
 
 
@@ -1664,8 +1822,11 @@ const [show5, setshow5] = useState(false);
      <img id="dealedit" src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
      
-     <Tooltip title="Complete Task.." arrow>
+     <Tooltip title="Complete Call Task.." arrow>
      <img id="completetask"  src="https://www.shareicon.net/data/2015/06/12/53127_task_256x256.png" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+     <Tooltip title="Complete Mail Task.." arrow>
+     <img id="completetask"  src="https://www.shareicon.net/data/2015/06/12/53127_task_256x256.png" onClick={handleShow6}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
    
      
@@ -2613,6 +2774,7 @@ sitevisitdata.map((item)=>
                     <Modal.Title>Complete Call Task</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
+                  
 
                   <div className="row" id="call" style={{padding:"10px"}}>
                         
@@ -2786,6 +2948,239 @@ sitevisitdata.map((item)=>
                     </Button>
                   </Modal.Footer>
                 </Modal>
+
+
+{/*========================================== mail task modal========================================================== */}
+
+                <Modal show={show6} onHide={handleClose6} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Complete Mail Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+                  <div className="row" id="email" >
+
+<div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail {mailtask.lead} For Meeting at {mailtask.due_date} for {mailtask.subject} of {mailtask.inventory}</p></div> 
+
+<div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
+<option>{mailtask.executive}</option>
+<option>---Select---</option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+
+<div className="col-md-4"><label className="labels">Select Lead</label>     <select
+      className="form-control form-control-sm"
+      required
+      onChange={(e) => {
+      const selectedLead = leaddatacall.find(item => item._id === e.target.value);
+      if (selectedLead) {
+      const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+      setmailtask(prevState => ({
+      ...prevState,
+      lead: fullName,
+      title2: selectedLead.title,
+      first_name: selectedLead.first_name,
+      last_name: selectedLead.last_name,
+      mobile_no:selectedLead.mobile_no,
+      email:selectedLead.email,
+      stage:selectedLead.stage
+      }));
+      }
+      }}
+      >
+  <option>{mailtask.lead}</option>
+<option>---Select---</option>
+    {
+        leaddatacall.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+
+    <div className="col-md-4"><label className="labels">Select Project</label> 
+            <Select className="form-control form-control-sm" style={{border:"none"}}
+        multiple
+        value={mailtask.project?mailtask.project:mailprojects}
+        onChange={handlesiteprojectchangemail}
+        renderValue={(selected) => selected.join(', ')}
+    >
+        {allproject.map((name) => (
+            <MenuItem key={name} value={name}>
+                <Checkbox checked={mailtask.project?mailtask.project.indexOf(name) > -1:mailprojects.indexOf(name) > -1} />
+                <ListItemText primary={name} />
+            </MenuItem>
+        ))}
+    </Select>
+            </div>
+
+            <div className="col-md-4">
+          <label className="labels">Select Block</label>
+          <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={mailtask.block?mailtask.block:allblockmail}  // Value contains the full block.block-project combinations
+          onChange={handleallblockchangemail}  // Handle the change when blocks are selected/deselected
+          renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+          >
+          {alldealblocksmail
+          .filter((value, index, self) =>
+          // Ensure unique combinations of block.block and block.project
+          index === self.findIndex((t) => (
+            t.block === value.block && t.project === value.project
+          ))
+          )
+          .map((block) => {
+          // Create a unique identifier by combining block.block and block.project
+          const uniqueBlockKey = `${block.block}-${block.project}`;
+
+          return (
+            <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+              <Checkbox 
+                checked={mailtask.block?mailtask.block.includes(uniqueBlockKey):allblockmail.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+              />
+              <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+            </MenuItem>
+          );
+          })
+          }
+          </Select>
+          </div>
+
+
+
+            <div className="col-md-4"><label className="labels">Select Inventory</label>
+         
+            <Select
+        className="form-control form-control-sm"
+        style={{ border: "none" }}
+        multiple
+        value={mailtask.inventory?mailtask.inventory:allunitmail} // Holds selected units
+        onChange={handleallunitschangemail} // Handle changes for unit selection
+        renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+        >
+        {alldealunitsmail
+        .filter((value, index, self) =>
+        // Ensure unique combinations of project, block, and unit
+        index === self.findIndex((t) => (
+        t.project === value.project &&
+        t.block === value.block &&
+        t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+        ))
+        )
+        .map((unit) => {
+        // Create a unique key for project-block-unit combination
+        const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+        return (
+        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+        <Checkbox checked={mailtask.inventory?mailtask.inventory.includes(uniqueKey):allunitmail.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+        <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        </MenuItem>
+        );
+        })}
+        </Select>
+
+
+                </div>
+
+  
+
+
+<div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
+    <option>{mailtask.subject}</option>
+    <option>---Select---</option>
+    <option>Payment Reminder</option>
+    <option>Agreement Reminder</option>
+    <option>Feedback</option>
+    <option>Matched inventory update</option>
+    <option>Document Required for Submision</option>
+    </select>
+    </div>
+
+<div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={mailtask.remarks} onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
+    <div className="col-md-2"></div>
+
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={mailtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
+
+
+<div className="col-md-6"><label className="labels">Completed?</label> 
+<label class="switch" onChange={handleToggle1}>
+<input type="checkbox" />
+    <span class="slider round"></span>
+    </label>
+</div>
+
+<div className="p-3 py-5" id="maildetails" style={{display:"none"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Mail Task</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+  <option>{mailtask.direction}</option>
+  <option>---Select---</option>
+    {
+        direction.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+    <option>{mailtask.status}</option>
+    <option>---Select---</option>
+   <option>Read</option>
+   <option>Delivered</option>
+   <option>Bounced</option>
+   <option>Undelivered</option>
+    </select>
+    </div>
+<div className="col-md-4"></div>
+</div>
+<div className="row mt-3">
+<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" /></div>
+<div className="col-md-8"> </div>
+
+<div className="col-md-4"></div>
+
+<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}}/></div>
+<div className="col-md-12"><br></br></div>
+<div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+ </div>
+
+</div>
+
+<div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={mailtaskdetails}>Submit</button></div>
+<div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+</div>
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose6}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={calltaskdetails}>
+                      Complete Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
 
 
    
