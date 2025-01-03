@@ -3029,7 +3029,7 @@ fetchleaddatamail()
               style={{ padding: "10px", fontFamily: "times new roman" }}  >
               <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
-              {item.uaddress} {item.ucity} 
+              {/* {item.uaddress} {item.ucity}  project.locality  project.city*/}
           
             </StyledTableCell>
             {visibleColumns3

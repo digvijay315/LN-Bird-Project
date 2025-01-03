@@ -87,7 +87,7 @@ function Task_form() {
             
 
     const activity=["Call","Email","Meeting","Site Visit"]
-    const reason=["Meeting","Site Visit","Discuss","For Requirment","etc"]
+    const reason=["Meeting","Site Visit","Discuss","For Requirment","other"]
     const direction=["Incoming","Outgoing"]
     const visittype=["Site Visit","Home Visit","Online"]
     const status=["Answered","Missed","Not Pic","Busy","Cut Call","Number Not Reachable","Switch Off","Incoming","Not Available","Number Invalid"]
@@ -1198,7 +1198,7 @@ useEffect(() => {
 
                         <div className="row" id="call" style={{display:"none"}}>
                         
-                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} For Meeting at {calltask.due_date}</p></div>
+                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} on {calltask.due_date}</p></div>
                         <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
                     <option>Select</option>
                         {
@@ -1352,7 +1352,7 @@ useEffect(() => {
 
                     <div className="row" id="email" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail {mailtask.lead} For Meeting at {mailtask.due_date} for {mailtask.subject} of {mailtask.inventory}</p></div> 
+                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} on {mailtask.due_date} of {mailtask.inventory} {mailtask.block} {mailtask.project} </p></div> 
 
                     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
                     <option>Select </option>
