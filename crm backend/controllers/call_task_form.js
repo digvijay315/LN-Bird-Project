@@ -3,10 +3,10 @@ const calltask_form=require('../models/call_task_form')
 const call_task_form=async(req,res)=>
     {
         try {
-            const{activity_type,title,reason,lead,executive,remarks,complete,due_date,title2,first_name,last_name,mobile_no,email,stage,
+            const{activity_type,title,reason,lead,executive,remarks,complete,due_date,due_time,title2,first_name,last_name,mobile_no,email,stage,
                 lead_id,direction,status,date,duration,result,intrested_inventory,feedback}=req.body;
 
-                const newcalltaskform=new calltask_form({activity_type,title,reason,lead,executive,remarks,complete,due_date,
+                const newcalltaskform=new calltask_form({activity_type,title,reason,lead,executive,remarks,complete,due_date,due_time,
                     title2,first_name,last_name,mobile_no,email,stage,lead_id,direction,status,date,duration,result,intrested_inventory,feedback
                 })
                     const resp=await newcalltaskform.save(); 

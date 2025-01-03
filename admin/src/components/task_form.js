@@ -95,8 +95,8 @@ function Task_form() {
     const location=["Home","Office","Company","Site"]
     
     
-    const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",
-      first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
+    const [calltask,setcalltask]=useState({activity_type:"Call",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",due_time:"",
+      title2:"",first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
       result:"",intrested_inventory:"",feedback:""})
 
     
@@ -1159,6 +1159,57 @@ useEffect(() => {
   };
 
 
+// ===============================call task onchange events================================================================
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  
+  // Day of the month with suffix
+  const day = date.getDate();
+  const suffix = (day === 1 || day === 21 || day === 31)
+    ? 'st' : (day === 2 || day === 22)
+    ? 'nd' : (day === 3 || day === 23)
+    ? 'rd' : 'th';
+    
+  const formattedDay = `${day}${suffix}`;
+  
+  // Month (abbreviated to 3 letters)
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  
+  // Year (4 digits)
+  const year = date.getFullYear();
+  
+  return `${formattedDay} ${month} ${year}`;
+};
+
+const handleDateChange = (e) => {
+  const selectedDate = e.target.value;
+  const formattedDate = formatDate(selectedDate);
+  setcalltask({ ...calltask, due_date: formattedDate });
+};
+
+
+
+const formatTime = (timeString) => {
+  let [hours, minutes] = timeString.split(':').map(Number);
+  const isPM = hours >= 12;
+  
+  // Convert to 12-hour format
+  if (hours > 12) hours -= 12;
+  if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+  const period = isPM ? 'PM' : 'AM';
+  
+  return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+};
+
+const handleTimeChange = (e) => {
+  const selectedTime = e.target.value;
+  const formattedTime = formatTime(selectedTime);
+  setcalltask({ ...calltask, due_time: formattedTime });
+};
+
+
 
 
     
@@ -1198,7 +1249,7 @@ useEffect(() => {
 
                         <div className="row" id="call" style={{display:"none"}}>
                         
-                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} on {calltask.due_date}</p></div>
+                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date} on time {calltask.due_time}.</p></div>
                         <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
                     <option>Select</option>
                         {
@@ -1259,7 +1310,9 @@ useEffect(() => {
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm"  onChange={handleDateChange}/></div>
+                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div>
+                    <div className="col-md-4"></div>
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
@@ -1304,7 +1357,7 @@ useEffect(() => {
                     <div className="col-md-4"></div>
                 
                
-                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1}/></div>
+                <div className="col-md-4"><label className="labels">Date</label><input type="date" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1}/></div>
                 <div className="col-md-4"><label className="labels">Duration</label><input type="time" className="form-control form-control-sm" /></div>
                 <div className="col-md-4"> </div>
 
@@ -1564,7 +1617,7 @@ useEffect(() => {
                   
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.block.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')},{sitevisit.block.join(',')},{sitevisit.project.join(',')}, @ {sitevisit.start_date} also associate with {sitevisit.participants}</p></div>
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
@@ -1858,7 +1911,7 @@ useEffect(() => {
                 
                     <div className="row" id="meeting" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.project}, {meetingtask.inventory} on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory},{meetingtask.block},{meetingtask.project} at {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
                         
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>

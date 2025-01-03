@@ -2031,6 +2031,54 @@ if(meetingtask.reason==="Discuss")
     }
 }
 
+const formatdate = (dateString) => {
+  const date = new Date(dateString);
+  
+  // Day of the month with suffix
+  const day = date.getDate();
+  const suffix = (day === 1 || day === 21 || day === 31)
+    ? 'st' : (day === 2 || day === 22)
+    ? 'nd' : (day === 3 || day === 23)
+    ? 'rd' : 'th';
+    
+  const formattedDay = `${day}${suffix}`;
+  
+  // Month (abbreviated to 3 letters)
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const month = months[date.getMonth()];
+  
+  // Year (4 digits)
+  const year = date.getFullYear();
+  
+  return `${formattedDay} ${month} ${year}`;
+};
+
+const handleDateChange = (e) => {
+  const selectedDate = e.target.value;
+  const formattedDate = formatdate(selectedDate);
+  setcalltask({ ...calltask, due_date: formattedDate });
+};
+
+
+
+const formatTime = (timeString) => {
+  let [hours, minutes] = timeString.split(':').map(Number);
+  const isPM = hours >= 12;
+  
+  // Convert to 12-hour format
+  if (hours > 12) hours -= 12;
+  if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+  const period = isPM ? 'PM' : 'AM';
+  
+  return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+};
+
+const handleTimeChange = (e) => {
+  const selectedTime = e.target.value;
+  const formattedTime = formatTime(selectedTime);
+  setcalltask({ ...calltask, due_time: formattedTime });
+};
+
 
 // =============================add to task for mail start============================================================================
 
@@ -3733,7 +3781,7 @@ sitevisitdata.map((item)=>
 
 <div className="row" id="call" style={{display:"none",padding:"10px"}}>
                         
-                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} For Meeting at {calltask.due_date}</p></div>
+<div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date} on time {calltask.due_time}.</p></div>
                         <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
                     <option>Select</option>
                         {
@@ -3795,7 +3843,8 @@ sitevisitdata.map((item)=>
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={handleDateChange}/></div>
+                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div>
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
