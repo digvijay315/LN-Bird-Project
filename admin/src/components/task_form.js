@@ -1959,17 +1959,14 @@ const handleTimeChange = (e) => {
                     </div>
                     <div className="col-md-6"></div>
 
-                    {
-                        sitevisit.remind_me && (
-                            <>
+                   
                             
                             <div className="col-md-3"><label className="labels">Select Start Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite}/></div>
-                            <div className="col-md-3"><label className="labels">Select End Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite1}/></div>
+                            {/* <div className="col-md-3"><label className="labels">Select End Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite1}/></div> */}
                             <div className="col-md-3"><label className="labels">Start Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangesite}/></div>
                             <div className="col-md-3"><label className="labels">End Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangesite1}/></div>
-                            </>
-                        )
-                    }
+                            <div className="col-md-3"></div>
+             
                   
                     <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
                     <label class="switch">

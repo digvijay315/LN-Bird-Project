@@ -950,6 +950,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                             key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
                           }
                         });
+                    console.log(response);
                     
                         if (response.data.results.length > 0) {
                           const { lat, lng } = response.data.results[0].geometry.location;
@@ -960,7 +961,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                             langitude: lng
                           }));
                           const addressComponents = response.data.results[0].address_components;
-                          let uaddress = '';
+                          let uaddress = response.data.results[0].formatted_address                          ;;
                           let ustreet = '';
                           let ulocality = '';
                           let ucity = '';
@@ -971,9 +972,9 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                           // Extract address components
                           addressComponents.forEach(component => {
                             const types = component.types;
-                            if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
-                            if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
-                            if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                            // if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                            if (types.includes('sublocality_level_1')) ulocality += component.long_name + ' ';
+                            if (types.includes('administrative_area_level_2'))ustreet  = component.long_name;
                             if (types.includes('administrative_area_level_1')) ustate = component.long_name;
                             if (types.includes('locality')) ucity = component.long_name;
                             if (types.includes('postal_code')) uzip = component.long_name;
@@ -1002,6 +1003,9 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                         console.error('Error fetching coordinates:', error);
                       }
                     };
+
+                    
+                    
                     
                     const handleMarkerDragEnd1 = async (e) => {
                       const newLat = e.latLng.lat();
@@ -1018,7 +1022,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                     
                         if (response.data.results.length > 0) {
                           const addressComponents = response.data.results[0].address_components;
-                          let uaddress = '';
+                          let uaddress = response.data.results[0].formatted_address  ;
                           let ustreet = '';
                           let ulocality = '';
                           let ucity = '';
@@ -1028,7 +1032,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                     
                           addressComponents.forEach(component => {
                             const types = component.types;
-                            if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                            // if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
                             if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
                             if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
                             if (types.includes('administrative_area_level_1')) ustate = component.long_name;
