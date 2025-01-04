@@ -1405,24 +1405,50 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                               setsize(newsizes)
                                             };
 
+                                            const convertToAreaUnit = (area, unit) => {
+                                              // Convert area to the selected square unit
+                                              if (unit === 'Sq Yard') {
+                                                return area / 9; // 1 Sq Yard = 9 Sq Feet
+                                              } else if (unit === 'Sq Meter') {
+                                                return area * 0.092903; // 1 Sq Foot = 0.092903 Sq Meter
+                                              } else if (unit === 'Sq Feet') {
+                                                return area; // No conversion needed if already in Sq Feet
+                                              } else if (unit === 'Sq Inch') {
+                                                return area * 144; // 1 Sq Foot = 144 Sq Inches
+                                              }
+                                              return area; // If no valid unit, return the area as it is
+                                            };
+                                            
                                             const calculateTotalArea = () => {
-                                              // Check if both values are numbers before proceeding
+                                              // Parse length and breadth as numbers
                                               const length = parseFloat(sizes.length);
                                               const bredth = parseFloat(sizes.bredth);
-                                          
+                                            
                                               if (!isNaN(length) && !isNaN(bredth)) {
-                                                const totalArea = length * bredth.toFixed(2); 
-                                                const sizeName = `${sizes.type} ${sizes.unit_type} (${totalArea} ${sizes.yard3})`// Calculate the total area
+                                                // Step 1: Multiply length and breadth in their selected units
+                                                let areaInSelectedUnit = length * bredth;
+                                            
+                                                // Step 2: Convert the area to the selected square unit (sizes.yard3)
+                                                areaInSelectedUnit = convertToAreaUnit(areaInSelectedUnit, sizes.yard3);
+                                            
+                                                // Format total area to two decimal places
+                                                const totalArea = areaInSelectedUnit.toFixed(2);
+                                            
+                                                // Update size_name with the new total_area
+                                                const sizeName = `${sizes.type} ${sizes.unit_type} (${totalArea} ${sizes.yard3})`;
+                                            
+                                                // Set the sizes state
                                                 setsizes({
                                                   ...sizes,
                                                   total_area: totalArea,
-                                                  size_name: sizeName,  // Set the size_name with the new total_area
+                                                  size_name: sizeName, // Set size_name with the new total_area
                                                 });
                                               } else {
                                                 setsizes({ ...sizes, total_area: "" }); // Clear if input is invalid
                                               }
-                                              
                                             };
+                                            
+                                            
 
                                       
 
@@ -3349,14 +3375,15 @@ console.log(project.add_unit);
                              </div>
                              <div className='col-md-6'></div>
                 
-                             <div className="col-md-3"><label className="labels" > Total Breadth</label><input type='text'  onBlur={calculateTotalArea} className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
+                             <div className="col-md-3"><label className="labels" > Total Breadth</label><input type='text'   className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,bredth:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" value={sizes.yard1} onChange={(e)=>setsizes({...sizes,yard2:e.target.value})}>
                                 <option>{sizes.yard1}</option>     
                                 </select>
                              </div>
                              <div className="col-md-3"><label className="labels" > Total Area</label><input type='text' value={sizes.total_area} readOnly  className='form-control form-control-sm' /></div>
-                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,yard3:e.target.value})}>
-                               
+                    <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,yard3:e.target.value})}
+                      onBlur={calculateTotalArea}>
+                               <option>---select---</option>
                                 <option>Sq Yard</option>
                                 <option>Sq Meter</option>
                                 <option>Sq Feet</option>
