@@ -3,12 +3,12 @@ const mailtask_form=require('../models/mail_task_form')
 const mail_task_form=async(req,res)=>
     {
         try {
-            const{activity_type,title,executive,lead,project,block,inventory,subject,remarks,complete,due_date,direction,status,
+            const{activity_type,title,executive,lead,project,block,inventory,subject,remarks,complete,due_date,due_time,direction,status,
                     date,feedback,title2,first_name,last_name,mobile_no,email,stage}=req.body;
                 
                 
                 const newmailtaskform=new mailtask_form({activity_type,title,executive,lead,project,block,inventory,subject,remarks,
-                    complete,due_date,direction,status,date,feedback,title2,first_name,last_name, mobile_no,email,stage })
+                    complete,due_date,due_time,direction,status,date,feedback,title2,first_name,last_name, mobile_no,email,stage })
                 
                     const resp=await newmailtaskform.save(); 
                     res.status(200).send({message:"mail task details saved",mailtask:resp})

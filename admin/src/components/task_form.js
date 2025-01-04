@@ -101,15 +101,15 @@ function Task_form() {
 
     
     const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],block:[],inventory:[],subject:"",remarks:"",
-        complete:"",due_date:"",direction:"",status:"",date:"",feedback:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",})
+        complete:"",due_date:"",due_time:"",direction:"",status:"",date:"",feedback:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",})
    
 
     const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
-            reason:"",project:[],block:[],inventory:[],remark:"",stage:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
+            reason:"",project:[],block:[],inventory:[],remark:"",stage:"",due_date:"",due_time:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
             complete:"",status:"",meeting_result:"",date:"",feedback:""})
    
     const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
-                inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
+                inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",start_time:"",end_time:"",complete:"",stage:"",title2:"",first_name:"",
                 last_name:"",mobile_no:[],email:[],lead_id:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
     
        
@@ -706,7 +706,110 @@ useEffect(() => {
   
   
 
-// console.log(sitevisit.intrested_inventory);
+  const formatDatesite = (dateString) => {
+    const date = new Date(dateString);
+    
+    // Day of the month with suffix
+    const day = date.getDate();
+    const suffix = (day === 1 || day === 21 || day === 31)
+      ? 'st' : (day === 2 || day === 22)
+      ? 'nd' : (day === 3 || day === 23)
+      ? 'rd' : 'th';
+      
+    const formattedDay = `${day}${suffix}`;
+    
+    // Month (abbreviated to 3 letters)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = months[date.getMonth()];
+    
+    // Year (4 digits)
+    const year = date.getFullYear();
+    
+    return `${formattedDay} ${month} ${year}`;
+  };
+  
+  const handleDateChangesite = (e) => {
+    const selectedDate = e.target.value;
+    const formattedDate = formatDatesite(selectedDate);
+    setsitevisit({ ...sitevisit, start_date: formattedDate });
+  };
+
+
+  const formatDatesite1 = (dateString) => {
+    const date = new Date(dateString);
+    
+    // Day of the month with suffix
+    const day = date.getDate();
+    const suffix = (day === 1 || day === 21 || day === 31)
+      ? 'st' : (day === 2 || day === 22)
+      ? 'nd' : (day === 3 || day === 23)
+      ? 'rd' : 'th';
+      
+    const formattedDay = `${day}${suffix}`;
+    
+    // Month (abbreviated to 3 letters)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = months[date.getMonth()];
+    
+    // Year (4 digits)
+    const year = date.getFullYear();
+    
+    return `${formattedDay} ${month} ${year}`;
+  };
+  
+  const handleDateChangesite1 = (e) => {
+    const selectedDate = e.target.value;
+    const formattedDate = formatDatesite1(selectedDate);
+    setsitevisit({ ...sitevisit, end_date: formattedDate });
+  };
+  
+  
+  
+  const formatTimesite = (timeString) => {
+    let [hours, minutes] = timeString.split(':').map(Number);
+    const isPM = hours >= 12;
+    
+    // Convert to 12-hour format
+    if (hours > 12) hours -= 12;
+    if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+    const period = isPM ? 'PM' : 'AM';
+    
+    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+  };
+  
+  const handleTimeChangesite = (e) => {
+    const selectedTime = e.target.value;
+    const formattedTime = formatTimesite(selectedTime);
+    setsitevisit({ ...sitevisit, start_time: formattedTime });
+  };
+
+
+    
+  const formatTimesite1 = (timeString) => {
+    let [hours, minutes] = timeString.split(':').map(Number);
+    const isPM = hours >= 12;
+    
+    // Convert to 12-hour format
+    if (hours > 12) hours -= 12;
+    if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+    const period = isPM ? 'PM' : 'AM';
+    
+    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+  };
+  
+  const handleTimeChangesite1 = (e) => {
+    const selectedTime = e.target.value;
+    const formattedTime = formatTimesite1(selectedTime);
+    setsitevisit({ ...sitevisit, end_time: formattedTime });
+  };
+
+
+
+
+
+
+
+  
 
 
 //== ================================this project data is for meeting task=============================================================
@@ -794,6 +897,54 @@ const handleprojectchange2 = (event) => {
         const updatemeetingtask = { ...prev, inventory: selectunits }; // Store only unit numbers
         return updatemeetingtask;
       });
+    };
+
+    const formatDatemeeting = (dateString) => {
+      const date = new Date(dateString);
+      
+      // Day of the month with suffix
+      const day = date.getDate();
+      const suffix = (day === 1 || day === 21 || day === 31)
+        ? 'st' : (day === 2 || day === 22)
+        ? 'nd' : (day === 3 || day === 23)
+        ? 'rd' : 'th';
+        
+      const formattedDay = `${day}${suffix}`;
+      
+      // Month (abbreviated to 3 letters)
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = months[date.getMonth()];
+      
+      // Year (4 digits)
+      const year = date.getFullYear();
+      
+      return `${formattedDay} ${month} ${year}`;
+    };
+    
+    const handleDateChangemeeting = (e) => {
+      const selectedDate = e.target.value;
+      const formattedDate = formatDatemeeting(selectedDate);
+      setmeetingtask({ ...meetingtask, due_date: formattedDate });
+    };
+    
+    
+    
+    const formatTimemeeting = (timeString) => {
+      let [hours, minutes] = timeString.split(':').map(Number);
+      const isPM = hours >= 12;
+      
+      // Convert to 12-hour format
+      if (hours > 12) hours -= 12;
+      if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+      const period = isPM ? 'PM' : 'AM';
+      
+      return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+    };
+    
+    const handleTimeChangemeeting = (e) => {
+      const selectedTime = e.target.value;
+      const formattedTime = formatTimemeeting(selectedTime);
+      setmeetingtask({ ...meetingtask, due_time: formattedTime });
     };
 
     //=============================== meetingtask all project,block and inventory end===================================================
@@ -1159,6 +1310,57 @@ useEffect(() => {
   };
 
 
+  const formatDatemail = (dateString) => {
+    const date = new Date(dateString);
+    
+    // Day of the month with suffix
+    const day = date.getDate();
+    const suffix = (day === 1 || day === 21 || day === 31)
+      ? 'st' : (day === 2 || day === 22)
+      ? 'nd' : (day === 3 || day === 23)
+      ? 'rd' : 'th';
+      
+    const formattedDay = `${day}${suffix}`;
+    
+    // Month (abbreviated to 3 letters)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = months[date.getMonth()];
+    
+    // Year (4 digits)
+    const year = date.getFullYear();
+    
+    return `${formattedDay} ${month} ${year}`;
+  };
+  
+  const handleDateChangemail = (e) => {
+    const selectedDate = e.target.value;
+    const formattedDate = formatDatemail(selectedDate);
+    setmailtask({ ...mailtask, due_date: formattedDate });
+  };
+  
+  
+  
+  const formatTimemail = (timeString) => {
+    let [hours, minutes] = timeString.split(':').map(Number);
+    const isPM = hours >= 12;
+    
+    // Convert to 12-hour format
+    if (hours > 12) hours -= 12;
+    if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+    const period = isPM ? 'PM' : 'AM';
+    
+    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+  };
+  
+  const handleTimeChangemail = (e) => {
+    const selectedTime = e.target.value;
+    const formattedTime = formatTimemail(selectedTime);
+    setmailtask({ ...mailtask, due_time: formattedTime });
+  };
+
+
+
+
 // ===============================call task onchange events================================================================
 
 const formatDate = (dateString) => {
@@ -1405,7 +1607,7 @@ const handleTimeChange = (e) => {
 
                     <div className="row" id="email" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} on {mailtask.due_date} of {mailtask.inventory} {mailtask.block} {mailtask.project} </p></div> 
+                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} @ {mailtask.due_date} on time {mailtask.due_time} of {mailtask.inventory.join(',')} </p></div> 
 
                     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
                     <option>Select </option>
@@ -1553,10 +1755,12 @@ const handleTimeChange = (e) => {
                     <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
                         <div className="col-md-2"></div>
                  
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangemail}/></div>
+                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemail}/></div>
+                    <div className="col-md-4"></div>
                     
                   
-                    <div className="col-md-6"><label className="labels">Completed?</label> 
+                    <div className="col-md-6"><label className="labels">Completed?</label>
                     <label class="switch" onChange={handleToggle1}>
                     <input type="checkbox" />
                         <span class="slider round"></span>
@@ -1617,7 +1821,7 @@ const handleTimeChange = (e) => {
                   
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')},{sitevisit.block.join(',')},{sitevisit.project.join(',')}, @ {sitevisit.start_date} also associate with {sitevisit.participants}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')} @ {sitevisit.start_date} on time {sitevisit.start_time} {sitevisit.participants ? ` also associate with ${sitevisit.participants}` : ""}</p></div>
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
@@ -1753,13 +1957,16 @@ const handleTimeChange = (e) => {
                         <span class="slider round"></span>
                         </label>
                     </div>
+                    <div className="col-md-6"></div>
 
                     {
                         sitevisit.remind_me && (
                             <>
-                            <div className="col-md-4"></div>
-                            <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+                            
+                            <div className="col-md-3"><label className="labels">Select Start Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite}/></div>
+                            <div className="col-md-3"><label className="labels">Select End Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite1}/></div>
+                            <div className="col-md-3"><label className="labels">Start Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangesite}/></div>
+                            <div className="col-md-3"><label className="labels">End Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangesite1}/></div>
                             </>
                         )
                     }
@@ -1911,7 +2118,7 @@ const handleTimeChange = (e) => {
                 
                     <div className="row" id="meeting" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory},{meetingtask.block},{meetingtask.project} at {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory.join(',')} at {meetingtask.location_type} @ {meetingtask.due_date} on time {meetingtask.due_time}</p></div>
                         
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
@@ -2108,8 +2315,9 @@ const handleTimeChange = (e) => {
                     <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
-                    <div className="col-md-8"></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangemeeting}/></div>
+                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemeeting}/></div>
+                    <div className="col-md-4"></div>
                     
                   
                     <div className="col-md-6"><label className="labels">Completed?</label> 

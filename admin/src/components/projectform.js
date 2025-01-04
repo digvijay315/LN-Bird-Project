@@ -972,8 +972,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                           addressComponents.forEach(component => {
                             const types = component.types;
                             if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
-                            if (types.includes('administrative_area_level_2')) ustreet += component.long_name + ' ';
-                            if (types.includes('sublocality_level_1')) ulocality = component.long_name;
+                            if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                            if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
                             if (types.includes('administrative_area_level_1')) ustate = component.long_name;
                             if (types.includes('locality')) ucity = component.long_name;
                             if (types.includes('postal_code')) uzip = component.long_name;
@@ -1407,7 +1407,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                               const bredth = parseFloat(sizes.bredth);
                                           
                                               if (!isNaN(length) && !isNaN(bredth)) {
-                                                const totalArea = length * bredth; 
+                                                const totalArea = length * bredth.toFixed(2); 
                                                 const sizeName = `${sizes.type} ${sizes.unit_type} (${totalArea} ${sizes.yard3})`// Calculate the total area
                                                 setsizes({
                                                   ...sizes,
