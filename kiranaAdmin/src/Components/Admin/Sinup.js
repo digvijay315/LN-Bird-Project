@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import logo from '../Assets/Logo (2).png';
+// import logo from '../Assets/Logo (2).png';
 import { Form, Button, Container, InputGroup } from "react-bootstrap";
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import { Link } from 'react-router-dom';
 import { applyInitialState } from '@mui/x-data-grid/internals';
 import api from '../api'
+import logo from '../Assets/mr. Kirana logo.png'
 
 function Sinup() {
   const [username, setUsername] = useState('');
@@ -73,7 +74,7 @@ console.log(response);
               src={logo}
               alt="Logo"
               className="mb-3"
-              style={{ width: "150px" }}
+              style={{ width: "350px" }}
             />
             <p
               style={{
