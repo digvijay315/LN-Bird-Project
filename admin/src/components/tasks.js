@@ -248,19 +248,6 @@ function Tasks() {
                         }
 /*-------------------------------------------------------------------searching all contact data by mobile email tags and company end---------------------------------------------------------------------------- */                                                     
       
-const [currentPage, setCurrentPage] = useState(1);
-const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
-const indexOfLastItem = currentPage * itemsPerPage;
-const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-const totalPages = Math.ceil(data.length / itemsPerPage);
-
-const [currentPage1, setCurrentPage1] = useState(1);
-const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
-const indexOfLastItem1 = currentPage1 * itemsPerPage1;
-const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
-const currentItems1 = meetingdata.slice(indexOfFirstItem1, indexOfLastItem1);
-const totalPages1 = Math.ceil(meetingdata.length / itemsPerPage1);
 
 // ============================site visit task pagination==============================================================
 
@@ -300,9 +287,6 @@ const renderPageNumbers2 = () => {
   const startPage2 = Math.max(1, currentPage2 - Math.floor(maxPageNumbersToShow2 / 2));
   const endPage2 = Math.min(totalPages2, startPage2 + maxPageNumbersToShow2 - 1);
 
-
-  
-  
   return (
     <div
       style={{
@@ -331,7 +315,7 @@ const renderPageNumbers2 = () => {
             borderRadius: '5px',
             marginRight: '5px',
             flexShrink: 0, // Prevent buttons from shrinking
-            backgroundColor: number === currentPage ? 'lightblue' : 'white',
+            backgroundColor: number === currentPage2 ? 'lightblue' : 'white',
           }}
         >
           {number}
@@ -347,6 +331,178 @@ const renderPageNumbers2 = () => {
     </div>
   );
 };
+
+
+  // ================================followup task pagination=====================================================
+
+  const [currentPage, setCurrentPage] = useState(1);
+const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
+const indexOfLastItem = currentPage * itemsPerPage;
+const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+const totalPages = Math.ceil(data.length / itemsPerPage);
+
+
+  // Handle items per page change
+  const handleItemsPerPageChangefollowup = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1); // Reset to first page whenever items per page changes
+  };
+
+// Function to handle page changes
+const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+// Function to handle "Next" and "Previous" page changes
+const goToNextPage = () => {
+  if (currentPage < totalPages) {
+    setCurrentPage(currentPage + 1);
+  }
+};
+
+const goToPreviousPage = () => {
+  if (currentPage > 1) {
+    setCurrentPage(currentPage - 1);
+  }
+};
+
+const renderPageNumbers = () => {
+  // Define the range of page numbers to display
+  const maxPageNumbersToShow = 5;
+  const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+  const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+       
+        whiteSpace: 'nowrap',
+        padding: '10px-15px',
+        width: '100%', 
+        position: 'relative'
+      }}
+    >
+      {/* Previous Button */}
+      {currentPage > 1 && (
+        <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Prev
+        </button>
+      )}
+
+      {/* Page Numbers */}
+      {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((number) => (
+        <button
+          key={number}
+          onClick={() => paginate(number)}
+          style={{
+            width: '30px',
+            borderRadius: '5px',
+            marginRight: '5px',
+            flexShrink: 0, // Prevent buttons from shrinking
+            backgroundColor: number === currentPage ? 'lightblue' : 'white',
+          }}
+        >
+          {number}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      {currentPage < totalPages && (
+        <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Next
+        </button>
+      )}
+    </div>
+  );
+};
+
+
+
+// ===========================================meeting task pagination===========================================================
+
+
+const [currentPage1, setCurrentPage1] = useState(1);
+const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
+const indexOfLastItem1 = currentPage1 * itemsPerPage1;
+const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
+const currentItems1 = meetingdata.slice(indexOfFirstItem1, indexOfLastItem1);
+const totalPages1 = Math.ceil(meetingdata.length / itemsPerPage1);
+
+
+  // Handle items per page change
+  const handleItemsPerPageChangemeeting = (e) => {
+    setItemsPerPage1(Number(e.target.value));
+    setCurrentPage1(1); // Reset to first page whenever items per page changes
+  };
+
+// Function to handle page changes
+const paginate1 = (pageNumber) => setCurrentPage1(pageNumber);
+
+// Function to handle "Next" and "Previous" page changes
+const goToNextPage1 = () => {
+  if (currentPage1 < totalPages1) {
+    setCurrentPage1(currentPage1 + 1);
+  }
+};
+
+const goToPreviousPage1 = () => {
+  if (currentPage1 > 1) {
+    setCurrentPage1(currentPage1 - 1);
+  }
+};
+
+const renderPageNumbers1 = () => {
+  // Define the range of page numbers to display
+  const maxPageNumbersToShow1 = 5;
+  const startPage1 = Math.max(1, currentPage1 - Math.floor(maxPageNumbersToShow1 / 2));
+  const endPage1 = Math.min(totalPages1, startPage1 + maxPageNumbersToShow1 - 1);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+       
+        whiteSpace: 'nowrap',
+        padding: '10px-15px',
+        width: '100%', 
+        position: 'relative'
+      }}
+    >
+      {/* Previous Button */}
+      {currentPage1 > 1 && (
+        <button onClick={goToPreviousPage1} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Prev
+        </button>
+      )}
+
+      {/* Page Numbers */}
+      {Array.from({ length: endPage1 - startPage1 + 1 }, (_, i) => startPage1 + i).map((number) => (
+        <button
+          key={number}
+          onClick={() => paginate1(number)}
+          style={{
+            width: '30px',
+            borderRadius: '5px',
+            marginRight: '5px',
+            flexShrink: 0, // Prevent buttons from shrinking
+            backgroundColor: number === currentPage1 ? 'lightblue' : 'white',
+          }}
+        >
+          {number}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      {currentPage1 < totalPages1 && (
+        <button onClick={goToNextPage1} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Next
+        </button>
+      )}
+    </div>
+  );
+};
+
+
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
       [`&.${tableCellClasses.head}`]: {
@@ -720,6 +876,10 @@ const Sitevisit=()=>
   document.getElementById("meeting").style.display="none"
   document.getElementById("meeting1").style.backgroundColor="white"
   document.getElementById("meeting1").style.borderRadius="0px"
+
+  document.getElementById("sitevisitpagination").style.display="flex"
+  document.getElementById("followuppagination").style.display="none"
+      document.getElementById("meetingpagination").style.display="none"
 }
 const followup=()=>
   {
@@ -734,6 +894,10 @@ const followup=()=>
     document.getElementById("meeting").style.display="none"
       document.getElementById("meeting1").style.backgroundColor="white"
       document.getElementById("meeting1").style.borderRadius="0px"
+
+  document.getElementById("sitevisitpagination").style.display="none"
+  document.getElementById("followuppagination").style.display="flex"
+    document.getElementById("meetingpagination").style.display="none"
   }
   const meeting=()=>
     {
@@ -749,6 +913,10 @@ const followup=()=>
       document.getElementById("sitevisit").style.display="none"
       document.getElementById("sitevisit1").style.backgroundColor="white"
       document.getElementById("sitevisit1").style.borderRadius="0px"
+
+      document.getElementById("sitevisitpagination").style.display="none"
+      document.getElementById("followuppagination").style.display="none"
+        document.getElementById("meetingpagination").style.display="flex"
     }
         
 
@@ -1839,7 +2007,7 @@ const mailtaskdetails=async()=>
 
     
     
-      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute"}}>
+      <div id="sitevisitpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute",display:"none"}}>
    
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
@@ -1852,6 +2020,34 @@ const mailtaskdetails=async()=>
     
     {renderPageNumbers2()}
     </div>
+
+    <div id="followuppagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:"none"}}>
+   
+      
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangefollowup} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    
+    {renderPageNumbers()}
+    </div>
+
+    <div id="meetingpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:"none"}}>
+   
+      
+   <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+   <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangemeeting} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+     <option value="5">5</option>
+     <option value="10">10</option>
+     <option value="20">20</option>
+     <option value="50">50</option>
+   </select>
+ 
+ {renderPageNumbers1()}
+ </div>
         
 
 
