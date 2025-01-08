@@ -572,9 +572,10 @@ const[countall,setcountall]=useState('')
       document.getElementById("delete").style.display="inline-block"
       document.getElementById("search").style.display="none"
       document.getElementById("edit").style.display="none"
-      document.getElementById("mail").style.display="inline-block"
-       document.getElementById("whatsapp").style.display="inline-block"
-       document.getElementById("message").style.display="inline-block"
+      // document.getElementById("mail").style.display="inline-block"
+      //  document.getElementById("whatsapp").style.display="inline-block"
+      //  document.getElementById("message").style.display="inline-block"
+       document.getElementById("sendall").style.display="inline-block"
       setSelectAll(!selectAll);
       if (!selectAll) {
         // Add all current page item IDs to selectedItems
@@ -585,18 +586,20 @@ const[countall,setcountall]=useState('')
         document.getElementById("delete").style.display="none"
         document.getElementById("search").style.display="flex"
         document.getElementById("edit").style.display="none"
-        document.getElementById("mail").style.display="none"
-         document.getElementById("whatsapp").style.display="none"
-         document.getElementById("message").style.display="none"
+        // document.getElementById("mail").style.display="none"
+        //  document.getElementById("whatsapp").style.display="none"
+        //  document.getElementById("message").style.display="none"
+         document.getElementById("sendall").style.display="none"
       }
     };
   
     const handleRowSelect = (id) => {
       document.getElementById("delete").style.display="none"
       document.getElementById("edit").style.display="none"
-      document.getElementById("mail").style.display="none"
-      document.getElementById("whatsapp").style.display="none"
-      document.getElementById("message").style.display="none"
+      // document.getElementById("mail").style.display="none"
+      // document.getElementById("whatsapp").style.display="none"
+      // document.getElementById("message").style.display="none"
+      document.getElementById("sendall").style.display="none"
       document.getElementById("addtask").style.display="none"
       document.getElementById("transferlead").style.display="none"
       document.getElementById("adduser").style.display="none"
@@ -613,9 +616,10 @@ const[countall,setcountall]=useState('')
         setSelectedItems([...selectedItems, id]);
         document.getElementById("delete").style.display="inline-block"
         document.getElementById("edit").style.display="inline-block"
-        document.getElementById("mail").style.display="inline-block"
-        document.getElementById("whatsapp").style.display="inline-block"
-        document.getElementById("message").style.display="inline-block" 
+        // document.getElementById("mail").style.display="inline-block"
+        // document.getElementById("whatsapp").style.display="inline-block"
+        // document.getElementById("message").style.display="inline-block" 
+        document.getElementById("sendall").style.display="inline-block"
         document.getElementById("addtask").style.display="inline-block"
         document.getElementById("transferlead").style.display="inline-block"
         document.getElementById("adduser").style.display="inline-block"
@@ -1082,6 +1086,61 @@ const[countall,setcountall]=useState('')
             //           setemails((prevProfile)=>([...prevProfile,emaildata]))
             //         })
             // }
+
+            const sendmailfunction=()=>
+            {
+              document.getElementById("sendmail").style.display="flex"
+              document.getElementById("sendmessage").style.display="none"
+              document.getElementById("sendwhatsapp").style.display="none"
+
+              document.getElementById("sendmessage1").style.color="black"
+              document.getElementById("sendmessage1").style.backgroundColor="white"
+              document.getElementById("sendwhatsapp1").style.color="black"
+              document.getElementById("sendwhatsapp1").style.backgroundColor="white"
+
+              document.getElementById("sendmail1").style.backgroundColor="black"
+              document.getElementById("sendmail1").style.color="white"
+              document.getElementById("sendmail1").style.borderRadius="50px"
+              document.getElementById("sendmail1").style.width="100px"
+              document.getElementById("sendmail1").style.textAlign="center"
+            }
+            const sendmessagefunction=()=>
+              {
+                document.getElementById("sendmail").style.display="none"
+                document.getElementById("sendmessage").style.display="flex"
+                document.getElementById("sendwhatsapp").style.display="none"
+  
+                document.getElementById("sendmail1").style.color="black"
+                document.getElementById("sendmail1").style.backgroundColor="white"
+                document.getElementById("sendwhatsapp1").style.color="black"
+                document.getElementById("sendwhatsapp1").style.backgroundColor="white"
+  
+                document.getElementById("sendmessage1").style.backgroundColor="black"
+                document.getElementById("sendmessage1").style.color="white"
+                document.getElementById("sendmessage1").style.borderRadius="50px"
+                document.getElementById("sendmessage1").style.width="150px"
+                document.getElementById("sendmessage1").style.textAlign="center"
+              }
+
+              const sendwhatsappfunction=()=>
+                {
+                  document.getElementById("sendmail").style.display="none"
+                  document.getElementById("sendmessage").style.display="none"
+                  document.getElementById("sendwhatsapp").style.display="flex"
+    
+                  document.getElementById("sendmail1").style.color="black"
+                  document.getElementById("sendmail1").style.backgroundColor="white"
+                  document.getElementById("sendmessage1").style.color="black"
+                  document.getElementById("sendmessage1").style.backgroundColor="white"
+    
+                  document.getElementById("sendwhatsapp1").style.backgroundColor="black"
+                  document.getElementById("sendwhatsapp1").style.color="white"
+                  document.getElementById("sendwhatsapp1").style.borderRadius="50px"
+                  document.getElementById("sendwhatsapp1").style.width="150px"
+                  document.getElementById("sendwhatsapp1").style.textAlign="center"
+                }
+
+
 
             const handleShow3 = async () => {
               setshow3(true);
@@ -2377,7 +2436,7 @@ const handleallblockchange = (event) => {
 <img id="updatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow4}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
-<Tooltip title="Send Mail.." arrow>
+{/* <Tooltip title="Send Mail.." arrow>
 <img id="mail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 <Tooltip title="Send WhatsApp.." arrow>
@@ -2385,8 +2444,12 @@ const handleallblockchange = (event) => {
 </Tooltip>
 <Tooltip title="Send Message.." arrow>
 <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+</Tooltip> */}
+<Tooltip title="Send Mail,WhatsApp and Message..." arrow>
+<img id="sendall"  src="https://cdn-icons-png.freepik.com/512/7878/7878341.png" onClick={handleShow3}  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip>
 </div>
+
 <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
@@ -3658,13 +3721,21 @@ const handleallblockchange = (event) => {
 
           <Modal show={show3} onHide={handleClose3} size='lg'>
             <Modal.Header>
-              <Modal.Title>Send Mail</Modal.Title>
+              <Modal.Title>Send</Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <div style={{width:"100%"}}>
+        <div style={{display:"flex", gap:"100px"}}>
+          <div style={{cursor:"pointer"}} id="sendmail1" onClick={sendmailfunction}>Send Mail</div> 
+          <div style={{cursor:"pointer"}} id="sendmessage1" onClick={sendmessagefunction}>Send Message</div>
+          <div style={{cursor:"pointer"}} id="sendwhatsapp1" onClick={sendwhatsappfunction}>Send WhatsApp</div>
    
+        </div>
+        <div className="col-md-12"><hr></hr></div>
   
-   <div className="row mt-2">
+   <div className="row mt-2" id="sendmail" style={{display:"none"}}>
+    <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send Mail</div>
+    <div className="col-md-12"><hr></hr></div>
        <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={emails} /></div>
        <div className="col-md-12"><label className="labels">Subject</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setsubject(e.target.value)}/></div>
        <div className="col-md-12"><label className="labels">Compose</label><textarea className="form-control form-control-sm" value={message}  placeholder="Enter Your Message" style={{height:"100px"}} onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
@@ -3687,6 +3758,16 @@ const handleallblockchange = (event) => {
         </ul>
       </div>
    </div>
+
+   <div className="row mt-2" id="sendmessage" style={{display:"none"}}>
+   <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send Message</div>
+    </div>
+
+    <div className="row mt-2" id="sendwhatsapp" style={{display:"none"}}>
+    <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send WhatsApp</div>
+    </div>
+
+
 </div>
           </Modal.Body>
             <Modal.Footer>

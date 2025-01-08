@@ -236,3 +236,14 @@ button:hover{
     transform: scale(1.1);
     
 }
+
+#sendall{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#sendall:hover
+{
+    transform: scale(1.1);
+    
+}

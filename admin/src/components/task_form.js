@@ -469,7 +469,7 @@ const handleprojectchange = (event) => {
     setprojects(selectproject);
     setsitevisit((prev) => {
       const updatedSiteVisit = { ...prev, project: selectproject };
-      fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      // fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
       return updatedSiteVisit; // Return the updated state
     });
   };
@@ -518,7 +518,13 @@ useEffect(() => {
   
   
 
-
+  const[alldealblocks1,setalldealblocks1]=useState([])
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      sitevisit.project.some((project) => project === item.project)
+    );
+    setalldealblocks1(dealblocks)
+  }, [sitevisit.project]);
 
   const[allblocks,setallblocks]=useState([])
 const handleblockchange = (event) => {
@@ -530,11 +536,31 @@ const handleblockchange = (event) => {
   
     setallblocks(selectblock);
     setsitevisit((prev) => {
-      const updatedSiteVisit = { ...prev, block: selectblock };
+      const updatedSiteVisit = { ...prev, block: selectblock};
+    
     //   fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
       return updatedSiteVisit; // Return the updated state
     });
   };
+
+
+  const [alldealunits1, setalldealunits1] = useState([]);
+
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      sitevisit.project.some((project) => project === item.project) &&
+      sitevisit.block.some((block) => {
+        // Split the block string by " - " and check only the block name (before the "-")
+        const blockName = block.split('-')[0]; // Get the part before the "-" and remove any extra spaces
+      
+        // Check if the item.block matches the block name
+        return item.block === blockName;
+      })
+    );
+    setalldealunits1(dealblocks);
+  }, [sitevisit.project, sitevisit.block]);
+  
+  
 
 
 const[allunit,setallunit]=useState([])
@@ -577,19 +603,19 @@ const handlesiteprojectchange = (event) => {
     });
   };
 
-  const alldealblock =[]
-  dealdata.map((item) => {
-      if (!alldealblock.includes(item.block)) {
-          alldealblock.push(item.block);
-      }
-    });
+  // const alldealblock =[]
+  // dealdata.map((item) => {
+  //     if (!alldealblock.includes(item.block)) {
+  //         alldealblock.push(item.block);
+  //     }
+  //   });
   
-    const alldealunit =[]
-  dealdata.map((item) => {
-      if (!alldealunit.includes(item.unit_number)) {
-          alldealunit.push(item.unit_number);
-      }
-    });
+  //   const alldealunit =[]
+  // dealdata.map((item) => {
+  //     if (!alldealunit.includes(item.unit_number)) {
+  //         alldealunit.push(item.unit_number);
+  //     }
+  //   });
   
 
   const[alldealblocks,setalldealblocks]=useState([])
@@ -1868,7 +1894,7 @@ const handleTimeChange = (e) => {
         </Select>
       </div>
 
-      <div className="col-md-4">
+      {/* <div className="col-md-4">
         <label className="labels">Select Block</label>
         <Select
           className="form-control form-control-sm"
@@ -1885,9 +1911,44 @@ const handleTimeChange = (e) => {
             </MenuItem>
           ))}
         </Select>
-      </div>
+      </div> */}
 
       <div className="col-md-4">
+              <label className="labels">Select Block</label>
+              <Select
+                className="form-control form-control-sm"
+                style={{ border: "none" }}
+                multiple
+                value={allblocks}  // Value contains the full block.block-project combinations
+                onChange={handleblockchange}  // Handle the change when blocks are selected/deselected
+                renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+              >
+                {alldealblocks1
+                  .filter((value, index, self) =>
+                    // Ensure unique combinations of block.block and block.project
+                    index === self.findIndex((t) => (
+                      t.block === value.block && t.project === value.project
+                    ))
+                  )
+                  .map((block) => {
+                    // Create a unique identifier by combining block.block and block.project
+                    const uniqueBlockKey = `${block.block}-${block.project}`;
+
+                    return (
+                      <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+                        <Checkbox 
+                          checked={allblocks.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+                        />
+                        <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+                      </MenuItem>
+                    );
+                  })
+                }
+              </Select>
+</div>
+
+
+      {/* <div className="col-md-4">
         <label className="labels">Select Inventory</label>
         <Select
           className="form-control form-control-sm"
@@ -1904,7 +1965,42 @@ const handleTimeChange = (e) => {
             </MenuItem>
           ))}
         </Select>
-      </div>
+      </div> */}
+
+<div className="col-md-4"><label className="labels">Select Inventory</label>
+                             
+                             <Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={allunit} // Holds selected units
+onChange={handleallunitschange} // Handle changes for unit selection
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+>
+{alldealunits1
+ .filter((value, index, self) =>
+   // Ensure unique combinations of project, block, and unit
+   index === self.findIndex((t) => (
+     t.project === value.project &&
+     t.block === value.block &&
+     t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+   ))
+ )
+ .map((unit) => {
+   // Create a unique key for project-block-unit combination
+   const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+   return (
+     <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+       <Checkbox checked={allunit.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+       <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+     </MenuItem>
+   );
+ })}
+</Select>
+
+
+                                 </div>
 
 
                     
