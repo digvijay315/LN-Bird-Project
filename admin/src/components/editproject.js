@@ -1437,24 +1437,64 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                               setsize(newsizes)
                                             };
 
-                                            const calculateTotalArea = () => {
-                                              // Check if both values are numbers before proceeding
-                                              const length = parseFloat(sizes.length);
-                                              const bredth = parseFloat(sizes.bredth);
-                                          
-                                              if (!isNaN(length) && !isNaN(bredth)) {
-                                                const totalArea = length * bredth; 
-                                                const sizeName = `${sizes.type} ${sizes.unit_type} (${totalArea} ${sizes.yard3})`// Calculate the total area
-                                                setsizes({
-                                                  ...sizes,
-                                                  total_area: totalArea,
-                                                  size_name: sizeName,  // Set the size_name with the new total_area
-                                                });
-                                              } else {
-                                                setsizes({ ...sizes, total_area: "" }); // Clear if input is invalid
-                                              }
-                                              
-                                            };
+                                             const convertToSquareUnit = (area, fromUnit, toUnit) => {
+                                                                                        const conversionFactors = {
+                                                                                          Yard: { 'Sq Yard': 1, 'Sq Meter': 0.836127, 'Sq Feet': 9, 'Sq Inch': 1296 },
+                                                                                          Meter: { 'Sq Yard': 1.19599, 'Sq Meter': 1, 'Sq Feet': 10.7639, 'Sq Inch': 1550.0031 },
+                                                                                          Feet: { 'Sq Yard': 0.111111, 'Sq Meter': 0.092903, 'Sq Feet': 1, 'Sq Inch': 144 },
+                                                                                          Inch: { 'Sq Yard': 0.000771605, 'Sq Meter': 0.00064516, 'Sq Feet': 0.00694444, 'Sq Inch': 1 },
+                                                                                        };
+                                                                                      
+                                                                                        if (!conversionFactors[fromUnit] || !conversionFactors[fromUnit][toUnit]) {
+                                                                                          console.error(`Invalid conversion from ${fromUnit} to ${toUnit}`);
+                                                                                          return area;
+                                                                                        }
+                                                                                      
+                                                                                        return area * conversionFactors[fromUnit][toUnit];
+                                                                                      };
+                                                                                      
+                                                                                      const calculateTotalArea = () => {
+                                                                                        const length = parseFloat(sizes.length);
+                                                                                        const bredth = parseFloat(sizes.bredth);
+                                                                                      
+                                                                                        // Check if length, bredth, yard1, and yard3 are valid
+                                                                                        if (!isNaN(length) && !isNaN(bredth) && sizes.yard1 && sizes.yard3) {
+                                                                                          const area = length * bredth;
+                                                                                          const fromUnit = sizes.yard1.replace('Sq ', ''); // Remove "Sq " to get the unit (Yard, Meter, etc.)
+                                                                                          const toUnit = sizes.yard3; // The unit we want to convert to (Sq Yard, Sq Meter, etc.)
+                                                                                      
+                                                                                          // Perform the conversion
+                                                                                          const convertedArea = convertToSquareUnit(area, fromUnit, toUnit);
+                                                                                      
+                                                                                          // Update the total_area first
+                                                                                          setsizes(prev => ({
+                                                                                            ...prev,
+                                                                                            total_area: convertedArea.toFixed(2),  // Format the area to 2 decimal places
+                                                                                          }));
+                                                                                        } else {
+                                                                                          setsizes(prev => ({ ...prev, total_area: '' }));
+                                                                                        }
+                                                                                      };
+                                                                                      
+                                                                                      // Separate useEffect to update size_name based on the total_area
+                                                                                      useEffect(() => {
+                                                                                        if (sizes.total_area && sizes.yard3) {
+                                                                                          // Calculate the size_name based on the updated total_area
+                                                                                          const sizeName = `${sizes.type} ${sizes.unit_type} (${sizes.total_area} ${sizes.yard3})`;
+                                                                                          setsizes(prev => ({
+                                                                                            ...prev,
+                                                                                            size_name: sizeName,
+                                                                                          }));
+                                                                                        }
+                                                                                      }, [sizes.total_area, sizes.yard3]);  // Run when total_area or yard3 changes
+                                                                                      
+                                                                                      // Main useEffect to handle changes in length, breadth, yard1, and yard3
+                                                                                      useEffect(() => {
+                                                                                        // Recalculate the total area when any relevant value changes
+                                                                                        calculateTotalArea();
+                                                                                      }, [sizes.length, sizes.bredth, sizes.yard1, sizes.yard3]); // Include yard3 here to trigger recalculation
+                                                                                      
+                                                                                      
 
                                       
 
@@ -3380,6 +3420,7 @@ console.log(project.add_unit);
                             <div className='row' id='plotsize' style={{margin:"20px",padding:"20px",border:"1px dashed black"}}>
                     <div className="col-md-3"><label className="labels" >Total Length</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setsizes({...sizes,length:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Measurement</label><select  className="form-control form-control-sm" onChange={(e)=>setsizes({...sizes,yard1:e.target.value})}>
+                              <option>---select---</option>
                                <option>Yard</option>
                                 <option>Meter</option>
                                 <option>Feet</option>

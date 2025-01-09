@@ -913,7 +913,7 @@ const handleprojectchange2 = (event) => {
       const selectunits = typeof value === 'string' ? value.split(',') : value;
     
       // Extract only the unit_number from the selected values (split by '-')
-      const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+      // const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
     
       // Update allunit1 state with the selected unit numbers
       setallunit1meeting(selectunits);
