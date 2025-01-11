@@ -409,15 +409,15 @@ React.useEffect(() => {
                         return;
                       }
                     
-                      // Manually handle owner_details and associated_contact (arrays of objects)
-                      if (key === "owner_details" || key === "associated_contact") {
-                        deal[key].forEach((item, index) => {
-                          // Loop over each object in owner_details or associated_contact
-                          Object.keys(item).forEach(subKey => {
-                            formdata.append(`${key}[${index}].${subKey}`, item[subKey]);
-                          });
-                        });
-                      } else {
+                      // // Manually handle owner_details and associated_contact (arrays of objects)
+                      // if (key === "owner_details" || key === "associated_contact") {
+                      //   deal[key].forEach((item, index) => {
+                      //     // Loop over each object in owner_details or associated_contact
+                      //     Object.keys(item).forEach(subKey => {
+                      //       formdata.append(`${key}[${index}].${subKey}`, item[subKey]);
+                      //     });
+                      //   });
+                      // } else {
                         // If it's an array of simple values (e.g., project_category), append each item
                         if (Array.isArray(deal[key])) {
                           deal[key].forEach((item, index) => {
@@ -427,7 +427,7 @@ React.useEffect(() => {
                           // If it's a single value, append it directly
                           formdata.append(key, deal[key]);
                         }
-                      }
+                      
                     });
                     
   
@@ -1066,7 +1066,8 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
         React.useEffect(() => {
           
           
-          if (relation === "Self") {
+          if (relation === "Self" && newcontact) {
+            
             setrelation("")
             setselectedcontact1(prevContacts => [
               ...prevContacts,
@@ -1074,7 +1075,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
             ]);
             setdeal(prevDeal => ({
               ...prevDeal,
-              owner_details: [...(prevDeal.owner_details || []), newcontact] // Append new contact to the existing owner_details array
+              owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
             }));
            
           }
@@ -1086,7 +1087,7 @@ const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country
             ]);
             setdeal(prevDeal => ({
               ...prevDeal,
-              associated_contact: [...(prevDeal.associated_contact || []), newcontact] // Append new contact to the existing owner_details array
+              associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
             }));
             // setdeal(prevDeal => ({ ...prevDeal.associated_contact,  newcontact }));
             // setrelation1(relation)

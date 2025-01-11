@@ -238,7 +238,7 @@ const add_contact = async (req, res) => {
                         };
                         const resp=await addcontact.findByIdAndUpdate(id,updatedFields,{ new: true })
 
-                        await updateDealsWithUpdatedContact(id, resp);
+                        // await updateDealsWithUpdatedContact(id, resp);
 
                         res.status(200).send({message:"lead update successfully"})
                     } catch (error) {
@@ -246,36 +246,36 @@ const add_contact = async (req, res) => {
                     }
                 }
 
-                const updateDealsWithUpdatedContact = async (id, resp) => {
-                    try {
-                      // Find and update deals where the contact._id exists in either owner_details or associated_contact
-                      const updatedDeals = await adddeal.updateMany(
-                        {
-                          $or: [
-                            { 'owner_details._id': id }, // Match contact in owner_details
-                            { 'associated_contact._id': id } // Match contact in associated_contact
-                          ]
-                        },
-                        {
-                          $set: {
-                            // Update the specific contact data inside the arrays, without replacing the whole array
-                            'owner_details.$[owner]': resp,    // Update matched contact in owner_details
-                            'associated_contact.$[assoc]': resp // Update matched contact in associated_contact
-                          }
-                        },
-                        {
-                          arrayFilters: [
-                            { 'owner._id': id },    // Filter for matching contact in owner_details
-                            { 'assoc._id': id }     // Filter for matching contact in associated_contact
-                          ]
-                        }
-                      );
+                // const updateDealsWithUpdatedContact = async (id, resp) => {
+                //     try {
+                //       // Find and update deals where the contact._id exists in either owner_details or associated_contact
+                //       const updatedDeals = await adddeal.updateMany(
+                //         {
+                //           $or: [
+                //             { 'owner_details._id': id }, // Match contact in owner_details
+                //             { 'associated_contact._id': id } // Match contact in associated_contact
+                //           ]
+                //         },
+                //         {
+                //           $set: {
+                //             // Update the specific contact data inside the arrays, without replacing the whole array
+                //             'owner_details.$[owner]': resp,    // Update matched contact in owner_details
+                //             'associated_contact.$[assoc]': resp // Update matched contact in associated_contact
+                //           }
+                //         },
+                //         {
+                //           arrayFilters: [
+                //             { 'owner._id': id },    // Filter for matching contact in owner_details
+                //             { 'assoc._id': id }     // Filter for matching contact in associated_contact
+                //           ]
+                //         }
+                //       );
                   
-                      console.log(`Deals updated where contact id: ${id} was referenced. Deals updated: ${updatedDeals.nModified}`);
-                    } catch (error) {
-                      console.error('Error updating related deals:', error);
-                    }
-                  };
+                //       console.log(`Deals updated where contact id: ${id} was referenced. Deals updated: ${updatedDeals.nModified}`);
+                //     } catch (error) {
+                //       console.error('Error updating related deals:', error);
+                //     }
+                //   };
                   
                   
                   

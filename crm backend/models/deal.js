@@ -35,6 +35,8 @@ const add_deal=new mongoose.Schema({
     visible_to:{type:String},
     owner_details:[{ type: mongoose.Schema.Types.ObjectId, ref: 'add_contact' }],
     associated_contact:[{ type: mongoose.Schema.Types.ObjectId, ref: 'add_contact' }],
+    // owner_details:{type:Array},
+    // associated_contact:{type:Array},
     relation:{type:String},
     document_details:[documentschema],
     s_no:{type:Array},
