@@ -1490,7 +1490,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
 // ==============================----------------------add unit start===========================================---------------------------
                                           const[unit,setunit]=useState([])
-                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
+                                          const[units,setunits]=useState({project_name:project?.name || "", unit_no:"",unit_type:"",category:"",block:"",
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                                                           total_land_area:"",
                                                                           water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
@@ -1501,6 +1501,16 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
                                                                           relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
                                                                           document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+
+                                                                          useEffect(() => {
+                                                                            if (project?.name) {
+                                                                              setunits(prevState => ({
+                                                                                ...prevState,
+                                                                                project_name: project.name
+                                                                              }));
+                                                                            }
+                                                                          }, [project]); // Only re-run this effect if project changes
+                                                                          
 
 
                                                                           function addFnunit1() {
@@ -1633,7 +1643,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                       setunit(updateunit);
                                                       setproject(prevState => ({
                                                         ...prevState,
-                                                        add_unit: updateunit
+                                                        add_unit: updateunit,
+                                                        
                                                       }));
                                                       
                                                       handleClose3()

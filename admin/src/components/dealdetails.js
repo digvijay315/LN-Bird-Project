@@ -3297,10 +3297,9 @@ const [show9, setshow9] = useState(false);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>, {item.block}<br></br>
-             {item.project_category}<br></br>
-             {item.project_subcategory}<br></br>
-             {item.project}
+            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
+             {item.ucategory} {item.usize}<br></br>
+             {item.ulocality} {item.ucity}
             </StyledTableCell>
             
             {visibleColumns

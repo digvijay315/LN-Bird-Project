@@ -12,7 +12,11 @@ const documentschema = new mongoose.Schema({
 const add_deal=new mongoose.Schema({   
     project_category:{type:Array},
     project_subcategory:{type:Array},   
-    location:{type:String},              
+    ulocality:{type:String},   
+    ucity:{type:String},
+    utype:{type:String},
+    ucategory:{type:String},
+    usize:{type:String},         
     available_for:{type:String},
     stage:{type:String},
     project:{type:String},

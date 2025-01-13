@@ -26,7 +26,7 @@ import 'react-quill/dist/quill.snow.css';
 function Deal() {
   const navigate=useNavigate()
 // ================================select project,units and block from project data start==============================================================
-const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",utype:"",ucategory:"",usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
   expected_price:"",quote_price:"",security_deposite:"",
 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
@@ -38,6 +38,62 @@ headers: {
 'Content-Type': 'multipart/form-data' // Set the Content-Type here
 }
 }
+
+React.useEffect(()=>{fetchcdata()},[])
+
+const [flattenedUnits, setFlattenedUnits] = useState([]);
+
+const fetchcdata=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('viewproject')
+    const flattened = [];
+      resp.data.project.forEach((project) => {
+        if (Array.isArray(project.add_unit)) {
+          // Flatten the add_unit array for each project
+          const units = project.add_unit.flatMap((unitArray) => unitArray);
+          flattened.push(...units);  // Add flattened units to the array
+        } else {
+          console.error('add_unit is not an array or is undefined');
+        }
+      });
+
+      // Now update the flattenedUnits state with the flattened array
+      setFlattenedUnits(flattened);
+
+    // Log the flattened units
+  
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+React.useEffect(() => {
+  if (flattenedUnits.length > 0 && deal.project && deal.block && deal.unit_number) {
+    // Look for a unit that matches deal criteria
+    const matchingUnit = flattenedUnits.find(
+      (unit) =>
+        unit.project_name === deal.project &&
+        unit.block === deal.block &&
+        unit.unit_no === deal.unit_number
+    );
+
+
+    // If a matching unit is found, update the deal's ulocality
+    if (matchingUnit) {
+      setdeal((prevDeal) => ({
+        ...prevDeal,
+        ulocality: matchingUnit.ulocality || "", // Ensure you handle cases where ulocality might be undefined
+        ucity: matchingUnit.ucity || "",
+        utype: matchingUnit.unit_type || "",
+        ucategory: matchingUnit.category || "",
+        usize: matchingUnit.size || ""
+      }));
+    }
+  }
+}, [flattenedUnits, deal.project, deal.block, deal.unit_number]);
 
 
 

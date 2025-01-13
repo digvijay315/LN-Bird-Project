@@ -40,6 +40,7 @@ const blockSchema = new mongoose.Schema({
   })
 
   const unitschema = new mongoose.Schema({
+    project_name: {type: String},
     unit_no: {type: String},
     unit_type: {type:String},
     category: {type: String },
