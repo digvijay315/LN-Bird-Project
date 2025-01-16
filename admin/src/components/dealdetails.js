@@ -3329,7 +3329,7 @@ const [show9, setshow9] = useState(false);
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
             <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
              {item.ucategory} {item.usize}<br></br>
-             {item.ulocality} {item.ucity}
+             {/* {item.ulocality} {item.ucity} */}{item.project}
             </StyledTableCell>
             
             {visibleColumns
@@ -4036,7 +4036,7 @@ const [show9, setshow9] = useState(false);
               style={{ padding: "10px", fontFamily: "times new roman" }}  >
               <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
-               {item.ulocality} {item.ucity} 
+               {/* {item.ulocality} {item.ucity}  */}{item.project_name}
                 {/* project.locality  project.city */}
           
             </StyledTableCell>

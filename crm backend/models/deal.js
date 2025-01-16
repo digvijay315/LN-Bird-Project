@@ -15,7 +15,7 @@ const add_deal=new mongoose.Schema({
     ulocality:{type:String},   
     ucity:{type:String},
     utype:{type:String},
-    ucategory:{type:String},
+    ucategory:{type:Array},
     usize:{type:String},         
     available_for:{type:String},
     stage:{type:String},

@@ -25,6 +25,7 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { Factory, School } from '@mui/icons-material';
+import * as XLSX from 'xlsx';
 
 
 
@@ -2565,7 +2566,191 @@ useEffect(() => {
 
 
 
-console.log(project.add_unit);
+const [show7, setshow7] = useState(false);
+const handleClose7 = () => setshow7(false);
+const handleShow7=async()=>
+{
+  setshow7(true);
+
+}
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    // Ensure the data has at least one row
+    if (data.length > 0) {
+      const updatedUnits = data.map((row) => {
+        // Create a new unit object by copying the base unit template
+        const newUnit = { ...units };
+
+        // Iterate through each key in the row (Excel columns)
+        Object.keys(row).forEach((key) => {
+          // Check if the key exists in the unit's state and update
+          if (newUnit.hasOwnProperty(key)) {
+            if (Array.isArray(newUnit[key])) {
+              // If the field is an array (like khewat_no, water_source), push the value
+              newUnit[key] = [...newUnit[key], row[key]];
+            } else {
+              // Otherwise, just assign the value directly
+              newUnit[key] = row[key];
+            }
+          }
+        });
+
+        return newUnit;
+      });
+
+      // Update the unit state and project state
+      setunit((prevUnit) => [...prevUnit, ...updatedUnits]); // Append new units to the list
+      setproject((prevState) => ({
+        ...prevState,
+        add_unit: [...prevState.add_unit, ...updatedUnits] // Add the new units to the project state
+      }));
+
+      // Close any modal or reset other states
+      handleClose7();
+      document.getElementById('choosedestination').value = 'Select';
+    } else {
+      toast.error('No data found in the Excel file.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file); // Use readAsArrayBuffer instead of readAsBinaryString
+};
+
+
+const [show8, setshow8] = useState(false);
+const handleClose8 = () => setshow8(false);
+const handleShow8=async()=>
+{
+  setshow8(true);
+
+}
+
+
+const handleFileChangeblock = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    // Ensure the data has at least one row
+    if (data.length > 0) {
+      const updatedblock = data.map((row) => {
+        // Create a new unit object by copying the base unit template
+        const newblock = { ...block };
+
+        // Iterate through each key in the row (Excel columns)
+        Object.keys(row).forEach((key) => {
+          // Check if the key exists in the unit's state and update
+          if (newblock.hasOwnProperty(key)) {
+            if (Array.isArray(newblock[key])) {
+              // If the field is an array (like khewat_no, water_source), push the value
+              newblock[key] = [...newblock[key], row[key]];
+            } else {
+              // Otherwise, just assign the value directly
+              newblock[key] = row[key];
+            }
+          }
+        });
+
+        return newblock;
+      });
+
+      // Update the unit state and project state
+      setblocks((prevblock) => [...prevblock, ...updatedblock]); // Append new units to the list
+      setproject((prevState) => ({
+        ...prevState,
+        add_block: [...prevState.add_block, ...updatedblock] // Add the new units to the project state
+      }));
+
+      // Close any modal or reset other states
+      handleClose8();
+      document.getElementById('choosedestination').value = 'Select';
+    } else {
+      toast.error('No data found in the Excel file.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file); // Use readAsArrayBuffer instead of readAsBinaryString
+};
+
+
+const [show9, setshow9] = useState(false);
+const handleClose9 = () => setshow9(false);
+const handleShow9=async()=>
+{
+  setshow9(true);
+
+}
+
+const handleFileChangesize = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    // Ensure the data has at least one row
+    if (data.length > 0) {
+      const updatedsize = data.map((row) => {
+        // Create a new unit object by copying the base unit template
+        const newsize = { ...sizes };
+
+        // Iterate through each key in the row (Excel columns)
+        Object.keys(row).forEach((key) => {
+          // Check if the key exists in the unit's state and update
+          if (newsize.hasOwnProperty(key)) {
+            if (Array.isArray(newsize[key])) {
+              // If the field is an array (like khewat_no, water_source), push the value
+              newsize[key] = [...newsize[key], row[key]];
+            } else {
+              // Otherwise, just assign the value directly
+              newsize[key] = row[key];
+            }
+          }
+        });
+
+        return newsize;
+      });
+
+      // Update the unit state and project state
+      setsize((prevsize) => [...prevsize, ...updatedsize]); // Append new units to the list
+      setproject((prevState) => ({
+        ...prevState,
+        add_size: [...prevState.add_size, ...updatedsize] // Add the new units to the project state
+      }));
+
+      // Close any modal or reset other states
+      handleClose9();
+      document.getElementById('choosedestination').value = 'Select';
+    } else {
+      toast.error('No data found in the Excel file.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file); // Use readAsArrayBuffer instead of readAsBinaryString
+};
 
 
 
@@ -2998,9 +3183,9 @@ console.log(project.add_unit);
                 <div className="row " >
 
                 
-                    <div className="col-md-9"></div>
+                    <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow1}>Add Block</button></div>
-                 
+                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow8}>Import Block</button></div>
                     <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
@@ -3211,9 +3396,9 @@ console.log(project.add_unit);
 <div className="col-md-12" id='sizedetails' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
                 <div className="row " >
-                <div className="col-md-9"></div>
+                <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow2}>Add Size</button></div>
-                 
+                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow9}>Import Size</button></div>
                     <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
@@ -3487,9 +3672,9 @@ console.log(project.add_unit);
 <div className="col-md-12" id='unitdetails' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
             <div className="p-3 py-5">
                 <div className="row " >
-                <div className="col-md-9"></div>
+                <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow3}>Add Unit</button></div>
-                 
+                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow7}>Import Unit</button></div>
                     <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginTop:"40px",marginLeft:"10px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
@@ -3636,7 +3821,7 @@ console.log(project.add_unit);
             <div style={{width:"100%"}}>
             <div className="row" id='unitdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e) => setunits({...units, unit_no: e.target.value.trim()})} /></div>
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e) => setunits({...units, unit_no: e.target.value})} /></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>Corner</option>
@@ -5052,6 +5237,64 @@ console.log(project.add_unit);
                 </div>
               </div>
           </div>
+
+
+          <Modal show={show7} onHide={handleClose7} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Import Units Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <input type="file" accept=".xlsx,.xls" onChange={handleFileChange}  id="import-file" />
+
+            </Modal.Body>
+            <Modal.Footer>
+            {/* <Button variant="secondary" onClick={addpayment}>
+                Import
+              </Button> */}
+              <Button variant="secondary" onClick={handleClose7}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          <Modal show={show8} onHide={handleClose8} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Import Blocks Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <input type="file" accept=".xlsx,.xls" onChange={handleFileChangeblock}  id="import-file" />
+
+            </Modal.Body>
+            <Modal.Footer>
+            {/* <Button variant="secondary" onClick={addpayment}>
+                Import
+              </Button> */}
+              <Button variant="secondary" onClick={handleClose8}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+           <Modal show={show9} onHide={handleClose9} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Import Sizes Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <input type="file" accept=".xlsx,.xls" onChange={handleFileChangesize}  id="import-file" />
+
+            </Modal.Body>
+            <Modal.Footer>
+             <Button variant="secondary" onClick={addpayment}>
+                Import
+              </Button> 
+               <Button variant="secondary" onClick={handleClose9}>
+                Close
+              </Button> 
+             </Modal.Footer> 
+           </Modal> 
 
 
 {/* ===========================-----------------------------price end--------------------------=============================================== */}

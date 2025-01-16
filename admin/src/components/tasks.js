@@ -252,7 +252,7 @@ function Tasks() {
 // ============================site visit task pagination==============================================================
 
 const [currentPage2, setCurrentPage2] = useState(1);
-const [itemsPerPage2, setItemsPerPage2] = useState(5); // User-defined items per page
+const [itemsPerPage2, setItemsPerPage2] = useState(8); // User-defined items per page
 const indexOfLastItem2 = currentPage2 * itemsPerPage2;
 const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
 const currentItems2 = sitedata.slice(indexOfFirstItem2, indexOfLastItem2);
@@ -336,7 +336,7 @@ const renderPageNumbers2 = () => {
   // ================================followup task pagination=====================================================
 
   const [currentPage, setCurrentPage] = useState(1);
-const [itemsPerPage, setItemsPerPage] = useState(5); // User-defined items per page
+const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -422,7 +422,7 @@ const renderPageNumbers = () => {
 
 
 const [currentPage1, setCurrentPage1] = useState(1);
-const [itemsPerPage1, setItemsPerPage1] = useState(5); // User-defined items per page
+const [itemsPerPage1, setItemsPerPage1] = useState(8); // User-defined items per page
 const indexOfLastItem1 = currentPage1 * itemsPerPage1;
 const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
 const currentItems1 = meetingdata.slice(indexOfFirstItem1, indexOfLastItem1);
