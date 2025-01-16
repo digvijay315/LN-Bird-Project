@@ -995,12 +995,12 @@ function Dealdetails() {
                     }
                   };
                 
-                  const handleRowSelect3 = (id) => {
-                 
-                    if (selectedItems3.includes(id)) {
-                      setSelectedItems3(selectedItems3.filter((itemId) => itemId !== id));
+                  const handleRowSelect3 = (item) => {
+            
+                    if (selectedItems3.includes(item)) {
+                      setSelectedItems3(selectedItems3.filter((itemId) => itemId !== item));
                     } else {
-                      setSelectedItems3([...selectedItems3, id]);
+                      setSelectedItems3([...selectedItems3, item]);
                   
                     }
                   };
@@ -2351,40 +2351,69 @@ const handleTimeChangemail = (e) => {
 
 // ======================================unit edit start========================================================================
 
+const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+  category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
+  total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
+  approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
+  team:[],visible_to:"",
+
+  location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
+
+  add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
+  price_list:[],Payment_plan:[]});
+
+
+  const[unit,setunit]=useState([])
+  const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
+                                  size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
+                                  total_land_area:"",
+                                  water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
+                                  direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
+                                  cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
+                                  action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
+                                  furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
+                                  ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
+                                  relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
+                                  document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+
+
 const [show9, setshow9] = useState(false);
     
                   const handleClose9 = () => setshow9(false);
+                  // const[fetchunit,setfetchunit]=useState([])
                   const handleShow9=async()=>
                   {
                     setshow9(true);
+                    const project=selectedItems3[0].project_name
+                    const block=selectedItems3[0].block
+                    const unit=selectedItems3[0].unit_no
+
+                    const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                    setunits(resp.data.project.add_unit[0])
+                    
                    
                   }
-
-                     const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
-                                                            category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
-                                                            total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
-                                                            approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
-                                                            team:[],visible_to:"",
-                                           
-                                                            location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
                   
-                                                            add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
-                                                            price_list:[],Payment_plan:[]});
+          const updateinventories=async()=>
+          {
+            const project=selectedItems3[0].project_name
+            const block=selectedItems3[0].block
+            const unit=selectedItems3[0].unit_no
+            try {
+              const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+              toast.success(`units updated successfully`,{autoClose:"2000"})
+            } catch (error) {
+              console.log(error);
+              
+            }
+          }
+                  
+
+                
                       
 
 
-       const[unit,setunit]=useState([])
-                                          const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
-                                                                          size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
-                                                                          total_land_area:"",
-                                                                          water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
-                                                                          direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
-                                                                          cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
-                                                                          action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
-                                                                          furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
-                                                                          ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
-                                                                          relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
-                                                                          document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+                                  
 
 
                                                                           function addFnunit1() {
@@ -3080,6 +3109,7 @@ const [show9, setshow9] = useState(false);
                                                     const handleCheckboxChange4 = (event) => {
                                                       setSowbuiltup(event.target.checked);
                                                     };
+
 
 
 
@@ -3997,8 +4027,8 @@ const [show9, setshow9] = useState(false);
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
               <input 
                 type="checkbox"
-                checked={selectedItems3.includes(item._id)}
-                onChange={() => handleRowSelect3(item._id)}
+                checked={selectedItems3.includes(item)}
+                onChange={() => handleRowSelect3(item)}
               />
               {index + 1}
             </StyledTableCell>
@@ -5109,6 +5139,7 @@ stage:selectedLead.stage
              
                     <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                               <option>{units.unit_type}</option>
                                 <option>---Select---</option>
                                 <option>Corner</option>
                                 <option> Two Side Open</option>
@@ -5136,6 +5167,7 @@ stage:selectedLead.stage
                     </div>
 
                     <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
+                    <option>{units.block}</option>
                     <option>choose</option>
                     {
                                 project.add_block.map((item)=>
@@ -5146,6 +5178,7 @@ stage:selectedLead.stage
                                 </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
+                    <option>{units.size}</option>
                     <option>choose</option>
                     {
                                 project.add_size.map((item)=>
@@ -5164,6 +5197,7 @@ stage:selectedLead.stage
 
 
                     <div className="col-md-6"><label className="labels">Land Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,land_type:e.target.value})}>
+                                <option>{units.land_type}</option>
                                 <option>---Select---</option>
                                 <option>Crop Land</option>
                                 <option>Wood Land</option>
@@ -5178,7 +5212,7 @@ stage:selectedLead.stage
                       Array.isArray(units.khewat_no) ?
                       units.khewat_no.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlekhewatnochange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.khewat_no} onChange={(event)=>handlekhewatnochange(index,event)}/>
                         
                       )):[]
                     }
@@ -5189,7 +5223,7 @@ stage:selectedLead.stage
                       Array.isArray(units.killa_no) ?
                       units.killa_no.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlekillanochange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.killa_no} onChange={(event)=>handlekillanochange(index,event)}/>
                        
                       )):[]
                     }
@@ -5200,7 +5234,7 @@ stage:selectedLead.stage
                       Array.isArray(units.share) ?
                       units.share.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlesharenochange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.share} onChange={(event)=>handlesharenochange(index,event)}/>
                       )):[]
                     }
                     </div>
@@ -5227,7 +5261,7 @@ stage:selectedLead.stage
                       units.water_source.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewatersourcechange(index,event)}>
-                          <option>---select---</option><option>Ground Water</option><option>Canal Water</option><option>Pond Water</option><option>Rain Water</option>
+                          <option>{units.water_source}</option><option>---select---</option><option>Ground Water</option><option>Canal Water</option><option>Pond Water</option><option>Rain Water</option>
                         </select>
                       )):[]
                     }
@@ -5238,7 +5272,7 @@ stage:selectedLead.stage
                       units.water_level.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterlevelchange(index,event)}>
-                          <option>---select---</option><option>100ft.</option><option>200Ft.</option>
+                          <option>{units.water_level}</option><option>---select---</option><option>100ft.</option><option>200Ft.</option>
                         </select>
                       )):[]
                     }
@@ -5250,7 +5284,7 @@ stage:selectedLead.stage
                       units.water_pump_type.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterpumpchange(index,event)}>
-                          <option>---select---</option><option>Submersible Motor(15 HP)</option><option>Sumersible Motor(20 HP)</option>
+                        <option>{units.water_pump_type}</option>  <option>---select---</option><option>Submersible Motor(15 HP)</option><option>Sumersible Motor(20 HP)</option>
                           <option>Monoblock Motor(10HP)</option><option>Diesel Engine Pump</option>
                         </select>
                       )):[]
@@ -5272,6 +5306,7 @@ stage:selectedLead.stage
                   <div className='col-md-12' style={{color:"green",fontWeight:"bolder"}}>Basic Details<hr></hr></div>
 
                   <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>{units.facing}</option>
                                 <option>---Select---</option>
                                 <option>Village Link Road</option>
                                 <option>Highway</option>
@@ -5281,6 +5316,7 @@ stage:selectedLead.stage
                     </div>
 
                     <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>{units.side_open}</option>
                                 <option>---Select---</option>
                                 <option>1 Side Open</option>
                                 <option>2 Side Open</option>
@@ -5289,6 +5325,7 @@ stage:selectedLead.stage
                     </div>
 
                     <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                <option>{units.road}</option>
                                 <option>---Select---</option>
                                 <option>11 Ft wide</option>
                                 <option>22 Ft Wide</option>
@@ -5299,7 +5336,8 @@ stage:selectedLead.stage
                                 </select>
                     </div>
 
-                    <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,fornt_on_road:e.target.value})}>
+                                <option>{units.fornt_on_road}</option>
                                 <option>---Select---</option>
                                 <option>10 ft</option>
                                 <option>20 ft</option>
@@ -5314,12 +5352,14 @@ stage:selectedLead.stage
                     </div>
 
                     <div className="col-md-4"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                <option>{units.ownership}</option>
                                 <option>---Select---</option>
                                 <option>Mustraka</option>
                                 <option>Individual</option>
                                 </select>
                     </div>
-                    <div className="col-md-4"><label className="labels">No. Of Owner</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">No. Of Owner</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,total_owner:e.target.value})}>
+                                <option>{units.total_owner}</option>
                                 <option>---Select---</option>
                                 <option>1</option>
                                 <option>2</option>
@@ -5338,6 +5378,7 @@ stage:selectedLead.stage
                           <>
 
                     <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
+                                <option>{units.direction}</option>
                                 <option>---Select---</option>
                                 <option>East</option>
                                 <option>West</option>
@@ -5351,6 +5392,7 @@ stage:selectedLead.stage
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>{units.facing}</option>
                                 <option>---Select---</option>
                                 <option>Park</option>
                                 <option>Green Belt</option>
@@ -5375,6 +5417,7 @@ stage:selectedLead.stage
                                 </select>
                     </div>
                     <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                <option>{units.road}</option>
                                 <option>---Select---</option>
                                 <option>9 Mtr Wide</option>
                                 <option>12 Mtr Wide</option>
@@ -5384,6 +5427,7 @@ stage:selectedLead.stage
                                 </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                <option>{units.ownership}</option>
                                 <option>---Select---</option>
                                 <option>Freehold</option>
                                 <option>Leasehold</option>
@@ -5392,6 +5436,7 @@ stage:selectedLead.stage
                                 </select>
                     </div>
                     <div className='col-md-6'><label className="labels">Stage</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,stage:e.target.value})}>
+                                <option>{units.stage}</option>
                                 <option>---Select---</option>
                                 <option>Active</option>
                                 <option>Inactive</option>
@@ -5417,6 +5462,7 @@ stage:selectedLead.stage
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
                     <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                          <option>{units.type}</option>
                           <option>---Select---</option>
                           <option>Duplex</option>
                           <option>Triplex</option>
@@ -5438,6 +5484,7 @@ stage:selectedLead.stage
                       units.floor.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
+                          <option>{units.floor}</option>
                           <option>---Select---</option>
                           <option>Ground Floor</option>
                           <option>First Floor</option>
@@ -5458,6 +5505,7 @@ stage:selectedLead.stage
                       units.cluter_details.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
+                          <option>{units.cluter_details}</option>
                           <option>---Select---</option>
                           <option>Living Room</option>
                           <option>Lobby</option>
@@ -5483,7 +5531,7 @@ stage:selectedLead.stage
                           Array.isArray(units.length) ?
                       units.length.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlelengthchange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.length} onChange={(event)=>handlelengthchange(index,event)}/>
                       )):[]
                     }
                     </div>
@@ -5492,7 +5540,7 @@ stage:selectedLead.stage
                       Array.isArray(units.bredth) ?
                       units.bredth.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlebredthchange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.bredth} onChange={(event)=>handlebredthchange(index,event)}/>
                       
                       )):[]
                     }
@@ -5525,11 +5573,12 @@ stage:selectedLead.stage
                     </>
                     )}
 
-                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
-                    <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' value={units.ocupation_date} onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                    <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' value={units.age_of_construction} onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
                     
 
                     <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm" onChange={(e)=>setunits({...units,furnishing_details:e.target.value})}>
+                                <option>{units.furnishing_details}</option>
                                 <option>---Select---</option>
                                 <option>Furnished</option>
                                 <option>Unfurnished</option>
@@ -5992,12 +6041,13 @@ stage:selectedLead.stage
                     </div>
                     <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
+                      Array.isArray(units.action12)?
                        units.action12.map((item,index)=>
                         (
                           <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
                           
-                        ))
+                        )):[]
                     }
                     </div>
                         
@@ -6012,7 +6062,7 @@ stage:selectedLead.stage
 
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" id="mailaddtask" onClick={mailtaskdetails} style={{display:"none"}}>
+              <Button variant="secondary" onClick={updateinventories}>
                 Update Unit 
               </Button>
               <Button variant="secondary" onClick={handleClose9}>

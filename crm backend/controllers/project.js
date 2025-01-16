@@ -114,4 +114,85 @@ const createProject = async (req, res) => {
                     console.log(error)
                 }
             }
-   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,update_project}
+
+            const view_projectforinventories = async (req, res) => {
+                try {
+                  // Retrieve project_name, block, and unit_no from request params or body
+                  const { project_name, block, unit_no } = req.params; // Assuming you are sending these in the request body
+                  
+                  // Perform the query on the project model and filter the add_unit array using $elemMatch
+                  const project = await addproject.findOne(
+                    {
+                      'add_unit': {
+                        $elemMatch: {
+                          project_name: project_name,
+                          block: block,
+                          unit_no: unit_no
+                        }
+                      }
+                    },
+                    {
+                      'add_unit.$': 1 // This will return only the matching `add_unit` element
+                    }
+                  );
+              
+                  if (!project) {
+                    return res.status(404).send({ message: "No project found matching the criteria" });
+                  }
+              
+                  // Send the response with the project details
+                  res.status(200).send({ message: "Project details fetched successfully", project: project });
+                } catch (error) {
+                  console.log(error);
+                  res.status(500).send({ message: "An error occurred while fetching project details", error: error.message });
+                }
+              };
+
+              const update_projectforinventories = async (req, res) => {
+                try {
+                  // Retrieve project_name, block, and unit_no from the URL parameters (params)
+                  const { project_name, block, unit_no } = req.params;
+              
+         
+              
+                  // Perform the update query on the project model and filter the add_unit array using $elemMatch
+                  const project = await addproject.findOneAndUpdate(
+                    {
+                      'add_unit': {
+                        $elemMatch: {
+                          project_name: project_name,
+                          block: block,
+                          unit_no: unit_no
+                        }
+                      }
+                    },
+                    {
+                      $set: {
+                        'add_unit.$': {
+                            ...req.body 
+                        }
+                      }
+                    },
+                    { new: true } // Return the updated project document after the update
+                  );
+              
+                  if (!project) {
+                    return res.status(404).send({ message: "No project found matching the criteria" });
+                  }
+              
+                  // Send the response with the updated project details
+                  res.status(200).send({
+                    message: "add_unit updated successfully",
+                    project: project
+                  });
+                } catch (error) {
+                  console.log(error);
+                  res.status(500).send({ message: "An error occurred while updating the project details", error: error.message });
+                }
+              };
+              
+
+              
+
+   module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,
+    update_project,view_projectforinventories,update_projectforinventories}
