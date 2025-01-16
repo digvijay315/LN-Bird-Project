@@ -1458,9 +1458,9 @@ const handleOwnerChange = (event) => {
 
 
 
-                console.log(leadinfo.matched_deal);
-                console.log(leadinfo.facing);
-                console.log(leadinfo.road);
+                // console.log(leadinfo.matched_deal);
+                // console.log(leadinfo.facing);
+                // console.log(leadinfo.road);
 
 
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================

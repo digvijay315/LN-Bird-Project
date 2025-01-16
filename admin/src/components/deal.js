@@ -1521,12 +1521,9 @@ console.log(deal.associated_contact);
                         </select></div>
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
-                        <option>Cash</option>
-                        <option>Online</option>
-                        <option>Net Banking</option>
-                        <option>NEFT</option>
-                        <option>Upi</option>
-                        <option>RTGS</option>
+                        <option>Full White</option>
+                        <option>Collecter Rate</option>
+                        <option>Flexiable</option>
                         </select></div>
                         <div className="col-md-4"></div>
 
@@ -1537,12 +1534,16 @@ console.log(deal.associated_contact);
                         <option>Walkin</option>
                         <option>Olx</option>
                         </select></div>
-                        <div className="col-md-5" ><label className="labels">White Portion</label>
-                        <div className="progress-container" onMouseDown={handleMouseDown}>
-                        <div className="progress-bar" style={{ width: `${progress}%` }} />
-                        <div className="progress-percentage">{Math.round(progress)}%</div>
+
+                        {deal.transaction_type === "Flexiable" && (
+                        <div className="col-md-8">
+                           <label className="labels">White Portion</label>
+                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
+                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
+                          <div className="progress-percentage">{Math.round(progress)}%</div>
                         </div>
                         </div>
+                      )}
                        
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
@@ -1661,12 +1662,9 @@ console.log(deal.associated_contact);
                         </select></div>
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
-                    <option>Cash</option>
+                    <option>Full White</option>
                         <option>Collecter Rate</option>
                         <option>Flexiable</option>
-                        <option>NEFT</option>
-                        <option>Upi</option>
-                        <option>RTGS</option>
                         </select></div>
                         <div className="col-md-4"></div>
 
@@ -1678,12 +1676,16 @@ console.log(deal.associated_contact);
                         <option>Olx</option>
                         </select></div>
                 
-                        <div className="col-md-5" ><label className="labels">White Portion</label>
-                        <div className="progress-container" onMouseDown={handleMouseDown}>
-                        <div className="progress-bar" style={{ width: `${progress}%` }} />
-                        <div className="progress-percentage">{Math.round(progress)}%</div>
+                        {deal.transaction_type === "Flexiable" && (
+                        <div className="col-md-8">
+                           <label className="labels">White Portion</label>
+                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
+                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
+                          <div className="progress-percentage">{Math.round(progress)}%</div>
                         </div>
                         </div>
+                      )}
+                       
                         
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
