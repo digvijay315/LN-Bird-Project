@@ -26,6 +26,8 @@ import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { Factory, School } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -2754,6 +2756,94 @@ const handleFileChangesize = (event) => {
 
 
 
+const sizedata = [
+  { size_name: 'size 1', block1: 'b1', category: 'residential',sub_category:'plot',unit_type:'corner',total_sealable_area:'',sq_feet1:'',
+    covered_area:'',sq_feet2:'',carpet_area:'',sq_feet3:'',loading:'',percentage:'',length:10,yard1:'feet',bredth:10,yard2:'feet',
+    total_area:100,yard3:'Sqfeet'
+   }
+];
+
+const generateExcelFilesize = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(sizedata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
+};
+
+
+                    
+                    
+
+const blockdata = [
+  { block_name: 'block 1', category: 'residential', sub_category: 'plot',land_area:1000,measurment:'Sqfeet',total_blocks:2,total_floors:2,
+    total_units:2,status:'open',parking_type:'all',rera_no:1001}
+];
+
+const generateExcelFileblock = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(blockdata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
+};
+
+
+
+ 
+
+  
+
+
+const unitdata = [
+  { project_name: 'block 1', unit_no: 'residential', unit_type: 'plot',category:'residential',block:'b1',size:'',land_type:'',
+    khewat_no:[''],killa_no:[''],share:[''],total_land_area:'',water_source:[''],water_level:[''],water_pump_type:[''],direction:'',
+    side_open:'',fornt_on_road:'',total_owner:'',facing:'',road:'',ownership:'',stage:'',type:'',floor:[''],cluter_details:[''],
+    length:[''],bredth:[''],total_area:[''],measurment2:[''],ocupation_date:'',age_of_construction:'',furnishing_details:'',
+    enter_furnishing_details:'',furnished_item:'',location:'',lattitude:'',langitude:'',uaddress:'',ustreet:'',ulocality:'',
+    ucity:'',uzip:'',ustate:'',ucountry:'',owner_details:[''],associated_contact:[''],relation:'',s_no:[''],preview:[''],descriptions:[''],
+    category:[''],s_no1:[''],url:[''],document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:['']
+  }
+];
+
+const generateExcelFileunit = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(unitdata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
+};
+
 
               
     return ( 
@@ -3186,6 +3276,9 @@ const handleFileChangesize = (event) => {
                     <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow1}>Add Block</button></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow8}>Import Block</button></div>
+                        <Tooltip title="Download Data.." arrow>
+                                        <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileblock} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
+                                        </Tooltip>
                     <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
@@ -3399,6 +3492,9 @@ const handleFileChangesize = (event) => {
                 <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow2}>Add Size</button></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow9}>Import Size</button></div>
+                          <Tooltip title="Download Data.." arrow>
+                                        <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFilesize} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
+                                        </Tooltip>
                     <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
@@ -3675,6 +3771,9 @@ const handleFileChangesize = (event) => {
                 <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow3}>Add Unit</button></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow7}>Import Unit</button></div>
+                     <Tooltip title="Download Data.." arrow>
+                                        <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileunit} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
+                                        </Tooltip>
                     <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginTop:"40px",marginLeft:"10px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
