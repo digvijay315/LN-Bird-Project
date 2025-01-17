@@ -123,7 +123,6 @@ const add_deal = async (req, res) => {
   
       // Process image files
       if (req.files) {
-        console.log(req.files);
         
         const imageField = req.files.filter(file => file.fieldname.includes('preview'));
         for (let file of imageField) {

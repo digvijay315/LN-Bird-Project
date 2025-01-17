@@ -58,7 +58,7 @@ router.get('/viewleadbymobile/:mobile_no',view_lead_Bymobile)
 
 //============================================= all routing for lead end=======================================================
 
-router.post('/project',upload.any('pic'),createProject)
+router.post('/project',uploadFields,createProject)
 router.get('/viewproject',view_project)
 router.get('/viewprojectbyid/:_id',view_project_Byid)
 router.get('/viewprojectbyname/:name',view_projectbyname)

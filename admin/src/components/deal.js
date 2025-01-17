@@ -142,30 +142,40 @@ const[data1,setdata1]=useState([]);
   const [allblocks, setallblocks] = useState([]);
 
 
+
+  const [numericValue, setNumericValue] = React.useState(null);
+  const [measurementUnit, setMeasurementUnit] = React.useState('');
+
   const fetchdatabyprojectname = async (projectNames) => {
 
     try {
       
         const resp = await api.get(`viewprojectbyname/${projectNames}`);
-        const allFetchedUnits= resp.data.project; 
-        setunits(allFetchedUnits);// Assuming resp.data.project is an array of units for that project
-      
-  
-    
+        // const allFetchedUnits= resp.data.project;
+        setunits(resp.data.project);// Assuming resp.data.project is an array of units for that project
     } catch (error) {
       console.log(error);
     }
   };
+  
+  
+
+  React.useEffect(() => {
+    if (deal.project) {
+      fetchdatabyprojectname(deal.project);
+    }
+  }, [deal.project]);
+  
   
   React.useEffect(() => {
     if (units.length >= 0) {
       const collectedUnits = units.flatMap(item => 
         item.add_unit.filter(unit => unit.stage === 'Active' && unit.block===deal.block) // Filter units where stage is 'active'
       );
-       console.log(collectedUnits);
-      // console.log(deal.block);
+   
+    
       
-      
+
       const collectedblocks=units.flatMap(item=>item.add_block)
       const collectcategory=units.flatMap(item=>item.category) 
       const collectsubcategory=units.flatMap(item=>item.sub_category) // Collect all add_unit arrays
@@ -173,9 +183,38 @@ const[data1,setdata1]=useState([]);
       setallUnits(collectedUnits);
       setallblocks(collectedblocks) 
       setdeal({...deal,project_category:collectcategory,project_subcategory:collectsubcategory,location:fulllocation})// Set allUnits with the collected units
-    }
-  }, [units,deal.block]);
 
+
+      const collectedsize = collectedUnits.filter((item) => 
+        item.block === deal.block && item.unit_no === deal.unit_number // Use strict equality === here
+      );
+
+      
+      if (collectedsize.length > 0) {
+        // Assuming 'size' is the field you're interested in
+        const sizeValue = collectedsize[0].size; // Or collectedsize[0].sizeName based on your actual field name
+    console.log(sizeValue);
+    
+    const regex = /\((\d+(\.\d+)?)\s*(\w+\s\w+)\)/;
+  const match = sizeValue.match(regex);
+
+  if (match) {
+    setNumericValue(parseFloat(match[1]));
+    setMeasurementUnit(match[3]);
+  }
+     
+      }
+      
+
+
+    }
+  }, [units,deal.block,deal.unit_number]);
+
+
+
+
+
+  
  
  
   
@@ -191,7 +230,7 @@ const[data1,setdata1]=useState([]);
 
     setdeal((prev) => {
       const updateproject = { ...prev, project: selectproject };
-       fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+      //  fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
       return updateproject; // Return the updated state
     });
   };
@@ -377,7 +416,7 @@ const fetchDeals = async () => {
 const updateDealApi = async (updatedDeal) => {
   try {
     await api.put(`updatedeal/${updatedDeal._id}`, updatedDeal); // PUT request to update the deal
-    console.log('Deal updated successfully:', updatedDeal);
+    // console.log('Deal updated successfully:', updatedDeal);
   } catch (error) {
     console.error('Error updating deal:', error);
   }
@@ -465,15 +504,7 @@ React.useEffect(() => {
                         return;
                       }
                     
-                      // // Manually handle owner_details and associated_contact (arrays of objects)
-                      // if (key === "owner_details" || key === "associated_contact") {
-                      //   deal[key].forEach((item, index) => {
-                      //     // Loop over each object in owner_details or associated_contact
-                      //     Object.keys(item).forEach(subKey => {
-                      //       formdata.append(`${key}[${index}].${subKey}`, item[subKey]);
-                      //     });
-                      //   });
-                      // } else {
+                     
                         // If it's an array of simple values (e.g., project_category), append each item
                         if (Array.isArray(deal[key])) {
                           deal[key].forEach((item, index) => {
@@ -1481,8 +1512,9 @@ console.log(deal.associated_contact);
                     <div className="col-md-0" id="multiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
                     <p>X</p>
                     </div>
-                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number" id="earea" onChange={calculateResult} className="form-control form-control-sm"  /></div>
+                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number" id="earea" onChange={calculateResult} value={numericValue} className="form-control form-control-sm"  /></div>
                     <div className="col-md-2" id="measurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
+                    <option value="">{measurementUnit}</option>
                     <option value="">sq feet</option>
                     <option value="">sq yard</option>
                     </select></div>
@@ -1504,8 +1536,9 @@ console.log(deal.associated_contact);
                     <div className="col-md-0" id="multiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
                     <p>X</p>
                     </div>
-                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number" id="qarea" onChange={calculateResult1}  className="form-control form-control-sm"/></div>
+                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number" id="qarea" value={numericValue}  onChange={calculateResult1}  className="form-control form-control-sm"/></div>
                     <div className="col-md-2" id="measurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
+                    <option>{measurementUnit}</option>
                     <option value="">sq feet</option>
                     <option value="">sq yard</option>
                     </select></div>
@@ -1597,8 +1630,9 @@ console.log(deal.associated_contact);
                  <div className="col-md-0" id="rmultiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
                  <p>X</p>
                  </div>
-                 <div className="col-md-2" id="rtotalarea"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult2} id="rearea"  className="form-control form-control-sm"  /></div>
+                 <div className="col-md-2" id="rtotalarea"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult2} value={numericValue} id="rearea"  className="form-control form-control-sm"  /></div>
                  <div className="col-md-2" id="rmeasurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
+                 <option value="">{measurementUnit}</option>
                  <option value="">sq feet</option>
                  <option value="">sq yard</option>
                  </select></div>
@@ -1620,8 +1654,9 @@ console.log(deal.associated_contact);
                  <div className="col-md-0" id="rmultiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
                  <p>X</p>
                  </div>
-                 <div className="col-md-2" id="rtotalarea1"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult3} id="rqarea1"  className="form-control form-control-sm"/></div>
+                 <div className="col-md-2" id="rtotalarea1"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult3} value={numericValue} id="rqarea1"  className="form-control form-control-sm"/></div>
                  <div className="col-md-2" id="rmeasurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" >
+                 <option>{measurementUnit}</option>
                  <option value="">sq feet</option>
                  <option value="">sq yard</option>
                  </select></div>

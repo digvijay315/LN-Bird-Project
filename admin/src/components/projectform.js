@@ -24,8 +24,10 @@ import { Select, MenuItem, Checkbox, ListItemText  } from '@mui/material';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
-import { Factory, School } from '@mui/icons-material';
+// import { Factory, School } from '@mui/icons-material';
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import Tooltip from '@mui/material/Tooltip';
 
 
 
@@ -82,29 +84,230 @@ function Projectform() {
       
 
      
+        const addproject = async (e) => {
+          e.preventDefault();
+        
+          try {
+            // Create a new FormData object
+            const formdata = new FormData();
 
-
-    const addproject=async(e)=>
-    {
-      
-        e.preventDefault();
-        try {
-            const resp= await api.post('project',project,config)
-        if(resp.status===201)
-            {
-                toast.success("Project Saved",{ autoClose: 2000 })
-                setTimeout(() => {
-                  navigate('/project')
-                }, 2000);
+            // First loop through and append all fields except 'pic', 'add_unit', 'add_size', and 'add_block'
+            Object.keys(project).forEach(key => {
+              // Skip 'pic', 'add_unit', 'add_size', and 'add_block'
+              if (key === "pic" || key === "add_unit" || key === "add_size" || key === "add_block") {
+                return;
+              }
+            
+              // If it's an array of simple values (e.g., project_category), append each item
+              if (Array.isArray(project[key])) {
+                project[key].forEach((item, index) => {
+                  formdata.append(`${key}[${index}]`, item);
+                });
+              } else {
+                // If it's a single value, append it directly
+                formdata.append(key, project[key]);
+              }
+            });
+            
+            // Handle the 'pic' field separately (assuming it's an array of files)
+            if (project.pic && project.pic.length > 0) {
+              // Loop through each item in the 'pic' array
+              project.pic.forEach((previewData, previewIndex) => {
+                // Check if 'files' exists within the current item (previewData) and is an array
+                if (previewData.files && previewData.files.length > 0) {
+                  // Loop through each file in 'files' and append it to formData
+                  previewData.files.forEach((file, fileIndex) => {
+                    formdata.append(`pic[${previewIndex}].files[${fileIndex}]`, file);
+                  });
+                }
+              });
             }
             
-      
-        } catch (error) {
-            toast.error(error.response.data.message,{ autoClose: 2000 })
-            console.log(error.response.data.message);
             
-        }
-    }
+            // Handle the 'add_unit' field separately (assuming it's an array of units with a 'preview' field)
+            if (project.add_unit && project.add_unit.length > 0) {
+              project.add_unit.forEach((unit, unitIndex) => {
+                // Loop over each field in the unit and append it dynamically
+                // Object.keys(unit).forEach((unitKey) => {
+                //   // For fields that are arrays or objects (like owner_details, associated_contact, etc.), handle appropriately
+                //   if (Array.isArray(unit[unitKey]) || typeof unit[unitKey] === 'object') {
+                //     formdata.append(`add_unit[${unitIndex}].${unitKey}`, JSON.stringify(unit[unitKey]));
+                //   } else {
+                //     // For simple fields, append them directly
+                //     formdata.append(`add_unit[${unitIndex}].${unitKey}`, unit[unitKey]);
+                //   }
+                // });
+            
+                // Handle the preview files inside each unit if they exist
+                if (unit.preview && unit.preview.length > 0) {
+                  unit.preview.forEach((file, previewIndex) => {
+                    formdata.append(`add_unit[${unitIndex}].preview[${previewIndex}]`, file);
+                  });
+                }
+              });
+            }
+            
+            
+            // Handle the 'add_size' field separately (assuming it's an array of sizes)
+            if (project.add_size) {
+              project.add_size.forEach((size, sizeIndex) => {
+                for (let sizeKey in size) {
+                  if (size.hasOwnProperty(sizeKey)) {
+                    formdata.append(`add_size[${sizeIndex}].${sizeKey}`, size[sizeKey]);
+                  }
+                }
+              });
+            }
+            
+            // Handle the 'add_block' field separately (assuming it's an array of blocks)
+            if (project.add_block && project.add_block.length > 0) {
+              project.add_block.forEach((document, index) => {
+                formdata.append(`add_block[${index}].block_name`, document.block_name);
+                formdata.append(`add_block[${index}].category`, document.category);
+                formdata.append(`add_block[${index}].sub_category`, document.sub_category);
+                formdata.append(`add_block[${index}].land_area`, document.land_area);
+                formdata.append(`add_block[${index}].measurment`, document.measurment);
+                formdata.append(`add_block[${index}].total_blocks`, document.total_blocks);
+                formdata.append(`add_block[${index}].total_floors`, document.total_floors);
+                formdata.append(`add_block[${index}].total_units`, document.total_units);
+                formdata.append(`add_block[${index}].status`, document.status);
+                formdata.append(`add_block[${index}].launched_on`, document.launched_on);
+                formdata.append(`add_block[${index}].expected_competion`, document.expected_competion);
+                formdata.append(`add_block[${index}].possession`, document.possession);
+                formdata.append(`add_block[${index}].parking_type`, document.parking_type);
+                formdata.append(`add_block[${index}].rera_no`, document.rera_no);
+            
+                // Handle the pic files inside each document
+                if (document.pic && document.pic.length > 0) {
+                  document.pic.forEach((file, picIndex) => {
+                    formdata.append(`document_details[${index}].pic[${picIndex}]`, file);
+                  });
+                }
+              });
+            }
+            
+            // Now you can send the 'formdata' to the server using your desired API method
+            
+        
+            // Send the FormData as a POST request
+            const resp = await api.post('project', formdata, {
+              headers: {
+                'Content-Type': 'multipart/form-data',  // Ensure the request is treated as a multipart/form-data request
+                
+                
+              }
+            });
+        
+            // Handle the response
+            if (resp.status === 201) {
+              toast.success("Project Saved", { autoClose: 2000 });
+              setTimeout(() => {
+                navigate('/project');
+              }, 2000);
+            }
+        
+          } catch (error) {
+            // Handle error
+            toast.error(error, { autoClose: 2000 });
+            console.log(error);
+          }
+        };
+        
+
+
+    // const addproject=async(e)=>
+    // {
+      
+    //     e.preventDefault();
+    //     try {
+
+    //       const formData = new FormData();
+    
+         
+    
+    // // Loop through the project state to append each property to FormData
+    // for (let key in project) {
+    //   if (project.hasOwnProperty(key)) {
+    //     // Check if the property is an array and handle accordingly
+    //     if (Array.isArray(project[key])) {
+    //       if (key === 'pic') {
+    //         // Handle 'pic' directly as an array of files
+    //         project[key].forEach((file) => {
+    //           formData.append(key, file);  // Append each file in the 'pic' array
+    //         });
+    //       } else if (key === 'add_unit') {
+    //         // Handle add_unit array separately
+    //         project[key].forEach((unit, unitIndex) => {
+    //           for (let unitKey in unit) {
+    //             if (unit.hasOwnProperty(unitKey)) {
+    //               if (unitKey === 'preview' && Array.isArray(unit[unitKey])) {
+    //                 // If the unit has a preview field and it's an array of files
+    //                 unit[unitKey].forEach((file) => {
+    //                   // Append each preview file individually
+    //                   formData.append(`add_unit[${unitIndex}].${unitKey}`, file);
+    //                 });
+    //               } else {
+    //                 // For other fields inside add_unit (e.g., unit_name, size, etc.)
+    //                 formData.append(`add_unit[${unitIndex}].${unitKey}`, unit[unitKey]);
+    //               }
+    //             }
+    //           }
+    //         });
+    //       } else if (key === 'add_block') {
+    //         // Handle add_block array separately
+    //         project[key].forEach((block, blockIndex) => {
+    //           for (let blockKey in block) {
+    //             if (block.hasOwnProperty(blockKey)) {
+    //               formData.append(`add_block[${blockIndex}].${blockKey}`, block[blockKey]);
+    //             }
+    //           }
+    //         });
+    //       } else if (key === 'add_size') {
+    //         // Handle add_size array separately
+    //         project[key].forEach((size, sizeIndex) => {
+    //           for (let sizeKey in size) {
+    //             if (size.hasOwnProperty(sizeKey)) {
+    //               formData.append(`add_size[${sizeIndex}].${sizeKey}`, size[sizeKey]);
+    //             }
+    //           }
+    //         });
+    //       } else if (key === 'price_list' || key === 'Payment_plan') {
+    //         // Handle other arrays of objects like price_list or Payment_plan
+    //         project[key].forEach((item, index) => {
+    //           for (let subKey in item) {
+    //             if (item.hasOwnProperty(subKey)) {
+    //               formData.append(`${key}[${index}].${subKey}`, item[subKey]);
+    //             }
+    //           }
+    //         });
+    //       } else {
+    //         // Handle non-file arrays (e.g., category, sub_category, etc.), stringify them
+    //         formData.append(key, JSON.stringify(project[key]));
+    //       }
+    //     } else {
+    //       // For regular properties (strings or other non-array types), append directly
+    //       formData.append(key, project[key]);
+    //     }
+    //   }
+    // }
+
+
+    //         const resp= await api.post('project',formData,config)
+    //     if(resp.status===201)
+    //         {
+    //             toast.success("Project Saved",{ autoClose: 2000 })
+    //             setTimeout(() => {
+    //               navigate('/project')
+    //             }, 2000);
+    //         }
+            
+      
+    //     } catch (error) {
+    //         toast.error(error.response.data.message,{ autoClose: 2000 })
+    //         console.log(error.response.data.message);
+            
+    //     }
+    // }
 
     const time=new Date()
     
@@ -591,14 +794,14 @@ function Projectform() {
                       document_Date: newdocumentdate
                     });
                   };
-                  const handlelinkedcontactchange = (index, event) => {
-                    const newlinkedcontact = [...units.linkded_contact];
-                    newlinkedcontact[index] = event.target.value;
-                    setunits({
-                      ...units,
-                      linkded_contact: newlinkedcontact
-                    });
-                  };
+                  // const handlelinkedcontactchange = (index, event) => {
+                  //   const newlinkedcontact = [...units.linkded_contact];
+                  //   newlinkedcontact[index] = event.target.value;
+                  //   setunits({
+                  //     ...units,
+                  //     linkded_contact: newlinkedcontact
+                  //   });
+                  // };
                   const handlepicchange1 = (index, event) => {
                     const newpic1 = [...units.pic];
                     const files = Array.from(event.target.files);
@@ -790,7 +993,7 @@ function Projectform() {
     //==================----------------- add delete and onchange event of array end---------------------------===============================
 
 // ==============---------------------------google location code start-----------------====================================================
-const [mapLoaded, setMapLoaded] = useState(false);  // Tracks if the first map is loaded
+// const [mapLoaded, setMapLoaded] = useState(false);  // Tracks if the first map is loaded
 const [mapLoaded1, setMapLoaded1] = useState(false);
                         const [coordinates, setCoordinates] = useState('');
                       //   const handleSubmit = async (e) => {
@@ -907,39 +1110,39 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                         }
                       };
 
-                      const mapStyles = {
-                        height: "500px",
-                        width: "100%"
-                      }
+                      // const mapStyles = {
+                      //   height: "500px",
+                      //   width: "100%"
+                      // }
                     
-                      const defaultCenter = {
-                        lat: coordinates.lat || 37.7749, lng: coordinates.lng || -122.4194
-                      };
+                      // const defaultCenter = {
+                      //   lat: coordinates.lat || 37.7749, lng: coordinates.lng || -122.4194
+                      // };
 
-                      const handleMarkerDragEnd = async (e) => {
-                        const newLat = e.latLng.lat();
-                        const newLng = e.latLng.lng();
-                        setCoordinates({ lat: newLat, lng: newLng });
+                      // const handleMarkerDragEnd = async (e) => {
+                      //   const newLat = e.latLng.lat();
+                      //   const newLng = e.latLng.lng();
+                      //   setCoordinates({ lat: newLat, lng: newLng });
                     
-                        // Reverse geocoding to get the location name from lat/lng
-                        try {
-                          const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
-                            params: {
-                              latlng: `${newLat},${newLng}`,
-                              key: "AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc",  // Replace with your API key
-                            },
-                          });
+                      //   // Reverse geocoding to get the location name from lat/lng
+                      //   try {
+                      //     const response = await axios.get("https://maps.googleapis.com/maps/api/geocode/json", {
+                      //       params: {
+                      //         latlng: `${newLat},${newLng}`,
+                      //         key: "AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc",  // Replace with your API key
+                      //       },
+                      //     });
                     
-                          if (response.data.results.length > 0) {
-                            const locationName = response.data.results[0].formatted_address;
-                            setproject({ ...project, location: locationName, lattitude: newLat, langitude: newLng });
-                          } else {
-                            console.log("No location name found");
-                          }
-                        } catch (error) {
-                          console.error("Error fetching location name:", error);
-                        }
-                      };
+                      //     if (response.data.results.length > 0) {
+                      //       const locationName = response.data.results[0].formatted_address;
+                      //       setproject({ ...project, location: locationName, lattitude: newLat, langitude: newLng });
+                      //     } else {
+                      //       console.log("No location name found");
+                      //     }
+                      //   } catch (error) {
+                      //     console.error("Error fetching location name:", error);
+                      //   }
+                      // };
 
 
                       const [coordinates1, setCoordinates1] = useState('');
@@ -1600,15 +1803,28 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                               s_no: newsno
                                                                             });
                                                                           };
+
+                                                                          // const handlepicchange = (index, event) => {
+                                                                          //   const newpic = [...project.pic];
+                                                                          //   const files = Array.from(event.target.files);
+                                                                          //   newpic[index] = {files:files}
+                                                                          //   setproject({
+                                                                          //     ...project,
+                                                                          //     pic: newpic
+                                                                          //   });
+                                                                          // };
+         
+                                                                          
                                                                           const handlepreviewchange = (index, event) => {
                                                                             
                                                                             const newpreview = [...units.preview];
                                                                             const files = Array.from(event.target.files);
-                                                                            const previewUrls = files.map(file => URL.createObjectURL(file));
-                                                                            newpreview[index] = {
-                                                                              files: files,
-                                                                              previewUrls: previewUrls
-                                                                            };
+                                                                            // const previewUrls = files.map(file => URL.createObjectURL(file));
+                                                                            // newpreview[index] = {
+                                                                            //   files: files,
+                                                                            //   previewUrls: previewUrls
+                                                                            // };
+                                                                            newpreview[index] = {files:files}
                                                                             setunits({
                                                                               ...units,
                                                                               preview: newpreview
@@ -2462,17 +2678,17 @@ const ustates = Object.keys(statesAndCities);
 const ucities = statesAndCities[units.ustate] || [];
 
 
-const asianCountries = [
-  "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
-  "Brunei", "Burma (Myanmar)", "Cambodia", "China", "Cyprus", "Georgia", 
-  "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", 
-  "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", 
-  "Maldives", "Mongolia", "Nepal", "North Korea", "Oman", "Pakistan", 
-  "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
-  "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", 
-  "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
-  "Vietnam", "Yemen"
-];
+// const asianCountries = [
+//   "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
+//   "Brunei", "Burma (Myanmar)", "Cambodia", "China", "Cyprus", "Georgia", 
+//   "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", 
+//   "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", 
+//   "Maldives", "Mongolia", "Nepal", "North Korea", "Oman", "Pakistan", 
+//   "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+//   "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", 
+//   "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
+//   "Vietnam", "Yemen"
+// ];
 
 
 const handleSuggestionClick1 = (contact, index) => {
@@ -2725,6 +2941,96 @@ const handleFileChangesize = (event) => {
   };
 
   reader.readAsArrayBuffer(file); // Use readAsArrayBuffer instead of readAsBinaryString
+};	
+
+
+																		
+const sizedata = [
+  { size_name: 'size 1', block1: 'b1', category: 'residential',sub_category:'plot',unit_type:'corner',total_sealable_area:'',sq_feet1:'',
+    covered_area:'',sq_feet2:'',carpet_area:'',sq_feet3:'',loading:'',percentage:'',length:10,yard1:'feet',bredth:10,yard2:'feet',
+    total_area:100,yard3:'Sqfeet'
+   }
+];
+
+const generateExcelFilesize = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(sizedata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
+};
+
+
+										
+										
+
+const blockdata = [
+  { block_name: 'block 1', category: 'residential', sub_category: 'plot',land_area:1000,measurment:'Sqfeet',total_blocks:2,total_floors:2,
+    total_units:2,status:'open',parking_type:'all',rera_no:1001}
+];
+
+const generateExcelFileblock = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(blockdata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
+};
+
+
+
+ 
+
+  
+
+
+const unitdata = [
+  { project_name: 'block 1', unit_no: 'residential', unit_type: 'plot',category:'residential',block:'b1',size:'',land_type:'',
+    khewat_no:[''],killa_no:[''],share:[''],total_land_area:'',water_source:[''],water_level:[''],water_pump_type:[''],direction:'',
+    side_open:'',fornt_on_road:'',total_owner:'',facing:'',road:'',ownership:'',stage:'',type:'',floor:[''],cluter_details:[''],
+    length:[''],bredth:[''],total_area:[''],measurment2:[''],ocupation_date:'',age_of_construction:'',furnishing_details:'',
+    enter_furnishing_details:'',furnished_item:'',location:'',lattitude:'',langitude:'',uaddress:'',ustreet:'',ulocality:'',
+    ucity:'',uzip:'',ustate:'',ucountry:'',owner_details:[''],associated_contact:[''],relation:'',s_no:[''],preview:[''],descriptions:[''],
+    category:[''],s_no1:[''],url:[''],document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:['']
+  }
+];
+
+const generateExcelFileunit = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(unitdata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
 };
 
 
@@ -2766,7 +3072,7 @@ const handleFileChangesize = (event) => {
  {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
-                <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
+                <div className="col-md-6"><label className="labels">Name</label><input type="text" required="true" name='name' className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
                 <div className='col-md-6'></div>
                     <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,developer_name:e.target.value})}>
                               <option>---Select---</option>
@@ -2994,6 +3300,7 @@ const handleFileChangesize = (event) => {
                       project.pic.map((item,index)=>
                       (
                         <input type="file" 
+                        name='pic'
                         style={{marginTop:"10px"}}
                         className="form-control form-control-sm" 
                         onChange={(event)=>handlepicchange(index,event)}
@@ -3153,7 +3460,9 @@ const handleFileChangesize = (event) => {
                     <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow1}>Add Block</button></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow8}>Import Block</button></div>
-                 
+                    <Tooltip title="Download Data.." arrow>
+                    <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileblock} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
+                    </Tooltip>
                     <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
@@ -3208,7 +3517,7 @@ const handleFileChangesize = (event) => {
             <div style={{width:"100%"}}>
             <div className="row" id='basicdetails1'>
              
-                    <div className="col-md-6"><label className="labels">Block/Tower Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setblock({...block,block_name:e.target.value})}/></div>
+                    <div className="col-md-6"><label className="labels">Block/Tower Name</label><input type="text" required="true" name='block_name' className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setblock({...block,block_name:e.target.value})}/></div>
                     <div className='col-md-6'></div>
 
                     <div className="col-md-12"><label className="labels">Category</label></div>
@@ -3217,6 +3526,7 @@ const handleFileChangesize = (event) => {
                         project.category.map((type) => (
                           <div className="col-md-3" key={type}>
                             <button 
+                            name='category'
                               className="form-control form-control-sm"
                               onClick={() => handleTypeClick3(type)} 
                               style={{ backgroundColor: selectedType2(type) ? 'green' : '' }}
@@ -3232,6 +3542,7 @@ const handleFileChangesize = (event) => {
                     <div className="col-md-12"><label className="labels">Sub Category</label>
                     <Select
                     className="form-control form-control-sm"
+                    name='sub_category'
                       labelId="subcategory-label"
                       id="subcategory"
                       multiple
@@ -3255,7 +3566,7 @@ const handleFileChangesize = (event) => {
                     {
                     project.category.includes('Agricultural') && (
                         <>
-                         <div className="col-md-3"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,land_area:e.target.value})}/></div>
+                         <div className="col-md-3"><label className="labels">Land Area</label><input type="text" className="form-control form-control-sm" required="true" name='land_area' onChange={(e)=>setblock({...block,land_area:e.target.value})}/></div>
                         <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>measurment</label>
                         <select className="form-control form-control-sm" required="true" onChange={(e)=>setblock({...block,measurment:e.target.value})}>
                               <option>Acres.</option>
@@ -3367,6 +3678,9 @@ const handleFileChangesize = (event) => {
                 <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow2}>Add Size</button></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow9}>Import Size</button></div>
+                    <Tooltip title="Download Data.." arrow>
+                    <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFilesize} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
+                    </Tooltip>
                  
                     <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -3646,7 +3960,10 @@ const handleFileChangesize = (event) => {
                 <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow3}>Add Unit</button></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow7}>Import Unit</button></div>
-                 
+                    <Tooltip title="Download Data.." arrow>
+                    <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileunit} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
+                    </Tooltip>
+
                     <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginTop:"40px",marginLeft:"10px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      

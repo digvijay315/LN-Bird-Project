@@ -74,6 +74,17 @@ const blockSchema = new mongoose.Schema({
     owner_details: {type: Array},
     associated_contact: {type: Array},
     relation: {type: String},
+    s_no: {type: Array},
+    preview: {type: Array},
+    descriptions: {type: Array},
+    category: {type: Array},
+    s_no1: {type: Array},
+    url: {type: Array},
+    document_name: {type: Array},
+    document_no: {type: Array},
+    document_Date: {type: Array},
+    linkded_contact: {type: Array},
+    // pic: {type: Array},
   })
   
 const priceschema = new mongoose.Schema({
