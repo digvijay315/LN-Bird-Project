@@ -2599,6 +2599,7 @@ useEffect(() => {
   }
 }, [relation,newcontact]);
 
+console.log(units.associated_contact);
 
 
 const handleSuggestionClick = (contact) => {

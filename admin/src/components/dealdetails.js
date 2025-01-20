@@ -1443,7 +1443,7 @@ function Dealdetails() {
             ]);
             setdeal(prevDeal => ({
               ...prevDeal,
-              owner_details: [...(prevDeal.owner_details || []), newcontact] // Append new contact to the existing owner_details array
+              owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
             }));
            
           }
@@ -1456,7 +1456,7 @@ function Dealdetails() {
             setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
             setdeal(prevDeal => ({
               ...prevDeal,
-              associated_contact: [...(prevDeal.associated_contact || []), newcontact] // Append new contact to the existing owner_details array
+              associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
             }));
             setrelation1(relation)
             setrelation("")
