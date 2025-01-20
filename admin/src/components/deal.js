@@ -26,11 +26,11 @@ import 'react-quill/dist/quill.snow.css';
 function Deal() {
   const navigate=useNavigate()
 // ================================select project,units and block from project data start==============================================================
-const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",utype:"",ucategory:"",usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-  expected_price:"",quote_price:"",security_deposite:"",
+const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",
+  utype:"",ucategory:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+  expected_price:"",quote_price:"",security_deposite:"",owner_details:[],associated_contact:[],
 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
-owner_details:[],associated_contact:[],relation:"",document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
 website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
 const config = {
@@ -70,6 +70,7 @@ const fetchcdata=async(event)=>
 
 }
 
+const[matchedunit,setmatchedunit]=useState([])
 React.useEffect(() => {
   if (flattenedUnits.length > 0 && deal.project && deal.block && deal.unit_number) {
     // Look for a unit that matches deal criteria
@@ -81,19 +82,31 @@ React.useEffect(() => {
     );
 
 
+
+
     // If a matching unit is found, update the deal's ulocality
+
     if (matchingUnit) {
-      setdeal((prevDeal) => ({
-        ...prevDeal,
-        ulocality: matchingUnit.ulocality || "", // Ensure you handle cases where ulocality might be undefined
-        ucity: matchingUnit.ucity || "",
-        utype: matchingUnit.unit_type || "",
-        ucategory: matchingUnit.category || "",
-        usize: matchingUnit.size || ""
-      }));
+      setmatchedunit(matchingUnit)
     }
   }
 }, [flattenedUnits, deal.project, deal.block, deal.unit_number]);
+
+console.log(matchedunit.unit_type);
+React.useEffect(() => {
+  setdeal((prevDeal) => ({
+    ...prevDeal,
+    utype: matchedunit.unit_type,
+  ulocality:matchedunit.ulocality,
+  ucategory:matchedunit.category,
+  ucity:matchedunit.ucity,
+  usize:matchedunit.size,
+  owner_details:matchedunit.owner_details,
+  associated_contact:matchedunit.associated_contact
+  }));
+}, [matchedunit]);
+
+
 
 
 
@@ -546,7 +559,7 @@ React.useEffect(() => {
                       });
                     }
   
-                    console.log(formdata)
+                
                     
   
                     const resp= await api.post('adddeal',formdata,{
@@ -1420,13 +1433,13 @@ console.log(deal.associated_contact);
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h4 className="text-right" onClick={()=>window.location.reload()} style={{cursor:"pointer"}}>Add Deal</h4>
                 </div><hr></hr><br></br>
-                <div className="row mt-2" style={{padding:"5px"}}>
+                {/* <div className="row mt-2" style={{padding:"5px"}}>
                 <div className="col-md-3" id="projectlabel"><label className="labels"style={{fontWeight:"bolder"}}>Price Info</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" alt="" style={{height:"20px",width:"145px"}}/></div>
                 <div className="col-md-3" id="basiclabel"><label className="labels" style={{fontWeight:"bolder"}}>Add Owner</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" alt="" style={{height:"20px",width:"145px"}}/></div>
                 <div className="col-md-3" id="photolabel"><label className="labels" style={{fontWeight:"bolder"}}>Add Document</label><img src="https://icon-library.com/images/green-arrow-icon-png/green-arrow-icon-png-12.jpg" alt="" style={{height:"20px",width:"115px"}}/></div>
                 <div className="col-md-3" id="ownerlabel"><label className="labels" style={{fontWeight:"bolder"}}>Upload</label></div>
                 <div className="col-md-12"><hr></hr></div>
-                </div><br></br>
+                </div><br></br> */}
 {/*-------------------------------------------------------------------price form----------------------------------------------------- */}
                
                 <div className="row"  id="projectform" >
@@ -1601,6 +1614,41 @@ console.log(deal.associated_contact);
                         <option>Team</option>
                         <option>All User</option>
                         </select></div>
+
+                        <div className="col-md-12"><label className="labels">Publish On</label></div>
+                    <div className="col-md-12"><hr></hr></div>
+                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
+                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Own Website</option>
+                                          <option>99 Acre</option>
+                                          <option>Olx</option>
+                                          <option>Magicbricks</option>
+                                          <option>Etc.</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
+                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Facebook</option>
+                                          <option>Instagram</option>
+                                          <option>Googe Page</option>
+                                          <option>Linkdin</option>
+                                          <option>Twitter</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
+                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Message</option>
+                                          <option>What's App</option>
+                                          <option>Email</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={deal.remarks} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setdeal({ ...deal, remarks: value })}/></div>
+                                    <div className="col-md-2"></div>
+
+
                       </div>
 {/* -----------------------=========================sale end====================================-------------------------------------- */}
 
@@ -1746,23 +1794,58 @@ console.log(deal.associated_contact);
                               <option> Post Sales</option>
                               <option> Pre Sales</option>
                         </select></div>
+
+                        <div className="col-md-12"><label className="labels">Publish On</label></div>
+                    <div className="col-md-12"><hr></hr></div>
+                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
+                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Own Website</option>
+                                          <option>99 Acre</option>
+                                          <option>Olx</option>
+                                          <option>Magicbricks</option>
+                                          <option>Etc.</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
+                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Facebook</option>
+                                          <option>Instagram</option>
+                                          <option>Googe Page</option>
+                                          <option>Linkdin</option>
+                                          <option>Twitter</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
+                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Message</option>
+                                          <option>What's App</option>
+                                          <option>Email</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={deal.remarks} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setdeal({ ...deal, remarks: value })}/></div>
+                                    <div className="col-md-2"></div>
+                                    
+
+
                       </div>
                   </div>
   
   {/*============================================ rent end=========================================================================== */}
-                  
-                    <div className="col-md-12"><hr></hr></div>
-                    <div className="row mt-4">
-                        <div className="col-md-2" id="projectbtn" onClick={handler} style={{marginLeft:"82%",marginBottom:"-50px"}}><button className="form-control form-control-sm">Next</button></div>
-      
-                        </div>
+                   
                     </div>
                     
         </div>
+        <div className="row mt-2">
+  
+                    <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",marginTop:"80px"}} id="ownerbtn"><button className="form-control form-control-sm" onClick={add_deal}>Save</button></div>
+                    </div>
         </div>
 {/*-----------------------------------------------------------------add owner form----------------------------------------------------- */}
 
-                <div id="basicform" style={{padding:"5px"}}>
+                {/* <div id="basicform" style={{padding:"5px"}}>
                 <div className="row" style={{width:"100%"}}>
                
                         <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
@@ -1876,16 +1959,16 @@ console.log(deal.associated_contact);
             )}
             </div>
                      </div>
-                  </div>
-                <div className="row mt-4">
+                  </div> */}
+                {/* <div className="row mt-4">
                     <div className="col-md-2" onClick={handler3} style={{marginLeft:"82%",marginBottom:"40px"}}><button className="form-control form-control-sm" id="basicbtn">Next</button></div>
                     <div className="col-md-2" onClick={handler2} style={{marginLeft:"-90%"}}><button className="form-control form-control-sm" id="prevbtn">Prev</button></div>
-                </div>
+                </div> */}
                 </div>
               </div>
 
 
-              <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+              {/* <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
               <Modal.Title>Quick Add Contact</Modal.Title>
             </Modal.Header>
@@ -2026,9 +2109,9 @@ console.log(deal.associated_contact);
                 Close
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
 
-          <Modal show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in"}}>
+          {/* <Modal show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
               <Modal.Title>Choose Relation</Modal.Title>
             </Modal.Header>
@@ -2053,11 +2136,11 @@ console.log(deal.associated_contact);
                 Close
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
 
 {/*-----------------------------------------------------------------document form----------------------------------------------------------------- */}             
           
-              <div id="photosform" style={{border:"1px solid gray",padding:"5px",marginTop:"-50px",display:"none"}}>
+              {/* <div id="photosform" style={{border:"1px solid gray",padding:"5px",marginTop:"-50px",display:"none"}}>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 </div><hr></hr>
                 <div className="row mt-2">
@@ -2079,7 +2162,7 @@ console.log(deal.associated_contact);
 
 
                         {/* <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={documents.linkded_contact}  placeholder="Type here For Search in Contact" required="true" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div> */}
-                        {showSuggestions  && filteredSuggestions.length > 0 && (
+                        {/* {showSuggestions  && filteredSuggestions.length > 0 && (
                             <ul className="suggestion-list">
                               {filteredSuggestions.map((suggestion, index) => (
                                 <li key={index} onClick={() => handleSuggestionClick1(suggestion)}>
@@ -2087,13 +2170,13 @@ console.log(deal.associated_contact);
                                 </li>
                               ))}
                             </ul>
-                          )}
+                          )} */}
 
 
 
-                        <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Pic</label><input type="file" name="pic" multiple className="form-control form-control-sm" onChange={handlepicchange}/></div>
-                        <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={adddocument}>+</button></div>
-                        <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
+                        {/* <div className="col-md-3"><label className="labels" style={{visibility:"hidden"}}>Pic</label><input type="file" name="pic" multiple className="form-control form-control-sm" onChange={handlepicchange}/></div>
+                        <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={adddocument}>+</button></div> */} 
+                        {/* <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
     <TableHead>
@@ -2133,18 +2216,18 @@ console.log(deal.associated_contact);
         )):[]}
       </tbody>
     </Table>
-    </TableContainer>
+    </TableContainer> */}
                   
-                  </div>
-              </div>
-              <div className="row mt-4">
+                  {/* </div>
+              </div> */}
+              {/* <div className="row mt-4">
                     <div className="col-md-2" onClick={handler5} style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="photosbtn"><button className="form-control form-control-sm" >Next</button></div>
                     <div className="col-md-2" onClick={handler4} style={{marginLeft:"-90%",display:"none"}} id="prevbtn1"><button className="form-control form-control-sm" >Prev</button></div>
-                </div>  
+                </div>   */}
 
 {/*-----------------------------------------------------------------photos and videos form----------------------------------------------------------------- */}             
               
-                <div id="ownerform" style={{padding:"5px",marginTop:"-130px",display:"none"}}>
+                {/* <div id="ownerform" style={{padding:"5px",marginTop:"-130px",display:"none"}}>
                
                   <div className="d-flex justify-content-between align-items-center mb-3">
                         <h6 className="text-right">Upload Images</h6>
@@ -2342,11 +2425,11 @@ console.log(deal.associated_contact);
                                     <div className="col-md-2"></div>
                     
                                     </div>
-                  </div>
-                <div className="row mt-5">
+                  </div> */}
+                {/* <div className="row mt-5">
                     <div className="col-md-2"  style={{marginLeft:"82%",marginBottom:"40px",display:"none"}} id="ownerbtn"><button className="form-control form-control-sm" onClick={add_deal}>Save</button></div>
                     <div className="col-md-2" onClick={handler6} style={{marginLeft:"-90%",display:"none"}} id="prevbtn2"><button className="form-control form-control-sm" >Prev</button></div>
-                </div>  
+                </div>   */}
       
         </div>
     </div>
