@@ -101,8 +101,12 @@ React.useEffect(() => {
   ucategory:matchedunit.category,
   ucity:matchedunit.ucity,
   usize:matchedunit.size,
-  owner_details:matchedunit.owner_details,
-  associated_contact:matchedunit.associated_contact
+  owner_details: Array.isArray(matchedunit.owner_details) 
+      ? matchedunit.owner_details.map(contact => contact._id) 
+      : [],  // Default to empty array if not an array
+    associated_contact: Array.isArray(matchedunit.associated_contact) 
+      ? matchedunit.associated_contact.map(contact => contact._id) 
+      : []  // Default to empty array if not an array
   }));
 }, [matchedunit]);
 console.log(matchedunit);
