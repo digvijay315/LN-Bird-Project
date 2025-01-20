@@ -4051,7 +4051,8 @@ const [show9, setshow9] = useState(false);
                     col.id==='ownerdetails' ?
                     (
                       <>
-                    {item.owner_details.map((item)=>
+                    { Array.isArray(item.owner_details)?
+                    item.owner_details.map((item)=>
                     (
                       <>
                      {item.title} {item.first_name} {item.last_name}<br></br>
@@ -4063,23 +4064,25 @@ const [show9, setshow9] = useState(false);
                         <div><SvgIcon component={PhoneIphoneIcon} />{item.mobile_no}</div>  // If not an array, just display the mobile_no
                       )}
                       </>
-                    ))}
+                    )):[]}
                       </>
                     ) :   col.id==='owneraddress' ?
                     (
                       <>
-                      {item.owner_details.map((item, index) => (
+                      {Array.isArray(item.owner_details)?
+                      item.owner_details.map((item, index) => (
                         <div key={index} >
                           s/h/o:-{item.father_husband_name}<br></br>
                           {item.h_no} {item.area1} {item.location1} <br></br>
                           {item.city1} {item.state1} {item.pincode1}
                         </div>
-                      ))}
+                      )):[]}
                     </>
                     ) :  col.id==='associatedcontact' ?
                     (
                       <>
-                      {item.associated_contact.map((item)=>
+                      {Array.isArray(item.associated_contact)?
+                      item.associated_contact.map((item)=>
                       (
                         <>
                        {item.title} {item.first_name} {item.last_name}<br></br>
@@ -4091,7 +4094,7 @@ const [show9, setshow9] = useState(false);
                           <div><SvgIcon component={PhoneIphoneIcon} />{item.mobile_no}</div>  // If not an array, just display the mobile_no
                         )}
                         </>
-                      ))}
+                      )):[]}
                         </>
                     ) :  col.id==='locationbrief' ?
                     (
