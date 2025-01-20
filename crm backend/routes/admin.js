@@ -70,7 +70,7 @@ router.put('/updateproject/:_id',upload.any('pic','preview'),update_project)
 
 
 //router.post('/adddeal',upload.any('preview'),add_deal)
- router.post('/adddeal',uploadFields,add_deal)
+ router.post('/adddeal',add_deal)
 router.get('/viewdeal',view_deal)
 router.get('/viewdealbyid/:_id',view_deal_Byid)
 router.get('/viewdealbystage/:stage',view_deal_Bystage)

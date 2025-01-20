@@ -224,7 +224,15 @@ const createProject = async (req, res) => {
   const view_project=async(req,res)=>
     {
         try {
-            const resp=await addproject.find()
+          const resp = await addproject.find()
+          .populate({
+              path: 'add_unit.owner_details', // Populate the 'owner_details' field inside 'add_unit'
+              model: 'add_contact' // Specify the model to populate
+          })
+          .populate({
+              path: 'add_unit.associated_contact', // Populate the 'associated_contact' field inside 'add_unit'
+              model: 'add_contact' // Specify the model to populate
+          });
             res.status(200).send({message:"project details fetch successfully",project:resp})
         } catch (error) {
             console.log(error)

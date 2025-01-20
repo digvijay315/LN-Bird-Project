@@ -105,7 +105,9 @@ React.useEffect(() => {
   associated_contact:matchedunit.associated_contact
   }));
 }, [matchedunit]);
-
+console.log(matchedunit);
+console.log(deal.owner_details);
+console.log(deal.utype);
 
 
 
@@ -562,11 +564,7 @@ React.useEffect(() => {
                 
                     
   
-                    const resp= await api.post('adddeal',formdata,{
-                            headers: {
-                              'Content-Type': 'multipart/form-data',
-                            },
-                          })
+                    const resp= await api.post('adddeal',deal)
                             if(resp.status===200)
                                 {
                                   toast.success(resp.data.message,{ autoClose: 2000 })
