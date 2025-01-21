@@ -25,6 +25,11 @@ const fileFilter = (req, file, cb) => {
       return cb(null, true); // Accept image files for preview
     }
 
+    else if (file.fieldname.includes('documentpic') && fileTypes.image.includes(file.mimetype)) {
+      return cb(null, true); // Accept image files for document details
+    }
+
+
     else if (file.fieldname.includes('pic') && fileTypes.image.includes(file.mimetype)) {
       return cb(null, true); // Accept image files for document details
     }

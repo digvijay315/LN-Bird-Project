@@ -627,6 +627,7 @@ const handleOwnerChange = (event) => {
             e.preventDefault();
             try {
                 const resp=await api.post('leadinfo',leadinfo,config)
+                const resp1= await api.post('addcontact',leadinfo,config)
                 if(resp.status===200)
                 {
                     toast.success(resp.data.message)

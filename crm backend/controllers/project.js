@@ -16,6 +16,8 @@ cloudinary.config({
 
 const createProject = async (req, res) => {
     try {
+ 
+      
       const {
         name, developer_name, joint_venture, secondary_developer, rera_number, descriptions,
         category, sub_category, land_area, measurment1, total_block, total_floor, total_units,
@@ -134,9 +136,6 @@ const createProject = async (req, res) => {
          const imagefiles = [];
          if (req.files) {
         
-          
-          
-               
                   const imagefield = req.files.filter(file => file.fieldname.includes('preview'));
                   
                   if (imagefield.length > 0) {
@@ -154,6 +153,7 @@ const createProject = async (req, res) => {
                   }
                 }
 
+console.log(imagefiles);
 
          
         

@@ -1417,8 +1417,19 @@ const formats = [
   'link', 'image'
 ]
 
-console.log(deal.owner_details);
-console.log(deal.associated_contact);
+  // Function to strip HTML tags and save plain text
+  const stripHTML = (htmlContent) => {
+    const plainText = new DOMParser().parseFromString(htmlContent, 'text/html').body.textContent || "";
+    return plainText;
+  };
+
+  // Automatically save the description when it changes
+  const handleChange = (value) => {
+    const plainText = stripHTML(value); // Strip HTML tags
+    setdeal({ ...deal, remarks: plainText });
+    // Optionally, save `plainText` to the database here as well (e.g., send API request)
+    console.log("Saving plain text to DB:", plainText);
+  };
 
 
 
@@ -1647,7 +1658,7 @@ console.log(deal.associated_contact);
                                           <option>Email</option>
                                           </select>
                                     </div>
-                                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={deal.remarks} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setdeal({ ...deal, remarks: value })}/></div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
                                     <div className="col-md-2"></div>
 
 
@@ -1827,7 +1838,7 @@ console.log(deal.associated_contact);
                                           <option>Email</option>
                                           </select>
                                     </div>
-                                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={deal.remarks} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setdeal({ ...deal, remarks: value })}/></div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
                                     <div className="col-md-2"></div>
                                     
 

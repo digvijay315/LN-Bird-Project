@@ -1441,7 +1441,7 @@ function Dealdetails() {
               ...prevContacts,
               newcontact // Add the new contact (assumed to be an object)
             ]);
-            setdeal(prevDeal => ({
+            setunits(prevDeal => ({
               ...prevDeal,
               owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
             }));
@@ -1453,8 +1453,8 @@ function Dealdetails() {
               ...prevContacts,
               newcontact // Add the new contact for other relations
             ]);
-            setdeal(prevDeal => ({ ...prevDeal, relation: relation }));
-            setdeal(prevDeal => ({
+            setunits(prevDeal => ({ ...prevDeal, relation: relation }));
+            setunits(prevDeal => ({
               ...prevDeal,
               associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
             }));
@@ -1483,14 +1483,26 @@ function Dealdetails() {
         const removeContact = (id) => {
     
           const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
-          const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
-          const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
+       
+         
+          const updatedContacts3 = units.owner_details.filter(contact => contact._id !== id);
+          const updatedContacts4 = units.associated_contact.filter(contact => contact._id !== id);
+
           setSelectedContacts(updatedContacts);
-          setselectedcontact1(updatedContacts1)
+
+          const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+          setselectedcontact1(updatedContacts1);
+          setunits((prevState) => ({
+            ...prevState,
+            owner_details: updatedContacts3,
+          }));
+
+          const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
           setselectedcontact2(updatedContacts2)
-          
-          // Update deal.owner_details with the current selected contacts
-          setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+          setunits((prevState) => ({
+            ...prevState,
+            associated_contact: updatedContacts4,
+          }));
 
         };
 
@@ -2393,6 +2405,7 @@ const [show9, setshow9] = useState(false);
                     
                    
                   }
+                
                   
           const updateinventories=async()=>
           {
@@ -5687,12 +5700,18 @@ stage:selectedLead.stage
                         <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button></div>
                     
                      <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
-                     {selectedcontact1.length >= 0 && (
+                     {units.owner_details.length >= 0 && (
                       <div className="contact-details">
                         <table  style={{width:"100%"}}>
                           
                           <tbody>
-                          {selectedcontact1.map(contact => (
+                           {/* Combine selectedcontact1 with units.owner_details while removing duplicates */}
+          {[...selectedcontact1, ...units.owner_details]
+            .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+            .filter((contact, index, self) => 
+              // Ensure that we only keep unique contacts based on _id
+              index === self.findIndex((c) => c._id === contact._id)
+            ).map(contact => (
                               <StyledTableRow>
                                 <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
                                 <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
@@ -5702,12 +5721,13 @@ stage:selectedLead.stage
                                 </StyledTableCell>
 
                                 <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
-                                  {contact.mobile_no.map((number, index) => (
+                                  {Array.isArray(contact.mobile_no)?
+                                  contact.mobile_no.map((number, index) => (
                                     <span key={index}>
                                       <SvgIcon component={PhoneIphoneIcon} />
                                       {number}<br></br>
                                     </span>
-                                  ))}
+                                  )):[]}
                                 </StyledTableCell>
 
                                 <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
@@ -5736,13 +5756,18 @@ stage:selectedLead.stage
                 </div>
                 
                 <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
-                {selectedcontact2.length >= 0 && (
+                {units.associated_contact.length >= 0 && (
                 <div className="contact-details">
                     <table style={{width:"100%"}}>
                         <tbody>
                              {
                               
-                              selectedcontact2.map(contact => (
+                              [...selectedcontact2, ...units.associated_contact]
+                                .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                .filter((contact, index, self) => 
+                                  // Ensure that we only keep unique contacts based on _id
+                                  index === self.findIndex((c) => c._id === contact._id)
+                                ).map(contact => (
                                 <StyledTableRow>
                                     <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
                                     <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>

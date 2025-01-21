@@ -84,7 +84,7 @@ const blockSchema = new mongoose.Schema({
     document_no: {type: Array},
     document_Date: {type: Array},
     linkded_contact: {type: Array},
-    // pic: {type: Array},
+    documentpic: {type: Array}
   })
   
 const priceschema = new mongoose.Schema({
