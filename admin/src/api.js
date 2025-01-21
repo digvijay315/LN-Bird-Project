@@ -2,7 +2,7 @@ import axios from "axios";
 const instance=axios.create({
    
         //  baseURL:'https://ln-bird-project-7.onrender.com/'
-        baseURL:' http://onlinerealestatecrm.in/'
+        baseURL:' https://onlinerealestatecrm.in/'
         // baseURL:'http://localhost:5000/'
        
 })
