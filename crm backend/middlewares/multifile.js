@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary').v2;
 // Storage setup for Multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Folder to store uploaded files temporarily
+    cb(null, 'uploads'); // Folder to store uploaded files temporarily
   },
   filename: function (req, file, cb) {
     // Set unique filename using timestamp and file extension
@@ -25,7 +25,7 @@ const fileFilter = (req, file, cb) => {
       return cb(null, true); // Accept image files for preview
     }
 
-    else if (file.fieldname.includes('documentpic') && fileTypes.image.includes(file.mimetype)) {
+    else if (file.fieldname.includes('image') && fileTypes.image.includes(file.mimetype)) {
       return cb(null, true); // Accept image files for document details
     }
 
@@ -43,7 +43,7 @@ const fileFilter = (req, file, cb) => {
 // Multer upload setup
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // Max file size 50MB
+  // limits: { fileSize: 50 * 1024 * 1024 }, // Max file size 50MB
   fileFilter: fileFilter
 });
 

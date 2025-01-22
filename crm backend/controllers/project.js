@@ -16,8 +16,8 @@ cloudinary.config({
 
 const createProject = async (req, res) => {
     try {
+
  
-      
       const {
         name, developer_name, joint_venture, secondary_developer, rera_number, descriptions,
         category, sub_category, land_area, measurment1, total_block, total_floor, total_units,
@@ -78,94 +78,206 @@ const createProject = async (req, res) => {
         i++;
       }
 
+
       const addunit_details = [];
       let u = 0;
+
+// Loop through each unit
+while (req.body[`add_unit[${u}].unit_no`]) {
+  const unit = {
+    project_name: req.body[`add_unit[${u}].project_name`],
+    unit_no: req.body[`add_unit[${u}].unit_no`],
+    unit_type: req.body[`add_unit[${u}].unit_type`],
+    category: req.body[`add_unit[${u}].category`],
+    block: req.body[`add_unit[${u}].block`],
+    size: req.body[`add_unit[${u}].size`],
+    direction: req.body[`add_unit[${u}].direction`],
+    facing: req.body[`add_unit[${u}].facing`],
+    road: req.body[`add_unit[${u}].road`],
+    ownership: req.body[`add_unit[${u}].ownership`],
+    stage: req.body[`add_unit[${u}].stage`],
+    floor: req.body[`add_unit[${u}].floor`],
+    cluter_details: req.body[`add_unit[${u}].cluter_details`],
+    length: req.body[`add_unit[${u}].length`],
+    bredth: req.body[`add_unit[${u}].bredth`],
+    total_area: req.body[`add_unit[${u}].total_area`],
+    measurment2: req.body[`add_unit[${u}].measurment2`],
+    ocupation_date: req.body[`add_unit[${u}].ocupation_date`],
+    age_of_construction: req.body[`add_unit[${u}].age_of_construction`],
+    furnishing_details: req.body[`add_unit[${u}].furnishing_details`],
+    furnished_item: req.body[`add_unit[${u}].furnished_item`],
+    location: req.body[`add_unit[${u}].location`],
+    lattitude: req.body[`add_unit[${u}].lattitude`],
+    langitude: req.body[`add_unit[${u}].langitude`],
+    uaddress: req.body[`add_unit[${u}].uaddress`],
+    ustreet: req.body[`add_unit[${u}].ustreet`],
+    ulocality: req.body[`add_unit[${u}].ulocality`],
+    ucity: req.body[`add_unit[${u}].ucity`],
+    uzip: req.body[`add_unit[${u}].uzip`],
+    ustate: req.body[`add_unit[${u}].ustate`],
+    ucountry: req.body[`add_unit[${u}].ucountry`],
+    owner_details: req.body[`add_unit[${u}].owner_details`],
+    associated_contact: req.body[`add_unit[${u}].associated_contact`],
+    relation: req.body[`add_unit[${u}].relation`],
+    s_no: req.body[`add_unit[${u}].s_no`],
+    descriptions: req.body[`add_unit[${u}].descriptions`],
+    s_no1: req.body[`add_unit[${u}].s_no1`],
+    url: req.body[`add_unit[${u}].url`],
+    document_name: req.body[`add_unit[${u}].document_name`],
+    document_no: req.body[`add_unit[${u}].document_no`],
+    document_Date: req.body[`add_unit[${u}].document_Date`],
+    linkded_contact: req.body[`add_unit[${u}].linkded_contact`]
+  };
+
+ 
+
+  // Prepare for file upload
+  const imagefiles = [];
+  const imagefiles1 = [];
+  if (req.files) {
+    const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[${u}].preview`));
+    const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[${u}].image`));
+    for (let file of imagefield) {
+      try {
+        const result = await cloudinary.uploader.upload(file.path);
+        imagefiles.push(result.secure_url);  
+
+        // Delete file after upload
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.error(`Failed to delete file: ${file.path}`, err);
+          } else {
+            console.log(`Successfully deleted file: ${file.path}`);
+          }
+        });
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+
+
+    for (let file of imagefield1) {
+      try {
+        const result = await cloudinary.uploader.upload(file.path);
+        imagefiles1.push(result.secure_url);  
+
+        // Delete file after upload
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.error(`Failed to delete file: ${file.path}`, err);
+          } else {
+            console.log(`Successfully deleted file: ${file.path}`);
+          }
+        });
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+
+  }
+
+  // Push unit details with images to the array
+  addunit_details.push({
+    ...unit,
+    preview: imagefiles,
+    image:imagefiles1
+  });
+
+  u++;
+}
+
+
+
+
+
+
+//       const addunit_details = [];
+//       let u = 0;
+//   console.log(req.body);
   
-      // Loop to process add_Content fields
-      while (req.body[`add_unit[${u}].unit_no`]) {
+//       // Loop to process add_Content fields
+//       while (req.body[`add_unit[${u}].unit_no`]) {
 
-      
-
-
-
-        const project_name = req.body[`add_unit[${u}].project_name`];
-        const unit_no = req.body[`add_unit[${u}].unit_no`];
-         const unit_type = req.body[`add_unit[${u}].unit_type`];
-         const category = req.body[`add_unit[${u}].category`];
-         const block = req.body[`add_unit[${u}].block`];
-         const size = req.body[`add_unit[${u}].size`];
-         const direction = req.body[`add_unit[${u}].direction`];
-         const facing = req.body[`add_unit[${u}].facing`];
-         const road = req.body[`add_unit[${u}].road`];
-         const ownership = req.body[`add_unit[${u}].ownership`];
-         const stage = req.body[`add_unit[${u}].stage`];
-         const floor = req.body[`add_unit[${u}].floor`];
-         const cluter_details = req.body[`add_block[${u}].cluter_details`];
-         const length = req.body[`add_unit[${u}].length`];
-         const bredth = req.body[`add_unit[${u}].bredth`];
-         const total_area = req.body[`add_unit[${u}].total_area`];
-         const measurment2 = req.body[`add_unit[${u}].measurment2`];
-         const ocupation_date = req.body[`add_unit[${u}].ocupation_date`];
-         const age_of_construction = req.body[`add_unit[${u}].age_of_construction`];
-         const furnishing_details = req.body[`add_unit[${u}].furnishing_details`];
-         const furnished_item = req.body[`add_unit[${u}].furnished_item`];
-         const location = req.body[`add_unit[${u}].location`];
-         const lattitude = req.body[`add_unit[${u}].lattitude`];
-         const langitude = req.body[`add_unit[${u}].langitude`];
-         const uaddress = req.body[`add_unit[${u}].uaddress`];
-         const ustreet = req.body[`add_unit[${u}].ustreet`];
-         const ulocality = req.body[`add_unit[${u}].ulocality`];
-         const ucity = req.body[`add_unit[${u}].ucity`];
-         const uzip = req.body[`add_unit[${u}].uzip`];
-         const ustate = req.body[`add_unit[${u}].ustate`];
-         const ucountry = req.body[`add_unit[${u}].ucountry`];
-         const owner_details = req.body[`add_unit[${u}].owner_details`];
-         const associated_contact = req.body[`add_unit[${u}].associated_contact`];
-         const relation = req.body[`add_unit[${u}].relation`];
-         const s_no = req.body[`add_unit[${u}].s_no`];
-         const descriptions = req.body[`add_unit[${u}].descriptions`];
-        //  const category = req.body[`add_unit[${u}].category`];
-         const s_no1 = req.body[`add_unit[${u}].s_no1`];
-         const url = req.body[`add_unit[${u}].url`];
-         const document_name = req.body[`add_unit[${u}].document_name`];
-         const document_no = req.body[`add_unit[${u}].document_no`];
-         const document_Date = req.body[`add_unit[${u}].document_Date`];
-         const linkded_contact = req.body[`add_unit[${u}].linkded_contact`];
+//         const project_name = req.body[`add_unit[${u}].project_name`];
+//         const unit_no = req.body[`add_unit[${u}].unit_no`];
+//          const unit_type = req.body[`add_unit[${u}].unit_type`];
+//          const category = req.body[`add_unit[${u}].category`];
+//          const block = req.body[`add_unit[${u}].block`];
+//          const size = req.body[`add_unit[${u}].size`];
+//          const direction = req.body[`add_unit[${u}].direction`];
+//          const facing = req.body[`add_unit[${u}].facing`];
+//          const road = req.body[`add_unit[${u}].road`];
+//          const ownership = req.body[`add_unit[${u}].ownership`];
+//          const stage = req.body[`add_unit[${u}].stage`];
+//          const floor = req.body[`add_unit[${u}].floor`];
+//          const cluter_details = req.body[`add_block[${u}].cluter_details`];
+//          const length = req.body[`add_unit[${u}].length`];
+//          const bredth = req.body[`add_unit[${u}].bredth`];
+//          const total_area = req.body[`add_unit[${u}].total_area`];
+//          const measurment2 = req.body[`add_unit[${u}].measurment2`];
+//          const ocupation_date = req.body[`add_unit[${u}].ocupation_date`];
+//          const age_of_construction = req.body[`add_unit[${u}].age_of_construction`];
+//          const furnishing_details = req.body[`add_unit[${u}].furnishing_details`];
+//          const furnished_item = req.body[`add_unit[${u}].furnished_item`];
+//          const location = req.body[`add_unit[${u}].location`];
+//          const lattitude = req.body[`add_unit[${u}].lattitude`];
+//          const langitude = req.body[`add_unit[${u}].langitude`];
+//          const uaddress = req.body[`add_unit[${u}].uaddress`];
+//          const ustreet = req.body[`add_unit[${u}].ustreet`];
+//          const ulocality = req.body[`add_unit[${u}].ulocality`];
+//          const ucity = req.body[`add_unit[${u}].ucity`];
+//          const uzip = req.body[`add_unit[${u}].uzip`];
+//          const ustate = req.body[`add_unit[${u}].ustate`];
+//          const ucountry = req.body[`add_unit[${u}].ucountry`];
+//          const owner_details = req.body[`add_unit[${u}].owner_details`];
+//          const associated_contact = req.body[`add_unit[${u}].associated_contact`];
+//          const relation = req.body[`add_unit[${u}].relation`];
+//          const s_no = req.body[`add_unit[${u}].s_no`];
+//          const descriptions = req.body[`add_unit[${u}].descriptions`];
+//         //  const category = req.body[`add_unit[${u}].category`];
+//          const s_no1 = req.body[`add_unit[${u}].s_no1`];
+//          const url = req.body[`add_unit[${u}].url`];
+//          const document_name = req.body[`add_unit[${u}].document_name`];
+//          const document_no = req.body[`add_unit[${u}].document_no`];
+//          const document_Date = req.body[`add_unit[${u}].document_Date`];
+//          const linkded_contact = req.body[`add_unit[${u}].linkded_contact`];
 
 
-         const imagefiles = [];
-         if (req.files) {
+//          const imagefiles = [];
+//          if (req.files) {
+//         console.log(req.files);
         
-                  const imagefield = req.files.filter(file => file.fieldname.includes('preview'));
+//                   const imagefield = req.files.filter(file => file.fieldname.includes('preview'));
+                 
                   
-                  if (imagefield.length > 0) {
-                    for (let file of imagefield) {
-                      const result = await cloudinary.uploader.upload(file.path);
-                      imagefiles.push(result.secure_url);  
-                      fs.unlink(file.path, (err) => {
-                        if (err) {
-                          console.error(`Failed to delete file: ${file.path}`, err);
-                        } else {
-                          console.log(`Successfully deleted file: ${file.path}`);
-                        }
-                      });
-                    }
-                  }
-                }
+//                   if (imagefield.length > 0) {
+//                     for (let file of imagefield) {
+//                       const result = await cloudinary.uploader.upload(file.path);
+//                       imagefiles.push(result.secure_url);  
+//                       fs.unlink(file.path, (err) => {
+//                         if (err) {
+//                           console.error(`Failed to delete file: ${file.path}`, err);
+//                         } else {
+//                           console.log(`Successfully deleted file: ${file.path}`);
+//                         }
+//                       });
+//                     }
+//                   }
+//                 }
 
-console.log(imagefiles);
+// console.log(imagefiles);
 
          
         
-         addunit_details.push({
-          project_name,unit_no,unit_type,category,block,size,direction,facing,road,ownership,
-          stage,floor,cluter_details,length,bredth,total_area,measurment2,ocupation_date,age_of_construction,furnishing_details,
-          furnished_item,location,lattitude,langitude,uaddress,ustreet,ulocality,ucity,uzip,ustate,ucountry,owner_details,
-          associated_contact,relation,s_no,descriptions,s_no1,url,document_name,document_no,document_Date,linkded_contact,preview:imagefiles
-        });
+//          addunit_details.push({
+//           project_name,unit_no,unit_type,category,block,size,direction,facing,road,ownership,
+//           stage,floor,cluter_details,length,bredth,total_area,measurment2,ocupation_date,age_of_construction,furnishing_details,
+//           furnished_item,location,lattitude,langitude,uaddress,ustreet,ulocality,ucity,uzip,ustate,ucountry,owner_details,
+//           associated_contact,relation,s_no,descriptions,s_no1,url,document_name,document_no,document_Date,linkded_contact,preview:imagefiles
+//         });
   
-        u++;
-      }
+//         u++;
+//       }
 
       const addsize_details = [];
       let s = 0;

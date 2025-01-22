@@ -171,11 +171,42 @@ function Projectform() {
                 formdata.append(`add_unit[${index}].document_Date`, document.document_Date);
                 formdata.append(`add_unit[${index}].linkded_contact`, document.linkded_contact);
 
-                if (units.preview && units.preview[index] && units.preview[index].files) {
-                  units.preview[index].files.forEach((file, picIndex) => {
-                    formdata.append(`add_unit[${index}].preview[${picIndex}]`, file);
+                // if (units.preview && units.preview[index] && units.preview[index].files) {
+                //   units.preview[index].files.forEach((file, picIndex) => {
+                //     formdata.append(`add_unit[${index}].preview[${picIndex}]`, file);
+                //   });
+                // }
+                if (document.preview && Array.isArray(document.preview)) {
+                  document.preview.forEach((previewItem, picIndex) => {
+                    if (Array.isArray(previewItem.files)) {
+                      previewItem.files.forEach((file, fileIndex) => {
+                        console.log(`Appending file for unit ${index}, preview[${picIndex}].files[${fileIndex}]`);
+                        formdata.append(`add_unit[${index}].preview[${picIndex}].files[${fileIndex}]`, file);
+                      });
+                    }
                   });
                 }
+
+                if (document.image && Array.isArray(document.image)) {
+                  document.image.forEach((previewItem, picIndex) => {
+                    if (Array.isArray(previewItem.files)) {
+                      previewItem.files.forEach((file, fileIndex) => {
+                        console.log(`Appending file for unit ${index}, preview[${picIndex}].files[${fileIndex}]`);
+                        formdata.append(`add_unit[${index}].image[${picIndex}].files[${fileIndex}]`, file);
+                      });
+                    }
+                  });
+                }
+                
+                
+
+
+                
+                // if (units.documentpic && units.documentpic[index] && units.documentpic[index].files) {
+                //   units.documentpic[index].files.forEach((file, picIndex) => {
+                //     formdata.append(`add_unit[${index}].documentpic[${picIndex}]`, file);
+                //   });
+                // }
                 
                 
               });
@@ -783,80 +814,7 @@ function Projectform() {
                 };
               
           
-                function addFn12() {
-                  
-     
-                  setunits({
-                    ...units,
-                    document_no:[...units.document_no,''],
-                    document_name: [...units.document_name, ''],
-                    document_Date: [...units.document_Date, ''],
-                    pic: [...units.pic, ''],
-                    linkded_contact: [...units.linkded_contact, ''],
-                    action12: [...units.action12, '']
-                  });
-                }
-              
-                const deleteall12=(index)=>
-                  {
-                    const newdocument_no = units.document_no.filter((_, i) => i !== index);
-                    const newdocumentname = units.document_name.filter((_, i) => i !== index);
-                    const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
-                    const newpic = units.pic.filter((_, i) => i !== index);
-                    const newlinkedcontact = units.linkded_contact.filter((_, i) => i !== index);
-                    const newaction12=units.action12.filter((_,i) => i !== index);
-                    
-                    setunits({
-                      ...units,
-                      document_no:newdocument_no,
-                      document_name: newdocumentname,
-                      document_Date: newdocumentdate,
-                      pic: newpic,
-                      linkded_contact: newlinkedcontact,
-                      action12:newaction12
-                    });
-                  }
-                  const handledocumentnochange = (index, event) => {
-                    const newdocumentno = [...units.document_no];
-                    newdocumentno[index] = event.target.value;
-                    setunits({
-                      ...units,
-                      document_no: newdocumentno
-                    });
-                  };
-                  const handledocumentnamechange = (index, event) => {
-                    const newdocumentname = [...units.document_name];
-                    newdocumentname[index] = event.target.value;
-                    setunits({
-                      ...units,
-                      document_name: newdocumentname
-                    });
-                  };
-                  const handledocumentdatechange = (index, event) => {
-                    const newdocumentdate = [...units.document_Date];
-                    newdocumentdate[index] = event.target.value;
-                    setunits({
-                      ...units,
-                      document_Date: newdocumentdate
-                    });
-                  };
-                  // const handlelinkedcontactchange = (index, event) => {
-                  //   const newlinkedcontact = [...units.linkded_contact];
-                  //   newlinkedcontact[index] = event.target.value;
-                  //   setunits({
-                  //     ...units,
-                  //     linkded_contact: newlinkedcontact
-                  //   });
-                  // };
-                  const handlepicchange1 = (index, event) => {
-                    const newpic1 = [...units.pic];
-                    const files = Array.from(event.target.files);
-                    newpic1[index] = {files:files}
-                    setunits({
-                      ...units,
-                      pic: newpic1
-                    });
-                  };
+            
                
 
 
@@ -1752,7 +1710,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
                                                                           ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
                                                                           relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
-                                                                          document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+                                                                          document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],image:[''],action12:[]})
 
                                                                           useEffect(() => {
                                                                             if (project?.name) {
@@ -1850,31 +1808,20 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                             });
                                                                           };
 
-                                                                          // const handlepicchange = (index, event) => {
-                                                                          //   const newpic = [...project.pic];
-                                                                          //   const files = Array.from(event.target.files);
-                                                                          //   newpic[index] = {files:files}
-                                                                          //   setproject({
-                                                                          //     ...project,
-                                                                          //     pic: newpic
-                                                                          //   });
-                                                                          // };
+                                                                      
+                                                                        
          
                                                                           
                                                                           const handlepreviewchange = (index, event) => {
                                                                             
                                                                             const newpreview = [...units.preview];
                                                                             const files = Array.from(event.target.files);
-                                                                            // const previewUrls = files.map(file => URL.createObjectURL(file));
-                                                                            // newpreview[index] = {
-                                                                            //   files: files,
-                                                                            //   previewUrls: previewUrls
-                                                                            // };
+                                                                          
                                                                             newpreview[index] = {files:files}
                                                                             setunits({
                                                                               ...units,
                                                                               preview: newpreview
-                                                                            });
+                                                                            })
                                                                           };
                                                                           
                                                                           
@@ -1895,6 +1842,80 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                             });
                                                                           };
                                                                           
+                                                                          function addFn12() {
+                  
+     
+                                                                            setunits({
+                                                                              ...units,
+                                                                              document_no:[...units.document_no,''],
+                                                                              document_name: [...units.document_name, ''],
+                                                                              document_Date: [...units.document_Date, ''],
+                                                                              image: [...units.image, ''],
+                                                                              linkded_contact: [...units.linkded_contact, ''],
+                                                                              action12: [...units.action12, '']
+                                                                            });
+                                                                          }
+                                                                        
+                                                                          const deleteall12=(index)=>
+                                                                            {
+                                                                              const newdocument_no = units.document_no.filter((_, i) => i !== index);
+                                                                              const newdocumentname = units.document_name.filter((_, i) => i !== index);
+                                                                              const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
+                                                                              const newpic = units.image.filter((_, i) => i !== index);
+                                                                              const newlinkedcontact = units.linkded_contact.filter((_, i) => i !== index);
+                                                                              const newaction12=units.action12.filter((_,i) => i !== index);
+                                                                              
+                                                                              setunits({
+                                                                                ...units,
+                                                                                document_no:newdocument_no,
+                                                                                document_name: newdocumentname,
+                                                                                document_Date: newdocumentdate,
+                                                                                image: newpic,
+                                                                                linkded_contact: newlinkedcontact,
+                                                                                action12:newaction12
+                                                                              });
+                                                                            }
+                                                                            const handledocumentnochange = (index, event) => {
+                                                                              const newdocumentno = [...units.document_no];
+                                                                              newdocumentno[index] = event.target.value;
+                                                                              setunits({
+                                                                                ...units,
+                                                                                document_no: newdocumentno
+                                                                              });
+                                                                            };
+                                                                            const handledocumentnamechange = (index, event) => {
+                                                                              const newdocumentname = [...units.document_name];
+                                                                              newdocumentname[index] = event.target.value;
+                                                                              setunits({
+                                                                                ...units,
+                                                                                document_name: newdocumentname
+                                                                              });
+                                                                            };
+                                                                            const handledocumentdatechange = (index, event) => {
+                                                                              const newdocumentdate = [...units.document_Date];
+                                                                              newdocumentdate[index] = event.target.value;
+                                                                              setunits({
+                                                                                ...units,
+                                                                                document_Date: newdocumentdate
+                                                                              });
+                                                                            };
+                                                                            // const handlelinkedcontactchange = (index, event) => {
+                                                                            //   const newlinkedcontact = [...units.linkded_contact];
+                                                                            //   newlinkedcontact[index] = event.target.value;
+                                                                            //   setunits({
+                                                                            //     ...units,
+                                                                            //     linkded_contact: newlinkedcontact
+                                                                            //   });
+                                                                            // };
+                                                                            const handlepicchange1 = (index, event) => {
+                                                                              const newpic1 = [...units.image];
+                                                                              const files = Array.from(event.target.files);
+                                                                              newpic1[index] = {files:files}
+                                                                              setunits({
+                                                                                ...units,
+                                                                                image: newpic1
+                                                                              });
+                                                                            };
                                                                           
                                                                       
                                                                      
@@ -1904,6 +1925,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
                                                   if (units.unit_no ) 
                                                     {
+                                                      console.log(units.preview);
+                                                      
                                                       const updateunit= [...unit, units];
                                                       setunit(updateunit);
                                                       setproject(prevState => ({
@@ -5032,10 +5055,10 @@ const generateExcelFileunit = () => {
 
                       <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
                     {
-                      Array.isArray(units.pic) ?
-                      units.pic.map((item,index)=>
+                      Array.isArray(units.image) ?
+                      units.image.map((item,index)=>
                       (
-                        <input type="file" className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
+                        <input type="file" name='image' className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
                         
                       )):[]
                     }
