@@ -30,7 +30,7 @@ function Leadsingleview() {
       <Header1/>
       <Sidebar1/>
 
-      <div style={{marginTop:"60px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+      {/* <div style={{marginTop:"60px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
         <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}} >
           <h6>INCOMING</h6>
           <p></p>
@@ -60,10 +60,10 @@ function Leadsingleview() {
          
         </div>  
         
-      </div>
+      </div> */}
       
 
-      <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"10px",paddingBottom:"50px"}}>
+      <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"60px",paddingBottom:"50px"}}>
         <div className='col-md-4' style={{border:"1px solid black",padding:"10px"}}>
             <div style={{display:"flex",}}>
                 <h6>{lead.title} {lead.first_name} {lead.last_name}
@@ -165,7 +165,57 @@ function Leadsingleview() {
 
             </div>
         </div>
-        <div className='col-md-4' style={{border:"1px solid black"}}>hello welcome</div>
+        <div className='col-md-4' style={{border:"1px solid black",padding:"10px"}}>
+            <div className='row'>
+
+            <div className="col-md-10"><label className="labels">Internal Notes</label><textarea  className='form-control form-control-sm' style={{height:"100px",backgroundColor:" #ffe6e6"}}/></div>
+            <div className='col-md-2'></div>
+            <div className='col-md-7'></div>
+            <div className='col-md-3' style={{marginTop:"5px"}}><button className='form-control form-control-sm'>Cancel</button></div>
+            <div className='col-md-2' style={{marginTop:"5px"}}><button className='form-control form-control-sm'>Add</button></div>
+
+            <div className='col-md-12'><input type='checkbox'></input><span>show on primary contact</span></div>
+
+            <div className='col-md-3' style={{marginTop:"20px"}}><p>Displaying</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
+                <option>all activity</option>
+                <option>contact activity</option>
+                <option>lead activity</option>
+                </select></div>
+
+                <div className='col-md-3' style={{marginTop:"20px"}}><p>by</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
+                <option>everyone</option>
+                <option>contact activity</option>
+                <option>lead activity</option>
+                </select></div>
+
+                <div className='col-md-3' style={{marginTop:"20px"}}><p>related to</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
+                <option>all</option>
+                <option>contact activity</option>
+                <option>lead activity</option>
+                </select></div>
+
+                <div className='col-md-3' style={{marginTop:"20px"}}><p>tagged</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
+                <option>any</option>
+                <option>contact activity</option>
+                <option>lead activity</option>
+                </select></div>
+
+                <div className='col-md-10' style={{border:"1px solid black",height:"80px",width:"100%",marginLeft:"20px"}}></div>
+                <div className='col-md-2'></div>
+
+                <div className='col-md-10' style={{border:"1px solid black",height:"80px",width:"100%",marginLeft:"20px",marginTop:"20px"}}></div>
+                <div className='col-md-2'></div>
+
+                <div className='col-md-10' style={{border:"1px solid black",height:"100px",width:"100%",marginLeft:"20px",marginTop:"20px",backgroundColor:" #ffe6e6"}}></div>
+                <div className='col-md-2'></div>
+
+                <div className='col-md-12' style={{marginTop:"10px"}}>
+                    <p>Manually Created - Lead Created</p>
+                </div>
+
+            </div>
+
+        </div>
         <div className='col-md-3' style={{border:"1px solid black"}}>hello welcome</div>
 
       </div>
