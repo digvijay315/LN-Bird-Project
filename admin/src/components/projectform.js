@@ -1934,6 +1934,10 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                         add_unit: updateunit,
                                                         
                                                       }));
+                                                      setselectedcontact1([])
+                                                      setselectedcontact2([])
+                                                    
+                                                  
                                                       
                                                       handleClose3()
 
@@ -2600,9 +2604,11 @@ useEffect(() => {
       ...prevContacts,
       newcontact // Add the new contact (assumed to be an object)
     ]);
+    console.log(newcontact._id);
+    
     setunits(prevDeal => ({
       ...prevDeal,
-      owner_details: [...prevDeal.owner_details, newcontact._id] // Append new contact to the existing owner_details array
+      owner_details:[...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
     }));
    
   }
@@ -2615,13 +2621,15 @@ useEffect(() => {
     setunits(prevDeal => ({ ...prevDeal, relation: relation }));
     setunits(prevDeal => ({
       ...prevDeal,
-      associated_contact: [...prevDeal.associated_contact, newcontact._id] // Append new contact to the existing owner_details array
+      associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
     }));
     // setrelation1(relation)
     setrelation("")
   }
 }, [relation,newcontact]);
 
+
+console.log(units.owner_details);
 console.log(units.associated_contact);
 
 
@@ -3080,7 +3088,7 @@ const unitdata = [
     side_open:'',fornt_on_road:'',total_owner:'',facing:'',road:'',ownership:'',stage:'',type:'',floor:[''],cluter_details:[''],
     length:[''],bredth:[''],total_area:[''],measurment2:[''],ocupation_date:'',age_of_construction:'',furnishing_details:'',
     enter_furnishing_details:'',furnished_item:'',location:'',lattitude:'',langitude:'',uaddress:'',ustreet:'',ulocality:'',
-    ucity:'',uzip:'',ustate:'',ucountry:'',owner_details:[''],associated_contact:[''],relation:'',s_no:[''],preview:[''],descriptions:[''],
+    ucity:'',uzip:'',ustate:'',ucountry:'',owner_details:[],associated_contact:[],relation:'',s_no:[''],preview:[''],descriptions:[''],
     category:[''],s_no1:[''],url:[''],document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:['']
   }
 ];
@@ -3102,6 +3110,7 @@ const generateExcelFileunit = () => {
   const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
   saveAs(blob, 'data.xlsx');
 };
+
 
 
 
@@ -5065,12 +5074,13 @@ const generateExcelFileunit = () => {
                     </div>
                     <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
+                      Array.isArray(units.action12)?
                        units.action12.map((item,index)=>
                         (
                           <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/></div>
                                   
                           
-                        ))
+                        )):[]
                     }
                     </div>
                         

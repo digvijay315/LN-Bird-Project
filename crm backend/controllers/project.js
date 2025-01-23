@@ -2,7 +2,7 @@ const addproject = require("../models/project");
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs'); 
-
+const mongoose=require('mongoose')
 
 
 require('dotenv').config()
@@ -82,8 +82,36 @@ const createProject = async (req, res) => {
       const addunit_details = [];
       let u = 0;
 
+      const sanitizeObjectId = (id) => {
+        if (id && id._id) {
+          return new mongoose.Types.ObjectId(id._id); // Extract _id and convert to ObjectId
+        } else if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
+          return new mongoose.Types.ObjectId(id); // Convert string to ObjectId
+        }
+        return null; // Return null for invalid ids
+      }
+      
+      // Function to process `owner_details` and `associated_contact`
+      const processOwnerDetails = (details) => {
+        if (typeof details === 'string') {
+          // Split comma-separated string and convert to ObjectId array
+          return details.split(',').map(id => sanitizeObjectId(id)).filter(id => id !== null);
+        } else if (Array.isArray(details)) {
+          return details.map(id => sanitizeObjectId(id)).filter(id => id !== null);
+        }
+        return []; // Return empty array if not a valid input
+      }
+
 // Loop through each unit
 while (req.body[`add_unit[${u}].unit_no`]) {
+
+  const ownerDetails = req.body[`add_unit[${u}].owner_details`];
+const associatedContact = req.body[`add_unit[${u}].associated_contact`];
+
+// Process both fields
+const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
+const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
+
   const unit = {
     project_name: req.body[`add_unit[${u}].project_name`],
     unit_no: req.body[`add_unit[${u}].unit_no`],
@@ -116,8 +144,8 @@ while (req.body[`add_unit[${u}].unit_no`]) {
     uzip: req.body[`add_unit[${u}].uzip`],
     ustate: req.body[`add_unit[${u}].ustate`],
     ucountry: req.body[`add_unit[${u}].ucountry`],
-    owner_details: req.body[`add_unit[${u}].owner_details`],
-    associated_contact: req.body[`add_unit[${u}].associated_contact`],
+    owner_details: sanitizedOwnerDetails,
+    associated_contact: sanitizedAssociatedContact,
     relation: req.body[`add_unit[${u}].relation`],
     s_no: req.body[`add_unit[${u}].s_no`],
     descriptions: req.body[`add_unit[${u}].descriptions`],
@@ -129,6 +157,8 @@ while (req.body[`add_unit[${u}].unit_no`]) {
     linkded_contact: req.body[`add_unit[${u}].linkded_contact`]
   };
 
+  console.log(unit.owner_details);
+  console.log(unit.associated_contact);
  
 
   // Prepare for file upload
@@ -176,6 +206,8 @@ while (req.body[`add_unit[${u}].unit_no`]) {
 
   }
 
+
+
   // Push unit details with images to the array
   addunit_details.push({
     ...unit,
@@ -185,6 +217,7 @@ while (req.body[`add_unit[${u}].unit_no`]) {
 
   u++;
 }
+
 
 
 

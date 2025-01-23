@@ -2327,7 +2327,10 @@ const handleallblockchange = (event) => {
 
 
 
-
+                                              const leadsingleview=(item)=>
+                                                {
+                                                  navigate('/leadsingleview',{state:item})
+                                                }
 
 
 
@@ -2540,7 +2543,7 @@ const handleallblockchange = (event) => {
             </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-              onClick={() => handleShow2(item)}
+              onClick={() => leadsingleview(item)}
             >
               {item.title} {item.first_name} {item.last_name}
               <br />
@@ -3683,41 +3686,24 @@ const handleallblockchange = (event) => {
 
 {/*-------------------edit model end---------------------------edit model end------------------------------------edit model end */}
 
-          <Modal show={show2} onHide={handleClose2} size='lg'>
+          {/* <Modal show={show2} onHide={handleClose2} size='xl'>
             <Modal.Header>
               <Modal.Title>Lead Details</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <div style={{border:"1px solid black",padding:"20px"}}>
-              <h4 style={{textAlign:"center",fontSize:"20px",fontFamily:"times-new roman"}}>Personal Deatils:</h4><hr></hr>
-              <b>Full Name:</b> <span >{data2.title}</span> <span>{data2.first_name} </span><span>{data2.last_name}</span><br></br>
-              <b>Mobile no:</b> <span>{data2.country_code}</span> <span>{data2.mobile_no} </span><br></br>
-              <b>Email id:</b> <span>{data2.email}</span><br></br>
-              <b>Title & Company:</b> <span>{data2.title_company}</span><br></br>
-              <b>Designation:</b> <span>{data2.designation}</span><br></br>
-              <b>Company Name:</b> <span>{data2.company_name}</span><br></br>
-              <b>Tags:</b> <span>{data2.tags}</span><br></br>
-              <b>Lead Type:</b> <span>{data2.lead_type}</span><br></br>
-              <b>Descriptions:</b> <span>{data2.descriptions}</span><br></br>
-              </div>
-              <div style={{border:"1px solid black",padding:"20px"}}>
-              <h4 style={{textAlign:"center",fontSize:"20px"}}>System Deatils:</h4><hr></hr>
-              <b>Team:</b> <span>{data2.team}</span><br></br>
-              <b>Owner:</b> <span>{data2.owner}</span><br></br>
-              <b>Campaign:</b> <span>{data2.campaign}</span><br></br>
-              <b>Source:</b> <span>{data2.source}</span><br></br>
-              <b>Sub Source:</b> <span>{data2.sub_source}</span><br></br>
-              <b>Stage:</b> <span>{data2.stage}</span><br></br>
-              <b>Channel Partner:</b> <span>{data2.refrencer_no}</span><br></br>
-              <b>Intersted Project:</b> <span>{data2.intrested_project}</span><br></br>
-              </div>
+
+
+
+
+              
+            
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose2}>
                 Close
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
 
           <Modal show={show3} onHide={handleClose3} size='lg'>
             <Modal.Header>
