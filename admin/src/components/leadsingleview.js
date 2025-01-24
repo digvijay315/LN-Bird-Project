@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { useLocation } from 'react-router-dom';
@@ -10,12 +10,12 @@ import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
+import api from "../api";
 
 function Leadsingleview() {
 
     const location=useLocation()
     const lead=location.state || {}
-    console.log(lead);
 
     const formattedDate = new Date(lead.lastcommunication).toLocaleString("en-GB", {
         day: "2-digit",
@@ -86,6 +86,175 @@ function Leadsingleview() {
         setIsTableVisible3(prevState => !prevState);
       };
 
+
+      const[sitevisitdata,setsitevisitdata]=useState([])
+      const sitevisit=async()=>
+      {
+        try {
+            const resp=await api.get('viewsitevisit')
+            setsitevisitdata(resp.data.sitevisit)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+      }
+
+      const[meetingdata,setmeetingdata]=useState([])
+      const meeting=async()=>
+      {
+        try {
+            const resp=await api.get('viewmeetingtask')
+            setmeetingdata(resp.data.meetingtask)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+      }
+
+      const[maildata,setmaildata]=useState([])
+      const mail=async()=>
+      {
+        try {
+            const resp=await api.get('viewmailtask')
+            setmaildata(resp.data.mail_task)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+      }
+
+      const[calldata,setcalldata]=useState([])
+      const call=async()=>
+      {
+        try {
+            const resp=await api.get('viewcalltask')
+            setcalldata(resp.data.call_task)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+      }
+      useEffect(()=>
+    {
+        sitevisit()
+        meeting()
+        mail()
+        call()
+    },[])
+
+
+    const[matchsitevisitdata,setmatchsitevisitdata]=useState([])
+    const matchLeadData = (site) => {
+        const [title, firstName, lastName] = site.lead.split(" "); // Split full name into title, first name, last name
+      
+        if (
+          lead.title === title &&
+          lead.first_name === firstName &&
+          lead.last_name === lastName
+        ) {
+            setmatchsitevisitdata((prevData) => [...prevData, site]);
+        }
+      };
+
+
+
+
+    useEffect(() => {
+        if (sitevisitdata.length > 0) {
+          sitevisitdata.forEach((site) => {
+            if (site.lead) {
+              // Now only need to match directly with site.lead
+              matchLeadData(site);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+            }
+          });
+        }
+      }, [sitevisitdata]);
+
+      const[matchmeetingdata,setmatchmeetingdata]=useState([])
+      const matchleaddatawithmeeting = (meeting) => {
+          const [title, firstName, lastName] = meeting.lead.split(" "); // Split full name into title, first name, last name
+        
+          if (
+            lead.title === title &&
+            lead.first_name === firstName &&
+            lead.last_name === lastName
+          ) {
+            setmatchmeetingdata((prevData) => [...prevData, meeting]);
+          }
+        };
+  
+  
+  
+  
+      useEffect(() => {
+          if (meetingdata.length > 0) {
+            meetingdata.forEach((meeting) => {
+              if (meeting.lead) {
+                // Now only need to match directly with site.lead
+                matchleaddatawithmeeting(meeting);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+              }
+            });
+          }
+        }, [meetingdata]);
+
+        const[matchmaildata,setmatchmaildata]=useState([])
+        const matchmaildatawithlead = (mail) => {
+            // const [title, firstName, lastName] = meeting.lead.split(" "); // Split full name into title, first name, last name
+          
+            if (
+              lead.title === mail.title2 &&
+              lead.first_name === mail.first_name &&
+              lead.last_name === mail.last_name
+            ) {
+                setmatchmaildata((prevData) => [...prevData, mail]);
+            }
+          };
+    
+    
+    
+    
+        useEffect(() => {
+            if (maildata.length > 0) {
+              maildata.forEach((mail) => {
+               
+                  // Now only need to match directly with site.lead
+                  matchmaildatawithlead(mail);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+                
+              });
+            }
+          }, [maildata]);
+    
+
+          const[matchcalldata,setmatchcalldata]=useState([])
+          const matchcalldatawithlead = (call) => {
+               const [title, firstName, lastName] = call.lead.split(" "); // Split full name into title, first name, last name
+            
+              if (
+                lead.title === title &&
+                lead.first_name === firstName &&
+                lead.last_name === lastName
+              ) {
+                setmatchcalldata((prevData) => [...prevData, call]);
+              }
+            };
+      
+      
+      
+      
+          useEffect(() => {
+              if (calldata.length > 0) {
+                calldata.forEach((call) => {
+                 
+                    // Now only need to match directly with site.lead
+                    matchcalldatawithlead(call);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+                  
+                });
+              }
+            }, [maildata]);
       
     
   return (
@@ -305,14 +474,76 @@ function Leadsingleview() {
   </div>
 
 
+{
+    matchsitevisitdata && matchsitevisitdata.length>0 && (
+        <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px"}}>
+        <p style={{color:"green",fontWeight:"bold"}}>Site Visit:</p>
+        <ul style={{marginLeft:"10px"}}>
+            {matchsitevisitdata.map((item, index) => (
+            <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
+                {item.title}
+            </li>
+            ))}
+        </ul>
 
-                <div className='col-md-10' style={{border:"1px solid black",height:"80px",width:"100%",marginLeft:"20px"}}></div>
+    </div>
+    )
+}
+            
                 <div className='col-md-2'></div>
 
-                <div className='col-md-10' style={{border:"1px solid black",height:"80px",width:"100%",marginLeft:"20px",marginTop:"20px"}}></div>
+                {
+                matchmeetingdata && matchmeetingdata.length>0 && (
+                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
+                    <p style={{color:"green",fontWeight:"bold"}}>Meeting Task:</p>
+                    <ul style={{marginLeft:"10px"}}>
+                        {matchmeetingdata.map((item, index) => (
+                        <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
+                            {item.title}
+                        </li>
+                        ))}
+                    </ul>
+
+                    </div>
+                    )
+                }
                 <div className='col-md-2'></div>
 
-                <div className='col-md-10' style={{border:"1px solid black",height:"100px",width:"100%",marginLeft:"20px",marginTop:"20px",backgroundColor:" #ffe6e6"}}></div>
+                {
+                matchmaildata && matchmaildata.length>0 && (
+                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
+                    <p style={{color:"green",fontWeight:"bold"}}>Mail Task:</p>
+                    <ul style={{marginLeft:"10px"}}>
+                        {matchmaildata.map((item, index) => (
+                        <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
+                            {item.title}
+                        </li>
+                        ))}
+                    </ul>
+
+                    </div>
+                    )
+                }
+                <div className='col-md-2'></div>
+
+                {
+                matchcalldata && matchcalldata.length>0 && (
+                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
+                    <p style={{color:"green",fontWeight:"bold"}}>Call Task:</p>
+                    <ul style={{marginLeft:"10px"}}>
+                        {matchcalldata.map((item, index) => (
+                        <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
+                            {item.title}
+                        </li>
+                        ))}
+                    </ul>
+
+                    </div>
+                    )
+                }
+                <div className='col-md-2'></div>
+
+                <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",height:"100px",width:"100%",marginLeft:"20px",marginTop:"20px",backgroundColor:" #ffe6e6"}}></div>
                 <div className='col-md-2'></div>
 
                 <div className='col-md-12' style={{marginTop:"10px"}}>
