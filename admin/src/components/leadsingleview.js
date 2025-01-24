@@ -168,37 +168,79 @@ function Leadsingleview() {
         <div className='col-md-4' style={{border:"1px solid black",padding:"10px"}}>
             <div className='row'>
 
-            <div className="col-md-10"><label className="labels">Internal Notes</label><textarea  className='form-control form-control-sm' style={{height:"100px",backgroundColor:" #ffe6e6"}}/></div>
-            <div className='col-md-2'></div>
+            <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
+                <option>Internal Notes</option>
+                <option>External Notes</option>
+                </select>
+                <div style={{
+    position: 'absolute',
+    right: '65%',
+    top: '15%',
+    transform: 'translateY(-50%)',
+    pointerEvents: 'none'
+  }}>
+    <span style={{
+      fontSize: '16px', 
+      color: '#333', 
+      fontWeight: 'bold'
+    }}>▼</span> {/* You can replace this with an image or icon */}
+  </div>
+
+                <textarea  className='form-control form-control-sm' style={{ position: "relative",height:"100px",backgroundColor:" #ffe6e6",border:"none"}}/></div>
+            
             <div className='col-md-7'></div>
-            <div className='col-md-3' style={{marginTop:"5px"}}><button className='form-control form-control-sm'>Cancel</button></div>
-            <div className='col-md-2' style={{marginTop:"5px"}}><button className='form-control form-control-sm'>Add</button></div>
+            <div className='col-md-3' style={{position: 'absolute', top: '100px',marginLeft:"60%",transition: 'background-color 0.3s ease'}} onMouseOver={(e) => e.target.style.backgroundColor = '#2196F3'} // On hover, change color to blue
+                 onMouseOut={(e) => e.target.style.backgroundColor = ' #ffe6e6'}><button className='form-control form-control-sm' style={{backgroundColor:" #ffe6e6",border:"none"}}>Cancel</button></div>
+            <div className='col-md-2' style={{position: 'absolute', top: '100px',marginLeft:"80%",transition: 'background-color 0.3s ease'}}    onMouseOver={(e) => e.target.style.backgroundColor = '#2196F3'} // On hover, change color to blue
+                 onMouseOut={(e) => e.target.style.backgroundColor = ' #ffe6e6'}><button className='form-control form-control-sm' style={{backgroundColor:" #ffe6e6",border:"none"}}>Add</button></div>
 
-            <div className='col-md-12'><input type='checkbox'></input><span>show on primary contact</span></div>
+            <div className='col-md-12' style={{marginTop:"20px"}}><input type='checkbox'></input><span>show on primary contact</span></div>
 
-            <div className='col-md-3' style={{marginTop:"20px"}}><p>Displaying</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
-                <option>all activity</option>
-                <option>contact activity</option>
-                <option>lead activity</option>
-                </select></div>
+            <div className="d-flex" style={{ justifyContent: "flex-start", gap: "20px", marginTop: "20px", flexWrap: "nowrap",paddingLeft:"20px" }}>
+  
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <p style={{ marginRight: "10px", marginBottom: "0" }}>Displaying:</p>
+    <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+      <option>all activity</option>
+      <option>contact activity</option>
+      <option>lead activity</option>
+    </select>
+  </div>
 
-                <div className='col-md-3' style={{marginTop:"20px"}}><p>by</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
-                <option>everyone</option>
-                <option>contact activity</option>
-                <option>lead activity</option>
-                </select></div>
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <p style={{ marginRight: "10px", marginBottom: "0" }}>By:</p>
+    <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+      <option>everyone</option>
+      <option>contact activity</option>
+      <option>lead activity</option>
+    </select>
+  </div>
 
-                <div className='col-md-3' style={{marginTop:"20px"}}><p>related to</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
-                <option>all</option>
-                <option>contact activity</option>
-                <option>lead activity</option>
-                </select></div>
+</div>
 
-                <div className='col-md-3' style={{marginTop:"20px"}}><p>tagged</p> <select className='form-control form-control-sm' style={{border:"none",backgroundColor:"transparent",fontSize:"12px",marginTop:"-20px"}}>
-                <option>any</option>
-                <option>contact activity</option>
-                <option>lead activity</option>
-                </select></div>
+<div className="d-flex" style={{ justifyContent: "flex-start", gap: "20px", marginTop: "0px", flexWrap: "nowrap",paddingLeft:"20px" }}>
+
+<div style={{ display: "flex", alignItems: "center" }}>
+  <p style={{ marginRight: "10px", marginBottom: "0", whiteSpace: "nowrap" }}>Related to:</p>
+  <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+    <option>all</option>
+    <option>contact activity</option>
+    <option>lead activity</option>
+  </select>
+</div>
+
+
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <p style={{ marginRight: "10px", marginBottom: "0" }}>Tagged:</p>
+    <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+      <option>any</option>
+      <option>contact activity</option>
+      <option>lead activity</option>
+    </select>
+  </div>
+  </div>
+
+
 
                 <div className='col-md-10' style={{border:"1px solid black",height:"80px",width:"100%",marginLeft:"20px"}}></div>
                 <div className='col-md-2'></div>
