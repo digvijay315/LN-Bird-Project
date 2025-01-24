@@ -2,6 +2,14 @@ import React from 'react'
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { useLocation } from 'react-router-dom';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import Paper from '@mui/material/Paper';
+import { useState } from 'react';
 
 function Leadsingleview() {
 
@@ -19,9 +27,65 @@ function Leadsingleview() {
       });
       
 
+      const allColumns = [
+        { id: 'sno', name: '#' },
+        { id: 'house_details', name: 'House Details' },
+        { id: 'contact', name: 'Contact' },
+        { id: 'available_from', name: 'Available From' },
+      ];
+  
+      const StyledTableCell = styled(TableCell)(({ theme }) => ({
+        [`&.${tableCellClasses.head}`]: {
+          backgroundColor: theme.palette.common.black,
+          color: theme.palette.common.white,
+          lineHeight:"15px"
+        },
+        [`&.${tableCellClasses.body}`]: {
+          fontSize: 14,
+        },
+      }));
       
+      const StyledTableRow = styled(TableRow)(({ theme }) => ({
+        '&:nth-of-type(odd)': {
+          backgroundColor: theme.palette.action.hover,
+        },
+        // hide last border
+        '&:last-child td, &:last-child th': {
+          border: 0,
+        },
+      }));
       
      
+      const [isTableVisible, setIsTableVisible] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility = () => {
+        setIsTableVisible(prevState => !prevState);
+      };
+
+      const [isTableVisible1, setIsTableVisible1] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility1 = () => {
+        setIsTableVisible1(prevState => !prevState);
+      };
+
+      
+      const [isTableVisible2, setIsTableVisible2] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility2 = () => {
+        setIsTableVisible2(prevState => !prevState);
+      };
+
+      
+      const [isTableVisible3, setIsTableVisible3] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility3 = () => {
+        setIsTableVisible3(prevState => !prevState);
+      };
+
       
     
   return (
@@ -66,7 +130,7 @@ function Leadsingleview() {
       <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"60px",paddingBottom:"50px"}}>
         <div className='col-md-4' style={{border:"1px solid black",padding:"10px"}}>
             <div style={{display:"flex",}}>
-                <h6>{lead.title} {lead.first_name} {lead.last_name}
+                <h6 style={{fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}
                     <p style={{fontSize:"12px",fontWeight:"normal"}}>{lead.email}</p>
                 </h6>
                 <h6 style={{marginLeft:"40%"}}>Site Visit</h6>
@@ -258,7 +322,584 @@ function Leadsingleview() {
             </div>
 
         </div>
-        <div className='col-md-3' style={{border:"1px solid black"}}>hello welcome</div>
+        <div className='col-md-3' style={{border:"1px solid black",padding:"10px"}}>
+
+        <div className='row'>
+
+        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Deal Match
+        <span 
+          onClick={toggleTableVisibility} 
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "10px", 
+            fontSize: "20px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            transform: isTableVisible ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+            marginTop: "0px", // Align the arrow properly
+          }}
+        >
+          ▼
+        </span>
+        <span 
+         
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "50%", 
+            fontSize: "30px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            marginTop: "0px", // Align the arrow properly
+    
+          }}
+        >
+          +
+        </span>
+        </div>
+
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+      <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+    <Table sx={{}} aria-label="customized table">
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
+        <TableRow >
+          {allColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+            >
+              {col.name}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      {/* <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems.includes(item._id)}
+                onChange={() => handleRowSelect(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              onClick={() => leadsingleview(item)}
+            >
+              {item.title} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email}</span>
+            </StyledTableCell>
+            {visibleColumns
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                   {col.id === 'budget' 
+                    ?(
+                      <>
+                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
+                       </>
+                    )
+                    :col.id === 'requirment' 
+                    ?(
+                      <>
+                     
+                       {item.requirment}  {item.property_type}  <br></br>  
+                       {item.sub_type}  <br></br>  {item.unit_type}
+                       </>
+                    ): col.id === 'location' 
+                    ?(
+                      <>
+                      {item.area2}  <br></br> 
+                      {item.block} <br></br> 
+                       {item.city2}  {item.location2}  <br></br> 
+                       {item.state2} {item.country2}  {item.pincode2} 
+                        
+                       </>
+                    ): col.id === 'stage' 
+                    ?(
+                      <>
+                      {item.stage} <br />
+                      <span 
+                        style={{
+                          color: item.lead_type === 'Hot' ? 'red' :
+                                 item.lead_type === 'Warm' ? 'blue' : 
+                                 item.lead_type === 'Cold' ? 'green' : 'black'
+                        }}
+                      >
+                        {item.lead_type}
+                      </span>
+                    </>
+                    ):  col.id === "owner" ? (
+                      <>
+                        {item.owner.map((owner, index) => (
+                          <span key={index}>
+                            {owner} ({item.team || ""})
+                            <br />
+                          </span>
+                        ))}
+                      </>
+                    ) : col.id === "lastcommunication" ? (
+                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
+                    ) :col.id === "createdAt" ? (
+                      formatDate(item[col.id]) // Format createdAt date
+                    ):  item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody> */}
+    </Table>
+  </TableContainer>
+
+  </div>
+
+  <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> PROPERTY
+        <span 
+          onClick={toggleTableVisibility1} 
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "10px", 
+            fontSize: "20px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+            marginTop: "0px", // Align the arrow properly
+          }}
+        >
+          ▼
+        </span>
+        <span 
+         
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "50%", 
+            fontSize: "30px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            marginTop: "0px", // Align the arrow properly
+    
+          }}
+        >
+          +
+        </span>
+        </div>
+
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+         
+        <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+    <Table sx={{}} aria-label="customized table">
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
+        <TableRow >
+          {allColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+            >
+              {col.name}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      {/* <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems.includes(item._id)}
+                onChange={() => handleRowSelect(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              onClick={() => leadsingleview(item)}
+            >
+              {item.title} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email}</span>
+            </StyledTableCell>
+            {visibleColumns
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                   {col.id === 'budget' 
+                    ?(
+                      <>
+                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
+                       </>
+                    )
+                    :col.id === 'requirment' 
+                    ?(
+                      <>
+                     
+                       {item.requirment}  {item.property_type}  <br></br>  
+                       {item.sub_type}  <br></br>  {item.unit_type}
+                       </>
+                    ): col.id === 'location' 
+                    ?(
+                      <>
+                      {item.area2}  <br></br> 
+                      {item.block} <br></br> 
+                       {item.city2}  {item.location2}  <br></br> 
+                       {item.state2} {item.country2}  {item.pincode2} 
+                        
+                       </>
+                    ): col.id === 'stage' 
+                    ?(
+                      <>
+                      {item.stage} <br />
+                      <span 
+                        style={{
+                          color: item.lead_type === 'Hot' ? 'red' :
+                                 item.lead_type === 'Warm' ? 'blue' : 
+                                 item.lead_type === 'Cold' ? 'green' : 'black'
+                        }}
+                      >
+                        {item.lead_type}
+                      </span>
+                    </>
+                    ):  col.id === "owner" ? (
+                      <>
+                        {item.owner.map((owner, index) => (
+                          <span key={index}>
+                            {owner} ({item.team || ""})
+                            <br />
+                          </span>
+                        ))}
+                      </>
+                    ) : col.id === "lastcommunication" ? (
+                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
+                    ) :col.id === "createdAt" ? (
+                      formatDate(item[col.id]) // Format createdAt date
+                    ):  item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody> */}
+    </Table>
+  </TableContainer>
+        </div>
+
+
+        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Active Tasks
+        <span 
+          onClick={toggleTableVisibility2} 
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "10px", 
+            fontSize: "20px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            transform: isTableVisible2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+            marginTop: "0px", // Align the arrow properly
+          }}
+        >
+          ▼
+        </span>
+        <span 
+         
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "50%", 
+            fontSize: "30px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            marginTop: "0px", // Align the arrow properly
+    
+          }}
+        >
+          +
+        </span>
+        </div>
+
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible2 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+         
+        <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+    <Table sx={{}} aria-label="customized table">
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
+        <TableRow >
+          {allColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+            >
+              {col.name}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      {/* <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems.includes(item._id)}
+                onChange={() => handleRowSelect(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              onClick={() => leadsingleview(item)}
+            >
+              {item.title} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email}</span>
+            </StyledTableCell>
+            {visibleColumns
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                   {col.id === 'budget' 
+                    ?(
+                      <>
+                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
+                       </>
+                    )
+                    :col.id === 'requirment' 
+                    ?(
+                      <>
+                     
+                       {item.requirment}  {item.property_type}  <br></br>  
+                       {item.sub_type}  <br></br>  {item.unit_type}
+                       </>
+                    ): col.id === 'location' 
+                    ?(
+                      <>
+                      {item.area2}  <br></br> 
+                      {item.block} <br></br> 
+                       {item.city2}  {item.location2}  <br></br> 
+                       {item.state2} {item.country2}  {item.pincode2} 
+                        
+                       </>
+                    ): col.id === 'stage' 
+                    ?(
+                      <>
+                      {item.stage} <br />
+                      <span 
+                        style={{
+                          color: item.lead_type === 'Hot' ? 'red' :
+                                 item.lead_type === 'Warm' ? 'blue' : 
+                                 item.lead_type === 'Cold' ? 'green' : 'black'
+                        }}
+                      >
+                        {item.lead_type}
+                      </span>
+                    </>
+                    ):  col.id === "owner" ? (
+                      <>
+                        {item.owner.map((owner, index) => (
+                          <span key={index}>
+                            {owner} ({item.team || ""})
+                            <br />
+                          </span>
+                        ))}
+                      </>
+                    ) : col.id === "lastcommunication" ? (
+                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
+                    ) :col.id === "createdAt" ? (
+                      formatDate(item[col.id]) // Format createdAt date
+                    ):  item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody> */}
+    </Table>
+  </TableContainer>
+        </div>
+
+        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Documents
+        <span 
+          onClick={toggleTableVisibility3} 
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "10px", 
+            fontSize: "20px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            transform: isTableVisible3 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+            marginTop: "0px", // Align the arrow properly
+          }}
+        >
+          ▼
+        </span>
+        <span 
+         
+          style={{ 
+            cursor: "pointer", 
+            marginLeft: "50%", 
+            fontSize: "30px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            marginTop: "0px", // Align the arrow properly
+    
+          }}
+        >
+          +
+        </span>
+        </div>
+
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+         
+        <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+    <Table sx={{}} aria-label="customized table">
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
+        <TableRow >
+          {allColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+            >
+              {col.name}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      {/* <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              <input 
+                type="checkbox"
+                checked={selectedItems.includes(item._id)}
+                onChange={() => handleRowSelect(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+              
+            </StyledTableCell>
+            <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              onClick={() => leadsingleview(item)}
+            >
+              {item.title} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon} />
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon} />
+              <span>{item.email}</span>
+            </StyledTableCell>
+            {visibleColumns
+              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
+              .map((col) => (
+                <StyledTableCell 
+                  key={col.id} 
+                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                >
+                   {col.id === 'budget' 
+                    ?(
+                      <>
+                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
+                       </>
+                    )
+                    :col.id === 'requirment' 
+                    ?(
+                      <>
+                     
+                       {item.requirment}  {item.property_type}  <br></br>  
+                       {item.sub_type}  <br></br>  {item.unit_type}
+                       </>
+                    ): col.id === 'location' 
+                    ?(
+                      <>
+                      {item.area2}  <br></br> 
+                      {item.block} <br></br> 
+                       {item.city2}  {item.location2}  <br></br> 
+                       {item.state2} {item.country2}  {item.pincode2} 
+                        
+                       </>
+                    ): col.id === 'stage' 
+                    ?(
+                      <>
+                      {item.stage} <br />
+                      <span 
+                        style={{
+                          color: item.lead_type === 'Hot' ? 'red' :
+                                 item.lead_type === 'Warm' ? 'blue' : 
+                                 item.lead_type === 'Cold' ? 'green' : 'black'
+                        }}
+                      >
+                        {item.lead_type}
+                      </span>
+                    </>
+                    ):  col.id === "owner" ? (
+                      <>
+                        {item.owner.map((owner, index) => (
+                          <span key={index}>
+                            {owner} ({item.team || ""})
+                            <br />
+                          </span>
+                        ))}
+                      </>
+                    ) : col.id === "lastcommunication" ? (
+                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
+                    ) :col.id === "createdAt" ? (
+                      formatDate(item[col.id]) // Format createdAt date
+                    ):  item[col.id]}
+                </StyledTableCell>
+              ))}
+          </StyledTableRow>
+        ))}
+      </tbody> */}
+    </Table>
+  </TableContainer>
+        </div>
+
+
+
+        </div>
+
+        </div>
 
       </div>
       
