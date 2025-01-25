@@ -297,7 +297,7 @@ function Leadsingleview() {
       
 
       <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"60px",paddingBottom:"50px"}}>
-        <div className='col-md-4' style={{border:"1px solid black",padding:"10px"}}>
+        <div className='col-md-3' style={{padding:"20px",fontSize:"14px",fontFamily:"times-new-roman"}}>
             <div style={{display:"flex",}}>
                 <h6 style={{fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}
                     <p style={{fontSize:"12px",fontWeight:"normal"}}>{lead.email}</p>
@@ -321,74 +321,74 @@ function Leadsingleview() {
                 <div className='col-md-3'><label style={{visibility:"hidden"}}>mobile no</label>
                     <input type='text' className="form-control form-control-sm" value={lead.mobile_no}></input>
                 </div>
-                <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px"}}>{lead.tags}</p></div>
+                <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px",fontWeight:"bold"}}>{lead.tags}</p></div>
                 <div className='col-md-6'></div>
 
             
 
                 <div className='col-md-5' style={{marginTop:"50px"}}><label>Owner Sales/Manager</label>
-                    <p style={{marginTop:"-10px"}}>{lead.owner}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label>Team</label><p style={{marginTop:"-10px"}}>{lead.team} Team</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label>Time Zone</label><p style={{marginTop:"-10px"}}>Asia/Kolkata</p></div>
+                <div className='col-md-3' style={{marginTop:"50px"}}><label>Team</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.team} Team</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>Asia/Kolkata</p></div>
 
 
-                <div className='col-md-4' style={{marginTop:"50px"}}><label>Recived On</label>
-                    <p style={{marginTop:"-10px"}}>{lead.owner}</p>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label>Recived On</label>
+                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label>Source</label><p style={{marginTop:"-10px"}}>{lead.campegin} {lead.source}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px"}}>{formattedDate}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label>Source</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"bold"}}>{formattedDate}</p></div>
                 <div className='col-md-12'><hr></hr></div>
 
-                <div className='row' style={{border:"1px solid black",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12'>Requirment To Buy/Rent</div>
+                <div className='row' style={{border:"1px solid gray",margin:"10px",width:"100%",borderRadius:"5px",padding:"10px"}}> 
+                    <div className='col-md-12' style={{color:"blue",fontWeight:"bold"}}>Requirment To Buy/Rent</div>
                     <div className='col-md-12'><hr></hr></div>
-                    <div className='col-md-12'><p>Location-{lead.location} {lead.city}</p></div>
+                    <div className='col-md-12'><p style={{fontWeight:"bold"}}>Location-{lead.location} {lead.city}</p></div>
 
-                    <div className='col-md-4' ><label style={{color:"blue"}}>Property Type</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.property_type}</p>
+                    <div className='col-md-4' ><label>Property Type</label>
+                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"bold"}}>{lead.property_type}</p>
                 </div>
-                <div className='col-md-4'><label>Sub Type</label><p style={{marginTop:"-10px"}}>{lead.sub_type}</p></div>
-                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px"}}>{lead.unit_type}</p></div>
+                <div className='col-md-4'><label>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.sub_type}</p></div>
+                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.unit_type}</p></div>
 
                 <div className='col-md-4' ><label>Budget</label>
-                    <p style={{marginTop:"-10px"}}>{lead.budget_min} to {lead.budget_max}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.budget_min} to {lead.budget_max}</p>
                 </div>
-                <div className='col-md-4'><label>Area/Size</label><p style={{marginTop:"-10px"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
-                <div className='col-md-4' ><label>Furnishing</label><p style={{marginTop:"-10px"}}>{lead.furnishing}</p></div>
+                <div className='col-md-4'><label>Area/Size</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
+                <div className='col-md-4' ><label>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.furnishing}</p></div>
 
                 <div className='col-md-4' ><label>Facing</label>
-                    <p style={{marginTop:"-10px"}}>{lead.facing}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.facing}</p>
                 </div>
-                <div className='col-md-4'><label>Transaction Type</label><p style={{marginTop:"-10px"}}>{lead.transaction_type}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
-                <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px"}}>{lead.timeline}</p></div>
+                <div className='col-md-4'><label>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.transaction_type}</p></div>
+                <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.timeline}</p></div>
 
                 <div className='col-md-8' ><label>Specific Requirment</label>
-                    <p style={{marginTop:"-10px"}}></p>
+                    <p style={{marginTop:"-10px",fontWeight:"bold"}}></p>
                 </div>
                 
                 
-                <div className='col-md-4' ><label>Road</label><p style={{marginTop:"-10px"}}>{lead.road}</p></div>
+                <div className='col-md-4' ><label>Road</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.road}</p></div>
 
                 </div>
 
-                <div className='row' style={{border:"1px solid black",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12'>Personal Details</div>
+                <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
+                    <div className='col-md-12' style={{color:"blue",fontWeight:"bold"}}>Personal Details</div>
                     <div className='col-md-12'><hr></hr></div>
-                    <div className='col-md-12'><p>Father/Husband Name-{lead.father_husband_name} {lead.city}</p></div>
+                    <div className='col-md-12'><p style={{fontWeight:"bold"}}>Father/Husband Name-{lead.father_husband_name} {lead.city}</p></div>
 
-                    <div className='col-md-3' ><label style={{color:"blue"}}>Address</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.h_no}</p>
+                    <div className='col-md-3' ><label>Address</label>
+                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"bold"}}>{lead.h_no}</p>
                 </div>
-                <div className='col-md-3'><label>Area/Location</label><p style={{marginTop:"-10px"}}>{lead.area1}</p></div>
-                <div className='col-md-2' ><label>City</label><p style={{marginTop:"-10px"}}>{lead.city1}</p></div>
-                <div className='col-md-2'><label>State</label><p style={{marginTop:"-10px"}}>{lead.state1}</p></div>
-                <div className='col-md-2' ><label>Zip</label><p style={{marginTop:"-10px"}}>{lead.pincode1}</p></div>
+                <div className='col-md-3'><label>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.area1}</p></div>
+                <div className='col-md-2' ><label>City</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.city1}</p></div>
+                <div className='col-md-2'><label>State</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.state1}</p></div>
+                <div className='col-md-2' ><label>Zip</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.pincode1}</p></div>
 
                 <div className='col-md-4' ><label>Job Title</label>
-                    <p style={{marginTop:"-10px"}}>{lead.designation}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.designation}</p>
                 </div>
-                <div className='col-md-4'><label>Company/Organisation</label><p style={{marginTop:"-10px"}}>{lead.company_name}</p></div>
+                <div className='col-md-4'><label>Company/Organisation</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.company_name}</p></div>
              
 
 
@@ -398,7 +398,7 @@ function Leadsingleview() {
 
             </div>
         </div>
-        <div className='col-md-4' style={{border:"1px solid black",padding:"10px"}}>
+        <div className='col-md-5' style={{border:"1px solid black",padding:"10px"}}>
             <div className='row'>
 
             <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
@@ -429,49 +429,80 @@ function Leadsingleview() {
 
             <div className='col-md-12' style={{marginTop:"20px"}}><input type='checkbox'></input><span>show on primary contact</span></div>
 
-            <div className="d-flex" style={{ justifyContent: "flex-start", gap: "20px", marginTop: "20px", flexWrap: "nowrap",paddingLeft:"20px" }}>
-  
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+  {/* Displaying Section */}
   <div style={{ display: "flex", alignItems: "center" }}>
-    <p style={{ marginRight: "10px", marginBottom: "0" }}>Displaying:</p>
-    <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+    <p style={{ marginRight: "10px", marginBottom: "0" }}>Displaying</p>
+    <select
+      className="form-control form-control-sm"
+      style={{
+        border: "none",
+        backgroundColor: "transparent",
+        fontSize: "12px",
+        minWidth: "120px",
+      }}
+    >
       <option>all activity</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
   </div>
 
+  {/* By Section */}
   <div style={{ display: "flex", alignItems: "center" }}>
     <p style={{ marginRight: "10px", marginBottom: "0" }}>By:</p>
-    <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+    <select
+      className="form-control form-control-sm"
+      style={{
+        border: "none",
+        backgroundColor: "transparent",
+        fontSize: "12px",
+        minWidth: "120px",
+      }}
+    >
       <option>everyone</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
   </div>
 
-</div>
+  {/* Related to Section */}
+  <div style={{ display: "flex", alignItems: "center" }}>
+    <p style={{ marginRight: "10px", marginBottom: "0", whiteSpace: "nowrap" }}>Related to:</p>
+    <select
+      className="form-control form-control-sm"
+      style={{
+        border: "none",
+        backgroundColor: "transparent",
+        fontSize: "12px",
+        minWidth: "120px",
+      }}
+    >
+      <option>all</option>
+      <option>contact activity</option>
+      <option>lead activity</option>
+    </select>
+  </div>
 
-<div className="d-flex" style={{ justifyContent: "flex-start", gap: "20px", marginTop: "0px", flexWrap: "nowrap",paddingLeft:"20px" }}>
-
-<div style={{ display: "flex", alignItems: "center" }}>
-  <p style={{ marginRight: "10px", marginBottom: "0", whiteSpace: "nowrap" }}>Related to:</p>
-  <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
-    <option>all</option>
-    <option>contact activity</option>
-    <option>lead activity</option>
-  </select>
-</div>
-
-
+  {/* Tagged Section */}
   <div style={{ display: "flex", alignItems: "center" }}>
     <p style={{ marginRight: "10px", marginBottom: "0" }}>Tagged:</p>
-    <select className="form-control form-control-sm" style={{ border: "none", backgroundColor: "transparent", fontSize: "12px", minWidth: "120px" }}>
+    <select
+      className="form-control form-control-sm"
+      style={{
+        border: "none",
+        backgroundColor: "transparent",
+        fontSize: "12px",
+        minWidth: "120px",
+      }}
+    >
       <option>any</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
   </div>
-  </div>
+</div>
+
 
 
 {
@@ -561,8 +592,9 @@ function Leadsingleview() {
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "10px", 
+            right: "50px", 
             fontSize: "20px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -575,12 +607,13 @@ function Leadsingleview() {
         <span 
          
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "50%", 
+            right: "20px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "-7px", // Align the arrow properly
     
           }}
         >
@@ -699,12 +732,13 @@ function Leadsingleview() {
 
   </div>
 
-  <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> PROPERTY
+  <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Inventories
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "10px", 
+            right: "50px", 
             fontSize: "20px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -717,12 +751,13 @@ function Leadsingleview() {
         <span 
          
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "50%", 
+            right: "20px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "-7px", // Align the arrow properly
     
           }}
         >
@@ -842,12 +877,13 @@ function Leadsingleview() {
         </div>
 
 
-        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Active Tasks
+        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Tasks
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "10px", 
+            right: "50px", 
             fontSize: "20px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -860,12 +896,13 @@ function Leadsingleview() {
         <span 
          
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "50%", 
+            right: "20px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "-7px", // Align the arrow properly
     
           }}
         >
@@ -988,8 +1025,9 @@ function Leadsingleview() {
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
+            position:"absolute",
             cursor: "pointer", 
-            marginLeft: "10px", 
+            right:  "50px", 
             fontSize: "20px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -1003,11 +1041,12 @@ function Leadsingleview() {
          
           style={{ 
             cursor: "pointer", 
-            marginLeft: "50%", 
+            position:"absolute",
+            right: "20px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "-7px", // Align the arrow properly
     
           }}
         >
