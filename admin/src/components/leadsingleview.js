@@ -34,7 +34,50 @@ function Leadsingleview() {
       }
     }, [lead]);
   
+    const[deal,setdeal]=useState([])
+    const viewdeal=async()=>
+    {
+      const resp=await api.get('viewdeal')
+      setdeal(resp.data.deal)
+      try {
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    useEffect(()=>
+    {
+      viewdeal()
+    },[])
 
+    const[filterdeal,setfilterdeal]=useState([])
+    
+
+  React.useEffect(() => {
+    if (deal.length > 0) {
+     
+        const price1 = lead.budget_min;
+        const price2 = lead.budget_max;
+        const requirment = lead.requirment === 'Buy' ? 'Sale' : lead.requirment;
+  
+        // Filter leads based on the current deal's criteria
+        const filterdeals = deal.filter(
+          (item) =>
+            item.available_for === requirment &&
+            item.expected_price >= parseFloat(price1) &&
+            item.expected_price <= parseFloat(price2)
+        );
+      
+        
+       setfilterdeal(filterdeals)
+   
+      
+    }
+  }, [deal]);
+
+ 
+  
 
     const formattedDate = new Date(lead.lastcommunication).toLocaleString("en-GB", {
         day: "2-digit",
@@ -710,7 +753,7 @@ const styles = {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "hidden",transition: "height 0.3s ease",overflowY:"scroll",overflowX:"scroll"}}>
       <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
@@ -725,97 +768,35 @@ const styles = {
           ))}
         </TableRow>
       </TableHead>
-      {/* <tbody>
+       <tbody>
         {
          
-        currentItems.map ((item, index) => (
+        filterdeal.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              <input 
-                type="checkbox"
-                checked={selectedItems.includes(item._id)}
-                onChange={() => handleRowSelect(item._id)}
-              />
               {index + 1}
             </StyledTableCell>
+            <StyledTableCell>
+              {item.unit_number}
+            </StyledTableCell>
+            <StyledTableCell>
+  {item.owner_details ? (
+    item.owner_details.map((owner, index) => (
+      <div key={index}>
+        {owner.mobile_no.map((mobile, mobileIndex) => (
+          <div key={mobileIndex}>{mobile}</div> 
+        ))}
+        <div>{owner.title} {owner.first_name} {owner.last_name}</div> 
+      </div>
+    ))
+  ) : (
+    'No Details Available' // Fallback if no owner details exist
+  )}
+</StyledTableCell>
 
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              
-            </StyledTableCell>
-            <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-              onClick={() => leadsingleview(item)}
-            >
-              {item.title} {item.first_name} {item.last_name}
-              <br />
-              <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
-              <br />
-              <SvgIcon component={EmailIcon} />
-              <span>{item.email}</span>
-            </StyledTableCell>
-            {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
-              .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
-                >
-                   {col.id === 'budget' 
-                    ?(
-                      <>
-                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
-                       </>
-                    )
-                    :col.id === 'requirment' 
-                    ?(
-                      <>
-                     
-                       {item.requirment}  {item.property_type}  <br></br>  
-                       {item.sub_type}  <br></br>  {item.unit_type}
-                       </>
-                    ): col.id === 'location' 
-                    ?(
-                      <>
-                      {item.area2}  <br></br> 
-                      {item.block} <br></br> 
-                       {item.city2}  {item.location2}  <br></br> 
-                       {item.state2} {item.country2}  {item.pincode2} 
-                        
-                       </>
-                    ): col.id === 'stage' 
-                    ?(
-                      <>
-                      {item.stage} <br />
-                      <span 
-                        style={{
-                          color: item.lead_type === 'Hot' ? 'red' :
-                                 item.lead_type === 'Warm' ? 'blue' : 
-                                 item.lead_type === 'Cold' ? 'green' : 'black'
-                        }}
-                      >
-                        {item.lead_type}
-                      </span>
-                    </>
-                    ):  col.id === "owner" ? (
-                      <>
-                        {item.owner.map((owner, index) => (
-                          <span key={index}>
-                            {owner} ({item.team || ""})
-                            <br />
-                          </span>
-                        ))}
-                      </>
-                    ) : col.id === "lastcommunication" ? (
-                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
-                    ) :col.id === "createdAt" ? (
-                      formatDate(item[col.id]) // Format createdAt date
-                    ):  item[col.id]}
-                </StyledTableCell>
-              ))}
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody> 
     </Table>
   </TableContainer>
 
