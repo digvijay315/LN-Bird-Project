@@ -107,6 +107,12 @@ function Leadsingleview() {
         { id: 'start_date', name: 'Date' },
         { id: 'sechudle_by', name: 'By' },
       ];
+      const allColumnsunit = [
+        { id: 'sno', name: '#' },
+        { id: 'unit_no', name: 'Unit No' },
+        { id: 'project', name: 'Project' },
+        { id: 'relation', name: 'Relation' },
+      ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -422,6 +428,92 @@ function formatDate(date) {
   // Format the date and time as "1st Jan 2025, 11:22 AM"
   return `${day}${suffix} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
 }
+
+
+React.useEffect(()=>{fetchcdata()},[])
+
+
+const [flattenedUnits, setFlattenedUnits] = useState([]);
+const fetchcdata=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('viewproject')
+    const flattened = [];
+      resp.data.project.forEach((project) => {
+        if (Array.isArray(project.add_unit)) {
+          // Flatten the add_unit array for each project
+          const units = project.add_unit.flatMap((unitArray) => unitArray);
+          flattened.push(...units);  // Add flattened units to the array
+        } else {
+          console.error('add_unit is not an array or is undefined');
+        }
+      });
+
+      // Now update the flattenedUnits state with the flattened array
+      setFlattenedUnits(flattened);
+
+    // Log the flattened units
+  
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+console.log(flattenedUnits);
+
+const [matchunit, setmatchunit] = useState([]); // To store matched data
+
+
+
+
+
+useEffect(() => {
+  const matchLeadWithUnit = async () => {
+    let matchedUnits = []; // Temp array to store matched units
+
+    // Iterate over each unit in flattenedUnits
+    for (let item of flattenedUnits) {
+      let matched = false; // Flag to check if a match is found
+
+      // Check owner_details array for matches
+      for (let owner of item.owner_details) {
+         console.log(owner.title);
+         console.log(owner.first_name);
+         console.log(owner.last_name);
+         console.log(lead.title);
+         console.log(lead.first_name);
+         console.log(lead.last_name);
+        
+        // const owner = await fetchOwnerDetails(ownerId); // Fetch owner details by ID
+        if (owner && owner.title === lead.title && owner.first_name === lead.first_name && owner.last_name === lead.last_name) {
+          matchedUnits.push({ ...item, matchedData: owner });
+          matched = true; // Mark as matched
+          break; // Break the loop once a match is found
+        }
+      }
+
+      // If no match found in owner_details, check associated_contact
+      if (!matched) {
+        for (let contact of item.associated_contact) {
+          // const contact = await fetchContactDetails(contactId); // Fetch contact details by ID
+          if (contact && contact.title === lead.title && contact.first_name === lead.first_name && contact.last_name === lead.last_name) {
+            matchedUnits.push({ ...item, matchedData: contact });
+            break; // Break the loop once a match is found
+          }
+        }
+      }
+    }
+
+    // Update state with the matched units
+    setmatchunit(matchedUnits);
+  };
+
+  // Trigger the matching function
+  matchLeadWithUnit();
+}, [flattenedUnits]);
+
 
 
 
@@ -953,13 +1045,13 @@ function formatDate(date) {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
         <TableRow >
-          {allColumns.map((col) => (
+          {allColumnsunit.map((col) => (
             <StyledTableCell
               key={col.id}
               style={{ fontFamily: "times new roman", cursor: 'pointer' }}
@@ -969,97 +1061,27 @@ function formatDate(date) {
           ))}
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
          
-        currentItems.map ((item, index) => (
+        matchunit.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              <input 
-                type="checkbox"
-                checked={selectedItems.includes(item._id)}
-                onChange={() => handleRowSelect(item._id)}
-              />
+           
               {index + 1}
             </StyledTableCell>
-
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              
+            <StyledTableCell>
+              {item.unit_no}
             </StyledTableCell>
-            <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-              onClick={() => leadsingleview(item)}
-            >
-              {item.title} {item.first_name} {item.last_name}
-              <br />
-              <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
-              <br />
-              <SvgIcon component={EmailIcon} />
-              <span>{item.email}</span>
+            <StyledTableCell>
+              {item.project_name}
             </StyledTableCell>
-            {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
-              .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
-                >
-                   {col.id === 'budget' 
-                    ?(
-                      <>
-                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
-                       </>
-                    )
-                    :col.id === 'requirment' 
-                    ?(
-                      <>
-                     
-                       {item.requirment}  {item.property_type}  <br></br>  
-                       {item.sub_type}  <br></br>  {item.unit_type}
-                       </>
-                    ): col.id === 'location' 
-                    ?(
-                      <>
-                      {item.area2}  <br></br> 
-                      {item.block} <br></br> 
-                       {item.city2}  {item.location2}  <br></br> 
-                       {item.state2} {item.country2}  {item.pincode2} 
-                        
-                       </>
-                    ): col.id === 'stage' 
-                    ?(
-                      <>
-                      {item.stage} <br />
-                      <span 
-                        style={{
-                          color: item.lead_type === 'Hot' ? 'red' :
-                                 item.lead_type === 'Warm' ? 'blue' : 
-                                 item.lead_type === 'Cold' ? 'green' : 'black'
-                        }}
-                      >
-                        {item.lead_type}
-                      </span>
-                    </>
-                    ):  col.id === "owner" ? (
-                      <>
-                        {item.owner.map((owner, index) => (
-                          <span key={index}>
-                            {owner} ({item.team || ""})
-                            <br />
-                          </span>
-                        ))}
-                      </>
-                    ) : col.id === "lastcommunication" ? (
-                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
-                    ) :col.id === "createdAt" ? (
-                      formatDate(item[col.id]) // Format createdAt date
-                    ):  item[col.id]}
-                </StyledTableCell>
-              ))}
+            <StyledTableCell>
+             
+            </StyledTableCell>
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
     </Table>
   </TableContainer>
         </div>
