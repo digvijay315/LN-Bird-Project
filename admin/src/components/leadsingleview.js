@@ -34,7 +34,6 @@ function Leadsingleview() {
       }
     }, [lead]);
   
-    console.log(documents); // Now documents is an array of objects
 
 
     const formattedDate = new Date(lead.lastcommunication).toLocaleString("en-GB", {
@@ -385,7 +384,7 @@ const styles = {
                 <h6 style={{fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}
                     <p style={{fontSize:"12px",fontWeight:"normal"}}>{lead.email}</p>
                 </h6>
-                <h6 style={{marginLeft:"40%"}}>Site Visit</h6>
+                <h6 style={{marginLeft:"35%"}}>Site Visit</h6>
                 <h6 style={{marginLeft:"20px"}}>Task</h6>
             </div>
             <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} />
@@ -432,7 +431,7 @@ const styles = {
                     <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"bold"}}>{lead.property_type}</p>
                 </div>
                 <div className='col-md-4'><label>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.sub_type}</p></div>
-                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.unit_type}</p></div>
+                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"bold",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
 
                 <div className='col-md-4' ><label>Budget</label>
                     <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.budget_min} to {lead.budget_max}</p>
@@ -441,7 +440,7 @@ const styles = {
                 <div className='col-md-4' ><label>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.furnishing}</p></div>
 
                 <div className='col-md-4' ><label>Facing</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.facing}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"bold",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing}</p>
                 </div>
                 <div className='col-md-4'><label>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.transaction_type}</p></div>
                 <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.timeline}</p></div>
