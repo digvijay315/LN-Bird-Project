@@ -101,6 +101,12 @@ function Leadsingleview() {
         { id: 'document_no', name: 'Document No.' },
         { id: 'document_pic', name: 'View' },
       ];
+      const allColumnstask = [
+        { id: 'sno', name: '#' },
+        { id: 'activity_type', name: 'Type' },
+        { id: 'start_date', name: 'Date' },
+        { id: 'sechudle_by', name: 'By' },
+      ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -154,6 +160,7 @@ function Leadsingleview() {
         setIsTableVisible3(prevState => !prevState);
       };
 
+      const [alltask,setalltask]=useState([])
 
       const[sitevisitdata,setsitevisitdata]=useState([])
       const sitevisit=async()=>
@@ -161,6 +168,7 @@ function Leadsingleview() {
         try {
             const resp=await api.get('viewsitevisit')
             setsitevisitdata(resp.data.sitevisit)
+            
             
         } catch (error) {
             console.log(error);
@@ -174,6 +182,7 @@ function Leadsingleview() {
         try {
             const resp=await api.get('viewmeetingtask')
             setmeetingdata(resp.data.meetingtask)
+           
             
         } catch (error) {
             console.log(error);
@@ -187,6 +196,7 @@ function Leadsingleview() {
         try {
             const resp=await api.get('viewmailtask')
             setmaildata(resp.data.mail_task)
+          
             
         } catch (error) {
             console.log(error);
@@ -200,6 +210,7 @@ function Leadsingleview() {
         try {
             const resp=await api.get('viewcalltask')
             setcalldata(resp.data.call_task)
+          
             
         } catch (error) {
             console.log(error);
@@ -214,6 +225,8 @@ function Leadsingleview() {
         call()
     },[])
 
+  
+    
 
     const[matchsitevisitdata,setmatchsitevisitdata]=useState([])
     const matchLeadData = (site) => {
@@ -225,8 +238,11 @@ function Leadsingleview() {
           lead.last_name === lastName
         ) {
             setmatchsitevisitdata((prevData) => [...prevData, site]);
+            setalltask((prevData) => [...prevData, site]);
         }
       };
+
+     
 
 
 
@@ -236,7 +252,8 @@ function Leadsingleview() {
           sitevisitdata.forEach((site) => {
             if (site.lead) {
               // Now only need to match directly with site.lead
-              matchLeadData(site);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+              matchLeadData(site); 
+               // Assuming site contains lead.title, lead.first_name, lead.last_name
             }
           });
         }
@@ -252,6 +269,7 @@ function Leadsingleview() {
             lead.last_name === lastName
           ) {
             setmatchmeetingdata((prevData) => [...prevData, meeting]);
+            setalltask((prevData) => [...prevData, meeting]);
           }
         };
   
@@ -279,6 +297,7 @@ function Leadsingleview() {
               lead.last_name === mail.last_name
             ) {
                 setmatchmaildata((prevData) => [...prevData, mail]);
+                setalltask((prevData) => [...prevData, mail]);
             }
           };
     
@@ -307,6 +326,7 @@ function Leadsingleview() {
                 lead.last_name === lastName
               ) {
                 setmatchcalldata((prevData) => [...prevData, call]);
+                setalltask((prevData) => [...prevData, call]);
               }
             };
       
@@ -324,6 +344,7 @@ function Leadsingleview() {
               }
             }, [maildata]);
 
+          console.log(alltask);
           
 
 
@@ -377,6 +398,30 @@ const styles = {
     cursor: 'pointer',
   },
 };
+
+
+function formatDate(date) {
+  const day = date.getDate();
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  const year = date.getFullYear();
+
+  // Get day suffix (st, nd, rd, th)
+  let suffix = 'th';
+  if (day === 1 || day % 10 === 1) suffix = 'st';
+  if (day === 2 || day % 10 === 2) suffix = 'nd';
+  if (day === 3 || day % 10 === 3) suffix = 'rd';
+
+  // Get hours and minutes
+  let hours = date.getHours();
+  let minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12; // Convert to 12-hour format
+  hours = hours ? hours : 12; // Handle the case for 12 AM/PM
+  minutes = minutes < 10 ? '0' + minutes : minutes; // Ensure minutes are always 2 digits
+
+  // Format the date and time as "1st Jan 2025, 11:22 AM"
+  return `${day}${suffix} ${month} ${year}, ${hours}:${minutes} ${ampm}`;
+}
 
 
 
@@ -466,7 +511,8 @@ const styles = {
                 <div className='col-md-12'><hr></hr></div>
 
                 <div className='row' style={{border:"1px solid gray",margin:"10px",width:"100%",borderRadius:"5px",padding:"10px"}}> 
-                    <div className='col-md-12' style={{color:"blue",fontWeight:"bold"}}>Requirment To Buy/Rent</div>
+                    <div className='col-md-10' style={{color:"blue",fontWeight:"bold"}}>{lead.requirment}</div>
+                    <div className='col-md-2'  style={{cursor: "pointer",fontSize: "30px",marginTop: "-7px",fontWeight:"lighter"}}>+</div>
                     <div className='col-md-12'><hr></hr></div>
                     <div className='col-md-12'><p style={{fontWeight:"bold"}}>Location-{lead.location} {lead.city}</p></div>
 
@@ -637,7 +683,23 @@ const styles = {
 
 {
     matchsitevisitdata && matchsitevisitdata.length>0 && (
+      
         <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px"}}>
+         <img
+        src="https://cdn-icons-png.flaticon.com/512/5521/5521277.png"
+        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
+        alt="icon"
+      />
+         <div
+        style={{
+          position: "absolute",
+          marginTop: "20px",
+          left: "-10px", // Adjust the left position to create space for the vertical line
+          height: "80%",
+          width: "1px", // Width of the vertical line
+          backgroundColor: "gray", // Color of the vertical line
+        }}
+      ></div>
         <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Site Visit:</p>
         <ul style={{marginLeft:"10px"}}>
             {matchsitevisitdata.map((item, index) => (
@@ -656,6 +718,23 @@ const styles = {
                 {
                 matchmeetingdata && matchmeetingdata.length>0 && (
                     <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
+                    
+                    <img
+        src="https://cdn-icons-png.freepik.com/256/7689/7689860.png?semt=ais_hybrid"
+        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
+        alt="icon"
+      />
+         <div
+        style={{
+          position: "absolute",
+          marginTop: "20px",
+          left: "-10px", // Adjust the left position to create space for the vertical line
+          height: "80%",
+          width: "1px", // Width of the vertical line
+          backgroundColor: "gray", // Color of the vertical line
+        }}
+      ></div>
+
                     <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Meeting Task:</p>
                     <ul style={{marginLeft:"10px"}}>
                         {matchmeetingdata.map((item, index) => (
@@ -673,6 +752,22 @@ const styles = {
                 {
                 matchmaildata && matchmaildata.length>0 && (
                     <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
+                    
+                    <img
+        src="https://purepng.com/public/uploads/large/purepng.com-mail-iconsymbolsiconsapple-iosiosios-8-iconsios-8-721522596075clftr.png"
+        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
+        alt="icon"
+      />
+         <div
+        style={{
+          position: "absolute",
+          marginTop: "20px",
+          left: "-10px", // Adjust the left position to create space for the vertical line
+          height: "80%",
+          width: "1px", // Width of the vertical line
+          backgroundColor: "gray", // Color of the vertical line
+        }}
+      ></div>
                     <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Mail Task:</p>
                     <ul style={{marginLeft:"10px"}}>
                         {matchmaildata.map((item, index) => (
@@ -690,6 +785,22 @@ const styles = {
                 {
                 matchcalldata && matchcalldata.length>0 && (
                     <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
+                   
+                   <img
+        src="https://icons.veryicon.com/png/o/miscellaneous/fs-icon/call-13.png"
+        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
+        alt="icon"
+      />
+         <div
+        style={{
+          position: "absolute",
+          marginTop: "20px",
+          left: "-10px", // Adjust the left position to create space for the vertical line
+          height: "70%",
+          width: "1px", // Width of the vertical line
+          backgroundColor: "gray", // Color of the vertical line
+        }}
+      ></div>
                     <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Call Task:</p>
                     <ul style={{marginLeft:"10px"}}>
                         {matchcalldata.map((item, index) => (
@@ -777,7 +888,14 @@ const styles = {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell>
-              {item.unit_number}
+              {item.unit_number}<br></br>
+              {item.project_category.map((cat)=>
+              (
+                <>
+                {cat}<br></br>
+                </>
+              ))}
+                {item.location}
             </StyledTableCell>
             <StyledTableCell>
   {item.owner_details ? (
@@ -980,13 +1098,13 @@ const styles = {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible2 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible2 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease",overflowY:"scroll",overflowX:"scroll"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
         <TableRow >
-          {allColumns.map((col) => (
+          {allColumnstask.map((col) => (
             <StyledTableCell
               key={col.id}
               style={{ fontFamily: "times new roman", cursor: 'pointer' }}
@@ -996,97 +1114,29 @@ const styles = {
           ))}
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
          
-        currentItems.map ((item, index) => (
+        alltask.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              <input 
-                type="checkbox"
-                checked={selectedItems.includes(item._id)}
-                onChange={() => handleRowSelect(item._id)}
-              />
               {index + 1}
             </StyledTableCell>
+            <StyledTableCell>
+              {item.activity_type}
+            </StyledTableCell>
+            <StyledTableCell>
+            {item.start_date
+              ? formatDate(new Date(item.start_date)) 
+              : formatDate(new Date(item.due_date))} 
+          </StyledTableCell>
 
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              
+            <StyledTableCell>
+              {item.lead}
             </StyledTableCell>
-            <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-              onClick={() => leadsingleview(item)}
-            >
-              {item.title} {item.first_name} {item.last_name}
-              <br />
-              <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
-              <br />
-              <SvgIcon component={EmailIcon} />
-              <span>{item.email}</span>
-            </StyledTableCell>
-            {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
-              .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
-                >
-                   {col.id === 'budget' 
-                    ?(
-                      <>
-                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
-                       </>
-                    )
-                    :col.id === 'requirment' 
-                    ?(
-                      <>
-                     
-                       {item.requirment}  {item.property_type}  <br></br>  
-                       {item.sub_type}  <br></br>  {item.unit_type}
-                       </>
-                    ): col.id === 'location' 
-                    ?(
-                      <>
-                      {item.area2}  <br></br> 
-                      {item.block} <br></br> 
-                       {item.city2}  {item.location2}  <br></br> 
-                       {item.state2} {item.country2}  {item.pincode2} 
-                        
-                       </>
-                    ): col.id === 'stage' 
-                    ?(
-                      <>
-                      {item.stage} <br />
-                      <span 
-                        style={{
-                          color: item.lead_type === 'Hot' ? 'red' :
-                                 item.lead_type === 'Warm' ? 'blue' : 
-                                 item.lead_type === 'Cold' ? 'green' : 'black'
-                        }}
-                      >
-                        {item.lead_type}
-                      </span>
-                    </>
-                    ):  col.id === "owner" ? (
-                      <>
-                        {item.owner.map((owner, index) => (
-                          <span key={index}>
-                            {owner} ({item.team || ""})
-                            <br />
-                          </span>
-                        ))}
-                      </>
-                    ) : col.id === "lastcommunication" ? (
-                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
-                    ) :col.id === "createdAt" ? (
-                      formatDate(item[col.id]) // Format createdAt date
-                    ):  item[col.id]}
-                </StyledTableCell>
-              ))}
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody> 
     </Table>
   </TableContainer>
         </div>
