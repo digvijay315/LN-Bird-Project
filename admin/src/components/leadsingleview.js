@@ -14,8 +14,28 @@ import api from "../api";
 
 function Leadsingleview() {
 
+
+  
+
     const location=useLocation()
     const lead=location.state || {}
+
+    const[documents,setdouments]=useState([])
+
+    useEffect(() => {
+      if (lead && lead.document_name && lead.document_no && lead.document_pic) {
+        // Merging the arrays together
+        const mergedDocuments = lead.document_name.map((name, index) => ({
+          name,
+          number: lead.document_no[index],
+          pic: lead.document_pic[index]
+        }));
+        setdouments(mergedDocuments);
+      }
+    }, [lead]);
+  
+    console.log(documents); // Now documents is an array of objects
+
 
     const formattedDate = new Date(lead.lastcommunication).toLocaleString("en-GB", {
         day: "2-digit",
@@ -32,6 +52,12 @@ function Leadsingleview() {
         { id: 'house_details', name: 'House Details' },
         { id: 'contact', name: 'Contact' },
         { id: 'available_from', name: 'Available From' },
+      ];
+      const allColumnsdocuments = [
+        { id: 'sno', name: '#' },
+        { id: 'document_name', name: 'Document Name' },
+        { id: 'document_no', name: 'Document No.' },
+        { id: 'document_pic', name: 'View' },
       ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -255,6 +281,63 @@ function Leadsingleview() {
                 });
               }
             }, [maildata]);
+
+          
+
+
+            const [imagePreview, setImagePreview] = useState(null);
+            const [openPreview, setOpenPreview] = useState(false);
+          
+            const handlePreviewClick = (imageUrl) => {
+              setImagePreview(imageUrl);
+              setOpenPreview(true); // Open the preview modal
+            };
+          
+            const handleClosePreview = () => {
+              setOpenPreview(false);
+              setImagePreview(null); // Close the modal
+            };
+
+
+            // Add some basic styles for modal
+const styles = {
+  modalOverlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modal: {
+    background: '#fff',
+    padding: '20px',
+    borderRadius: '10px',
+    position: 'relative',
+  },
+  imagePreview: {
+    maxWidth: '100%',
+    maxHeight: '80vh',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+    background: 'red',
+    color: '#fff',
+    border: 'none',
+    padding: '5px',
+    borderRadius: '50%',
+    cursor: 'pointer',
+  },
+};
+
+
+
       
     
   return (
@@ -297,7 +380,7 @@ function Leadsingleview() {
       
 
       <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"60px",paddingBottom:"50px"}}>
-        <div className='col-md-3' style={{padding:"20px",fontSize:"14px",fontFamily:"times-new-roman"}}>
+        <div className='col-md-3' style={{padding:"20px",fontSize:"14px",fontFamily:"arial"}}>
             <div style={{display:"flex",}}>
                 <h6 style={{fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}
                     <p style={{fontSize:"12px",fontWeight:"normal"}}>{lead.email}</p>
@@ -318,11 +401,11 @@ function Leadsingleview() {
                 </div>
                 <div className='col-md-6'></div>
 
-                <div className='col-md-3'><label style={{visibility:"hidden"}}>mobile no</label>
-                    <input type='text' className="form-control form-control-sm" value={lead.mobile_no}></input>
+                <div className='col-md-4'><label style={{visibility:"hidden"}}>mobile no</label>
+                    <input type='text' className="form-control form-control-sm" style={{fontSize:"11.5px"}} value={lead.mobile_no}></input>
                 </div>
                 <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px",fontWeight:"bold"}}>{lead.tags}</p></div>
-                <div className='col-md-6'></div>
+                <div className='col-md-5'></div>
 
             
 
@@ -398,7 +481,7 @@ function Leadsingleview() {
 
             </div>
         </div>
-        <div className='col-md-5' style={{border:"1px solid black",padding:"10px"}}>
+        <div className='col-md-5' style={{padding:"10px"}}>
             <div className='row'>
 
             <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
@@ -429,78 +512,83 @@ function Leadsingleview() {
 
             <div className='col-md-12' style={{marginTop:"20px"}}><input type='checkbox'></input><span>show on primary contact</span></div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-  {/* Displaying Section */}
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <p style={{ marginRight: "10px", marginBottom: "0" }}>Displaying</p>
+            <div style={{ display: "flex",fontSize:"14px",marginTop:"10px" }}>
+
+
+    <p style={{marginLeft: "10px" }}>Displaying</p>
     <select
       className="form-control form-control-sm"
       style={{
         border: "none",
         backgroundColor: "transparent",
         fontSize: "12px",
-        minWidth: "120px",
+      fontWeight:"bold",
+      marginTop:"-8px"
       }}
     >
       <option>all activity</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
-  </div>
 
-  {/* By Section */}
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <p style={{ marginRight: "10px", marginBottom: "0" }}>By:</p>
+
+ 
+    <p style={{marginBottom: "0" }}>By</p>
     <select
       className="form-control form-control-sm"
       style={{
         border: "none",
         backgroundColor: "transparent",
         fontSize: "12px",
-        minWidth: "120px",
+        fontWeight:"bold",
+         marginTop:"-8px"
+      
       }}
     >
       <option>everyone</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
-  </div>
+  
 
-  {/* Related to Section */}
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <p style={{ marginRight: "10px", marginBottom: "0", whiteSpace: "nowrap" }}>Related to:</p>
+
+    <p style={{marginBottom: "0", whiteSpace: "nowrap" }}>Related to</p>
     <select
       className="form-control form-control-sm"
       style={{
         border: "none",
         backgroundColor: "transparent",
         fontSize: "12px",
-        minWidth: "120px",
+    fontWeight:"bold",
+     marginTop:"-8px",
+      width:"80px"
       }}
     >
       <option>all</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
-  </div>
 
-  {/* Tagged Section */}
-  <div style={{ display: "flex", alignItems: "center" }}>
-    <p style={{ marginRight: "10px", marginBottom: "0" }}>Tagged:</p>
+
+ 
+    <p style={{marginBottom: "0" }}>Tagged</p>
     <select
       className="form-control form-control-sm"
       style={{
         border: "none",
         backgroundColor: "transparent",
         fontSize: "12px",
-        minWidth: "120px",
+       fontWeight:"bold",
+        marginTop:"-8px",
+        marginRight:"20px",
+        width:"80px"
       }}
     >
       <option>any</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
-  </div>
+ 
 </div>
 
 
@@ -508,7 +596,7 @@ function Leadsingleview() {
 {
     matchsitevisitdata && matchsitevisitdata.length>0 && (
         <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px"}}>
-        <p style={{color:"green",fontWeight:"bold"}}>Site Visit:</p>
+        <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Site Visit:</p>
         <ul style={{marginLeft:"10px"}}>
             {matchsitevisitdata.map((item, index) => (
             <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
@@ -526,7 +614,7 @@ function Leadsingleview() {
                 {
                 matchmeetingdata && matchmeetingdata.length>0 && (
                     <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
-                    <p style={{color:"green",fontWeight:"bold"}}>Meeting Task:</p>
+                    <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Meeting Task:</p>
                     <ul style={{marginLeft:"10px"}}>
                         {matchmeetingdata.map((item, index) => (
                         <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
@@ -543,7 +631,7 @@ function Leadsingleview() {
                 {
                 matchmaildata && matchmaildata.length>0 && (
                     <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
-                    <p style={{color:"green",fontWeight:"bold"}}>Mail Task:</p>
+                    <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Mail Task:</p>
                     <ul style={{marginLeft:"10px"}}>
                         {matchmaildata.map((item, index) => (
                         <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
@@ -560,7 +648,7 @@ function Leadsingleview() {
                 {
                 matchcalldata && matchcalldata.length>0 && (
                     <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
-                    <p style={{color:"green",fontWeight:"bold"}}>Call Task:</p>
+                    <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Call Task:</p>
                     <ul style={{marginLeft:"10px"}}>
                         {matchcalldata.map((item, index) => (
                         <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
@@ -584,7 +672,7 @@ function Leadsingleview() {
             </div>
 
         </div>
-        <div className='col-md-3' style={{border:"1px solid black",padding:"10px"}}>
+        <div className='col-md-3' style={{padding:"10px"}}>
 
         <div className='row'>
 
@@ -600,6 +688,7 @@ function Leadsingleview() {
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
             marginTop: "0px", // Align the arrow properly
+           
           }}
         >
           ▼
@@ -614,6 +703,7 @@ function Leadsingleview() {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             marginTop: "-7px", // Align the arrow properly
+            fontWeight:"lighter"
     
           }}
         >
@@ -758,7 +848,7 @@ function Leadsingleview() {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             marginTop: "-7px", // Align the arrow properly
-    
+      fontWeight:"lighter"
           }}
         >
           +
@@ -903,7 +993,7 @@ function Leadsingleview() {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             marginTop: "-7px", // Align the arrow properly
-    
+      fontWeight:"lighter"
           }}
         >
           +
@@ -1047,7 +1137,7 @@ function Leadsingleview() {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             marginTop: "-7px", // Align the arrow properly
-    
+      fontWeight:"lighter"
           }}
         >
           +
@@ -1060,7 +1150,7 @@ function Leadsingleview() {
     <Table sx={{}} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
         <TableRow >
-          {allColumns.map((col) => (
+          {allColumnsdocuments.map((col) => (
             <StyledTableCell
               key={col.id}
               style={{ fontFamily: "times new roman", cursor: 'pointer' }}
@@ -1070,97 +1160,44 @@ function Leadsingleview() {
           ))}
         </TableRow>
       </TableHead>
-      {/* <tbody>
+      <tbody>
         {
-         
-        currentItems.map ((item, index) => (
+        
+        documents.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              <input 
-                type="checkbox"
-                checked={selectedItems.includes(item._id)}
-                onChange={() => handleRowSelect(item._id)}
-              />
               {index + 1}
             </StyledTableCell>
-
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
-              
-            </StyledTableCell>
-            <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-              onClick={() => leadsingleview(item)}
-            >
-              {item.title} {item.first_name} {item.last_name}
-              <br />
-              <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
-              <br />
-              <SvgIcon component={EmailIcon} />
-              <span>{item.email}</span>
-            </StyledTableCell>
-            {visibleColumns
-              .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
-              .map((col) => (
-                <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
-                >
-                   {col.id === 'budget' 
-                    ?(
-                      <>
-                       ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
-                       </>
-                    )
-                    :col.id === 'requirment' 
-                    ?(
-                      <>
-                     
-                       {item.requirment}  {item.property_type}  <br></br>  
-                       {item.sub_type}  <br></br>  {item.unit_type}
-                       </>
-                    ): col.id === 'location' 
-                    ?(
-                      <>
-                      {item.area2}  <br></br> 
-                      {item.block} <br></br> 
-                       {item.city2}  {item.location2}  <br></br> 
-                       {item.state2} {item.country2}  {item.pincode2} 
-                        
-                       </>
-                    ): col.id === 'stage' 
-                    ?(
-                      <>
-                      {item.stage} <br />
-                      <span 
-                        style={{
-                          color: item.lead_type === 'Hot' ? 'red' :
-                                 item.lead_type === 'Warm' ? 'blue' : 
-                                 item.lead_type === 'Cold' ? 'green' : 'black'
-                        }}
-                      >
-                        {item.lead_type}
-                      </span>
-                    </>
-                    ):  col.id === "owner" ? (
-                      <>
-                        {item.owner.map((owner, index) => (
-                          <span key={index}>
-                            {owner} ({item.team || ""})
-                            <br />
-                          </span>
-                        ))}
-                      </>
-                    ) : col.id === "lastcommunication" ? (
-                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
-                    ) :col.id === "createdAt" ? (
-                      formatDate(item[col.id]) // Format createdAt date
-                    ):  item[col.id]}
-                </StyledTableCell>
-              ))}
+        <StyledTableCell>
+          {item.name}
+        </StyledTableCell>
+        <StyledTableCell>
+          {item.number}
+        </StyledTableCell>
+        <StyledTableCell>
+              {/* Eye button to trigger image preview */}
+              <button onClick={() => handlePreviewClick(item.pic)}>
+                👁️ {/* You can replace this with an icon */}
+              </button>
+        </StyledTableCell>
+          
           </StyledTableRow>
         ))}
-      </tbody> */}
+      </tbody>
+
+       {/* Modal or Image Preview */}
+       {openPreview && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modal}>
+            <img src={imagePreview} alt="Preview" style={styles.imagePreview} />
+            <button onClick={handleClosePreview} style={styles.closeButton}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+
     </Table>
   </TableContainer>
         </div>
