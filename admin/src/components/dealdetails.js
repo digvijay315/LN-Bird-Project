@@ -3675,7 +3675,7 @@ const [show9, setshow9] = useState(false);
 <img id="projectmessage"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip>
 <Tooltip title="Preview.." arrow>
-<img id="projectpreview"  src="https://cdn-icons-png.flaticon.com/512/143/143594.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="projectpreview"  src="https://cdn-icons-png.flaticon.com/512/143/143594.png" onClick={()=>navigate('projectpreview',{state:selectedItems2})}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 <Tooltip title="Add/Remove User.." arrow>
 <img id="projectaddremoveuser"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>

@@ -41,6 +41,7 @@ import AddContactForm from './components/demo';
 import Sortaddcontact from './components/sortaddcontact.js';
 import EditProjectform from './components/editproject.js';
 import Leadsingleview from './components/leadsingleview.js';
+import Projectpreview from './components/projectpreview.js';
 
 function App() {
   return (
@@ -78,6 +79,7 @@ function App() {
       <Route path='/sortaddcontact' element={<Sortaddcontact/>}/>
       <Route path='/editproject' element={<EditProjectform/>}/>
       <Route path='/leadsingleview' element={<Leadsingleview/>}/>
+      <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

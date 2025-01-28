@@ -2124,7 +2124,7 @@ const handleTypeClick3 = (type) => {
                       const option = bankOptions.find(opt => opt.value === bankValue);
                       return {
                           name: option.label,
-                          logo: option.logo,
+                          // logo: option.logo,
                       };
                   });
           
