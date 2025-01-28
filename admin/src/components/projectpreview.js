@@ -249,6 +249,163 @@ function Projectpreview() {
 
                     <div className='col-md-12' style={{marginTop:"20px"}}><u>Amenities</u></div>
                     <div className='col-md-12' style={{marginTop:"20px",marginLeft:"20px"}}><u>Basic</u></div>
+                        
+                    {
+                    project.basic_aminities?.map((item, index) => (
+                        <div className='col-md-2' key={index}>
+                        {item === "24x7 Water Supply" ? (
+                            <>
+                            <img 
+                                src="https://training.leadrat.com/assets/amenities-icons/waterSupply.svg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Car Parking" ? (
+                            <>
+                            <img 
+                                src="	https://training.leadrat.com/assets/amenities-icons/CAR%20parking.svg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Intercom" ? (
+                            <>
+                            <img 
+                                src="https://training.leadrat.com/assets/amenities-icons/intercom.svg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Multi-Purpose Hall" ? (
+                            <>
+                            <img 
+                                src="https://training.leadrat.com/assets/amenities-icons/multipurpose%20hall.svg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Municipal Water Supply" ? (
+                            <>
+                            <img 
+                                src="https://training.leadrat.com/assets/amenities-icons/waterSupply.svg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Garbage Management System" ? (
+                            <>
+                            <img 
+                                src="https://training.leadrat.com/assets/amenities-icons/garbage.svg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '50px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Fire Fighting System" ? (
+                            <>
+                            <img 
+                                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/fire-protection-1724182-1464021.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Visitor Car Parking" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/3420/3420275.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Earthquake Resistance" ? (
+                            <>
+                            <img 
+                                src="https://img.icons8.com/?size=160&id=wwGvmjaFovuy&format=png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Lift" ? (
+                            <>
+                            <img 
+                                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/lift-2028518-1712621.png?f=webp&w=256" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Maintenance Staff" ? (
+                            <>
+                            <img 
+                                src="https://icons.veryicon.com/png/o/file-type/color-administrative-simple-icon/maintenance-worker.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Power Supply" ? (
+                            <>
+                            <img 
+                                src="https://static.vecteezy.com/system/resources/previews/032/534/022/non_2x/uninterrupted-power-supply-icon-vector.jpg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Air Condition" ? (
+                            <>
+                            <img 
+                                src="https://previews.123rf.com/images/ylivdesign/ylivdesign2110/ylivdesign211005077/175844307-air-conditioner-icon-outline-air-conditioner-vector-icon-color-flat-isolated.jpg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Security" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/9767/9767122.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Bike Parking" ? (
+                            <>
+                            <img 
+                                src="https://i.fbcd.co/products/resized/resized-750-500/2-aeb047d180a347464eba71fd1b87d9889c9d39b7ce48329fe258e4dde18a6754.jpg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Others" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/8382/8382949.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '50px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :(
+                            item
+                        )}
+                        </div>
+                    ))
+                    }
+
+                       
+
                     <div className='col-md-12' style={{marginTop:"20px",marginLeft:"20px"}}><u>Nearby</u></div>
                     <div className='col-md-12' style={{marginTop:"20px",marginLeft:"20px"}}><u>Featured</u></div>
                     <div className='col-md-12' style={{marginTop:"20px"}}><u>Project Walk-through</u></div>
