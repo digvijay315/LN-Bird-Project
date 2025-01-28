@@ -1676,7 +1676,7 @@ const [show5, setshow5] = useState(false);
                     // fetchleaddata()
                   }
 
-                  const [calltask,setcalltask]=useState({activity_type:"",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",title2:"",
+                  const [calltask,setcalltask]=useState({activity_type:"",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",due_time:"",title2:"",
                     first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
                     result:"",intrested_inventory:"",feedback:""})
 
@@ -1727,8 +1727,12 @@ const [show5, setshow5] = useState(false);
                         document.getElementById("date1").style.color="black"
                     }
 
+                    console.log(selectedItems1);
+
                     const calltaskdetails=async()=>
                       {
+                       
+                        
                       const title1 = document.getElementById("calltitle").innerText;
                       // Update state
                       const updatedCallTask = { ...calltask, title: title1 };
@@ -1882,7 +1886,7 @@ const mailtaskdetails=async()=>
       // Update state
       const updatedMailTask = { ...mailtask, title: title1 };
       try {
-          const resp=await api.post('mailtask',updatedMailTask)
+          const resp=await api.put(`updatemailtask/${selectedItems1}`,updatedMailTask)
           if(resp.status===200)
           {
               toast.success(resp.data.message)
@@ -1903,6 +1907,175 @@ const mailtaskdetails=async()=>
 
 
   //======================================== mail task complete form end==============================================================
+
+
+
+// ======================================call task edit start===================================================================
+
+
+const [show7, setshow7] = useState(false);
+    
+                  const handleClose7 = () => setshow7(false);
+                  const handleShow7=async()=>
+                  {
+                    setshow7(true);
+                    fetchcalldata()
+                    // fetchleaddata()
+                  }
+
+
+                  const formatDate = (dateString) => {
+                    const date = new Date(dateString);
+                    
+                    // Day of the month with suffix
+                    const day = date.getDate();
+                    const suffix = (day === 1 || day === 21 || day === 31)
+                      ? 'st' : (day === 2 || day === 22)
+                      ? 'nd' : (day === 3 || day === 23)
+                      ? 'rd' : 'th';
+                      
+                    const formattedDay = `${day}${suffix}`;
+                    
+                    // Month (abbreviated to 3 letters)
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    const month = months[date.getMonth()];
+                    
+                    // Year (4 digits)
+                    const year = date.getFullYear();
+                    
+                    return `${formattedDay} ${month} ${year}`;
+                  };
+                  
+                  const handleDateChange = (e) => {
+                    const selectedDate = e.target.value;
+                    const formattedDate = formatDate(selectedDate);
+                    setcalltask({ ...calltask, due_date: formattedDate });
+                  };
+                  
+                  
+                  
+                  const formatTime = (timeString) => {
+                    let [hours, minutes] = timeString.split(':').map(Number);
+                    const isPM = hours >= 12;
+                    
+                    // Convert to 12-hour format
+                    if (hours > 12) hours -= 12;
+                    if (hours === 0) hours = 12; // midnight or noon should display as 12, not 0
+                    const period = isPM ? 'PM' : 'AM';
+                    
+                    return `${hours}:${minutes < 10 ? '0' + minutes : minutes} ${period}`;
+                  };
+                  
+                  const handleTimeChange = (e) => {
+                    const selectedTime = e.target.value;
+                    const formattedTime = formatTime(selectedTime);
+                    setcalltask({ ...calltask, due_time: formattedTime });
+                  };
+
+
+// ================================================call task edit end==============================================
+
+// =========================================mail task edit start==============================================================
+
+
+const [show8, setshow8] = useState(false);
+    
+                  const handleClose8 = () => setshow8(false);
+                  const handleShow8=async()=>
+                  {
+                    setshow8(true);
+                    fetchmaildata()
+                  }
+
+
+
+// ==================================================mail task edit end====================================================================
+
+
+// ===========================================site visit edit start============================================================
+
+
+const [show9, setshow9] = useState(false);
+    
+                  const handleClose9 = () => setshow9(false);
+                  const handleShow9=async()=>
+                  {
+                    setshow9(true);
+                    fetchsitevisitdata()
+                  }
+
+
+                  const updatesitevisit = async () => {
+                    const title1 = document.getElementById("sitevisittitle").innerText;
+                    // Update site visit task
+                    const updatedsiteTask = { ...sitevisit, title: title1 };
+                  
+                    try {
+                   
+                        const resp = await api.put(`updatesitevisittask/${selectedItems}`, updatedsiteTask);
+                  
+                        // If successful, show a success toast and reload
+                        if (resp.status === 200) {
+                          toast.success("Task Updated", { autoClose: 2000 });
+                  
+                          setTimeout(() => {
+                            window.location.reload();
+                          }, 2000);
+                        }
+                      } 
+                  
+                     catch (error) {
+                      // Handle any errors during the process
+                      toast.error("An error occurred. Please check your data and try again.");
+                    }
+                  };
+
+
+
+
+
+// =================================================site visit edit end=============================================================
+
+
+//=================================================== meeting task edit start===========================================================
+
+
+const [show10, setshow10] = useState(false);
+    
+                  const handleClose10 = () => setshow10(false);
+                  const handleShow10=async()=>
+                  {
+                    setshow10(true);
+                    fetchmeetingdata()
+                  }
+
+                  const updatemeetingtask = async () => {
+                    const title1 = document.getElementById("meetingtitle").innerText;
+                    
+                    // Update site visit task
+                    const updatemeetingtask = { ...meetingtask, title: title1 };
+                  
+                    try {
+                    
+                        const resp = await api.put(`updatemeetingtask/${selectedItems2}`, updatemeetingtask);
+                        if (resp.status === 200) {
+                          toast.success("Task Updated", { autoClose: 2000 });
+                  
+                          setTimeout(() => {
+                            window.location.reload();
+                          }, 2000);
+                        }
+                      
+                    } catch (error) {
+                      // Handle any errors during the process
+                      toast.error("An error occurred. Please check your data and try again.");
+                    }
+                  };
+              
+
+
+
+//================================================== meeting task edit end===============================================================
 
 
 
@@ -1953,7 +2126,7 @@ const mailtaskdetails=async()=>
      </Tooltip>
      
      <Tooltip title="Edit Task.." arrow>
-     <img id="dealedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     <img id="dealedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow9} style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
      
      <Tooltip title="Complete Task.." arrow>
@@ -1970,7 +2143,7 @@ const mailtaskdetails=async()=>
      </Tooltip>
      
      <Tooltip title="Edit Task.." arrow>
-     <img id="dealedit" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/UniversalEditButton3.svg/1200px-UniversalEditButton3.svg.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     <img id="dealedit" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/UniversalEditButton3.svg/1200px-UniversalEditButton3.svg.png" onClick={handleShow10}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
      
      <Tooltip title="Complete Task.." arrow>
@@ -1986,8 +2159,12 @@ const mailtaskdetails=async()=>
      <img id="dealdelete" src="https://cdn3d.iconscout.com/3d/premium/thumb/delete-button-3d-icon-download-in-png-blend-fbx-gltf-file-formats--remove-cancel-pack-user-interface-icons-6307914.png?f=webp" onClick={deleteSelectedItems1}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px"}} alt=""/>
      </Tooltip>
      
-     <Tooltip title="Edit Task.." arrow>
-     <img id="dealedit" src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png"  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     <Tooltip title="Edit Call Task.." arrow>
+     <img id="dealedit" src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png" onClick={handleShow7}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+     </Tooltip>
+
+     <Tooltip title="Edit Mail Task.." arrow>
+     <img id="dealedit" src="https://cdn-icons-png.flaticon.com/512/2098/2098402.png" onClick={handleShow8}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
      </Tooltip>
      
      <Tooltip title="Complete Call Task.." arrow>
@@ -3118,19 +3295,12 @@ sitevisitdata.map((item)=>
                     <div className="col-md-12"><br></br></div>
                     <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
                      
-                    {/* <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
-                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
-                    </div> */}
+                  
                     </div>
                     
         </div>
         </div>
-                    
-                    {/* <div className="row">
-                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={calltaskdetails}>Submit</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    </div> */}
+                   
                     </div>
                     </div>
 
@@ -3360,8 +3530,7 @@ sitevisitdata.map((item)=>
 
 </div>
 
-<div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={mailtaskdetails}>Submit</button></div>
-<div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+
 </div>
 
                   </Modal.Body>
@@ -3369,7 +3538,7 @@ sitevisitdata.map((item)=>
                     <Button variant="secondary" onClick={handleClose6}>
                       Close
                     </Button>
-                    <Button variant="secondary" onClick={calltaskdetails}>
+                    <Button variant="secondary" onClick={mailtaskdetails}>
                       Complete Task
                     </Button>
                   </Modal.Footer>
@@ -3377,9 +3546,1029 @@ sitevisitdata.map((item)=>
 
 
 
+{/* ===============================================edit call task=========================================================== */}
+
+
+<Modal show={show7} onHide={handleClose7} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Edit Call Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                  
+
+                  <div className="row" id="call" style={{padding:"10px"}}>
+                        
+                        <div className="col-md-12"><label className="labels">Title</label><p id="calltitle">Call {calltask.lead} For Meeting at {calltask.due_date}</p></div>
+                        <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
+                    <option>{calltask.reason}</option>
+                    <option>---Select---</option>
+                        {
+                            reason.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+              
+               
+                <div className="col-md-4"><label className="labels">Select Lead</label>
+                <select
+                className="form-control form-control-sm"
+                required
+                onChange={(e) => {
+                const selectedLead = leaddatacall.find(item => item._id === e.target.value);
+                if (selectedLead) {
+                    const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                    setcalltask(prevState => ({
+                    ...prevState,
+                    lead: fullName,
+                    title2: selectedLead.title,
+                    first_name: selectedLead.first_name,
+                    last_name: selectedLead.last_name,
+                    mobile_no:selectedLead.mobile_no,
+                    email:selectedLead.email,
+                    stage:selectedLead.stage
+                    }));
+                }
+                }}
+  >
+                    <option>{calltask.lead}</option>
+                    <option>---Select---</option>
+                        {
+                            leaddatacall.map((item)=>
+                            (
+                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+                                
+                            ))
+                            
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
+                        <option>{calltask.executive}</option>
+                        <option>---Select---</option>
+                        <option>Rajesh</option>
+                        <option>Suresh</option>
+                        <option>Vivek</option>
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-10"><label className="labels">Remark</label><textarea value={calltask.remarks} className='form-control form-control-sm' onChange={(e)=>setcalltask({...calltask,remarks:e.target.value})}/></div>
+
+                  
+                    <div className="col-md-2"></div>
+
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" value={calltask.due_date} className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div>
+                    <div className="col-md-4"></div>
+                    <div className="col-md-6"><label className="labels">Completed?</label> 
+                    <label class="switch">
+                    <input type="checkbox" onChange={handleToggle}/>
+                        <span class="slider round"></span>
+                        </label>
+                    </div>
+                  <div className="col-md-2"></div>
+
+                  <div style={{width:"100%"}}>
+            <div className="row" id='calldetails' style={{display:"none"}}>
+           
+        <div className="col-12">
+            
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right">Complete Call Task</h4>
+                </div><hr></hr>
+                
+                <div className="row mt-2">
+                    
+                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,direction:e.target.value}))} >
+                    <option>{calltask.direction}</option>
+                    <option>---Select---</option>
+                        {
+                            direction.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,status:e.target.value}))}>
+                    <option>{calltask.status}</option>
+                    <option>---Select---</option>
+                        {
+                            status.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+                
+               
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" value={calltask.date} className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
+                <div className="col-md-4"><label className="labels">Duration</label><input type="time" value={calltask.duration} className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...calltask,duration:e.target.value}))}/></div>
+                <div className="col-md-4"> </div>
+
+                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,result:e.target.value}))}>
+                    <option>{calltask.result}</option>
+                    <option>---Select---</option>
+                       {
+                        result.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+                       </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,intrested_inventory:e.target.value}))}>
+                    <option>{calltask.intrested_inventory}</option>
+                    <option>---Select---</option>
+                        {
+                          sitevisitdata.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={calltask.feedback}  style={{height:"100px"}} onChange={(e)=>setcalltask((prevState)=>({...calltask,feedback:e.target.value}))}/></div>
+                    <div className="col-md-12"><br></br></div>
+                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+                     
+                  
+                    </div>
+                    
+        </div>
+        </div>
+                    
+                  
+                    </div>
+                    </div>
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose7}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={calltaskdetails}>
+                      Edit Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+{/* ========================================================edit call task end================================================== */}
+   
+
+
+{/* ====================================================edit mail task start=============================================== */}
+
+
+<Modal show={show8} onHide={handleClose8} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Update Mail Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+                  <div className="row" id="email" >
+
+<div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail {mailtask.lead} For Meeting at {mailtask.due_date} for {mailtask.subject} of {mailtask.inventory}</p></div> 
+
+<div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
+<option>{mailtask.executive}</option>
+<option>---Select---</option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+
+<div className="col-md-4"><label className="labels">Select Lead</label>     <select
+      className="form-control form-control-sm"
+      required
+      onChange={(e) => {
+      const selectedLead = leaddatacall.find(item => item._id === e.target.value);
+      if (selectedLead) {
+      const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+      setmailtask(prevState => ({
+      ...prevState,
+      lead: fullName,
+      title2: selectedLead.title,
+      first_name: selectedLead.first_name,
+      last_name: selectedLead.last_name,
+      mobile_no:selectedLead.mobile_no,
+      email:selectedLead.email,
+      stage:selectedLead.stage
+      }));
+      }
+      }}
+      >
+  <option>{mailtask.lead}</option>
+<option>---Select---</option>
+    {
+        leaddatacall.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+
+    <div className="col-md-4"><label className="labels">Select Project</label> 
+            <Select className="form-control form-control-sm" style={{border:"none"}}
+        multiple
+        value={mailtask.project?mailtask.project:mailprojects}
+        onChange={handlesiteprojectchangemail}
+        renderValue={(selected) => selected.join(', ')}
+    >
+        {allproject.map((name) => (
+            <MenuItem key={name} value={name}>
+                <Checkbox checked={mailtask.project?mailtask.project.indexOf(name) > -1:mailprojects.indexOf(name) > -1} />
+                <ListItemText primary={name} />
+            </MenuItem>
+        ))}
+    </Select>
+            </div>
+
+            <div className="col-md-4">
+          <label className="labels">Select Block</label>
+          <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={mailtask.block?mailtask.block:allblockmail}  // Value contains the full block.block-project combinations
+          onChange={handleallblockchangemail}  // Handle the change when blocks are selected/deselected
+          renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+          >
+          {alldealblocksmail
+          .filter((value, index, self) =>
+          // Ensure unique combinations of block.block and block.project
+          index === self.findIndex((t) => (
+            t.block === value.block && t.project === value.project
+          ))
+          )
+          .map((block) => {
+          // Create a unique identifier by combining block.block and block.project
+          const uniqueBlockKey = `${block.block}-${block.project}`;
+
+          return (
+            <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+              <Checkbox 
+                checked={mailtask.block?mailtask.block.includes(uniqueBlockKey):allblockmail.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+              />
+              <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+            </MenuItem>
+          );
+          })
+          }
+          </Select>
+          </div>
+
+
+
+            <div className="col-md-4"><label className="labels">Select Inventory</label>
+         
+            <Select
+        className="form-control form-control-sm"
+        style={{ border: "none" }}
+        multiple
+        value={mailtask.inventory?mailtask.inventory:allunitmail} // Holds selected units
+        onChange={handleallunitschangemail} // Handle changes for unit selection
+        renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+        >
+        {alldealunitsmail
+        .filter((value, index, self) =>
+        // Ensure unique combinations of project, block, and unit
+        index === self.findIndex((t) => (
+        t.project === value.project &&
+        t.block === value.block &&
+        t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+        ))
+        )
+        .map((unit) => {
+        // Create a unique key for project-block-unit combination
+        const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+        return (
+        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+        <Checkbox checked={mailtask.inventory?mailtask.inventory.includes(uniqueKey):allunitmail.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+        <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        </MenuItem>
+        );
+        })}
+        </Select>
+
+
+                </div>
+
+  
+
+
+<div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
+    <option>{mailtask.subject}</option>
+    <option>---Select---</option>
+    <option>Payment Reminder</option>
+    <option>Agreement Reminder</option>
+    <option>Feedback</option>
+    <option>Matched inventory update</option>
+    <option>Document Required for Submision</option>
+    </select>
+    </div>
+
+<div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={mailtask.remarks} onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
+    <div className="col-md-2"></div>
+
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={mailtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
+
+
+<div className="col-md-6"><label className="labels">Completed?</label> 
+<label class="switch" onChange={handleToggle1}>
+<input type="checkbox" />
+    <span class="slider round"></span>
+    </label>
+</div>
+
+<div className="p-3 py-5" id="maildetails" style={{display:"none"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Mail Task</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+  <option>{mailtask.direction}</option>
+  <option>---Select---</option>
+    {
+        direction.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+    <option>{mailtask.status}</option>
+    <option>---Select---</option>
+   <option>Read</option>
+   <option>Delivered</option>
+   <option>Bounced</option>
+   <option>Undelivered</option>
+    </select>
+    </div>
+<div className="col-md-4"></div>
+</div>
+<div className="row mt-3">
+<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" /></div>
+<div className="col-md-8"> </div>
+
+<div className="col-md-4"></div>
+
+<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}}/></div>
+<div className="col-md-12"><br></br></div>
+<div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+ </div>
+
+</div>
+
+
+</div>
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose8}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={mailtaskdetails}>
+                      Update Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+
+{/* ==================================================edit mail task end========================================================== */}
+
+
+{/* ============================================edit site visit task start ========================================================*/}
+
+<Modal show={show9} onHide={handleClose9} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Update Site-Visit Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+
+
+                  <div className="row" id="sitevisit" >
+
+<div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.project.join(',')}, {sitevisit.inventory.join(',')} on {sitevisit.start_date}</p></div>
+
+    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
+<option>{sitevisit.executive} </option>
+<option>---select---</option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+
+    <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
+<option>{sitevisit.sitevisit_type} </option>
+<option>---select---</option>
+   {
+    visittype.map(item=>
+        (
+            <option>{item}</option>
+        )
+    )
+   }
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+
+    <div className="col-md-4"><label className="labels">Select Project</label> 
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+multiple
+value={sitevisit.project}
+onChange={handleprojectchange}
+renderValue={(selected) => selected.join(', ')}
+>
+{allproject.map((name) => (
+    <MenuItem key={name} value={name}>
+        <Checkbox checked={sitevisit.project.indexOf(name) > -1} />
+        <ListItemText primary={name} />
+    </MenuItem>
+))}
+</Select>
+    </div>
+   
+
+
+    <div className="col-md-4"><label className="labels">Select Block</label>
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+multiple
+value={sitevisit.block}
+onChange={handleblockchange}
+renderValue={(selected) => selected.join(', ')}
+>
+{allBlocks.map((block) => (
+<MenuItem key={block} value={block}> {/* Ensure unit_no is the value you want */}
+    <Checkbox checked={sitevisit.block.indexOf(block) > -1} />
+    <ListItemText primary={block} /> {/* Render unit_no or other relevant property */}
+</MenuItem>
+))}
+</Select>
+    </div>
+    <div className="col-md-4"><label className="labels">Select Inventory</label>
+    <Select className="form-control form-control-sm" style={{border:"none"}}
+multiple
+value={sitevisit.inventory}
+onChange={handleallunitschange}
+renderValue={(selected) => selected.join(', ')}
+>
+{allUnits.map((unit) => (
+<MenuItem key={unit} value={unit}> {/* Ensure unit_no is the value you want */}
+    <Checkbox checked={sitevisit.inventory.indexOf(unit) > -1} />
+    <ListItemText primary={unit} /> {/* Render unit_no or other relevant property */}
+</MenuItem>
+))}
+</Select>
+    </div>
+
+
+  
+  
+
+     
+    <div className="col-md-4"><label className="labels">Select Lead</label>
+    <select
+    className="form-control form-control-sm"
+    required
+    onChange={handleLeadChange}>
+      <option>{sitevisit.lead}</option>
+<option>---Select---</option>
+    {
+        leaddata.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
+    <option>{sitevisit.confirmation}</option>
+<option>---Select---</option>
+   <option>Confirmed</option>
+   <option>Tentative</option>
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+
+    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={sitevisit.remark} style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
+
+
+    <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
+    <option>{sitevisit.participants}</option>
+<option>---Select---</option>
+   {
+    contactdata.map((item)=>
+    (
+        <option>{item.title} {item.first_name} {item.last_name} ({item.company_name})</option>
+    )) 
+   }
+    </select>
+    </div>
+    <div className="col-md-6"></div>
+
+    <div className="col-md-6"><label className="labels">Remind Me?</label> 
+<label class="switch">
+<input type="checkbox" checked={sitevisit.remind_me} onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
+    <span class="slider round"></span>
+    </label>
+</div>
+
+{
+    sitevisit.remind_me && (
+        <>
+        <div className="col-md-4"></div>
+        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" value={sitevisit.start_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" value={sitevisit.end_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+        </>
+    )
+}
+
+<div className="col-md-6"><label className="labels">Mark As Completed?</label> 
+<label class="switch">
+<input type="checkbox" onChange={handleToggle3}/>
+    <span class="slider round"></span>
+    </label>
+</div>
+
+
+
+<div className="p-3 py-5" id="sitevisitdetails" style={{width:"100%",display:"none"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Site Visit</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+<option>Select</option>
+   <option>Conducted</option>
+   <option>Did Not Visit</option>
+   <option>Not Intersted</option>
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+    {
+        sitevisit.status==="Conducted" &&(
+            <>
+
+            <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+            <Select className="form-control form-control-sm" style={{border:"none"}}
+        multiple
+        value={siteprojects}
+        onChange={handlesiteprojectchange}
+        renderValue={(selected) => selected.join(', ')}
+    >
+        {sitevisit.project.map((name) => (
+            <MenuItem key={name} value={name}>
+                <Checkbox checked={siteprojects.indexOf(name) > -1} />
+                <ListItemText primary={name} />
+            </MenuItem>
+        ))}
+    </Select>
+            </div>
+
+            <div className="col-md-4">
+<label className="labels">Select Interested Block</label>
+<Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={allblock}  // Value contains the full block.block-project combinations
+onChange={handleallblockchange}  // Handle the change when blocks are selected/deselected
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+>
+{alldealblocks
+.filter((value, index, self) =>
+// Ensure unique combinations of block.block and block.project
+index === self.findIndex((t) => (
+  t.block === value.block && t.project === value.project
+))
+)
+.map((block) => {
+// Create a unique identifier by combining block.block and block.project
+const uniqueBlockKey = `${block.block}-${block.project}`;
+
+return (
+  <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+    <Checkbox 
+      checked={allblock.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+    />
+    <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+  </MenuItem>
+);
+})
+}
+</Select>
+</div>
+
+
+
+            <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+         
+            <Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={allunit1} // Holds selected units
+onChange={handleallunitschange1} // Handle changes for unit selection
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+>
+{alldealunits
+.filter((value, index, self) =>
+// Ensure unique combinations of project, block, and unit
+index === self.findIndex((t) => (
+t.project === value.project &&
+t.block === value.block &&
+t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+))
+)
+.map((unit) => {
+// Create a unique key for project-block-unit combination
+const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+return (
+<MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+<Checkbox checked={allunit1.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+<ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+</MenuItem>
+);
+})}
+</Select>
+
+
+                </div>
+                </>
+        )
+    }
+ 
+
+
+
+<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+
+
+</div>
+</div>
+
+
+<div className="col-md-2"></div>
+
+
+</div>
+
+
+
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose9}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={updatesitevisit}>
+                      Update Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+
+{/* ==========================================================edit site visit task end =======================================*/}
+
+
+{/*================================================ edit meeting task start =================================================*/}
+
+
+<Modal show={show10} onHide={handleClose10} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Update Meeting Task</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+
+
+
+                  <div className="row" id="meeting">
+
+<div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.project}, {meetingtask.inventory} on {meetingtask.location_type} @ {meetingtask.due_date}</p></div>
+    
+    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
+<option>{meetingtask.executive}</option>
+<option>---Select---</option>
+<option>Rajesh</option>
+    <option>Suresh</option>
+    <option>Vivek</option>
+    </select>
+    </div>
+    
+        <div className="col-md-4"><label className="labels">Select Lead</label> <select
+        className="form-control form-control-sm"
+        required
+        onChange={(e) => {
+        const selectedLead = leaddatameeting.find(item => item._id === e.target.value);
+        if (selectedLead) {
+        setleadidmeeting(selectedLead._id)
+
+          const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+          setmeetingtask(prevState => ({
+          ...prevState,
+          lead: fullName,
+          title2: selectedLead.title,
+          first_name: selectedLead.first_name,
+          last_name: selectedLead.last_name,
+          mobile_no:selectedLead.mobile_no,
+          email:selectedLead.email,
+          stage:selectedLead.stage
+          }));
+          }
+          }}
+          >
+            <option>{meetingtask.lead}</option>
+<option>---Select---</option>
+    {
+        leaddatameeting.map((item)=>
+        (
+            <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
+            
+        ))
+        
+    }
+    </select>
+    </div>
+    <div className="col-md-4"></div>
+    
+    <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
+<option>{meetingtask.location_type}</option>
+<option>---Select---</option>
+    {
+        location.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" value={meetingtask.location_address} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
+<div className="col-md-4"></div>
+
+
+<div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
+<option>{meetingtask.reason}</option>
+<option>---Select---</option>
+    <option>Negotiation</option>
+    <option>Discuss</option>
+    <option>Agreement</option>
+    <option>Token</option>
+    </select>
+    </div>
+<div className="col-md-8"></div>
+
+{
+  meetingtask.reason==="Discuss" && (
+    <>
+
+  
+
+        <div className="col-md-4">
+      <label className="labels">Select Project</label> 
+      <Select
+      className="form-control form-control-sm"
+      style={{ border: "none" }}
+      multiple
+      value={meetingtask.project}
+      onChange={handleprojectchange2}
+      renderValue={(selected) => selected.join(', ')}
+      >
+      {allproject.map((name) => (
+      <MenuItem key={name} value={name}>
+      <Checkbox checked={meetingtask.project.indexOf(name) > -1} />
+      <ListItemText primary={name} />
+      </MenuItem>
+      ))}
+      </Select>
+      </div>
+
+
+<div className="col-md-4">
+<label className="labels">Select Block</label>
+<Select
+className="form-control form-control-sm"
+style={{ border: "none" }}
+multiple
+value={meetingtask.block}  // Value contains the full block.block-project combinations
+onChange={handleallblockchangemeeting}  // Handle the change when blocks are selected/deselected
+renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+>
+{alldealblocksmeeting
+.filter((value, index, self) =>
+// Ensure unique combinations of block.block and block.project
+index === self.findIndex((t) => (
+  t.block === value.block && t.project === value.project
+))
+)
+.map((block) => {
+// Create a unique identifier by combining block.block and block.project
+const uniqueBlockKey = `${block.block}-${block.project}`;
+
+return (
+  <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+    <Checkbox 
+      checked={meetingtask.block.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+    />
+    <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+  </MenuItem>
+);
+})
+}
+</Select>
+</div>
+
+<div className="col-md-4"><label className="labels">Select Inventory</label>
+         
+         <Select
+    className="form-control form-control-sm"
+    style={{ border: "none" }}
+    multiple
+    value={meetingtask.inventory} // Holds selected units
+    onChange={handleallunitschange1meeting} // Handle changes for unit selection
+    renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+    >
+    {alldealunitsmeeting
+    .filter((value, index, self) =>
+      // Ensure unique combinations of project, block, and unit
+      index === self.findIndex((t) => (
+        t.project === value.project &&
+        t.block === value.block &&
+        t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+      ))
+    )
+    .map((unit) => {
+      // Create a unique key for project-block-unit combination
+      const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+
+      return (
+        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+          <Checkbox checked={meetingtask.inventory.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        </MenuItem>
+      );
+    })}
+    </Select>
+
+
+             </div>
+        </>
+
+  )
+}
+
+{
+  meetingtask.reason !=="Discuss" && (
+
+    <div className="col-md-4"><label className="labels">Inventory</label>
+    <select className="form-control form-control-sm"
+onChange={handleallunitschange2}
+>
+  <option>{meetingtask.inventory}</option>
+<option>---select---</option>
+{
+sitevisitdata.map((item)=>
+(
+  <option>{item}</option>
+))
+}
+
+</select>
+    </div>
+
+  )
+}
+
+
+
+<div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={meetingtask.remark} style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
+<div className="col-md-2"></div>
+
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={meetingtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+
+<div className="col-md-6"><label className="labels">Completed?</label> 
+<label class="switch">
+<input type="checkbox" onChange={handleToggle2} />
+    <span class="slider round"></span>
+    </label>
+</div>
 
 
    
+
+
+
+
+<div className="p-3 py-5" id="meetingdetails" style={{display:"none",width:"100%"}}>
+<div className="d-flex justify-content-between align-items-center mb-3">
+<h4 className="text-right">Complete Meeting Task</h4>
+</div><hr></hr>
+
+<div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
+<option>{meetingtask.status}</option>
+<option>---Select---</option>
+  <option>Conducted</option>
+  <option>Cancelled</option>
+  <option> Postponed</option>
+    </select>
+    </div>
+
+    {
+      meetingtask.status==="Conducted" && 
+      (
+        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,meeting_result:e.target.value}))}>
+        <option>{meetingtask.meeting_result}</option>
+        <option>---Select---</option>
+          <option>Deal Done</option>
+          <option>Negotiation Uncomplete</option>
+          <option>Deal Not Done</option>
+          <option>Site Visit</option>
+            </select>
+            </div>
+      )
+     
+    }
+    {
+      meetingtask.meeting_result==="Deal Done" && (
+      <div className="col-md-3"><label className="labels" style={{visibility:"none"}}>.</label><button style={{backgroundColor:"greenyellow"}} className="form-control form-control-sm"  onClick={() => window.open('/bookingdetails', '_blank')}> Create Booking</button></div>
+      )
+    }
+
+<div className="col-md-1"></div>
+</div>
+<div className="row mt-3">
+<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" value={meetingtask.date} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={meetingtask.feedback} style={{height:"100px"}} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
+ </div>
+
+    </div>
+    
+
+
+    </div> 
+
+
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose10}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={updatemeetingtask}>
+                      Update Task
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+
+
+
+{/*===================================================== edit meeting task end ===================================================*/}
+
+
           <ToastContainer/>
         </div>
      );

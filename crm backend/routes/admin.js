@@ -91,7 +91,7 @@ router.post('/mailtask',mail_task_form)
 router.get('/viewmailtask',view_mail)
 router.delete('/removemailask/:_id',remove_mailtask)
 router.get('/viewmailtaskbyid/:_id',view_mailtask_Byid)
-router.put('/updatecalltask/:_id',update_mailtask)
+router.put('/updatemailtask/:_id',update_mailtask)
 
 router.post('/calltask',call_task_form)
 router.get('/viewcalltask',view_call)
