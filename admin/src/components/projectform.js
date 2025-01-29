@@ -5235,7 +5235,16 @@ const generateExcelFileunit = () => {
                               <option>Railway Station</option>
                               <option>Airport</option>
                               <option>Taxi Stand</option>
-                              <option>Shoping Mall</option>
+                              <option>Atm</option>
+                              <option>Bank</option>
+                              <option>Church</option>
+                              <option>Mosque</option>
+                              <option>Park</option>
+                              <option>Restaurants</option>
+                              <option>School</option>
+                              <option>Temple</option>
+                              <option>Super Market</option>
+
                         </select>
                         </div>
                         <div className="col-md-3"><label className='labels'>Name Of Destination</label><input id='nameofdestination' type='text' className='form-control form-control-sm' onChange={(e)=>setdestinations((prevprofile)=>({...prevprofile,name_of_destination:e.target.value}))}/> </div>
