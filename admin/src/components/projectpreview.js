@@ -254,7 +254,7 @@ function Projectpreview() {
                     <div className='col-md-12'><hr></hr></div>
 
                     <div className='col-md-12'><u>Unit Range</u></div>
-                    <div className='col-md-12' style={{display:"inline-flex",gap:"20px",marginTop:"10px"}}>
+                    <div className='col-md-12' style={{display:"inline-flex",gap:"20px",marginTop:"10px",flexWrap:"wrap"}}>
                         {
                             project.add_unit?.map((unit)=>
                             (
@@ -830,190 +830,307 @@ function Projectpreview() {
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Cafeteria" ? (
+                        ) :  item === "Kids Play area" ? (
                             <>
                             <img 
-                                src="https://img.lovepik.com/png/20231122/restaurant-icon-with-table-and-chairs-in-the-center-vector_668376_wh860.png" 
+                                src="https://png.pngtree.com/png-vector/20241112/ourmid/pngtree-kids-play-area-png-image_14404049.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Car Washing Area" ? (
+                        ) :  item === "Barbeque Facility" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/1144/1144264.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/9229/9229279.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "No Common Wall" ? (
+                        ) : item === "Basket Ball Court" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/8233/8233286.png" 
+                                src="https://icon2.cleanpng.com/20231227/csv/transparent-icon-basketball-hoop-square-hoop-metal-hoop-basketball-thrown-into-white-square-1710952309481.webp" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Driver Dormitory" ? (
+                        ) : item === "Skating Rink" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/3663/3663802.png" 
+                                src="https://w7.pngwing.com/pngs/699/173/png-transparent-ice-skating-ice-rink-ice-skates-figure-skating-ice-skates-thumbnail.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "EPABX System" ? (
+                        ) : item === "Socity Office" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/1555/1555391.png" 
+                                src="https://cdn-icons-png.freepik.com/512/9665/9665162.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "CCTV" ? (
+                        ) :  item === "Squash Court" ? (
                             <>
                             <img 
-                                src="https://img.pikbest.com/origin/09/22/57/168pIkbEsTePr.png!sw800" 
+                                src="https://www.shutterstock.com/image-vector/squash-sport-graphic-player-action-260nw-2205017303.jpg" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Gymaasium" ? (
+                        ) :  item === "Waiting Longue" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/6750/6750831.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/914/914622.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Garden" ? (
+                        ) : item === "Yoga And Meditation Center" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/366/366969.png" 
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2lTTir0neITuvoGNnXJTHWwVV6Xl6KYPPjg&s" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Power Back Up" ? (
+                        ) : item === "Water Softener" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/9163/9163699.png" 
+                                src="https://img.freepik.com/premium-vector/water-softening-icon-vector-image-can-be-used-water-treatment_120816-368505.jpg" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}/>
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
                         ) : 
-                        item === "Party Lawn" ? (
+                        item === "Swipe Card Entry" ? (
                             <>
                             <img 
-                                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/party-1969058-1666648.png" 
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSukLbdxHWmFfo_VWt0itrS1Jot2z52Gp7uUA&s" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Gazebo" ? (
+                        ) : item === "Health Facilities" ? (
                             <>
                             <img 
-                                src="https://png.pngtree.com/png-vector/20240529/ourmid/pngtree-an-isometric-image-of-an-old-gazebo-vector-png-image_6963273.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/4646/4646577.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold",}}>{item}</p>
                             </>
-                        ) :  item === "Cold Storage" ? (
+                        ) :  item === "Library" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.freepik.com/512/16133/16133272.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/9043/9043296.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Solar Water Heater" ? (
+                        ) :  item === "Day Care Center" ? (
                             <>
                             <img 
-                                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/solar-water-heating-3762071-3138631.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/3212/3212937.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Jogging Track" ? (
+                        ) :  item === "Reception" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/5024/5024659.png" 
+                                src="https://static.vecteezy.com/system/resources/previews/033/142/149/non_2x/color-icon-for-reception-vector.jpg" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "DTH Connection" ? (
+                        ) :  item === "Shiping Stores" ? (
                             <>
                             <img 
-                                src="https://cdn.iconscout.com/icon/free/png-256/free-dth-icon-download-in-svg-png-gif-file-formats--direct-to-home-signal-network-dish-antenna-payment-e-wallet-pack-commerce-shopping-icons-1538051.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/5207/5207228.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Three Tier Security" ? (
+                        ) : item === "Laundry Room" ? (
                             <>
                             <img 
-                                src="https://png.pngtree.com/png-vector/20250118/ourlarge/pngtree-set-of-colorful-shield-and-padlock-icons-symbolizing-security-protection-privacy-png-image_15263816.png" 
+                                src="https://cdn-icons-png.flaticon.com/512/6209/6209752.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Smoking Area" ? (
+                        ) : item === "Indoor Games" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/9830/9830826.png" 
+                                src="https://static.vecteezy.com/system/resources/previews/020/040/449/non_2x/hand-drawn-set-of-board-game-elements-for-adults-and-children-color-simple-icons-for-gambling-table-games-and-entertainment-illustration-isolated-on-white-background-vector.jpg" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Spa & Saloon" ? (
+                        ) : item === "Piped Lpg Connection" ? (
                             <>
                             <img 
-                                src="https://w7.pngwing.com/pngs/507/668/png-transparent-free-beauty-icons-thumbnail.png" 
+                                src="https://png.pngtree.com/png-vector/20221007/ourmid/pngtree-illustration-of-shut-off-valve-on-natural-gas-pipe-png-image_6263282.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Solar Power" ? (
+                        ) :  item === "Confrence Or Meeting Room" ? (
                             <>
                             <img 
-                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_IQQAexEDoqwU9PhHze3WLx28zm7TG2UrGA&s" 
+                                src="https://cdn.iconscout.com/icon/premium/png-256-thumb/meeting-room-2156306-1811746.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) :  item === "Video Door Phone" ? (
+                        ) :  item === "Badminton Court" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.freepik.com/512/8957/8957802.png" 
+                                src="https://w7.pngwing.com/pngs/418/175/png-transparent-game-sport-badminton-racquet-shuttlecock-girl-court-colored-outline-icon-thumbnail.png" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
                                     <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                             </>
-                        ) : item === "Utility Shop" ? (
+                        ) : item === "Sauna Bath" ? (
                             <>
                             <img 
-                                src="https://cdn-icons-png.flaticon.com/512/438/438560.png" 
+                                src="https://cdn-icons-png.freepik.com/512/5906/5906324.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Rain Water Harvesting" ? (
+                            <>
+                            <img 
+                                src="https://static.vecteezy.com/system/resources/previews/026/114/716/non_2x/rainwater-harvesting-environmental-color-icon-illustration-vector.jpg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold",}}>{item}</p>
+                            </>
+                        ) :  item === "Jacuzzi" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.freepik.com/512/7969/7969407.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Massage Parlor" ? (
+                            <>
+                            <img 
+                                src="https://static.vecteezy.com/system/resources/previews/015/074/026/non_2x/spa-massage-icon-color-outline-vector.jpg" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Tution Room" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/3492/3492080.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Restaurant" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/1376/1376387.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Tennis Court" ? (
+                            <>
+                            <img 
+                                src="https://png.pngtree.com/png-vector/20220711/ourmid/pngtree-tennis-court-png-image_5823087.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Club House" ? (
+                            <>
+                            <img 
+                                src="https://cdn.iconscout.com/icon/free/png-256/free-club-building-icon-download-in-svg-png-gif-file-formats--clubhouse-bar-pub-modern-city-buildings-pack-icons-2125068.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Swimming Pool" ? (
+                            <>
+                            <img 
+                                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaPEVvUldQc8LjAOPoRn2lj8a8LEuBs8FQZg&s" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Wi-Fi" ? (
+                            <>
+                            <img 
+                                src="https://purepng.com/public/uploads/large/purepng.com-wifi-iconwifi-iconwifiiconwireless-connection-1701528436244t3ged.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) :  item === "Mini Theater" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/708/708883.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Modular Kitchen" ? (
+                            <>
+                            <img 
+                                src="https://cdn-icons-png.flaticon.com/512/3095/3095310.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Cycliing Track" ? (
+                            <>
+                            <img 
+                                src="https://icons.veryicon.com/png/o/business/color-olympic-events-flat-icon/cycling-track-1.png" 
+                                alt="Water Supply Icon" 
+                                style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
+                            />
+                                    <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
+                            </>
+                        ) : item === "Outdoor Games" ? (
+                            <>
+                            <img 
+                                src="https://img.pikbest.com/origin/10/07/01/29wpIkbEsTTxe.jpg!w700wp" 
                                 alt="Water Supply Icon" 
                                 style={{ width: '30px', height: '30px', verticalAlign: 'middle', marginRight: '5px' }}
                             />
@@ -1021,7 +1138,7 @@ function Projectpreview() {
                             </>
                         ) :(
                         
-                            item.destination
+                            <p style={{fontSize:"12px",fontWeight:"bold"}}>{item}</p>
                         )}
                         </div>
                     ))
@@ -1034,8 +1151,40 @@ function Projectpreview() {
         </div>
 
         <div className='col-md-4'>
+            <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px"}}>
+                <div className='col-md-12' style={{fontWeight:"bold"}}>Suraj Kumar</div>
+                <div className='col-md-12' style={{fontSize:"12px",marginBottom:"20px"}}>+919991000570</div>
+            <div className="col-md-6"><label className="labels" style={{fontWeight:"bold",fontSize:"12px"}}>Name</label><input type="text" placeholder='alex dow' required="true" className="form-control form-control-sm"/></div>
+            <div className="col-md-6"><label className="labels" style={{fontWeight:"bold",fontSize:"12px"}}>Phone No.</label><input type="text" placeholder='7047752734'  required="true" className="form-control form-control-sm"/></div>
+            <div className="col-md-6"><label className="labels" style={{fontWeight:"bold",fontSize:"12px"}}>Email</label><input type="text" placeholder='ex. alex@gmail.com' required="true" className="form-control form-control-sm"/></div>
+            <div className="col-md-6"><label className="labels" style={{fontWeight:"bold",fontSize:"12px"}}>Budget</label><input type="text" placeholder='ex. 400000'  required="true" className="form-control form-control-sm"/></div>
 
-    </div>
+            <div className="col-md-6"><label className="labels" style={{fontWeight:"bold",fontSize:"12px"}}>Unit Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,developer_name:e.target.value})}>
+                              <option>---Select---</option>
+                              {
+                                project.add_unit?.map((item)=>
+                                (
+                                  <option>{item.unit_no}</option>
+                                ))
+                              }
+                        </select>
+                        </div>
+                        <div className='col-md-6'></div>
+                    
+                    <div className='col-md-12' style={{display:"inline-flex"}}>
+                        <input type='checkbox' style={{ transform: 'scale(1.5)' }}/><p style={{fontSize:"12px",paddingTop:"15px",marginLeft:"10px"}}>I agree with the <span><u>Terms & Privecy Policy</u></span></p>
+                    </div>
+
+                    <div className='col-md-12'>
+                        <button className='form-control form=control-sm' style={{borderRadius:"5px"}}>Enquire Now</button>
+                    </div>
+            </div>
+
+            <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px",marginTop:"20px"}}>
+                <div className='col-md-12'><u>Brochure</u></div>
+            </div>
+
+        </div>
 
 </div>
 </div>
