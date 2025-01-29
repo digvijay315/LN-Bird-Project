@@ -267,13 +267,7 @@ function Projectform() {
             
         
             // Send the FormData as a POST request
-            const resp = await api.post('project', formdata, {
-              headers: {
-                'Content-Type': 'multipart/form-data',  // Ensure the request is treated as a multipart/form-data request
-                
-                
-              }
-            });
+            const resp = await api.post('project', formdata,config);
         
             // Handle the response
             if (resp.status === 201) {
