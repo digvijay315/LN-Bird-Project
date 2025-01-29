@@ -355,7 +355,7 @@ const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
         category, sub_category, land_area, measurment1, total_block, total_floor, total_units,
         status, launched_on, expected_competion, possession, parking_type, approved_bank,
         approvals, registration_no, date, pic:imagefiles, owner, team, visible_to,location,lattitude,langitude,address,
-        street,locality,city,zip,state,country, add_block:addblock_details,add_size:addsize_details,add_unit:addunit_details,basic_aminities,
+        street,locality,city,zip,state,country, add_block,add_size,add_unit:addunit_details,basic_aminities,
         features_aminities,nearby_aminities,price_list,Payment_plan
       });
   

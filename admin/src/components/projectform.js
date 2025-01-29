@@ -267,7 +267,7 @@ function Projectform() {
             
         
             // Send the FormData as a POST request
-            const resp = await api.post('project', formdata,config);
+            const resp = await api.post('project', project,config);
         
             // Handle the response
             if (resp.status === 201) {
@@ -281,6 +281,7 @@ function Projectform() {
             // Handle error
             toast.error(error, { autoClose: 2000 });
             console.log(error);
+        
           }
         };
         
