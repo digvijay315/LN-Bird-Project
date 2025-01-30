@@ -192,7 +192,7 @@ unitDetails={
   u++;
 }
 
-console.log(addunit_details);
+
 
       // Simply pass the add_block as it is if no further modification is needed
       const newProject = new addproject({

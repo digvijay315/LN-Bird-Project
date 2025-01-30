@@ -1146,13 +1146,39 @@ function Projectpreview() {
                     ))
                     }
 
-                    <div className='col-md-12' style={{marginTop:"20px"}}><u>Project Walk-through</u></div>
+                    <div className='col-md-12' style={{marginTop:"20px"}}><u>Project Walk-through</u>
+                    {
+    project.add_unit?.map((unit, index) => (
+      // Check if 'url' is an array for the current 'unit' object
+      Array.isArray(unit.url) && unit.url.length > 0 ? (
+        unit.url.map((item, urlIndex) => (
+          <iframe 
+            key={`${index}-${urlIndex}`} // Unique key for each iframe
+            width="873" 
+            height="491" 
+            src={item}  
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin" 
+            allowFullScreen 
+          />
+        ))
+      ) : (
+        <p key={index}>No URLs available for this project walk-through.</p>
+      )
+    ))
+  }
+
+  
+                    
+                    
+                    </div>
 
 
             </div>
         </div>
 
-        <div className='col-md-4' style={{marginBottom:"50px"}}>
+        <div className='col-md-4' style={{height:"500px",overflowY:"scroll",marginBottom:"50px"}}>
             <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px"}}>
                 <div className='col-md-12' style={{fontWeight:"bold"}}>Suraj Kumar</div>
                 <div className='col-md-12' style={{fontSize:"12px",marginBottom:"20px"}}>+919991000570</div>
@@ -1182,7 +1208,7 @@ function Projectpreview() {
                     </div>
             </div>
 
-            <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px",marginTop:"20px",backgroundImage: 'urlhttps://cdn.vectorstock.com/i/500p/84/65/abstract-white-monochrome-background-vector-32028465.jpg)',backgroundSize: 'cover',backgroundRepeat:"repeat",height:"auto"}}>
+            <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px",marginTop:"20px"}}>
                 <div className='col-md-12'><u>Brochure</u></div>
                 <div className='col-md-4' style={{height:"150px",backgroundColor:"#F2F0EF"}}>
                     <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png' style={{height:"130px",width:"150px",paddingTop:"20px"}}></img>

@@ -2415,6 +2415,9 @@ const [show9, setshow9] = useState(false);
             try {
               const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
               toast.success(`units updated successfully`,{autoClose:"2000"})
+                              setTimeout(() => {
+                                window.location.reload()
+                              }, 2000);
             } catch (error) {
               console.log(error);
               
