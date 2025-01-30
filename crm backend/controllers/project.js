@@ -50,33 +50,33 @@ const createProject = async (req, res) => {
 
 
 
- const addblock_details = [];
-      let i = 0;
+//  const addblock_details = [];
+//       let i = 0;
   
-      // Loop to process add_Content fields
-      while (req.body[`add_block[${i}].block_name`]) {
-        const block_name = req.body[`add_block[${i}].block_name`];
-        const category = req.body[`add_block[${i}].category`];
-         const sub_category = req.body[`add_block[${i}].sub_category`];
-         const land_area = req.body[`add_block[${i}].land_area`];
-         const measurment = req.body[`add_block[${i}].measurment`];
-         const total_blocks = req.body[`add_block[${i}].total_blocks`];
-         const total_floors = req.body[`add_block[${i}].total_floors`];
-         const total_units = req.body[`add_block[${i}].total_units`];
-         const status = req.body[`add_block[${i}].status`];
-         const launched_on = req.body[`add_block[${i}].launched_on`];
-         const expected_competion = req.body[`add_block[${i}].expected_competion`];
-         const possession = req.body[`add_block[${i}].possession`];
-         const parking_type = req.body[`add_block[${i}].parking_type`];
-         const rera_no = req.body[`add_block[${i}].rera_no`];
+//       // Loop to process add_Content fields
+//       while (req.body[`add_block[${i}].block_name`]) {
+//         const block_name = req.body[`add_block[${i}].block_name`];
+//         const category = req.body[`add_block[${i}].category`];
+//          const sub_category = req.body[`add_block[${i}].sub_category`];
+//          const land_area = req.body[`add_block[${i}].land_area`];
+//          const measurment = req.body[`add_block[${i}].measurment`];
+//          const total_blocks = req.body[`add_block[${i}].total_blocks`];
+//          const total_floors = req.body[`add_block[${i}].total_floors`];
+//          const total_units = req.body[`add_block[${i}].total_units`];
+//          const status = req.body[`add_block[${i}].status`];
+//          const launched_on = req.body[`add_block[${i}].launched_on`];
+//          const expected_competion = req.body[`add_block[${i}].expected_competion`];
+//          const possession = req.body[`add_block[${i}].possession`];
+//          const parking_type = req.body[`add_block[${i}].parking_type`];
+//          const rera_no = req.body[`add_block[${i}].rera_no`];
     
-        addblock_details.push({
-          block_name,category,sub_category,land_area,measurment,total_blocks,total_floors,total_units,status,launched_on,
-          expected_competion,possession,parking_type,rera_no
-        });
+//         addblock_details.push({
+//           block_name,category,sub_category,land_area,measurment,total_blocks,total_floors,total_units,status,launched_on,
+//           expected_competion,possession,parking_type,rera_no
+//         });
   
-        i++;
-      }
+//         i++;
+//       }
 
 
       const addunit_details = [];
@@ -102,71 +102,86 @@ const createProject = async (req, res) => {
         return []; // Return empty array if not a valid input
       }
 
-// Loop through each unit
-while (req.body[`add_unit[${u}].unit_no`]) {
 
-  const ownerDetails = req.body[`add_unit[${u}].owner_details`];
-const associatedContact = req.body[`add_unit[${u}].associated_contact`];
+
+while (u < req.body.add_unit.length) {
+  const unit = req.body.add_unit[u];
+ 
+
+   const ownerDetails = req.body[`add_unit[${u}].owner_details`];
+   const associatedContact = req.body[`add_unit[${u}].associated_contact`];
 
 // Process both fields
 const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
 const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
 
-  const unit = {
-    project_name: req.body[`add_unit[${u}].project_name`],
-    unit_no: req.body[`add_unit[${u}].unit_no`],
-    unit_type: req.body[`add_unit[${u}].unit_type`],
-    category: req.body[`add_unit[${u}].category`],
-    block: req.body[`add_unit[${u}].block`],
-    size: req.body[`add_unit[${u}].size`],
-    direction: req.body[`add_unit[${u}].direction`],
-    facing: req.body[`add_unit[${u}].facing`],
-    road: req.body[`add_unit[${u}].road`],
-    ownership: req.body[`add_unit[${u}].ownership`],
-    stage: req.body[`add_unit[${u}].stage`],
-    floor: req.body[`add_unit[${u}].floor`],
-    cluter_details: req.body[`add_unit[${u}].cluter_details`],
-    length: req.body[`add_unit[${u}].length`],
-    bredth: req.body[`add_unit[${u}].bredth`],
-    total_area: req.body[`add_unit[${u}].total_area`],
-    measurment2: req.body[`add_unit[${u}].measurment2`],
-    ocupation_date: req.body[`add_unit[${u}].ocupation_date`],
-    age_of_construction: req.body[`add_unit[${u}].age_of_construction`],
-    furnishing_details: req.body[`add_unit[${u}].furnishing_details`],
-    furnished_item: req.body[`add_unit[${u}].furnished_item`],
-    location: req.body[`add_unit[${u}].location`],
-    lattitude: req.body[`add_unit[${u}].lattitude`],
-    langitude: req.body[`add_unit[${u}].langitude`],
-    uaddress: req.body[`add_unit[${u}].uaddress`],
-    ustreet: req.body[`add_unit[${u}].ustreet`],
-    ulocality: req.body[`add_unit[${u}].ulocality`],
-    ucity: req.body[`add_unit[${u}].ucity`],
-    uzip: req.body[`add_unit[${u}].uzip`],
-    ustate: req.body[`add_unit[${u}].ustate`],
-    ucountry: req.body[`add_unit[${u}].ucountry`],
-    owner_details: sanitizedOwnerDetails,
-    associated_contact: sanitizedAssociatedContact,
-    relation: req.body[`add_unit[${u}].relation`],
-    s_no: req.body[`add_unit[${u}].s_no`],
-    descriptions: req.body[`add_unit[${u}].descriptions`],
-    s_no1: req.body[`add_unit[${u}].s_no1`],
-    url: req.body[`add_unit[${u}].url`],
-    document_name: req.body[`add_unit[${u}].document_name`],
-    document_no: req.body[`add_unit[${u}].document_no`],
-    document_Date: req.body[`add_unit[${u}].document_Date`],
-    linkded_contact: req.body[`add_unit[${u}].linkded_contact`]
-  };
+unitDetails={
 
-  console.log(unit.owner_details);
-  console.log(unit.associated_contact);
+  project_name: unit.project_name,
+  unit_no: unit.unit_no,
+  owner_details: sanitizedOwnerDetails,
+  associated_contact: sanitizedAssociatedContact
+}
+
+//   const unit = {
+//     project_name: req.body[`add_unit[${u}].project_name`],
+//     unit_no: req.body[`add_unit[${u}].unit_no`],
+//     unit_type: req.body[`add_unit[${u}].unit_type`],
+//     category: req.body[`add_unit[${u}].category`],
+//     block: req.body[`add_unit[${u}].block`],
+//     size: req.body[`add_unit[${u}].size`],
+//     direction: req.body[`add_unit[${u}].direction`],
+//     facing: req.body[`add_unit[${u}].facing`],
+//     road: req.body[`add_unit[${u}].road`],
+//     ownership: req.body[`add_unit[${u}].ownership`],
+//     stage: req.body[`add_unit[${u}].stage`],
+//     floor: req.body[`add_unit[${u}].floor`],
+//     cluter_details: req.body[`add_unit[${u}].cluter_details`],
+//     length: req.body[`add_unit[${u}].length`],
+//     bredth: req.body[`add_unit[${u}].bredth`],
+//     total_area: req.body[`add_unit[${u}].total_area`],
+//     measurment2: req.body[`add_unit[${u}].measurment2`],
+//     ocupation_date: req.body[`add_unit[${u}].ocupation_date`],
+//     age_of_construction: req.body[`add_unit[${u}].age_of_construction`],
+//     furnishing_details: req.body[`add_unit[${u}].furnishing_details`],
+//     furnished_item: req.body[`add_unit[${u}].furnished_item`],
+//     location: req.body[`add_unit[${u}].location`],
+//     lattitude: req.body[`add_unit[${u}].lattitude`],
+//     langitude: req.body[`add_unit[${u}].langitude`],
+//     uaddress: req.body[`add_unit[${u}].uaddress`],
+//     ustreet: req.body[`add_unit[${u}].ustreet`],
+//     ulocality: req.body[`add_unit[${u}].ulocality`],
+//     ucity: req.body[`add_unit[${u}].ucity`],
+//     uzip: req.body[`add_unit[${u}].uzip`],
+//     ustate: req.body[`add_unit[${u}].ustate`],
+//     ucountry: req.body[`add_unit[${u}].ucountry`],
+//     owner_details: sanitizedOwnerDetails,
+//     associated_contact: sanitizedAssociatedContact,
+//     relation: req.body[`add_unit[${u}].relation`],
+//     s_no: req.body[`add_unit[${u}].s_no`],
+//     descriptions: req.body[`add_unit[${u}].descriptions`],
+//     s_no1: req.body[`add_unit[${u}].s_no1`],
+//     url: req.body[`add_unit[${u}].url`],
+//     document_name: req.body[`add_unit[${u}].document_name`],
+//     document_no: req.body[`add_unit[${u}].document_no`],
+//     document_Date: req.body[`add_unit[${u}].document_Date`],
+//     linkded_contact: req.body[`add_unit[${u}].linkded_contact`]
+//   };
+
+//   console.log(unit.owner_details);
+//   console.log(unit.associated_contact);
  
 
   // Prepare for file upload
   const imagefiles = [];
   const imagefiles1 = [];
+  
+  
   if (req.files) {
-    const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[${u}].preview`));
-    const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[${u}].image`));
+    const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[${u}][preview]`));
+    const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[${u}][image]`));
+   
+    
     for (let file of imagefield) {
       try {
         const result = await cloudinary.uploader.upload(file.path);
@@ -205,19 +220,27 @@ const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
     }
 
   }
+  if (imagefiles.length > 0) {
+    unitDetails.preview = imagefiles;  // Attach preview images
+  }
+  if (imagefiles1.length > 0) {
+    unitDetails.image = imagefiles1;  // Attach main images
+  }
 
 
 
-  // Push unit details with images to the array
-  addunit_details.push({
-    ...unit,
-    preview: imagefiles,
-    image:imagefiles1
-  });
+//   // Push unit details with images to the array
+//   addunit_details.push({
+//     ...req.body,
+//     preview: imagefiles,
+//     image:imagefiles1
+//   });
+addunit_details.push(unitDetails);
 
   u++;
 }
 
+console.log(addunit_details);
 
 
 
@@ -312,38 +335,38 @@ const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
 //         u++;
 //       }
 
-      const addsize_details = [];
-      let s = 0;
+      // const addsize_details = [];
+      // let s = 0;
   
-      // Loop to process add_Content fields
-      while (req.body[`add_size[${s}].size_name`]) {
-        const size_name = req.body[`add_size[${s}].size_name`];
-        const block1 = req.body[`add_size[${s}].block1`];
-         const category = req.body[`add_size[${s}].category`];
-         const sub_category = req.body[`add_size[${s}].sub_category`];
-         const unit_type = req.body[`add_size[${s}].unit_type`];
-         const total_sealable_area = req.body[`add_size[${s}].total_sealable_area`];
-         const sq_feet1 = req.body[`add_size[${s}].sq_feet1`];
-         const covered_area = req.body[`add_size[${s}].covered_area`];
-         const sq_feet2 = req.body[`add_size[${s}].sq_feet2`];
-         const carpet_area = req.body[`add_size[${s}].carpet_area`];
-         const sq_feet3 = req.body[`add_size[${s}].sq_feet3`];
-         const loading = req.body[`add_size[${s}].loading`];
-         const percentage = req.body[`add_size[${s}].percentage`];
-         const length = req.body[`add_size[${s}].length`];
-         const yard1 = req.body[`add_size[${s}].yard1`];
-         const bredth = req.body[`add_size[${s}].bredth`];
-         const yard2 = req.body[`add_size[${s}].yard2`];
-         const total_area = req.body[`add_size[${s}].total_area`];
-         const yard3 = req.body[`add_size[${s}].yard3`];
+      // // Loop to process add_Content fields
+      // while (req.body[`add_size[${s}].size_name`]) {
+      //   const size_name = req.body[`add_size[${s}].size_name`];
+      //   const block1 = req.body[`add_size[${s}].block1`];
+      //    const category = req.body[`add_size[${s}].category`];
+      //    const sub_category = req.body[`add_size[${s}].sub_category`];
+      //    const unit_type = req.body[`add_size[${s}].unit_type`];
+      //    const total_sealable_area = req.body[`add_size[${s}].total_sealable_area`];
+      //    const sq_feet1 = req.body[`add_size[${s}].sq_feet1`];
+      //    const covered_area = req.body[`add_size[${s}].covered_area`];
+      //    const sq_feet2 = req.body[`add_size[${s}].sq_feet2`];
+      //    const carpet_area = req.body[`add_size[${s}].carpet_area`];
+      //    const sq_feet3 = req.body[`add_size[${s}].sq_feet3`];
+      //    const loading = req.body[`add_size[${s}].loading`];
+      //    const percentage = req.body[`add_size[${s}].percentage`];
+      //    const length = req.body[`add_size[${s}].length`];
+      //    const yard1 = req.body[`add_size[${s}].yard1`];
+      //    const bredth = req.body[`add_size[${s}].bredth`];
+      //    const yard2 = req.body[`add_size[${s}].yard2`];
+      //    const total_area = req.body[`add_size[${s}].total_area`];
+      //    const yard3 = req.body[`add_size[${s}].yard3`];
     
-        addsize_details.push({
-          size_name,block1,category,sub_category,unit_type,total_sealable_area,sq_feet1,covered_area,sq_feet2,carpet_area,
-          sq_feet3,loading,percentage,length,yard1,bredth,yard2,total_area,yard3
-        });
+      //   addsize_details.push({
+      //     size_name,block1,category,sub_category,unit_type,total_sealable_area,sq_feet1,covered_area,sq_feet2,carpet_area,
+      //     sq_feet3,loading,percentage,length,yard1,bredth,yard2,total_area,yard3
+      //   });
   
-        s++;
-      }
+      //   s++;
+      // }
 
 
 
