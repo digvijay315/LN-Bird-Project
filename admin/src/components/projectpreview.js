@@ -55,6 +55,8 @@ function Projectpreview() {
   // Ensure project and add_unit are available and the preview array exists
   const allImages = project.add_unit?.flatMap(unit => unit.preview); 
 
+  const cloudinaryPdfUrl = 'https://drive.google.com/file/d/1MNZZ7tyy9Fb2QMoKqv2Z4hyAjmzVF7i9/view?usp=drive_link';
+  
 
     
     
@@ -1150,7 +1152,7 @@ function Projectpreview() {
             </div>
         </div>
 
-        <div className='col-md-4'>
+        <div className='col-md-4' style={{marginBottom:"50px"}}>
             <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px"}}>
                 <div className='col-md-12' style={{fontWeight:"bold"}}>Suraj Kumar</div>
                 <div className='col-md-12' style={{fontSize:"12px",marginBottom:"20px"}}>+919991000570</div>
@@ -1180,8 +1182,18 @@ function Projectpreview() {
                     </div>
             </div>
 
-            <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px",marginTop:"20px"}}>
+            <div className='row' style={{border:"1px solid gray", borderRadius:"5px", backgroundColor:"white",padding:"10px",marginLeft:"20px",marginTop:"20px",backgroundImage: 'urlhttps://cdn.vectorstock.com/i/500p/84/65/abstract-white-monochrome-background-vector-32028465.jpg)',backgroundSize: 'cover',backgroundRepeat:"repeat",height:"auto"}}>
                 <div className='col-md-12'><u>Brochure</u></div>
+                <div className='col-md-4' style={{height:"150px",backgroundColor:"#F2F0EF"}}>
+                    <img src='https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1200px-PDF_file_icon.svg.png' style={{height:"130px",width:"150px",paddingTop:"20px"}}></img>
+                </div>
+                <div className='col-md-8'></div>
+                <div className='col-md-12' style={{display:"inline-flex"}}>
+                {/* Button to trigger PDF download from Cloudinary */}
+                <a href={cloudinaryPdfUrl} download="Brochure.pdf">
+                  <p style={{fontSize:"12px"}}>download brochure ... <button style={{border:"none"}}><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPWqiIGw7fFyNP0vI_nxHj-0xUsLjPeY4Riw&s' style={{height:"20px"}}></img></button></p>
+                </a>
+                </div>
             </div>
 
         </div>
