@@ -19,6 +19,7 @@ const {createProject,view_project, view_projectbyname, view_projectbycityname, r
 const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner, update_dealbyprojectandunit, view_deal_Byproject } = require('../controllers/add_deal');
  const uploadFields = require('../middlewares/multifile');
 const upload1 = require('../middlewares/multifile');
+const { add_activity, view_activity, remove_activity } = require('../controllers/addactivity');
 
 
 const router=express.Router()
@@ -137,5 +138,13 @@ router.post('/addproperty/addtower',add_tower)
 router.get('/addproperty/viewtower',view_tower)
 router.post('/addproperty/addproject')
 router.get('/addproperty/viewproject',view_project)
+
+// ======================================activity route========================================================
+
+router.post('/addactivity',add_activity)
+router.get('/viewactivity',view_activity)
+router.delete('/removeactivity/:_id',remove_activity)
+
+
 
 module.exports=router;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { act, useEffect } from 'react'
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { useLocation } from 'react-router-dom';
@@ -17,6 +17,8 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ReactQuill from 'react-quill';  // Import ReactQuill
 import 'react-quill/dist/quill.snow.css';
+import Swal from 'sweetalert2'; 
+import '../css/leadview.css'
 
 function Leadsingleview() {
 
@@ -523,6 +525,28 @@ useEffect(() => {
 
 // ==============================================log a call model start===================================================================
 
+const [outcome, setoutcome] = useState(["Intrested", "Not Intrested", "Left Voicemail", "No Answer"]);
+const[allactivity,setallactivity]=useState([])
+const viewallactivity=async()=>
+{
+  try {
+    const resp=await api.get('viewactivity')
+    setallactivity(resp.data.activity)
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+useEffect(()=>
+{
+  viewallactivity()
+},[])
+
+
+
+
+const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:""})
 
 const [show1, setshow1] = useState(false);
 
@@ -530,6 +554,7 @@ const handleClose1 = () => setshow1(false);
 const handleShow1=async()=>
 {
       setshow1(true);
+      setactivity({...activity,activity_name:"call"})
 }
 
 const modules = {
@@ -542,6 +567,91 @@ const modules = {
     [{ 'color': [] }, { 'background': [] }],
     ['clean']  // Allows the user to clear formatting
   ],
+};
+
+const handleNoteChange = (value) => {
+  setactivity({ ...activity, activity_note: value });
+};
+
+      const addactivity=async()=>
+      {
+        try {
+          const resp=await api.post('addactivity',activity)
+          if(resp.status===200)
+          {
+            Swal.fire({
+              icon: 'success',
+              title: 'Activity Saved',
+              text: 'Your activity has been saved successfully!',
+            });
+            handleClose1()
+          }
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000);
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+
+      const deleteactivity=async(id)=>
+      {
+        try {
+          const resp=await api.delete(`removeactivity/${id}`)
+          if(resp.status===200)
+            {
+              Swal.fire({
+                icon: 'success',
+                title: 'Activity Deleted',
+                text: 'Your activity has been deleted successfully!',
+              });
+              setTimeout(() => {
+                window.location.reload()
+              }, 1000);
+            }
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+ 
+
+      const [show2, setshow2] = useState(false);
+
+const handleClose2 = () => setshow2(false);
+const handleShow2=async(e)=>
+{
+      setshow2(true);
+}
+
+const[newoutcome,setnewoutcome]=useState("")
+const addoutcome = () => {
+  // Make sure the new outcome is not empty
+  if (newoutcome.trim() !== "") {
+    setoutcome(prevOutcome => [...prevOutcome, newoutcome]);  // Add new outcome to the array
+    handleClose2();  // Close the modal or perform any other action
+    setnewoutcome(""); // Clear the newoutcome input field
+  }
+};
+
+
+const handleCopy = () => {
+  // Use the Clipboard API to copy the text to the clipboard
+  navigator.clipboard.writeText(lead.mobile_no)
+    .then(() => {
+      // Optional: alert or feedback to user that the text was copied
+      Swal.fire({
+        icon: 'success',
+        text: 'Text copied to clipboard',
+      });
+    })
+    .catch((err) => {
+      // Optional: handle error if clipboard write fails
+      console.error("Failed to copy text: ", err);
+    });
 };
 
 
@@ -687,7 +797,7 @@ const modules = {
                       />
                       View Script
                     </MenuItem>
-                    <MenuItem style={{fontSize:"14px"}}>
+                    <MenuItem style={{fontSize:"14px"}} onClick={handleCopy }>
                       <img
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb0e6jgH9MKFXVyOdjqtb-8Y2AGgtNybnD4g&s"
                         alt="whatsapp-icon"
@@ -888,146 +998,42 @@ const modules = {
 </div>
 
 
-
-{
-    matchsitevisitdata && matchsitevisitdata.length>0 && (
-      
-        <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px"}}>
-         <img
-        src="https://cdn-icons-png.flaticon.com/512/5521/5521277.png"
-        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
-        alt="icon"
-      />
-         <div
-        style={{
-          position: "absolute",
-          marginTop: "20px",
-          left: "-10px", // Adjust the left position to create space for the vertical line
-          height: "80%",
-          width: "1px", // Width of the vertical line
-          backgroundColor: "gray", // Color of the vertical line
-        }}
-      ></div>
-        <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Site Visit:</p>
-        <ul style={{marginLeft:"10px"}}>
-            {matchsitevisitdata.map((item, index) => (
-            <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
-                {item.title}
-            </li>
-            ))}
-        </ul>
-
-    </div>
-    )
-}
-            
-                <div className='col-md-2'></div>
-
                 {
-                matchmeetingdata && matchmeetingdata.length>0 && (
-                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
-                    
-                    <img
-        src="https://cdn-icons-png.freepik.com/256/7689/7689860.png?semt=ais_hybrid"
-        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
-        alt="icon"
-      />
-         <div
-        style={{
-          position: "absolute",
-          marginTop: "20px",
-          left: "-10px", // Adjust the left position to create space for the vertical line
-          height: "80%",
-          width: "1px", // Width of the vertical line
-          backgroundColor: "gray", // Color of the vertical line
-        }}
-      ></div>
+                allactivity && allactivity.length>0 && (
+                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
+                
+                        {allactivity.slice().reverse().map((item, index) => (
+                          item.activity_name==="call"?(
+                            <div id='callaction' >
+                            <div><img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' style={{height:"20px"}}></img>
+                            
+                            <span style={{marginLeft:"60%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                            <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
 
-                    <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Meeting Task:</p>
-                    <ul style={{marginLeft:"10px"}}>
-                        {matchmeetingdata.map((item, index) => (
-                        <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
-                            {item.title}
-                        </li>
+                            </div>
+                            <span>{lead.owner} called <u> {lead.title} {lead.first_name} {lead.last_name}</u></span><br></br>
+                            <span style={{fontWeight:"bold"}}>{item.call_outcome}</span> Outcome<br></br>
+                            <div dangerouslySetInnerHTML={{ __html: item.activity_note }} />
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ):<p>no activity</p>
                         ))}
-                    </ul>
+                  
 
                     </div>
                     )
                 }
                 <div className='col-md-2'></div>
 
-                {
-                matchmaildata && matchmaildata.length>0 && (
-                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
-                    
-                    <img
-        src="https://purepng.com/public/uploads/large/purepng.com-mail-iconsymbolsiconsapple-iosiosios-8-iconsios-8-721522596075clftr.png"
-        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
-        alt="icon"
-      />
-         <div
-        style={{
-          position: "absolute",
-          marginTop: "20px",
-          left: "-10px", // Adjust the left position to create space for the vertical line
-          height: "80%",
-          width: "1px", // Width of the vertical line
-          backgroundColor: "gray", // Color of the vertical line
-        }}
-      ></div>
-                    <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Mail Task:</p>
-                    <ul style={{marginLeft:"10px"}}>
-                        {matchmaildata.map((item, index) => (
-                        <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
-                            {item.title}
-                        </li>
-                        ))}
-                    </ul>
+              
 
-                    </div>
-                    )
-                }
-                <div className='col-md-2'></div>
-
-                {
-                matchcalldata && matchcalldata.length>0 && (
-                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px"}}>
-                   
-                   <img
-        src="https://icons.veryicon.com/png/o/miscellaneous/fs-icon/call-13.png"
-        style={{ height: "20px", marginLeft: "-30px",  position: "absolute", }}
-        alt="icon"
-      />
-         <div
-        style={{
-          position: "absolute",
-          marginTop: "20px",
-          left: "-10px", // Adjust the left position to create space for the vertical line
-          height: "70%",
-          width: "1px", // Width of the vertical line
-          backgroundColor: "gray", // Color of the vertical line
-        }}
-      ></div>
-                    <p style={{fontWeight:"bold"}}><img src='https://cdn-icons-png.freepik.com/256/4315/4315445.png?semt=ais_hybrid' style={{height:"20px",marginRight:"10px"}}></img>Call Task:</p>
-                    <ul style={{marginLeft:"10px"}}>
-                        {matchcalldata.map((item, index) => (
-                        <li key={index} style={{ listStyleType: "disc", paddingLeft: "10px",fontSize:"14px",fontFamily:"times-new-roman" }}>
-                            {item.title}
-                        </li>
-                        ))}
-                    </ul>
-
-                    </div>
-                    )
-                }
-                <div className='col-md-2'></div>
-
-                <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",height:"100px",width:"100%",marginLeft:"20px",marginTop:"20px",backgroundColor:" #ffe6e6"}}></div>
-                <div className='col-md-2'></div>
+             
 
                 <div className='col-md-12' style={{marginTop:"10px"}}>
-                    <p>Manually Created - Lead Created</p>
+                    <p style={{fontSize:"14px"}}><u>{lead.title} {lead.first_name} {lead.last_name}</u> added by {lead.owner}</p>
                 </div>
 
             </div>
@@ -1390,13 +1396,25 @@ const modules = {
             <div className="row">
 
             <div className="col-md-10"><label className="labels">Call Outcome</label>
-                        <select className="form-control form-control-sm" required="true" >
+                        <select className="form-control form-control-sm" required="true" 
+                         onChange={(e) => {
+                          const selectedValue = e.target.value;
+                          setactivity({ ...activity, call_outcome: selectedValue });
+                    
+                          // Check if the selected option is "Add New Outcome" and call handleShow2
+                          if (selectedValue === 'Add New Outcome') {
+                            handleShow2();  // Call the function to show the modal or open the new outcome form
+                          }
+                        }}
+                        >
                               <option>---Select---</option>
-                              <option>Intrested</option>
-                              <option>Not Intrested</option>
-                              <option>Left Voicemail</option>
-                              <option>No Answer</option>
-                              <option>Add New Outcome</option>
+                            {
+                              outcome.map((item)=>
+                              (
+                                <option>{item}</option>
+                              ))
+                            }
+                            <option onClick={handleShow2}>Add New Outcome</option>
                              
                         </select>
             </div>
@@ -1408,11 +1426,11 @@ const modules = {
             <div className="col-md-10">
       <label className="labels" style={{ visibility: "hidden" }}>Note</label>
       <ReactQuill
-        // value={note}
-        // onChange={handleChange}
         modules={modules}  // Add the toolbar options for formatting
         placeholder="Add a note about this call."
         style={{ height: '100px', width: '100%' }}
+        value={activity.activity_note}  // Bind the editor with state
+        onChange={handleNoteChange}
       />
     </div>
             <div className='col-md-2'></div>
@@ -1424,12 +1442,37 @@ const modules = {
             <Button variant="secondary" onClick={handleClose1} >
                Do Not Log
               </Button>
-              <Button variant="secondary">
+              <Button variant="secondary" onClick={addactivity}>
                 Save
               </Button>
             </Modal.Footer>
       </Modal>
       
+
+      <Modal show={show2} onHide={handleClose2} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+                <h6 style={{fontWeight:"normal", fontSize:"12px"}}>Call Outcome</h6>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+          
+            <div className="row">
+
+            <div className="col-md-10"><label className="labels">Call Outcome</label>
+                        <input type='text' className="form-control form-control-sm" required="true" onChange={(e)=>setnewoutcome(e.target.value)}/>
+                         
+            </div>
+        
+            </div>
+
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}}>
+            <Button variant="secondary" onClick={addoutcome} >
+               Add
+              </Button>
+            </Modal.Footer>
+      </Modal>
       
 
     </div>
