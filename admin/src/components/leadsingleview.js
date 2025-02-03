@@ -11,6 +11,12 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
+import { Tooltip } from 'react-bootstrap';
+import { Select, MenuItem, FormControl, InputLabel, OutlinedInput } from '@mui/material';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import ReactQuill from 'react-quill';  // Import ReactQuill
+import 'react-quill/dist/quill.snow.css';
 
 function Leadsingleview() {
 
@@ -515,6 +521,32 @@ useEffect(() => {
 }, [flattenedUnits]);
 
 
+// ==============================================log a call model start===================================================================
+
+
+const [show1, setshow1] = useState(false);
+
+const handleClose1 = () => setshow1(false);
+const handleShow1=async()=>
+{
+      setshow1(true);
+}
+
+const modules = {
+  toolbar: [
+    [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['bold', 'italic', 'underline'],
+    ['link'],
+    [{ 'align': [] }],
+    [{ 'color': [] }, { 'background': [] }],
+    ['clean']  // Allows the user to clear formatting
+  ],
+};
+
+
+// ==============================================log a call model end=================================================================
+
 
 
       
@@ -556,18 +588,28 @@ useEffect(() => {
         </div>  
         
       </div> */}
+
+       <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
+        <div  style={{padding:"10px",borderRadius:"10px"}} >
+          <h6>Lead</h6>
+          <h3 style={{fontWeight:"normal"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px"}}>{lead.company_name}
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}}>Edit</button>
+          </span>
+          </h3>
+        </div>
+      </div>
       
 
-      <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"60px",paddingBottom:"50px"}}>
+      <div className='row' style={{display:"flex",height:"100%",marginLeft:"60px",width:"100%",gap:"10px",marginTop:"5px",paddingBottom:"50px",backgroundColor:"white"}}>
         <div className='col-md-3' style={{padding:"20px",fontSize:"14px",fontFamily:"arial"}}>
-            <div style={{display:"flex",}}>
+            {/* <div style={{display:"flex",}}>
                 <h6 style={{fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}
                     <p style={{fontSize:"12px",fontWeight:"normal"}}>{lead.email}</p>
                 </h6>
                 <h6 style={{marginLeft:"35%"}}>Site Visit</h6>
                 <h6 style={{marginLeft:"20px"}}>Task</h6>
-            </div>
-            <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} />
+            </div> */}
+            {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
                 <div className='col-md-3'></div>
                 <div className='col-md-3'><label>Status</label>
@@ -580,11 +622,84 @@ useEffect(() => {
                 </div>
                 <div className='col-md-6'></div>
 
-                <div className='col-md-4'><label style={{visibility:"hidden"}}>mobile no</label>
-                    <input type='text' className="form-control form-control-sm" style={{fontSize:"11.5px"}} value={lead.mobile_no}></input>
-                </div>
+                <div className="col-md-6" >
+                            <label className='labels' style={{visibility:"hidden"}}>mobile</label>
+                <FormControl fullWidth size="small">
+                  <InputLabel id="mobile-label" style={{paddingTop:"23px",fontSize:"18px"}}>
+                  <img
+                        src="https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg"
+                        alt="call-icon"
+                        style={{ height: '30px', marginRight: '4px' }}
+                      />
+                  {lead.mobile_no}</InputLabel>
+                  <Select
+                    labelId="mobile-label"
+                    id="mobile-select"
+                    value={lead.mobile_no}  // Always keep the mobile number as the value
+                    style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
+                    MenuProps={{
+                      PaperProps: {
+                        // style: {
+                        //   maxHeight: 200, // Limit dropdown height
+                        // },
+                      },
+                    }}
+                  >
+                
+                    {/* Action options */}
+                    <MenuItem style={{fontSize:"14px"}}>
+                      <img
+                        src="https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg"
+                        alt="call-icon"
+                        style={{ height: '16px', marginRight: '8px' }}
+                      />
+                      Call Directly
+                    </MenuItem>
+                    <MenuItem style={{fontSize:"14px"}}>
+                      <img
+                        src="https://static.vecteezy.com/system/resources/previews/005/911/524/non_2x/desktop-computer-icon-desktop-computer-symbol-free-vector.jpg"
+                        alt="message-icon"
+                        style={{ height: '16px', marginRight: '8px' }}
+                      />
+                      Call Via Desktop App
+                    </MenuItem>
+                    <MenuItem style={{fontSize:"14px"}}>
+                      <img
+                        src="https://static.thenounproject.com/png/888710-200.png"
+                        alt="whatsapp-icon"
+                        style={{ height: '16px', marginRight: '8px' }}
+                      />
+                      Add To Call List
+                    </MenuItem>
+                    <MenuItem style={{fontSize:"14px"}} onClick={handleShow1}>
+                      <img
+                        src="https://www.iconpacks.net/icons/2/free-plus-icon-3107-thumb.png"
+                        alt="whatsapp-icon"
+                        style={{ height: '16px', marginRight: '8px' }}
+                      />
+                      Log a Call
+                    </MenuItem>
+                    <MenuItem style={{fontSize:"14px"}}>
+                      <img
+                        src="https://static-00.iconduck.com/assets.00/view-list-text-icon-512x512-5d2by98p.png"
+                        alt="whatsapp-icon"
+                        style={{ height: '16px', marginRight: '8px' }}
+                      />
+                      View Script
+                    </MenuItem>
+                    <MenuItem style={{fontSize:"14px"}}>
+                      <img
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb0e6jgH9MKFXVyOdjqtb-8Y2AGgtNybnD4g&s"
+                        alt="whatsapp-icon"
+                        style={{ height: '16px', marginRight: '8px' }}
+                      />
+                    Copy {lead.mobile_no}
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
                 <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px",fontWeight:"bold"}}>{lead.tags}</p></div>
-                <div className='col-md-5'></div>
+                <div className='col-md-3'></div>
 
             
 
@@ -666,7 +781,8 @@ useEffect(() => {
 
             <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
                 <option>Internal Notes</option>
-                <option>External Notes</option>
+                <option>Email</option>
+                <option>SMS</option>
                 </select>
                 <div style={{
     position: 'absolute',
@@ -1261,6 +1377,58 @@ useEffect(() => {
         </div>
 
       </div>
+
+      <Modal show={show1} onHide={handleClose1} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+                <h6 style={{fontWeight:"normal", fontSize:"12px"}}>CALL SUMMARY</h6>
+              <h3>{lead.title} {lead.first_name} {lead.last_name}</h3>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+          
+            <div className="row">
+
+            <div className="col-md-10"><label className="labels">Call Outcome</label>
+                        <select className="form-control form-control-sm" required="true" >
+                              <option>---Select---</option>
+                              <option>Intrested</option>
+                              <option>Not Intrested</option>
+                              <option>Left Voicemail</option>
+                              <option>No Answer</option>
+                              <option>Add New Outcome</option>
+                             
+                        </select>
+            </div>
+            <div className='col-md-2'></div>
+
+            {/* <div className='col-md-10'><label className='labels' style={{visibility:"hidden"}}>note</label>
+              <textarea className='form-control form-control-sm' placeholder='Add a note about this call.' style={{height:"100px"}}></textarea>
+            </div> */}
+            <div className="col-md-10">
+      <label className="labels" style={{ visibility: "hidden" }}>Note</label>
+      <ReactQuill
+        // value={note}
+        // onChange={handleChange}
+        modules={modules}  // Add the toolbar options for formatting
+        placeholder="Add a note about this call."
+        style={{ height: '100px', width: '100%' }}
+      />
+    </div>
+            <div className='col-md-2'></div>
+                
+            </div>
+
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}}>
+            <Button variant="secondary" onClick={handleClose1} >
+               Do Not Log
+              </Button>
+              <Button variant="secondary">
+                Save
+              </Button>
+            </Modal.Footer>
+      </Modal>
       
       
 
