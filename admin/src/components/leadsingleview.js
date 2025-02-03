@@ -531,7 +531,11 @@ const viewallactivity=async()=>
 {
   try {
     const resp=await api.get('viewactivity')
-    setallactivity(resp.data.activity)
+    const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+    const filteredActivities = resp.data.activity.filter((activity) => {
+      return activity.lead === fullname; // Filter based on the full name
+    });
+    setallactivity(filteredActivities)
     
   } catch (error) {
     console.log(error);
@@ -546,7 +550,7 @@ useEffect(()=>
 
 
 
-const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:""})
+const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:""})
 
 const [show1, setshow1] = useState(false);
 
@@ -554,7 +558,8 @@ const handleClose1 = () => setshow1(false);
 const handleShow1=async()=>
 {
       setshow1(true);
-      setactivity({...activity,activity_name:"call"})
+      const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+      setactivity({...activity,activity_name:"call",lead:fullname})
 }
 
 const modules = {
@@ -999,8 +1004,8 @@ const handleCopy = () => {
 
 
                 {
-                allactivity && allactivity.length>0 && (
-                    <div className='col-md-10' style={{border:"1px solid black",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
+                allactivity && allactivity.length>0 ? (
+                    <div className='col-md-10' style={{border:"1px solid black",maxHeight:"500px",overflowY:"scroll",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
                 
                         {allactivity.slice().reverse().map((item, index) => (
                           item.activity_name==="call"?(
@@ -1024,6 +1029,8 @@ const handleCopy = () => {
                   
 
                     </div>
+                    ):(
+                      <p className="no-activity-flash" style={{fontSize:"14px",color:"red",paddingLeft:"20px"}}>no activity till now</p>
                     )
                 }
                 <div className='col-md-2'></div>
@@ -1033,7 +1040,7 @@ const handleCopy = () => {
              
 
                 <div className='col-md-12' style={{marginTop:"10px"}}>
-                    <p style={{fontSize:"14px"}}><u>{lead.title} {lead.first_name} {lead.last_name}</u> added by {lead.owner}</p>
+                    <p style={{fontSize:"14px"}}><u>{lead.title} {lead.first_name} {lead.last_name}</u> added by {lead.owner.join(',')}</p>
                 </div>
 
             </div>

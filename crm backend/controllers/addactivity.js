@@ -6,10 +6,10 @@ const addactivity = require("../models/activity");
 
 const add_activity = async (req, res) => {
     try {
-        const {activity_name, call_outcome, activity_note} = req.body;
+        const {activity_name, call_outcome, activity_note,lead} = req.body;
 
         // Create a new contact with the uploaded Cloudinary URLs
-        const newaddactivity = new addactivity({activity_name, call_outcome, activity_note});
+        const newaddactivity = new addactivity({activity_name, call_outcome, activity_note,lead});
 
         // Save to database
         const resp = await newaddactivity.save();

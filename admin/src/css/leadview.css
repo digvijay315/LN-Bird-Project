@@ -1,4 +1,26 @@
-/* #callaction:hover #deletebutton {
-    display: block;
+/* #callaction:hover #callaction {
+    background-color:red;
   } */
+
+  .no-activity-flash {
+    color: red; /* You can change this to any color you like */
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    animation: flash 1s infinite; /* Apply flash animation */
+  }
+  
+  /* Keyframes for the flashing effect */
+  @keyframes flash {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.3; /* Halfway, it becomes less visible */
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
   
