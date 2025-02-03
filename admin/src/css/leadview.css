@@ -2,6 +2,13 @@
     background-color:red;
   } */
 
+  label
+  {
+    color: #B85042;
+    word-break:keep-all;
+    font-size: 12px;
+  }
+
   .no-activity-flash {
     color: red; /* You can change this to any color you like */
     font-size: 16px;
@@ -22,5 +29,6 @@
       opacity: 1;
     }
   }
+
   
   

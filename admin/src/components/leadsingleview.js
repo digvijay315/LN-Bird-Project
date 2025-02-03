@@ -707,7 +707,7 @@ const handleCopy = () => {
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Lead</h6>
-          <h3 style={{fontWeight:"normal"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px"}}>{lead.company_name}
+          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>{lead.company_name}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}}>Edit</button>
           </span>
           </h3>
@@ -727,7 +727,7 @@ const handleCopy = () => {
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
                 <div className='col-md-3'></div>
-                <div className='col-md-3'><label>Status</label>
+                <div className='col-md-5'><label>Status</label>
                 <select className="form-control form-control-sm" style={{color:"red"}}>
                     <option >{lead?.lead_type || '---Select---'}</option>
                         {/* <option>Hot</option>
@@ -735,7 +735,7 @@ const handleCopy = () => {
                         <option>Cold</option> */}
                 </select>
                 </div>
-                <div className='col-md-6'></div>
+                <div className='col-md-4'></div>
 
                 <div className="col-md-6" >
                             <label className='labels' style={{visibility:"hidden"}}>mobile</label>
@@ -813,75 +813,75 @@ const handleCopy = () => {
                   </Select>
                 </FormControl>
               </div>
-                <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px",fontWeight:"bold"}}>{lead.tags}</p></div>
+                <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px",fontWeight:"normal"}}>{lead.tags}</p></div>
                 <div className='col-md-3'></div>
 
             
 
                 <div className='col-md-5' style={{marginTop:"50px"}}><label>Owner Sales/Manager</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.owner}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label>Team</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.team} Team</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>Asia/Kolkata</p></div>
+                <div className='col-md-3' style={{marginTop:"50px"}}><label>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team} Team</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
 
                 <div className='col-md-4' style={{marginTop:"0px"}}><label>Recived On</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.owner}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label>Source</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.campegin} {lead.source}</p></div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"bold"}}>{formattedDate}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"normal"}}>{formattedDate}</p></div>
                 <div className='col-md-12'><hr></hr></div>
 
                 <div className='row' style={{border:"1px solid gray",margin:"10px",width:"100%",borderRadius:"5px",padding:"10px"}}> 
-                    <div className='col-md-10' style={{color:"blue",fontWeight:"bold"}}>{lead.requirment}</div>
+                    <div className='col-md-10' style={{color:"blue",fontWeight:"normal"}}>{lead.requirment}</div>
                     <div className='col-md-2'  style={{cursor: "pointer",fontSize: "30px",marginTop: "-7px",fontWeight:"lighter"}}>+</div>
                     <div className='col-md-12'><hr></hr></div>
-                    <div className='col-md-12'><p style={{fontWeight:"bold"}}>Location-{lead.location} {lead.city}</p></div>
+                    <div className='col-md-12'><p style={{fontWeight:"normal"}}>Location-{lead.location} {lead.city}</p></div>
 
                     <div className='col-md-4' ><label>Property Type</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"bold"}}>{lead.property_type}</p>
+                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type}</p>
                 </div>
-                <div className='col-md-4'><label>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.sub_type}</p></div>
-                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"bold",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
+                <div className='col-md-4'><label>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.sub_type}</p></div>
+                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
 
                 <div className='col-md-4' ><label>Budget</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.budget_min} to {lead.budget_max}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.budget_min} to {lead.budget_max}</p>
                 </div>
-                <div className='col-md-4'><label>Area/Size</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
-                <div className='col-md-4' ><label>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.furnishing}</p></div>
+                <div className='col-md-4'><label>Area/Size</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
+                <div className='col-md-4' ><label>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.furnishing}</p></div>
 
                 <div className='col-md-4' ><label>Facing</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing}</p>
                 </div>
-                <div className='col-md-4'><label>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.transaction_type}</p></div>
-                <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.timeline}</p></div>
+                <div className='col-md-4'><label>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
+                <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.timeline}</p></div>
 
                 <div className='col-md-8' ><label>Specific Requirment</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold"}}></p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}></p>
                 </div>
                 
                 
-                <div className='col-md-4' ><label>Road</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.road}</p></div>
+                <div className='col-md-4' ><label>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road}</p></div>
 
                 </div>
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12' style={{color:"blue",fontWeight:"bold"}}>Personal Details</div>
+                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Personal Details</div>
                     <div className='col-md-12'><hr></hr></div>
-                    <div className='col-md-12'><p style={{fontWeight:"bold"}}>Father/Husband Name-{lead.father_husband_name} {lead.city}</p></div>
+                    <div className='col-md-12'><p style={{fontWeight:"normal"}}>Father/Husband Name-{lead.father_husband_name} {lead.city}</p></div>
 
                     <div className='col-md-3' ><label>Address</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"bold"}}>{lead.h_no}</p>
+                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.h_no}</p>
                 </div>
-                <div className='col-md-3'><label>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.area1}</p></div>
-                <div className='col-md-2' ><label>City</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.city1}</p></div>
-                <div className='col-md-2'><label>State</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.state1}</p></div>
-                <div className='col-md-2' ><label>Zip</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.pincode1}</p></div>
+                <div className='col-md-3'><label>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.area1}</p></div>
+                <div className='col-md-2' ><label>City</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.city1}</p></div>
+                <div className='col-md-2'><label>State</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.state1}</p></div>
+                <div className='col-md-2' ><label>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.pincode1}</p></div>
 
                 <div className='col-md-4' ><label>Job Title</label>
-                    <p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.designation}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.designation}</p>
                 </div>
-                <div className='col-md-4'><label>Company/Organisation</label><p style={{marginTop:"-10px",fontWeight:"bold"}}>{lead.company_name}</p></div>
+                <div className='col-md-4'><label>Company/Organisation</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.company_name}</p></div>
              
 
 
@@ -1001,11 +1001,13 @@ const handleCopy = () => {
     </select>
  
 </div>
+<div className='col-md-12'><hr></hr></div>
+
 
 
                 {
                 allactivity && allactivity.length>0 ? (
-                    <div className='col-md-10' style={{border:"1px solid black",maxHeight:"500px",overflowY:"scroll",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
+                    <div className='col-md-11' style={{maxHeight:"500px",overflowY:"scroll",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
                 
                         {allactivity.slice().reverse().map((item, index) => (
                           item.activity_name==="call"?(
@@ -1050,7 +1052,8 @@ const handleCopy = () => {
 
         <div className='row'>
 
-        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Deal Match
+          <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
+        <div className='col-md-12' > Deal Match
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -1140,8 +1143,10 @@ const handleCopy = () => {
   </TableContainer>
 
   </div>
+  </div>
 
-  <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Inventories
+  <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+  <div className='col-md-12'> Inventories
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -1214,9 +1219,11 @@ const handleCopy = () => {
     </Table>
   </TableContainer>
         </div>
+        </div>
 
 
-        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Tasks
+        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+        <div className='col-md-12'> Tasks
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -1291,8 +1298,11 @@ const handleCopy = () => {
     </Table>
   </TableContainer>
         </div>
+        </div>
 
-        <div className='col-md-12' style={{fontWeight:"bold",fontFamily:"times-new-roman"}}> Documents
+        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+
+        <div className='col-md-12'> Documents
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -1381,6 +1391,7 @@ const handleCopy = () => {
 
     </Table>
   </TableContainer>
+        </div>
         </div>
 
 
