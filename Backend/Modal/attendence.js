@@ -11,9 +11,9 @@ const attendence = new mongoose.Schema({
     training_venue_atten:{type:String},
     trainer:{type:String},
     trainer_emp_id:{type:String},
-    employee_id_atten:{type:String},
+    employee_id_atten:{type:Array},
     service_provider:{type:String},
-    employee_idtwo_atten:{type:String}
+    // employee_idtwo_atten:{type:String}
 });
 
 const attendence_modal = mongoose.model('attendence_info', attendence);

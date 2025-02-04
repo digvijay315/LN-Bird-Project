@@ -9,7 +9,8 @@ const students_register = new mongoose.Schema({
     time_zone:{type:String},
     create_password:{type:String},
     confirm_password:{type:String},
-    role:{type:String}
+    role:{type:String},
+    status: { type: String, default: 'pending', enum: ['pending', 'approved', 'rejected'] }
 
 })
 

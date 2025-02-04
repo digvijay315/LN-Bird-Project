@@ -26,6 +26,16 @@ const get_oja_details = async (req, res) => {
     }
 }
 
+const delete_oja_data = async (req, res) => {
+  try {
+    const _id = req.params._id;
+    const resp = await create_oja_modal.findByIdAndDelete({_id:_id});
+    res.status(200).send({message: "OJA data deleted successfully", create_oja: resp});
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const get_oja_details_byIds = async (req, res) => {
     try {
         const id = req.params._id;
@@ -40,6 +50,16 @@ const get_oja_details_byIds = async (req, res) => {
         console.error('Error retrieving OJA:', error);
         res.status(500).json({ message: 'Failed to retrieve OJA', error }); 
     }
+}
+
+const update_oja_details = async (req, res) => {
+  try {
+    const id = req.params._id;
+    const resp = await create_oja_modal.findByIdAndUpdate(id, req.body);
+    res.status(200).send({message: "OJA data successfully updated", create_oja: resp});
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 const updateOjaInfo = async (req, res) => {
@@ -68,4 +88,4 @@ const updateOjaInfo = async (req, res) => {
     }
   };
 
-module.exports = {post_oja_data, get_oja_details, get_oja_details_byIds, updateOjaInfo};
+module.exports = {post_oja_data, get_oja_details, delete_oja_data, get_oja_details_byIds, update_oja_details, updateOjaInfo};
