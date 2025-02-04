@@ -777,11 +777,17 @@ const sendmail=async(e)=>
       .map((field) => {
         switch (field) {
           case "name":
-            return lead.first_name + " " + lead.last_name;
+            return lead.title + " " + lead.first_name + " " + lead.last_name;
           case "mobile":
-            return lead.mobile;
+            return lead.mobile_no;
           case "city":
             return lead.city;
+            case "email":
+              return lead.email;
+              case "company":
+                return lead.company_name;
+                case "designation":
+                  return lead.designation;
           default:
             return "";
         }
@@ -1147,6 +1153,9 @@ const [isExpanded, setIsExpanded] = useState(false);
                 <MenuItem value="name">Name</MenuItem>
                 <MenuItem value="mobile">Mobile</MenuItem>
                 <MenuItem value="city">City</MenuItem>
+                <MenuItem value="email">Email</MenuItem>
+                <MenuItem value="company">Company</MenuItem>
+                <MenuItem value="designation">Designation</MenuItem>
               </Select>
        </div>
       
@@ -1272,7 +1281,7 @@ const [isExpanded, setIsExpanded] = useState(false);
 
                 {
                 allactivity && allactivity.length>0 ? (
-                    <div className='col-md-11' style={{maxHeight:"500px",overflowY:"scroll",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
+                    <div className='col-md-11' style={{maxHeight:"830px",overflowY:"scroll",borderRadius:"5px",width:"100%",marginLeft:"20px",padding:"10px",marginTop:"10px",fontSize:"12px"}}>
                 
                         {allactivity.slice().reverse().map((item, index) => (
                           item.activity_name==="call"?(
