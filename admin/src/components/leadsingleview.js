@@ -19,6 +19,8 @@ import ReactQuill from 'react-quill';  // Import ReactQuill
 import 'react-quill/dist/quill.snow.css';
 import Swal from 'sweetalert2'; 
 import '../css/leadview.css'
+import { useDropzone } from 'react-dropzone';
+import { toast, ToastContainer } from "react-toastify";
 
 function Leadsingleview() {
 
@@ -525,6 +527,7 @@ useEffect(() => {
 
 // ==============================================log a call model start===================================================================
 
+const status=["Answered","Missed","Not Pic","Busy","Cut Call","Number Not Reachable","Switch Off","Incoming","Not Available","Number Invalid"]
 const [outcome, setoutcome] = useState(["Intrested", "Not Intrested", "Left Voicemail", "No Answer"]);
 const[allactivity,setallactivity]=useState([])
 const viewallactivity=async()=>
@@ -550,7 +553,8 @@ useEffect(()=>
 
 
 
-const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:""})
+const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
+  direction:"",status:"",date:"",duration:"",intrested_inventory:""})
 
 const [show1, setshow1] = useState(false);
 
@@ -660,10 +664,131 @@ const handleCopy = () => {
 };
 
 
+const[sitevisitdata1,setsitevisitdata1]=useState([]);
+const fetchsitevisitdataformeeting=async(event)=>
+{
+  
+  try {
+    const resp=await api.get('viewsitevisit')
+    const result = resp.data?.sitevisit?.flatMap((item) => item.intrested_inventory) || [];
+    setsitevisitdata1(result)
+  } catch (error) {
+    console.log(error);
+  }
+
+}
+
+useEffect(()=>
+  {
+    fetchsitevisitdataformeeting()
+  },[])
+
 // ==============================================log a call model end=================================================================
 
 
 
+
+
+// /=================================================internal notes start===========================================================
+
+const [selectedOption, setSelectedOption] = useState("Internal Notes"); // Set the default value to "Internal Notes"
+
+const handleChange = (event) => {
+  setSelectedOption(event.target.value);
+};
+
+const templates = {
+  template1: "Hello, \n\nI hope this email finds you well. I wanted to follow up on our previous conversation regarding property. Please let me know if you have any questions.\n\nBest regards,\nDigvijay Kumar",
+  template2: "Hi there, \n\nI just wanted to remind you about the upcoming event on [date]. It will be held at Noida. Please feel free to reach out if you need any additional information.\n\nSincerely,\nDigvijay Kumar",
+  template3: `Dear sir, \n\nWe are excited to inform you that your application has been approved. Please find attached the documents with further details about the next steps.\n\nBest regards,\nDigvijay Kumar`
+};
+const[message,setmessage]=useState("")
+const[subject,setsubject]=useState("")
+const [selectedTemplate, setSelectedTemplate] = useState('');
+const [attachments, setAttachments] = useState([]);
+
+const { getRootProps, getInputProps } = useDropzone({
+  onDrop: (acceptedFiles) => {
+    setAttachments(acceptedFiles); // Store selected files
+  },
+});
+
+const handleTemplateSelect = (e) => {
+  const templateKey = e.target.value; // Get selected template key
+  setSelectedTemplate(templateKey); // Set the selected template
+  const selectedTemplateContent = templates[templateKey] || ''; // Get the template content
+
+  // Convert '\n' to '<br>' for HTML email formatting
+  const htmlFormattedMessage = selectedTemplateContent.replace(/\n/g, '<br>');
+  
+  // Set the message state with the formatted message (HTML-friendly)
+  setmessage(htmlFormattedMessage); 
+};
+
+const sendmail=async(e)=>
+  {
+    e.preventDefault();
+    const formData = new FormData();
+
+// Add the subject, message, and recipient email to form data
+        formData.append('subject', subject);
+        formData.append('message', message);
+        formData.append('emails', lead.email);
+        
+        // Append the files to form data
+        attachments.forEach((file) => {
+          formData.append('attachments', file);
+        });
+    try {
+      
+      const resp=await api.post(`contact/sendmail`,formData)
+      if(resp.status===200)
+      {
+        Swal.fire({
+          icon: 'success',
+          title: 'Mail',
+          text: 'Mail Sent Successfully!',
+        });
+     setTimeout(() => {
+      window.location.reload()
+     }, 2000);
+      }
+     
+    } catch (error) {
+      toast.error(error.response.data,{ autoClose: 2000 });
+    }
+  }
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleSelectChange = (event) => {
+    const selectedValues = event.target.value;
+    setSelectedOptions(selectedValues);
+
+    // Update the subject with selected field values from the lead object
+    const updatedSubject = selectedValues
+      .map((field) => {
+        switch (field) {
+          case "name":
+            return lead.first_name + " " + lead.last_name;
+          case "mobile":
+            return lead.mobile;
+          case "city":
+            return lead.city;
+          default:
+            return "";
+        }
+      })
+      .join(", "); // Join selected fields with a comma and space
+    setsubject(updatedSubject); // Set the subject with the dynamically updated value
+  };
+
+
+
+
+
+
+//=================================================== internal notes end=============================================================
       
     
   return (
@@ -727,7 +852,7 @@ const handleCopy = () => {
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
                 <div className='col-md-3'></div>
-                <div className='col-md-5'><label>Status</label>
+                <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
                 <select className="form-control form-control-sm" style={{color:"red"}}>
                     <option >{lead?.lead_type || '---Select---'}</option>
                         {/* <option>Hot</option>
@@ -738,7 +863,7 @@ const handleCopy = () => {
                 <div className='col-md-4'></div>
 
                 <div className="col-md-6" >
-                            <label className='labels' style={{visibility:"hidden"}}>mobile</label>
+                            <label  style={{color:"#B85042"}}>Mobile</label>
                 <FormControl fullWidth size="small">
                   <InputLabel id="mobile-label" style={{paddingTop:"23px",fontSize:"18px"}}>
                   <img
@@ -813,23 +938,23 @@ const handleCopy = () => {
                   </Select>
                 </FormControl>
               </div>
-                <div className='col-md-3' style={{marginTop:"25px"}}><label>Tags</label><p style={{lineHeight:"0px",fontWeight:"normal"}}>{lead.tags}</p></div>
+                <div className='col-md-3' style={{marginTop:"25px"}}><label style={{color:"#B85042"}}>Tags</label><p style={{lineHeight:"0px",fontWeight:"normal"}}>{lead.tags}</p></div>
                 <div className='col-md-3'></div>
 
             
 
-                <div className='col-md-5' style={{marginTop:"50px"}}><label>Owner Sales/Manager</label>
+                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Owner Sales/Manager</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team} Team</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
+                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team} Team</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
 
-                <div className='col-md-4' style={{marginTop:"0px"}}><label>Recived On</label>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"normal"}}>{formattedDate}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"normal"}}>{formattedDate}</p></div>
                 <div className='col-md-12'><hr></hr></div>
 
                 <div className='row' style={{border:"1px solid gray",margin:"10px",width:"100%",borderRadius:"5px",padding:"10px"}}> 
@@ -838,30 +963,30 @@ const handleCopy = () => {
                     <div className='col-md-12'><hr></hr></div>
                     <div className='col-md-12'><p style={{fontWeight:"normal"}}>Location-{lead.location} {lead.city}</p></div>
 
-                    <div className='col-md-4' ><label>Property Type</label>
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Property Type</label>
                     <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type}</p>
                 </div>
-                <div className='col-md-4'><label>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.sub_type}</p></div>
-                <div className='col-md-4' ><label>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.sub_type}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
 
-                <div className='col-md-4' ><label>Budget</label>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Budget</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.budget_min} to {lead.budget_max}</p>
                 </div>
-                <div className='col-md-4'><label>Area/Size</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
-                <div className='col-md-4' ><label>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.furnishing}</p></div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Area/Size</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.furnishing}</p></div>
 
-                <div className='col-md-4' ><label>Facing</label>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing}</p>
                 </div>
-                <div className='col-md-4'><label>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
                 <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.timeline}</p></div>
 
-                <div className='col-md-8' ><label>Specific Requirment</label>
+                <div className='col-md-8' ><label style={{color:"#B85042"}}>Specific Requirment</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}></p>
                 </div>
                 
                 
-                <div className='col-md-4' ><label>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road}</p></div>
 
                 </div>
 
@@ -870,18 +995,18 @@ const handleCopy = () => {
                     <div className='col-md-12'><hr></hr></div>
                     <div className='col-md-12'><p style={{fontWeight:"normal"}}>Father/Husband Name-{lead.father_husband_name} {lead.city}</p></div>
 
-                    <div className='col-md-3' ><label>Address</label>
+                    <div className='col-md-3' ><label style={{color:"#B85042"}}>Address</label>
                     <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.h_no}</p>
                 </div>
-                <div className='col-md-3'><label>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.area1}</p></div>
-                <div className='col-md-2' ><label>City</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.city1}</p></div>
-                <div className='col-md-2'><label>State</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.state1}</p></div>
-                <div className='col-md-2' ><label>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.pincode1}</p></div>
+                <div className='col-md-3'><label style={{color:"#B85042"}}>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.area1}</p></div>
+                <div className='col-md-2' ><label style={{color:"#B85042"}}>City</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.city1}</p></div>
+                <div className='col-md-2'><label style={{color:"#B85042"}}>State</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.state1}</p></div>
+                <div className='col-md-2' ><label style={{color:"#B85042"}}>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.pincode1}</p></div>
 
-                <div className='col-md-4' ><label>Job Title</label>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Job Title</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.designation}</p>
                 </div>
-                <div className='col-md-4'><label>Company/Organisation</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.company_name}</p></div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Company/Organisation</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.company_name}</p></div>
              
 
 
@@ -894,7 +1019,7 @@ const handleCopy = () => {
         <div className='col-md-5' style={{padding:"10px"}}>
             <div className='row'>
 
-            <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
+            {/* <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
                 <option>Internal Notes</option>
                 <option>Email</option>
                 <option>SMS</option>
@@ -910,16 +1035,120 @@ const handleCopy = () => {
       fontSize: '16px', 
       color: '#333', 
       fontWeight: 'bold'
-    }}>▼</span> {/* You can replace this with an image or icon */}
+    }}>▼</span> {/* You can replace this with an image or icon 
   </div>
 
-                <textarea  className='form-control form-control-sm' style={{ position: "relative",height:"100px",backgroundColor:" #ffe6e6",border:"none"}}/></div>
+                <textarea  className='form-control form-control-sm' style={{ position: "relative",height:"100px",backgroundColor:" #ffe6e6",border:"none"}}/></div> */}
             
-            <div className='col-md-7'></div>
+            {/* <div className='col-md-7'></div>
             <div className='col-md-3' style={{position: 'absolute', top: '100px',marginLeft:"60%",transition: 'background-color 0.3s ease'}} onMouseOver={(e) => e.target.style.backgroundColor = '#2196F3'} // On hover, change color to blue
                  onMouseOut={(e) => e.target.style.backgroundColor = ' #ffe6e6'}><button className='form-control form-control-sm' style={{backgroundColor:" #ffe6e6",border:"none"}}>Cancel</button></div>
             <div className='col-md-2' style={{position: 'absolute', top: '100px',marginLeft:"80%",transition: 'background-color 0.3s ease'}}    onMouseOver={(e) => e.target.style.backgroundColor = '#2196F3'} // On hover, change color to blue
-                 onMouseOut={(e) => e.target.style.backgroundColor = ' #ffe6e6'}><button className='form-control form-control-sm' style={{backgroundColor:" #ffe6e6",border:"none"}}>Add</button></div>
+                 onMouseOut={(e) => e.target.style.backgroundColor = ' #ffe6e6'}><button className='form-control form-control-sm' style={{backgroundColor:" #ffe6e6",border:"none"}}>Add</button></div> */}
+
+
+<div className="col-md-11">
+      <FormControl fullWidth size="small">
+        <Select
+          labelId="mobile-label"
+          id="mobile-select"
+          value={selectedOption} // Bind the value to state
+          onChange={handleChange} // Update the state when the value changes
+          style={{ fontSize: "14px", boxShadow: "none", height: selectedOption === "Email" ? "250px" : "50px", display: "flex", // Flexbox to align items
+            flexDirection: "column", // Stack items vertically
+            justifyContent: "flex-start", // Align items to the top
+            paddingLeft: "15px",paddingTop:"5px" }}
+            IconComponent={null}
+        >
+          {/* Action options */}
+          <MenuItem value="Email" style={{ fontSize: "14px" }}>
+            <img
+              src="https://cdn.iconscout.com/icon/free/png-256/free-email-icon-download-in-svg-png-gif-file-formats--envenlope-letter-mail-user-interface-pack-icons-83578.png"
+              alt="call-icon"
+              style={{ height: "16px", marginRight: "8px" }}
+            />
+            Email             {selectedOption === "Email" && lead && (
+              <span style={{marginLeft:"20%"}}>
+                {" |"}
+                {lead.title} {lead.first_name} {lead.last_name}
+              </span>
+              
+            )}
+          </MenuItem>
+          <MenuItem value="SMS" style={{ fontSize: "14px" }}>
+            <img
+              src="https://thumbs.dreamstime.com/b/sms-sign-icon-black-editable-vector-illustration-isolated-white-background-sms-icon-black-124325394.jpg"
+              alt="message-icon"
+              style={{ height: "16px", marginRight: "8px" }}
+            />
+            SMS
+          </MenuItem>
+          <MenuItem value="Internal Notes" style={{ fontSize: "14px" }}>
+            <img
+              src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg"
+              alt="whatsapp-icon"
+              style={{ height: "16px", marginRight: "8px" }}
+            />
+            Internal Notes
+          </MenuItem>
+         
+        </Select>
+        {selectedOption === "Email" && (
+          <div style={{marginTop:"-200px",  padding: "10px", border: "1px solid #ccc",height:"200px" }}>
+         
+         <div className="row mt-2" id="sendmail" style={{fontSize:"12px"}}>
+       {/* <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={lead.email} /></div> */}
+       <div className="col-md-12" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+        <input type="text" style={{border:"none",fontSize:"12px",borderBottom:"1px solid gray"}} required="true" className="form-control form-control-sm" placeholder='subject' value={subject} onChange={(e)=>setsubject(e.target.value)}/>
+       <Select
+                multiple
+                value={selectedOptions}
+                onChange={handleSelectChange}
+                style={{ fontSize: "12px", width: "20%",border:"none" }}
+                displayEmpty
+              >
+                {/* Dropdown for selecting fields to include in the subject */}
+                <MenuItem value="name">Name</MenuItem>
+                <MenuItem value="mobile">Mobile</MenuItem>
+                <MenuItem value="city">City</MenuItem>
+              </Select>
+       </div>
+      
+
+       <div className="col-md-12" style={{marginTop:"5px"}}><textarea  className="form-control form-control-sm" value={message}  placeholder="Enter Your Message" style={{height:"50px",border:"none",fontSize:"12px"}} onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
+       <div className="col-md-4" style={{fontSize:"12px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+       <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
+          <option value="">---Select Template---</option>
+          <option value="template1">Template 1</option>
+          <option value="template2">Template 2</option>
+          <option value="template3">Template 3</option>
+        </select>
+       </div>
+
+       <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc', padding: '10px', cursor: 'pointer',margin:"10px" }}>
+        <input {...getInputProps()} />
+        <p>Drag & drop files here, or click to select files</p>
+        <ul>
+          {attachments.length > 0 && attachments.map((file, index) => (
+            <li key={index}>{file.name}</li>
+          ))}
+        </ul>
+      </div>
+      <div className='col-md-2' style={{marginTop:"40px",marginLeft:"50px"}}><button className='form-control form-control-sm' onClick={sendmail}>send</button></div>
+   </div>
+
+          </div>
+        )}
+   
+      </FormControl>
+    </div>
+
+    
+
+    
+
+
+
 
             <div className='col-md-12' style={{marginTop:"20px"}}><input type='checkbox'></input><span>show on primary contact</span></div>
 
@@ -1413,6 +1642,40 @@ const handleCopy = () => {
           
             <div className="row">
 
+            <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setactivity({...activity,direction:e.target.value})}>
+                    <option>---Select---</option>
+                    <option>Incoming</option>
+                    <option>Outgoing</option>
+                        </select>
+                        </div>
+
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setactivity({...activity,status:e.target.value})} >
+                         <option>---Select---</option>
+                         {
+                            status.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                        </select>
+                        </div>
+
+                        <div className="col-md-4"><label className="labels">Date</label><input type="date" id="date1" className="form-control form-control-sm" onChange={(e)=>setactivity({...activity,date:e.target.value})}/></div>
+                <div className="col-md-4"><label className="labels">Duration</label><input type="time" className="form-control form-control-sm" onChange={(e)=>setactivity({...activity,duration:e.target.value})}/></div>
+                <div className="col-md-4"> </div>
+
+                <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setactivity({...activity,intrested_inventory:e.target.value})}>
+                    <option>---Select---</option>
+                    {
+                          sitevisitdata1.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select>
+                        </div>
+
             <div className="col-md-10"><label className="labels">Call Outcome</label>
                         <select className="form-control form-control-sm" required="true" 
                          onChange={(e) => {
@@ -1492,7 +1755,7 @@ const handleCopy = () => {
             </Modal.Footer>
       </Modal>
       
-
+<ToastContainer/>
     </div>
   )
 }
