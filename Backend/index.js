@@ -17,6 +17,11 @@ const catResponseRoutes = require('./Routes/admin');
 app.use('/api', catResponseRoutes);
 
 app.use('/api/questions', require('./Routes/admin'));
+app.get('/',(req,res)=>
+{
+    res.send("welcome")
+}
+)
 
 app.listen(5000,()=>
 {
