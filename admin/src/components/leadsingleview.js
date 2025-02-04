@@ -554,7 +554,7 @@ useEffect(()=>
 
 
 const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
-  direction:"",status:"",date:"",duration:"",intrested_inventory:""})
+  direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0})
 
 const [show1, setshow1] = useState(false);
 
@@ -694,7 +694,10 @@ useEffect(()=>
 const [selectedOption, setSelectedOption] = useState("Internal Notes"); // Set the default value to "Internal Notes"
 
 const handleChange = (event) => {
+  const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
   setSelectedOption(event.target.value);
+  setactivity({...activity,activity_name:"email",lead:fullname})
+
 };
 
 const templates = {
@@ -723,6 +726,7 @@ const handleTemplateSelect = (e) => {
   
   // Set the message state with the formatted message (HTML-friendly)
   setmessage(htmlFormattedMessage); 
+  setactivity({...activity,message:htmlFormattedMessage})
 };
 
 const sendmail=async(e)=>
@@ -742,6 +746,7 @@ const sendmail=async(e)=>
     try {
       
       const resp=await api.post(`contact/sendmail`,formData)
+      
       if(resp.status===200)
       {
         Swal.fire({
@@ -749,9 +754,11 @@ const sendmail=async(e)=>
           title: 'Mail',
           text: 'Mail Sent Successfully!',
         });
+        const resp1=await api.post('addactivity',activity)
      setTimeout(() => {
       window.location.reload()
      }, 2000);
+    
       }
      
     } catch (error) {
@@ -783,7 +790,36 @@ const sendmail=async(e)=>
     setsubject(updatedSubject); // Set the subject with the dynamically updated value
   };
 
+const handlemailmessage=(e)=>
+{
+  setmessage(e.target.value)
+  setactivity({...activity,message:e.target.value})
+}
+const [viewCount1, setViewCount1] = useState(0);
+const [isExpanded, setIsExpanded] = useState(false);
 
+  const toggleExpand = async(id) => {
+    setIsExpanded(!isExpanded);  // Toggle the expanded state
+    if (!isExpanded) {
+      try {
+        const resp = await api.get(`viewactivitybyid/${id}`);
+        console.log(resp);
+        
+        const currentViewCount = Number(resp.data.activity[0].viewcount); 
+        const newViewCount = currentViewCount + 1;
+        console.log(currentViewCount);
+        
+        const resp1=await api.put(`updateactivity/${id}`,{ viewCount1: newViewCount })
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+
+  };
+
+  
 
 
 
@@ -1115,7 +1151,7 @@ const sendmail=async(e)=>
        </div>
       
 
-       <div className="col-md-12" style={{marginTop:"5px"}}><textarea  className="form-control form-control-sm" value={message}  placeholder="Enter Your Message" style={{height:"50px",border:"none",fontSize:"12px"}} onChange={e => setmessage(prevProfile => ({ ...prevProfile, message: e.target.value }))}/></div>
+       <div className="col-md-12" style={{marginTop:"5px"}}><textarea  className="form-control form-control-sm" value={message?message:''}  placeholder="Enter Your Message" style={{height:"50px",border:"none",fontSize:"12px"}} onChange={handlemailmessage}/></div>
        <div className="col-md-4" style={{fontSize:"12px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
        <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
           <option value="">---Select Template---</option>
@@ -1255,7 +1291,43 @@ const sendmail=async(e)=>
                           
                             </div>
                        
-                          ):<p>no activity</p>
+                          ) :  item.activity_name==="email"?(
+                            <div id='mailaction' onClick={()=>toggleExpand(item._id)}
+                                style={{
+                                  cursor: "pointer",
+                                  overflow: "hidden",
+                                  height: isExpanded ? "auto" : "80px", // Height based on expanded state
+                                  transition: "height 0.3s ease", // Smooth transition for height change
+                                }}>
+                            <div><img src='https://illustoon.com/photo/2751.png' style={{height:"20px"}}></img>
+                            <span style={{fontSize:"10px"}}>you sent an email to {lead.title} {lead.first_name} {lead.last_name}</span>
+                            <img
+          src="https://cdn-icons-png.flaticon.com/512/301/301687.png"
+          style={{
+            height: "15px",
+            marginLeft:"10%",
+            cursor: "pointer",
+            marginRight: "5px",
+          }}
+          onClick={toggleExpand} // Eye icon also toggles the expand/collapse
+        />
+        <span> {item.viewcount}</span>
+                            <span style={{marginLeft:"15%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                            <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
+
+                            </div>
+                            <span><u> {lead.email}  </u></span><br></br>
+                            <div dangerouslySetInnerHTML={{ __html: item.message }} /><br></br>
+                            <span style={{fontWeight:"bold"}}>{lead.owner}</span>
+                           <hr></hr>
+                            <br></br>
+                            {!isExpanded && (
+                              <hr style={{ marginTop: "10px", borderTop: "1px solid black" }} />
+                            )}
+                            </div>
+                           
+                       
+                          ) :<p>no activity</p>
                         ))}
                   
 

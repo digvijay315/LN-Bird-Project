@@ -9,7 +9,9 @@ const add_activity=new mongoose.Schema({
     status:{type:String},
     date:{type:String},
     duration:{type:String},
-    intrested_inventory:{type:String}
+    intrested_inventory:{type:String},
+    message:{type:String},
+    viewcount:{type:Number,default:0},
     },{timestamps:true})
 
 const addactivity=mongoose.model('add_activity',add_activity)

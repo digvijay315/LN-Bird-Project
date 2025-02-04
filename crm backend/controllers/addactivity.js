@@ -6,9 +6,10 @@ const addactivity = require("../models/activity");
 
 const add_activity = async (req, res) => {
     try {
-        const {activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory} = req.body;
+        const {activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory,message,viewcount} = req.body;
+     
       
-        const newaddactivity = new addactivity({activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory});
+        const newaddactivity = new addactivity({activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory,message,viewcount});
 
         // Save to database
         const resp = await newaddactivity.save();
@@ -29,6 +30,17 @@ const view_activity=async(req,res)=>
         }
     }
 
+    const view_activitybyid=async(req,res)=>
+        {
+            try {
+                const id=req.params._id
+                const resp=await addactivity.find({_id:id})
+                res.status(200).send({message:"activity details fetch successfully",activity:resp})
+            } catch (error) {
+                console.log(error)
+            }
+        }
+
     const remove_activity=async(req,res)=>
         {
             try {
@@ -44,6 +56,20 @@ const view_activity=async(req,res)=>
                 console.log(error)
             }
         }
+
+        const update_activity=async(req,res)=>
+            {
+                try {
+                   
+                    
+                    const id=req.params._id
+                    const {viewCount1}=req.body
+                    const resp=await addactivity.findByIdAndUpdate(id, { $set: { viewcount:viewCount1 } },{ new: true })
+                    res.status(200).send({message:"activity update  successfully",activity:resp})
+                } catch (error) {
+                    console.log(error)
+                }
+            }
     
 
-module.exports={add_activity,view_activity,remove_activity}
+module.exports={add_activity,view_activity,remove_activity,update_activity,view_activitybyid}
