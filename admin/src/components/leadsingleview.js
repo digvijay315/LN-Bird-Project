@@ -811,10 +811,10 @@ const sendmail=async(e)=>
     setsubject(updatedSubject); // Set the subject with the dynamically updated value
   };
 
-const handlemailmessage=(e)=>
+const handlemailmessage=(value)=>
 {
-  setmessage(e.target.value)
-  setactivity({...activity,message:e.target.value})
+  setmessage(value)
+  setactivity({...activity,message:value})
 }
 const [viewCount1, setViewCount1] = useState(0);
 const [isExpanded, setIsExpanded] = useState(false);
@@ -899,6 +899,18 @@ const handleactivitynoteschange=(value)=>
 
 // =================================================filter activity end============================================================
     
+const [buttonText, setButtonText] = useState("→"); // Button text
+const [isSmall, setIsSmall] = useState(false);
+
+  // Function to toggle size
+  const handleToggle = () => {
+    setIsSmall(!isSmall); // Toggle the state value
+    setButtonText(isSmall ? "→" : "←");
+  };
+
+
+
+
   return (
     <div>
 
@@ -942,6 +954,8 @@ const handleactivitynoteschange=(value)=>
           <h6>Lead</h6>
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>{lead.company_name}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}}>Edit</button>
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
+    
           </span>
           </h3>
         </div>
@@ -1124,7 +1138,7 @@ const handleactivitynoteschange=(value)=>
 
             </div>
         </div>
-        <div className='col-md-5' style={{padding:"10px"}}>
+        <div className={isSmall ? 'col-md-8' : 'col-md-5'} style={{padding:"10px",transition:"className 1s ease"}}>
             <div className='row'>
 
             {/* <div className="col-md-12"><select className='form-control form-control-sm' style={{border:"none",backgroundColor:" #ffe6e6",backgroundImage: "url('https://p7.hiclipart.com/preview/218/63/773/writing-computer-icons-website-content-writer-reading-download-png-writing-icon.jpg')", backgroundSize: "30px 30px",backgroundRepeat: "no-repeat",backgroundPosition: "left center",paddingLeft: "40px", appearance: 'none',paddingRight: "30px"}}>
@@ -1162,12 +1176,15 @@ const handleactivitynoteschange=(value)=>
           id="mobile-select"
           value={selectedOption} // Bind the value to state
           onChange={handleChange} // Update the state when the value changes
-          style={{ fontSize: "14px", boxShadow: "none",height: selectedOption === "Email" ? "250px" : selectedOption === "Internal Notes" ? "180px" : "50px",
+          style={{ fontSize: "14px", boxShadow: "none",height: selectedOption === "Email" ? "300px" : selectedOption === "Internal Notes" ? "180px" : "50px",
             display: "flex", // Flexbox to align items
             flexDirection: "column", // Stack items vertically
             justifyContent: "flex-start", // Align items to the top
-            paddingLeft: "15px",paddingTop:"5px" }}
+            paddingLeft: "15px",paddingTop:"5px",
+            backgroundColor:selectedOption==="Internal Notes"?"#ffe6e6":"white"
+           }}
             IconComponent={null}
+            
         >
           {/* Action options */}
           <MenuItem value="Email" style={{ fontSize: "14px" }}>
@@ -1203,7 +1220,7 @@ const handleactivitynoteschange=(value)=>
          
         </Select>
         {selectedOption === "Email" && (
-          <div style={{marginTop:"-200px",  padding: "10px", border: "1px solid #ccc",height:"200px" }}>
+          <div style={{marginTop:"-250px",  padding: "10px", border: "1px solid #ccc",height:"250px" }}>
          
          <div className="row mt-2" id="sendmail" style={{fontSize:"12px"}}>
        {/* <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={lead.email} /></div> */}
@@ -1227,8 +1244,14 @@ const handleactivitynoteschange=(value)=>
        </div>
       
 
-       <div className="col-md-12" style={{marginTop:"5px"}}><textarea  className="form-control form-control-sm" value={message?message:''}  placeholder="Enter Your Message" style={{height:"50px",border:"none",fontSize:"12px"}} onChange={handlemailmessage}/></div>
-       <div className="col-md-4" style={{fontSize:"12px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+       <div className="col-md-12" style={{marginTop:"5px"}}>
+          <ReactQuill
+        modules={modules1}  // Add the toolbar options for formatting
+        style={{ height: '80px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+        className="my-quill-editor"
+        value={message}   placeholder="Enter Your Message"  onChange={handlemailmessage}/>
+        </div>
+       <div className="col-md-4" style={{fontSize:"12px",marginTop:"40px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
        <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
           <option value="">---Select Template---</option>
           <option value="template1">Template 1</option>
@@ -1237,16 +1260,16 @@ const handleactivitynoteschange=(value)=>
         </select>
        </div>
 
-       <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc', padding: '10px', cursor: 'pointer',margin:"10px" }}>
+       <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"60px", cursor: 'pointer' }}>
         <input {...getInputProps()} />
-        <p>Drag & drop files here, or click to select files</p>
+        <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
         <ul>
           {attachments.length > 0 && attachments.map((file, index) => (
             <li key={index}>{file.name}</li>
           ))}
         </ul>
       </div>
-      <div className='col-md-2' style={{marginTop:"40px",marginLeft:"50px"}}><button className='form-control form-control-sm' onClick={sendmail}>send</button></div>
+      <div className='col-md-2' style={{marginTop:"70px",marginLeft:"50px"}}><button className='form-control form-control-sm' onClick={sendmail}>send</button></div>
    </div>
 
           </div>
@@ -1495,7 +1518,11 @@ const handleactivitynoteschange=(value)=>
             </div>
 
         </div>
-        <div className='col-md-3' style={{padding:"10px"}}>
+
+
+
+
+        <div className='col-md-3' style={{padding:"10px",display:isSmall?"none":"block"}}>
 
         <div className='row'>
 
@@ -1840,6 +1867,7 @@ const handleactivitynoteschange=(value)=>
   </TableContainer>
         </div>
         </div>
+      
 
 
 
