@@ -6,10 +6,10 @@ const addactivity = require("../models/activity");
 
 const add_activity = async (req, res) => {
     try {
-        const {activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory,message,viewcount} = req.body;
+        const {activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory,message,viewcount,activity_note1} = req.body;
      
       
-        const newaddactivity = new addactivity({activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory,message,viewcount});
+        const newaddactivity = new addactivity({activity_name, call_outcome, activity_note,lead,direction,status,date,duration,intrested_inventory,message,viewcount,activity_note1});
 
         // Save to database
         const resp = await newaddactivity.save();
@@ -40,6 +40,9 @@ const view_activity=async(req,res)=>
                 console.log(error)
             }
         }
+
+      
+    
 
     const remove_activity=async(req,res)=>
         {

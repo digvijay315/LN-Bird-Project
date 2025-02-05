@@ -530,6 +530,7 @@ useEffect(() => {
 const status=["Answered","Missed","Not Pic","Busy","Cut Call","Number Not Reachable","Switch Off","Incoming","Not Available","Number Invalid"]
 const [outcome, setoutcome] = useState(["Intrested", "Not Intrested", "Left Voicemail", "No Answer"]);
 const[allactivity,setallactivity]=useState([])
+const[filterdata,setfilterdata]=useState([])
 const viewallactivity=async()=>
 {
   try {
@@ -539,6 +540,7 @@ const viewallactivity=async()=>
       return activity.lead === fullname; // Filter based on the full name
     });
     setallactivity(filteredActivities)
+    setfilterdata(filteredActivities)
     
   } catch (error) {
     console.log(error);
@@ -554,7 +556,8 @@ useEffect(()=>
 
 
 const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
-  direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0})
+  direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
+  activity_note1:""})
 
 const [show1, setshow1] = useState(false);
 
@@ -575,6 +578,18 @@ const modules = {
     [{ 'align': [] }],
     [{ 'color': [] }, { 'background': [] }],
     ['clean']  // Allows the user to clear formatting
+  ],
+};
+
+const modules1 = {
+  toolbar: [
+    [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+    ['bold', 'italic', 'underline'],
+    ['link'],
+    // [{ 'align': [] }],
+    [{ 'color': [] }, { 'background': [] }],
+    // ['clean']  // Allows the user to clear formatting
   ],
 };
 
@@ -825,13 +840,64 @@ const [isExpanded, setIsExpanded] = useState(false);
 
   };
 
-  
+  useEffect(() => {
+    // Access the editor container and editor area after the component is mounted
+    const quillEditor = document.querySelector('.my-quill-editor .ql-container');
+    const quillContent = document.querySelector('.my-quill-editor .ql-editor');
 
+    if (quillEditor) {
+      quillEditor.style.border = 'none';
+    }
+    if (quillContent) {
+      quillContent.style.border = 'none';
+    }
+  }, []);
+  
+const handleactivitynoteschange=(value)=>
+{
+  const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+  setactivity({...activity,activity_note1:value,activity_name:"notes",lead:fullname})
+}
 
 
 
 //=================================================== internal notes end=============================================================
       
+//======================================== filter activity start===============================================================
+
+
+ const [showDropdown, setShowDropdown] = useState(false);
+ const activityname = [
+  'call', 
+  'email', 
+  'notes' 
+];
+
+ const [selectactivity, setselectactivity] = useState([]);
+
+ const handlefilterCheckboxChange = (activity) => {
+   // Update selectactivity based on the checkbox change
+   const updatedSelections = selectactivity.includes(activity)
+     ? selectactivity.filter((p) => p !== activity)  // Remove the activity if already selected
+     : [...selectactivity, activity];  // Add the activity if it's not selected
+ 
+   setselectactivity(updatedSelections);
+ 
+   // Filter the data based on selected activities (activity_name)
+   const newFilteredData = filterdata.filter((item) =>
+     updatedSelections.length === 0 || updatedSelections.includes(item.activity_name)
+   );
+ 
+   // Set allactivity with the newly filtered data (no need to merge previous data)
+   setallactivity(newFilteredData);
+ };
+ console.log(allactivity);
+ 
+
+
+
+
+// =================================================filter activity end============================================================
     
   return (
     <div>
@@ -1096,7 +1162,8 @@ const [isExpanded, setIsExpanded] = useState(false);
           id="mobile-select"
           value={selectedOption} // Bind the value to state
           onChange={handleChange} // Update the state when the value changes
-          style={{ fontSize: "14px", boxShadow: "none", height: selectedOption === "Email" ? "250px" : "50px", display: "flex", // Flexbox to align items
+          style={{ fontSize: "14px", boxShadow: "none",height: selectedOption === "Email" ? "250px" : selectedOption === "Internal Notes" ? "180px" : "50px",
+            display: "flex", // Flexbox to align items
             flexDirection: "column", // Stack items vertically
             justifyContent: "flex-start", // Align items to the top
             paddingLeft: "15px",paddingTop:"5px" }}
@@ -1125,7 +1192,7 @@ const [isExpanded, setIsExpanded] = useState(false);
             />
             SMS
           </MenuItem>
-          <MenuItem value="Internal Notes" style={{ fontSize: "14px" }}>
+          <MenuItem value="Internal Notes" style={{ fontSize: "14px",backgroundColor:"#ffe6e6" }}>
             <img
               src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg"
               alt="whatsapp-icon"
@@ -1184,6 +1251,25 @@ const [isExpanded, setIsExpanded] = useState(false);
 
           </div>
         )}
+
+
+{selectedOption === "Internal Notes" && (
+          <div style={{marginTop:"-130px",  padding: "10px", border: "1px solid #ccc",height:"130px",backgroundColor:"#ffe6e6" }}>
+         
+         <div className="col-md-12">
+          {/* <textarea  className="form-control form-control-sm" value={message?message:''}  placeholder="Enter Your Message" style={{height:"80px",border:"none",fontSize:"12px",}} onChange={handlemailmessage}/> */}
+          <ReactQuill
+        modules={modules1}  // Add the toolbar options for formatting
+        style={{ height: '80px', width: '100%',fontSize:"12px"}}
+        className="my-quill-editor"
+        value={activity.activity_note1}  // Bind the editor with state
+        onChange={handleactivitynoteschange}
+      />
+          </div>
+          <div className='col-md-2' style={{marginTop:"10px",marginLeft:"85%"}}><button style={{backgroundColor:"#ffe6e6",border:"none"}} className='form-control form-control-sm' onClick={addactivity}>Add</button></div>
+
+          </div>
+        )}
    
       </FormControl>
     </div>
@@ -1197,11 +1283,47 @@ const [isExpanded, setIsExpanded] = useState(false);
 
             <div className='col-md-12' style={{marginTop:"20px"}}><input type='checkbox'></input><span>show on primary contact</span></div>
 
-            <div style={{ display: "flex",fontSize:"14px",marginTop:"10px" }}>
+         
 
+<div className='col-md-4' style={{display:"flex",marginTop:"20px"}}>
+    <p style={{marginLeft: "10px",fontSize:"14px" }}>Displaying</p>
+        <div style={{paddingLeft:"10px"}}>
+        <span style={{fontWeight:"bold",fontSize:"12px",cursor:"pointer"}}   onClick={() => setShowDropdown(!showDropdown)} >all activity</span>
+        {showDropdown && (
+  <div
+    className="dropdown-container"
+    style={{
+      position: 'absolute',
+      marginTop: '0px',
+      left: '10%',
+      width: '150px',
+      backgroundColor: '#f9f9f9',
+      border: '1px solid #ddd',
+      borderRadius: '4px',
+      padding: '10px',
+      boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+      zIndex: 10,
+      
+    }}
+  >
+    {activityname.map((activity) => (
+      <div key={activity} className="dropdown-item" style={{height:"40px",fontSize:"14px"}} >
+        <label>
+                <input
+                  type="checkbox"
+                  checked={selectactivity.includes(activity)}
+                  onChange={() => handlefilterCheckboxChange(activity)}
+                  style={{ marginRight: '8px' }}
+                />
+                {activity}
+              </label>
+            </div>
+              ))}
+            </div>
+          )}
 
-    <p style={{marginLeft: "10px" }}>Displaying</p>
-    <select
+        </div>
+    {/* <select
       className="form-control form-control-sm"
       style={{
         border: "none",
@@ -1214,10 +1336,10 @@ const [isExpanded, setIsExpanded] = useState(false);
       <option>all activity</option>
       <option>contact activity</option>
       <option>lead activity</option>
-    </select>
+    </select> */}
+</div>
 
-
- 
+<div className='col-md-4' style={{display:"flex",marginTop:"20px"}}>
     <p style={{marginBottom: "0" }}>By</p>
     <select
       className="form-control form-control-sm"
@@ -1234,10 +1356,10 @@ const [isExpanded, setIsExpanded] = useState(false);
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
-  
+    </div>
 
 
-    <p style={{marginBottom: "0", whiteSpace: "nowrap" }}>Related to</p>
+    {/* <p style={{marginBottom: "0", whiteSpace: "nowrap" }}>Related to</p>
     <select
       className="form-control form-control-sm"
       style={{
@@ -1252,10 +1374,10 @@ const [isExpanded, setIsExpanded] = useState(false);
       <option>all</option>
       <option>contact activity</option>
       <option>lead activity</option>
-    </select>
+    </select> */}
 
 
- 
+<div className='col-md-4' style={{display:"flex",marginTop:"20px"}}>
     <p style={{marginBottom: "0" }}>Tagged</p>
     <select
       className="form-control form-control-sm"
@@ -1266,15 +1388,15 @@ const [isExpanded, setIsExpanded] = useState(false);
        fontWeight:"bold",
         marginTop:"-8px",
         marginRight:"20px",
-        width:"80px"
+       
       }}
     >
       <option>any</option>
       <option>contact activity</option>
       <option>lead activity</option>
     </select>
- 
-</div>
+    </div>
+
 <div className='col-md-12'><hr></hr></div>
 
 
@@ -1288,7 +1410,7 @@ const [isExpanded, setIsExpanded] = useState(false);
                             <div id='callaction' >
                             <div><img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"60%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                            <span style={{marginLeft:"61%"}}>{new Date(item.createdAt).toLocaleString()}</span>
                             <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
 
                             </div>
@@ -1335,6 +1457,21 @@ const [isExpanded, setIsExpanded] = useState(false);
                             )}
                             </div>
                            
+                       
+                          ) : item.activity_name==="notes"?(
+                            <div id='noteaction' >
+                            <div><img src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg" style={{height:"20px"}}></img>
+                            
+                            <span style={{marginLeft:"60%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                            <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> left a note</span><br></br>
+                            <div dangerouslySetInnerHTML={{ __html: item.activity_note1 }} />
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
                        
                           ) :<p>no activity</p>
                         ))}
@@ -1782,9 +1919,7 @@ const [isExpanded, setIsExpanded] = useState(false);
             </div>
             <div className='col-md-2'></div>
 
-            {/* <div className='col-md-10'><label className='labels' style={{visibility:"hidden"}}>note</label>
-              <textarea className='form-control form-control-sm' placeholder='Add a note about this call.' style={{height:"100px"}}></textarea>
-            </div> */}
+         
             <div className="col-md-10">
       <label className="labels" style={{ visibility: "hidden" }}>Note</label>
       <ReactQuill

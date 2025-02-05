@@ -12,6 +12,7 @@ const add_activity=new mongoose.Schema({
     intrested_inventory:{type:String},
     message:{type:String},
     viewcount:{type:Number,default:0},
+    activity_note1:{type:String}
     },{timestamps:true})
 
 const addactivity=mongoose.model('add_activity',add_activity)

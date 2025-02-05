@@ -30,5 +30,14 @@
     }
   }
 
+  .my-quill-editor .ql-toolbar {
+    margin-top: -15px; /* You can change this value to suit your needs */
+    border: none;
+  }
+  
+  .my-quill-editor .ql-container {
+    width: 100%;  /* To match the editor width */
+    border: none;
+  }
   
   
