@@ -5,7 +5,7 @@ import Sidebar1 from "./sidebar1";
 import { toast, ToastContainer } from "react-toastify";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { utils, writeFile } from "xlsx";
 import '../css/hover.css';
 import { useRef } from "react";
@@ -25,6 +25,7 @@ import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
 
 function Leadfetch() {
+
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
     "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
     "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
@@ -2331,6 +2332,7 @@ const handleallblockchange = (event) => {
                                                 {
                                                   navigate('/leadsingleview',{state:item})
                                                 }
+
 
 
 

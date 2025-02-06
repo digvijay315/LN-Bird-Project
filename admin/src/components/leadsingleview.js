@@ -1,7 +1,7 @@
 import React, { act, useEffect } from 'react'
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -21,10 +21,11 @@ import Swal from 'sweetalert2';
 import '../css/leadview.css'
 import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function Leadsingleview() {
 
-
+const navigate=useNavigate()
   
 
     const location=useLocation()
@@ -115,7 +116,7 @@ function Leadsingleview() {
         { id: 'sno', name: '#' },
         { id: 'activity_type', name: 'Type' },
         { id: 'start_date', name: 'Date' },
-        { id: 'sechudle_by', name: 'By' },
+        { id: 'status', name: 'Status' },
       ];
       const allColumnsunit = [
         { id: 'sno', name: '#' },
@@ -953,7 +954,7 @@ const [isSmall, setIsSmall] = useState(false);
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Lead</h6>
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>{lead.company_name}
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}}>Edit</button>
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={()=>navigate('/leaddetails',{state:lead._id})}>Edit</button>
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
           </span>
@@ -1434,8 +1435,19 @@ const [isSmall, setIsSmall] = useState(false);
                             <div><img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' style={{height:"20px"}}></img>
                             
                             <span style={{marginLeft:"61%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                            <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
+                            {/* <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span> */}
+                            <span  style={{marginLeft:"0%",display:"inline-block"}}>
+                            <Dropdown >
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
 
+                              <Dropdown.Menu>
+                                <Dropdown.Item >Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} >Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
                             </div>
                             <span>{lead.owner} called <u> {lead.title} {lead.first_name} {lead.last_name}</u></span><br></br>
                             <span style={{fontWeight:"bold"}}>{item.call_outcome}</span> Outcome<br></br>
@@ -1467,8 +1479,20 @@ const [isSmall, setIsSmall] = useState(false);
         />
         <span> {item.viewcount}</span>
                             <span style={{marginLeft:"15%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                            <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
+                            {/* <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span> */}
 
+                            <span  style={{marginLeft:"0%",position:"absolute",marginTop:"-10px"}}>
+                            <Dropdown >
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item >Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} >Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
                             </div>
                             <span><u> {lead.email}  </u></span><br></br>
                             <div dangerouslySetInnerHTML={{ __html: item.message }} /><br></br>
@@ -1486,7 +1510,20 @@ const [isSmall, setIsSmall] = useState(false);
                             <div><img src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg" style={{height:"20px"}}></img>
                             
                             <span style={{marginLeft:"60%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                            <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span>
+                            {/* <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span> */}
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown >
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item >Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} >Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
 
                             </div>
                             <span><u>{lead.owner}</u> left a note</span><br></br>
@@ -1730,42 +1767,55 @@ const [isSmall, setIsSmall] = useState(false);
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible2 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease",overflowY:"scroll",overflowX:"scroll"}}>
+        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible2 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease",overflowY:"scroll",overflowX:"scroll"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
-      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
-        <TableRow >
+      <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow style={{backgroundColor:"gray"}}>
           {allColumnstask.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
           ))}
         </TableRow>
-      </TableHead>
+      </thead>
       <tbody>
         {
          
         alltask.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
               {item.activity_type}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
             {item.start_date
               ? formatDate(new Date(item.start_date)) 
               : formatDate(new Date(item.due_date))} 
           </StyledTableCell>
 
-            <StyledTableCell>
-              {item.lead}
-            </StyledTableCell>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+          {allColumnstask.map((col) => (
+        col.id === "status" ? (
+      <span>
+        {item.complete === "true" ? (
+          <span style={{color:"green"}}>Complete</span>
+        ) : item.complete === "" && new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date() ? (
+          <span style={{color:"blue"}}>Pending</span>
+        ) : item.complete === "" && new Date(item.due_date) < new Date() || new Date(item.start_date) < new Date() ? (
+          <span className='no-activity-flash' style={{fontSize:"12px"}}>Overdue</span>
+        ) : ""}
+      </span>
+    ) : null
+  ))}
+        </StyledTableCell>
+
           </StyledTableRow>
         ))}
       </tbody> 
