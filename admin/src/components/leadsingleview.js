@@ -910,6 +910,64 @@ const [isSmall, setIsSmall] = useState(false);
   };
 
 
+  const [calltask,setcalltask]=useState({activity_type:"",title:"",reason:"",lead:"",executive:"",remarks:"",complete:"",due_date:"",due_time:"",title2:"",
+                      first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
+                      result:"",intrested_inventory:"",feedback:""})
+
+                      const direction=["Incoming","Outgoing"]
+                      const result=["Interested","Not Interested","Postponed","Low Budget","Location Mismatch"]
+
+                      const handler1=()=>
+                        {
+                            document.getElementById("date1").style.color="black"
+                        }
+
+                        const [show3, setshow3] = useState(false);
+
+                        const handleClose3 = () => setshow3(false);
+                        const handleShow3=()=>
+                        {
+                              setshow3(true);
+                        }
+
+  const[callid,setcallid]=useState("")
+  const completetask=(item)=>
+  {
+    if(item.activity_type==="Call" && item.complete==="")
+    {
+      const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+      setcalltask(item)
+      handleShow3()
+      setcallid(item._id)
+      setactivity({...activity,activity_name:"complete call task",lead:fullname})
+    }
+    else
+    {
+      alert("Task already completed...")
+    }
+  }
+  const calltaskdetails=async()=>
+    {
+   
+     const updatedCallTask = { ...calltask, complete:"true" };
+    
+    try {
+    const resp=await api.put(`updatecalltask/${callid}`,updatedCallTask)
+    const resp1=await api.post('addactivity',activity)
+    if(resp.status===200)
+    {
+    toast.success("task completed success")
+    setTimeout(() => {
+    window.location.reload();
+    }, 2000); // 2000 milliseconds = 2 seconds
+
+    }
+} catch (error) {
+
+    toast.error(error.message)
+}
+}
+
 
 
   return (
@@ -1442,8 +1500,8 @@ const [isSmall, setIsSmall] = useState(false);
                               </Dropdown.Toggle>
 
                               <Dropdown.Menu>
-                                <Dropdown.Item >Edit</Dropdown.Item>
-                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} >Delete</Dropdown.Item>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
                               
                               </Dropdown.Menu>
                             </Dropdown>
@@ -1487,8 +1545,8 @@ const [isSmall, setIsSmall] = useState(false);
                               </Dropdown.Toggle>
 
                               <Dropdown.Menu>
-                                <Dropdown.Item >Edit</Dropdown.Item>
-                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} >Delete</Dropdown.Item>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
                               
                               </Dropdown.Menu>
                             </Dropdown>
@@ -1518,8 +1576,8 @@ const [isSmall, setIsSmall] = useState(false);
                               </Dropdown.Toggle>
 
                               <Dropdown.Menu>
-                                <Dropdown.Item >Edit</Dropdown.Item>
-                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} >Delete</Dropdown.Item>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
                               
                               </Dropdown.Menu>
                             </Dropdown>
@@ -1533,12 +1591,39 @@ const [isSmall, setIsSmall] = useState(false);
                           
                             </div>
                        
-                          ) :<p>no activity</p>
+                          ) : item.activity_name==="complete call task"?(
+                            <div id='completecallaction' >
+                            <div><img src="https://t4.ftcdn.net/jpg/03/03/72/17/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es.jpg" style={{height:"40px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} of {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) : <p>no activity</p>
                         ))}
                   
 
                     </div>
-                    ):(
+                    ): (
                       <p className="no-activity-flash" style={{fontSize:"14px",color:"red",paddingLeft:"20px"}}>no activity till now</p>
                     )
                 }
@@ -1787,7 +1872,7 @@ const [isSmall, setIsSmall] = useState(false);
         {
          
         alltask.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} onClick={()=>completetask(item)} style={{cursor:"pointer"}}>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell>
@@ -2045,6 +2130,85 @@ const [isSmall, setIsSmall] = useState(false);
             <Modal.Footer style={{marginTop:"20px"}}>
             <Button variant="secondary" onClick={addoutcome} >
                Add
+              </Button>
+            </Modal.Footer>
+      </Modal>
+
+      <Modal show={show3} onHide={handleClose3} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+               Complete Call Task
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div className="row mt-2">
+                    
+                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,direction:e.target.value}))} >
+                    
+                    <option>---Select---</option>
+                        
+                          <option>Incoming</option>
+                          <option>Outgoing</option>
+                        
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,status:e.target.value}))}>
+                   
+                    <option>---Select---</option>
+                    <option>Answered</option>
+                    <option>Missed</option>
+                    <option>Not Pic</option>
+                    <option>Busy</option>
+                    <option>Cut Call</option>
+                    <option>Number Not Reachable</option>
+                    <option>Switch Off</option>
+                    <option>Incoming</option>
+                    <option>Not Available</option>
+                    <option>Number Invalid</option>
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+                
+               
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1"  className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...prevState,date:e.target.value}))}/></div>
+                <div className="col-md-4"><label className="labels">Duration</label><input type="time"  className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...prevState,duration:e.target.value}))}/></div>
+                <div className="col-md-4"> </div>
+
+                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,result:e.target.value}))}>
+                   
+                    <option>---Select---</option>
+                    <option>Interested</option>
+                    <option>Not Interested</option>
+                    <option>Postponed</option>
+                    <option>Low Budget</option>
+                    <option>Location Mismatch</option>
+                       
+                       </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,intrested_inventory:e.target.value}))}>
+                    
+                    <option>---Select---</option>
+                        {
+                          sitevisitdata1.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select>
+                        </div>
+                    <div className="col-md-4"></div>
+
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'   style={{height:"100px"}} onChange={(e)=>setcalltask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
+                    <div className="col-md-12"><br></br></div>
+                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+                     
+                  
+                    </div>
+
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}}>
+            <Button variant="secondary" onClick={calltaskdetails} >
+               Complete
               </Button>
             </Modal.Footer>
       </Modal>
