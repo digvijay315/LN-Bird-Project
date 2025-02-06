@@ -757,7 +757,7 @@ useEffect(() => {
   const handleDateChangesite = (e) => {
     const selectedDate = e.target.value;
     const formattedDate = formatDatesite(selectedDate);
-    setsitevisit({ ...sitevisit, start_date: formattedDate });
+    setsitevisit({ ...sitevisit, start_date: selectedDate });
   };
 
 
@@ -786,7 +786,7 @@ useEffect(() => {
   const handleDateChangesite1 = (e) => {
     const selectedDate = e.target.value;
     const formattedDate = formatDatesite1(selectedDate);
-    setsitevisit({ ...sitevisit, end_date: formattedDate });
+    setsitevisit({ ...sitevisit, end_date: selectedDate });
   };
   
   
@@ -950,7 +950,7 @@ const handleprojectchange2 = (event) => {
     const handleDateChangemeeting = (e) => {
       const selectedDate = e.target.value;
       const formattedDate = formatDatemeeting(selectedDate);
-      setmeetingtask({ ...meetingtask, due_date: formattedDate });
+      setmeetingtask({ ...meetingtask, due_date: selectedDate });
     };
     
     
@@ -1361,7 +1361,7 @@ useEffect(() => {
   const handleDateChangemail = (e) => {
     const selectedDate = e.target.value;
     const formattedDate = formatDatemail(selectedDate);
-    setmailtask({ ...mailtask, due_date: formattedDate });
+    setmailtask({ ...mailtask, due_date: selectedDate });
   };
   
   
@@ -1414,7 +1414,7 @@ const formatDate = (dateString) => {
 const handleDateChange = (e) => {
   const selectedDate = e.target.value;
   const formattedDate = formatDate(selectedDate);
-  setcalltask({ ...calltask, due_date: formattedDate });
+  setcalltask({ ...calltask, due_date: selectedDate });
 };
 
 

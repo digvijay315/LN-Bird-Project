@@ -861,6 +861,7 @@ const handleactivitynoteschange=(value)=>
 }
 
 
+console.log(alltask);
 
 //=================================================== internal notes end=============================================================
       
@@ -1883,6 +1884,7 @@ const [isSmall, setIsSmall] = useState(false);
             {item.start_date
               ? formatDate(new Date(item.start_date)) 
               : formatDate(new Date(item.due_date))} 
+              {/* {item.start_date || item.due_date} {item.due_time} */}
           </StyledTableCell>
 
           <StyledTableCell style={{ fontSize: "12px" }}>
