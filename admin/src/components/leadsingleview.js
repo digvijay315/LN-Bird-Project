@@ -1837,7 +1837,7 @@ const [isSmall, setIsSmall] = useState(false);
           ▼
         </span>
         <span 
-         
+         onClick={()=>navigate('/tasksform')}
           style={{ 
             position:"absolute",
             cursor: "pointer", 
