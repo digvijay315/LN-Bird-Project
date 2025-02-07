@@ -893,7 +893,7 @@ console.log(alltask);
    // Set allactivity with the newly filtered data (no need to merge previous data)
    setallactivity(newFilteredData);
  };
- console.log(allactivity);
+
  
 
 
@@ -915,10 +915,16 @@ const [isSmall, setIsSmall] = useState(false);
                       first_name:"",last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",direction:"",status:"",date:"",duration:"",
                       result:"",intrested_inventory:"",feedback:""})
 
-                      const direction=["Incoming","Outgoing"]
-                      const result=["Interested","Not Interested","Postponed","Low Budget","Location Mismatch"]
-
-                      const handler1=()=>
+  const [mailtask,setmailtask]=useState({activity_type:"Mail",title:"",executive:"",lead:"",project:[],block:[],inventory:[],subject:"",remarks:"",
+                        complete:"",due_date:"",due_time:"",direction:"",status:"",date:"",feedback:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",})
+                     
+                     
+  const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
+                       reason:"",project:[],block:[],inventory:[],remark:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
+                       complete:"",status:"",meeting_result:"",date:"",feedback:""})                  
+                     
+                     
+                        const handler1=()=>
                         {
                             document.getElementById("date1").style.color="black"
                         }
@@ -931,7 +937,26 @@ const [isSmall, setIsSmall] = useState(false);
                               setshow3(true);
                         }
 
-  const[callid,setcallid]=useState("")
+
+                        const [show4, setshow4] = useState(false);
+
+                        const handleClose4 = () => setshow4(false);
+                        const handleShow4=()=>
+                        {
+                              setshow4(true);
+                        }
+
+                        const [show5, setshow5] = useState(false);
+
+                        const handleClose5 = () => setshow5(false);
+                        const handleShow5=()=>
+                        {
+                              setshow5(true);
+                        }
+
+
+
+  const[taskid,settaskid]=useState("")
   const completetask=(item)=>
   {
     if(item.activity_type==="Call" && item.complete==="")
@@ -939,12 +964,31 @@ const [isSmall, setIsSmall] = useState(false);
       const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
       setcalltask(item)
       handleShow3()
-      setcallid(item._id)
+      settaskid(item._id)
       setactivity({...activity,activity_name:"complete call task",lead:fullname})
     }
+    else if(item.activity_type==="Mail" && item.complete==="")
+      {
+        const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+        setmailtask(item)
+        handleShow4()
+        settaskid(item._id)
+        setactivity({...activity,activity_name:"complete mail task",lead:fullname})
+      }
+      else if(item.activity_type==="Meeting" && item.complete==="")
+        {
+          const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+          setmeetingtask(item)
+          handleShow5()
+          settaskid(item._id)
+          setactivity({...activity,activity_name:"complete meeting task",lead:fullname})
+        }
     else
     {
-      alert("Task already completed...")
+      Swal.fire({
+        icon:"success",
+        text:"Task already completed..."
+      })
     }
   }
   const calltaskdetails=async()=>
@@ -953,7 +997,7 @@ const [isSmall, setIsSmall] = useState(false);
      const updatedCallTask = { ...calltask, complete:"true" };
     
     try {
-    const resp=await api.put(`updatecalltask/${callid}`,updatedCallTask)
+    const resp=await api.put(`updatecalltask/${taskid}`,updatedCallTask)
     const resp1=await api.post('addactivity',activity)
     if(resp.status===200)
     {
@@ -969,6 +1013,101 @@ const [isSmall, setIsSmall] = useState(false);
 }
 }
 
+
+const mailtaskdetails=async()=>
+  {
+   
+
+      // Update state
+      const updatedMailTask = { ...mailtask, complete:"true" };
+      try {
+          const resp=await api.put(`updatemailtask/${taskid}`,updatedMailTask)
+          const resp1=await api.post('addactivity',activity)
+          if(resp.status===200)
+          {
+              toast.success(resp.data.message)
+              setTimeout(() => {
+                  window.location.reload();
+                }, 2000); // 2000 milliseconds = 2 seconds
+              
+          }
+      } catch (error) {
+          
+          toast.error(error.message)
+      }
+    }
+
+
+        const[leadupdatestage,setleadupdatestage]=useState("")
+        const[dealupdatestage,setdealupdatestage]=useState("")
+    useEffect(()=>
+    {
+      if(meetingtask.meeting_result==="Deal Done")
+      {
+        setleadupdatestage("Booked")
+        setdealupdatestage("Booking")
+      }
+    
+    },[meetingtask.meeting_result])
+
+    const meetingdetails = async () => {
+    
+      const updatemeetingtask = { ...meetingtask, complete:"true" };
+    
+      try {
+        const data1 = { newstage: dealupdatestage };
+        const stage = { stage:leadupdatestage };
+    
+        
+     
+        // Loop through each selected project-block-unit combination
+        let isValidCombination = true;
+        for (let i = 0; i < meetingtask.inventory.length; i++) {
+          const selectedCombination = meetingtask.inventory[i];
+          const [unit_number, block, project] = selectedCombination.split('-');
+    
+          // Check if the unit_number, block, and project exist
+          if (unit_number && block && project) {
+            console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+    
+            try {
+              // Call API for each valid combination
+              const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+            } catch (error) {
+              // Handle API errors for the individual combination
+              toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+              isValidCombination = false; // Set to false if the combination fails
+            }
+          } else {
+            // If any part is missing, skip the combination
+            toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+            isValidCombination = false;
+          }
+        }
+    
+        // Post site visit data if the combination is valid
+        if (isValidCombination) {
+          const resp = await api.put(`updatemeetingtask/${taskid}`, updatemeetingtask);
+    
+          const resp1 = await api.put(`updateleadbystagebyemail/${meetingtask.email[0]}`,stage );
+          const resp2=await api.post('addactivity',activity)
+          // If successful, show a success toast and reload
+          if (resp.status === 200) {
+            toast.success("Task Completed", { autoClose: 2000 });
+    
+            setTimeout(() => {
+              window.location.reload();
+            }, 2000);
+          }
+        } else {
+          toast.error("Some project/block/unit combinations were invalid. Please check your data.");
+        }
+    
+      } catch (error) {
+        // Handle any errors during the process
+        toast.error("An error occurred. Please check your data and try again.");
+      }
+    };
 
 
   return (
@@ -1036,7 +1175,7 @@ const [isSmall, setIsSmall] = useState(false);
                 <div className='col-md-3'></div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
                 <select className="form-control form-control-sm" style={{color:"red"}}>
-                    <option >{lead?.lead_type || '---Select---'}</option>
+                    <option >{lead?.stage || '---Select---'}</option>
                         {/* <option>Hot</option>
                         <option>Warm</option>
                         <option>Cold</option> */}
@@ -1594,7 +1733,7 @@ const [isSmall, setIsSmall] = useState(false);
                        
                           ) : item.activity_name==="complete call task"?(
                             <div id='completecallaction' >
-                            <div><img src="https://t4.ftcdn.net/jpg/03/03/72/17/360_F_303721767_iNO49Cr0bPrcZT9eIuTr0VUa5QXuK1es.jpg" style={{height:"40px"}}></img>
+                            <div><img src="https://cdn3d.iconscout.com/3d/premium/thumb/two-way-communication-3d-icon-download-in-png-blend-fbx-gltf-file-formats--chat-chatting-people-join-call-center-pack-icons-8400040.png" style={{height:"20px"}}></img>
                             
                             <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
                           
@@ -1619,7 +1758,61 @@ const [isSmall, setIsSmall] = useState(false);
                           
                             </div>
                        
-                          ) : <p>no activity</p>
+                          ) : item.activity_name==="complete mail task"?(
+                            <div id='completemailaction' >
+                            <div><img src="https://cdn-icons-png.flaticon.com/512/4697/4697867.png" style={{height:"20px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} of {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) :  item.activity_name==="complete meeting task"?(
+                            <div id='completemeetingaction' >
+                            <div><img src="https://cdn-icons-png.flaticon.com/512/1081/1081530.png" style={{height:"20px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} with {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) :<p>no activity</p>
                         ))}
                   
 
@@ -2136,6 +2329,8 @@ const [isSmall, setIsSmall] = useState(false);
             </Modal.Footer>
       </Modal>
 
+      {/* ====================================================complete call task start ==================================================*/}
+
       <Modal show={show3} onHide={handleClose3} size='lg'>
             <Modal.Header>
               <Modal.Title>
@@ -2212,9 +2407,147 @@ const [isSmall, setIsSmall] = useState(false);
             <Button variant="secondary" onClick={calltaskdetails} >
                Complete
               </Button>
+              <Button variant="secondary" onClick={handleClose3} >
+               Close
+              </Button>
             </Modal.Footer>
       </Modal>
       
+      {/* ============================================complete call task end========================================================= */}
+
+
+      {/*=========================================== complete mail task start ========================================================*/}
+
+      <Modal show={show4} onHide={handleClose4} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+               Complete Mail Task
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div className="row mt-2">
+                    
+            <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+            <option>---Select---</option>
+                        
+                        <option>Incoming</option>
+                        <option>Outgoing</option>
+                        </select>
+             </div>
+
+             <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+                    <option>---select---</option>
+                       <option>Read</option>
+                       <option>Delivered</option>
+                       <option>Bounced</option>
+                       <option>Undelivered</option>
+                        </select>
+               </div>
+               <div className="col-md-4"></div>
+
+                  <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" /></div>
+                <div className="col-md-8"> </div>
+
+                   <div className="col-md-4"></div>
+
+                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                    <div className="col-md-12"><br></br></div>
+                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div>      
+                  
+                    </div>
+
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}}>
+            <Button variant="secondary" onClick={mailtaskdetails} >
+               Complete
+              </Button>
+              <Button variant="secondary" onClick={handleClose4} >
+               Close
+              </Button>
+            </Modal.Footer>
+      </Modal>
+
+{/* ==============================================complete mail task end=========================================================== */}
+
+
+
+{/* ===================================complete meeting task start======================================================================= */}
+
+<Modal show={show5} onHide={handleClose5} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+               Complete Meeting Task
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <div className="row mt-2">
+                    
+            <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
+
+              <option>---Select---</option>
+                <option>Conducted</option>
+                <option>Cancelled</option>
+                <option> Postponed</option>
+                  </select>
+          </div>
+
+          {
+      meetingtask.status==="Conducted" && 
+            (
+              <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,meeting_result:e.target.value}))}>
+              <option>{meetingtask.meeting_result}</option>
+              <option>---Select---</option>
+                <option>Deal Done</option>
+                <option>Negotiation Uncomplete</option>
+                <option>Deal Not Done</option>
+                <option>Site Visit</option>
+                  </select>
+                  </div>
+            )
+          
+            }
+
+              {
+                meetingtask.meeting_result==="Deal Done" && (
+                <div className="col-md-3"><label className="labels" style={{visibility:"none"}}>.</label><button style={{backgroundColor:"greenyellow"}} className="form-control form-control-sm"  onClick={() => window.open('/bookingdetails', '_blank')}> Create Booking</button></div>
+                )
+              }
+              <div className="col-md-1"></div>
+
+              <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" value={meetingtask.date} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
+
+              <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
+
+            </div>
+
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}}>
+            <Button variant="secondary" onClick={meetingdetails} >
+               Complete
+              </Button>
+              <Button variant="secondary" onClick={handleClose5} >
+               Close
+              </Button>
+            </Modal.Footer>
+      </Modal>
+
+
+
+
+{/* ==========================================complete meeting task end============================================================= */}
+
+
+{/* =========================================complete sitevisit task start========================================================= */}
+
+
+
+
+
+
+
+
+{/* =======================================complete site vist task end ===========================================================*/}
+
 <ToastContainer/>
     </div>
   )

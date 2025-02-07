@@ -1381,8 +1381,7 @@ const [show4, setshow4] = useState(false);
                   }
                   const [meetingtask,setmeetingtask]=useState({activity_type:"Meeting",title:"",executive:"",lead:"",location_type:"",location_address:"",
                     reason:"",project:[],block:[],inventory:[],remark:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
-                    complete:"",status:"",meeting_result:"",date:"",feedback:""
-                  })
+                    complete:"",status:"",meeting_result:"",date:"",feedback:""})
 
                     const fetchmeetingdata=async(event)=>
                       {
