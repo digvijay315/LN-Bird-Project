@@ -2360,37 +2360,23 @@ const handleTypeClick3 = (type) => {
                     setteams(selectedteam);
                     setproject({ ...project, team: selectedteam });
                 };
-                const bankOptions = [
-                  { value: 'sbi', label: 'State Bank of India', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/SBI-logo.svg/2048px-SBI-logo.svg.png' },
-                  { value: 'hdfc', label: 'HDFC Bank', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPiQARLn9IY-nzbl9wU0-IHn6_lcfZvCa76w&s' },
-                  { value: 'icici', label: 'ICICI Bank', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd2SufMo9hay75vGgsFcIX0kbzn1fCuOPQqg&s' },
-                  { value: 'axis', label: 'Axis Bank', logo: 'https://download.logo.wine/logo/Axis_Bank/Axis_Bank-Logo.wine.png' },
-                  { value: 'punjab_national', label: 'Punjab National Bank', logo: 'https://iconape.com/wp-content/files/ek/208557/svg/208557.svg' },
-                  { value: 'bank_of_baroda', label: 'Bank of Baroda', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPjV3MWR0PoGMFoqLEgZe5RUF49lU-Z3Ofyw&s' },
-                  { value: 'union_bank', label: 'Union Bank of India', logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIv2bcBKrbGxkjWvLX08z-80PgmL9v-SRvzA&s' },
-                  { value: 'kotak', label: 'Kotak Mahindra Bank', logo: 'https://seekvectors.com/files/download/Kotak%20Mahindra%20Bank.png' },
-              ];
-              const [selectedBanks, setSelectedBanks] = useState([]);
-
-              const handleChange = (event) => {
-                  const value = event.target.value;
-                  setSelectedBanks(value);
+                const bankOptions = [ 'State Bank of India','HDFC Bank','ICICI Bank','Axis Bank','Punjab National Bank',
+                  'Bank of Baroda','Union Bank of India','Kotak Mahindra Bank'];
+               const [selectedBanks, setSelectedBanks] = useState([]);
+              
+                            const handleChange = (event) => {
+                              const value = event.target.value;
+                            
+                              // Update selectedBanks with the new selection
+                              setSelectedBanks(value);
+                            
+                              // Update the approved_bank state (just store the names of selected banks)
+                              setproject((prevState) => ({
+                                ...prevState,
+                                approved_bank: value, // Only store the bank names
+                              }));
+                            };
           
-                  // Map selected values to include both name and logo
-                  const approvedBanks = value.map((bankValue) => {
-                      const option = bankOptions.find(opt => opt.value === bankValue);
-                      return {
-                          name: option.label,
-                          logo: option.logo,
-                      };
-                  });
-          
-                  // Update project state with approved banks
-                  setproject(prevState => ({
-                      ...prevState,
-                      approved_bank: approvedBanks
-                  }));
-              };
         
               
               const zoneslist = [
@@ -3297,16 +3283,12 @@ const generateExcelFileunit = () => {
                 multiple
                 value={selectedBanks}
                 onChange={handleChange}
-                renderValue={(selected) => selected.map((value) => {
-                    const option = bankOptions.find(opt => opt.value === value);
-                    return option.label;
-                }).join(', ')}
+                renderValue={(selected) => selected.join(', ')}
             >
                 {bankOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        <Checkbox checked={selectedBanks.indexOf(option.value) > -1} />
-                        <ListItemText primary={option.label} />
-                        <img src={option.logo} alt={option.label} style={{ width: 50, height: 40 }} />
+                    <MenuItem key={option} value={option}>
+                        <Checkbox checked={selectedBanks.indexOf(option) > -1} />
+                        <ListItemText primary={option} />
                     </MenuItem>
                 ))}
             </Select>
@@ -4184,7 +4166,7 @@ const generateExcelFileunit = () => {
             <div style={{width:"100%"}}>
             <div className="row" id='unitdetails1'>
              
-                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm"  placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>Corner</option>
