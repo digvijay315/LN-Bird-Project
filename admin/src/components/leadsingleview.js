@@ -12,7 +12,7 @@ import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
 import { Tooltip } from 'react-bootstrap';
-import { Select, MenuItem, FormControl, InputLabel, OutlinedInput } from '@mui/material';
+import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import ReactQuill from 'react-quill';  // Import ReactQuill
@@ -22,6 +22,7 @@ import '../css/leadview.css'
 import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
+
 
 function Leadsingleview() {
 
@@ -180,7 +181,7 @@ const navigate=useNavigate()
       const [alltask,setalltask]=useState([])
 
       const[sitevisitdata,setsitevisitdata]=useState([])
-      const sitevisit=async()=>
+      const sitevisittask=async()=>
       {
         try {
             const resp=await api.get('viewsitevisit')
@@ -236,7 +237,7 @@ const navigate=useNavigate()
       }
       useEffect(()=>
     {
-        sitevisit()
+        sitevisittask()
         meeting()
         mail()
         call()
@@ -923,7 +924,9 @@ const [isSmall, setIsSmall] = useState(false);
                        reason:"",project:[],block:[],inventory:[],remark:"",due_date:"",title2:"",first_name:"",last_name:"",mobile_no:"",email:"",stage:"",
                        complete:"",status:"",meeting_result:"",date:"",feedback:""})                  
                      
-                     
+    const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
+                       inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",complete:"",stage:"",title2:"",first_name:"",
+                       last_name:"",mobile_no:[],email:[],stage:"",lead_id:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})                  
                         const handler1=()=>
                         {
                             document.getElementById("date1").style.color="black"
@@ -952,6 +955,14 @@ const [isSmall, setIsSmall] = useState(false);
                         const handleShow5=()=>
                         {
                               setshow5(true);
+                        }
+
+                        const [show6, setshow6] = useState(false);
+
+                        const handleClose6 = () => setshow6(false);
+                        const handleShow6=()=>
+                        {
+                              setshow6(true);
                         }
 
 
@@ -983,6 +994,14 @@ const [isSmall, setIsSmall] = useState(false);
           settaskid(item._id)
           setactivity({...activity,activity_name:"complete meeting task",lead:fullname})
         }
+        else if(item.activity_type==="SiteVisit" && item.complete==="")
+          {
+            const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
+            setsitevisit(item)
+            handleShow6()
+            settaskid(item._id)
+            setactivity({...activity,activity_name:"complete site visit task",lead:fullname})
+          }
     else
     {
       Swal.fire({
@@ -1108,6 +1127,221 @@ const mailtaskdetails=async()=>
         toast.error("An error occurred. Please check your data and try again.");
       }
     };
+
+
+// ===================================sitevisit complete code start================================================
+
+    const[dealdata,setdealdata]=useState([])
+    const fetchdealdata=async(event)=>
+        {
+          
+          try {
+            const resp=await api.get('viewdeal')
+            const all=(resp.data.deal)
+            setdealdata(all)
+          } catch (error) {
+            console.log(error);
+          }
+        
+        }
+
+        useEffect(()=>
+        {
+          fetchdealdata()
+        },[])
+
+ const[updatestage,setupdatestage]=useState("")
+    const[updatestage1,setupdatestage1]=useState("")
+
+
+  const handleleadstatuschange =  (e) => {
+    const newStatus = e.target.value;
+
+    // Update the status first
+    setsitevisit((prevState) => {
+        return {
+            ...prevState,
+            status: newStatus
+        };
+    });
+
+    // Now check if status is "Conducted" and update the stage
+    if (newStatus === "Conducted") {
+        setupdatestage("Opportunity");
+        setupdatestage1("Quote");
+    }
+    else if (newStatus === "Did Not Visit" || "Not Intersted>") {
+        setupdatestage("Prospect");
+        setupdatestage1("Open");
+    }
+};
+
+
+const [siteprojects, setsiteprojects] = useState([]);
+const [siteunits, setsiteunits] = useState([]);
+
+const handlesiteprojectchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    const selectproject = typeof value === 'string' ? value.split(',') : value;
+  
+    setsiteprojects(selectproject);
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { ...prev, intrested_project: selectproject };
+      fetchdatabysiteprojectname(selectproject); // Fetch data with the updated project names
+      return updatedSiteVisit; // Return the updated state
+    });
+  };
+
+  const fetchdatabysiteprojectname = async (projectNames) => {
+
+    try {
+      const fetchPromises = projectNames.map(async (projectName) => {
+        const resp = await api.get(`viewdealbyproject/${projectName}`);
+        return resp.data.deal; // Assuming resp.data.project is an array of units for that project
+      });
+  
+      const results = await Promise.all(fetchPromises);
+      const allFetchedUnits = results.flat();
+      setsiteunits(allFetchedUnits); // Set the units to the flattened result
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+    const[allblock,setallblock]=useState([])
+  const handleallblockchange = (event) => {
+    const {
+      target: { value },
+    } = event;
+  
+    // Convert value to an array if it's a string (for multiple selection)
+    const selectblock = typeof value === 'string' ? value.split(',') : value;
+  
+    // Update the allblock state with full block.block-project combinations (for selected blocks)
+    setallblock(selectblock);
+  
+    // Update the sitevisit state with only block.block values (not both block.block and block.project)
+    setsitevisit((prev) => {
+      const updatedSiteVisit = { 
+        ...prev, 
+        intrested_block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
+      };
+      return updatedSiteVisit;
+    });
+  };
+  
+  const[alldealblocks,setalldealblocks]=useState([])
+    useEffect(() => {
+      const dealblocks = dealdata.filter((item) =>
+        sitevisit.intrested_project.some((project) => project === item.project)
+      );
+      setalldealblocks(dealblocks)
+    }, [sitevisit.intrested_project]);
+  
+    const[allunit1,setallunit1]=useState([])
+    const handleallunitschange1 = (event) => {
+      const { target: { value } } = event;
+    
+      // Convert value to an array if it's a string (for multiple selection)
+      const selectunits = typeof value === 'string' ? value.split(',') : value;
+    
+      // Extract only the unit_number from the selected values (split by '-')
+      const unitNumbers = selectunits.map(item => item.split('-')[0]); // Get only the unit_number part
+    
+      // Update allunit1 state with the selected unit numbers
+      setallunit1(selectunits);
+    
+      // Update the sitevisit state with selected units in intrested_inventory
+      setsitevisit((prev) => {
+        const updatedSiteVisit = { ...prev, intrested_inventory: selectunits }; // Store only unit numbers
+        return updatedSiteVisit;
+      });
+    };
+    
+  
+    const [alldealunits, setalldealunits] = useState([]);
+  
+  useEffect(() => {
+    const dealblocks = dealdata.filter((item) =>
+      sitevisit.intrested_project.some((project) => project === item.project) &&
+      sitevisit.intrested_block.some((block) => block === item.block) // Add the condition for interested blocks
+    );
+    setalldealunits(dealblocks);
+  }, [sitevisit.intrested_project, sitevisit.intrested_block]); 
+
+
+
+  const sitevisitdetails = async () => {
+    
+ 
+  
+    
+    // Update site visit task
+    const updatedsiteTask = { ...sitevisit, complete:"true" };
+  
+    try {
+      const data1 = { newstage: updatestage1 };
+      const stage = { stage:updatestage };
+  
+   
+        
+        
+        
+        
+  
+      // Loop through each selected project-block-unit combination
+      let isValidCombination = true;
+      for (let i = 0; i < allunit1.length; i++) {
+        const selectedCombination = allunit1[i];
+        const [unit_number, block, project] = selectedCombination.split('-');
+  
+        // Check if the unit_number, block, and project exist
+        if (unit_number && block && project) {
+          console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+  
+          try {
+            // Call API for each valid combination
+            const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+          } catch (error) {
+            // Handle API errors for the individual combination
+            toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+            isValidCombination = false; // Set to false if the combination fails
+          }
+        } else {
+          // If any part is missing, skip the combination
+          toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+          isValidCombination = false;
+        }
+      }
+  
+      // Post site visit data if the combination is valid
+      if (isValidCombination) {
+        const resp = await api.put(`updatesitevisittask/${taskid}`, updatedsiteTask);
+        const resp1 = await api.put(`updatelead/${sitevisit.lead_id}`,stage );
+        const resp2=await api.post('addactivity',activity)
+        // If successful, show a success toast and reload
+        if (resp.status === 200) {
+          toast.success("Task Completed", { autoClose: 2000 });
+  
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        }
+      } else {
+        toast.error("Some project/block/unit combinations were invalid. Please check your data.");
+      }
+  
+    } catch (error) {
+      // Handle any errors during the process
+      toast.error("An error occurred. Please check your data and try again.");
+    }
+  };
+
+// ====================================site visit complete code end============================================================
 
 
   return (
@@ -1812,7 +2046,34 @@ const mailtaskdetails=async()=>
                           
                             </div>
                        
-                          ) :<p>no activity</p>
+                          ) :  item.activity_name==="complete site visit task"?(
+                            <div id='completsitevisitaction' >
+                            <div><img src="https://cdn-icons-png.freepik.com/512/8094/8094388.png" style={{height:"20px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} with {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) : <p>no activity</p>
                         ))}
                   
 
@@ -2540,7 +2801,138 @@ const mailtaskdetails=async()=>
 {/* =========================================complete sitevisit task start========================================================= */}
 
 
+<Modal show={show6} onHide={handleClose6} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+               Complete Site Visit Task
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+          <div className="row mt-2">
+          
+          <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+          <option>Select</option>
+             <option>Conducted</option>
+             <option>Did Not Visit</option>
+             <option>Not Intersted</option>
+              </select>
+              </div>
+              <div className="col-md-8"></div>
+              {
+                  sitevisit.status==="Conducted" &&(
+                      <>
+          
+                      <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+                      <Select className="form-control form-control-sm" style={{border:"none"}}
+                  multiple
+                  value={siteprojects}
+                  onChange={handlesiteprojectchange}
+                  renderValue={(selected) => selected.join(', ')}
+              >
+                  {sitevisit.project.map((name) => (
+                      <MenuItem key={name} value={name}>
+                          <Checkbox checked={siteprojects.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                      </MenuItem>
+                  ))}
+              </Select>
+                      </div>
+          
+                      <div className="col-md-4">
+          <label className="labels">Select Interested Block</label>
+          <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={allblock}  // Value contains the full block.block-project combinations
+          onChange={handleallblockchange}  // Handle the change when blocks are selected/deselected
+          renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
+          >
+          {alldealblocks
+          .filter((value, index, self) =>
+          // Ensure unique combinations of block.block and block.project
+          index === self.findIndex((t) => (
+            t.block === value.block && t.project === value.project
+          ))
+          )
+          .map((block) => {
+          // Create a unique identifier by combining block.block and block.project
+          const uniqueBlockKey = `${block.block}-${block.project}`;
+          
+          return (
+            <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+              <Checkbox 
+                checked={allblock.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
+              />
+              <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+            </MenuItem>
+          );
+          })
+          }
+          </Select>
+          </div>
+          
+          
+          
+                      <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+                   
+                      <Select
+          className="form-control form-control-sm"
+          style={{ border: "none" }}
+          multiple
+          value={allunit1} // Holds selected units
+          onChange={handleallunitschange1} // Handle changes for unit selection
+          renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
+          >
+          {alldealunits
+          .filter((value, index, self) =>
+          // Ensure unique combinations of project, block, and unit
+          index === self.findIndex((t) => (
+          t.project === value.project &&
+          t.block === value.block &&
+          t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
+          ))
+          )
+          .map((unit) => {
+          // Create a unique key for project-block-unit combination
+          const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
+          
+          return (
+          <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
+          <Checkbox checked={allunit1.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
+          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+          </MenuItem>
+          );
+          })}
+          </Select>
+          
+          
+                          </div>
+                          </>
+                  )
+              }
+           
+          
+          
+          
+          <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+          <div className="col-md-8"></div>
+          
+          <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+          
+          
+          </div>
 
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}}>
+            <Button variant="secondary" onClick={sitevisitdetails} >
+               Complete
+              </Button>
+              <Button variant="secondary" onClick={handleClose6} >
+               Close
+              </Button>
+            </Modal.Footer>
+      </Modal>
 
 
 
