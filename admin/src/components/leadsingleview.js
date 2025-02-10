@@ -1230,6 +1230,7 @@ const handlesiteprojectchange = (event) => {
         ...prev, 
         intrested_block: selectblock.map(item => item.split('-')[0]) // Store only block.block in sitevisit
       };
+setactivity({...activity, edit_field: "block",edit_value:selectblock})
       return updatedSiteVisit;
     });
   };
@@ -1726,6 +1727,7 @@ const deleteall3=(index)=>
           ...prevProfile,
           education: neweducation
         }));
+      setactivity({...activity, edit_field: "education",edit_value:neweducation})
       };
       const handledegreeChange = (index, event) => {
         const newdegree = [...leadinfo.degree];
@@ -1734,6 +1736,7 @@ const deleteall3=(index)=>
           ...prevProfile,
           degree: newdegree
         }));
+        setactivity({...activity, edit_field: "degree",edit_value:newdegree})
       };
 
       const handleschool_collegeChange = (index, event) => {
@@ -1743,6 +1746,7 @@ const deleteall3=(index)=>
           ...prevProfile,
           school_college: newschool
         }));
+        setactivity({...activity, edit_field: "school/collage",edit_value:newschool})
       };
 
     function addFn5() {
@@ -1778,6 +1782,7 @@ const deleteall3=(index)=>
           ...prevProfile,
           loan: newloan
         }));
+        setactivity({...activity, edit_field: "loan",edit_value:newloan})
       };
       const handlebankchange = (index, event) => {
         const newbank = [...leadinfo.bank];
@@ -1786,6 +1791,7 @@ const deleteall3=(index)=>
           ...prevProfile,
           bank: newbank
         }));
+        setactivity({...activity, edit_field: "bank",edit_value:newbank})
       };
       const handleamountchange = (index, event) => {
         const newamount = [...leadinfo.amount];
@@ -1794,6 +1800,7 @@ const deleteall3=(index)=>
           ...prevProfile,
           amount: newamount
         }));
+        setactivity({...activity, edit_field: "amount",edit_value:newamount})
       };
 
       function addFn6() {
@@ -1826,6 +1833,7 @@ const deleteall3=(index)=>
             ...prevProfile,
             social_media: newsocial_media
           }));
+          setactivity({...activity, edit_field: "social media",edit_value:newsocial_media})
         };
         const handleurlChange = (index, event) => {
           const newurl = [...leadinfo.url];
@@ -1834,6 +1842,7 @@ const deleteall3=(index)=>
             ...prevProfile,
             url: newurl
           }));
+          setactivity({...activity, edit_field: "url",edit_value:newurl})
         };
 
         function addFn7() {
@@ -1866,6 +1875,7 @@ const deleteall3=(index)=>
               ...prevProfile,
               income: newincome
             }));
+            setactivity({...activity, edit_field: "income",edit_value:newincome})
           };
           const handleamount1change = (index, event) => {
             const newamount1 = [...leadinfo.amount1];
@@ -1874,6 +1884,7 @@ const deleteall3=(index)=>
               ...prevProfile,
               amount1: newamount1
             }));
+            setactivity({...activity, edit_field: "income-amount",edit_value:newamount1})
           };
 
           function addFn8() {
@@ -1909,6 +1920,7 @@ const deleteall3=(index)=>
                 ...prevProfile,
                 document_no: newdocumentno
               }));
+              setactivity({...activity, edit_field: "document no",edit_value:newdocumentno})
             };
             const handledocumentnamechange = (index, event) => {
               const newdocumentname = [...leadinfo.document_name];
@@ -1917,6 +1929,7 @@ const deleteall3=(index)=>
                 ...prevProfile,
                 document_name: newdocumentname
               }));
+              setactivity({...activity, edit_field: "document name",edit_value:newdocumentname})
             };
             const handledocumentpicchange = (index, event) => {
               const newdocumentpic = [...leadinfo.document_pic];
@@ -1926,6 +1939,7 @@ const deleteall3=(index)=>
                 ...prevProfile,
                 document_pic: newdocumentpic
               }));
+              setactivity({...activity, edit_field: "document pic",edit_value:newdocumentpic}) 
             };
 
             const leadinfobasic=()=>
@@ -2033,12 +2047,14 @@ const deleteall3=(index)=>
               // Otherwise, select all options
               setmatcheddeals(matchdeal); // Select all options
               setleadinfo({ ...leadinfo, matched_deal: matchdeal }); // Update matched_deal in leadinfo
+            setactivity({...activity, edit_field: "mathced deal",edit_value:matchdeal})
             }
           } else {
             // If individual items are selected/deselected
             const selectedmatcheddeal = typeof value === 'string' ? value.split(',') : value;
             setmatcheddeals(selectedmatcheddeal); // Update selected deals
             setleadinfo({ ...leadinfo, matched_deal: selectedmatcheddeal }); // Update matched_deal with selected options
+            setactivity({...activity, edit_field: "matched deal",edit_value:selectedmatcheddeal})
           }
         };
         
@@ -2051,6 +2067,7 @@ const deleteall3=(index)=>
           const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
           setProgress(clampedProgress);
           setleadinfo((prevLead) => ({ ...prevLead, white_portion: clampedProgress })); // Update deal.whiteportion
+        setactivity({...activity, edit_field: "white portion",edit_value:clampedProgress});
         };
         
         const handleMouseDown = (e) => {
@@ -2082,12 +2099,14 @@ const deleteall3=(index)=>
               // Otherwise, select all options
               setfacings(facing); // Select all options
               setleadinfo({ ...leadinfo, facing: facing }); // Update facing in leadinfo
+            setactivity({...activity, edit_field: "facing",edit_value:facing})
             }
           } else {
             // Handle individual selections/deselections
             const selectedfacing = typeof value === 'string' ? value.split(',') : value;
             setfacings(selectedfacing); // Update selected facings
             setleadinfo({ ...leadinfo, facing: selectedfacing }); // Update facing in leadinfo
+            setactivity({...activity, edit_field: "facing",edit_value:selectedfacing});
           }
         };
         
@@ -2110,12 +2129,14 @@ const deleteall3=(index)=>
               // Otherwise, select all options
               setroads(road); // Select all options
               setleadinfo({ ...leadinfo, road: road }); // Update road in leadinfo
+          setactivity({...activity, edit_field: "road",edit_value:road})
             }
           } else {
             // Handle individual selections/deselections
             const selectedroad = typeof value === 'string' ? value.split(',') : value;
             setroads(selectedroad); // Update selected roads
             setleadinfo({ ...leadinfo, road: selectedroad }); // Update road in leadinfo
+          setactivity({...activity, edit_field: "road",edit_value:selectedroad});
           }
         };
         
@@ -2132,7 +2153,7 @@ const deleteall3=(index)=>
                                                           profession_subcategory: "", // Reset subcategory when category changes
                                                           designation: "", // Reset designation when category changes
                                                         }));
-                                                      
+                                                        setactivity({...activity, edit_field: "profession category",edit_value:selectedCategory})
                                                         // Update available subcategories based on selected profession category
                                                         setAvailableSubcategories(professtiondetails.profession_subcategory[selectedCategory] || []);
                                                       };
@@ -2146,6 +2167,7 @@ const deleteall3=(index)=>
                                                           profession_subcategory: selectedSubcategory,
                                                           designation: "", // Reset designation when subcategory changes
                                                         }));
+                                                        setactivity({...activity, edit_field: "profession subcategory",edit_value:selectedSubcategory})
                                                       
                                                         // Update available designations based on selected profession subcategory
                                                         setAvailableDesignations(professtiondetails.designation[selectedSubcategory] || []);
@@ -2159,7 +2181,9 @@ const deleteall3=(index)=>
                                                           ...prevLead,
                                                           designation: selectedDesignation,
                                                         }));
+                                                        setactivity({...activity, edit_field: "designation",edit_value:selectedDesignation})
                                                       };
+
 
                                                       const[data11,setdata11]=useState([]);
 const fetchdatabyprojectcityname=async()=>
@@ -2237,6 +2261,7 @@ const handleprojectchange = (event) => {
         const updateproject = { ...prev, area2: [] }; // Deselect all
         return updateproject;
       });
+setactivity({...activity, edit_field: "area",edit_value:selectproject});
     } else {
       // Select all projects
       setleadinfo((prev) => {
@@ -2244,6 +2269,7 @@ const handleprojectchange = (event) => {
         fetchdatabyprojectname(allproject); // Fetch data with the selected projects
         return updateproject;
       });
+setactivity({...activity, edit_field: "area",edit_value:allproject})
     }
   } else {
     // Handle individual project selection/deselection
@@ -2434,6 +2460,7 @@ const selectlocation=()=>
                                                 ...prevLead,
                                                 unit_type: selectedUnitTypes,
                                               }));
+                                              setactivity({...activity, edit_field: "refrencer",edit_value:selectedUnitTypes})
                                             };
 
                                             const handleSubcategoryChange = (event) => {
@@ -2446,6 +2473,7 @@ const selectlocation=()=>
                                                 sub_type: selectedSubcategories,
                                                 unit_type: [], // Ensure uniqueness
                                               }));
+                                              setactivity({...activity, edit_field: "sub category",edit_value:selectedSubcategories})
                                             };
                                             const getAvailableSubcategories = () => {
                                               if (Array.isArray(leadinfo.property_type)) {
@@ -2505,6 +2533,7 @@ const selectlocation=()=>
                                                 sub_type: [], // Ensure uniqueness
                                                 unit_type: [], // Ensure uniqueness
                                               }));
+                                            setactivity({...activity, edit_field: "property type",edit_value:selectedCategories})
                                             };
 
 
@@ -2517,18 +2546,7 @@ const selectlocation=()=>
                                             ];
                                             
                                             const [owners, setOwners] = useState([]);
-                                            // const[leadowner,setleadowner]=useState(leaddata.owner)
-                                            
-                                            // const handleOwnerChange = (event) => {
-                                            //   const {
-                                            //       target: { value },
-                                            //   } = event;
-                                            
-                                            //   const selectedOwners = typeof value === 'string' ? value.split(',') : value;
-                                            
-                                            //   setOwners(selectedOwners);
-                                            //   setleadowner(selectedOwners);
-                                            // };
+                                        
                                             
                                             const handleOwnerChange1 = (event) => {
                                               const {
@@ -2539,6 +2557,7 @@ const selectlocation=()=>
                                             
                                               setOwners(selectedOwners);
                                               setleadinfo({ ...leadinfo, owner: selectedOwners });
+                                              setactivity({...activity, edit_field: "owner",edit_value:selectedOwners});
                                             };
                                             
 
@@ -2557,11 +2576,11 @@ const selectlocation=()=>
                                             ];
 
                                             const getSourceOptions = () => {
-                                              if (leadinfo.campaign === "Online Campaign") {
+                                              if (leadinfo.campegin === "Online Campaign") {
                                                 return onlineCampaignSources;
-                                              } else if (leadinfo.campaign === "Offline Campaign") {
+                                              } else if (leadinfo.campegin === "Offline Campaign") {
                                                 return offlineCampaignSources;
-                                              } else if (leadinfo.campaign === "Organic Campaign") {
+                                              } else if (leadinfo.campegin === "Organic Campaign") {
                                                 return organicCampaignSources;
                                               } else {
                                                 return [];
@@ -4287,7 +4306,7 @@ console.log(activity);
                 <hr></hr>
               <div className="row mt-2" id="leadinfobasic1">
                     
-                    <div className="col-md-3"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
+                    <div className="col-md-3"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, title: updatedTags});setactivity({...activity, edit_field: "title",edit_value:updatedTags});}}>
                         <option>{leadinfo?.title|| ''}</option>
                         <option>Mr.</option>
                         <option>Mrs.</option>
@@ -4298,11 +4317,11 @@ console.log(activity);
                         <option>col</option>
                         </select>
                         </div>
-                    <div className="col-md-4"><label className="labels">Name</label><input type="text" defaultValue={leadinfo?.first_name || ''} required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,first_name:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" defaultValue={leadinfo?.last_name || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Name</label><input type="text" defaultValue={leadinfo?.first_name || ''} required="true" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, first_name: updatedTags});setactivity({...activity, edit_field: "first Name",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" defaultValue={leadinfo?.last_name || ''} className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, last_name: updatedTags});setactivity({...activity, edit_field: "last Name",edit_value:updatedTags});}}/></div>
                 </div>
                 <div className="row mt-3" id="leadinfobasic2">
-                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country_code:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, country_code: updatedTags});setactivity({...activity, edit_field: "country code",edit_value:updatedTags});}}>
                     <option value="">{leadinfo?.country_code[0] || '+91 India'}</option>
                    {
                    
@@ -4313,26 +4332,26 @@ console.log(activity);
                     )
                    }
                     </select></div>
-                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadinfo?.mobile_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_type:e.target.value})}>
+                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadinfo?.mobile_no || ''} className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, mobile_no: updatedTags});setactivity({...activity, edit_field: "mobile no.",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, mobile_type: updatedTags});setactivity({...activity, edit_field: "mobile type",edit_value:updatedTags});}}>
                     <option>{leadinfo?.mobile_type || '---Personal---'}</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
-                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadinfo?.email[0] || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email_type:e.target.value})}>
+                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadinfo?.email[0] || ''} className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, email: updatedTags});setactivity({...activity, edit_field: "email",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, email_type: updatedTags});setactivity({...activity, edit_field: "email type",edit_value:updatedTags});}}>
                     <option>{leadinfo?.email_type || '---Personal---'}</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>
                         </select></div>
                      <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadinfo?.tags || ''} className="form-control form-control-sm"    onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, tags: updatedTags});setactivity({...activity, edit_field: "tags",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadinfo?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadinfo?.descriptions || ''} className='form-control form-control-sm' onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, descriptions: updatedTags});setactivity({...activity, edit_field: "descriptions",edit_value:updatedTags});}}/></div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                    <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,stage:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm"onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, stage: updatedTags});setactivity({...activity, edit_field: "stage",edit_value:updatedTags});}}>
                     <option>{leadinfo?.stage || '---Select---'}</option>
                     <option>Incoming</option>
                         <option>Prospect</option>
@@ -4347,7 +4366,7 @@ console.log(activity);
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Lead Type</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lead_type:e.target.value})}>
+                    <select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, lead_type: updatedTags});setactivity({...activity, edit_field: "lead type",edit_value:updatedTags});}}>
                     <option>{leadinfo?.lead_type || '---Select---'}</option>
                         <option>Hot</option>
                         <option>Warm</option>
@@ -4355,14 +4374,7 @@ console.log(activity);
                         </select>
                     </div>
                     <div className="col-md-6"><label className="labels">Owner</label>
-                    {/* <select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,owner:e.target.value})}>
-                              <option>{leadData?.owner[0] || '---select---'}</option>
-                              <option>Suraj</option> 
-                              <option>Suresh Kumar</option>
-                              <option>Ramesh Singh</option>
-                              <option>Maanav Sharma</option>
-                              <option>Sukram</option>
-                        </select> */}
+                   
                         <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
                     value={leadinfo.owner}
@@ -4380,7 +4392,7 @@ console.log(activity);
                     ))}
                 </Select>
                         </div>
-                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,team:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, team: updatedTags});setactivity({...activity, edit_field: "team",edit_value:updatedTags});}}>
                               <option>{leadinfo?.team || '---select---'}</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -4388,7 +4400,7 @@ console.log(activity);
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,visible_to:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, visible_to: updatedTags});setactivity({...activity, edit_field: "visible to",edit_value:updatedTags});}}>
                                 <option>{leadinfo?.visible_to || '---Select---'}</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -4399,14 +4411,14 @@ console.log(activity);
                    
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Campegin Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                    
-                        <div className="col-md-6"><label className="labels">Campaign</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,campaign:e.target.value})}>
+                        <div className="col-md-6"><label className="labels">Campaign</label><select className="form-control form-control-sm"onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, campegin: updatedTags});setactivity({...activity, edit_field: "campegin",edit_value:updatedTags});}}>
                     <option>{leadinfo?.campaign || '---Select---'}</option>
                         <option>Online Campaign</option>
                         <option>Offline Campaign</option>
                         <option>Organic Campaign</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,source:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, source: updatedTags});setactivity({...activity, edit_field: "source",edit_value:updatedTags});}}>
                     <option>{leadinfo?.source || '---Select---'}</option>
                     {getSourceOptions().map((source, index) => (
                       <option key={index} value={source}>
@@ -4415,7 +4427,7 @@ console.log(activity);
                     ))}
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Sub-Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,sub_source:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Sub-Source</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, sub_source: updatedTags});setactivity({...activity, edit_field: "sub source",edit_value:updatedTags});}}>
                     <option>{leadinfo?.sub_source || '---Select---'}</option>
                         <option>Call</option>
                         <option>Sms</option>
@@ -4427,8 +4439,8 @@ console.log(activity);
                      <>
                      <div className="col-md-5">
                         <label className="labels">Referrer Name</label>
-                        <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}>
-                          <option>{leadinfo?.refrencer_name || '---Select---'}</option>
+                        <select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, refrencer_no: updatedTags});setactivity({...activity, edit_field: "refrencer",edit_value:updatedTags});}}>
+                          <option>{leadinfo?.refrencer_no || '---Select---'}</option>
                          
                       {
                         contactdata.map((item)=>
@@ -4443,13 +4455,7 @@ console.log(activity);
                     )}
                     
                     <div className="col-md-12"><hr></hr></div>
-                    {/* <div className="col-md-6"><label className="labels">Intersted Project</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,intrested_project:e.target.value})}>
-                    <option>{leadData?.intrested_project || '---Select---'}</option>
-                        <option>Suresh Kumar</option>
-                        <option>Rakesh Kumar</option>
-                        <option>Admin</option>
-                        </select>
-                    </div> */}
+                 
                     </div>
 {/* ---------------------------------------leadinfo basic details end ------------------------------------------------------------------------*/}
             
@@ -4458,7 +4464,7 @@ console.log(activity);
               
               
 <div className="row mt-2" id="leadinforequirment" style={{display:"none"}}>
-                <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
+                <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, requirment: updatedTags});setactivity({...activity, edit_field: "requirment",edit_value:updatedTags});}}>
                     <option>Select</option>
                        {
                         requirment.map(item=>
@@ -4470,16 +4476,7 @@ console.log(activity);
                         </select>
                         </div>
                         <div className="col-md-3"><label className="labels">Property Type</label>
-                        {/* <select className="form-control form-control-sm" required="true"onChange={(e)=>setleadinfo({...leadinfo,property_type:e.target.value})}>
-                    <option>Select</option>
-                        {
-                            property_type.map(item=>
-                                (
-                                    <option>{item}</option>
-                                )   
-                            )
-                        }
-                        </select> */}
+                
                          <Select
                          className="form-control form-control-sm" style={{border:"none"}}
                           multiple
@@ -4497,10 +4494,10 @@ console.log(activity);
                         </div>
                         
                         <div className="col-md-4"><label className="labels" style={{display:"inline-block"}}>Purpose</label><br></br>
-                        <input type="radio" name="purpose" value={"End use"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>End use<input type="radio" name="purpose" value={"Investor"} style={{marginLeft:"20px",marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>Investor
+                        <input type="radio" name="purpose" value={"End use"} style={{marginRight:"10px"}} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, purpose: updatedTags});setactivity({...activity, edit_field: "purpose",edit_value:updatedTags});}}/>End use<input type="radio" name="purpose" value={"Investor"} style={{marginLeft:"20px",marginRight:"10px"}} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, purpose: updatedTags});setactivity({...activity, edit_field: "purpose",edit_value:updatedTags});}}/>Investor
                         </div>
                         <div className="col-md-2"><label className="labels" >NRI</label><br></br>
-                        <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,nri:e.target.value})}/>Yes
+                        <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, nri: updatedTags});setactivity({...activity, edit_field: "nri",edit_value:updatedTags});}}/>Yes
                         </div>
                         <div className="col-md-6"><label className="labels">Sub Type</label>
                         
@@ -4542,9 +4539,7 @@ console.log(activity);
                               <label className="labels">Budget Min</label>
                               <select
                                 className="form-control form-control-sm"
-                                onChange={(e) =>
-                                  setleadinfo({ ...leadinfo, budget_min: e.target.value })
-                                }
+                                onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, budget_min: updatedTags});setactivity({...activity, edit_field: "min budget",edit_value:updatedTags});}}
                                 value={leadinfo.budget_min}
                               >
                                 <option>---Select---</option>
@@ -4560,9 +4555,7 @@ console.log(activity);
                               <label className="labels">Budget Max</label>
                               <select
                                 className="form-control form-control-sm"
-                                onChange={(e) =>
-                                  setleadinfo({ ...leadinfo, budget_max: e.target.value })
-                                }
+                                onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, budget_max: updatedTags});setactivity({...activity, edit_field: "max budget",edit_value:updatedTags});}}
                                 value={leadinfo.budget_max}
                               >
                                 <option>---Select---</option>
@@ -4578,7 +4571,7 @@ console.log(activity);
 
                         {leadinfo.requirment === "Buy" && (
                        <>
-                        <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, budget_min: updatedTags});setactivity({...activity, edit_field: "min budget",edit_value:updatedTags});}}>
                         <option>---Select---</option>
                         {buyBudgetOptions.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -4588,7 +4581,7 @@ console.log(activity);
                         </select></div>
                       
                       
-                        <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, budget_max: updatedTags});setactivity({...activity, edit_field: "max budget",edit_value:updatedTags});}}>
                         <option>---Select---</option>
                         {filteredMaxBudgetOptionsbuy.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -4598,7 +4591,7 @@ console.log(activity);
                         </select></div>
                         </>
                       )}
-                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, minimum_area: updatedTags});setactivity({...activity, edit_field: "minimum area",edit_value:updatedTags});}}>
                         <option>Select</option>
                         {areaoptions.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -4607,7 +4600,7 @@ console.log(activity);
                                 ))}
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, maximum_area: updatedTags});setactivity({...activity, edit_field: "maximun area",edit_value:updatedTags});}}>
                         <option>Select</option>
                         {filteredarea.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -4617,7 +4610,7 @@ console.log(activity);
                 
                         </select></div>
                    
-                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
+                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, area_metric: updatedTags});setactivity({...activity, edit_field: "area matric",edit_value:updatedTags});}} >
                       
                         <option>Sq Yard</option>
                         <option>Marla</option>
@@ -4636,7 +4629,7 @@ console.log(activity);
 
                            <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
                         <div className="col-md-5"><label className="labels">Country</label>
-                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}>
+                        <select  className="form-control form-control-sm"  onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, country2: updatedTags});setactivity({...activity, edit_field: "country",edit_value:updatedTags});}}>
                         <option>{leadinfo.country2}</option>
                     {asianCountries.map((country, index) => (
                       <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
@@ -4646,7 +4639,7 @@ console.log(activity);
                           </select>
                         </div>
                        
-                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}>
+                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, state2: updatedTags});setactivity({...activity, edit_field: "state",edit_value:updatedTags});}}>
                         <option value="">{leadinfo.state2}</option>
                       {states.map((state) => (
                         <option key={state} value={state}>
@@ -4658,14 +4651,11 @@ console.log(activity);
                         <div className="col-md-2"></div>
 
                         <div className="col-md-5"><label className="labels">City</label>
-                        {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
-                          <option>---select country---</option>
-                          <option>India</option>
-                          </select> */}
+                 
                              <select
                     className="form-control form-control-sm"
                     value={leadinfo.city2}
-                    onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}
+                    onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, city2: updatedTags});setactivity({...activity, edit_field: "city",edit_value:updatedTags});}}
                     disabled={!leadinfo.state2 || cities.length === 0} // Disable if no state or invalid state
                   >
                     <option value="">--Select City--</option>
@@ -4728,23 +4718,23 @@ console.log(activity);
                           ))}
                         </Select>
                       </div>
-                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" value={leadinfo.specific_unit} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" value={leadinfo.specific_unit} className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, specific_unit: updatedTags});setactivity({...activity, edit_field: "specific unit",edit_value:updatedTags});}}/></div>
                     </div>
 
                        <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
-                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, search_location: updatedTags});setactivity({...activity, edit_field: "location",edit_value:updatedTags});}}/></div>
                         <div className="col-md-4"></div>
-                        <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                        <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, street_address: updatedTags});setactivity({...activity, edit_field: "street address",edit_value:updatedTags});}}/></div>
                         <div className="col-md-4"></div>
-                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, city2: updatedTags});setactivity({...activity, edit_field: "city",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, area2: updatedTags});setactivity({...activity, edit_field: "area",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, block: updatedTags});setactivity({...activity, edit_field: "block",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, pincode2: updatedTags});setactivity({...activity, edit_field: "pincode",edit_value:updatedTags});}}/></div>
                     
-                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, country2: updatedTags});setactivity({...activity, edit_field: "country",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, state2: updatedTags});setactivity({...activity, edit_field: "state",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, lattitude: updatedTags});setactivity({...activity, edit_field: "lattitude",edit_value:updatedTags});}}/></div>
+                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, longitude: updatedTags});setactivity({...activity, edit_field: "langitude",edit_value:updatedTags});}}/></div>
                     {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
                     </div>
                     </div>
@@ -4801,7 +4791,7 @@ console.log(activity);
                 </Select>
                     </div>
                     <div className="col-md-4"><label className="labels">Funding</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
+                    <select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, funding: updatedTags});setactivity({...activity, edit_field: "funding",edit_value:updatedTags});}}>
                     <option>Select</option>
                    {
                     funding.map(item=>
@@ -4814,7 +4804,7 @@ console.log(activity);
                     </div>
                    
                     <div className="col-md-4"><label className="labels">Timeline</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
+                    <select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, timeline: updatedTags});setactivity({...activity, edit_field: "timeline",edit_value:updatedTags});}}>
                     <option>Select</option>
                       {
                         timeline.map(item=>
@@ -4830,7 +4820,7 @@ console.log(activity);
                    
                 
                     <div className="col-md-4"><label className="labels">Furnishing</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
+                    <select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, furnishing: updatedTags});setactivity({...activity, edit_field: "furnishing",edit_value:updatedTags});}}>
                     <option>Select</option>
                        {
                         furnishing.map(item=>
@@ -4844,7 +4834,7 @@ console.log(activity);
                     <div className="col-md-4"></div>
 
                     <div className="col-md-4"><label className="labels">Transaction Type</label>
-                    <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
+                    <select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, transaction_type: updatedTags});setactivity({...activity, edit_field: "transaction type",edit_value:updatedTags});}}>
                     <option>Select</option>
                      {
                         transaction_type.map(item=>
@@ -4928,7 +4918,7 @@ console.log(activity);
                         ))}
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,company_name:e.target.value})}>
+                    <div className="col-md-6"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, company_name: updatedTags});setactivity({...activity, edit_field: "company name",edit_value:updatedTags});}}>
                     <option>{leadinfo?.company_name || '---Select---'}</option>
                     <option>---Select company---</option>
                       {
@@ -4950,21 +4940,21 @@ console.log(activity);
 
 {/*=====================--------------------- leadinfo personal start-------------------------------------------============================= */}
      <div className="row mt-2" id="leadinfopersonal" style={{display:"none"}}>
-                     <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm" defaultValue={data1.father_husband_name} onChange={(e)=>setleadinfo({...leadinfo,father_husband_name:e.target.value})}/></div>
+                     <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm" defaultValue={data1.father_husband_name} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, father_husband_name: updatedTags});setactivity({...activity, edit_field: "father/husband name",edit_value:updatedTags});}}/></div>
 
-                            <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control form-control-sm" defaultValue={data1.h_no} onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
-                            <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" defaultValue={data1.area1} onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
+                            <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control form-control-sm" defaultValue={data1.h_no} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, h_no: updatedTags});setactivity({...activity, edit_field: "house no.",edit_value:updatedTags});}}/></div>
+                            <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" defaultValue={data1.area1} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, area1: updatedTags});setactivity({...activity, edit_field: "area",edit_value:updatedTags});}}/></div>
 
-                            <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" defaultValue={data1.location1} onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" defaultValue={data1.city1} onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})} /></div>
-                            <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" defaultValue={data1.pincode1} onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" defaultValue={data1.location1} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, location1: updatedTags});setactivity({...activity, edit_field: "location",edit_value:updatedTags});}}/></div>
+                            <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" defaultValue={data1.city1} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, city1: updatedTags});setactivity({...activity, edit_field: "city",edit_value:updatedTags});}} /></div>
+                            <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" defaultValue={data1.pincode1} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, pincode1: updatedTags});setactivity({...activity, edit_field: "pincode",edit_value:updatedTags});}}/></div>
 
-                            <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" defaultValue={data1.country1} onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
-                            <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" defaultValue={data1.state1} onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})} /></div>
+                            <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" defaultValue={data1.country1} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, country1: updatedTags});setactivity({...activity, edit_field: "country",edit_value:updatedTags});}}/></div>
+                            <div className="col-md-6"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" defaultValue={data1.state1} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, state1: updatedTags});setactivity({...activity, edit_field: "state",edit_value:updatedTags});}} /></div>
 
                             <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                            <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,gender:e.target.value})}>
+                            <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, gender: updatedTags});setactivity({...activity, edit_field: "gender",edit_value:updatedTags});}}>
                                         <option>{data1.gender}</option>
                                         <option>Select</option>
                                         <option>Male</option>
@@ -4972,7 +4962,7 @@ console.log(activity);
                                         <option>Others</option>
                                 </select>
                             </div>
-                            <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maritial_status:e.target.value})}>
+                            <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, maritial_status: updatedTags});setactivity({...activity, edit_field: "maritial status",edit_value:updatedTags});}}>
                                     <option>{data1.maritial_status}</option>
                                     <option>Select</option>
                                     <option>Married</option>
@@ -4981,8 +4971,8 @@ console.log(activity);
                                 </select>
                             </div>
 
-                            <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control form-control-sm" defaultValue={data1.birth_date} onChange={(e)=>setleadinfo({...leadinfo,birth_date:e.target.value})}/></div>
-                            <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control form-control-sm" defaultValue={data1.anniversary_date} onChange={(e)=>setleadinfo({...leadinfo,anniversary_date:e.target.value})}/></div>
+                            <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" className="form-control form-control-sm" defaultValue={data1.birth_date} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, birth_date: updatedTags});setactivity({...activity, edit_field: "birth date",edit_value:updatedTags});}}/></div>
+                            <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" className="form-control form-control-sm" defaultValue={data1.anniversary_date} onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, anniversary_date: updatedTags});setactivity({...activity, edit_field: "anniversary date",edit_value:updatedTags});}}/></div>
 
                             <div className="col-md-3"> <label className="labels">Education</label>
                                 
