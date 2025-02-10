@@ -559,7 +559,7 @@ useEffect(()=>
 
 const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
   direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
-  activity_note1:""})
+  activity_note1:"",edit_field:"",edit_value:""})
 
 const [show1, setshow1] = useState(false);
 
@@ -1377,8 +1377,10 @@ const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",count
                     const[data1,setdata1]=useState([])
                     const handleShow7=async()=>
                     {
+                      const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
                       if(lead)
                       {
+                        setactivity({...activity,activity_name:"edit",lead:fullname})
                         try {
                           const resp=await api.get(`viewbyid/${lead._id}`)//here search contact by id
                           //  console.log(resp);
@@ -1998,16 +2000,10 @@ const deleteall3=(index)=>
       const updatelead=async()=>
         {
           try {
-            
             const id=data1._id
             const resp=await api.put(`updatelead/${id}`,leadinfo,config)
+            const resp1=await api.post('addactivity',activity)
             toast.success("lead updated",{ autoClose: 2000 })
-            setTimeout(() => {
-              navigate('/leaddetails')
-            }, 2000);
-            // setTimeout(() => {
-            //   handleClose1()
-            // }, 2000);
             setTimeout(() => {
               window.location.reload()
             }, 2000);
@@ -2641,6 +2637,7 @@ const selectlocation=()=>
 
 // =========================edit lead end===================================================================================
 
+console.log(activity);
 
 
 
@@ -3375,6 +3372,33 @@ const selectlocation=()=>
                           
                             </div>
                        
+                          ) : item.activity_name==="edit"?(
+                            <div id='editaction' >
+                            <div><img src="https://www.freeiconspng.com/uploads/document-edit-icon-19.png" style={{height:"20px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} {item.lead} {item.edit_field} with {item.edit_value}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
                           ) : <p>no activity</p>
                         ))}
                   
@@ -3391,7 +3415,7 @@ const selectlocation=()=>
              
 
                 <div className='col-md-12' style={{marginTop:"10px"}}>
-                    <p style={{fontSize:"14px"}}><u>{lead.title} {lead.first_name} {lead.last_name}</u> added by {lead.owner.join(',')}</p>
+                    <p style={{fontSize:"14px"}}><u>{lead.title} {lead.first_name} {lead.last_name}</u> added by {lead.owner?.join(',')}</p>
                 </div>
 
             </div>
@@ -4303,7 +4327,7 @@ const selectlocation=()=>
                         <option>Office</option>
                         <option>Business</option>
                         </select></div>
-                     <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadinfo?.tags || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
+                     <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadinfo?.tags || ''} className="form-control form-control-sm"    onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, tags: updatedTags});setactivity({...activity, edit_field: "tags",edit_value:updatedTags});}}/></div>
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadinfo?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>

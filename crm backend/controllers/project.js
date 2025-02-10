@@ -78,19 +78,21 @@ while (u < req.body.add_unit.length) {
   const unit = req.body.add_unit[u];
  
 
-   const ownerDetails = req.body[`add_unit[${u}].owner_details`];
-   const associatedContact = req.body[`add_unit[${u}].associated_contact`];
+//    const ownerDetails = req.body[`add_unit[${u}].owner_details`];
+//    const associatedContact = req.body[`add_unit[${u}].associated_contact`];
 
-// Process both fields
-const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
-const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
+// // Process both fields
+// const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
+// const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
 
 unitDetails={
 
   project_name: unit.project_name,
   unit_no: unit.unit_no,
-  owner_details: sanitizedOwnerDetails,
-  associated_contact: sanitizedAssociatedContact,
+  // owner_details: sanitizedOwnerDetails,
+  // associated_contact: sanitizedAssociatedContact,
+  owner_details: unit.owner_details,
+  associated_contact: unit.associated_contact,
   unit_type: unit.unit_type,
   category: unit.category,
   block: unit.block,
@@ -346,19 +348,21 @@ unitDetails={
                     const unit = req.body.add_unit[u];
                    
                   
-                     const ownerDetails = req.body[`add_unit[${u}].owner_details`];
-                     const associatedContact = req.body[`add_unit[${u}].associated_contact`];
+                  //    const ownerDetails = req.body[`add_unit[${u}].owner_details`];
+                  //    const associatedContact = req.body[`add_unit[${u}].associated_contact`];
                   
-                  // Process both fields
-                  const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
-                  const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
+                  // // Process both fields
+                  // const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
+                  // const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
                   
                   unitDetails={
                   
                     project_name: unit.project_name,
                     unit_no: unit.unit_no,
-                    owner_details: sanitizedOwnerDetails,
-                    associated_contact: sanitizedAssociatedContact,
+                    // owner_details: sanitizedOwnerDetails,
+                    // associated_contact: sanitizedAssociatedContact,
+                    owner_details: unit.owner_details,
+                    associated_contact: unit.associated_contact,
                     unit_type: unit.unit_type,
                     category: unit.category,
                     block: unit.block,
