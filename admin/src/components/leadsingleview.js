@@ -3429,7 +3429,7 @@ console.log(activity);
 
         <div className='row'>
 
-          <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
+          <div className='col-md-12' style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
         <div className='col-md-12' > Deal Match
         <span 
           onClick={toggleTableVisibility} 
@@ -3452,7 +3452,7 @@ console.log(activity);
           style={{ 
             position:"absolute",
             cursor: "pointer", 
-            right: "20px", 
+            right: "15px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -3544,7 +3544,7 @@ console.log(activity);
           style={{ 
             position:"absolute",
             cursor: "pointer", 
-            right: "20px", 
+            right: "15px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -3621,7 +3621,7 @@ console.log(activity);
           style={{ 
             position:"absolute",
             cursor: "pointer", 
-            right: "20px", 
+            right: "15px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
@@ -3714,7 +3714,7 @@ console.log(activity);
           style={{ 
             cursor: "pointer", 
             position:"absolute",
-            right: "20px", 
+            right: "15px", 
             fontSize: "30px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation

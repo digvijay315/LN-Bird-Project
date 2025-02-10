@@ -1,5 +1,8 @@
 import React from 'react'
 import  { useState } from "react";
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure this is imported
 
 function Login() {
 
@@ -50,7 +53,7 @@ function Login() {
         },
         eyeIcon: {
           position: "absolute",
-          right: "80px",
+          right: "150px",
           cursor: "pointer",
           fontSize: "20px",
           color: "#6c63ff",
@@ -105,6 +108,15 @@ function Login() {
   };
 
 
+  const [show1, setshow1] = useState(false);
+
+const handleClose1 = () => setshow1(false);
+const handleShow1=async()=>
+{
+      setshow1(true);
+
+}
+
 
 
   return (
@@ -122,10 +134,104 @@ function Login() {
         }}>
         </div>
         <div  style={{height:"100vh",width:"40%",backgroundColor:"white"}}>
-            <div style={{marginTop:"25%",marginLeft:"20%"}}>
+
+<div style={{marginLeft:"20%",marginTop:"10%"}}>
+<img src='	https://webapp.friska.ai/static/media/logo_lg.7a15c556eacfc46586a9a097255a16f3.svg'></img>
+        <button
+              style={{
+                marginTop: "15px",
+                width: "50%",
+                padding: "12px",
+                border: "1px solid blue",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                color: "black",
+                fontSize: "16px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+             Sign in with Google
+            </button>
+
+            <button
+              style={{
+                marginTop: "15px",
+                width: "50%",
+                padding: "12px",
+                border: "1px solid blue",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                color: "black",
+                fontSize: "16px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+             Sign in with Apple
+            </button>
+
+            <button
+              style={{
+                marginTop: "15px",
+                width: "50%",
+                padding: "12px",
+                border: "1px solid blue",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                color: "black",
+                fontSize: "16px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+             Sign in with Microsoft
+            </button>
+
+            <button
+            onClick={handleShow1}
+              style={{
+                marginTop: "15px",
+                width: "50%",
+                padding: "12px",
+                border: "1px solid blue",
+                borderRadius: "5px",
+                backgroundColor: "white",
+                color: "black",
+                fontSize: "16px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+             Sign in with Email
+            </button>
+            </div>
+
+        
+        </div>
+
+     </div>
+
+     <Modal show={show1} onHide={handleClose1} size='lg'>
+            <Modal.Header>
+              <Modal.Title>
+                Sign in 
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+             <div style={{marginLeft:"20%"}}>
             <img src='	https://webapp.friska.ai/static/media/logo_lg.7a15c556eacfc46586a9a097255a16f3.svg'></img>
             <h1 class="login_title">Welcome back</h1>
-            <p class="login_content" style={{marginTop:"-20px"}}>Login to your Friska AI account</p>
+            <p class="login_content" style={{marginTop:"0px"}}>Login to your Friska AI account</p>
             <div className="input-container">
             <div style={styles.inputContainer}>
             <input
@@ -174,63 +280,21 @@ function Login() {
             Login
           </button>
 
-<div style={{display:"flex",gap:"10px"}}>
-            {/* Google Login Button - Just the design */}
-            <button
-              style={{
-                marginTop: "15px",
-                width: "40%",
-                padding: "12px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#4285F4",
-                color: "white",
-                fontSize: "16px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/5/51/Google.png"
-                alt="Google Logo"
-                style={{ width: "20px", marginRight: "10px" }}
-              />
-              Login with Google
-            </button>
-
-                {/* Facebook Login Button - Just the design */}
-                <button
-              style={{
-                marginTop: "15px",
-                width: "50%",
-                padding: "12px",
-                border: "none",
-                borderRadius: "5px",
-                backgroundColor: "#3b5998",
-                color: "white",
-                fontSize: "16px",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-                alt="Facebook Logo"
-                style={{ width: "20px", marginRight: "10px" }}
-              />
-              Login with Facebook
-            </button>
-            </div>
         </div>
             
-            </div>
-        </div>
+            </div> 
 
-     </div>
+            </Modal.Body>
+            <Modal.Footer style={{marginTop:"20px"}} onClick={handleClose1}>
+            <Button variant="secondary">
+              Close
+              </Button>
+              <Button variant="secondary">
+                Login
+              </Button>
+            </Modal.Footer>
+      </Modal>
+
     </div>
   )
 }
