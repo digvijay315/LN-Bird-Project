@@ -2846,7 +2846,7 @@ console.log(activity);
                     <div className='col-md-12'><p style={{fontWeight:"normal"}}>Location-{lead.location} {lead.city}</p></div>
 
                     <div className='col-md-4' ><label style={{color:"#B85042"}}>Property Type</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type}</p>
+                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type.join(',')}</p>
                 </div>
                 <div className='col-md-4'><label style={{color:"#B85042"}}>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.sub_type}</p></div>
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
@@ -2858,7 +2858,7 @@ console.log(activity);
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.furnishing}</p></div>
 
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing.join(',')}</p>
                 </div>
                 <div className='col-md-4'><label style={{color:"#B85042"}}>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
                 <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.timeline}</p></div>
@@ -2868,7 +2868,7 @@ console.log(activity);
                 </div>
                 
                 
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road.join(',')}</p></div>
 
                 </div>
 
