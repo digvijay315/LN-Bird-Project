@@ -43,31 +43,60 @@ const handleShow2=()=>
 
 
 const[login,setlogin]=useState({email:"",password:""})
-const[token,settoken]=useState("") 
 const userlogin=async()=>
 {
     try {
         const resp= await axios.post('https://friskaaiapi.azurewebsites.net/login',login)
-        console.log(resp)
-        console.log(login)
-        settoken(resp.data.result.token)
-        // if(token)
-        // {
-       
-        //     Swal.fire({
-        //         title: 'Login!',
-        //         text: 'Welcome to friska!',
-        //         icon: 'success',
-        //         confirmButtonText: 'Ok',
-        //       })
-
-        //       setTimeout(() => {
-        //         navigate('/dietform')
-        //     }, 2000);
-              
-        // }
-   
+        if(resp.status===200)
+        {
+            Swal.fire({
+                        title: 'Login!',
+                        text: 'Welcome to friska!',
+                        icon: 'success',
+                        confirmButtonText: 'Ok',
+                      })
         
+                      setTimeout(() => {
+                        navigate('/dietform')
+                    }, 2000);
+
+        }
+     
+    } catch (error) {
+        Swal.fire({
+            title: 'Login!',
+            text: 'Please check username and password!',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+          })
+        
+    }
+}
+
+
+const[user,setuser]=useState({email:"",username:"",password:""})
+const signup=async()=>
+{
+    try {
+        const resp= await axios.post('https://friskaaiapi.azurewebsites.net/signup',user)
+        console.log(resp);
+        console.log(user);
+        
+        if(resp.status===200)
+        {
+            Swal.fire({
+                        title: 'Registration!',
+                        text: 'User Registration Successfull!',
+                        icon: 'success',
+                        confirmButtonText: 'Ok',
+                      })
+        
+                      setTimeout(() => {
+                        window.location.reload() 
+                    }, 2000);
+
+        }
+     
     } catch (error) {
         Swal.fire({
             title: 'Login!',
@@ -178,16 +207,15 @@ const userlogin=async()=>
                         </div>
                         <h3 class="font-md">Register new account</h3>
                         <p>Access to the most powerfull tool in the entire design and web industry.</p>
-                        <form>
-                            <input class="form-control" type="text" name="name" placeholder="Full Name" required/>
-                            <input class="form-control" type="email" name="email" placeholder="E-mail Address" required/>
-                            <input class="form-control" type="password" name="password" placeholder="Password" required/>
-                            {/* <input class="form-control" type="number" name="age" placeholder="Age" required/> */}
-                            {/* <input class="form-control" type="number" name="height" placeholder="Height" required/> */}
+                        
+                            <input class="form-control" type="text" name="username" placeholder="Full Name" required onChange={(e)=>setuser({...user,username:e.target.value})}/>
+                            <input class="form-control" type="email" name="email" placeholder="E-mail Address" required onChange={(e)=>setuser({...user,email:e.target.value})}/>
+                            <input class="form-control" type="password" name="password" placeholder="Password" required onChange={(e)=>setuser({...user,password:e.target.value})}/>
+                         
                             <div class="form-button  d-flex">
-                                <button id="submit" type="submit" class="btn btn-primary">Register</button>
+                                <button id="submit"  class="btn btn-primary" onClick={signup}>Register</button>
                             </div>
-                        </form>
+                       
                         {/* <div class="other-links social-with-title">
                             <div class="text">Or register with</div>
                             <a href="#"><i class="fab fa-facebook-f"></i>Facebook</a><a href="#"><i class="fab fa-google"></i>Google</a><a href="#"><i class="fab fa-linkedin-in"></i>Linkedin</a>
