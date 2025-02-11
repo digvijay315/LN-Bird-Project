@@ -5,11 +5,19 @@ import  { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure this is imported
+import axios from 'axios';
+import { Icon } from '@mui/material';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
 
 function Login1() {
 
+    const navigate=useNavigate()
 
   const [show1, setshow1] = useState(false);
+
+  
 
 const handleClose1 = () =>{
     setshow1(false);
@@ -34,6 +42,42 @@ const handleShow2=()=>
 }
 
 
+const[login,setlogin]=useState({userName:"",password:""})
+const[token,settoken]=useState("") 
+const userlogin=async()=>
+{
+    try {
+        const resp= await axios.post('https://mobiledev.friska.ai/Member/MemberAuthenticate',login)
+        settoken(resp.data.result.token)
+        if(token)
+        {
+       
+            Swal.fire({
+                title: 'Login!',
+                text: 'Welcome to friska!',
+                icon: 'success',
+                confirmButtonText: 'Ok',
+              })
+
+              setTimeout(() => {
+                navigate('/dietform')
+            }, 2000);
+              
+        }
+   
+        
+    } catch (error) {
+        Swal.fire({
+            title: 'Login!',
+            text: 'Please check username and password!',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+          })
+        
+    }
+}
+
+
   return (
     <div>
 
@@ -51,13 +95,13 @@ const handleShow2=()=>
                         </div>
                         <h3 class="font-md">Login to account</h3>
                         <p>Access to the most powerfull tool in the entire design and web industry.</p>
-                        <form>
-                            <input class="form-control" type="text" name="username" placeholder="E-mail Address" required/>
-                            <input class="form-control" type="password" name="password" placeholder="Password" required/>
+                        
+                            <input class="form-control" type="text" name="username" placeholder="E-mail Address" required onChange={(e)=>setlogin({...login,userName:e.target.value})}/>
+                            <input class="form-control" type="password" name="password" placeholder="Password" required onChange={(e)=>setlogin({...login,password:e.target.value})}/>
                             <div class="form-button d-flex align-items-center">
-                                <button id="submit" type="submit" class="btn btn-primary">Login</button><a  onClick={handleShow1} style={{cursor:"pointer"}}>Forget password?</a>
+                                <button id="submit"  class="btn btn-primary" onClick={userlogin}>Login</button><a  onClick={handleShow1} style={{cursor:"pointer"}}>Forget password?</a>
                             </div>
-                        </form>
+                     
                         {/* <div class="other-links social-with-title">
                             <div class="text">Or login with</div>
                             <a href="#"><i class="fab fa-facebook-f"></i>Facebook</a><a href="#"><i class="fab fa-google"></i>Google</a><a href="#"><i class="fab fa-linkedin-in"></i>Linkedin</a>

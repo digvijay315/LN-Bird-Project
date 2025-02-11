@@ -33,6 +33,10 @@ maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
 website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
+const[activity]=useState({activity_name:"deal created", call_outcome:"", activity_note:"",lead:"",
+  direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
+  activity_note1:"",edit_field:"",edit_value:""})
+
 const config = {
 headers: {
 'Content-Type': 'multipart/form-data' // Set the Content-Type here
@@ -92,7 +96,7 @@ React.useEffect(() => {
   }
 }, [flattenedUnits, deal.project, deal.block, deal.unit_number]);
 
-console.log(matchedunit.unit_type);
+// console.log(matchedunit.unit_type);
 React.useEffect(() => {
   setdeal((prevDeal) => ({
     ...prevDeal,
@@ -109,9 +113,9 @@ React.useEffect(() => {
       : []  // Default to empty array if not an array
   }));
 }, [matchedunit]);
-console.log(matchedunit);
-console.log(deal.owner_details);
-console.log(deal.utype);
+// console.log(matchedunit);
+// console.log(deal.owner_details);
+// console.log(deal.utype);
 
 
 
@@ -509,65 +513,71 @@ React.useEffect(() => {
        
 
 
+          React.useEffect(() => {
+            const ownerDetails = Array.isArray(deal.owner_details) ? deal.owner_details : [];
+            const associatedContact = Array.isArray(deal.associated_contact) ? deal.associated_contact : [];
+          
+            // Combine owner_details and associated_contact
+            const combinedContacts = [...ownerDetails, ...associatedContact];
+
+            fetchContacts(combinedContacts)
+          
+            // You can now use the uniqueContacts for further processing like fetching details
+          }, [deal.owner_details, deal.associated_contact]);
+          
+
+          const [contacts, setContacts] = useState([]);
+
+          const fetchContacts = async (contactIds) => {
+            try {
+              if (contactIds.length === 0) return; // Exit if no contactIds
+        
+              const fetchedContacts = [];
+        
+              // Loop through contactIds and make an individual API call for each
+              for (let id of contactIds) {
+                const response = await api.get(`viewcontactbyid/${id}`); // Adjust this based on your endpoint
+                if (response.data && response.data.contact) {
+                  fetchedContacts.push(response.data.contact);
+                }
+              }
+        
+              // After fetching all the contacts, update the state
+              setContacts(fetchedContacts);
+        
+            } catch (error) {
+              console.error('Error fetching contacts:', error);
+            }
+          };
+         
+          
+
+
 
           const add_deal=async(e)=>
             {
                 e.preventDefault();
            
                   try {
-                    
-                    const formdata=new FormData()
-                    Object.keys(deal).forEach(key => {
-                      // Skip 'preview' and 'document_details' because we will handle them separately
-                      if (key === "preview" || key === "document_details") {
-                        return;
-                      }
-                    
-                     
-                        // If it's an array of simple values (e.g., project_category), append each item
-                        if (Array.isArray(deal[key])) {
-                          deal[key].forEach((item, index) => {
-                            formdata.append(`${key}[${index}]`, item);
-                          });
-                        } else {
-                          // If it's a single value, append it directly
-                          formdata.append(key, deal[key]);
-                        }
+       
+          
+
+                    // Loop through each contact and post activity separately
+                    for (let contact of contacts) {
+                      // Prepare the lead field with the current contact's name
+                      const lead = `${contact.title} ${contact.first_name} ${contact.last_name}`;
                       
-                    });
-                    
-  
-                    if (deal.document_details && deal.document_details.length > 0) {
-                      deal.document_details.forEach((document, index) => {
-                        formdata.append(`document_details[${index}].document_name`, document.document_name);
-                        formdata.append(`document_details[${index}].document_no`, document.document_no);
-                        formdata.append(`document_details[${index}].document_Date`, document.document_Date);
-                        formdata.append(`document_details[${index}].linkded_contact`, document.linkded_contact);
-                    
-                        // Handle the pic files inside each document
-                        if (document.pic && document.pic.length > 0) {
-                          document.pic.forEach((file, picIndex) => {
-                            formdata.append(`document_details[${index}].pic[${picIndex}]`, file);
-                          });
-                        }
-                      });
+                      const activityForContact = {
+                        ...activity, // Keep the default activity fields
+                        lead: lead // Update the lead for this particular contact
+                      };
+                      
+              
+                      // Send POST request for activity (one request per contact)
+                      const resp = await api.post('addactivity', activityForContact); // Adjust this endpoint as needed
+                      
                     }
                     
-                    
-                    
-                    
-  
-                    if (deal.preview && deal.preview.length > 0) {
-                      deal.preview.forEach((previewData, previewIndex) => {
-                        previewData.files.forEach((file, fileIndex) => {
-                          formdata.append(`preview[${previewIndex}].files[${fileIndex}]`, file);
-                        });
-                      });
-                    }
-  
-                
-                    
-  
                     const resp= await api.post('adddeal',deal)
                             if(resp.status===200)
                                 {
@@ -583,29 +593,7 @@ React.useEffect(() => {
                        }
      
           
-          
-          // const add_deal=async(e)=>
-          // {
-          //     e.preventDefault();
-         
-          //       try {
-          //               const resp= await api.post('adddeal',deal,{
-          //                 headers: {
-          //                   'Content-Type': 'multipart/form-data',
-          //                 },
-          //               })
-          //                 if(resp.status===200)
-          //                     {
-          //                       toast.success(resp.data.message,{ autoClose: 2000 })
-          //                       setTimeout(() => {
-          //                         navigate('/dealdetails')
-          //                       }, 2000);
-                                
-          //                      }
-          //             } catch (error) {
-          //                     toast.error(error.response.data.message,{ autoClose: 2000 })
-          //             }
-          //            }
+
 // =======================================add deal end=================================================================================
 
 //================== add document and remove document inside deal start==================================================================

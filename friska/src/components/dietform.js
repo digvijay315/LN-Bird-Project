@@ -7,7 +7,10 @@ import '../css/login1.css'
 function Dietform() {
 
 
-  const[dietplan,setdietplan]=useState({dietary_restrictions:[],digestive_issues:[],food_allergies:[]})
+  const[dietplan,setdietplan]=useState({Gender:"",Weight:"",Height_feet:"",Height_inches:"",Age:"",Activity_Level:"",Dietary_Preference:"",
+    Dietary_Restrictions:[],Digestive_Issues:[],Food_Allergies:[]})
+
+
   const dietary_restrictionslist = [
     'Gluten-free diet',
     'Dairy-free diet',

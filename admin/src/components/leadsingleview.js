@@ -3537,7 +3537,34 @@ console.log(activity);
                           
                             </div>
                        
-                          ) : <p>no activity</p>
+                          ) : item.activity_name==="deal created"?(
+                            <div id='createsitevisittaskction' >
+                            <div><img src="https://cdn-icons-png.flaticon.com/512/2132/2132939.png" style={{height:"30px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) :<p>no activity</p>
                         ))}
                   
 
