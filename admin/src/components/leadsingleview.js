@@ -873,7 +873,16 @@ console.log(alltask);
  const activityname = [
   'call', 
   'email', 
-  'notes' 
+  'notes',
+  'edit',
+  'complete call task',
+  'complete mail task',
+  'complete meeting task',
+  'complete site visit task',
+  'create call task',
+  'create mail task',
+  'create meeting task',
+  'create site visit task'
 ];
 
  const [selectactivity, setselectactivity] = useState([]);
@@ -3070,7 +3079,9 @@ console.log(activity);
       position: 'absolute',
       marginTop: '0px',
       left: '10%',
-      width: '150px',
+      width: '200px',
+      height:"200px",
+      overflowY:"scroll",
       backgroundColor: '#f9f9f9',
       border: '1px solid #ddd',
       borderRadius: '4px',
@@ -3081,13 +3092,13 @@ console.log(activity);
     }}
   >
     {activityname.map((activity) => (
-      <div key={activity} className="dropdown-item" style={{height:"40px",fontSize:"14px"}} >
+      <div key={activity} className="dropdown-item" style={{height:"40px",fontSize:"14px",color:"#783894"}} >
         <label>
                 <input
                   type="checkbox"
                   checked={selectactivity.includes(activity)}
                   onChange={() => handlefilterCheckboxChange(activity)}
-                  style={{ marginRight: '8px' }}
+                  style={{ marginRight: '8px', }}
                 />
                 {activity}
               </label>
@@ -3418,6 +3429,114 @@ console.log(activity);
                           
                             </div>
                        
+                          ) : item.activity_name==="create call task"?(
+                            <div id='createcalltaskaction' >
+                            <div><img src="https://www.shutterstock.com/image-vector/call-planner-icon-time-management-260nw-1414111730.jpg" style={{height:"40px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) : item.activity_name==="create mail task"?(
+                            <div id='createmailtaskaction' >
+                            <div><img src="https://cdn-icons-png.freepik.com/256/16294/16294372.png?semt=ais_hybrid" style={{height:"30px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) : item.activity_name==="create meeting task"?(
+                            <div id='createmeetingtaskaction' >
+                            <div><img src="https://t4.ftcdn.net/jpg/03/67/61/45/360_F_367614596_kyv8YYMpghwJ6pR6NHp7oyIN1IVnfHvF.jpg" style={{height:"30px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
+                          ) : item.activity_name==="create site visit task"?(
+                            <div id='createsitevisittaskction' >
+                            <div><img src="https://cdn-icons-png.freepik.com/256/13156/13156025.png?semt=ais_hybrid" style={{height:"30px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
                           ) : <p>no activity</p>
                         ))}
                   
@@ -3467,7 +3586,7 @@ console.log(activity);
           ▼
         </span>
         <span 
-         
+         onClick={()=>navigate('/deal')}
           style={{ 
             position:"absolute",
             cursor: "pointer", 

@@ -86,7 +86,7 @@ function Task_form() {
             console.log(sitevisitdata);
             
 
-    const activity=["Call","Email","Meeting","Site Visit"]
+    const activitys=["Call","Email","Meeting","Site Visit"]
     const reason=["Meeting","Site Visit","Discuss","For Requirment","other"]
     const direction=["Incoming","Outgoing"]
     const visittype=["Site Visit","Home Visit","Online"]
@@ -112,6 +112,9 @@ function Task_form() {
                 inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",start_time:"",end_time:"",complete:"",stage:"",title2:"",first_name:"",
                 last_name:"",mobile_no:[],email:[],lead_id:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
     
+                const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
+                  direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
+                  activity_note1:"",edit_field:"",edit_value:""})
        
 
                 const Location=useLocation()
@@ -167,6 +170,7 @@ function Task_form() {
             
             try {
             const resp=await api.post('calltask',updatedCallTask)
+            const resp1=await api.post('addactivity',activity)
             if(resp.status===200)
             {
             toast.success(resp.data.message)
@@ -193,6 +197,7 @@ function Task_form() {
                 const updatedMailTask = { ...mailtask, title: title1 };
                 try {
                     const resp=await api.post('mailtask',updatedMailTask)
+                    const resp1=await api.post('addactivity',activity)
                     if(resp.status===200)
                     {
                         toast.success(resp.data.message)
@@ -217,6 +222,7 @@ function Task_form() {
                     const updatemeetingtask = { ...meetingtask, title: title1 };
                     try {
                         const resp=await api.post('meetingtask',updatemeetingtask)
+                        const resp1=await api.post('addactivity',activity)
 
                         const data1 = { newstage: updatestagemeeting1 };
 
@@ -280,7 +286,7 @@ function Task_form() {
                   try {
                     // First API request to post sitevisit details
                     const resp = await api.post('sitevisit', updatedsiteTask);
-                
+                    const resp1=await api.post('addactivity',activity)
                 
                    
                 
@@ -1194,6 +1200,7 @@ const[leadid,setleadid]=useState("")
                 stage: selectedLead.stage,
                 lead_id:selectedLead._id
             }));
+            setactivity({...activity,activity_name:"create site visit task",lead:fullName})
         }
 
     }
@@ -1463,7 +1470,7 @@ const handleTimeChange = (e) => {
                     <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control form-control-sm" id="forms" required="true" onChange={handleformchange}>
                     <option>Select</option>
                         {
-                            activity.map(item=>
+                            activitys.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -1510,6 +1517,7 @@ const handleTimeChange = (e) => {
                     email:selectedLead.email,
                     stage:selectedLead.stage
                     }));
+                    setactivity({...activity,activity_name:"create call task",lead:fullName})
                 }
                 }}
   >
@@ -1662,6 +1670,7 @@ const handleTimeChange = (e) => {
           email:selectedLead.email,
           stage:selectedLead.stage
         }));
+        setactivity({...activity,activity_name:"create mail task",lead:fullName})
       }
     }}
   >
@@ -2240,6 +2249,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
           email:selectedLead.email,
           stage:selectedLead.stage
         }));
+        setactivity({...activity,activity_name:"create meeting task",lead:fullName})
       }
     }}
   >
