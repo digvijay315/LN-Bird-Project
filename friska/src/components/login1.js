@@ -42,28 +42,30 @@ const handleShow2=()=>
 }
 
 
-const[login,setlogin]=useState({userName:"",password:""})
+const[login,setlogin]=useState({email:"",password:""})
 const[token,settoken]=useState("") 
 const userlogin=async()=>
 {
     try {
-        const resp= await axios.post('https://mobiledev.friska.ai/Member/MemberAuthenticate',login)
+        const resp= await axios.post('https://friskaaiapi.azurewebsites.net/login',login)
+        console.log(resp)
+        console.log(login)
         settoken(resp.data.result.token)
-        if(token)
-        {
+        // if(token)
+        // {
        
-            Swal.fire({
-                title: 'Login!',
-                text: 'Welcome to friska!',
-                icon: 'success',
-                confirmButtonText: 'Ok',
-              })
+        //     Swal.fire({
+        //         title: 'Login!',
+        //         text: 'Welcome to friska!',
+        //         icon: 'success',
+        //         confirmButtonText: 'Ok',
+        //       })
 
-              setTimeout(() => {
-                navigate('/dietform')
-            }, 2000);
+        //       setTimeout(() => {
+        //         navigate('/dietform')
+        //     }, 2000);
               
-        }
+        // }
    
         
     } catch (error) {
@@ -96,7 +98,7 @@ const userlogin=async()=>
                         <h3 class="font-md">Login to account</h3>
                         <p>Access to the most powerfull tool in the entire design and web industry.</p>
                         
-                            <input class="form-control" type="text" name="username" placeholder="E-mail Address" required onChange={(e)=>setlogin({...login,userName:e.target.value})}/>
+                            <input class="form-control" type="text" name="username" placeholder="E-mail Address" required onChange={(e)=>setlogin({...login,email:e.target.value})}/>
                             <input class="form-control" type="password" name="password" placeholder="Password" required onChange={(e)=>setlogin({...login,password:e.target.value})}/>
                             <div class="form-button d-flex align-items-center">
                                 <button id="submit"  class="btn btn-primary" onClick={userlogin}>Login</button><a  onClick={handleShow1} style={{cursor:"pointer"}}>Forget password?</a>
@@ -180,8 +182,8 @@ const userlogin=async()=>
                             <input class="form-control" type="text" name="name" placeholder="Full Name" required/>
                             <input class="form-control" type="email" name="email" placeholder="E-mail Address" required/>
                             <input class="form-control" type="password" name="password" placeholder="Password" required/>
-                            <input class="form-control" type="number" name="age" placeholder="Age" required/>
-                            <input class="form-control" type="number" name="height" placeholder="Height" required/>
+                            {/* <input class="form-control" type="number" name="age" placeholder="Age" required/> */}
+                            {/* <input class="form-control" type="number" name="height" placeholder="Height" required/> */}
                             <div class="form-button  d-flex">
                                 <button id="submit" type="submit" class="btn btn-primary">Register</button>
                             </div>
@@ -191,7 +193,7 @@ const userlogin=async()=>
                             <a href="#"><i class="fab fa-facebook-f"></i>Facebook</a><a href="#"><i class="fab fa-google"></i>Google</a><a href="#"><i class="fab fa-linkedin-in"></i>Linkedin</a>
                         </div> */}
                         <div class="page-links">
-                            <a href="login34.html">Login to account</a>
+                            <a onClick={()=>window.location.reload()} style={{cursor:"pointer"}}>Login to account</a>
                         </div>
                     </div>
                 </div>
