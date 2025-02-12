@@ -1,6 +1,7 @@
 import React from 'react';
 // import '../css/login1.css';
 import myImage from '../images/37023.jpg';
+import friska from '../images/Friska.png'
 import  { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -113,14 +114,14 @@ const signup=async()=>
     <div>
 
 <div class="form-body without-side" id='main' style={{backgroundImage: `url(${myImage})`, height:"100vh",backgroundRepeat:"no-repeat",backgroundSize:"cover",}}>
-        <div class="iofrm-layout" style={{marginLeft:"60%"}}>
+        <div class="iofrm-layout" style={{marginLeft:"60%",}}>
             <div class="form-holder">
-                <div class="form-content">
-                    <div class="form-items">
+                <div class="form-content" >
+                    <div class="form-items" style={{backgroundColor:"white"}}>
                         <div class="website-logo-inside logo-normal">
                             <a href="index.html">
                                 <div >
-                                    <img class="logo-size" src="https://webapp.friska.ai/static/media/logo_lg.7a15c556eacfc46586a9a097255a16f3.svg" alt=""/>
+                                    <img class="logo-size" src={friska} style={{height:"50px",width:"200px",paddingRight:"20px"}} alt=""/>
                                 </div>
                             </a>
                         </div>
