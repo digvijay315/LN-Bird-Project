@@ -113,8 +113,8 @@ const signup=async()=>
   return (
     <div>
 
-<div class="form-body without-side" id='main' style={{backgroundImage: `url(${myImage})`, height:"100vh",backgroundRepeat:"no-repeat",backgroundSize:"cover",}}>
-        <div class="iofrm-layout" style={{marginLeft:"60%",}}>
+<div class="form-body without-side" id='main' style={{ backgroundColor:"#783894",height:"100vh"}}>
+        <div class="iofrm-layout" style={{marginLeft:"0%",marginTop:"-2%"}}>
             <div class="form-holder">
                 <div class="form-content" >
                     <div class="form-items" style={{backgroundColor:"white"}}>
@@ -126,19 +126,19 @@ const signup=async()=>
                             </a>
                         </div>
                         <h3 class="font-md">Login to account</h3>
-                        <p>Access to the most powerfull tool in the entire design and web industry.</p>
+                        <p style={{fontWeight:"bold",fontSize:"14px"}}>AI Powered nutrition that adapts to you because one size doesn't fit all.</p>
                         
-                            <input class="form-control" type="text" name="username" placeholder="E-mail Address" required onChange={(e)=>setlogin({...login,email:e.target.value})}/>
-                            <input class="form-control" type="password" name="password" placeholder="Password" required onChange={(e)=>setlogin({...login,password:e.target.value})}/>
+                            <input class="form-control" style={{backgroundColor:"white",color:"black",fontWeight:"bold",border:"1px solid black"}} type="text" name="username" placeholder="E-mail Address" required onChange={(e)=>setlogin({...login,email:e.target.value})}/>
+                            <input class="form-control" style={{backgroundColor:"white",color:"black",fontWeight:"bold",border:"1px solid black"}} type="password" name="password" placeholder="Password" required onChange={(e)=>setlogin({...login,password:e.target.value})}/>
                             <div class="form-button d-flex align-items-center">
-                                <button id="submit"  class="btn btn-primary" onClick={userlogin}>Login</button><a  onClick={handleShow1} style={{cursor:"pointer"}}>Forget password?</a>
+                                <button id="submit"  class="btn btn-primary" onClick={userlogin}>Login</button><a  onClick={handleShow1} style={{cursor:"pointer",fontWeight:"bold"}}>Forget password?</a>
                             </div>
                      
                         {/* <div class="other-links social-with-title">
                             <div class="text">Or login with</div>
                             <a href="#"><i class="fab fa-facebook-f"></i>Facebook</a><a href="#"><i class="fab fa-google"></i>Google</a><a href="#"><i class="fab fa-linkedin-in"></i>Linkedin</a>
                         </div> */}
-                        <div class="page-links">
+                        <div class="page-links" style={{paddingTop:"20px"}}>
                             <a onClick={handleShow2} style={{cursor:"pointer"}}>Register new account</a>
                         </div>
                     </div>
@@ -158,14 +158,14 @@ const signup=async()=>
                         <div class="website-logo-inside logo-normal">
                             <a href="index.html">
                                 <div>
-                                    <img  src="https://webapp.friska.ai/static/media/logo_lg.7a15c556eacfc46586a9a097255a16f3.svg" alt=""/>
+                                    <img  src={friska} style={{height:"30px",width:"150px",paddingRight:"20px"}} alt=""/>
                                 </div>
                             </a>
                         </div>
                         <h3 class="font-md">Password Reset</h3>
-                        <p>To reset your password, enter the email address you use to sign in to iofrm</p>
+                        <p style={{fontWeight:"bold",fontSize:"12px"}}>To reset your password, enter the email address you use to sign in to friska</p>
                         <form>
-                            <input class="form-control" type="text" name="username" placeholder="E-mail Address" required/>
+                            <input class="form-control" style={{backgroundColor:"white",color:"black",fontWeight:"bold",border:"1px solid black"}} type="text" name="username" placeholder="E-mail Address" required/>
                             <div class="form-button d-flex">
                                 <button id="submit" type="submit" class="btn btn-primary">Send Reset Link</button>
                             </div>
@@ -202,16 +202,16 @@ const signup=async()=>
                         <div class="website-logo-inside logo-normal">
                             <a href="index.html">
                                 <div>
-                                    <img class="logo-size" src="https://webapp.friska.ai/static/media/logo_lg.7a15c556eacfc46586a9a097255a16f3.svg" alt=""/>
+                                    <img class="logo-size" src={friska} style={{height:"50px",width:"200px",paddingRight:"20px"}} alt=""/>
                                 </div>
                             </a>
                         </div>
                         <h3 class="font-md">Register new account</h3>
-                        <p>Access to the most powerfull tool in the entire design and web industry.</p>
+                        <p style={{fontWeight:"bold",fontSize:"14px"}}>AI Powered nutrition that adapts to you because one size doesn't fit all.</p>
                         
-                            <input class="form-control" type="text" name="username" placeholder="Full Name" required onChange={(e)=>setuser({...user,username:e.target.value})}/>
-                            <input class="form-control" type="email" name="email" placeholder="E-mail Address" required onChange={(e)=>setuser({...user,email:e.target.value})}/>
-                            <input class="form-control" type="password" name="password" placeholder="Password" required onChange={(e)=>setuser({...user,password:e.target.value})}/>
+                            <input class="form-control" style={{backgroundColor:"white",color:"black",fontWeight:"bold",border:"1px solid black"}} type="text" name="username" placeholder="Full Name" required onChange={(e)=>setuser({...user,username:e.target.value})}/>
+                            <input class="form-control" style={{backgroundColor:"white",color:"black",fontWeight:"bold",border:"1px solid black"}} type="email" name="email" placeholder="E-mail Address" required onChange={(e)=>setuser({...user,email:e.target.value})}/>
+                            <input class="form-control" style={{backgroundColor:"white",color:"black",fontWeight:"bold",border:"1px solid black"}} type="password" name="password" placeholder="Password" required onChange={(e)=>setuser({...user,password:e.target.value})}/>
                          
                             <div class="form-button  d-flex">
                                 <button id="submit"  class="btn btn-primary" onClick={signup}>Register</button>
@@ -222,7 +222,7 @@ const signup=async()=>
                             <a href="#"><i class="fab fa-facebook-f"></i>Facebook</a><a href="#"><i class="fab fa-google"></i>Google</a><a href="#"><i class="fab fa-linkedin-in"></i>Linkedin</a>
                         </div> */}
                         <div class="page-links">
-                            <a onClick={()=>window.location.reload()} style={{cursor:"pointer"}}>Login to account</a>
+                            <a onClick={()=>window.location.reload()} style={{cursor:"pointer",paddingTop:"10px"}}>Login to account</a>
                         </div>
                     </div>
                 </div>

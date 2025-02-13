@@ -5,6 +5,7 @@ import Dietform from './components/dietform';
 import { BrowserRouter,Route,Routes } from 'react-router-dom';
 import Chatai from './components/chatai';
 import AzureAIComponent from './components/test';
+import MealPlanChat from './components/test';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
     {/* <Dietform/> */}
     {/* <Chatai/> */}
     {/* <AzureAIComponent/> */}
+    {/* <MealPlanChat/> */}
     </div>
   );
 }

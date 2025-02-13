@@ -1,58 +1,93 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Login from './login';
 
-const AzureAIComponent = () => {
-    const [responseData, setResponseData] = useState(null);
-    const [error, setError] = useState(null);
+// Function to simulate the API call using axios.get
+const fetchMealPlan = async (chatHistory, userInput, foodDatabase) => {
+  try {
+    // Pass the chat history, user input, and food database as query parameters
+    const response = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', {
+      body: {
+        chat_history:(chatHistory), // Pass chat history as a stringified JSON
+        question: userInput,
+        food_database:foodDatabase// Pass food database as a stringified JSON
+      },
+    });
 
-    const endpoint = "https://friskaai-ml-space-hiycz.eastus2.inference.ml.azure.com/score";
-    const apiKey = "PUqBOZXczfPbr0uXJtcKV9CGnxVPqAyK";
-
-    const callAzureAI = async () => {
-        try {
-            const response = await axios.post(endpoint, {
-                messages: [{ role: "user", content: "Hello, how are you?" }],
-                max_tokens: 50
-            }, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "api-key": apiKey
-                }
-            });
-                console.log(response);
-                
-            // Set the response data to state
-            setResponseData(response.data);
-            setError(null);  // Clear any previous errors
-        } catch (err) {
-            // Set the error message if the request fails
-            setError(err.response ? err.response.data : err.message);
-            setResponseData(null); // Clear any previous successful responses
-        }
-    };
-
-    return (
-        <div>
-            <button onClick={callAzureAI}>Call Azure AI</button>
-
-            {/* Display response data */}
-            {responseData && (
-                <div>
-                    <h3>Response from Azure AI:</h3>
-                    <pre>{JSON.stringify(responseData, null, 2)}</pre>
-                </div>
-            )}
-
-            {/* Display error if any */}
-            {error && (
-                <div style={{ color: 'red' }}>
-                    <h3>Error:</h3>
-                    <pre>{JSON.stringify(error, null, 2)}</pre>
-                </div>
-            )}
-        </div>
-    );
+    return response.data.answer; // Assuming the API returns the answer in `response.data.answer`
+  } catch (error) {
+    console.error('Error fetching meal plan:', error);
+    throw new Error('Failed to fetch meal plan');
+  }
 };
 
-export default AzureAIComponent;
+const MealPlanChat = () => {
+  const [chatHistory, setChatHistory] = useState([]);
+  const [userInput, setUserInput] = useState('');
+  const [mealPlan, setMealPlan] = useState('');
+  const foodDatabase=foodDatabase
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Fetch the meal plan from API using Axios and update chat history
+      const mealPlanResponse = await fetchMealPlan(chatHistory, userInput, foodDatabase);
+
+      // Update chat history with the new question and meal plan response
+      const newChatHistory = [
+        ...chatHistory,
+        {
+          inputs: {
+            question: userInput,
+            // food_database: foodDatabase,
+          },
+          outputs: {
+            answer: mealPlanResponse.answer,
+          },
+        },
+      ];
+      setChatHistory(newChatHistory);
+      setMealPlan(mealPlanResponse);
+    } catch (error) {
+      console.error("Error fetching meal plan:", error);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Meal Plan Chat</h1>
+      <div>
+        <h2>Chat History</h2>
+        <ul>
+          {chatHistory.map((chat, index) => (
+            <li key={index}>
+              <p><strong>Question:</strong> {chat.inputs.question}</p>
+              <p><strong>Answer:</strong> {chat.outputs.answer}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+
+        <div>
+          <label htmlFor="userInput">Ask a question:</label>
+          <input
+            type="text"
+            id="userInput"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+          />
+        </div>
+        <button onClick={handleSubmit}>Submit</button>
+    
+
+      {mealPlan && (
+        <div>
+          <h3>Meal Plan:</h3>
+          <p>{mealPlan}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MealPlanChat;

@@ -177,7 +177,7 @@ const calculateTdee = (gender, weight, height, age, activity_level) => {
   }, [dietplan.Weight, dietplan.Height_feet, dietplan.Height_inches, dietplan.Age, dietplan.Gender, dietplan.Activity_Level]);
 
 
-  const prompt = `Please create a personalized meal plan based on the following profile:
+  const question = `Please create a personalized meal plan based on the following profile:
 - Gender: ${dietplan.Gender}
 - Age: ${dietplan.Age} years
 - Weight: ${dietplan.Weight} kg
@@ -200,7 +200,7 @@ const food_database = "Generate Food Menu";
 // Construct the full object to send in the POST request
 const requestData = {
   chat_history: [],  // Empty array for now, or you can add previous messages if needed
-  prompt: prompt,
+  question: question,
   food_database: food_database
 };
 
@@ -253,7 +253,7 @@ const getdietplan = async () => {
       });
 
       setTimeout(() => {
-        navigate('/chatai', { state: { answer: resp2.data.answer } });
+        navigate('/chatai', { state: { answer: resp2.data.answer,foodData:resp1.data.answer } });
       }, 2000);
     } else {
       Swal.fire({
@@ -400,7 +400,7 @@ const getdietplan = async () => {
         </div>
         <div className='col-md-2'></div>
 
-        <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={getdietplan}  style={{backgroundColor:"#783894",color:"white"}}>
+        <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={getdietplan}  style={{backgroundColor:"#783894",color:"white",borderRadius:"20px"}}>
         {loading ? (
           <span>Loading...</span> // Placeholder for a text or spinner
         ) : (

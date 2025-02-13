@@ -1,13 +1,90 @@
 import React, { useState, useEffect } from "react";
 import '../css/chaiai.css'
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const Chatai = () => {
   
 
   const location=useLocation()
   const rawData = location.state.answer;
+  const fooddata=location.state.foodData
+
+  
+  // const food_database=fooddata
+  // const answer=rawData
  
+  const [input,setinput]=useState("")
+
+
+
+
+
+  const [chat_history, setchat_history] = useState([{
+    inputs: {
+      question: input,
+      food_database: fooddata
+    },
+    outputs: {
+      answer: rawData
+    }
+  }]);
+
+ 
+
+
+
+  const [chatHistory, setChatHistory] = useState([]); 
+ const fetchMealPlan = async () => {
+  try {
+    // Pass the chat history, user input, and food database as query parameters
+    const response = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', {
+      chat_history: chat_history, // Pass chat history as a stringified JSON
+      question: input,
+      food_database:fooddata // Pass food database as a stringified JSON
+    });
+    console.log(response.data.question);
+console.log(response.data.answer);
+setChatHistory([...chatHistory,response.data]);
+
+    return response.data.answer; // Assuming the API returns the answer in `response.data.answer`
+  } catch (error) {
+    console.error('Error fetching meal plan:', error);
+    throw new Error('Failed to fetch meal plan');
+  }
+};
+
+console.log(chatHistory);
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     // Fetch the meal plan from API using Axios and update chat history
+  //     const mealPlanResponse = await fetchMealPlan(chatHistory, userInput, foodDatabase);
+
+  //     // Update chat history with the new question and meal plan response
+  //     const newChatHistory = [
+  //       ...chatHistory,
+  //       {
+  //         inputs: {
+  //           question: userInput,
+  //           // food_database: foodDatabase,
+  //         },
+  //         outputs: {
+  //           answer: mealPlanResponse.answer,
+  //         },
+  //       },
+  //     ];
+  //     setChatHistory(newChatHistory);
+  //     setMealPlan(mealPlanResponse);
+  //   } catch (error) {
+  //     console.error("Error fetching meal plan:", error);
+  //   }
+  // };
+
+
+
 
   const mealSections = [
     {
@@ -53,14 +130,35 @@ const Chatai = () => {
   };
   
 
-  
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
 <div className="row" style={{backgroundColor:"white"}}>
-<div className="col-md-2" style={{marginTop:"5%",borderRight:"1px solid black"}}>
+<div className="col-md-2" style={{marginTop:"5%",borderRight:"1px solid black",position:"fixed",height:"75vh",overflowY:"scroll"}}>
       <header style={styles.header}>
-        <h5 style={{fontWeight:"bold"}}><u>Chat History</u></h5>
+        <h5 style={{fontWeight:"bold"}}><u>Meal Plan History</u></h5>
       </header>
+      <main style={{height:"60vh"}}>
+
+     <ul>
+    {/* Check if chatHistory is an array, and then map */}
+    {Array.isArray(chatHistory) ? (
+      chatHistory.map((chat, index) => (
+        <li key={index}>
+          <p><strong>Question:</strong> {chat.question}</p>
+          <p><strong>Answer:</strong> {chat.answer}</p>
+        </li>
+      ))
+    ) : (
+      <p>No chat history available</p>
+    )}
+  </ul>
+      </main>
+
+      <footer style={styles.footer}>
+        {/* <button style={styles.messageButton}>Save Chat Log</button> */}
+        <button style={styles.messageButton}>Generate new meal plan</button>
+      </footer>
      
 </div>
     <div className="col-md-10" style={styles.container}>
@@ -90,13 +188,10 @@ const Chatai = () => {
             <p>You can now chat with the nutrition assistant about your meal plan or ask any nutrition-related questions!</p>
       </main>
 
-      <footer style={styles.footer}>
-        <button style={styles.messageButton}>Save Chat Log</button>
-        <button style={styles.messageButton2}>Generate new meal plan</button>
-      </footer>
+ 
         <div style={{display:"flex",marginBottom:"20px",gap:"10px",}}>
-      <input style={{marginTop:"20px",borderRadius:"25px"}} placeholder="Your Message" type="text" className="form-control"></input>
-      <button className="form-control" style={{height:"40px",width:"60px",marginTop:"20px",borderRadius:"10px"}}>Send</button>
+      <input style={{marginTop:"20px",borderRadius:"25px"}} placeholder="Your Message" type="text" className="form-control" onChange={(e)=>setinput(e.target.value)}></input>
+      <button className="form-control" style={{height:"40px",width:"60px",marginTop:"20px",borderRadius:"10px"}} onClick={fetchMealPlan}>Send</button>
       </div>
     </div>
   
@@ -147,14 +242,17 @@ const styles = {
     marginTop: "20px",
   },
   messageButton: {
-    backgroundColor: "#28a745",
-    color: "#fff",
-    border: "none",
+    backgroundColor:"#783894",
+    color: "white",
+    border: "1px solid black",
     padding: "10px 15px",
     cursor: "pointer",
-    borderRadius: "5px",
-   
+    position:"fixed",
+    marginTop:"70px",
+    borderRadius:"20px",
+    marginLeft:"20px",
   },
+
   messageButton2: {
     backgroundColor: "#28a745",
     color: "#fff",
