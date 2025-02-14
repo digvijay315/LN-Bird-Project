@@ -48,11 +48,15 @@ const userlogin=async()=>
 {
     try {
         const resp= await axios.post('https://friskaaiapi.azurewebsites.net/login',login)
+        console.log(resp);
+        
         if(resp.status===200)
         {
+            localStorage.setItem('id',resp.data.UserID)
+            console.log(resp.data.UserID);
             Swal.fire({
                         title: 'Login!',
-                        text: 'Welcome to friska!',
+                        text: 'Welcome to Friska NutriAI!',
                         icon: 'success',
                         confirmButtonText: 'Ok',
                       })
@@ -60,7 +64,7 @@ const userlogin=async()=>
                       setTimeout(() => {
                         navigate('/dietform')
                     }, 2000);
-
+                
         }
      
     } catch (error) {

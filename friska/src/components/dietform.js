@@ -281,8 +281,8 @@ const getdietplan = async () => {
   return (
     <div style={{backgroundColor:"#783894"}}>
       <div style={{width:"50%",marginLeft:"30%",border:"1px solid black",backgroundColor:"white",borderRadius:"10px",padding:"30px"}}>
-      <h2 style={{fontWeight:"bold"}}>Hello, I am Friska</h2>
-      <p>Your Personalized Nutrition Assistant</p>
+      <h2 style={{fontWeight:"bold"}}>Hello, I am Friska NutriAI</h2>
+      <p>Your Personal Nutrition Assistant</p>
       <div style={{border:"1px solid black",padding:"20px",borderRadius:"10px",}}>
       <div className='row' style={{lineHeight:"40px"}}>
         <h4 style={{fontWeight:"bold"}}>Your Profile</h4>
