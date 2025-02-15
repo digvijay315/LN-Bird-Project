@@ -54,19 +54,29 @@ const userlogin=async()=>
         {
             localStorage.setItem('id',resp.data.UserID)
             localStorage.setItem('username',resp.data.UserName)
+
+            const resp1=await axios.get(`https://friskaaiapi.azurewebsites.net/get-diet-info/${resp.data.UserID}`)
+            console.log(resp1);
+            
             
             Swal.fire({
                         title: 'Login!',
                         text: 'Welcome to Friska NutriAI!',
                         icon: 'success',
                         confirmButtonText: 'Ok',
-                      })
-        
-                      setTimeout(() => {
+                      })  
+
+                      if(resp1.data.message==="User dietary info retrieved successfully")
+                      {
+                        navigate('/chatai')
+
+                      }
+                      else
+                      {
                         navigate('/dietform')
-                    }, 2000);
-                
+                      }
         }
+
      
     } catch (error) {
         Swal.fire({
@@ -118,7 +128,7 @@ const signup=async()=>
   return (
     <div>
 
-<div class="form-body without-side" id='main' style={{ backgroundColor:"#783894",height:"100vh"}}>
+<div class="form-body without-side" id='main' style={{ backgroundColor:"#783894",height:"104vh"}}>
         <div class="iofrm-layout" style={{marginLeft:"0%",marginTop:"-2%"}}>
             <div class="form-holder">
                 <div class="form-content" >
