@@ -181,12 +181,14 @@ const requestData = {
 };
 
 const[answer2,setanswer2]=useState("")
+
+
 const getdietplan2 = async () => {
-  alert("hello")
+ 
   setLoading(true); // Start loading indicator when function is triggered
 
   try {
-console.log(requestData);
+
 
     const resp1 = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', requestData);
     console.log(resp1);
@@ -197,12 +199,24 @@ console.log(requestData);
         food_database: resp1.data.answer, // Change food_database to the value from resp1.result
       };
 
-      console.log(updatedRequestData);
       
       const resp2 = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', updatedRequestData);
       console.log(resp2);
       
       setanswer2(resp2.data.answer)
+      setchat_history(prevHistory => [
+        ...prevHistory,
+        {
+          inputs: {
+            question: input,
+            food_database: resp1.data.answer
+          },
+          outputs: {
+            answer: resp2.data.answer  // Setting new answer
+          }
+        }
+      ]);
+      
 
       Swal.fire({
         title: 'Success',
@@ -232,14 +246,20 @@ console.log(requestData);
     setLoading(false); // Stop loading once everything is done
   }
 };
+
+  console.log(answer2);
   
-console.log(answer2);
   useEffect(() => {
     // Convert raw Markdown to HTML
     const convertedHtml = marked(answer2);
     setHtmlContent(convertedHtml);
   }, [answer2]);
  
+
+  // useEffect(()=>
+  // {
+  //   getdietplan2()
+  // },[dietplan])
 
   return (
 <div className="row" style={{backgroundColor:"white",position: "relative"}}>

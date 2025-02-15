@@ -107,9 +107,9 @@ const signup=async()=>
                         confirmButtonText: 'Ok',
                       })
         
-                    //   setTimeout(() => {
-                    //     window.location.reload() 
-                    // }, 2000);
+                      setTimeout(() => {
+                        window.location.reload() 
+                    }, 2000);
 
         }
      
