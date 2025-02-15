@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import { Login } from "@mui/icons-material";
 import { height, maxHeight, minHeight } from "@mui/system";
 import send from '../images/send.png'
+import Swal from 'sweetalert2';
 
 const Chatai = () => {
   
@@ -17,8 +18,8 @@ const Chatai = () => {
   },[])
 
   const location=useLocation()
-  const rawData = location.state.answer;
-  const fooddata=location.state.foodData
+  const rawData = location.state?.answer || "";
+  const fooddata=location.state?.foodData || ""
 
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +30,8 @@ const Chatai = () => {
     const convertedHtml = marked(rawData);
     setHtmlContent(convertedHtml);
   }, []);
+
+
   
 
  
@@ -123,7 +126,119 @@ const[allchat,setallchat]=useState([])
   };
 
 
+  // =========================================================new code==============================================================
 
+
+  const id2=localStorage.getItem('id')
+  const username2=localStorage.getItem('username')
+
+const[dietplan,setdietplan]=useState([])
+  const getdietplan=async()=>
+  {
+    try {
+      const resp=await axios.get(`https://friskaaiapi.azurewebsites.net/get-diet-info/${id2}`)
+      setdietplan(resp.data.data)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(()=>
+  {
+    getdietplan()
+  },[])
+
+
+  
+
+  const question = `Please create a personalized meal plan based on the following profile:
+- Gender: ${dietplan.Gender}
+- Age: ${dietplan.Age} years
+- Weight: ${dietplan.Weight} kg
+- Height: ${dietplan.Height_feet} feet ${dietplan.Height_inches} inches
+- BMI: ${dietplan.BMI}
+- TDEE: ${dietplan.TDEE} calories/day
+- Activity Level: ${dietplan.Activity_Level}
+- Dietary Preference: ${dietplan.Dietary_Preference}
+- Dietary Restrictions: ${dietplan.Dietary_Restrictions}
+- Digestive Issues: ${dietplan.Digestive_Issues}
+- Aggravating Foods: ${dietplan.Aggrevating_Foods}
+- Food Allergies: ${dietplan.Food_Allergies}
+
+Please provide a detailed one-day meal plan with specific portions, timing, and a nutritional breakdown.
+The meal plan should avoid all dietary restrictions, aggravating foods, and allergens while ensuring balanced nutrition based on the user's TDEE.`;
+
+
+  // Define food_database
+const food_database = "Generate Food Menu";
+
+// Construct the full object to send in the POST request
+const requestData = {
+  chat_history: [],  // Empty array for now, or you can add previous messages if needed
+  question: question,
+  food_database: food_database
+};
+
+const[answer2,setanswer2]=useState("")
+const getdietplan2 = async () => {
+  alert("hello")
+  setLoading(true); // Start loading indicator when function is triggered
+
+  try {
+console.log(requestData);
+
+    const resp1 = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', requestData);
+    console.log(resp1);
+
+    if (resp1.status === 200) {
+      const updatedRequestData = {
+        ...requestData,
+        food_database: resp1.data.answer, // Change food_database to the value from resp1.result
+      };
+
+      console.log(updatedRequestData);
+      
+      const resp2 = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', updatedRequestData);
+      console.log(resp2);
+      
+      setanswer2(resp2.data.answer)
+
+      Swal.fire({
+        title: 'Success',
+        text: resp2.data.message,
+        icon: 'success',
+        confirmButtonText: 'Ok',
+      });
+
+    
+    } else {
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to get the expected response from the AI prompt API!',
+        icon: 'error',
+        confirmButtonText: 'Ok',
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    Swal.fire({
+      title: 'Error',
+      text: 'An error occurred while processing the request!',
+      icon: 'error',
+      confirmButtonText: 'Ok',
+    });
+  } finally {
+    setLoading(false); // Stop loading once everything is done
+  }
+};
+  
+console.log(answer2);
+  useEffect(() => {
+    // Convert raw Markdown to HTML
+    const convertedHtml = marked(answer2);
+    setHtmlContent(convertedHtml);
+  }, [answer2]);
  
 
   return (
@@ -160,7 +275,7 @@ const[allchat,setallchat]=useState([])
 
       <footer style={styles.footer}>
         {/* <button style={styles.messageButton}>Save Chat Log</button> */}
-        <button style={styles.messageButton}>Generate new meal plan</button>
+        <button style={styles.messageButton} onClick={getdietplan2}>Generate new meal plan</button>
       </footer>
      
 </div>

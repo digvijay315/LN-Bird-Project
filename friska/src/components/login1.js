@@ -53,7 +53,8 @@ const userlogin=async()=>
         if(resp.status===200)
         {
             localStorage.setItem('id',resp.data.UserID)
-            console.log(resp.data.UserID);
+            localStorage.setItem('username',resp.data.UserName)
+            
             Swal.fire({
                         title: 'Login!',
                         text: 'Welcome to Friska NutriAI!',
@@ -96,9 +97,9 @@ const signup=async()=>
                         confirmButtonText: 'Ok',
                       })
         
-                      setTimeout(() => {
-                        window.location.reload() 
-                    }, 2000);
+                    //   setTimeout(() => {
+                    //     window.location.reload() 
+                    // }, 2000);
 
         }
      

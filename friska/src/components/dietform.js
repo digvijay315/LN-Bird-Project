@@ -11,11 +11,22 @@ function Dietform() {
 
   const navigate=useNavigate()
 
+  const id2=localStorage.getItem('id')
+  const username2=localStorage.getItem('username')
 
-  const[dietplan,setdietplan]=useState({UserID:1,username:"testuser",BMI:0,TDEE:0,Gender:"Male",Weight:0,Height_feet:0,Height_inches:0,Age:0,Activity_Level:"",Dietary_Preference:"",
+ 
+
+  const[dietplan,setdietplan]=useState({UserID:"",username:"",BMI:0,TDEE:0,Gender:"Male",Weight:0,Height_feet:0,Height_inches:0,Age:0,Activity_Level:"Sedentary",Dietary_Preference:"None",
     Dietary_Restrictions:"",Digestive_Issues:"",Food_Allergies:"",Aggrevating_Foods:""})
 
+    useState(()=>
+      {
+        setdietplan({...dietplan,UserID:id2,username:username2})
+    
+      },[])
 
+      console.log(dietplan);
+      
   const dietary_restrictionslist = [
     'Gluten-free diet',
     'Dairy-free diet',
@@ -276,6 +287,26 @@ const getdietplan = async () => {
   }
 };
 
+// ===================================================submit code================================================================
+
+  const savediet=async()=>
+  {
+    try {
+      const resp=await axios.post('https://friskaaiapi.azurewebsites.net/dietinfocreate',dietplan)
+      Swal.fire({
+        icon:"success",
+        title:"submit",
+        text:"Diet plan saved"
+      })
+      setTimeout(() => {
+        navigate('/chatai')
+      }, 2000);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
 
   return (
@@ -415,6 +446,10 @@ const getdietplan = async () => {
         </div>
       )}
 
+          </div>
+          <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={savediet}  style={{backgroundColor:"#783894",color:"white",borderRadius:"20px"}}>
+        submit
+          </Button>
           </div>
 
       </div>
