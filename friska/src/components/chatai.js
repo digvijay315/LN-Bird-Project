@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../css/chaiai.css'
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {marked} from 'marked';
 import ReactMarkdown from 'react-markdown';
@@ -8,9 +8,13 @@ import { Login } from "@mui/icons-material";
 import { height, maxHeight, minHeight } from "@mui/system";
 import send from '../images/send.png'
 import Swal from 'sweetalert2';
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const Chatai = () => {
+
+  const navigate=useNavigate()
   
+  const[answer2,setanswer2]=useState("")
 
   useEffect(()=>
   {
@@ -43,7 +47,7 @@ const Chatai = () => {
       food_database: fooddata
     },
     outputs: {
-      answer: rawData
+      answer: answer2
     }
   }]);
 
@@ -85,10 +89,12 @@ useState(()=>
       food_database:fooddata // Pass food database as a stringified JSON
     });
 
+    console.log(chatHistory);
+    
     setChatHistory([...chatHistory,response.data]);
     const updatedChat = { ...chat, Chat_Log: response.data.answer };
 
-
+    console.log(updatedChat);
     const response2=await axios.post('https://friskaaiapi.azurewebsites.net/create-chat-log/',updatedChat)
     console.log(response2);
     return response.data.answer; // Assuming the API returns the answer in `response.data.answer`
@@ -150,24 +156,92 @@ const[dietplan,setdietplan]=useState([])
   },[])
 
 
+   // BMI calculation
+    const calculateBmi = (weight, height_feet, height_inches) => {
+      const heightInCm = (height_feet * 30.48) + (height_inches * 2.54); // Convert feet and inches to cm
+      const heightInM = heightInCm / 100; // Convert cm to meters
+      return weight / (heightInM ** 2); // BMI formula
+    };
+  
+  // TDEE calculation
+  const calculateTdee = (gender, weight, height, age, activity_level) => {
+    let bmr;
+    if (gender.toLowerCase() === "male") {
+      bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+      bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+  
+    const activity_factors = {
+      sedentary: 1.2,
+      "lightly active": 1.375,
+      "moderately active": 1.55,
+      "very active": 1.725,
+      "extra active": 1.9
+    };
+  
+    // Multiply BMR by the activity factor to calculate TDEE
+    const tdee = bmr * activity_factors[activity_level.toLowerCase()];
+  
+    // Round the TDEE to the nearest integer
+    return Math.round(tdee); // Ensure no decimals in the TDEE
+  };
+  
+  
+    // UseEffect to automatically calculate BMI and TDEE whenever relevant state changes
+    useEffect(() => {
+      // Only calculate if all required fields are provided
+      if (dietplan.Weight && dietplan.Height_feet && dietplan.Height_inches && dietplan.Age && dietplan.Gender && dietplan.Activity_Level) {
+        // Convert height into cm (feet to inches to cm)
+        const heightCm = (dietplan.Height_feet * 30.48) + (dietplan.Height_inches * 2.54);
+  
+        // Calculate BMI
+        const bmi = calculateBmi(dietplan.Weight, dietplan.Height_feet, dietplan.Height_inches);
+        
+        // Calculate TDEE
+        const tdee = calculateTdee(dietplan.Gender, dietplan.Weight, heightCm, dietplan.Age, dietplan.Activity_Level);
+  
+        // Update state with the calculated BMI and TDEE
+        setdietplan((prevDietplan) => ({
+          ...prevDietplan,
+          BMI: bmi,
+          TDEE: parseFloat(tdee)
+        }));
+      }
+    }, [dietplan.Weight, dietplan.Height_feet, dietplan.Height_inches, dietplan.Age, dietplan.Gender, dietplan.Activity_Level]);
+
+  console.log(dietplan);
   
 
   const question = `Please create a personalized meal plan based on the following profile:
 - Gender: ${dietplan.Gender}
 - Age: ${dietplan.Age} years
 - Weight: ${dietplan.Weight} kg
-- Height: ${dietplan.Height_feet} feet ${dietplan.Height_inches} inches
+- Height: ${dietplan.Height_ft} feet ${dietplan.Height_in} inches
 - BMI: ${dietplan.BMI}
 - TDEE: ${dietplan.TDEE} calories/day
-- Activity Level: ${dietplan.Activity_Level}
-- Dietary Preference: ${dietplan.Dietary_Preference}
-- Dietary Restrictions: ${dietplan.Dietary_Restrictions}
-- Digestive Issues: ${dietplan.Digestive_Issues}
-- Aggravating Foods: ${dietplan.Aggrevating_Foods}
-- Food Allergies: ${dietplan.Food_Allergies}
+- Activity Level: ${dietplan.ActivityLevel}
+- Dietary Preference: ${dietplan.DietaryPreference}
+- Dietary Restrictions: ${dietplan.DietaryRestrictions}
+- Digestive Issues: ${dietplan.DigestiveIssues}
+- Aggravating Foods: ${dietplan.AggravatingFoods}
+- Food Allergies: ${dietplan.FoodAllergies}
+
+
 
 Please provide a detailed one-day meal plan with specific portions, timing, and a nutritional breakdown.
 The meal plan should avoid all dietary restrictions, aggravating foods, and allergens while ensuring balanced nutrition based on the user's TDEE.`;
+
+
+
+
+
+
+
+
+
+
+
 
 
   // Define food_database
@@ -180,7 +254,7 @@ const requestData = {
   food_database: food_database
 };
 
-const[answer2,setanswer2]=useState("")
+
 
 
 const getdietplan2 = async () => {
@@ -192,6 +266,7 @@ const getdietplan2 = async () => {
 
     const resp1 = await axios.post('https://friskaaiapi.azurewebsites.net/aiprompt', requestData);
     console.log(resp1);
+    console.log(requestData);
 
     if (resp1.status === 200) {
       const updatedRequestData = {
@@ -299,7 +374,7 @@ const getdietplan2 = async () => {
       </footer>
      
 </div>
-    <div className="col-md-10" style={styles.container}>
+    <div className="col-md-9" style={styles.container}>
       <div className="maindiv" style={{maxHeight:"80vh",overflowY:"auto"}}>
       <style>
     {/* Hide scrollbar for Webkit browsers */}
@@ -365,6 +440,20 @@ const getdietplan2 = async () => {
   </div>
 
     </div>
+    </div>
+    <div className="col-md-1" style={{marginRight:"5%",marginTop:"2%"}}>
+
+    <Dropdown >
+      <Dropdown.Toggle id="custom-dropdown">
+        {username2}
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu >
+        <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+        <Dropdown.Item onClick={()=>navigate('/')}>Logout</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+
     </div>
 
     <div style={{ display: "flex",
