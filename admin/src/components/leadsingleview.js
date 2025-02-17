@@ -3564,6 +3564,33 @@ console.log(activity);
                           
                             </div>
                        
+                          ) : item.activity_name==="add inventory"?(
+                            <div id='createsitevisittaskction' >
+                            <div><img src="https://icons.veryicon.com/png/o/miscellaneous/seiko-cloud-map-standard-library/add-inventory.png" style={{height:"30px"}}></img>
+                            
+                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                          
+
+                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                            <Dropdown>
+                                   <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
+                              </Dropdown.Toggle>
+
+                              <Dropdown.Menu>
+                                <Dropdown.Item style={{fontSize:"12px"}}>Edit</Dropdown.Item>
+                                <Dropdown.Item onClick={()=>deleteactivity(item._id)} style={{fontSize:"12px"}}>Delete</Dropdown.Item>
+                              
+                              </Dropdown.Menu>
+                            </Dropdown>
+                            </span>
+
+                            </div>
+                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                           <hr></hr>
+                            <br></br>
+                          
+                            </div>
+                       
                           ) :<p>no activity</p>
                         ))}
                   
@@ -3705,7 +3732,7 @@ console.log(activity);
           ▼
         </span>
         <span 
-         
+         onClick={()=>navigate('/addinventory',{state:lead})}
           style={{ 
             position:"absolute",
             cursor: "pointer", 

@@ -15,7 +15,7 @@ const {booking_details,view_booking} = require('../controllers/booking_details')
 const {addpayment_details,view_payment} = require('../controllers/addpayment_details');
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
-const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project, view_project_Byid, update_project, view_projectforinventories, update_projectforinventories} = require('../controllers/project');
+const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project, view_project_Byid, update_project, view_projectforinventories, update_projectforinventories, update_projectaddunit} = require('../controllers/project');
 const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner, update_dealbyprojectandunit, view_deal_Byproject } = require('../controllers/add_deal');
  const uploadFields = require('../middlewares/multifile');
 const upload1 = require('../middlewares/multifile');
@@ -68,7 +68,7 @@ router.get('/viewprojectforinventories/:project_name/:unit_no/:block', view_proj
 router.put('/updateprojectforinventories/:project_name/:unit_no/:block', update_projectforinventories);
 router.delete('/deleteproject/:_id',remove_project)
 router.put('/updateproject/:_id',upload.any('pic','preview'),update_project)
-
+router.put('/addinventory/:name',uploadFields,update_projectaddunit)
 
 //router.post('/adddeal',upload.any('preview'),add_deal)
  router.post('/adddeal',add_deal)

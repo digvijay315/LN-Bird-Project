@@ -451,22 +451,21 @@ const getdietplan = async () => {
         </div>
         <div className='col-md-2'></div>
 
-        <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={getdietplan}  style={{backgroundColor:"#783894",color:"white",borderRadius:"20px"}}>
+        {/* <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={getdietplan}  style={{backgroundColor:"#783894",color:"white",borderRadius:"20px"}}> 
         {loading ? (
-          <span>Loading...</span> // Placeholder for a text or spinner
+          <span>Loading...</span> 
         ) : (
           'Generate Meal Plan'
         )}
           </Button>
           
-           {/* Conditionally render the custom running man animation */}
       {loading && (
           <div className="spinner-container">
-          <div className="spinner"></div> {/* Circle spinner */}
+          <div className="spinner"></div> {/* Circle spinner 
         </div>
       )}
 
-          </div>
+           </div> */}
           <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={savediet}  style={{backgroundColor:"#783894",color:"white",borderRadius:"20px"}}>
         submit
           </Button>

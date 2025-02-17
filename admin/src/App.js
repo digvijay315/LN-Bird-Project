@@ -17,7 +17,7 @@ import Site_visit_complete_form from './components/site_visit_complete_form';
 import Sale_lease from './components/sale_lease';
 import Booking_details from './components/booking_details';
 import Payment_details from './components/Payment_details';
-import Addinventory from './components/addinventory';
+// import Addinventory from './components/addinventory';
 import Leadfetch from './components/leaddetails';
 import Fetchcontact from './components/contactdetails';
 import InventoryDetails from './components/inventorydetails';
@@ -42,6 +42,7 @@ import Sortaddcontact from './components/sortaddcontact.js';
 import EditProjectform from './components/editproject.js';
 import Leadsingleview from './components/leadsingleview.js';
 import Projectpreview from './components/projectpreview.js';
+import Editinventory from './components/add_inventory.js';
 
 function App() {
   return (
@@ -59,7 +60,7 @@ function App() {
       <Route path='/mailtaskform' element={<Mail_task_form/>}></Route>
       <Route path='/meetingtaskform' element={<Meeting_task_form/>}></Route>
       <Route path='/sitevisitform' element={<Site_visit/>}></Route>
-      <Route path='/addinventory' element={<Addinventory/>}></Route>
+      {/* <Route path='/addinventory' element={<Addinventory/>}></Route> */}
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
       <Route path='/leaddetails' element={<Leadfetch/>}></Route>
@@ -80,6 +81,7 @@ function App() {
       <Route path='/editproject' element={<EditProjectform/>}/>
       <Route path='/leadsingleview' element={<Leadsingleview/>}/>
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
+      <Route path='/addinventory' element={<Editinventory/>}/>
     </Routes> 
     {/* <SuggestionBox/>  */}
     {/* <Adddeveloper/> */}

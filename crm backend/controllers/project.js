@@ -51,46 +51,13 @@ const createProject = async (req, res) => {
 
       const addunit_details = [];
       let u = 0;
-
-      const sanitizeObjectId = (id) => {
-        if (id && id._id) {
-          return new mongoose.Types.ObjectId(id._id); // Extract _id and convert to ObjectId
-        } else if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
-          return new mongoose.Types.ObjectId(id); // Convert string to ObjectId
-        }
-        return null; // Return null for invalid ids
-      }
-      
-      // Function to process `owner_details` and `associated_contact`
-      const processOwnerDetails = (details) => {
-        if (typeof details === 'string') {
-          // Split comma-separated string and convert to ObjectId array
-          return details.split(',').map(id => sanitizeObjectId(id)).filter(id => id !== null);
-        } else if (Array.isArray(details)) {
-          return details.map(id => sanitizeObjectId(id)).filter(id => id !== null);
-        }
-        return []; // Return empty array if not a valid input
-      }
-
-
-
 while (u < req.body.add_unit.length) {
   const unit = req.body.add_unit[u];
  
-
-//    const ownerDetails = req.body[`add_unit[${u}].owner_details`];
-//    const associatedContact = req.body[`add_unit[${u}].associated_contact`];
-
-// // Process both fields
-// const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
-// const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
-
 unitDetails={
 
   project_name: unit.project_name,
   unit_no: unit.unit_no,
-  // owner_details: sanitizedOwnerDetails,
-  // associated_contact: sanitizedAssociatedContact,
   owner_details: unit.owner_details,
   associated_contact: unit.associated_contact,
   unit_type: unit.unit_type,
@@ -322,45 +289,14 @@ unitDetails={
                         const addunit_details = [];
                         let u = 0;
                   
-                        const sanitizeObjectId = (id) => {
-                          if (id && id._id) {
-                            return new mongoose.Types.ObjectId(id._id); // Extract _id and convert to ObjectId
-                          } else if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
-                            return new mongoose.Types.ObjectId(id); // Convert string to ObjectId
-                          }
-                          return null; // Return null for invalid ids
-                        }
-                        
-                        // Function to process `owner_details` and `associated_contact`
-                        const processOwnerDetails = (details) => {
-                          if (typeof details === 'string') {
-                            // Split comma-separated string and convert to ObjectId array
-                            return details.split(',').map(id => sanitizeObjectId(id)).filter(id => id !== null);
-                          } else if (Array.isArray(details)) {
-                            return details.map(id => sanitizeObjectId(id)).filter(id => id !== null);
-                          }
-                          return []; // Return empty array if not a valid input
-                        }
-                  
-                  
                   
                   while (u < req.body.add_unit?.length) {
                     const unit = req.body.add_unit[u];
-                   
-                  
-                  //    const ownerDetails = req.body[`add_unit[${u}].owner_details`];
-                  //    const associatedContact = req.body[`add_unit[${u}].associated_contact`];
-                  
-                  // // Process both fields
-                  // const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
-                  // const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
-                  
+              
                   unitDetails={
                   
                     project_name: unit.project_name,
                     unit_no: unit.unit_no,
-                    // owner_details: sanitizedOwnerDetails,
-                    // associated_contact: sanitizedAssociatedContact,
                     owner_details: unit.owner_details,
                     associated_contact: unit.associated_contact,
                     unit_type: unit.unit_type,
@@ -544,45 +480,15 @@ unitDetails={
                   const addunit_details = [];
                   let u = 0;
             
-                  const sanitizeObjectId = (id) => {
-                    if (id && id._id) {
-                      return new mongoose.Types.ObjectId(id._id); // Extract _id and convert to ObjectId
-                    } else if (typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id)) {
-                      return new mongoose.Types.ObjectId(id); // Convert string to ObjectId
-                    }
-                    return null; // Return null for invalid ids
-                  }
-                  
-                  // Function to process `owner_details` and `associated_contact`
-                  const processOwnerDetails = (details) => {
-                    if (typeof details === 'string') {
-                      // Split comma-separated string and convert to ObjectId array
-                      return details.split(',').map(id => sanitizeObjectId(id)).filter(id => id !== null);
-                    } else if (Array.isArray(details)) {
-                      return details.map(id => sanitizeObjectId(id)).filter(id => id !== null);
-                    }
-                    return []; // Return empty array if not a valid input
-                  }
-            
-            
-            
             while (u < req.body.add_unit?.length) {
               const unit = req.body.add_unit[u];
-             
-            
-               const ownerDetails = req.body[`add_unit[${u}].owner_details`];
-               const associatedContact = req.body[`add_unit[${u}].associated_contact`];
-            
-            // Process both fields
-            const sanitizedOwnerDetails = processOwnerDetails(ownerDetails);
-            const sanitizedAssociatedContact = processOwnerDetails(associatedContact);
-            
+         
             unitDetails={
             
               project_name: unit.project_name,
               unit_no: unit.unit_no,
-              owner_details: sanitizedOwnerDetails,
-              associated_contact: sanitizedAssociatedContact,
+              owner_details: unit.owner_details,
+              associated_contact:unit.associated_contact,
               unit_type: unit.unit_type,
               category: unit.category,
               block: unit.block,
@@ -739,9 +645,167 @@ if (existingUnitIndex !== -1) {
                   res.status(500).send({ message: "An error occurred while updating the project details", error: error.message });
                 }
               };
+
+
+              const update_projectaddunit=async(req,res)=>
+                {
+                    try {
+                  
+                        const name=req.params.name;
+                        console.log(name);
+                        const user=await addproject.findOne({name:name})
+                        if(!user)
+                            {
+                                return res.send({message:"project not found"})
+                            }
+    
+                            let existingUnits = user.add_unit || [];
+                           
+                            const addunit_details = [];
+                           const unit=req.body
+                      unitDetails={
+                      
+                        project_name: unit.project_name,
+                        unit_no: unit.unit_no,
+                        owner_details: unit.owner_details,
+                        associated_contact: unit.associated_contact,
+                        unit_type: unit.unit_type,
+                        category: unit.category,
+                        block: unit.block,
+                        size: unit.size,
+                        direction: unit.direction,
+                        facing: unit.facing,
+                        road:unit.facing ,
+                        ownership:unit.ownership,
+                        stage: unit.stage,
+                        floor: unit.floor,
+                        cluter_details:unit.cluter_details ,
+                        length: unit.length,
+                        bredth: unit.bredth,
+                        total_area: unit.total_area,
+                        measurment2: unit.measurment2,
+                        ocupation_date: unit.ocupation_date,
+                        age_of_construction: unit.age_of_construction,
+                        furnishing_details: unit.furnishing_details,
+                        furnished_item: unit.furnished_item,
+                        location: unit.location,
+                        lattitude: unit.lattitude,
+                        langitude: unit.langitude,
+                        uaddress: unit.uaddress,
+                        ustreet: unit.ustreet,
+                        ulocality: unit.ulocality,
+                        ucity: unit.ucity,
+                        uzip: unit.uzip,
+                        ustate: unit.ustate,
+                        ucountry: unit.ucountry,
+                        relation: unit.relation,
+                        s_no: unit.s_no,
+                        descriptions: unit.descriptions,
+                        category: unit.category,
+                        s_no1: unit.s_no1,
+                        url: unit.url,
+                        document_name: unit.document_name,
+                        document_no: unit.document_no,
+                        document_Date: unit.document_Date,
+                        linkded_contact: unit.linkded_contact,
+                        preview:[],
+                        image:[]
+                      }
+                      
+                      
+                        // Prepare for file upload
+                        const imagefiles = [];
+                        const imagefiles1 = [];
+                        
+                        
+                        if (req.files) {
+                        
+                          
+                          const imagefield = req.files.filter(file => file.fieldname.includes('preview'));
+                          const imagefield1 = req.files.filter(file => file.fieldname.includes('image'));
+                         
+            
+                          
+                          for  (let file of imagefield) {
+                            try {
+                              const result = await cloudinary.uploader.upload(file.path);
+                              imagefiles.push(result.secure_url);  
+                      
+                              // Delete file after upload
+                              fs.unlink(file.path, (err) => {
+                                if (err) {
+                                  console.error(`Failed to delete file: ${file.path}`, err);
+                                } else {
+                                  console.log(`Successfully deleted file: ${file.path}`);
+                                }
+                              });
+                            } catch (error) {
+                              console.error('Error uploading file:', error);
+                            }
+                          }
+                      
+                       
+                          
+                         
+
+                          for (let file of imagefield1) {
+                            try {
+                              const result = await cloudinary.uploader.upload(file.path);
+                              imagefiles1.push(result.secure_url);  
+                      
+                              // Delete file after upload
+                              fs.unlink(file.path, (err) => {
+                                if (err) {
+                                  console.error(`Failed to delete file: ${file.path}`, err);
+                                } else {
+                                  console.log(`Successfully deleted file: ${file.path}`);
+                                }
+                              });
+                            } catch (error) {
+                              console.error('Error uploading file:', error);
+                            }
+                          }
+                      
+                        }
+                        if (imagefiles.length > 0) {
+                          unitDetails.preview = imagefiles;  // Attach preview images
+                        }
+                        if (imagefiles1.length > 0) {
+                          unitDetails.image = imagefiles1;  // Attach main images
+                        }
+                     
+    
+                         // Find if the unit_no already exists in the existing units
+          const existingUnitIndex = existingUnits.findIndex(existingUnit => existingUnit.unit_no === unit.unit_no);
+    
+          // If the unit already exists, keep the existing data
+          if (existingUnitIndex !== -1) {
+            res.send({message:"unit no already exist"})
+            return  // Push the existing unit data
+          } else {
+            // If unit doesn't exist, add the new unit
+            addunit_details.push(unitDetails);
+          }
+                      
+                        
+                    
+      
+
+                    
+                      
+                      const resp = await addproject.findOneAndUpdate(
+                        { name: name },
+                        { $push: { add_unit: { $each: addunit_details } } }, // ✅ Appends new units without removing old ones
+                        { new: true }
+                      );
+                        res.status(200).send({message:"unit added successfully"})
+                    } catch (error) {
+                        console.log(error)
+                    }
+                }
               
 
               
 
    module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,
-    update_project,view_projectforinventories,update_projectforinventories}
+    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit}

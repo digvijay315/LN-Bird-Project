@@ -1,7 +1,7 @@
 import React from 'react';
 // import '../css/login1.css';
 import myImage from '../images/37023.jpg';
-import friska from '../images/Friska.png'
+import friska from '../images/FriskaNutriAI_Logo 1.png'
 import  { useState } from "react";
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -136,7 +136,7 @@ const signup=async()=>
                         <div class="website-logo-inside logo-normal">
                             <a href="index.html">
                                 <div >
-                                    <img class="logo-size" src={friska} style={{height:"50px",width:"200px",paddingRight:"20px"}} alt=""/>
+                                    <img class="logo-size" src={friska} style={{height:"40px",width:"250px",paddingRight:"20px"}} alt=""/>
                                 </div>
                             </a>
                         </div>
@@ -173,7 +173,7 @@ const signup=async()=>
                         <div class="website-logo-inside logo-normal">
                             <a href="index.html">
                                 <div>
-                                    <img  src={friska} style={{height:"30px",width:"150px",paddingRight:"20px"}} alt=""/>
+                                    <img  src={friska} style={{height:"30px",width:"200px",paddingRight:"20px"}} alt=""/>
                                 </div>
                             </a>
                         </div>
@@ -217,7 +217,7 @@ const signup=async()=>
                         <div class="website-logo-inside logo-normal">
                             <a href="index.html">
                                 <div>
-                                    <img class="logo-size" src={friska} style={{height:"50px",width:"200px",paddingRight:"20px"}} alt=""/>
+                                    <img class="logo-size" src={friska} style={{height:"40px",width:"250px",paddingRight:"20px"}} alt=""/>
                                 </div>
                             </a>
                         </div>
