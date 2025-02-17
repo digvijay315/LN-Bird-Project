@@ -292,6 +292,26 @@ const getdietplan = async () => {
   const savediet=async()=>
   {
     try {
+      if (dietplan.Age < 40 || dietplan.Age > 80) {
+        setLoading(false); // Stop loading if validation fails
+        Swal.fire({
+          title: 'Age Restriction',
+          text: 'Age should be between 40 to 80!',
+          icon: 'error',
+          confirmButtonText: 'Ok',
+        });
+        return;
+      }
+      if (dietplan.Weight < 20 || dietplan.Weight > 1400) {
+        setLoading(false); // Stop loading if validation fails
+        Swal.fire({
+          title: 'Weight Restriction',
+          text: 'Weight should be between 20lbs to 1400lbs!',
+          icon: 'error',
+          confirmButtonText: 'Ok',
+        });
+        return;
+      }
       const resp=await axios.post('https://friskaaiapi.azurewebsites.net/dietinfocreate',dietplan)
       Swal.fire({
         icon:"success",
