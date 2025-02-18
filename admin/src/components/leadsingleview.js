@@ -892,7 +892,8 @@ console.log(alltask);
   'create meeting task',
   'create site visit task',
   'deal created',
-  'add inventory'
+  'add inventory',
+  'added docuemnt'
 ];
 
  const [selectactivity, setselectactivity] = useState([]);
@@ -3078,6 +3079,16 @@ try {
             />
             SMS
           </MenuItem>
+
+          <MenuItem value="Whats App" style={{ fontSize: "14px",}}>
+            <img
+              src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg"
+              alt="whatsapp-icon"
+              style={{ height: "16px", marginRight: "8px" }}
+            />
+            Whats App
+          </MenuItem>
+          
           <MenuItem value="Internal Notes" style={{ fontSize: "14px",backgroundColor:"#ffe6e6" }}>
             <img
               src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg"
@@ -3086,6 +3097,8 @@ try {
             />
             Internal Notes
           </MenuItem>
+
+         
          
         </Select>
         {selectedOption === "Email" && (

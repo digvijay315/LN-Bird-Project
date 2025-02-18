@@ -20,6 +20,7 @@ const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_d
  const uploadFields = require('../middlewares/multifile');
 const upload1 = require('../middlewares/multifile');
 const { add_activity, view_activity, remove_activity, update_activity, view_activitybyid } = require('../controllers/addactivity');
+const { sendmessage, makecall } = require('../controllers/sendsms');
 
 
 const router=express.Router()
@@ -146,6 +147,10 @@ router.get('/viewactivity',view_activity)
 router.get('/viewactivitybyid/:_id',view_activitybyid)
 router.delete('/removeactivity/:_id',remove_activity)
 router.put('/updateactivity/:_id',update_activity)
+
+
+router.post('/sendmessage',sendmessage)
+router.post('/makecall',makecall)
 
 
 
