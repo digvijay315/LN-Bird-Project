@@ -1,9 +1,10 @@
 
 
 const twilio=require('twilio')
+require('dotenv').config();
 
-const accountSid = "AC18ffab636fbe7ad0dab0a7bd48e2150f";
-const authToken = "abad644377d556f04c5e9f3a4b5ae6a9";
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 
 const sendmessage=async(req,res)=>
@@ -15,7 +16,7 @@ const sendmessage=async(req,res)=>
 
     const resp = await client.messages.create({
       body: message,
-      from: +19062561113, // Your Twilio number
+      from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio number
       to: to, // Receiver's phone number
     });
     res.status(200).send({message:"message send successfully",resp})
@@ -36,7 +37,7 @@ const makecall=async(req,res)=>
             const resp = await client.calls.create({
                 url: "http://demo.twilio.com/docs/voice.xml",
                 to: to,
-                from: +19062561113, // Your Twilio phone number
+                from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio phone number
               });
         res.status(200).send({message:"message send successfully",resp})
             
