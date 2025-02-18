@@ -467,7 +467,7 @@ const getdietplan = async () => {
 
            </div> */}
           <div className='col-md-4' style={{marginTop:"20px"}}><Button className='buttons' onClick={savediet}  style={{backgroundColor:"#783894",color:"white",borderRadius:"20px"}}>
-        submit
+        Submit
           </Button>
           </div>
 
