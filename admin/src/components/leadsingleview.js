@@ -178,6 +178,14 @@ const navigate=useNavigate()
         setIsTableVisible3(prevState => !prevState);
       };
 
+         
+      const [isTableVisible4, setIsTableVisible4] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility4 = () => {
+        setIsTableVisible4(prevState => !prevState);
+      };
+
       const [alltask,setalltask]=useState([])
 
       const[sitevisitdata,setsitevisitdata]=useState([])
@@ -4104,6 +4112,69 @@ try {
   </TableContainer>
         </div>
         </div>
+
+
+        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+
+<div className='col-md-12'> History
+<span 
+  onClick={toggleTableVisibility4} 
+  style={{ 
+    position:"absolute",
+    cursor: "pointer", 
+    right:  "50px", 
+    fontSize: "20px", 
+    display: "inline-block", 
+    transition: "transform 0.3s ease", // Smooth transition for rotation
+    transform: isTableVisible4 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+    marginTop: "0px", // Align the arrow properly
+  }}
+>
+  ▼
+</span>
+<span 
+//  onClick={handleShow8}
+  style={{ 
+    cursor: "pointer", 
+    position:"absolute",
+    right: "15px", 
+    fontSize: "30px", 
+    display: "inline-block", 
+    transition: "transform 0.3s ease", // Smooth transition for rotation
+    marginTop: "-7px", // Align the arrow properly
+fontWeight:"lighter"
+  }}
+>
+  +
+</span>
+</div>
+
+<div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible4 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+ 
+<TableContainer component={Paper} style={{ maxHeight: '300px', overflow: 'auto' }}>
+<Table sx={{}} aria-label="customized table">
+<thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+<TableRow style={{backgroundColor:"gray"}}>
+  {/* {allColumnsdocuments.map((col) => (
+    <StyledTableCell
+      key={col.id}
+      style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
+    >
+      {col.name}
+    </StyledTableCell>
+  ))} */}
+</TableRow>
+</thead>
+<tbody>
+
+
+
+</tbody>
+
+</Table>
+</TableContainer>
+</div>
+</div>
       
 
 
