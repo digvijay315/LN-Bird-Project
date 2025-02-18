@@ -1006,8 +1006,75 @@ function Editinventory() {
                                                           };
 
                                                           
-console.log(units);
+    const handleTypeClick = (type) => {
+                  setproject(prevProject => {
+                    const { category } = prevProject;
+                    
+                    // If the category is 'Agricultural'
+                    if (type === "Agricultural") {
+                        if (category.includes("Agricultural")) {
+                            // If already selected, remove it
+                            return { ...prevProject, category: category.filter(item => item !== "Agricultural") };
+                        } else {
+                            // If not selected, add it and remove all other categories
+                            return { ...prevProject, category: ["Agricultural"] };  // Only keep "Agricultural"
+                        }
+                    } else {
+                        // For any other category
+                        if (category.includes("Agricultural")) {
+                            // If "Agricultural" is selected, don't allow selecting others
+                            toast.error("if you select Agricultural then you can't select more category")
+                            return prevProject;  // Return as is, do nothing
+                        } else {
+                            // If "Agricultural" is not selected, allow adding/removing this category
+                            if (category.includes(type)) {
+                                // Remove the category if already selected
+                                return { ...prevProject, category: category.filter(item => item !== type) };
+                            } else {
+                                // Add the category if not already selected
+                                return { ...prevProject, category: [...category, type] };
+                            }
+                        }
+                    }
+                });
 
+                setunits(prevProject => {
+                  const { category } = prevProject;
+                  
+                  // If the category is 'Agricultural'
+                  if (type === "Agricultural") {
+                      if (category.includes("Agricultural")) {
+                          // If already selected, remove it
+                          return { ...prevProject, category: category.filter(item => item !== "Agricultural") };
+                      } else {
+                          // If not selected, add it and remove all other categories
+                          return { ...prevProject, category: ["Agricultural"] };  // Only keep "Agricultural"
+                      }
+                  } else {
+                      // For any other category
+                      if (category.includes("Agricultural")) {
+                          // If "Agricultural" is selected, don't allow selecting others
+                          toast.error("if you select Agricultural then you can't select more category")
+                          return prevProject;  // Return as is, do nothing
+                      } else {
+                          // If "Agricultural" is not selected, allow adding/removing this category
+                          if (category.includes(type)) {
+                              // Remove the category if already selected
+                              return { ...prevProject, category: category.filter(item => item !== type) };
+                          } else {
+                              // Add the category if not already selected
+                              return { ...prevProject, category: [...category, type] };
+                          }
+                      }
+                  }
+              });
+          };
+
+          const isSelected = (type) => project.category.includes(type);
+     
+
+      
+        
 
   return (
     <div>
@@ -1099,8 +1166,20 @@ console.log(units);
                                 <option>Ordinary </option>
                                 </select>
                     </div>
-                    <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
-                    <div className="col-md-12" style={{display:"flex"}} >
+                    <div className="col-md-12" style={{ display: "flex",marginTop:"10px" }}><label className="labels">Category</label>
+            {['Residential', 'Commercial', 'Agricultural', 'Institutional', 'Industrial'].map((type) => (
+                <div className="col-md-2" key={type} style={{marginTop:"20px"}}>
+                    <button 
+                        className='form-control form-control-sm' 
+                        onClick={() => handleTypeClick(type)} 
+                        style={{ backgroundColor: isSelected(type) ? 'green' : '' }}
+                    >
+                        {type}
+                    </button>
+                </div>
+            ))}
+        </div>
+                    {/* <div className="col-md-12" style={{display:"flex"}} >
                     <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
                       {
                         project.category.map((type) => (
@@ -1116,7 +1195,7 @@ console.log(units);
                         ))
                       }
                     </div>
-                    </div>
+                    </div> */}
 
                     <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
                     <option>---select block---</option>

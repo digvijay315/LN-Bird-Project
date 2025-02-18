@@ -392,7 +392,7 @@ const getdietplan2 = async () => {
     `}
   </style>
       <header style={styles.header}>
-        <h1 style={{fontWeight:"bold"}}>Friska NutriAI</h1>
+        <h1 style={{fontWeight:"bold"}}>Friska Nutriai</h1>
         <p>Your personal nutrition assistant 😊</p>
 
         {/* <p style={{textAlign:"left",}}>Hello! I'm glad to assist you in creating a personalized meal plan that aligns with your dietary preferences and restrictions.

@@ -105,7 +105,7 @@ const navigate=useNavigate()
         { id: 'sno', name: '#' },
         { id: 'house_details', name: 'House Details' },
         { id: 'contact', name: 'Contact' },
-        { id: 'available_from', name: 'Available From' },
+        { id: 'available_from', name: 'Available' },
       ];
       const allColumnsdocuments = [
         { id: 'sno', name: '#' },
@@ -882,7 +882,9 @@ console.log(alltask);
   'create call task',
   'create mail task',
   'create meeting task',
-  'create site visit task'
+  'create site visit task',
+  'deal created',
+  'add inventory'
 ];
 
  const [selectactivity, setselectactivity] = useState([]);
@@ -2846,7 +2848,7 @@ console.log(activity);
                     <div className='col-md-12'><p style={{fontWeight:"normal"}}>Location-{lead.location} {lead.city}</p></div>
 
                     <div className='col-md-4' ><label style={{color:"#B85042"}}>Property Type</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type.join(',')}</p>
+                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type?.join(',')}</p>
                 </div>
                 <div className='col-md-4'><label style={{color:"#B85042"}}>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.sub_type}</p></div>
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
@@ -3657,30 +3659,30 @@ console.log(activity);
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "hidden",transition: "height 0.3s ease",overflowY:"scroll",overflowX:"scroll"}}>
-      <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
+      <TableContainer component={Paper} style={{ maxHeight: '400px'}}>
     <Table sx={{}} aria-label="customized table">
-      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
-        <TableRow >
+    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow style={{backgroundColor:"gray"}}>
           {allColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
           ))}
         </TableRow>
-      </TableHead>
+      </thead>
        <tbody>
         {
          
         filterdeal.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {item.unit_number}<br></br>
               {item.project_category.map((cat)=>
               (
@@ -3690,7 +3692,7 @@ console.log(activity);
               ))}
                 {item.location}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
   {item.owner_details ? (
     item.owner_details.map((owner, index) => (
       <div key={index}>
@@ -3750,36 +3752,36 @@ console.log(activity);
 
         <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
     <Table sx={{}} aria-label="customized table">
-      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
-        <TableRow >
+    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnsunit.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
             >
               {col.name}
             </StyledTableCell>
           ))}
         </TableRow>
-      </TableHead>
+      </thead>
       <tbody>
         {
          
         matchunit.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
            
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {item.unit_no}
-            </StyledTableCell>
-            <StyledTableCell>
+            </StyledTableCell >
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {item.project_name}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
              
             </StyledTableCell>
           </StyledTableRow>
@@ -3825,9 +3827,9 @@ console.log(activity);
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible2 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease",overflowY:"scroll",overflowX:"scroll"}}>
+        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible2 ? "300px" : "0",transition: "height 0.3s ease",overflow:"auto"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+        <TableContainer component={Paper} style={{  maxHeight: '300px'}}>
     <Table sx={{}} aria-label="customized table">
       <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
@@ -3920,35 +3922,35 @@ console.log(activity);
 
         <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+        <TableContainer component={Paper} style={{ maxHeight: '200px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
-      <TableHead style={{ position: "sticky", top: 0, zIndex: 10,backgroundColor:"white" }}>
-        <TableRow >
+    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow style={{backgroundColor:"gray"}}>
           {allColumnsdocuments.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
           ))}
         </TableRow>
-      </TableHead>
+      </thead>
       <tbody>
         {
         
         documents.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
               {index + 1}
             </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
           {item.name}
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
           {item.number}
         </StyledTableCell>
-        <StyledTableCell>
+        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
               {/* Eye button to trigger image preview */}
               <button onClick={() => handlePreviewClick(item.pic)}>
                 👁️ {/* You can replace this with an icon */}
