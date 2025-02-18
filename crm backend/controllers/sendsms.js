@@ -30,7 +30,7 @@ const sendmessage=async(req,res)=>
 const makecall=async(req,res)=>
     {
         try {
-            console.log(req.body);
+       
             
             const { to} = req.body;
     
