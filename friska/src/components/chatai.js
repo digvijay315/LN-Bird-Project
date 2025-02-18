@@ -392,7 +392,7 @@ const getdietplan2 = async () => {
     `}
   </style>
       <header style={styles.header}>
-        <h1 style={{fontWeight:"bold"}}>Friska Nutriai</h1>
+        <h1 style={{fontWeight:"bold"}}>Friska NutriAi</h1>
         <p>Your personal nutrition assistant 😊</p>
 
         {/* <p style={{textAlign:"left",}}>Hello! I'm glad to assist you in creating a personalized meal plan that aligns with your dietary preferences and restrictions.
@@ -449,7 +449,7 @@ const getdietplan2 = async () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu >
-        <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+        {/* <Dropdown.Item href="#/action-1">Profile</Dropdown.Item> */}
         <Dropdown.Item onClick={()=>navigate('/')}>Logout</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

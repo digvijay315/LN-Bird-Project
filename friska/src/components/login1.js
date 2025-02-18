@@ -61,7 +61,7 @@ const userlogin=async()=>
             
             Swal.fire({
                         title: 'Login!',
-                        text: 'Welcome to Friska Nutriai!',
+                        text: 'Welcome to Friska NutriAi!',
                         icon: 'success',
                         confirmButtonText: 'Ok',
                       })  
