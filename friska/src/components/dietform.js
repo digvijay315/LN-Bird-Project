@@ -315,7 +315,7 @@ const getdietplan = async () => {
       const resp=await axios.post('https://friskaaiapi.azurewebsites.net/dietinfocreate',dietplan)
       Swal.fire({
         icon:"success",
-        title:"submit",
+        title:"Submit",
         text:"Diet plan saved"
       })
       setTimeout(() => {
