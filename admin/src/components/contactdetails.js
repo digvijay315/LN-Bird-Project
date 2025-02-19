@@ -2790,7 +2790,7 @@ console.log(leadinfo);
             </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
-           
+              onClick={() => navigate('/contactsingleview',{state:item})}
             >
               {item.title} {item.first_name} {item.last_name}
               <br />

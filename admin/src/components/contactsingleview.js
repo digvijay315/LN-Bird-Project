@@ -24,7 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
-function Leadsingleview() {
+function Contactsingleview() {
 
 const navigate=useNavigate()
   
@@ -103,9 +103,9 @@ const navigate=useNavigate()
 
       const allColumns = [
         { id: 'sno', name: '#' },
-        { id: 'house_details', name: 'Details' },
-        { id: 'contact', name: ' Owner Contact' },
-        { id: 'available_from', name: 'Available From' },
+        { id: 'house_details', name: 'House Details' },
+        { id: 'contact', name: 'Contact' },
+        { id: 'available_from', name: 'Available' },
       ];
       const allColumnsdocuments = [
         { id: 'sno', name: '#' },
@@ -2821,7 +2821,7 @@ try {
 
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
-          <h6>Lead</h6>
+          <h6>Contact</h6>
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>{lead.company_name}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
@@ -2949,38 +2949,7 @@ try {
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"normal"}}>{formattedDate}</p></div>
                 <div className='col-md-12'><hr></hr></div>
 
-                <div className='row' style={{border:"1px solid gray",margin:"10px",width:"100%",borderRadius:"5px",padding:"10px"}}> 
-                    <div className='col-md-10' style={{color:"blue",fontWeight:"normal"}}>{lead.requirment}</div>
-                    <div className='col-md-2'  style={{cursor: "pointer",fontSize: "30px",marginTop: "-7px",fontWeight:"lighter"}}>+</div>
-                    <div className='col-md-12'><hr></hr></div>
-                    <div className='col-md-12'><p style={{fontWeight:"normal"}}>Location-{lead.location} {lead.city}</p></div>
-
-                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Property Type</label>
-                    <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.property_type?.join(',')}</p>
-                </div>
-                <div className='col-md-4'><label style={{color:"#B85042"}}>Sub Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.sub_type}</p></div>
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Unit Type</label><p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.unit_type}</p></div>
-
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Budget</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.budget_min} to {lead.budget_max}</p>
-                </div>
-                <div className='col-md-4'><label style={{color:"#B85042"}}>Area/Size</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.minimum_area}{lead.area_metric} to {lead.maximum_area}{lead.area_metric}</p></div>
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.furnishing}</p></div>
-
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing.join(',')}</p>
-                </div>
-                <div className='col-md-4'><label style={{color:"#B85042"}}>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
-                <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.timeline}</p></div>
-
-                <div className='col-md-8' ><label style={{color:"#B85042"}}>Specific Requirment</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}></p>
-                </div>
-                
-                
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road.join(',')}</p></div>
-
-                </div>
+            
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
                     <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Personal Details</div>
@@ -3770,93 +3739,7 @@ try {
 
         <div className='row'>
 
-          <div className='col-md-12' style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
-        <div className='col-md-12' > Deal Match
-        <span 
-          onClick={toggleTableVisibility} 
-          style={{ 
-            position:"absolute",
-            cursor: "pointer", 
-            right: "50px", 
-            fontSize: "20px", 
-            display: "inline-block", 
-            transition: "transform 0.3s ease", // Smooth transition for rotation
-            transform: isTableVisible ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
-           
-          }}
-        >
-          ▼
-        </span>
-        <span 
-         onClick={()=>navigate('/deal')}
-          style={{ 
-            position:"absolute",
-            cursor: "pointer", 
-            right: "15px", 
-            fontSize: "30px", 
-            display: "inline-block", 
-            transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "-7px", // Align the arrow properly
-            fontWeight:"lighter"
-    
-          }}
-        >
-          +
-        </span>
-        </div>
-
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
-      <TableContainer component={Paper} style={{ maxHeight: '400px'}}>
-    <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
-        <TableRow style={{backgroundColor:"gray"}}>
-          {allColumns.map((col) => (
-            <StyledTableCell
-              key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"12px" }}
-            >
-              {col.name}
-            </StyledTableCell>
-          ))}
-        </TableRow>
-      </thead>
-       <tbody>
-        {
-         
-        filterdeal.map ((item, index) => (
-          <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {index + 1}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
-             {item.ucategory?.join(',')} {item.usize}<br></br>
-             {/* {item.ulocality} {item.ucity} */}{item.project}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-  {item.owner_details ? (
-    item.owner_details.map((owner, index) => (
-      <div key={index}>
-        {owner.mobile_no.map((mobile, mobileIndex) => (
-          <div key={mobileIndex}>{mobile}</div> 
-        ))}
-        <div>{owner.title} {owner.first_name} {owner.last_name}</div> 
-      </div>
-    ))
-  ) : (
-    'No Details Available' // Fallback if no owner details exist
-  )}
-</StyledTableCell>
-
-          </StyledTableRow>
-        ))}
-      </tbody> 
-    </Table>
-  </TableContainer>
-
-  </div>
-  </div>
+        
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
   <div className='col-md-12'> Inventories
@@ -5818,4 +5701,4 @@ fontWeight:"lighter"
   )
 }
 
-export default Leadsingleview
+export default Contactsingleview

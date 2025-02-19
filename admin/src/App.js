@@ -43,6 +43,7 @@ import EditProjectform from './components/editproject.js';
 import Leadsingleview from './components/leadsingleview.js';
 import Projectpreview from './components/projectpreview.js';
 import Editinventory from './components/add_inventory.js';
+import Contactsingleview from './components/contactsingleview.js';
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
       <Route path='/sortaddcontact' element={<Sortaddcontact/>}/>
       <Route path='/editproject' element={<EditProjectform/>}/>
       <Route path='/leadsingleview' element={<Leadsingleview/>}/>
+      <Route path='/contactsingleview' element={<Contactsingleview/>}/>
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
     </Routes> 
