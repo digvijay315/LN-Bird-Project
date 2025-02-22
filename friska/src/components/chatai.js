@@ -89,12 +89,11 @@ useState(()=>
       food_database:fooddata // Pass food database as a stringified JSON
     });
 
-    console.log(chatHistory);
+    console.log(response);
     
     setChatHistory([...chatHistory,response.data]);
     const updatedChat = { ...chat, Chat_Log: response.data.answer };
 
-    console.log(updatedChat);
     const response2=await axios.post('https://friskaaiapi.azurewebsites.net/create-chat-log/',updatedChat)
     console.log(response2);
     return response.data.answer; // Assuming the API returns the answer in `response.data.answer`
