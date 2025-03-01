@@ -14,7 +14,8 @@ const add_activity=new mongoose.Schema({
     viewcount:{type:Number,default:0},
     activity_note1:{type:String},
     edit_field:{type:String},
-    edit_value:{type:String}
+    edit_value:{type:String},
+    task_title:{type:String}
     },{timestamps:true})
 
 const addactivity=mongoose.model('add_activity',add_activity)

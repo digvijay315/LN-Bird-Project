@@ -652,7 +652,6 @@ if (existingUnitIndex !== -1) {
                     try {
                   
                         const name=req.params.name;
-                        console.log(name);
                         const user=await addproject.findOne({name:name})
                         if(!user)
                             {

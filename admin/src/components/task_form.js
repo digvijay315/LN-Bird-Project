@@ -114,7 +114,7 @@ function Task_form() {
     
                 const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
                   direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
-                  activity_note1:"",edit_field:"",edit_value:""})
+                  activity_note1:"",edit_field:"",edit_value:"",task_title:""})
        
 
                 const Location=useLocation()
@@ -167,10 +167,11 @@ function Task_form() {
             const title1 = document.getElementById("title").innerText;
             // Update state
             const updatedCallTask = { ...calltask, title: title1 };
+            const updatedCallTask1 = { ...activity, task_title: title1 };
             
             try {
             const resp=await api.post('calltask',updatedCallTask)
-            const resp1=await api.post('addactivity',activity)
+            const resp1=await api.post('addactivity',updatedCallTask1)
             if(resp.status===200)
             {
             toast.success(resp.data.message)
