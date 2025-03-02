@@ -84,7 +84,7 @@ function Editinventory() {
 
                                       const[activity,setactivity]=useState({activity_name:"add inventory", call_outcome:"", activity_note:"",lead:"",
                                         direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
-                                        activity_note1:"",edit_field:"",edit_value:""})
+                                        activity_note1:"",edit_field:"",edit_value:"",projectname:"",unitno:""})
 
 
 
@@ -1145,7 +1145,7 @@ function Editinventory() {
             <div className="row" id='unitdetails1'>
              
             <div className="col-md-8"><label className="labels">Select Project</label>
-            <select className="form-control form-control-sm"   onChange={(e)=>setunits({...units,project_name:e.target.value})}>
+            <select className="form-control form-control-sm"   onChange={(e)=>{setunits({...units,project_name:e.target.value});setactivity({...activity,projectname:e.target.value})}}>
               <option>---select project---</option>
               {
                 project1.map((item)=>
@@ -1156,7 +1156,7 @@ function Editinventory() {
               </select>
             </div>
                   <div className="col-md-4"></div>
-                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm"  placeholder="unit number" onChange={(e)=>{setunits({...units,unit_no:e.target.value});setactivity({...activity,unitno:e.target.value})}}/></div>
                     <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
                                <option>{units.unit_type}</option>
                                 <option>---Select---</option>

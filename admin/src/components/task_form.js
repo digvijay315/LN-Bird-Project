@@ -196,9 +196,10 @@ function Task_form() {
         
                 // Update state
                 const updatedMailTask = { ...mailtask, title: title1 };
+                const updatedMailTask1 = { ...activity, task_title: title1 };
                 try {
                     const resp=await api.post('mailtask',updatedMailTask)
-                    const resp1=await api.post('addactivity',activity)
+                    const resp1=await api.post('addactivity',updatedMailTask1)
                     if(resp.status===200)
                     {
                         toast.success(resp.data.message)
@@ -221,9 +222,10 @@ function Task_form() {
                     const data = { stage: updatestagemeeting };
                     // Update state
                     const updatemeetingtask = { ...meetingtask, title: title1 };
+                    const updatedMailTask2 = { ...activity, task_title: title1 };
                     try {
                         const resp=await api.post('meetingtask',updatemeetingtask)
-                        const resp1=await api.post('addactivity',activity)
+                        const resp1=await api.post('addactivity',updatedMailTask2)
 
                         const data1 = { newstage: updatestagemeeting1 };
 
@@ -283,11 +285,12 @@ function Task_form() {
                   
                   // Update state
                   const updatedsiteTask = { ...sitevisit, title: title1 };
+                  const updatedsiteTask1 = { ...activity, task_title: title1 };
                 
                   try {
                     // First API request to post sitevisit details
                     const resp = await api.post('sitevisit', updatedsiteTask);
-                    const resp1=await api.post('addactivity',activity)
+                    const resp1=await api.post('addactivity',updatedsiteTask1)
                 
                    
                 

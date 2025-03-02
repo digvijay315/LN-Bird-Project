@@ -3736,7 +3736,7 @@ try {
                             </span>
                             </div>
                             </div>
-                            <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
+                            <span style={{color:"blue"}}><u>{lead.owner}</u></span><span> {item.activity_name} {item.unitno} in {item.projectname}.</span><br></br>
                            <hr></hr>
                             <br></br>
                           

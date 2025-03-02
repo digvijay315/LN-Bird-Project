@@ -7,11 +7,11 @@ const addactivity = require("../models/activity");
 const add_activity = async (req, res) => {
     try {
         const {activity_name, call_outcome, activity_note,lead,direction,status,date,duration,
-            intrested_inventory,message,viewcount,activity_note1,edit_field,edit_value,task_title} = req.body;
+            intrested_inventory,message,viewcount,activity_note1,edit_field,edit_value,task_title,projectname,unitno} = req.body;
      
       
         const newaddactivity = new addactivity({activity_name, call_outcome, activity_note,lead,direction,status,date,
-            duration,intrested_inventory,message,viewcount,activity_note1,edit_field,edit_value,task_title});
+            duration,intrested_inventory,message,viewcount,activity_note1,edit_field,edit_value,task_title,projectname,unitno});
 
         // Save to database
         const resp = await newaddactivity.save();
