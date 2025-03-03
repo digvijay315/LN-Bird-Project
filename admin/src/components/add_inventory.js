@@ -352,6 +352,7 @@ function Editinventory() {
                                             }
                                             const unitdetail3=()=>
                                               {
+                                                showsuggestions()
                                                 setModalSize('lg');
                                                 setActiveUnit(3);
                                                 document.getElementById("unitdetails1").style.display="none"
@@ -903,6 +904,23 @@ function Editinventory() {
                                                               setShowSuggestions(false)
                                                             }
                                                           }, [input,allSuggestions]);
+
+                                                    
+
+                                                          const showsuggestions=()=>
+                                                          {
+                                                            if (lead) {
+                                                              const results = allSuggestions.filter(contact =>
+                                                                contact.first_name?.toLowerCase().includes(lead.first_name?.toLowerCase())
+                                                              );
+                                                              console.log(results);
+                                                              
+                                                              setFilteredSuggestions(results);
+                                                              setShowSuggestions(true);
+                                                            } else {
+                                                              setShowSuggestions(false)
+                                                            }
+                                                          }
                                                   
                                                          
                                                         
@@ -1702,11 +1720,11 @@ function Editinventory() {
                 <div className="row" style={{width:"100%"}}>
                
                         <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
-                        {showSuggestions && input && filteredSuggestions.length > 0 && (
+                        {showSuggestions  && filteredSuggestions.length > 0 && (
                             <ul className="suggestion-list">
                               {filteredSuggestions.map((suggestion, index) => (
                                 <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                                  {suggestion.first_name}
+                                  {suggestion.first_name} {suggestion.last_name}
                                 </li>
                               ))}
                             </ul>

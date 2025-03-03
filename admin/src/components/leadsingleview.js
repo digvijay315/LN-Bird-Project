@@ -103,9 +103,10 @@ const navigate=useNavigate()
 
       const allColumns = [
         { id: 'sno', name: '#' },
-        { id: 'house_details', name: 'Details' },
-        { id: 'contact', name: ' Owner Contact' },
-        { id: 'available_from', name: 'Available From' },
+        { id: 'unit_no', name: 'Unit No.' },
+        { id: 'project_name', name: ' Project' },
+        { id: 'size', name: ' Size' },
+        { id: 'available_from', name: 'Available_From' },
       ];
       const allColumnsdocuments = [
         { id: 'sno', name: '#' },
@@ -2950,17 +2951,17 @@ try {
 
             
 
-                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Owner Sales/Manager</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
+                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>User</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}({lead.team})</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team} Team</p></div>
+                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
                 <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
 
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin}, {lead.source}, {lead.sub_source}</p></div>
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"normal"}}>{formattedDate}</p></div>
                 <div className='col-md-12'><hr></hr></div>
 
@@ -3332,7 +3333,7 @@ try {
                           item.activity_name==="call"?(
                             <div id='callaction' >
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' style={{height:"20px"}}></img>
+                              <img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' alt='' style={{height:"20px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3368,7 +3369,7 @@ try {
                                   transition: "height 0.3s ease", // Smooth transition for height change
                                 }}>
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src='https://illustoon.com/photo/2751.png' style={{height:"20px"}}></img>
+                              <img src='https://illustoon.com/photo/2751.png' alt='' style={{height:"20px"}}></img>
                             
          
                            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -3404,7 +3405,7 @@ try {
                           ) : item.activity_name==="notes"?(
                             <div id='noteaction' >
                               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                                <img src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg" style={{height:"20px"}}></img>
+                                <img src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg" alt='' style={{height:"20px"}}></img>
                             
                                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3495,7 +3496,7 @@ try {
                           ) :  item.activity_name==="complete meeting task"?(
                             <div id='completemeetingaction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://cdn-icons-png.flaticon.com/512/1081/1081530.png" style={{height:"20px"}}></img>
+                              <img src="https://cdn-icons-png.flaticon.com/512/1081/1081530.png" alt='' style={{height:"20px"}}></img>
 
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3522,7 +3523,7 @@ try {
                           ) :  item.activity_name==="complete site visit task"?(
                             <div id='completsitevisitaction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://cdn-icons-png.freepik.com/512/8094/8094388.png" style={{height:"20px"}}></img>
+                              <img src="https://cdn-icons-png.freepik.com/512/8094/8094388.png" alt='' style={{height:"20px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3550,7 +3551,7 @@ try {
                           ) : item.activity_name==="edit"?(
                             <div id='editaction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://www.freeiconspng.com/uploads/document-edit-icon-19.png" style={{height:"20px"}}></img>
+                              <img src="https://www.freeiconspng.com/uploads/document-edit-icon-19.png" alt='' style={{height:"20px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3578,7 +3579,7 @@ try {
                           ) : item.activity_name==="create call task"?(
                             <div id='createcalltaskaction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://www.shutterstock.com/image-vector/call-planner-icon-time-management-260nw-1414111730.jpg" style={{height:"40px"}}></img>
+                              <img src="https://www.shutterstock.com/image-vector/call-planner-icon-time-management-260nw-1414111730.jpg" alt='' style={{height:"40px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3607,7 +3608,7 @@ try {
                           ) : item.activity_name==="create mail task"?(
                             <div id='createmailtaskaction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://cdn-icons-png.freepik.com/256/16294/16294372.png?semt=ais_hybrid" style={{height:"30px"}}></img>
+                              <img src="https://cdn-icons-png.freepik.com/256/16294/16294372.png?semt=ais_hybrid" alt='' style={{height:"30px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3635,7 +3636,7 @@ try {
                           ) : item.activity_name==="create meeting task"?(
                             <div id='createmeetingtaskaction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://t4.ftcdn.net/jpg/03/67/61/45/360_F_367614596_kyv8YYMpghwJ6pR6NHp7oyIN1IVnfHvF.jpg" style={{height:"30px"}}></img>
+                              <img src="https://t4.ftcdn.net/jpg/03/67/61/45/360_F_367614596_kyv8YYMpghwJ6pR6NHp7oyIN1IVnfHvF.jpg" alt='' style={{height:"30px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3663,7 +3664,7 @@ try {
                           ) : item.activity_name==="create site visit task"?(
                             <div id='createsitevisittaskction' >
                              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://cdn-icons-png.freepik.com/256/13156/13156025.png?semt=ais_hybrid" style={{height:"30px"}}></img>
+                              <img src="https://cdn-icons-png.freepik.com/256/13156/13156025.png?semt=ais_hybrid" alt='' style={{height:"30px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3691,7 +3692,7 @@ try {
                           ) : item.activity_name==="deal created"?(
                             <div id='createsitevisittaskction' >
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://cdn-icons-png.flaticon.com/512/2132/2132939.png" style={{height:"30px"}}></img>
+                              <img src="https://cdn-icons-png.flaticon.com/512/2132/2132939.png" alt='' style={{height:"30px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3718,7 +3719,7 @@ try {
                           ) : item.activity_name==="add inventory"?(
                             <div id='createsitevisittaskction' >
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://icons.veryicon.com/png/o/miscellaneous/seiko-cloud-map-standard-library/add-inventory.png" style={{height:"30px"}}></img>
+                              <img src="https://icons.veryicon.com/png/o/miscellaneous/seiko-cloud-map-standard-library/add-inventory.png" alt='' style={{height:"30px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3745,7 +3746,7 @@ try {
                           ) : item.activity_name==="added docuemnt"?(
                             <div id='createsitevisittaskction' >
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
-                              <img src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" style={{height:"30px"}}></img>
+                              <img src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" alt='' style={{height:"30px"}}></img>
                             
                               <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                             <span>{new Date(item.createdAt).toLocaleString()}</span>
@@ -3844,7 +3845,7 @@ try {
           {allColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"12px" }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
@@ -3861,23 +3862,20 @@ try {
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
             <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
-             {item.ucategory?.join(',')} {item.usize}<br></br>
-             {/* {item.ulocality} {item.ucity} */}{item.project}
+             {/* {item.ucategory?.join(',')} {item.usize}<br></br> */}
+             {/* {item.ulocality} {item.ucity}{item.project} */}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-  {item.owner_details ? (
-    item.owner_details.map((owner, index) => (
-      <div key={index}>
-        {owner.mobile_no.map((mobile, mobileIndex) => (
-          <div key={mobileIndex}>{mobile}</div> 
-        ))}
-        <div>{owner.title} {owner.first_name} {owner.last_name}</div> 
-      </div>
-    ))
-  ) : (
-    'No Details Available' // Fallback if no owner details exist
-  )}
-</StyledTableCell>
+            {item.project}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            {item.usize}
+            </StyledTableCell>
+
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            {item.project}
+            </StyledTableCell>
 
           </StyledTableRow>
         ))}
@@ -3931,7 +3929,7 @@ try {
           {allColumnsunit.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
@@ -4039,9 +4037,9 @@ try {
       <span>
         {item.complete === "true" ? (
           <span style={{color:"green"}}>Complete</span>
-        ) : item.complete === "" && new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date() ? (
+        ) : (item.complete === "" && new Date(item.due_date) > new Date()) || new Date(item.start_date) > new Date() ? (
           <span style={{color:"blue"}}>Pending</span>
-        ) : item.complete === "" && new Date(item.due_date) < new Date() || new Date(item.start_date) < new Date() ? (
+        ) : (item.complete === "" && new Date(item.due_date) < new Date()) || new Date(item.start_date) < new Date() ? (
           <span className='no-activity-flash' style={{fontSize:"12px"}}>Overdue</span>
         ) : ""}
       </span>
@@ -4845,7 +4843,7 @@ fontWeight:"lighter"
                         <option>Whatsapp</option>
                         </select>
                     </div>
-                    {(leadinfo.source === "Reference" || leadinfo.source === "Channel Partner" && leadinfo.campaign === "Organic Campaign") && (
+                    {((leadinfo.source === "Reference" || leadinfo.source === "Channel Partner") && leadinfo.campaign === "Organic Campaign") && (
                      <>
                      <div className="col-md-5">
                         <label className="labels">Referrer Name</label>
