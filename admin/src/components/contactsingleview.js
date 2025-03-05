@@ -675,7 +675,7 @@ const addoutcome = () => {
 
 const handleCopy = () => {
   // Use the Clipboard API to copy the text to the clipboard
-  navigator.clipboard.writeText(lead.mobile_no)
+  navigator.clipboard.writeText(lead.mobile_no[0])
     .then(() => {
       // Optional: alert or feedback to user that the text was copied
       Swal.fire({
@@ -2316,11 +2316,11 @@ try {
                         alt="call-icon"
                         style={{ height: '30px', marginRight: '4px' }}
                       />
-                  {lead.mobile_no}</InputLabel>
+                  {lead.mobile_no[0]}</InputLabel>
                   <Select
                     labelId="mobile-label"
                     id="mobile-select"
-                    value={lead.mobile_no}  // Always keep the mobile number as the value
+                    value={lead.mobile_no[0]}  // Always keep the mobile number as the value
                     style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
                     MenuProps={{
                       PaperProps: {
@@ -2391,12 +2391,12 @@ try {
                 <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Owner Sales/Manager</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team} Team</p></div>
+                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
                 <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
 
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
                 </div>
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Last Conduct At</label><p style={{ wordWrap: "break-word", whiteSpace: "normal",marginTop:"-10px",fontWeight:"normal"}}>{formattedDate}</p></div>
@@ -4617,7 +4617,7 @@ fontWeight:"lighter"
    
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" >
+            <Button variant="secondary" onClick={updatecontact}>
                 Update
               </Button>
               <Button variant="secondary" onClick={handleClose7}>

@@ -23,6 +23,7 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
+import ReactQuill from 'react-quill';  // Import ReactQuill
 
 function Leadfetch() {
 
@@ -1186,6 +1187,22 @@ const[countall,setcountall]=useState('')
             const[subject,setsubject]=useState("")
             const [selectedTemplate, setSelectedTemplate] = useState('');
             const [attachments, setAttachments] = useState([]);
+
+            const modules1 = {
+              toolbar: [
+                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                ['bold', 'italic', 'underline'],
+                ['link'],
+                // [{ 'align': [] }],
+                [{ 'color': [] }, { 'background': [] }],
+                // ['clean']  // Allows the user to clear formatting
+              ],
+            };
+            const handlemailmessage=(value)=>
+              {
+                setmessage(value)
+              }
 
             const { getRootProps, getInputProps } = useDropzone({
               onDrop: (acceptedFiles) => {
@@ -3721,7 +3738,7 @@ const handleallblockchange = (event) => {
         </div>
         <div className="col-md-12"><hr></hr></div>
   
-   <div className="row mt-2" id="sendmail" style={{display:"none"}}>
+   {/* <div className="row mt-2" id="sendmail" style={{display:"none"}}>
     <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send Mail</div>
     <div className="col-md-12"><hr></hr></div>
        <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={emails} /></div>
@@ -3745,7 +3762,44 @@ const handleallblockchange = (event) => {
           ))}
         </ul>
       </div>
-   </div>
+   </div> */}
+
+<div className="row mt-2" id="sendmail" style={{fontSize:"12px",display:"none"}}>
+      <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder",fontSize:"1vw"}}> Send Mail</div>
+          {/* <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={lead.email} /></div> */}
+          <div className="col-md-12" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+           <input type="text" style={{border:"none",fontSize:"12px",borderBottom:"1px solid gray"}} required="true" className="form-control form-control-sm" placeholder='subject' value={subject} onChange={(e)=>setsubject(e.target.value)}/>
+      
+          </div>
+         
+   
+          <div className="col-md-12" style={{marginTop:"5px"}}>
+             <ReactQuill
+           modules={modules1}  // Add the toolbar options for formatting
+           style={{ height: '80px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+           className="my-quill-editor"
+           value={message}   placeholder="Enter Your Message"  onChange={handlemailmessage}/>
+           </div>
+          <div className="col-md-4" style={{fontSize:"12px",marginTop:"40px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+          <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
+             <option value="">---Select Template---</option>
+             <option value="template1">Template 1</option>
+             <option value="template2">Template 2</option>
+             <option value="template3">Template 3</option>
+           </select>
+          </div>
+   
+          <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"60px", cursor: 'pointer' }}>
+           <input {...getInputProps()} />
+           <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
+           <ul>
+             {attachments.length > 0 && attachments.map((file, index) => (
+               <li key={index}>{file.name}</li>
+             ))}
+           </ul>
+         </div>
+         {/* <div className='col-md-2' style={{marginTop:"70px",marginLeft:"50px"}}><button className='form-control form-control-sm' onClick={sendmail}>send</button></div> */}
+      </div>
 
    <div className="row mt-2" id="sendmessage" style={{display:"none"}}>
    <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send Message</div>

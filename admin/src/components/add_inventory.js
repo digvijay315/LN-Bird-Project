@@ -2076,7 +2076,7 @@ function Editinventory() {
                         
 
                         {/* <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={documents.linkded_contact}  placeholder="Type here For Search in Contact" required="true" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div> */}
-                        {showSuggestions  && filteredSuggestions.length > 0 && (
+                        {/* {showSuggestions  && filteredSuggestions.length > 0 && (
                             <ul className="suggestion-list">
                               {filteredSuggestions.map((suggestion, index) => (
                                 <li key={index} onClick={() => handleSuggestionClick1(suggestion,index)}>
@@ -2084,7 +2084,7 @@ function Editinventory() {
                                 </li>
                               ))}
                             </ul>
-                          )}
+                          )} */}
 
 
                       <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>

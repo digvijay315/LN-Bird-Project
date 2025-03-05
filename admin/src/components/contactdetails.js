@@ -27,6 +27,7 @@ import'../css/addcontact.css';
 import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
+import ReactQuill from 'react-quill';  // Import ReactQuill
 
 
 
@@ -330,7 +331,7 @@ const renderPageNumbers = () => {
    
   
 
-
+//========================================== send code start========================================================================
     
     const[emails,setemails]=useState([])
     const [show3, setshow3] = useState(false);
@@ -370,6 +371,8 @@ const renderPageNumbers = () => {
       );
     };
 
+    
+
     const templates = {
       template1: "Hello, \n\nI hope this email finds you well. I wanted to follow up on our previous conversation regarding property. Please let me know if you have any questions.\n\nBest regards,\nDigvijay Kumar",
       template2: "Hi there, \n\nI just wanted to remind you about the upcoming event on [date]. It will be held at Noida. Please feel free to reach out if you need any additional information.\n\nSincerely,\nDigvijay Kumar",
@@ -380,6 +383,23 @@ const renderPageNumbers = () => {
             const[subject,setsubject]=useState("")
             const [selectedTemplate, setSelectedTemplate] = useState('');
             const [attachments, setAttachments] = useState([]);
+
+            const handlemailmessage=(value)=>
+              {
+                setmessage(value)
+              }
+
+              const modules1 = {
+                toolbar: [
+                  [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                  ['bold', 'italic', 'underline'],
+                  ['link'],
+                  // [{ 'align': [] }],
+                  [{ 'color': [] }, { 'background': [] }],
+                  // ['clean']  // Allows the user to clear formatting
+                ],
+              };
 
             const { getRootProps, getInputProps } = useDropzone({
               onDrop: (acceptedFiles) => {
@@ -398,6 +418,37 @@ const renderPageNumbers = () => {
               // Set the message state with the formatted message (HTML-friendly)
               setmessage(htmlFormattedMessage); 
             };
+
+              const [selectedOptions, setSelectedOptions] = useState([]);
+            
+              const handleSelectChange = (event) => {
+                const selectedValues = event.target.value;
+                setSelectedOptions(selectedValues);
+            
+                // Update the subject with selected field values from the lead object
+                const updatedSubject = selectedValues
+                  .map((field) => {
+                    switch (field) {
+                      case "name":
+                        // return lead.title + " " + lead.first_name + " " + lead.last_name;
+                      case "mobile":
+                        // return lead.mobile_no;
+                      case "city":
+                        // return lead.city;
+                        case "email":
+                          // return lead.email;
+                          case "company":
+                            // return lead.company_name;
+                            case "designation":
+                              // return lead.designation;
+                      default:
+                        return "";
+                    }
+                  })
+                  .join(", "); // Join selected fields with a comma and space
+                setsubject(updatedSubject); // Set the subject with the dynamically updated value
+              };
+            
 
 
             const sendmail=async(e)=>
@@ -487,7 +538,7 @@ const renderPageNumbers = () => {
                     }
 
 
-
+// ========================================send code end==================================================================================
 
 
     const formatRelativeDate = (date) => {
@@ -3580,7 +3631,7 @@ console.log(leadinfo);
         </div>
         <div className="col-md-12"><hr></hr></div>
   
-        <div className="row mt-2" id="sendmail" style={{display:"none"}}>
+        {/* <div className="row mt-2" id="sendmail" style={{display:"none"}}>
     <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send Mail</div>
     <div className="col-md-12"><hr></hr></div>
        <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={emails} /></div>
@@ -3604,7 +3655,44 @@ console.log(leadinfo);
           ))}
         </ul>
       </div>
-   </div>
+   </div> */}
+
+      <div className="row mt-2" id="sendmail" style={{fontSize:"12px",display:"none"}}>
+      <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder",fontSize:"1vw"}}> Send Mail</div>
+          {/* <div className="col-md-12"><label className="labels">Recipients</label><input type="text" required="true" className="form-control form-control-sm" defaultValue={lead.email} /></div> */}
+          <div className="col-md-12" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+           <input type="text" style={{border:"none",fontSize:"12px",borderBottom:"1px solid gray"}} required="true" className="form-control form-control-sm" placeholder='subject' value={subject} onChange={(e)=>setsubject(e.target.value)}/>
+      
+          </div>
+         
+   
+          <div className="col-md-12" style={{marginTop:"5px"}}>
+             <ReactQuill
+           modules={modules1}  // Add the toolbar options for formatting
+           style={{ height: '80px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+           className="my-quill-editor"
+           value={message}   placeholder="Enter Your Message"  onChange={handlemailmessage}/>
+           </div>
+          <div className="col-md-4" style={{fontSize:"12px",marginTop:"40px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+          <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
+             <option value="">---Select Template---</option>
+             <option value="template1">Template 1</option>
+             <option value="template2">Template 2</option>
+             <option value="template3">Template 3</option>
+           </select>
+          </div>
+   
+          <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"60px", cursor: 'pointer' }}>
+           <input {...getInputProps()} />
+           <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
+           <ul>
+             {attachments.length > 0 && attachments.map((file, index) => (
+               <li key={index}>{file.name}</li>
+             ))}
+           </ul>
+         </div>
+         {/* <div className='col-md-2' style={{marginTop:"70px",marginLeft:"50px"}}><button className='form-control form-control-sm' onClick={sendmail}>send</button></div> */}
+      </div>
 
    <div className="row mt-2" id="sendmessage" style={{display:"none"}}>
    <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send Message</div>
