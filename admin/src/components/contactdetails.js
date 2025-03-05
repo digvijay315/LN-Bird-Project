@@ -1129,6 +1129,8 @@ const allColumns = [
           }
         }
 
+        //======================================= update contact end===========================================================
+
         const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
       

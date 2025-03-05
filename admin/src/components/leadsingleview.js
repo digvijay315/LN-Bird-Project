@@ -103,7 +103,7 @@ const navigate=useNavigate()
 
       const allColumns = [
         { id: 'sno', name: '#' },
-        { id: 'unit_no', name: 'Unit No.' },
+        { id: 'unit_no', name: 'Unit_No.' },
         { id: 'project_name', name: ' Project' },
         { id: 'size', name: ' Size' },
         { id: 'available_from', name: 'Available_From' },
@@ -3837,7 +3837,7 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "400px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible ? "400px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
       <TableContainer component={Paper} style={{ maxHeight: '400px'}}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
@@ -3920,7 +3920,7 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
     <Table sx={{}} aria-label="customized table">
@@ -3981,7 +3981,7 @@ try {
           ▼
         </span>
         <span 
-         onClick={()=>navigate('/tasksform')}
+         onClick={()=>navigate('/tasksform',{state:lead})}
           style={{ 
             position:"absolute",
             cursor: "pointer", 
@@ -3997,7 +3997,7 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible2 ? "300px" : "0",transition: "height 0.3s ease",overflow:"auto"}}>
+        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible2 ? "300px" : "0",transition: "height 0.3s ease",overflow:"auto"}}>
          
         <TableContainer component={Paper} style={{  maxHeight: '300px'}}>
     <Table sx={{}} aria-label="customized table">
@@ -4090,7 +4090,7 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '200px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
@@ -4185,7 +4185,7 @@ fontWeight:"lighter"
 </span>
 </div>
 
-<div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible4 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+<div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible4 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
  
 <TableContainer component={Paper} style={{ maxHeight: '300px', overflow: 'auto' }}>
 <Table sx={{}} aria-label="customized table">

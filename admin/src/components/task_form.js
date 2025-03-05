@@ -119,11 +119,10 @@ function Task_form() {
 
                 const Location=useLocation()
                 const id=Location.state
-                // const getid=id.id[0]
-                const getid = id?.id.map((item) => item); 
+                const lead=Location.state
+                const getid = id?.id?.map((item) => item); 
               
                
-                
               const[selecteddeal,setselecteddeal]=useState([])
                 const getselecteddeal=async()=>
                 {
@@ -1525,14 +1524,24 @@ const handleTimeChange = (e) => {
                 }
                 }}
   >
-                    <option>Select</option>
+
+                  <option>---select---</option>
+
+                        {lead?._id && (
+                              <option value={lead._id}>
+                                  {id.title} {id.first_name} {id.last_name}
+                              </option>
+                          )}
+
+                    
                         {
+                          !lead && (
                             data.map((item)=>
                             (
                                 <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
                                 
                             ))
-                            
+                          )
                         }
                         </select>
                         </div>
@@ -1678,13 +1687,21 @@ const handleTimeChange = (e) => {
       }
     }}
   >
-                    <option>Select</option>
+                     <option>---select---</option>
+
+                      {lead?._id && (
+                            <option value={lead._id}>
+                                {id.title} {id.first_name} {id.last_name}
+                            </option>
+                        )}
                         {
+                          !lead && (
                             data.map((item)=>
                             (
                                 <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
                                 
                             ))
+                          )
                             
                         }
                         </select>
@@ -2026,13 +2043,21 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         className="form-control form-control-sm"
                         required
                         onChange={handleLeadChange}>
-                    <option>Select</option>
+                     <option>---select---</option>
+
+                    {lead?._id && (
+                          <option value={lead._id}>
+                              {id.title} {id.first_name} {id.last_name}
+                          </option>
+                      )}
                         {
+                          !lead && (
                             data.map((item)=>
                             (
                                 <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
                                 
                             ))
+                          )
                             
                         }
                         </select>
@@ -2257,14 +2282,21 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
       }
     }}
   >
-                    <option>Select</option>
+                     <option>---select---</option>
+
+                        {lead?._id && (
+                              <option value={lead._id}>
+                                  {id.title} {id.first_name} {id.last_name}
+                              </option>
+                          )}
                         {
+                          !lead && (
                             data.map((item)=>
                             (
                                 <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
                                 
                             ))
-                            
+                          )
                         }
                         </select>
                         </div>
