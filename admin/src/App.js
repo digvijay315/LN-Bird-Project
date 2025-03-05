@@ -44,6 +44,7 @@ import Leadsingleview from './components/leadsingleview.js';
 import Projectpreview from './components/projectpreview.js';
 import Editinventory from './components/add_inventory.js';
 import Contactsingleview from './components/contactsingleview.js';
+import Companysingleview from './components/companysingleview.js';
 
 function App() {
   return (
@@ -82,15 +83,10 @@ function App() {
       <Route path='/editproject' element={<EditProjectform/>}/>
       <Route path='/leadsingleview' element={<Leadsingleview/>}/>
       <Route path='/contactsingleview' element={<Contactsingleview/>}/>
+      <Route path='/contactdetails/companysingleview' element={<Companysingleview/>}/>
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
     </Routes> 
-    {/* <SuggestionBox/>  */}
-    {/* <Adddeveloper/> */}
-    {/* <Projectform/> */}
-  {/* <BankSelector/> */}
-  {/* <FlipViewComponent/> */}
-  {/* <AddContactForm/> */}
    </div>
    </BrowserRouter>
   );

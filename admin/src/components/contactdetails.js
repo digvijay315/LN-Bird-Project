@@ -2868,7 +2868,7 @@ console.log(leadinfo);
             </StyledTableCell>
 
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px",  fontFamily: "times new roman" }} 
              
             >
               {item.h_no} {item.area1}
@@ -2881,7 +2881,7 @@ console.log(leadinfo);
             </StyledTableCell>
 
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px", fontFamily: "times new roman" }} 
              
             >
               {item.profession_category} ({item.profession_subcategory})
@@ -3700,6 +3700,8 @@ console.log(leadinfo);
 
     <div className="row mt-2" id="sendwhatsapp" style={{display:"none"}}>
     <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send WhatsApp</div>
+
+    
     </div>
 </div>
           </Modal.Body>
@@ -3863,8 +3865,8 @@ console.log(leadinfo);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman" }} 
-             
+              style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer" }} 
+             onClick={()=>navigate('companysingleview',{state:item})}
             >
               {item.name}
               <br />
