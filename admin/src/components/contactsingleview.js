@@ -2388,7 +2388,7 @@ try {
 
             
 
-                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Owner Sales/Manager</label>
+                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>User</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
                 </div>
                 <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>

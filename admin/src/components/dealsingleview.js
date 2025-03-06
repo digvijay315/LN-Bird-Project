@@ -24,7 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 
 
-function Companysingleview() {
+function Dealsingleview() {
 
 const navigate=useNavigate()
   
@@ -1901,8 +1901,8 @@ try {
 
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
-          <h6>Company</h6>
-          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.name} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>
+          <h6>Deal</h6>
+          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
@@ -2813,6 +2813,82 @@ try {
         <div className='col-md-3' style={{padding:"10px",display:isSmall?"none":"block"}}>
 
         <div className='row'>
+
+        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+  <div className='col-md-12'> Matched Lead
+        <span 
+          onClick={toggleTableVisibility1} 
+          style={{ 
+            position:"absolute",
+            cursor: "pointer", 
+            right: "50px", 
+            fontSize: "20px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+            marginTop: "0px", // Align the arrow properly
+          }}
+        >
+          ▼
+        </span>
+        <span 
+         onClick={()=>navigate('/addinventory',{state:lead})}
+          style={{ 
+            position:"absolute",
+            cursor: "pointer", 
+            right: "15px", 
+            fontSize: "30px", 
+            display: "inline-block", 
+            transition: "transform 0.3s ease", // Smooth transition for rotation
+            marginTop: "-7px", // Align the arrow properly
+      fontWeight:"lighter"
+          }}
+        >
+          +
+        </span>
+        </div>
+
+        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+         
+        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+    <Table sx={{}} aria-label="customized table">
+    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow  style={{backgroundColor:"gray"}}>
+          {allColumnsunit.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
+            >
+              {col.name}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </thead>
+      <tbody>
+        {
+         
+        matchunit.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+           
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+              {item.unit_no}
+            </StyledTableCell >
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+              {item.project_name}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+             
+            </StyledTableCell>
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+        </div>
+        </div>
 
         
 
@@ -4377,4 +4453,4 @@ fontWeight:"lighter"
   )
 }
 
-export default Companysingleview
+export default Dealsingleview

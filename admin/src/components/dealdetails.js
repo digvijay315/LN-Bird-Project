@@ -3342,7 +3342,7 @@ const [show9, setshow9] = useState(false);
               />
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",cursor:"pointer" }} onClick={()=>navigate('dealsingleview',{state:item})}>
             <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
              {item.ucategory} {item.usize}<br></br>
              {/* {item.ulocality} {item.ucity} */}{item.project}
@@ -3793,7 +3793,7 @@ const [show9, setshow9] = useState(false);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman" }}  >
+              style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer"}} onClick={()=>navigate('projectsingleview',{state:item})} >
               {item.name}
           
             </StyledTableCell>
@@ -4049,7 +4049,7 @@ const [show9, setshow9] = useState(false);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman" }}  >
+              style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer" }} onClick={()=>navigate('inventorysingleview',{state:item})}  >
               <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
                {/* {item.ulocality} {item.ucity}  */}{item.project_name}

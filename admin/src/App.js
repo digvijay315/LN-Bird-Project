@@ -45,6 +45,9 @@ import Projectpreview from './components/projectpreview.js';
 import Editinventory from './components/add_inventory.js';
 import Contactsingleview from './components/contactsingleview.js';
 import Companysingleview from './components/companysingleview.js';
+import Dealsingleview from './components/dealsingleview.js';
+import Projectsingleview from './components/projectsingleview.js';
+import Inventorysingleview from './components/inventorysingleview.js';
 
 function App() {
   return (
@@ -84,6 +87,9 @@ function App() {
       <Route path='/leadsingleview' element={<Leadsingleview/>}/>
       <Route path='/contactsingleview' element={<Contactsingleview/>}/>
       <Route path='/contactdetails/companysingleview' element={<Companysingleview/>}/>
+      <Route path='/dealdetails/dealsingleview' element={<Dealsingleview/>}/>
+      <Route path='/dealdetails/projectsingleview' element={<Projectsingleview/>}/>
+      <Route path='/dealdetails/inventorysingleview' element={<Inventorysingleview/>}/>
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
     </Routes> 
