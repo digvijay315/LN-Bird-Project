@@ -249,7 +249,7 @@ const add_deal = async (req, res) => {
                                 pics // Update preview field with new images if provided
                             };
                             const resp=await adddeal.findByIdAndUpdate(id,updatedFields,{ new: true })
-                            res.status(200).send({message:"lead update successfully"})
+                            res.status(200).send({message:"Deal update successfully"})
                         } catch (error) {
                             console.log(error)
                         }

@@ -25,6 +25,7 @@ import Tooltip from '@mui/material/Tooltip';
 import api from "../api";
 import '../css/deal.css';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import { toWords } from 'number-to-words';
 
 
 function Dealdetails() {
@@ -1356,10 +1357,12 @@ function Dealdetails() {
                         
                           },[selectedItems,selectedItems2,selectedItems3])
 
-
-
-
-                          const[deal,setdeal]=useState({owner_details:[],associated_contact:[],relation:"",})
+                          const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",
+                            utype:"",ucategory:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+                            expected_price:"",quote_price:"",security_deposite:"",owner_details:[],associated_contact:[],relation:"",
+                          maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
+                          deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
+                          website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
 
                           const [show7, setshow7] = useState(false);
@@ -3127,8 +3130,480 @@ const [show9, setshow9] = useState(false);
                                                     };
 
 
-// ========================================edit unit end================================================================
+// ========================================edit unit end===========================================================================
 
+
+// ===================================================edit deal start===================================================================
+
+const [show10, setshow10] = useState(false);
+    
+const handleClose10 = () => setshow10(false);
+const handleShow10=async()=>
+{
+  setshow10(true);
+  try {
+    const resp=await api.get(`viewdealbyid/${selectedItems}`)
+    setdeal(resp.data.deal)
+  } catch (error) {
+    console.log(error);
+    
+  }
+ 
+}
+
+
+const [progress, setProgress] = useState(deal.white_portion || 10); // Initialize with deal.whiteportion
+
+const handleMouseMove = (e) => {
+  const progressBar = e.target.getBoundingClientRect();
+  const newProgress = ((e.clientX - progressBar.left) / progressBar.width) * 100;
+  const clampedProgress = Math.max(0, Math.min(newProgress, 100)); // Clamp between 0 and 100
+  setProgress(clampedProgress);
+  setdeal((prevDeal) => ({ ...prevDeal, white_portion: clampedProgress })); // Update deal.whiteportion
+};
+
+const handleMouseDown = (e) => {
+  handleMouseMove(e); // Set initial progress
+  window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('mouseup', handleMouseUp);
+};
+
+const handleMouseUp = () => {
+  window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mouseup', handleMouseUp);
+};
+
+
+function available_for()
+{
+    const available=document.getElementById("availablefor").value;
+    if(available==="Sale")
+        {
+            document.getElementById("sale").style.display="flex"
+            document.getElementById("rent").style.display="none"
+            setdeal({...deal,available_for:"Sale"})
+        }
+        if(available==="Rent")
+            {
+                document.getElementById("rent").style.display="flex"
+                document.getElementById("sale").style.display="none"
+                setdeal({...deal,available_for:"Rent"})
+            }   
+       if(available==="Select") 
+        {
+             document.getElementById("rent").style.display="none"
+                document.getElementById("sale").style.display="none"
+        }
+        
+}
+
+
+const handleprojectchange = (event) => {
+ 
+  
+  const selectproject = event.target.value
+
+
+  setdeal((prev) => {
+    const updateproject = { ...prev, project: selectproject };
+    //  fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+    return updateproject; // Return the updated state
+  });
+};
+
+
+const handleallunitschange = (event) => {
+ 
+const selectunit = event.target.value
+
+  
+  setdeal((prev) => {
+    const updateunit = { ...prev, unit_number: selectunit };
+    return updateunit; // Return the updated state
+  });
+};
+
+
+const handleallblockchange = (event) => {
+   
+  
+    const selectblocks = event.target.value
+  
+     
+    setdeal((prev) => {
+      const updateblock = { ...prev, block: selectblocks };
+      return updateblock; // Return the updated state
+    });
+  };
+
+  const[data1,setdata1]=useState([]);
+        const fetchdata1=async()=>
+        {
+          
+          try {
+            const resp=await api.get('viewproject')
+            setdata1(resp.data.project)
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+
+
+       
+
+  React.useEffect(()=>
+  {fetchdata1()},[])
+
+
+
+
+  const allproject =[]
+  data1.map((item)=>
+  (
+      allproject.push(item.name)
+  ))
+   
+
+  const [units1, setunits1] = useState([]);
+  const [allUnits, setallUnits] = useState([]);
+  const [allblocks, setallblocks] = useState([]);
+
+
+
+  const [numericValue, setNumericValue] = React.useState(null);
+  const [measurementUnit, setMeasurementUnit] = React.useState('');
+
+  const fetchdatabyprojectname = async (projectNames) => {
+
+    try {
+      
+        const resp = await api.get(`viewprojectbyname/${projectNames}`);
+        // const allFetchedUnits= resp.data.project;
+        setunits1(resp.data.project);// Assuming resp.data.project is an array of units for that project
+    } catch (error) {
+      console.log(error);
+    }
+  };
+ 
+  
+  
+
+  React.useEffect(() => {
+    if (deal.project) {
+      fetchdatabyprojectname(deal.project);
+    }
+  }, [deal.project]);
+  
+  
+  React.useEffect(() => {
+    if (units1.length >= 0) {
+      const collectedUnits = units1.flatMap(item => 
+        item.add_unit.filter(unit => unit.stage === 'Active' && unit.block===deal.block) // Filter units where stage is 'active'
+      );
+   
+    
+      
+
+      const collectedblocks=units1.flatMap(item=>item.add_block)
+      console.log(collectedblocks);
+       
+      const collectcategory=units1.flatMap(item=>item.category) 
+      const collectsubcategory=units1.flatMap(item=>item.sub_category) // Collect all add_unit arrays
+      const fulllocation = units1.flatMap(item => `${item.add_location}, ${item.address} ${item.street} ${item.locality} ${item.city}`).join(' ');
+      setallUnits(collectedUnits);
+      setallblocks(collectedblocks) 
+      setdeal({...deal,project_category:collectcategory,project_subcategory:collectsubcategory,location:fulllocation})// Set allUnits with the collected units
+
+
+      const collectedsize = collectedUnits.filter((item) => 
+        item.block === deal.block && item.unit_no === deal.unit_number // Use strict equality === here
+      );
+
+      
+      if (collectedsize.length > 0) {
+        // Assuming 'size' is the field you're interested in
+        const sizeValue = collectedsize[0].size; // Or collectedsize[0].sizeName based on your actual field name
+    console.log(sizeValue);
+    
+    const regex = /\((\d+(\.\d+)?)\s*(\w+\s\w+)\)/;
+  const match = sizeValue.match(regex);
+
+  if (match) {
+    setNumericValue(parseFloat(match[1]));
+    setMeasurementUnit(match[3]);
+  }
+     
+      }
+      
+
+
+    }
+  }, [units1,deal.block,deal.unit_number]);
+
+
+
+  const handleselectpricetypechang=(e)=>
+    {
+
+      const selectedValue = e.target.value;
+
+      if (selectedValue === "absolute") {
+          document.getElementById("price1").style.display="none"
+        document.getElementById("multiply").style.display="none"
+        document.getElementById("totalarea").style.display="none"
+        document.getElementById("measurment").style.display="none"
+         document.getElementById("priceintext").style.display="none"
+
+        document.getElementById("totalprice").style.display="block"
+        document.getElementById("divforprice1").style.display="block"
+      } else if (selectedValue === "calculated") {
+         document.getElementById("price1").style.display="block"
+        document.getElementById("multiply").style.display="block"
+        document.getElementById("totalarea").style.display="block"
+        document.getElementById("measurment").style.display="block"
+         document.getElementById("priceintext").style.display="block"
+         
+        document.getElementById("totalprice").style.display="none"
+        document.getElementById("divforprice1").style.display="none"
+      }
+      setdeal((prev)=>({
+        ...prev,
+        calculated_type:e.target.value
+
+      }))
+     
+    }
+
+    const ehandleselectpricetypechang=(e)=>
+      {
+
+        const selectedValue = e.target.value;
+
+        if (selectedValue === "absolute") {
+            document.getElementById("price11").style.display="none"
+          document.getElementById("multiply1").style.display="none"
+          document.getElementById("totalarea1").style.display="none"
+          document.getElementById("measurment1").style.display="none"
+           document.getElementById("priceintext1").style.display="none"
+
+          document.getElementById("totalprice1").style.display="block"
+          document.getElementById("divforprice11").style.display="block"
+        } else if (selectedValue === "calculated") {
+           document.getElementById("price11").style.display="block"
+          document.getElementById("multiply1").style.display="block"
+          document.getElementById("totalarea1").style.display="block"
+          document.getElementById("measurment1").style.display="block"
+           document.getElementById("priceintext1").style.display="block"
+           
+          document.getElementById("totalprice1").style.display="none"
+          document.getElementById("divforprice11").style.display="none"
+        }
+        setdeal((prev)=>({
+          ...prev,
+          calculated_type:e.target.value
+
+        }))
+       
+      }
+
+    const rhandleselectpricetypechang=(e)=>
+      {
+
+        const selectedValue1 = e.target.value;
+
+        if (selectedValue1 === "absolute") {
+            document.getElementById("rprice1").style.display="none"
+          document.getElementById("rmultiply").style.display="none"
+          document.getElementById("rtotalarea").style.display="none"
+          document.getElementById("rmeasurment").style.display="none"
+           document.getElementById("rpriceintext").style.display="none"
+
+          document.getElementById("rtotalprice").style.display="block"
+          document.getElementById("rdivforprice1").style.display="block"
+        } else if (selectedValue1 === "calculated") {
+           document.getElementById("rprice1").style.display="block"
+          document.getElementById("rmultiply").style.display="block"
+          document.getElementById("rtotalarea").style.display="block"
+          document.getElementById("rmeasurment").style.display="block"
+           document.getElementById("rpriceintext").style.display="block"
+           
+          document.getElementById("rtotalprice").style.display="none"
+          document.getElementById("rdivforprice1").style.display="none"
+        }
+        setdeal((prev)=>({
+          ...prev,
+          calculated_type:e.target.value
+
+        }))
+       
+      }
+
+      const rhandleselectpricetypechang1=(e)=>
+        {
+
+          const selectedValue1 = e.target.value;
+
+          if (selectedValue1 === "absolute") {
+              document.getElementById("rprice11").style.display="none"
+            document.getElementById("rmultiply1").style.display="none"
+            document.getElementById("rtotalarea1").style.display="none"
+            document.getElementById("rmeasurment1").style.display="none"
+             document.getElementById("rpriceintext1").style.display="none"
+
+            document.getElementById("rtotalprice1").style.display="block"
+            document.getElementById("rdivforprice11").style.display="block"
+          } else if (selectedValue1 === "calculated") {
+             document.getElementById("rprice11").style.display="block"
+            document.getElementById("rmultiply1").style.display="block"
+            document.getElementById("rtotalarea1").style.display="block"
+            document.getElementById("rmeasurment1").style.display="block"
+             document.getElementById("rpriceintext1").style.display="block"
+             
+            document.getElementById("rtotalprice1").style.display="none"
+            document.getElementById("rdivforprice11").style.display="none"
+          }
+          setdeal((prev)=>({
+            ...prev,
+            calculated_type:e.target.value
+
+          }))
+         
+        }
+
+
+        const formatCurrency = (num) => {
+          if (num === 0) return "₹0"; // Handle zero case
+        
+          // Convert number to string
+          const numStr = num.toString();
+        
+          // Split the number into whole and decimal parts
+          const [whole, decimal] = numStr.split('.');
+        
+          // Format the whole part for Indian currency style
+          const lastThreeDigits = whole.slice(-3);
+          const otherDigits = whole.slice(0, -3);
+          const formattedWhole = otherDigits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + (otherDigits.length > 0 ? "," : "") + lastThreeDigits;
+        
+          // Combine whole and decimal parts, if any
+          return `${formattedWhole}${decimal ? '.' + decimal : ''}`;
+        };
+        
+        const [result0, setResult0] = useState("");
+        const [resultText, setResultText] = useState('');
+        
+        const calculateResult = () => {
+          const areaValue = parseFloat(document.getElementById("earea").value) || 0; // Ensure valid number
+          const priceValue = parseFloat(document.getElementById("eprice").value) || 0; // Ensure valid number
+          const calculatedResult = areaValue * priceValue;
+        
+          setResult0(calculatedResult);
+          setdeal(prevDeal => ({ ...prevDeal, expected_price: calculatedResult }));
+        };
+        
+        React.useEffect(() => {
+          // Convert result to text format
+          if (result0) {
+            const words = toWords(result0, { format: 'en-IN' });
+            setResultText(`(${words} only)`);
+          } else {
+            setResultText('');
+          }
+        }, [result0]);
+        
+        const [result1, setResult1] = useState("");
+        const [resultText1, setResultText1] = useState('');
+        
+        const calculateResult1 = () => {
+          const areaValue = parseFloat(document.getElementById("qarea").value) || 0; // Ensure valid number
+          const priceValue = parseFloat(document.getElementById("qprice").value) || 0; // Ensure valid number
+          const calculatedResult = areaValue * priceValue;
+        
+          setResult1(calculatedResult);
+          setdeal(prevDeal => ({ ...prevDeal, quote_price: calculatedResult }));
+        };
+        
+        
+        React.useEffect(() => {
+          // Convert result to text format
+          if (result1) {
+            const words = toWords(result1, { format: 'en-IN' });
+            setResultText1(`(${words} only)`);
+          } else {
+            setResultText1('');
+          }
+        }, [result1]);
+        
+        
+        const [result2, setResult2] = useState("");
+        const [resultText2, setResultText2] = useState('');
+        
+        const calculateResult2 = () => {
+          const areaValue = parseFloat(document.getElementById("rearea").value) || 0; // Ensure valid number
+          const priceValue = parseFloat(document.getElementById("reprice").value) || 0; // Ensure valid number
+          const calculatedResult = areaValue * priceValue;
+        
+          setResult2(calculatedResult);
+          setdeal(prevDeal => ({ ...prevDeal, expected_price: calculatedResult }));
+        };
+        
+        
+        React.useEffect(() => {
+          // Convert result to text format
+          if (result2) {
+            const words = toWords(result2, { format: 'en-IN' });
+            setResultText2(`(${words} only)`);
+          } else {
+            setResultText2('');
+          }
+        }, [result2]);
+        
+        const [result3, setResult3] = useState("");
+        const [resultText3, setResultText3] = useState('');
+        
+        const calculateResult3 = () => {
+          const areaValue = parseFloat(document.getElementById("rqarea1").value) || 0; // Ensure valid number
+          const priceValue = parseFloat(document.getElementById("rqprice1").value) || 0; // Ensure valid number
+          const calculatedResult = areaValue * priceValue;
+        
+          setResult3(calculatedResult);
+          setdeal(prevDeal => ({ ...prevDeal, quote_price: calculatedResult }));
+        };
+        
+        React.useEffect(() => {
+          // Convert result to text format
+          if (result3) {
+            const words = toWords(result3, { format: 'en-IN' });
+            setResultText3(`(${words} only)`);
+          } else {
+            setResultText3('');
+          }
+        }, [result3]);
+
+
+        const updatedeal=async()=>
+        {
+          try {
+            const resp=await api.put(`updatedeal/${selectedItems}`,deal)
+            if(resp.status===200)
+            {
+                toast.success(resp.data.message,{ autoClose: 2000 })
+            }
+            setTimeout(() => {
+              window.location.reload()
+            }, 2000);
+            
+          } catch (error) {
+            console.log(error);
+            
+          }
+        }
+          
+
+
+
+// ===================================================edit deal end====================================================================
 
 
                   
@@ -3211,7 +3686,7 @@ const [show9, setshow9] = useState(false);
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
-<img id="dealedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow10}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Send Mail.." arrow>
@@ -6101,6 +6576,439 @@ stage:selectedLead.stage
               </Button>
             </Modal.Footer>
           </Modal>
+
+
+
+          <Modal show={show10} onHide={handleClose10} size='xl'>
+            <Modal.Header>
+              <Modal.Title>Update Deal</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+
+
+          <div className="row"  id="projectform" >
+        <div className="col-12">
+            <div >
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h4 className="text-right">Sale or Rent</h4>
+                </div><hr></hr>
+                <div className="row mt-2">
+                    
+                    <div className="col-md-4"><label className="labels">Available For</label><select name="availablefor" id="availablefor" className="form-control form-control-sm" required="true" onChange={available_for} >
+                    <option>{deal.available_for}</option>
+                        <option>Sale</option>
+                        <option>Rent</option>
+                        <option>Lease</option>
+                        </select>
+                        </div>
+                        
+                        <div className="col-md-4"><label className="labels">Stage</label><select name="stage"  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,stage:e.target.value})}>
+                    <option>{deal.stage}</option>
+                        <option>Open</option>
+                        <option>Quote</option>
+                        <option>Negotiation </option>
+                        <option>Booked </option>
+                        <optgroup label="Closed">
+                          <option>Won</option><option>Lost</option><option>Reject</option>
+                        </optgroup>
+                        </select>
+                        </div>
+                        <div className="col-md-4"></div>
+
+                        <div className="col-md-4"><label className="labels">Project</label>
+                        <select className="form-control form-control-sm" name="project" onChange={handleprojectchange}>
+                        <option>{deal.project}</option>
+                        {
+                          allproject.map((project)=>
+                          (
+                            <option>{project}</option>
+                          ))
+                        }
+                        </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Block</label>
+                        <select className="form-control form-control-sm" name="block" onChange={handleallblockchange} >
+                        <option>{deal.block}</option>
+                    {
+                      allblocks.map((block)=>
+                      (
+                        <option>{block.block_name}</option>
+                      ))
+                    }
+                      
+  
+                </select>
+                        </div>
+                        <div className="col-md-4"><label className="labels">Unit No.</label>
+                        <select className="form-control form-control-sm" name="unit_no" onChange={handleallunitschange}  >
+                      <option>{deal.unit_number}</option>
+                      {
+                        allUnits.map((units)=>
+                        (
+                          <option>{units.unit_no}</option>
+                        ))
+                      }
+                </select>
+                        </div>
+                  
+                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Terms Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                </div>
+
+    {/* ===============================================sale start======================================================================== */}
+
+
+                <div className="row" id="sale" style={{display:"none"}}>
+                  <div className="col-md-12"><u><b>Expected Price</b></u></div>
+                 
+                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={handleselectpricetypechang} >
+                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                    </select></div>
+                    <div id="price1" className="col-md-2"><label className="labels">Price</label>
+                    <input id="eprice" onChange={calculateResult} type="number" className="form-control form-control-sm" /></div>
+                    
+                    <div className="col-md-0" id="multiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                    <p>X</p>
+                    </div>
+                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number" id="earea" onChange={calculateResult} value={numericValue} className="form-control form-control-sm"  /></div>
+                    <div className="col-md-2" id="measurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
+                    <option value="">{measurementUnit}</option>
+                    <option value="">sq feet</option>
+                    <option value="">sq yard</option>
+                    </select></div>
+                    
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{deal.expected_price}{formatCurrency(result0)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" name="expected_price" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
+                   <div id="divforprice1" className="col-md-5" style={{display:"none"}}></div>
+
+
+                 
+                  <div className="col-md-12"><u><b>Quote Price</b></u></div>
+              
+
+                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute1" required="true" className="form-control form-control-sm" onChange={ehandleselectpricetypechang} >
+                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                    </select></div>
+                    <div id="price11" className="col-md-2"><label className="labels">Price</label>
+                    <input id="qprice" onChange={calculateResult1} type="number" className="form-control form-control-sm" /></div>
+                    
+                    <div className="col-md-0" id="multiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                    <p>X</p>
+                    </div>
+                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number" id="qarea" value={numericValue}  onChange={calculateResult1}  className="form-control form-control-sm"/></div>
+                    <div className="col-md-2" id="measurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
+                    <option>{measurementUnit}</option>
+                    <option value="">sq feet</option>
+                    <option value="">sq yard</option>
+                    </select></div>
+                    
+                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{deal.quote_price}{formatCurrency(result1)}<br></br>{resultText1}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" name="quote_price" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
+                   <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
+
+                    <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
+                    <option>Select</option>
+                        <option>Hot</option>
+                        <option>Warm</option>
+                        <option>Cold</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
+                    <option>Select</option>
+                        <option>Full White</option>
+                        <option>Collecter Rate</option>
+                        <option>Flexiable</option>
+                        </select></div>
+                        <div className="col-md-4"></div>
+
+                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                    <option>Select</option>
+                        <option>99 Acre</option>
+                        <option>News Paper</option>
+                        <option>Walkin</option>
+                        <option>Olx</option>
+                        </select></div>
+
+                        {deal.transaction_type === "Flexiable" && (
+                        <div className="col-md-8">
+                           <label className="labels">White Portion</label>
+                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
+                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
+                          <div className="progress-percentage">{Math.round(progress)}%</div>
+                        </div>
+                        </div>
+                      )}
+                       
+
+                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
+                    <option>Select</option>
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
+                    <option>Select</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
+                    <option>Select</option>
+                        <option>Only Me</option>
+                        <option>Team</option>
+                        <option>All User</option>
+                        </select></div>
+
+                        <div className="col-md-12"><label className="labels">Publish On</label></div>
+                    <div className="col-md-12"><hr></hr></div>
+                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
+                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Own Website</option>
+                                          <option>99 Acre</option>
+                                          <option>Olx</option>
+                                          <option>Magicbricks</option>
+                                          <option>Etc.</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
+                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Facebook</option>
+                                          <option>Instagram</option>
+                                          <option>Googe Page</option>
+                                          <option>Linkdin</option>
+                                          <option>Twitter</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
+                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
+                                          <option>select</option>
+                                          <option>Message</option>
+                                          <option>What's App</option>
+                                          <option>Email</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
+                                    <div className="col-md-2"></div>
+
+
+                      </div>
+{/* -----------------------=========================sale end====================================-------------------------------------- */}
+
+{/* ------------------------------------------------============rent start========================-------------------------------------- */}
+                     
+                     
+                        <div className="row" id="rent" style={{display:"none"}}>
+                        <div className="col-md-4"><label className="labels">Floors</label><select className="form-control form-control-sm" name="floors" onChange={(e)=>setdeal({...deal,floors:e.target.value})}>
+                        <option>{deal.floors}</option>
+                        <option>---select---</option>
+                        <option>Ground</option>
+                        <option>1st</option>
+                        <option>2nd</option>
+                        <option>3rd</option>
+                        <option>4th</option>
+                        <option>Top</option>
+                        </select></div>
+                        <div className="col-md-8"></div>
+
+                        <div className="col-md-12"><u><b>Expected Price</b></u></div>
+                 
+                 <div className="col-md-2"><label className="labels" >Type</label><select id="rcalculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={rhandleselectpricetypechang} >
+                 <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                 </select></div>
+                 <div id="rprice1" className="col-md-2"><label className="labels">Price</label>
+                 <input id="reprice" onChange={calculateResult2} type="number" className="form-control form-control-sm" /></div>
+                 
+                 <div className="col-md-0" id="rmultiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                 <p>X</p>
+                 </div>
+                 <div className="col-md-2" id="rtotalarea"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult2} value={numericValue} id="rearea"  className="form-control form-control-sm"  /></div>
+                 <div className="col-md-2" id="rmeasurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
+                 <option value="">{measurementUnit}</option>
+                 <option value="">sq feet</option>
+                 <option value="">sq yard</option>
+                 </select></div>
+                 
+                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext"><br></br>{deal.expected_price}{formatCurrency(result2)}<br></br>{resultText2}</span></label><input type="text" id="rtotalprice" style={{display:"none"}} className="form-control form-control-sm" name="expected_price" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
+                <div id="rdivforprice1" className="col-md-5" style={{display:"none"}}></div>
+
+
+              
+               <div className="col-md-12"><u><b>Quote Price</b></u></div>
+           
+
+                 <div className="col-md-2"><label className="labels" >Type</label><select id="rcalculatedorabsoulute11" required="true" className="form-control form-control-sm" onChange={rhandleselectpricetypechang1} >
+                 <option value="calculated">calculated</option><option value="absolute">absolute</option>
+                 </select></div>
+                 <div id="rprice11" className="col-md-2"><label className="labels">Price</label>
+                 <input id="rqprice1" onChange={calculateResult3} type="number" className="form-control form-control-sm" /></div>
+                 
+                 <div className="col-md-0" id="rmultiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
+                 <p>X</p>
+                 </div>
+                 <div className="col-md-2" id="rtotalarea1"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult3} value={numericValue} id="rqarea1"  className="form-control form-control-sm"/></div>
+                 <div className="col-md-2" id="rmeasurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" >
+                 <option>{measurementUnit}</option>
+                 <option value="">sq feet</option>
+                 <option value="">sq yard</option>
+                 </select></div>
+                 
+                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext1"><br></br>{deal.quote_price}{formatCurrency(result3)}<br></br>{resultText3}</span></label><input type="text" id="rtotalprice1" style={{display:"none"}} className="form-control form-control-sm" name="quote_price" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
+                <div id="rdivforprice11" className="col-md-5" style={{display:"none"}}></div>
+
+                
+                    <div className="col-md-3"><label className="labels">Security Deposite</label><input type="text" required="true" value={deal.security_deposite} className="form-control form-control-sm" name="security_deposite" onChange={(e)=>setdeal({...deal,security_deposite:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Maintanance Charge</label><input type="text" required="true" value={deal.maintainence_charge} className="form-control form-control-sm" name="maintainence_charge" onChange={(e)=>setdeal({...deal,maintainence_charge:e.target.value})}/></div>
+                    <div className="col-md-2"><label className="labels">Rent Esclation</label><select className="form-control form-control-sm" name="rent_escltion" onChange={(e)=>setdeal({...deal,rent_escltion:e.target.value})}>
+                    <option>{deal.rent_escltion}</option>
+                         <option>---select---</option>
+                        <option>99 Acre</option>
+                        <option>News Paper</option>
+                        <option>Walkin</option>
+                        <option>Olx</option>
+                        </select></div>
+                        <div className="col-md-2"><label className="labels">Rent Period</label><select className="form-control form-control-sm" name="rent_period" onChange={(e)=>setdeal({...deal,rent_period:e.target.value})}>
+                        <option>{deal.rent_period}</option>
+                         <option>---select---</option>
+                        <option>06 months</option>
+                        <option>11 months</option>
+                        <option>24 months</option>
+                        <option>36 months</option>
+                        </select></div>
+                        <div className="col-md-2"><label className="labels">Fitout Period</label><select className="form-control form-control-sm" name="fitout_perioud" onChange={(e)=>setdeal({...deal,fitout_perioud:e.target.value})}>
+                        <option>{deal.fitout_perioud}</option>
+                        <option>---select---</option>
+                        <option>06 months</option>
+                        <option>11 months</option>
+                        <option>24 months</option>
+                        <option>36 months</option>
+                        </select></div>
+
+                        <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
+                        <option>{deal.deal_type}</option>
+                        <option>---select---</option>
+                        <option>Hot</option>
+                        <option>Warm</option>
+                        <option>Cold</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
+                        <option>{deal.transaction_type}</option>
+                         <option>---select---</option>
+                         <option>Full White</option>
+                        <option>Collecter Rate</option>
+                        <option>Flexiable</option>
+                        </select></div>
+                        <div className="col-md-4"></div>
+
+                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <option>{deal.source}</option>
+                         <option>---select---</option>
+                         <option>99 Acre</option>
+                        <option>News Paper</option>
+                        <option>Walkin</option>
+                        <option>Olx</option>
+                        </select></div>
+                
+                        {deal.transaction_type === "Flexiable" && (
+                        <div className="col-md-8">
+                           <label className="labels">White Portion</label>
+                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
+                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
+                          <div className="progress-percentage">{Math.round(progress)}%</div>
+                        </div>
+                        </div>
+                      )}
+                       
+                        
+
+                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
+                        <option>{deal.team}</option>
+                              <option>---select---</option>
+                               <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
+                        <option>{deal.user}</option>
+                              <option>---select---</option>
+                              <option>Suraj</option> 
+                              <option>Suresh Kumar</option>
+                              <option>Ramesh Singh</option>
+                              <option>Maanav Sharma</option>
+                              <option>Sukram</option>
+                        </select></div>
+                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
+                        <option>{deal.visible_to}</option>
+                              <option>---select---</option>
+                              <option>Sales</option>
+                              <option>Marketing</option>
+                              <option> Post Sales</option>
+                              <option> Pre Sales</option>
+                        </select></div>
+
+                        <div className="col-md-12"><label className="labels">Publish On</label></div>
+                    <div className="col-md-12"><hr></hr></div>
+                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
+                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
+                                      <option>{deal.website}</option>
+                                          <option>---select---</option>
+                                          <option>Own Website</option>
+                                          <option>99 Acre</option>
+                                          <option>Olx</option>
+                                          <option>Magicbricks</option>
+                                          <option>Etc.</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
+                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
+                                      <option>{deal.social_media}</option>
+                                          <option>---select---</option>
+                                          <option>Facebook</option>
+                                          <option>Instagram</option>
+                                          <option>Googe Page</option>
+                                          <option>Linkdin</option>
+                                          <option>Twitter</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
+                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
+                                      <option>{deal.send_matchedlead}</option>
+                                          <option>---select---</option>
+                                          <option>Message</option>
+                                          <option>What's App</option>
+                                          <option>Email</option>
+                                          </select>
+                                    </div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
+                                    <div className="col-md-2"></div>
+                                    
+
+
+                      </div>
+                  </div>
+  
+  {/*============================================ rent end=========================================================================== */}
+                   
+                    </div>
+                    
+        </div>
+
+        </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={updatedeal}>
+                Update Deal 
+              </Button>
+              <Button variant="secondary" onClick={handleClose10}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
 
 
 
