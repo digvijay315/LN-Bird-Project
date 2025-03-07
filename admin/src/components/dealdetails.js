@@ -6329,6 +6329,14 @@ stage:selectedLead.stage
                        Array.isArray(units.preview)?
                        units.preview.map((name, index) => (
                                  <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                     {name && (
+                                      <img 
+                                        // src={typeof item === 'string' ? item : URL.createObjectURL(item)} 
+                                        src={`${name}`}
+                                        alt="preview" 
+                                        style={{width: "50px", height: "50px", objectFit: "cover", marginBottom: "10px"}}
+                                      />
+                                    )}
                                    <input 
                                    name="preview"
                                      type="file"
@@ -6336,6 +6344,9 @@ stage:selectedLead.stage
                                      multiple
                                      onChange={(event) => handlepreviewchange(index, event)}
                                    />
+                                   {
+
+                                   }
                                      {name.previewUrls && name.previewUrls.map((url, idx) => (
                                          <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
                                        ))}

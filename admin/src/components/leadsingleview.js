@@ -22,6 +22,8 @@ import '../css/leadview.css'
 import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
+import "react-circular-progressbar/dist/styles.css";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 
 function Leadsingleview() {
@@ -2795,7 +2797,7 @@ try {
 
 // =======================================================add document end==============================================================
 
-
+const completionPercentage = 20; // Set default value here
 
   return (
     <div>
@@ -2803,37 +2805,6 @@ try {
       <Header1/>
       <Sidebar1/>
 
-      {/* <div style={{marginTop:"60px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
-        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}} >
-          <h6>INCOMING</h6>
-          <p></p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>PROSPECT</h6>
-          <p></p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} >
-          <h6>OPPORTUNITY</h6>
-          <p></p>
-        </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-          <h6>NEGOTIATION</h6>
-          <p></p>
-        </div>
-     
-        <div className="lead" style={{borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}}>
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none",fontWeight:"bold",marginTop:"-10px"}}>
-            CLOSED
-        </button>
-            <ul class="dropdown-menu">
-              <li className="form-control">Won <span style={{fontSize:"30px",color:"green",fontWeight:"bolder"}}><sup></sup></span></li>
-              <li className="form-control">Lost <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup></sup></span></li>
-              <li className="form-control">Unqualified  <span style={{fontSize:"30px",color:"red",fontWeight:"bolder"}}><sup></sup></span></li>
-            </ul>
-         
-        </div>  
-        
-      </div> */}
 
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
@@ -2859,15 +2830,30 @@ try {
             </div> */}
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
-                <div className='col-md-3'></div>
-                <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
-                <select className="form-control form-control-sm" style={{color:"red"}}>
-                    <option >{lead?.stage || '---Select---'}</option>
-                        {/* <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option> */}
-                </select>
-                </div>
+            <div className="col-md-3 d-flex justify-content-center align-items-center">
+        <div style={{ width: 60, height: 60 }}>
+          <CircularProgressbar
+            value={completionPercentage}
+            text={`${completionPercentage}%`}
+            styles={buildStyles({
+              pathColor: "#B85042",
+              textColor: "#B85042",
+              trailColor: "#f0f0f0",
+              strokeLinecap: "round",
+              textSize: "18px",
+            })}
+          />
+        </div>
+      </div>
+      <div className="col-md-5">
+        <label style={{ color: "#B85042" }}>Status</label>
+        <select className="form-control form-control-sm" style={{ color: "red" }}>
+          <option>{lead?.stage ? String(lead.stage) : "---Select---"}</option>
+          <option>Hot</option>
+          <option>Warm</option>
+          <option>Cold</option>
+        </select>
+      </div>
                 <div className='col-md-4'></div>
 
                 <div className="col-md-6" >

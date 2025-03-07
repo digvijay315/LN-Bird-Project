@@ -22,7 +22,8 @@ import '../css/leadview.css'
 import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
-
+import "react-circular-progressbar/dist/styles.css";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 function Contactsingleview() {
 
@@ -2262,7 +2263,7 @@ try {
 
 // =======================================================add document end==============================================================
 
-
+const completionPercentage = 20; // Set default value here
 
   return (
     <div>
@@ -2296,7 +2297,21 @@ try {
             </div> */}
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
-                <div className='col-md-3'></div>
+            <div className="col-md-3 d-flex justify-content-center align-items-center">
+                        <div style={{ width: 60, height: 60 }}>
+                          <CircularProgressbar
+                            value={completionPercentage}
+                            text={`${completionPercentage}%`}
+                            styles={buildStyles({
+                              pathColor: "#B85042",
+                              textColor: "#B85042",
+                              trailColor: "#f0f0f0",
+                              strokeLinecap: "round",
+                              textSize: "18px",
+                            })}
+                          />
+                        </div>
+                      </div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
                 <select className="form-control form-control-sm" style={{color:"red"}}>
                     <option >{lead?.stage || '---Select---'}</option>

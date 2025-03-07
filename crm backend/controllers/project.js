@@ -459,29 +459,29 @@ unitDetails={
                 }
               };
 
+
+
               const update_projectforinventories = async (req, res) => {
                 try {
                   // Retrieve project_name, block, and unit_no from the URL parameters (params)
                   const { project_name, block, unit_no } = req.params;
 
-                  const user = await addproject.findOneAndUpdate(
-                    {
-                      'add_unit': {
-                        $elemMatch: {
-                          project_name: project_name,
-                          block: block,
-                          unit_no: unit_no
-                        }
-                      }
-                    })
-              
-                  let existingUnits = user || [];
+                  const project = await addproject.findOne({
+                    'add_unit': { $elemMatch: { project_name, block, unit_no } }
+                });
 
-                  const addunit_details = [];
-                  let u = 0;
-            
-            while (u < req.body.add_unit?.length) {
-              const unit = req.body.add_unit[u];
+                if (!project) {
+                  return res.status(404).send({ message: "No project found matching the criteria" });
+              }
+      
+              // Step 2: Find the index of the unit to update
+              const unitIndex = project.add_unit.findIndex(unit => unit.unit_no === unit_no);
+              if (unitIndex === -1) {
+                  return res.status(404).send({ message: "Unit not found" });
+              }
+
+              const existingUnit = project.add_unit[unitIndex];
+              const unit = req.body
          
             unitDetails={
             
@@ -527,8 +527,12 @@ unitDetails={
               document_name: unit.document_name,
               document_no: unit.document_no,
               document_Date: unit.document_Date,
-              linkded_contact: unit.linkded_contact
+              linkded_contact: unit.linkded_contact,
+              preview: existingUnit.preview,
+              image:existingUnit.image
+
             }
+          
             
             
               // Prepare for file upload
@@ -539,10 +543,10 @@ unitDetails={
               if (req.files) {
                 console.log(req.files);
                 
-                const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[${u}][preview]`));
-                const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[${u}][image]`));
+                const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[preview]`));
+                const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[image]`));
                
-                console.log(imagefield1);
+               
                 
                 for (let file of imagefield) {
                   try {
@@ -589,53 +593,18 @@ unitDetails={
                 unitDetails.image = imagefiles1;  // Attach main images
               }
 
-               // Find if the unit_no already exists in the existing units
-const existingUnitIndex = existingUnits.findIndex(existingUnit => existingUnit.unit_no === unit.unit_no);
 
-// If the unit already exists, keep the existing data
-if (existingUnitIndex !== -1) {
-  addunit_details.push(existingUnits[existingUnitIndex]);  // Push the existing unit data
-} else {
-  // If unit doesn't exist, add the new unit
-  addunit_details.push(unitDetails);
-}
+
+
+                  project.add_unit[unitIndex] = unitDetails;
+
+
+                  await project.save();
+                                
+             
             
-              
-              u++;
-            }
-              
-              //  const updatedFields = {
-              //     ...req.body,
-              //     pic:imagefiles,
-              //     add_unit:addunit_details
-              // };
-              
-                  // Perform the update query on the project model and filter the add_unit array using $elemMatch
-                  const project = await addproject.findOneAndUpdate(
-                    {
-                      'add_unit': {
-                        $elemMatch: {
-                          project_name: project_name,
-                          block: block,
-                          unit_no: unit_no
-                        }
-                      }
-                    },
-                    {
-                      $set: {
-                        'add_unit.$': {
-                            ...addunit_details 
-                        }
-                      }
-                    },
-                    { new: true } // Return the updated project document after the update
-                  );
-              
-                  if (!project) {
-                    return res.status(404).send({ message: "No project found matching the criteria" });
-                  }
-              
-                  // Send the response with the updated project details
+
+                 
                   res.status(200).send({
                     message: "add_unit updated successfully",
                     project: project
