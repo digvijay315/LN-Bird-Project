@@ -541,7 +541,7 @@ unitDetails={
               
               
               if (req.files) {
-                console.log(req.files);
+              
                 
                 const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[preview]`));
                 const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[image]`));
@@ -773,7 +773,36 @@ unitDetails={
                 }
               
 
+
+                const delete_projectforinventories = async (req, res) => {
+                  try {
+                      // Retrieve project_name, block, and unit_no from the URL parameters (params)
+                      const { project_name, block, unit_no } = req.params;
+              
+                      // Find the project that contains the unit
+                      const project = await addproject.findOne({
+                          'add_unit': { $elemMatch: { project_name, block, unit_no } }
+                      });
+              
+                      if (!project) {
+                          return res.status(404).send({ message: "No project found matching the criteria" });
+                      }
+              
+                      // Remove the matching unit from the add_unit array
+                      await addproject.updateOne(
+                          { _id: project._id }, 
+                          { $pull: { add_unit: { project_name, block, unit_no } } }
+                      );
+              
+                      res.status(200).send({ message: "Unit deleted successfully" });
+              
+                  } catch (error) {
+                      res.status(500).send({ message: "Error deleting project unit", error });
+                  }
+              };
+              
+
               
 
    module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,
-    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit}
+    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit,delete_projectforinventories}

@@ -32,9 +32,21 @@ const { assignAssessment, getAssignedAssessments } = require('../Controllers/ass
 const { assignQuiz, getAssignedQuizes } = require('../Controllers/assigned_quiz_form');
 const { getWaitlistedUsers, approveWaitlistedUser } = require('../Controllers/waitlistController');
 const { assignAssessmentAttendies, getEmployeeAssignments } = require('../Controllers/assign_assessment_attendies_form');
+const { saveProject, getProject, updateProjectMatrix, getEmployeeProjects } = require('../Controllers/hr_create_project_form');
+const { saveTrainer, getTrainer } = require('../Controllers/add_trainer_form');
+const authMiddleware = require('../MiddleWare/auth');
+const { nominationValidator } = require('../MiddleWare/validator');
+const nominationController = require('../Controllers/add_nomination_form');
+const { submitTenderResponse, submitContractResponse, getApprovalsByProject } = require('../Controllers/project_approvals_form');
+const EmployeeInfo = require('../Modal/employee_register');
+const { saveRecruitmentPlan, getAllRecruitmentPlans, getRecruitmentPlanById, updateRecruitmentPlan, deleteRecruitmentPlan } = require('../Controllers/recruitment_plan_form');
 // const auth = require('../middleware/auth'); // Assuming you have authentication middleware
 // const { createAssessment } = require('../Controllers/create_assessment_form');
 // const { create_Assessment } = require('../Controllers/create_assessment_form');
+const protect = require('../MiddleWare/auth');
+const { registerCandidate, getAllCandidates, getCandidateById, updateCandidate, deleteCandidate, getCandidateByUsername } = require('../Controllers/candidate_register_form');
+const { assignCATsToCandidates, getCandidateCATs, getAllCATAssignments, updateCATAssignment, deleteCATAssignment } = require('../Controllers/candidate_cat_form');
+const { startCandidateTest, submitCandidateTest, getCandidateResponses, getCandidateResponseById, getCATResponsesCandidate } = require('../Controllers/candidate_response_form');
 
 const router = express.Router();
 
@@ -62,6 +74,18 @@ router.get('/trainingeventbyid/:_id', get_data_eventbyid);
 router.delete('/trainingevent_delete/:_id', delete_event_data);
 router.get('/get_events_by_month', get_events_by_month);
 router.get('/get_events_by_date', getEventsByDate);
+
+router.post('/addtrainer', saveTrainer);
+router.get('/getTrainer', getTrainer);
+
+router.post('/send-nomination-emails',
+  authMiddleware,
+  nominationValidator,
+  nominationController.sendNominationEmails
+);
+router.get('/confirm-training/:trainingId/:employeeId',
+  nominationController.confirmAttendance,
+)
 
 router.post('/add_attendence_details', post_attendence_details);
 
@@ -186,10 +210,10 @@ router.get('/api/questions/categories', async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching categories' });
     }
-  });
+});
   
-  // Get questions by category
-  router.get('/api/questions', async (req, res) => {
+// Get questions by category
+router.get('/api/questions', async (req, res) => {
     try {
       const { mainCategory, subCategory } = req.query;
       
@@ -217,7 +241,7 @@ router.get('/api/questions/categories', async (req, res) => {
     } catch (error) {
       res.status(500).json({ message: 'Error fetching questions' });
     }
-  });
+});
 
 router.post('/quize_response', createResponse);
 // router.get('/get_quize_response/:quizId', getQuizResponses);
@@ -232,6 +256,39 @@ router.get('/get_excel_Data', getAllExcelData);
 router.post('/assign_assessment_attendies', assignAssessmentAttendies);
 router.get('/employee_assignments/:employee_id', getEmployeeAssignments);
 
+router.post('/save_projects', saveProject);
+router.get('/get_projects', getProject);
+router.put('/update_project_matrix', updateProjectMatrix);
+router.get('/employee-projects/:employeeId', getEmployeeProjects);
+
+router.put('/submit-tender-response', submitTenderResponse);
+router.put('/submit-contract-response', submitContractResponse);
+router.get('/project-approvals', getApprovalsByProject);
+
+router.post('/save_recruitment_plan', saveRecruitmentPlan);
+router.get('/recruitment_plans', getAllRecruitmentPlans);
+router.get('/get_recruitment_plan/:id', getRecruitmentPlanById);
+router.put('/update_recruitment_plan/:id', updateRecruitmentPlan);
+router.delete('/delete_recruitment_plan/:id', deleteRecruitmentPlan);
+
+router.post('/candidate_register', registerCandidate);
+router.get('/get_all_candidates', getAllCandidates);
+router.get('/get_candidate_username/:username', getCandidateByUsername);
+router.get('/get_candidate/:id', getCandidateById);
+router.put('/update_candidate/:id', updateCandidate);
+router.delete('/delete_candidate/:id', deleteCandidate);
+
+router.post('/assign_cat_candidate', assignCATsToCandidates);
+router.get('/get_assigned_cats_candidates', getAllCATAssignments);
+router.get('/get_assigned_cats_candidates/:candidateId', getCandidateCATs);
+router.put('/update_assigned_cat/:id', updateCATAssignment);
+router.delete('/delete_assigned_cat/:id', deleteCATAssignment);
+
+router.post('/candidate_test_start', startCandidateTest);
+router.post('/candidate_test_submit/:responseId', submitCandidateTest);
+router.get('/get_cat_candidate_response/:candidateId', getCandidateResponseById);
+router.get('/get_all_response_specific_candidate', getCandidateResponses);
+router.get('/get_all_response_specific_cat', getCATResponsesCandidate);
 
 
 module.exports = router;

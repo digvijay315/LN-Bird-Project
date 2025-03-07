@@ -5,6 +5,7 @@ const students_register = new mongoose.Schema({
     username:{type:String},
     first_name:{type:String},
     last_name:{type:String},
+    grade:{type:String},
     country:{type:String},
     time_zone:{type:String},
     create_password:{type:String},

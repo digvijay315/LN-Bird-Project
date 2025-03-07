@@ -3133,6 +3133,37 @@ const [show9, setshow9] = useState(false);
 // ========================================edit unit end===========================================================================
 
 
+// ========================================delete unit start=========================================================================
+
+
+const deleteinventories=async()=>
+  {
+    const project=selectedItems3[0].project_name
+    const block=selectedItems3[0].block
+    const unit=selectedItems3[0].unit_no
+    console.log(project);
+    
+    try {
+      const resp=await api.delete(`deleteprojectforinventories/${project}/${unit}/${block}`)
+      toast.success(`units deleted successfully`,{autoClose:"2000"})
+                      setTimeout(() => {
+                        window.location.reload()
+                      }, 2000);
+    } catch (error) {
+      toast.error(`failed to delete units`,{autoClose:"2000"})
+      setTimeout(() => {
+        window.location.reload()
+      }, 2000);
+      console.log(error);
+      
+    }
+  }
+
+
+// ==============================================delete unit end==================================================================
+
+
+
 // ===================================================edit deal start===================================================================
 
 const [show10, setshow10] = useState(false);
@@ -4377,7 +4408,7 @@ const handleallblockchange = (event) => {
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="unitdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg"  style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="unitdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteinventories}  style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
@@ -6608,6 +6639,7 @@ stage:selectedLead.stage
                     
                     <div className="col-md-4"><label className="labels">Available For</label><select name="availablefor" id="availablefor" className="form-control form-control-sm" required="true" onChange={available_for} >
                     <option>{deal.available_for}</option>
+                    <option>---select---</option>
                         <option>Sale</option>
                         <option>Rent</option>
                         <option>Lease</option>
@@ -6616,6 +6648,7 @@ stage:selectedLead.stage
                         
                         <div className="col-md-4"><label className="labels">Stage</label><select name="stage"  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,stage:e.target.value})}>
                     <option>{deal.stage}</option>
+                    <option>---select---</option>
                         <option>Open</option>
                         <option>Quote</option>
                         <option>Negotiation </option>
@@ -6630,6 +6663,7 @@ stage:selectedLead.stage
                         <div className="col-md-4"><label className="labels">Project</label>
                         <select className="form-control form-control-sm" name="project" onChange={handleprojectchange}>
                         <option>{deal.project}</option>
+                        <option>---select---</option>
                         {
                           allproject.map((project)=>
                           (
@@ -6641,6 +6675,7 @@ stage:selectedLead.stage
                         <div className="col-md-4"><label className="labels">Block</label>
                         <select className="form-control form-control-sm" name="block" onChange={handleallblockchange} >
                         <option>{deal.block}</option>
+                        <option>---select---</option>
                     {
                       allblocks.map((block)=>
                       (
@@ -6654,6 +6689,7 @@ stage:selectedLead.stage
                         <div className="col-md-4"><label className="labels">Unit No.</label>
                         <select className="form-control form-control-sm" name="unit_no" onChange={handleallunitschange}  >
                       <option>{deal.unit_number}</option>
+                      <option>---select---</option>
                       {
                         allUnits.map((units)=>
                         (

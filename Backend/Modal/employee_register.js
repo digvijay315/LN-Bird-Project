@@ -9,11 +9,13 @@ const employee_register = new mongoose.Schema({
     date_of_join:{type:String},
     project_code:{type:String},
     project_name:{type:String},
+    department:{type:String},
     region:{type:String},
     project_manger:{type:String},
     employee_id_two:{type:String},
     name:{type:String},
     designation:{type:String},
+    role:{type:String},
     status: { type: String, default: 'pending', enum: ['pending', 'approved', 'rejected'] },
 
     experiences: [{
