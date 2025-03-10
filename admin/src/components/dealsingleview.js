@@ -2417,11 +2417,11 @@ const handleallblockchange1 = (event) => {
                         alt="call-icon"
                         style={{ height: '25px', marginRight: '4px' }}
                       />
-                  {lead.owner_details[0].mobile_no[0]}</InputLabel>
+                  {lead.owner_details[0]?.mobile_no[0]}</InputLabel>
                   <Select
                     labelId="mobile-label"
                     id="mobile-select"
-                    value={lead.owner_details[0].mobile_no[0]}  // Always keep the mobile number as the value
+                    value={lead.owner_details[0]?.mobile_no[0]}  // Always keep the mobile number as the value
                     style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
                     MenuProps={{
                       PaperProps: {
