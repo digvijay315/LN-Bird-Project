@@ -2263,7 +2263,7 @@ try {
 
 // =======================================================add document end==============================================================
 
-const completionPercentage = 20; // Set default value here
+
 
   return (
     <div>
@@ -2297,27 +2297,15 @@ const completionPercentage = 20; // Set default value here
             </div> */}
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
-            <div className="col-md-3 d-flex justify-content-center align-items-center">
-                        <div style={{ width: 60, height: 60 }}>
-                          <CircularProgressbar
-                            value={completionPercentage}
-                            text={`${completionPercentage}%`}
-                            styles={buildStyles({
-                              pathColor: "#B85042",
-                              textColor: "#B85042",
-                              trailColor: "#f0f0f0",
-                              strokeLinecap: "round",
-                              textSize: "18px",
-                            })}
-                          />
-                        </div>
+            <div className="col-md-3">
+                      
                       </div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
-                <select className="form-control form-control-sm" style={{color:"red"}}>
-                    <option >{lead?.stage || '---Select---'}</option>
-                        {/* <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option> */}
+                <select className="form-control form-control-sm">
+                    <option >{lead?.status || '---Select---'}</option>
+                    <option>---select---</option>
+                        <option>Customer</option>
+                        <option>Prospect</option>
                 </select>
                 </div>
                 <div className='col-md-4'></div>
@@ -2422,8 +2410,9 @@ const completionPercentage = 20; // Set default value here
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
                     <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Personal Details</div>
                     <div className='col-md-12'><hr></hr></div>
-                    <div className='col-md-12'><p style={{fontWeight:"normal"}}>Father/Husband Name-{lead.father_husband_name} {lead.city}</p></div>
+                    <div className='col-md-12'><p style={{fontWeight:"normal"}}>Father/Husband Name-{lead.father_husband_name}</p></div>
 
+                    <div className='col-md-12'><p style={{fontWeight:"normal"}}>Location- <span style={{color:"#B85042"}}>{lead.location1}</span></p></div>
                     <div className='col-md-3' ><label style={{color:"#B85042"}}>Address</label>
                     <p style={{marginTop:"-10px",wordWrap: "break-word", whiteSpace: "normal",fontWeight:"normal"}}>{lead.h_no}</p>
                 </div>

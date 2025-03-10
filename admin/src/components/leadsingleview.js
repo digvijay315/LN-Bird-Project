@@ -11,7 +11,7 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
-import { Tooltip } from 'react-bootstrap';
+import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -24,6 +24,7 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+
 
 
 function Leadsingleview() {
@@ -126,6 +127,7 @@ const navigate=useNavigate()
         { id: 'sno', name: '#' },
         { id: 'unit_no', name: 'Unit No' },
         { id: 'project', name: 'Project' },
+        { id: 'add_size', name: 'Size' },
         { id: 'relation', name: 'Relation' },
       ];
   
@@ -2801,7 +2803,6 @@ const completionPercentage = 20; // Set default value here
 
   return (
     <div>
-
       <Header1/>
       <Sidebar1/>
 
@@ -2847,14 +2848,27 @@ const completionPercentage = 20; // Set default value here
       </div>
       <div className="col-md-5">
         <label style={{ color: "#B85042" }}>Status</label>
-        <select className="form-control form-control-sm" style={{ color: "red" }}>
+        <select className="form-control form-control-sm">
           <option>{lead?.stage ? String(lead.stage) : "---Select---"}</option>
-          <option>Hot</option>
-          <option>Warm</option>
-          <option>Cold</option>
+                        <option>---select---</option>
+                        <option>Incoming</option>
+                        <option>Prospect</option>
+                        <option>Negotiation</option>
+                        <option>Oppurtunity</option>
+                        <option>Booked</option>
+                        <optgroup label="Closed" style={{fontWeight:"bolder",color:"blue"}}>
+                        <option style={{color:"green"}}>Won</option>
+                        <option style={{color:"red"}}>Lost</option>
+                        <option style={{color:"gray"}}>Unqualified </option>
+                        </optgroup>
         </select>
       </div>
-                <div className='col-md-4'></div>
+
+                <div className='col-md-4'>
+                   <Tooltip title="Update Status..." arrow>
+                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"30px",marginTop:"30px",cursor:"pointer"}} ></img>
+                </Tooltip>
+                  </div>
 
                 <div className="col-md-6" >
                             <label  style={{color:"#B85042"}}>Mobile</label>
@@ -3823,8 +3837,8 @@ const completionPercentage = 20; // Set default value here
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible ? "400px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
-      <TableContainer component={Paper} style={{ maxHeight: '400px'}}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible ? "200px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
+      <TableContainer component={Paper} style={{ height: '200px'}}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
@@ -3846,21 +3860,19 @@ const completionPercentage = 20; // Set default value here
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
             <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
-             {/* {item.ucategory?.join(',')} {item.usize}<br></br> */}
-             {/* {item.ulocality} {item.ucity}{item.project} */}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
             {item.project}
             </StyledTableCell>
 
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
             {item.usize}
             </StyledTableCell>
 
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-            {item.project}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {new Date(item.createdAt).toLocaleString()}
             </StyledTableCell>
 
           </StyledTableRow>
@@ -3906,9 +3918,9 @@ const completionPercentage = 20; // Set default value here
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+        <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
@@ -3927,17 +3939,19 @@ const completionPercentage = 20; // Set default value here
          
         matchunit.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-           
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
               {item.unit_no}
             </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
               {item.project_name}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
+              {item.size}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
              
             </StyledTableCell>
           </StyledTableRow>

@@ -1905,7 +1905,7 @@ try {
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
-    
+          <button style={{height:"30px",borderRadius:"5px",fontSize:"14px",marginLeft:"2%",padding:"5px"}} onClick={handleToggle}>Publish On</button>
           </span>
           </h3>
         </div>
