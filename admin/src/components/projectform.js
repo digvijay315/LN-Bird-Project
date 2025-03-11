@@ -1155,7 +1155,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                             key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
                           }
                         });
-                    console.log(response);
+               
                     
                         if (response.data.results.length > 0) {
                           const { lat, lng } = response.data.results[0].geometry.location;
@@ -1271,7 +1271,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                       width: "100%"
                     }
                   
-                    const defaultCenter1 = {
+                    const 
+                    defaultCenter1 = {
                       lat: coordinates1.lat || 37.7749, lng: coordinates1.lng || -122.4194
                     };
 // ================================----------------------google location code end-----------------------------================================

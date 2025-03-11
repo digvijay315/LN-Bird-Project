@@ -26,6 +26,8 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { toWords } from 'number-to-words';
+import combo from '../components/images/2 Combo 1.jpg'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 function Dealsingleview() {
 
@@ -2459,6 +2461,29 @@ const handleallblockchange1 = (event) => {
 // =====================================matchedlead conde end===============================================================================
 
 
+// ======================================================show map start=================================================================================
+
+const [show11, setshow11] = useState(false);
+
+
+const handleClose11 = () => setshow11(false);
+const handleShow11=async()=>
+{
+      setshow11(true);
+}
+
+
+const mapStyles1 = {
+  height: "500px",
+  width: "100%"
+}
+
+const defaultCenter1 = {
+  lat: unitlocation.lattitude || 37.7749, lng: unitlocation.langitude || -122.4194
+};
+
+// ======================================================show map end==================================================================
+
   return (
     <div>
 
@@ -2623,7 +2648,10 @@ const handleallblockchange1 = (event) => {
 
                     <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.lattitude}</p></div>
                     <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.langitude}</p></div>
-                    <div className='col-md-4'></div>
+                    <div className='col-md-4'><Tooltip title="View on map..." arrow>
+                      <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer"}} onClick={handleShow11}></img>
+                      </Tooltip>
+                      </div>
 
                     <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.uaddress}</p></div>
                     <div className='col-md-6'><label style={{color:"#B85042"}}>Street</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ustreet}</p></div>
@@ -5099,446 +5127,48 @@ fontWeight:"lighter"
 
 
 
-   <Modal show={show10} onHide={handleClose10} size='xl'>
+   <Modal show={show11} onHide={handleClose11} size='xl'>
             <Modal.Header>
               <Modal.Title>Update Deal</Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
+                               <div style={{border:"1px solid black",marginTop:"10px"}}>
+                                              
+                                                
+                                                        <LoadScript
+                                                          googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc">
+                                                                  <GoogleMap
+                                                            mapContainerStyle={mapStyles1}
+                                                              zoom={13}
+                                                              center={defaultCenter1}
+                                                              >
+                                                          <Marker
+                                                            position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                                                            draggable={true}
+                                                           
+                                                          />
+                                                          </GoogleMap>
+                                                          </LoadScript>
+                                           
+                                                        </div>
 
 
-          <div className="row"  id="projectform" >
-        <div className="col-12">
-            <div >
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right">Sale or Rent</h4>
-                </div><hr></hr>
-                <div className="row mt-2">
+         
                     
-                    <div className="col-md-4"><label className="labels">Available For</label><select name="availablefor" id="availablefor" className="form-control form-control-sm" required="true" onChange={available_for} >
-                    <option>{deal.available_for}</option>
-                    <option>---select---</option>
-                        <option>Sale</option>
-                        <option>Rent</option>
-                        <option>Lease</option>
-                        </select>
-                        </div>
-                        
-                        <div className="col-md-4"><label className="labels">Stage</label><select name="stage"  className="form-control form-control-sm" required="true" onChange={(e)=>setdeal({...deal,stage:e.target.value})}>
-                    <option>{deal.stage}</option>
-                    <option>---select---</option>
-                        <option>Open</option>
-                        <option>Quote</option>
-                        <option>Negotiation </option>
-                        <option>Booked </option>
-                        <optgroup label="Closed">
-                          <option>Won</option><option>Lost</option><option>Reject</option>
-                        </optgroup>
-                        </select>
-                        </div>
-                        <div className="col-md-4"></div>
-
-                        <div className="col-md-4"><label className="labels">Project</label>
-                        <select className="form-control form-control-sm" name="project" onChange={handleprojectchange}>
-                        <option>{deal.project}</option>
-                        <option>---select---</option>
-                        {
-                          allproject.map((project)=>
-                          (
-                            <option>{project}</option>
-                          ))
-                        }
-                        </select>
-                        </div>
-                        <div className="col-md-4"><label className="labels">Block</label>
-                        <select className="form-control form-control-sm" name="block" onChange={handleallblockchange1} >
-                        <option>{deal.block}</option>
-                        <option>---select---</option>
-                    {
-                      allblocks.map((block)=>
-                      (
-                        <option>{block.block_name}</option>
-                      ))
-                    }
-                      
-  
-                </select>
-                        </div>
-                        <div className="col-md-4"><label className="labels">Unit No.</label>
-                        <select className="form-control form-control-sm" name="unit_no" onChange={handleallunitschange}  >
-                      <option>{deal.unit_number}</option>
-                      <option>---select---</option>
-                      {
-                        allUnits.map((units)=>
-                        (
-                          <option>{units.unit_no}</option>
-                        ))
-                      }
-                </select>
-                        </div>
-                  
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Terms Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-                </div>
-
-    {/* ===============================================sale start======================================================================== */}
-
-
-                <div className="row" id="sale" style={{display:"none"}}>
-                  <div className="col-md-12"><u><b>Expected Price</b></u></div>
-                 
-                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={handleselectpricetypechang} >
-                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
-                    </select></div>
-                    <div id="price1" className="col-md-2"><label className="labels">Price</label>
-                    <input id="eprice" onChange={calculateResult} type="number" className="form-control form-control-sm" /></div>
-                    
-                    <div className="col-md-0" id="multiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
-                    <p>X</p>
-                    </div>
-                    <div className="col-md-2" id="totalarea"><label className="labels" > Total Area</label><input type="number" id="earea" onChange={calculateResult} value={numericValue} className="form-control form-control-sm"  /></div>
-                    <div className="col-md-2" id="measurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setdeal({...deal,measurment1:e.target.value})} >
-                    <option value="">{measurementUnit}</option>
-                    <option value="">sq feet</option>
-                    <option value="">sq yard</option>
-                    </select></div>
-                    
-                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext"><br></br>{deal.expected_price}{formatCurrency(result0)}<br></br>{resultText}</span></label><input type="text" id="totalprice" style={{display:"none"}} className="form-control form-control-sm" name="expected_price" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
-                   <div id="divforprice1" className="col-md-5" style={{display:"none"}}></div>
-
-
-                 
-                  <div className="col-md-12"><u><b>Quote Price</b></u></div>
-              
-
-                    <div className="col-md-2"><label className="labels" >Type</label><select id="calculatedorabsoulute1" required="true" className="form-control form-control-sm" onChange={ehandleselectpricetypechang} >
-                    <option value="calculated">calculated</option><option value="absolute">absolute</option>
-                    </select></div>
-                    <div id="price11" className="col-md-2"><label className="labels">Price</label>
-                    <input id="qprice" onChange={calculateResult1} type="number" className="form-control form-control-sm" /></div>
-                    
-                    <div className="col-md-0" id="multiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
-                    <p>X</p>
-                    </div>
-                    <div className="col-md-2" id="totalarea1"><label className="labels" > Total Area</label><input type="number" id="qarea" value={numericValue}  onChange={calculateResult1}  className="form-control form-control-sm"/></div>
-                    <div className="col-md-2" id="measurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
-                    <option>{measurementUnit}</option>
-                    <option value="">sq feet</option>
-                    <option value="">sq yard</option>
-                    </select></div>
-                    
-                   <div className="col-md-3"><label className="labels">Total Price<span id="priceintext1"><br></br>{deal.quote_price}{formatCurrency(result1)}<br></br>{resultText1}</span></label><input type="text" id="totalprice1" style={{display:"none"}} className="form-control form-control-sm" name="quote_price" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
-                   <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
-
-                    <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
-                    <option>Select</option>
-                        <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option>
-                        </select></div>
-                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
-                    <option>Select</option>
-                        <option>Full White</option>
-                        <option>Collecter Rate</option>
-                        <option>Flexiable</option>
-                        </select></div>
-                        <div className="col-md-4"></div>
-
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
-                    <option>Select</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
-                        </select></div>
-
-                        {deal.transaction_type === "Flexiable" && (
-                        <div className="col-md-8">
-                           <label className="labels">White Portion</label>
-                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
-                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
-                          <div className="progress-percentage">{Math.round(progress)}%</div>
-                        </div>
-                        </div>
-                      )}
                        
-
-                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
-                    <option>Select</option>
-                              <option>Sales</option>
-                              <option>Marketing</option>
-                              <option> Post Sales</option>
-                              <option> Pre Sales</option>
-                        </select></div>
-                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
-                    <option>Select</option>
-                              <option>Suraj</option> 
-                              <option>Suresh Kumar</option>
-                              <option>Ramesh Singh</option>
-                              <option>Maanav Sharma</option>
-                              <option>Sukram</option>
-                        </select></div>
-                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
-                    <option>Select</option>
-                        <option>Only Me</option>
-                        <option>Team</option>
-                        <option>All User</option>
-                        </select></div>
-
-                        <div className="col-md-12"><label className="labels">Publish On</label></div>
-                    <div className="col-md-12"><hr></hr></div>
-                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
-                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
-                                          <option>select</option>
-                                          <option>Own Website</option>
-                                          <option>99 Acre</option>
-                                          <option>Olx</option>
-                                          <option>Magicbricks</option>
-                                          <option>Etc.</option>
-                                          </select>
-                                    </div>
-                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
-                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
-                                          <option>select</option>
-                                          <option>Facebook</option>
-                                          <option>Instagram</option>
-                                          <option>Googe Page</option>
-                                          <option>Linkdin</option>
-                                          <option>Twitter</option>
-                                          </select>
-                                    </div>
-                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
-                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
-                                          <option>select</option>
-                                          <option>Message</option>
-                                          <option>What's App</option>
-                                          <option>Email</option>
-                                          </select>
-                                    </div>
-                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
-                                    <div className="col-md-2"></div>
-
-
-                      </div>
-{/* -----------------------=========================sale end====================================-------------------------------------- */}
-
-{/* ------------------------------------------------============rent start========================-------------------------------------- */}
-                     
-                     
-                        <div className="row" id="rent" style={{display:"none"}}>
-                        <div className="col-md-4"><label className="labels">Floors</label><select className="form-control form-control-sm" name="floors" onChange={(e)=>setdeal({...deal,floors:e.target.value})}>
-                        <option>{deal.floors}</option>
-                        <option>---select---</option>
-                        <option>Ground</option>
-                        <option>1st</option>
-                        <option>2nd</option>
-                        <option>3rd</option>
-                        <option>4th</option>
-                        <option>Top</option>
-                        </select></div>
-                        <div className="col-md-8"></div>
-
-                        <div className="col-md-12"><u><b>Expected Price</b></u></div>
-                 
-                 <div className="col-md-2"><label className="labels" >Type</label><select id="rcalculatedorabsoulute" required="true" className="form-control form-control-sm" onChange={rhandleselectpricetypechang} >
-                 <option value="calculated">calculated</option><option value="absolute">absolute</option>
-                 </select></div>
-                 <div id="rprice1" className="col-md-2"><label className="labels">Price</label>
-                 <input id="reprice" onChange={calculateResult2} type="number" className="form-control form-control-sm" /></div>
-                 
-                 <div className="col-md-0" id="rmultiply"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
-                 <p>X</p>
-                 </div>
-                 <div className="col-md-2" id="rtotalarea"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult2} value={numericValue} id="rearea"  className="form-control form-control-sm"  /></div>
-                 <div className="col-md-2" id="rmeasurment"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm"  >
-                 <option value="">{measurementUnit}</option>
-                 <option value="">sq feet</option>
-                 <option value="">sq yard</option>
-                 </select></div>
-                 
-                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext"><br></br>{deal.expected_price}{formatCurrency(result2)}<br></br>{resultText2}</span></label><input type="text" id="rtotalprice" style={{display:"none"}} className="form-control form-control-sm" name="expected_price" onChange={(e)=>setdeal({...deal,expected_price:e.target.value})}/></div>
-                <div id="rdivforprice1" className="col-md-5" style={{display:"none"}}></div>
-
-
-              
-               <div className="col-md-12"><u><b>Quote Price</b></u></div>
-           
-
-                 <div className="col-md-2"><label className="labels" >Type</label><select id="rcalculatedorabsoulute11" required="true" className="form-control form-control-sm" onChange={rhandleselectpricetypechang1} >
-                 <option value="calculated">calculated</option><option value="absolute">absolute</option>
-                 </select></div>
-                 <div id="rprice11" className="col-md-2"><label className="labels">Price</label>
-                 <input id="rqprice1" onChange={calculateResult3} type="number" className="form-control form-control-sm" /></div>
-                 
-                 <div className="col-md-0" id="rmultiply1"><label className="labels" style={{visibility:"hidden"}}>Blank</label>
-                 <p>X</p>
-                 </div>
-                 <div className="col-md-2" id="rtotalarea1"><label className="labels" > Total Area</label><input type="number" onChange={calculateResult3} value={numericValue} id="rqarea1"  className="form-control form-control-sm"/></div>
-                 <div className="col-md-2" id="rmeasurment1"><label className="labels" > Sq Feet/Yard</label><select required="true" className="form-control form-control-sm" >
-                 <option>{measurementUnit}</option>
-                 <option value="">sq feet</option>
-                 <option value="">sq yard</option>
-                 </select></div>
-                 
-                <div className="col-md-3"><label className="labels">Total Price<span id="rpriceintext1"><br></br>{deal.quote_price}{formatCurrency(result3)}<br></br>{resultText3}</span></label><input type="text" id="rtotalprice1" style={{display:"none"}} className="form-control form-control-sm" name="quote_price" onChange={(e)=>setdeal({...deal,quote_price:e.target.value})}/></div>
-                <div id="rdivforprice11" className="col-md-5" style={{display:"none"}}></div>
-
-                
-                    <div className="col-md-3"><label className="labels">Security Deposite</label><input type="text" required="true" value={deal.security_deposite} className="form-control form-control-sm" name="security_deposite" onChange={(e)=>setdeal({...deal,security_deposite:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Maintanance Charge</label><input type="text" required="true" value={deal.maintainence_charge} className="form-control form-control-sm" name="maintainence_charge" onChange={(e)=>setdeal({...deal,maintainence_charge:e.target.value})}/></div>
-                    <div className="col-md-2"><label className="labels">Rent Esclation</label><select className="form-control form-control-sm" name="rent_escltion" onChange={(e)=>setdeal({...deal,rent_escltion:e.target.value})}>
-                    <option>{deal.rent_escltion}</option>
-                         <option>---select---</option>
-                        <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
-                        </select></div>
-                        <div className="col-md-2"><label className="labels">Rent Period</label><select className="form-control form-control-sm" name="rent_period" onChange={(e)=>setdeal({...deal,rent_period:e.target.value})}>
-                        <option>{deal.rent_period}</option>
-                         <option>---select---</option>
-                        <option>06 months</option>
-                        <option>11 months</option>
-                        <option>24 months</option>
-                        <option>36 months</option>
-                        </select></div>
-                        <div className="col-md-2"><label className="labels">Fitout Period</label><select className="form-control form-control-sm" name="fitout_perioud" onChange={(e)=>setdeal({...deal,fitout_perioud:e.target.value})}>
-                        <option>{deal.fitout_perioud}</option>
-                        <option>---select---</option>
-                        <option>06 months</option>
-                        <option>11 months</option>
-                        <option>24 months</option>
-                        <option>36 months</option>
-                        </select></div>
-
-                        <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
-                        <option>{deal.deal_type}</option>
-                        <option>---select---</option>
-                        <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option>
-                        </select></div>
-                        <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
-                        <option>{deal.transaction_type}</option>
-                         <option>---select---</option>
-                         <option>Full White</option>
-                        <option>Collecter Rate</option>
-                        <option>Flexiable</option>
-                        </select></div>
-                        <div className="col-md-4"></div>
-
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
-                        <option>{deal.source}</option>
-                         <option>---select---</option>
-                         <option>99 Acre</option>
-                        <option>News Paper</option>
-                        <option>Walkin</option>
-                        <option>Olx</option>
-                        </select></div>
-                
-                        {deal.transaction_type === "Flexiable" && (
-                        <div className="col-md-8">
-                           <label className="labels">White Portion</label>
-                        <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
-                          <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
-                          <div className="progress-percentage">{Math.round(progress)}%</div>
-                        </div>
-                        </div>
-                      )}
-                       
-                        
-
-                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-                        <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
-                        <option>{deal.team}</option>
-                              <option>---select---</option>
-                               <option>Sales</option>
-                              <option>Marketing</option>
-                              <option> Post Sales</option>
-                              <option> Pre Sales</option>
-                        </select></div>
-                        <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
-                        <option>{deal.user}</option>
-                              <option>---select---</option>
-                              <option>Suraj</option> 
-                              <option>Suresh Kumar</option>
-                              <option>Ramesh Singh</option>
-                              <option>Maanav Sharma</option>
-                              <option>Sukram</option>
-                        </select></div>
-                        <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
-                        <option>{deal.visible_to}</option>
-                              <option>---select---</option>
-                              <option>Sales</option>
-                              <option>Marketing</option>
-                              <option> Post Sales</option>
-                              <option> Pre Sales</option>
-                        </select></div>
-
-                        <div className="col-md-12"><label className="labels">Publish On</label></div>
-                    <div className="col-md-12"><hr></hr></div>
-                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
-                                      <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
-                                      <option>{deal.website}</option>
-                                          <option>---select---</option>
-                                          <option>Own Website</option>
-                                          <option>99 Acre</option>
-                                          <option>Olx</option>
-                                          <option>Magicbricks</option>
-                                          <option>Etc.</option>
-                                          </select>
-                                    </div>
-                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
-                                      <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
-                                      <option>{deal.social_media}</option>
-                                          <option>---select---</option>
-                                          <option>Facebook</option>
-                                          <option>Instagram</option>
-                                          <option>Googe Page</option>
-                                          <option>Linkdin</option>
-                                          <option>Twitter</option>
-                                          </select>
-                                    </div>
-                                    <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
-                                      <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
-                                      <option>{deal.send_matchedlead}</option>
-                                          <option>---select---</option>
-                                          <option>Message</option>
-                                          <option>What's App</option>
-                                          <option>Email</option>
-                                          </select>
-                                    </div>
-                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
-                                    <div className="col-md-2"></div>
-                                    
-
-
-                      </div>
-                  </div>
-  
-  {/*============================================ rent end=========================================================================== */}
-                   
-                    </div>
-                    
-        </div>
 
         </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={updatedeal}>
-                Update Deal 
-              </Button>
-              <Button variant="secondary" onClick={handleClose10}>
+           
+              <Button variant="secondary" onClick={handleClose11}>
                 Close
               </Button>
             </Modal.Footer>
           </Modal>
 
 
-
-
-
-{/*========================================== add document details end ===================================================================*/}
-
+{/*==================================================== map modal end============================================================== */}
 
 <ToastContainer/>
     </div>
