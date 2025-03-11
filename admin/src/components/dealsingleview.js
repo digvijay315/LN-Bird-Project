@@ -11,7 +11,7 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
-import { Tooltip } from 'react-bootstrap';
+import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -96,21 +96,21 @@ const navigate=useNavigate()
  
   
 
-    const formattedDate = new Date(lead.lastcommunication).toLocaleString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
+    // const formattedDate = new Date(lead.lastcommunication).toLocaleString("en-GB", {
+    //     day: "2-digit",
+    //     month: "short",
+    //     year: "numeric",
+    //     hour: "2-digit",
+    //     minute: "2-digit",
+    //     hour12: true,
+    //   });
       
 
-      const allColumns = [
+      const allColumnslead = [
         { id: 'sno', name: '#' },
-        { id: 'house_details', name: 'House Details' },
-        { id: 'contact', name: 'Contact' },
-        { id: 'available_from', name: 'Available' },
+        { id: 'details', name: 'Full Name' },
+        { id: 'status', name: 'Status' },
+        { id: 'mobile_no', name: 'Contact' },
       ];
       const allColumnsdocuments = [
         { id: 'sno', name: '#' },
@@ -124,11 +124,11 @@ const navigate=useNavigate()
         { id: 'start_date', name: 'Date' },
         { id: 'status', name: 'Status' },
       ];
-      const allColumnsunit = [
+      const allColumnscontact = [
         { id: 'sno', name: '#' },
-        { id: 'unit_no', name: 'Unit No' },
-        { id: 'project', name: 'Project' },
-        { id: 'relation', name: 'Relation' },
+        { id: 'details', name: 'Full Name' },
+        { id: 'mobile_no', name: 'Contact' },
+        { id: 'email', name: 'Email' },
       ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -505,12 +505,7 @@ useEffect(() => {
 
       // Check owner_details array for matches
       for (let owner of item.owner_details) {
-         console.log(owner.title);
-         console.log(owner.first_name);
-         console.log(owner.last_name);
-         console.log(lead.title);
-         console.log(lead.first_name);
-         console.log(lead.last_name);
+       
         
         // const owner = await fetchOwnerDetails(ownerId); // Fetch owner details by ID
         if (owner && owner.title === lead.title && owner.first_name === lead.first_name && owner.last_name === lead.last_name) {
@@ -2364,6 +2359,105 @@ const handleallblockchange1 = (event) => {
 
   //================================================== deal edit end==============================================================
 
+// ===================================location details code start==================================================================
+
+
+        const[unitlocation,setunitlocation]=useState([])
+  const getlocationdetails=async()=>
+                  {
+                    const project=lead.project
+                    const block=lead.block
+                    const unit=lead.unit_number
+
+
+                    const resp=await api.get(`viewproject`)
+                    const allUnits = resp.data.project.flatMap(project => project.add_unit || []);
+                    
+                     // Filter the flattened unit list
+                      const filteredUnits = allUnits.filter(
+                        (item) =>
+                          item.project_name === project &&
+                          item.unit_no === unit &&
+                          item.block === block
+                      );
+                    setunitlocation(filteredUnits[0])
+                  }
+
+          
+                  
+                  useEffect(()=>
+                  {
+                    getlocationdetails()
+                  },[])
+ 
+       
+        
+               
+               
+               
+                  
+//======================================= location details code end=================================================================
+
+
+// =======================================matchedlead code start=====================================================================
+
+
+                  const[leaddata,setleaddata]=useState([])
+                      const viewlead=async()=>
+                      {
+                        try {
+                        const resp=await api.get('leadinfo')
+                        setleaddata(resp.data.lead)
+                        
+                          
+                        } catch (error) {
+                          console.log(error);
+                          
+                        }
+                      }
+                      useEffect(()=>
+                      {
+                        viewlead()
+                      },[])
+                  
+                      const[filterlead,setfilterlead]=useState([])
+                      
+              
+                  
+                    React.useEffect(() => {
+                      if (leaddata.length > 0) {
+                       
+                          // const price1 = lead.budget_min;
+                          // const price2 = lead.budget_max;
+                          const expected_price=lead.expected_price
+                          const available_for = lead.available_for === 'Sale' ? 'Buy' : lead.available_for;
+
+                          console.log(lead.expected_price);
+                          
+                    
+                          // Filter leads based on the current deal's criteria
+                          const filterlead = leaddata.filter(
+                            (item) =>
+                              
+                              item.requirment === available_for &&
+                              item.budget_min <= expected_price &&
+                              item.budget_max >= expected_price
+                         
+                              
+                          );
+                        
+                          
+                          setfilterlead(filterlead)
+                     
+                        
+                      }
+                    }, [leaddata]);
+
+
+
+
+// =====================================matchedlead conde end===============================================================================
+
 
   return (
     <div>
@@ -2379,7 +2473,7 @@ const handleallblockchange1 = (event) => {
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow10}>Edit</button>
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
-          <button style={{height:"30px",borderRadius:"5px",fontSize:"14px",marginLeft:"2%",padding:"5px"}} onClick={handleToggle}>Publish On</button>
+          <button style={{height:"30px",borderRadius:"5px",fontSize:"14px",marginLeft:"2px",padding:"5px"}} onClick={handleToggle}>Publish On</button>
           </span>
           </h3>
         </div>
@@ -2399,14 +2493,23 @@ const handleallblockchange1 = (event) => {
             <div className='row'>
                 <div className='col-md-3'></div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
-                <select className="form-control form-control-sm" style={{color:"red"}}>
+                <select className="form-control form-control-sm" >
                     <option >{lead?.stage || '---Select---'}</option>
-                        {/* <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option> */}
+                    <option>---Select---</option>
+                        <option>Open</option>
+                        <option>Quote</option>
+                        <option>Negotiation </option>
+                        <option>Booked </option>
+                        <optgroup label="Closed">
+                          <option>Won</option><option>Lost</option><option>Reject</option>
+                        </optgroup>
                 </select>
                 </div>
-                <div className='col-md-4'></div>
+                 <div className='col-md-4'>
+                                   <Tooltip title="Update Status..." arrow>
+                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"30px",marginTop:"30px",cursor:"pointer"}} ></img>
+                                </Tooltip>
+                  </div>
 
                 <div className="col-md-6" >
                             <label  style={{color:"#B85042"}}>Mobile</label>
@@ -2484,25 +2587,56 @@ const handleallblockchange1 = (event) => {
                   </Select>
                 </FormControl>
               </div>
-                <div className='col-md-3' style={{marginTop:"25px"}}><label style={{color:"#B85042"}}>Tags</label><p style={{lineHeight:"0px",fontWeight:"normal"}}>{lead.tags}</p></div>
+                <div className='col-md-3' style={{marginTop:"25px"}}></div>
                 <div className='col-md-3'></div>
+
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Available For</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.available_for}</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Expected Price</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.expected_price}</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Quote Price</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.quote_price}</p></div>
+
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Project</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.project}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Block</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.block}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Unit Number</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.unit_number}</p></div>
 
             
 
-                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>User</label>
+                <div className='col-md-5' ><label style={{color:"#B85042"}}>User</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.user}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
+                <div className='col-md-3' ><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
 
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Recived On</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
                 
                 <div className='col-md-12'><hr></hr></div>
 
+
+                <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
+                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
+                    <div className='col-md-12'><hr></hr></div>
+                   
+                    <div className='col-md-12'><label style={{color:"#B85042"}}>Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation?.location}</p></div>
+
+                    <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.lattitude}</p></div>
+                    <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.langitude}</p></div>
+                    <div className='col-md-4'></div>
+
+                    <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.uaddress}</p></div>
+                    <div className='col-md-6'><label style={{color:"#B85042"}}>Street</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ustreet}</p></div>
+             
+                    <div className='col-md-6'><label style={{color:"#B85042"}}>Locality</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ulocality}</p></div>
+                    <div className='col-md-6'><label style={{color:"#B85042"}}>City</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ucity}</p></div>
+              
+                    <div className='col-md-4'><label style={{color:"#B85042"}}>State</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ustate}</p></div>
+                    <div className='col-md-4'><label style={{color:"#B85042"}}>Country</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ucountry}</p></div>
+                    <div className='col-md-4'><label style={{color:"#B85042"}}>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.uzip}</p></div>
+                   
+                </div>
+ 
             
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
@@ -2558,10 +2692,6 @@ const handleallblockchange1 = (event) => {
                   
                  }
               
-
-                
-             
-
 
                 </div>
 
@@ -3365,16 +3495,16 @@ const handleallblockchange1 = (event) => {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible ? "300px" : "0",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ height: '300px' }}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
-          {allColumnsunit.map((col) => (
+          {allColumnslead.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
@@ -3384,20 +3514,23 @@ const handleallblockchange1 = (event) => {
       <tbody>
         {
          
-        matchunit.map ((item, index) => (
+        filterlead.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
            
               {index + 1}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.unit_no}
+              {item.title} {item.first_name} {item.last_name}
             </StyledTableCell >
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.project_name}
+              {item.stage}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-             
+            {item.mobile_no.map((contact, index) => (
+                         
+               <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 12}} />{contact}<br></br></span> 
+            ))}
             </StyledTableCell>
           </StyledTableRow>
         ))}
@@ -3443,17 +3576,16 @@ const handleallblockchange1 = (event) => {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+        <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
-          {allColumnsunit.map((col) => (
+          {allColumnscontact.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
-            >
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px", whiteSpace: "nowrap",lineHeight:"5px"}}>
               {col.name}
             </StyledTableCell>
           ))}
@@ -3462,20 +3594,28 @@ const handleallblockchange1 = (event) => {
       <tbody>
         {
          
-        matchunit.map ((item, index) => (
+        lead.associated_contact.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
            
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.unit_no}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+              {item.title} {item.first_name} {item.last_name}
             </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.project_name}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {item.mobile_no.map((contact, index) => (
+                         
+                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
+             ))
+             }
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-             
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {item.email.map((contact, index) => (
+                         
+                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon} sx={{ fontSize: 14}} /> {contact}<br></br></span> 
+                      ))
+            }
             </StyledTableCell>
           </StyledTableRow>
         ))}
