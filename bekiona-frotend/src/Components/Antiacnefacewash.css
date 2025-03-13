@@ -1,0 +1,38 @@
+.accordion-body {
+    background-color: #f8f9fa; /* Light background for better readability */
+    padding: 20px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    color: #333; /* Dark text for contrast */
+  }
+  
+  .accordion-body h4 {
+    color: #ff5722; /* Highlighted heading color */
+  }
+  
+  .accordion-body h5 {
+    color: #4caf50; /* Subheading color for key benefits */
+    margin-top: 20px;
+  }
+  
+  .accordion-body p {
+    line-height: 1.6; /* Improved text readability */
+    margin-bottom: 20px;
+  }
+  
+  .list-group-item {
+    background-color: transparent; /* Keep the background transparent */
+    border: none; /* Remove borders */
+    padding: 10px 0; /* Add spacing between items */
+    line-height: 1.6; /* Line spacing */
+  }
+  
+  .list-group-item strong {
+    color: #007bff; /* Add a pop of color for key points */
+  }
+
+  
+  /* -----------------------------------------------feacture------------------------------------------------------ */
+
+
+ 
