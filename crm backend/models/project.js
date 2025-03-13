@@ -73,6 +73,7 @@ const blockSchema = new mongoose.Schema({
     ucountry: {type: String},
     owner_details:[{ type: mongoose.Schema.Types.ObjectId, ref: 'add_contact' }],
     associated_contact:[{ type: mongoose.Schema.Types.ObjectId, ref: 'add_contact' }],
+    previousowner_details:[{ type: mongoose.Schema.Types.ObjectId, ref: 'add_contact' }],
     relation: {type: String},
     s_no: {type: Array},
     preview: {type: Array},

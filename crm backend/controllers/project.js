@@ -191,7 +191,11 @@ unitDetails={
           .populate({
               path: 'add_unit.associated_contact', // Populate the 'associated_contact' field inside 'add_unit'
               model: 'add_contact' // Specify the model to populate
-          });
+          })
+           .populate({
+            path: 'add_unit.previousowner_details', // Populate 'owner_details' inside 'add_unit'
+            model: 'add_contact' // Specify the model for population
+          })
             res.status(200).send({message:"project details fetch successfully",project:resp})
         } catch (error) {
             console.log(error)
@@ -347,12 +351,12 @@ unitDetails={
                     
                     
                     if (req.files) {
-                      console.log(req.files);
+                    
                       
                       const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[${u}][preview]`));
                       const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[${u}][image]`));
                      
-                      console.log(imagefield1);
+                 
                       
                       for (let file of imagefield) {
                         try {
@@ -432,6 +436,21 @@ unitDetails={
                   const { project_name, block, unit_no } = req.params; // Assuming you are sending these in the request body
                   
                   // Perform the query on the project model and filter the add_unit array using $elemMatch
+                  // const project = await addproject.findOne(
+                  //   {
+                  //     'add_unit': {
+                  //       $elemMatch: {
+                  //         project_name: project_name,
+                  //         block: block,
+                  //         unit_no: unit_no
+                  //       }
+                  //     }
+                  //   },
+                  //   {
+                  //     'add_unit.$': 1 // This will return only the matching `add_unit` element
+                  //   }
+                  // )
+
                   const project = await addproject.findOne(
                     {
                       'add_unit': {
@@ -443,9 +462,22 @@ unitDetails={
                       }
                     },
                     {
-                      'add_unit.$': 1 // This will return only the matching `add_unit` element
+                      'add_unit.$': 1 // This ensures only the matching `add_unit` element is returned
                     }
-                  );
+                  )
+                  .populate({
+                    path: 'add_unit.owner_details', // Populate 'owner_details' inside 'add_unit'
+                    model: 'add_contact' // Specify the model for population
+                  })
+                  .populate({
+                    path: 'add_unit.associated_contact', // Populate 'associated_contact' inside 'add_unit'
+                    model: 'add_contact' // Specify the model for population
+                  })
+                   .populate({
+                    path: 'add_unit.previousowner_details', // Populate 'owner_details' inside 'add_unit'
+                    model: 'add_contact' // Specify the model for population
+                  })
+                  
               
                   if (!project) {
                     return res.status(404).send({ message: "No project found matching the criteria" });
@@ -482,11 +514,14 @@ unitDetails={
 
               const existingUnit = project.add_unit[unitIndex];
               const unit = req.body
+
+              let previousOwnerDetails = existingUnit.owner_details || [];
          
             unitDetails={
             
               project_name: unit.project_name,
               unit_no: unit.unit_no,
+              previousowner_details: previousOwnerDetails, 
               owner_details: unit.owner_details,
               associated_contact:unit.associated_contact,
               unit_type: unit.unit_type,
@@ -593,7 +628,8 @@ unitDetails={
                 unitDetails.image = imagefiles1;  // Attach main images
               }
 
-
+              console.log(unitDetails.previousowner_details);
+              
 
 
                   project.add_unit[unitIndex] = unitDetails;
@@ -631,6 +667,8 @@ unitDetails={
                            
                             const addunit_details = [];
                            const unit=req.body
+                          
+                           
                       unitDetails={
                       
                         project_name: unit.project_name,

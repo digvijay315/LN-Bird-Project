@@ -1424,6 +1424,8 @@ function Dealdetails() {
         
         }
 
+        
+        
         const [selectedcontact1,setselectedcontact1]=useState([])
         const [selectedcontact2,setselectedcontact2]=useState([])
         const[newcontact,setnewcontact]=useState([])
@@ -2408,6 +2410,7 @@ const [show9, setshow9] = useState(false);
                     
                    
                   }
+                console.log(units.owner_details);
                 
                   
           const updateinventories=async()=>

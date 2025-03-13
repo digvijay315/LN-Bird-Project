@@ -132,6 +132,13 @@ const navigate=useNavigate()
         { id: 'mobile_no', name: 'Contact' },
         { id: 'email', name: 'Email' },
       ];
+
+      const allColumnspreviousowner = [
+        { id: 'sno', name: '#' },
+        { id: 'details', name: 'Full Name' },
+        { id: 'mobile_no', name: 'Contact' },
+        { id: 'email', name: 'Email' },
+      ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -191,6 +198,13 @@ const navigate=useNavigate()
       // Function to toggle the visibility of the table
       const toggleTableVisibility4 = () => {
         setIsTableVisible4(prevState => !prevState);
+      };
+
+      const [isTableVisible5, setIsTableVisible5] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility5 = () => {
+        setIsTableVisible5(prevState => !prevState);
       };
 
       const [alltask,setalltask]=useState([])
@@ -2386,6 +2400,7 @@ const handleallblockchange1 = (event) => {
                   }
 
           
+          
                   
                   useEffect(()=>
                   {
@@ -2483,6 +2498,10 @@ const defaultCenter1 = {
 };
 
 // ======================================================show map end==================================================================
+
+
+
+
 
   return (
     <div>
@@ -3845,7 +3864,7 @@ const defaultCenter1 = {
 
 <div className='col-md-12'> History
 <span 
-  onClick={toggleTableVisibility4} 
+  onClick={toggleTableVisibility5} 
   style={{ 
     position:"absolute",
     cursor: "pointer", 
@@ -3876,31 +3895,53 @@ fontWeight:"lighter"
 </span>
 </div>
 
-<div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible4 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
- 
-<TableContainer component={Paper} style={{ maxHeight: '300px', overflow: 'auto' }}>
-<Table sx={{}} aria-label="customized table">
-<thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
-<TableRow style={{backgroundColor:"gray"}}>
-  {/* {allColumnsdocuments.map((col) => (
-    <StyledTableCell
-      key={col.id}
-      style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
-    >
-      {col.name}
-    </StyledTableCell>
-  ))} */}
-</TableRow>
-</thead>
-<tbody>
-
-
-
-</tbody>
-
-</Table>
-</TableContainer>
-</div>
+<div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible5 ? "200px" : "0",transition: "height 0.3s ease"}}>
+         
+         <TableContainer component={Paper} style={{ height: '200px' }}>
+     <Table sx={{}} aria-label="customized table">
+     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+         <TableRow  style={{backgroundColor:"gray"}}>
+           {allColumnspreviousowner.map((col) => (
+             <StyledTableCell
+               key={col.id}
+               style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px", whiteSpace: "nowrap",lineHeight:"5px"}}>
+               {col.name}
+             </StyledTableCell>
+           ))}
+         </TableRow>
+       </thead>
+        <tbody>
+         {
+          
+         unitlocation.previousowner_details?.map ((item, index) => (
+           <StyledTableRow key={index}>
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            
+               {index + 1}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+               {item.title} {item.first_name} {item.last_name}
+             </StyledTableCell >
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+             {item.mobile_no.map((contact, index) => (
+                          
+                          <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
+              ))
+              }
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+             {item.email.map((contact, index) => (
+                          
+                          <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon} sx={{ fontSize: 14}} /> {contact}<br></br></span> 
+                       ))
+             }
+             </StyledTableCell>
+           </StyledTableRow>
+         ))}
+       </tbody> 
+     </Table>
+   </TableContainer>
+         </div>
 </div>
       
 
