@@ -1,7 +1,7 @@
-/* General Footer Styling */
+
 .footer {
     color: black;
-    padding: 40px 20px; /* Added padding for smaller screens */
+    padding: 40px 20px; 
     /* background: linear-gradient(135deg, #37AFE1, #4CC9FE); */
     background-image: url(https://wdtlilacdemo.wpengine.com/wp-content/uploads/2023/06/mask-patten-style.png);
     height: fit-content;
@@ -43,7 +43,7 @@
     color: #ffcc00;
   }
   
-  /* Contact Section Styling */
+ 
   .footer .contact p {
     margin: 5px 0;
   }
@@ -53,7 +53,7 @@
     text-decoration: underline;
   }
   
-  /* App Links Styling */
+
   .footer .app-links img {
     width: 120px;
     margin-right: 10px;
@@ -64,7 +64,7 @@
     transform: scale(1.05);
   }
   
-  /* Footer Bottom Styling */
+
   .footer-bottom {
     background: black;
     color: white;
@@ -78,48 +78,48 @@
 
 
 
-  /* Social Media Icons Container */
+
 .social-media-icons {
   display: flex;
   justify-content: center;
-  gap: 15px; /* Space between icons */
+  gap: 15px; 
   margin-top: 20px;
 }
 
-/* Icon Links */
+
 .social-media-icons .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 30px;
   height: 30px;
-  border-radius: 50%; /* Circular shape */
-  /* background-color: #f1f1f1;  */
-  color: #333; /* Default icon color */
+  border-radius: 50%; 
+
+  color: #333; 
   text-decoration: none;
   font-size: 1.5rem;
-  transition: all 0.3s ease; /* Smooth transition */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: all 0.3s ease; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Hover Effects */
+
 .social-media-icons .icon:hover {
-  transform: scale(1.1); /* Slight zoom effect */
-  color: #fff; /* White icon color */
+  transform: scale(1.1); 
+  color: #fff; 
 }
 
-/* Individual Icon Colors */
+
 .icon.facebook:hover {
-  background-color: #1877f2; /* Facebook Blue */
+  background-color: #1877f2; 
 }
 .icon.twitter:hover {
-  background-color: #1da1f2; /* Twitter Blue */
+  background-color: #1da1f2; 
 }
 .icon.instagram:hover {
-  background-color: #e4405f; /* Instagram Pinkish */
+  background-color: #e4405f; 
 }
 .icon.linkedin:hover {
-  background-color: #0077b5; /* LinkedIn Blue */
+  background-color: #0077b5; 
 }
 
 @media (max-width: 576px) {
