@@ -42,31 +42,7 @@
 
   
   
-  Navbar Links
-  /* .nav-link {
-    color: black !important;
-    font-size: 1rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-  } */
 
-  /* #navbarNav .nav-link:hover {
-    background-color: black !important; 
-    color: white !important; 
-    transform: scale(1.1); 
-  } */
-  
-  /* #navbarNav .nav-link:focus,
-  #navbarNav .nav-link:active {
-    background-color: black !important; 
-    color: white !important; 
-  } */
-
-  
-  /* Toggler Styling */
     .navbar-toggler {
     border: none;
     color: black;
@@ -74,17 +50,9 @@
   
   .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-  } */
+  } 
   
-  /* Responsive Navbar Alignment */
-  /* @media (max-width: 768px) {
-    .nav-link {
-      text-align: center;
-      margin: 0.5rem 0;
-    }
-  } */
-  
-  /* Smooth Scroll for Links */
+
   html {
     scroll-behavior: smooth;
   }
@@ -92,32 +60,6 @@
 
 
 
-  /* General Flex Container Styling */
-/* .button-header {
-    display: flex;
-    gap: 5px;
-    align-items: center;
-    justify-content: center;
-    margin: 20px;
-  } */
-  
-  /* Button Styling */
- /* .buttons-header{
-    background-color: black; 
-    color: white;
-    border: none;
-    padding: 5px 5px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-    transition: transform 0.2s, box-shadow 0.2s;
-    width: 6rem;
-   
-  } */
   
   button:hover {
     background-color:rgb(43, 41, 41); 
@@ -130,45 +72,22 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  /* Icon Styling */
+
   button i {
     font-size: 18px;
   }
   
-  /* Responsive Design */
-  /* @media (max-width: 600px) {
-    div {
-      flex-direction: column;
-      gap: 15px;
-    }
-  
-    button {
-      width: 100%;
-      justify-content: center;
-    }
-  } */
+ 
   
 
 
 
   
   
-  /* Responsive Styling */
-  /* @media (max-width: 768px) {
-    .container-lg {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-  
-    #dropdown-basic-button {
-      width: 100%;
-      text-align: left;
-    }
-  } */
+ 
   
 
-  /* modal css */
+
 
   .custom-modal .modal-dialog {
     width: 2000px;
@@ -198,12 +117,7 @@
 
 
 
-  /* ------------------------------------------------------------------------------------------------------- */
 
-/* Navbar Styling */
-
-
-/* cart css start------------------------------------------------------------------------------------------------ */
 .cart-container {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -277,25 +191,25 @@
 
 
 .cart-total {
-  background-color: #f8f9fa; /* Light grey background */
-  border: 1px solid #dee2e6; /* Subtle border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 20px; /* Spacing inside the box */
-  margin: 20px 0; /* Space above and below */
-  text-align: center; /* Center-align text */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern look */
+  background-color: #f8f9fa; 
+  border: 1px solid #dee2e6; 
+  border-radius: 8px; 
+  padding: 20px; 
+  margin: 20px 0; 
+  text-align: center; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .cart-total h3 {
-  font-size: 1.5rem; /* Slightly larger text */
-  color: #333; /* Darker text color for contrast */
-  font-weight: bold; /* Bold font for emphasis */
-  margin: 0; /* Remove default margin */
+  font-size: 1.5rem;
+  color: #333; 
+  font-weight: bold; 
+  margin: 0; 
 }
 
 .cart-total span {
-  color: #28a745; /* Green color for the price */
-  font-weight: 600; /* Slightly bold */
+  color: #28a745;
+  font-weight: 600; 
 }
 
 
@@ -303,36 +217,24 @@
 
 .modal-title {
   display: flex;
-  align-items: center; /* Align image and text vertically */
-  gap: 20px; /* Space between image and text */
+  align-items: center; 
+  gap: 20px; 
 }
 
 .modal-title img {
   height: 3rem;
   width: 7rem;
-  object-fit: contain; /* Ensures the image scales properly */
-  border-radius: 5px; /* Adds slight rounding to the image */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  object-fit: contain; 
+  border-radius: 5px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .modal-title span {
-  font-size: 1.5rem; /* Increase font size for better visibility */
-  font-weight: bold; /* Make text bold */
-  color: #333; /* Dark text color */
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  color: #333; 
 }
 
-/* search box in header code------------------------------------------------------------------------ */
-/* Default Styles */
-
-
-
-
-
-
-
-
-
-/* search box in header code end------------------------------------------------------------------------ */
 
 .icon-circle {
   width: 80px;
@@ -343,18 +245,18 @@
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
-  animation: upDown 2s infinite ease-in-out; /* Add animation */
+  animation: upDown 2s infinite ease-in-out; 
 }
 
 @keyframes upDown {
   0% {
-    transform: translateY(0); /* Initial position */
+    transform: translateY(0); 
   }
   50% {
-    transform: translateY(-10px); /* Move up by 10px */
+    transform: translateY(-10px); 
   }
   100% {
-    transform: translateY(0); /* Return to the initial position */
+    transform: translateY(0); 
   }
 }
 
@@ -372,112 +274,7 @@
 
 
 
- /* Main Header Styles */
-/* .main-header {
-  background-color: #00d4ff;
-  width: 100%;
-  padding: 10px 0;
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem; 
-} */
 
-/* Header Content */
-/* .header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin: 0 auto; 
-  padding: 0 20px; 
-  flex-wrap: wrap; 
-} */
-
-/* Centered Text */
-/* .header-text {
-  flex: 1;
- 
-} */
-
-/* .header-text span {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: bold;
-  height: 2rem;
-} */
-
-
-/* Responsive Styles */
-
-
-/* @media (max-width: 768px) {
-  .navbar-nav {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
-    background-color: #f8f9f3;
-    position: fixed;
-    top: 120px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 120px);
-    overflow-y: auto;
-    z-index: 1000;
-  }
-
-  .navbar-nav .nav-link {
-    padding: 10px 0;
-    font-size: 16px;
-  }
-
-  .dropdown-menu {
-    width: 100%;
-    background-color: #f8f9f3;
-  }
-
-  .navbar-toggler {
-    margin-top: 10px;
-    color: #000;
-  }
-
-  .d-flex.justify-content-end {
-    position: absolute;
-    top: 40px;
-    right: 20px;
-    gap: 15px;
-  }
-
-  .d-flex.justify-content-end i {
-    font-size: 25px;
-  }
-
-  
-  #navbar1 {
-    display: none !important;
-  }
-
-  #navbar2 {
-    display: block !important;
-  }
-  
-} */
-
-/* @media (min-width: 769px) {
-  
-  #navbar1 {
-    display: block;
-  }
-
-  #navbar2 {
-    display: none;
-  }
-}
-
-
-
- */
 
 
 
