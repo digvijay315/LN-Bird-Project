@@ -9,7 +9,10 @@ const nodemailer = require('nodemailer');
 
 const app=express();
 
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
+// Increase request body size limit
+app.use(bodyParser.json({ limit: "50mb" })); // Increase limit for JSON payloads
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // Increase limit for form data
 app.use(express.json())
 // app.use('/images', express.static('images'));
 app.use('/images', express.static(path.join(__dirname, 'images')));

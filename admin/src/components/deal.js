@@ -588,7 +588,9 @@ React.useEffect(() => {
                                   
                                  }
                         } catch (error) {
-                                toast.error(error.response.data.message,{ autoClose: 2000 })
+                                // toast.error(error.response.data.message,{ autoClose: 2000 })
+                                console.log(error);
+                                
                         }
                        }
      

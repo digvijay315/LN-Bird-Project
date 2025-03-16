@@ -64,82 +64,6 @@ cloudinary.config({
 const add_deal = async (req, res) => {
     try {
 
-
-
-
-
-      const adddocument_details = [];
-      let i = 0;
-  
-      // Loop to process add_Content fields
-      while (req.body[`document_details[${i}].document_name`]) {
-        const document_name = req.body[`document_details[${i}].document_name`];
-        const document_no = req.body[`document_details[${i}].document_no`];
-        const document_Date = req.body[`document_details[${i}].document_Date`];
-        const linkded_contact = req.body[`document_details[${i}].linkded_contact`];
-    
-  
-        const imagefiles = [];
- 
-  
-       
-        if (req.files) {
-
-       
-          const imagefield = req.files.filter(file => file.fieldname.includes('pic'));
-          
-          if (imagefield.length > 0) {
-            for (let file of imagefield) {
-              const result = await cloudinary.uploader.upload(file.path);
-              imagefiles.push(result.secure_url);  
-              fs.unlink(file.path, (err) => {
-                if (err) {
-                  console.error(`Failed to delete file: ${file.path}`, err);
-                } else {
-                  console.log(`Successfully deleted file: ${file.path}`);
-                }
-              });
-            }
-          }
-        }
-  
-   
-        adddocument_details.push({
-            document_name,
-          document_Date,
-          document_no,
-          linkded_contact,
-          pic: imagefiles, 
-        });
-  
-        i++;
-      }
-          
-
-
-  
-      const images = [];
- 
-  
-      // Process image files
-      if (req.files) {
-        
-        const imageField = req.files.filter(file => file.fieldname.includes('preview'));
-        for (let file of imageField) {
-          const result = await cloudinary.uploader.upload(file.path);
-          images.push(result.secure_url);
-          fs.unlink(file.path, (err) => {
-            if (err) {
-              console.error(`Failed to delete file: ${file.path}`, err);
-            } else {
-              console.log(`Successfully deleted file: ${file.path}`);
-            }
-          });
-        }
-    }
-  
-    
-
     const {
         project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usize, available_for, stage, project, block, unit_number, floors, expected_price,
         quote_price, security_deposite, maintainence_charge, rent_escltion, rent_period, fitout_perioud, deal_type, transaction_type,
@@ -151,9 +75,8 @@ const add_deal = async (req, res) => {
       const new_add_deal = new adddeal({
         project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usize, available_for, stage, project, block, unit_number, floors, expected_price,
         quote_price, security_deposite, maintainence_charge, rent_escltion, rent_period, fitout_perioud, deal_type, transaction_type,
-        source, white_portion, team, user, visible_to, owner_details, associated_contact, relation, document_details: adddocument_details,
+        source, white_portion, team, user, visible_to, owner_details, associated_contact, relation, 
         s_no, descriptions, category, s_no1, url, website, social_media, send_matchedlead, matchedleads, matchinglead, remarks,
-        preview: images  // Store Cloudinary URLs directly in the preview field
       });
   
       // Save the deal to the database
