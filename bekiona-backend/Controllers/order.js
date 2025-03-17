@@ -3,6 +3,7 @@ const Order = require('../Modals/order');
 // Create Order
 const createOrder = async (req, res) => {
   try {
+  console.log(req.body);
   
     
     const orderData = req.body;

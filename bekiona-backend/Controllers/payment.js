@@ -8,7 +8,9 @@ const razorpay = new Razorpay({
 const payment=async(req,res)=>
 {
     try {
-        const { amount } = req.body;
+        let  { amount } = req.body;
+        amount = Math.round(Number(amount)); 
+        
         const options = {
             amount: amount * 100, // Amount in paise
             currency: 'INR',

@@ -320,7 +320,7 @@ useEffect(()=>
       // Step 2: Razorpay Checkout Options
       const options = {
         key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Key ID
-        amount: order.amount,
+        amount: parseFloat(order.amount),
         currency: order.currency,
         name: 'Your Company Name',
         description: 'Test Transaction',
