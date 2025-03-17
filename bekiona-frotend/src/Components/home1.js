@@ -198,7 +198,7 @@ const[product1,setproduct1]=useState([])
      setLoading(true);
      try {
        const response = await api.get("allreview"); // Replace with actual endpoint
-       if (response.status === 200) {
+       if (response?.status === 200) {
          setReviews(response.data); // Update the state correctly
          
        }
