@@ -11,7 +11,7 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
-import { Tooltip } from 'react-bootstrap';
+import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -22,6 +22,10 @@ import '../css/leadview.css'
 import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import { SvgIcon } from "@mui/material";
+import EmailIcon from '@mui/icons-material/Email';
 
 
 function Inventorysingleview() {
@@ -127,6 +131,20 @@ const navigate=useNavigate()
         { id: 'project', name: 'Project' },
         { id: 'relation', name: 'Relation' },
       ];
+
+      const allColumnspreviousowner = [
+        { id: 'sno', name: '#' },
+        { id: 'details', name: 'Full Name' },
+        { id: 'mobile_no', name: 'Contact' },
+        { id: 'email', name: 'Email' },
+      ];
+
+      const allColumnscontact = [
+        { id: 'sno', name: '#' },
+        { id: 'details', name: 'Full Name' },
+        { id: 'mobile_no', name: 'Contact' },
+        { id: 'email', name: 'Email' },
+      ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
         [`&.${tableCellClasses.head}`]: {
@@ -186,6 +204,13 @@ const navigate=useNavigate()
       // Function to toggle the visibility of the table
       const toggleTableVisibility4 = () => {
         setIsTableVisible4(prevState => !prevState);
+      };
+
+      const [isTableVisible5, setIsTableVisible5] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility5 = () => {
+        setIsTableVisible5(prevState => !prevState);
       };
 
       const [alltask,setalltask]=useState([])
@@ -1889,10 +1914,32 @@ try {
 
 // =======================================================add document end==============================================================
 
+// ======================================================show map start=================================================================================
 
+const [show11, setshow11] = useState(false);
+
+
+const handleClose11 = () => setshow11(false);
+const handleShow11=async()=>
+{
+      setshow11(true);
+}
+
+
+const mapStyles1 = {
+  height: "500px",
+  width: "100%"
+}
+
+const defaultCenter1 = {
+  lat: lead?.lattitude ? parseFloat(lead.lattitude) : 37.7749,
+  lng: lead?.langitude ? parseFloat(lead.langitude) : -122.4194
+};
+
+// =================================================show map end=====================================================================
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
 
       <Header1/>
       <Sidebar1/>
@@ -1902,7 +1949,7 @@ try {
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Inventory</h6>
-          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}
+          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_no} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project_name}
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
@@ -1925,11 +1972,11 @@ try {
             <div className='row'>
                 <div className='col-md-3'></div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
-                <select className="form-control form-control-sm" style={{color:"red"}}>
+                <select className="form-control form-control-sm">
                     <option >{lead?.stage || '---Select---'}</option>
-                        {/* <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option> */}
+                        <option>---select---</option>
+                        <option>Active</option>
+                        <option>Inactive</option>
                 </select>
                 </div>
                 <div className='col-md-4'></div>
@@ -1943,11 +1990,11 @@ try {
                         alt="call-icon"
                         style={{ height: '25px', marginRight: '4px' }}
                       />
-                  {lead.mobile_no1}</InputLabel>
+                  {lead.owner_details[0]?.mobile_no[0]}</InputLabel>
                   <Select
                     labelId="mobile-label"
                     id="mobile-select"
-                    value={lead.mobile_no1}  // Always keep the mobile number as the value
+                    value={lead.owner_details[0]?.mobile_no[0]}// Always keep the mobile number as the value
                     style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
                     MenuProps={{
                       PaperProps: {
@@ -2010,44 +2057,117 @@ try {
                   </Select>
                 </FormControl>
               </div>
-                <div className='col-md-3' style={{marginTop:"25px"}}><label style={{color:"#B85042"}}>Tags</label><p style={{lineHeight:"0px",fontWeight:"normal"}}>{lead.tags}</p></div>
-                <div className='col-md-3'></div>
+                {/* <div className='col-md-3' style={{marginTop:"25px"}}><label style={{color:"#B85042"}}>Tags</label><p style={{lineHeight:"0px",fontWeight:"normal"}}>{lead.tags}</p></div> */}
+                <div className='col-md-6'></div>
 
             
 
-                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>User</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Project Name</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.project_name}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Unit Number</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.unit_no}</p></div>
+                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Block</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.block}</p></div>
 
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Category</label>
+                    <p style={{fontWeight:"normal"}}>
+                      {lead.category.map((item)=>
+                      (
+                       <span>{item}<br></br></span>
+                      ))}</p>
+                </div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Size</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.size}</p></div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Ownership</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.ownership}</p></div>
 
                 <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
+                    <p style={{fontWeight:"normal"}}>{new Date(lead.ocupation_date).toLocaleString()}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                
                 
                 <div className='col-md-12'><hr></hr></div>
 
             
 
-                <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
-                    <div className='col-md-12'><hr></hr></div>
-                   
+                    <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
+                                   <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
+                                   <div className='col-md-12'><hr></hr></div>
+                                  
+                                   <div className='col-md-12'><label style={{color:"#B85042"}}>Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.location}</p></div>
+               
+                                   <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.lattitude}</p></div>
+                                   <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.langitude}</p></div>
+                                   <div className='col-md-4'><Tooltip title="View on map..." arrow>
+                                     <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer"}} onClick={handleShow11}></img>
+                                     </Tooltip>
+                                     </div>
+               
+                                   <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.uaddress}</p></div>
+                                   <div className='col-md-6'><label style={{color:"#B85042"}}>Street</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.ustreet}</p></div>
+                            
+                                   <div className='col-md-6'><label style={{color:"#B85042"}}>Locality</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.ulocality}</p></div>
+                                   <div className='col-md-6'><label style={{color:"#B85042"}}>City</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.ucity}</p></div>
+                             
+                                   <div className='col-md-4'><label style={{color:"#B85042"}}>State</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.ustate}</p></div>
+                                   <div className='col-md-4'><label style={{color:"#B85042"}}>Country</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.ucountry}</p></div>
+                                   <div className='col-md-4'><label style={{color:"#B85042"}}>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.uzip}</p></div>
+                                  
+                               </div>
 
-                 
-                <div className='col-md-3'><label style={{color:"#B85042"}}>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.area}</p></div>
-                <div className='col-md-2' ><label style={{color:"#B85042"}}>City</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.city}</p></div>
-                <div className='col-md-2'><label style={{color:"#B85042"}}>State</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.state}</p></div>
-                <div className='col-md-2' ><label style={{color:"#B85042"}}>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.pin_code}</p></div>
-
+                                      <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
+                                                   <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Owner Details</div>
+                                                   <div className='col-md-12'><hr></hr></div>
+                                                  
+                               
+                                                {
+                                                 lead.owner_details.map((item)=>
+                                                 (
+                                                   <>
+                                                   <div className='col-md-12'><label style={{color:"#B85042"}}>Full Name</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{item.title} {item.first_name} {item.last_name}</p></div>
+                               
+                                                   <div className='col-md-5'><label style={{color:"#B85042"}}>Contact</label>
+                                                   <p style={{ marginTop: "-10px", fontWeight: "normal" }}>
+                                                       {item.mobile_no.map((contact, index) => (
+                                                        
+                                                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
+                                                       ))}
+                                                      
+                                                     </p>
+                                                   </div>
+                                                   <div className='col-md-7'><label style={{color:"#B85042"}}>Email</label>
+                                                   <p style={{ marginTop: "-10px", fontWeight: "normal" }}>
+                                                       {item.email.map((email, index) => (
+                                                        
+                                                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon}  sx={{ fontSize: 14}}/>{email}<br></br></span> 
+                                                       ))}
+                                                      
+                                                     </p>
+                                                     </div>
+                               
+                                                     <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label>
+                                                   <p style={{ marginTop: "-10px", fontWeight: "normal",fontSize:"12px" }}>
+                                                    {item.location1}<br></br>
+                                                    {item.area1},{item.city1}<br></br>
+                                                    {item.state1},{item.pincode1}
+                                                     </p>
+                                                     </div>
+                               
+                                                     <div className='col-md-6'><label style={{color:"#B85042"}}>User</label>
+                                                   <p style={{ marginTop: "-10px", fontWeight: "normal",fontSize:"12px" }}>
+                                                   {item.owner.map((owner, index) => (
+                                                        
+                                                        <span key={index} style={{fontSize:"12px"}}>{owner}({item.team})<br></br></span> 
+                                                      ))}
+                                                   
+                                                     </p>
+                                                     </div>
+                                                 
+                                                   </>
+                                                 ))
+                                                 
+                                                }
+                                             
+                               
+                                               </div>
                 
-             
-
-
-                </div>
-
 
 
             </div>
@@ -2892,8 +3012,8 @@ try {
 
         
 
-  <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories
+        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+  <div className='col-md-12'> Associated Contact
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -2926,17 +3046,16 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+        <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
-          {allColumnsunit.map((col) => (
+          {allColumnscontact.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
-            >
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px", whiteSpace: "nowrap",lineHeight:"5px"}}>
               {col.name}
             </StyledTableCell>
           ))}
@@ -2945,20 +3064,28 @@ try {
       <tbody>
         {
          
-        matchunit.map ((item, index) => (
+        lead.associated_contact.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
            
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.unit_no}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+              {item.title} {item.first_name} {item.last_name}
             </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.project_name}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {item.mobile_no.map((contact, index) => (
+                         
+                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
+             ))
+             }
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-             
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {item.email.map((contact, index) => (
+                         
+                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon} sx={{ fontSize: 14}} /> {contact}<br></br></span> 
+                      ))
+            }
             </StyledTableCell>
           </StyledTableRow>
         ))}
@@ -3160,7 +3287,7 @@ try {
 
 <div className='col-md-12'> History
 <span 
-  onClick={toggleTableVisibility4} 
+  onClick={toggleTableVisibility5} 
   style={{ 
     position:"absolute",
     cursor: "pointer", 
@@ -3168,7 +3295,7 @@ try {
     fontSize: "20px", 
     display: "inline-block", 
     transition: "transform 0.3s ease", // Smooth transition for rotation
-    transform: isTableVisible4 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+    transform: isTableVisible5 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
     marginTop: "0px", // Align the arrow properly
   }}
 >
@@ -3191,31 +3318,53 @@ fontWeight:"lighter"
 </span>
 </div>
 
-<div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible4 ? "300px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
- 
-<TableContainer component={Paper} style={{ maxHeight: '300px', overflow: 'auto' }}>
-<Table sx={{}} aria-label="customized table">
-<thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
-<TableRow style={{backgroundColor:"gray"}}>
-  {/* {allColumnsdocuments.map((col) => (
-    <StyledTableCell
-      key={col.id}
-      style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
-    >
-      {col.name}
-    </StyledTableCell>
-  ))} */}
-</TableRow>
-</thead>
-<tbody>
-
-
-
-</tbody>
-
-</Table>
-</TableContainer>
-</div>
+<div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible5 ? "200px" : "0",transition: "height 0.3s ease"}}>
+         
+         <TableContainer component={Paper} style={{ height: '200px' }}>
+     <Table sx={{}} aria-label="customized table">
+     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+         <TableRow  style={{backgroundColor:"gray"}}>
+           {allColumnspreviousowner.map((col) => (
+             <StyledTableCell
+               key={col.id}
+               style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px", whiteSpace: "nowrap",lineHeight:"5px"}}>
+               {col.name}
+             </StyledTableCell>
+           ))}
+         </TableRow>
+       </thead>
+        <tbody>
+         {
+          
+         lead?.previousowner_details?.map ((item, index) => (
+           <StyledTableRow key={index}>
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            
+               {index + 1}
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+               {item.title} {item.first_name} {item.last_name}
+             </StyledTableCell >
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+             {item.mobile_no.map((contact, index) => (
+                          
+                          <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
+              ))
+              }
+             </StyledTableCell>
+             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+             {item.email.map((contact, index) => (
+                          
+                          <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon} sx={{ fontSize: 14}} /> {contact}<br></br></span> 
+                       ))
+             }
+             </StyledTableCell>
+           </StyledTableRow>
+         ))}
+       </tbody> 
+     </Table>
+   </TableContainer>
+         </div>
 </div>
       
 
@@ -4447,6 +4596,47 @@ fontWeight:"lighter"
 
 {/*========================================== add document details end ===================================================================*/}
 
+
+{/*====================================== show map start =======================================================================*/}
+
+
+                              <Modal show={show11} onHide={handleClose11} size='xl' animation={true}>
+                                        <Modal.Header>
+                                          <Modal.Title>Map</Modal.Title>
+                                        </Modal.Header>
+                                        <Modal.Body>
+                            
+                                                           <div style={{border:"1px solid black",marginTop:"10px"}}>
+                                                                          
+                                                                            
+                                                                                    <LoadScript
+                                                                                      googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc">
+                                                                                              <GoogleMap
+                                                                                        mapContainerStyle={mapStyles1}
+                                                                                          zoom={13}
+                                                                                          center={defaultCenter1}
+                                                                                          >
+                                                                                      <Marker
+                                                                                        position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                                                                                        draggable={true}
+                                                                                       
+                                                                                      />
+                                                                                      </GoogleMap>
+                                                                                      </LoadScript>
+                                                                       
+                                                                                    </div>
+                            
+                                    </Modal.Body>
+                                        <Modal.Footer>
+                                       
+                                          <Button variant="secondary" onClick={handleClose11}>
+                                            Close
+                                          </Button>
+                                        </Modal.Footer>
+                                      </Modal>
+
+
+{/* =================================================show map end ===============================================================*/}
 
 <ToastContainer/>
     </div>

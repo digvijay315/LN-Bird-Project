@@ -2802,7 +2802,7 @@ try {
 const completionPercentage = 20; // Set default value here
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
       <Header1/>
       <Sidebar1/>
 

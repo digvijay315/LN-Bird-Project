@@ -11,7 +11,7 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
-import { Tooltip } from 'react-bootstrap';
+import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -22,6 +22,7 @@ import '../css/leadview.css'
 import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 
 function Projectsingleview() {
@@ -37,12 +38,13 @@ const navigate=useNavigate()
     const[documents,setdouments]=useState([])
 
     useEffect(() => {
-      if (lead && lead.document_name && lead.document_no && lead.document_pic) {
+      if (lead && lead.approvals && lead.registration_no && lead.date) {
         // Merging the arrays together
-        const mergedDocuments = lead.document_name.map((name, index) => ({
-          name,
-          number: lead.document_no[index],
-          pic: lead.document_pic[index]
+        const mergedDocuments = lead.approvals.map((approvals, index) => ({
+          approvals,
+          registration_no: lead.registration_no[index],
+          date: lead.date[index],
+          pic:lead.pic[index]
         }));
         setdouments(mergedDocuments);
       }
@@ -111,8 +113,9 @@ const navigate=useNavigate()
       ];
       const allColumnsdocuments = [
         { id: 'sno', name: '#' },
-        { id: 'document_name', name: 'Document Name' },
-        { id: 'document_no', name: 'Document No.' },
+        { id: 'document_name', name: 'Approvals' },
+        { id: 'document_no', name: 'Registration_No.' },
+        { id: 'date', name: 'Date' },
         { id: 'document_pic', name: 'View' },
       ];
       const allColumnstask = [
@@ -1890,9 +1893,36 @@ try {
 // =======================================================add document end==============================================================
 
 
+// =========================================show map start=========================================================================
+
+const [show11, setshow11] = useState(false);
+
+
+const handleClose11 = () => setshow11(false);
+const handleShow11=async()=>
+{
+      setshow11(true);
+}
+
+
+const mapStyles1 = {
+  height: "500px",
+  width: "100%"
+}
+
+const defaultCenter1 = {
+  lat: lead?.lattitude ? parseFloat(lead.lattitude) : 37.7749,
+  lng: lead?.langitude ? parseFloat(lead.langitude) : -122.4194
+};
+
+
+
+
+// =====================================================show map end=================================================================
+
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
 
       <Header1/>
       <Sidebar1/>
@@ -2089,21 +2119,29 @@ try {
             
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
-                    <div className='col-md-12'><hr></hr></div>
-                   
-
-                 
-                <div className='col-md-3'><label style={{color:"#B85042"}}>Area/Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.area}</p></div>
-                <div className='col-md-2' ><label style={{color:"#B85042"}}>City</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.city}</p></div>
-                <div className='col-md-2'><label style={{color:"#B85042"}}>State</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.state}</p></div>
-                <div className='col-md-2' ><label style={{color:"#B85042"}}>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.pin_code}</p></div>
-
-                
-             
-
-
-                </div>
+                                <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
+                                <div className='col-md-12'><hr></hr></div>
+                               
+                                <div className='col-md-12'><label style={{color:"#B85042"}}>Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.location}</p></div>
+            
+                                <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.lattitude}</p></div>
+                                <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.langitude}</p></div>
+                                <div className='col-md-4'><Tooltip title="View on map..." arrow>
+                                  <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer"}} onClick={handleShow11} ></img>
+                                  </Tooltip>
+                                  </div>
+            
+                                <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.address}</p></div>
+                                <div className='col-md-6'><label style={{color:"#B85042"}}>Street</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.street}</p></div>
+                         
+                                <div className='col-md-6'><label style={{color:"#B85042"}}>Locality</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.locality}</p></div>
+                                <div className='col-md-6'><label style={{color:"#B85042"}}>City</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.city}</p></div>
+                          
+                                <div className='col-md-4'><label style={{color:"#B85042"}}>State</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.state}</p></div>
+                                <div className='col-md-4'><label style={{color:"#B85042"}}>Country</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.country}</p></div>
+                                <div className='col-md-4'><label style={{color:"#B85042"}}>Zip</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.zip}</p></div>
+                               
+                            </div>
 
 
 
@@ -3178,10 +3216,13 @@ try {
               {index + 1}
             </StyledTableCell>
         <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-          {item.name}
+          {item.approvals}
         </StyledTableCell>
         <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-          {item.number}
+          {item.registration_no}
+        </StyledTableCell>
+        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
+          {item.date}
         </StyledTableCell>
         <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
               {/* Eye button to trigger image preview */}
@@ -4496,13 +4537,48 @@ fontWeight:"lighter"
             </Modal.Footer>
           </Modal>
 
-
-
-
-
-
-
 {/*========================================== add document details end ===================================================================*/}
+
+
+{/*======================================== show map start================================================================== */}
+
+
+   <Modal show={show11} onHide={handleClose11} size='xl' animation={true}>
+            <Modal.Header>
+              <Modal.Title>Map</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+                               <div style={{border:"1px solid black",marginTop:"10px"}}>
+                                              
+                                                
+                                                        <LoadScript
+                                                          googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc">
+                                                                  <GoogleMap
+                                                            mapContainerStyle={mapStyles1}
+                                                              zoom={13}
+                                                              center={defaultCenter1}
+                                                              >
+                                                          <Marker
+                                                            position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                                                            draggable={true}
+                                                           
+                                                          />
+                                                          </GoogleMap>
+                                                          </LoadScript>
+                                           
+                                                        </div>
+
+        </Modal.Body>
+            <Modal.Footer>
+           
+              <Button variant="secondary" onClick={handleClose11}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+{/* ============================================show map end ==================================================================*/}
 
 
 <ToastContainer/>

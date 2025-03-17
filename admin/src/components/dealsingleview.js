@@ -26,7 +26,6 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { toWords } from 'number-to-words';
-import combo from '../components/images/2 Combo 1.jpg'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 function Dealsingleview() {
@@ -2494,8 +2493,10 @@ const mapStyles1 = {
 }
 
 const defaultCenter1 = {
-  lat: unitlocation.lattitude || 37.7749, lng: unitlocation.langitude || -122.4194
+  lat: unitlocation?.lattitude ? parseFloat(unitlocation.lattitude) : 37.7749,
+  lng: unitlocation?.langitude ? parseFloat(unitlocation.langitude) : -122.4194
 };
+
 
 // ======================================================show map end==================================================================
 
@@ -2504,7 +2505,7 @@ const defaultCenter1 = {
 
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
 
       <Header1/>
       <Sidebar1/>
@@ -2650,6 +2651,11 @@ const defaultCenter1 = {
                 <div className='col-md-3' ><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Deal Type</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.deal_type}</p>
+                </div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
+                  <div className='col-md-4'></div>
 
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Recived On</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
@@ -3913,7 +3919,7 @@ fontWeight:"lighter"
         <tbody>
          {
           
-         unitlocation.previousowner_details?.map ((item, index) => (
+         unitlocation?.previousowner_details?.map ((item, index) => (
            <StyledTableRow key={index}>
              <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
             
@@ -5168,9 +5174,9 @@ fontWeight:"lighter"
 
 
 
-   <Modal show={show11} onHide={handleClose11} size='xl'>
+   <Modal show={show11} onHide={handleClose11} size='xl' animation={true}>
             <Modal.Header>
-              <Modal.Title>Update Deal</Modal.Title>
+              <Modal.Title>Map</Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
@@ -5193,11 +5199,6 @@ fontWeight:"lighter"
                                                           </LoadScript>
                                            
                                                         </div>
-
-
-         
-                    
-                       
 
         </Modal.Body>
             <Modal.Footer>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import api from "../api";
 import '../css/addcontact.css';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 
 const AddContactForm = () => {
   const [contact, setContact] = useState({
@@ -13,6 +14,15 @@ const AddContactForm = () => {
     document_pic: [] // Will hold the file objects
   });
 
+
+  const mapStyles1 = {
+    height: "500px",
+    width: "100%"
+  }
+  
+  const defaultCenter1 = {
+    lat:  37.7749, lng: -122.4194
+  };
   // Handles file input change
 //   const handledocumentpicchange = (event) => {
 //     const newFiles = Array.from(event.target.files[0]);
@@ -186,6 +196,27 @@ const handledocumentpicchange = (event) => {
    
 
       <button type="button" onClick={addcontact}>Submit</button>
+
+           <div style={{border:"1px solid black",marginTop:"10px"}}>
+                                                    
+                                                      
+                                                              <LoadScript
+                                                                googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc">
+                                                                        <GoogleMap
+                                                                  mapContainerStyle={mapStyles1}
+                                                                    zoom={13}
+                                                                    center={defaultCenter1}
+                                                                    >
+                                                                <Marker
+                                                                  position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                                                                  draggable={true}
+                                                                 
+                                                                />
+                                                                </GoogleMap>
+                                                                </LoadScript>
+                                                 
+                                                              </div>
+      
     </div>
   );
 };

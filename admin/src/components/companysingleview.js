@@ -1893,7 +1893,7 @@ try {
 const completionPercentage = 20; // Set default value here
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
 
       <Header1/>
       <Sidebar1/>
@@ -1924,7 +1924,7 @@ const completionPercentage = 20; // Set default value here
             </div> */}
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
-                            <div className="col-md-3 d-flex justify-content-center align-items-center">
+                            {/* <div className="col-md-3 d-flex justify-content-center align-items-center">
                         <div style={{ width: 60, height: 60 }}>
                           <CircularProgressbar
                             value={completionPercentage}
@@ -1938,7 +1938,8 @@ const completionPercentage = 20; // Set default value here
                             })}
                           />
                         </div>
-                      </div>
+                      </div> */}
+                      <div className='col-md-3'></div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
                 <select className="form-control form-control-sm" style={{color:"red"}}>
                     <option >{lead?.stage || '---Select---'}</option>

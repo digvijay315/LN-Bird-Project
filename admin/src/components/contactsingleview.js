@@ -2266,7 +2266,7 @@ try {
 
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
 
       <Header1/>
       <Sidebar1/>
