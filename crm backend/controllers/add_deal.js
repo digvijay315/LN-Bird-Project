@@ -163,13 +163,12 @@ const add_deal = async (req, res) => {
                                 {
                                     return res.send({message:"deal not found"})
                                 }
-                                const pics = req.files ? req.files.map(item => item.path) : [];
-                                const preview=req.files ? req.files.map((item=>item.path)):[]
+                                // const pics = req.files ? req.files.map(item => item.path) : [];
+                                // const preview=req.files ? req.files.map((item=>item.path)):[]
                             
                              const updatedFields = {
                                 ...req.body,
-                                preview,
-                                pics // Update preview field with new images if provided
+                          
                             };
                             const resp=await adddeal.findByIdAndUpdate(id,updatedFields,{ new: true })
                             res.status(200).send({message:"Deal update successfully"})
@@ -218,7 +217,7 @@ const add_deal = async (req, res) => {
                         {
                             try {
                                 const _id=req.params._id;
-                                const resp= await adddeal.findOne({_id:_id})
+                                const resp= await adddeal.findOne({_id:_id}).populate('owner_details').populate('associated_contact')
                                 if(!resp)
                                     {
                                        return res.send("lead info not available")
@@ -241,7 +240,7 @@ const add_deal = async (req, res) => {
                                 
                                  const updatedFields = {
                                     remarks:req.body.remarks,
-                                    stage:req.body.stage,stage:req.body.stage
+                                    stage:req.body.stage,
                                 };
                                 const resp=await adddeal.findByIdAndUpdate(id,updatedFields,{ new: true })
                                 res.status(200).send({message:"lead update successfully"})

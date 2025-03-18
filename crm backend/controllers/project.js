@@ -66,7 +66,7 @@ unitDetails={
   size: unit.size,
   direction: unit.direction,
   facing: unit.facing,
-  road:unit.facing ,
+  road:unit.road ,
   ownership:unit.ownership,
   stage: unit.stage,
   floor: unit.floor,
@@ -309,7 +309,7 @@ unitDetails={
                     size: unit.size,
                     direction: unit.direction,
                     facing: unit.facing,
-                    road:unit.facing ,
+                    road:unit.road ,
                     ownership:unit.ownership,
                     stage: unit.stage,
                     floor: unit.floor,
@@ -530,7 +530,7 @@ unitDetails={
               size: unit.size,
               direction: unit.direction,
               facing: unit.facing,
-              road:unit.facing ,
+              road:unit.road ,
               ownership:unit.ownership,
               stage: unit.stage,
               floor: unit.floor,
@@ -628,7 +628,7 @@ unitDetails={
                 unitDetails.image = imagefiles1;  // Attach main images
               }
 
-              console.log(unitDetails.previousowner_details);
+            
               
 
 
@@ -681,7 +681,7 @@ unitDetails={
                         size: unit.size,
                         direction: unit.direction,
                         facing: unit.facing,
-                        road:unit.facing ,
+                        road:unit.road ,
                         ownership:unit.ownership,
                         stage: unit.stage,
                         floor: unit.floor,

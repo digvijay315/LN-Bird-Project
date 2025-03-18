@@ -27,6 +27,8 @@ import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import { toWords } from 'number-to-words';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import axios from "axios";
 
 function Dealsingleview() {
 
@@ -85,6 +87,15 @@ const navigate=useNavigate()
         { id: 'details', name: 'Full Name' },
         { id: 'mobile_no', name: 'Contact' },
         { id: 'email', name: 'Email' },
+      ];
+
+      const allColumnsunitdetails = [
+        { id: 'sno', name: '#' },
+        { id: 'floor', name: 'Floor' },
+        { id: 'cluter', name: 'Cluters' },
+        { id: 'length', name: 'Length' },
+        { id: 'breadth', name: 'Breadth' },
+        { id: 'total_area', name: 'Total_Area' }
       ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -2034,8 +2045,403 @@ const defaultCenter1 = {
 
 // ======================================================show map end==================================================================
 
+// ==================================builtup details toggle start================================================================
+
+const [showTable, setShowTable] = useState(false);
+
+const completionPercentage = 20; // Set default value here
+
+//======================================== builtup details toggle end===================================================================
 
 
+// ======================================unit edit start========================================================================
+
+const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+  category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
+  total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
+  approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
+  team:[],visible_to:"",
+
+  location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
+
+  add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
+  price_list:[],Payment_plan:[]});
+
+
+  const[unit,setunit]=useState([])
+  const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
+                                  size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
+                                  total_land_area:"",
+                                  water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
+                                  direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
+                                  cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
+                                  action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
+                                  furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
+                                  ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
+                                  relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
+                                  document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+
+
+const [show9, setshow9] = useState(false);
+    
+                  const handleClose9 = () => setshow9(false);
+                  // const[fetchunit,setfetchunit]=useState([])
+                  const handleShow9=async()=>
+                  {
+                    setshow9(true);
+                    const project=unitlocation.project_name
+                    const block=unitlocation.block
+                    const unit=unitlocation.unit_no
+
+                    const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                    setunits(resp.data.project.add_unit[0])
+                    
+                   
+                  }
+                // console.log(units.owner_details);
+                
+                  
+          const updateinventories=async()=>
+          {
+            const project=unitlocation.project_name
+            const block=unitlocation.block
+            const unit=unitlocation.unit_no
+            try {
+              const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+              toast.success(`Data updated successfully`,{autoClose:"2000"})
+                              setTimeout(() => {
+                                window.location.reload()
+                              }, 2000);
+            } catch (error) {
+              console.log(error);
+              
+            }
+          }
+                  
+
+                              const [input, setInput] = useState('');
+                  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+                  const [showSuggestions, setShowSuggestions] = useState(false);
+                  const [allSuggestions, setAllSuggestions] = useState([]);
+                  const [selectedContacts, setSelectedContacts] = useState([]);
+            
+                  React.useEffect(() => {
+                    const fetchSuggestions = async () => {
+                      try {
+                        const response = await api.get('viewcontact');
+                        const data = response.data.contact;
+                        
+                        // Extract the first_name field from the fetched data
+                        // const names = data.map(item => item.first_name);
+                        setAllSuggestions(data);
+                      } catch (error) {
+                        console.error('Error fetching suggestions:', error);
+                      }
+                    };
+                
+                    fetchSuggestions();
+                  }, []);
+          
+                  React.useEffect(() => {
+                    if (input) {
+                      const results = allSuggestions.filter(contact =>
+                        contact.first_name?.toLowerCase().includes(input.toLowerCase())
+                      );
+                      setFilteredSuggestions(results);
+                      setShowSuggestions(true);
+                    } else {
+                      setShowSuggestions(false)
+                    }
+                  }, [input,allSuggestions]);
+          
+                 
+                
+                  const handleInputChange = (event) => {
+                    setInput(event.target.value);
+                    handleClose2()
+                  };
+                  
+                  
+                  const [show22, setshow22] = useState(false);
+                  const handleClose22 = () => setshow22(false);
+                  const handleShow22=async()=>
+                  {
+                    setshow22(true);
+                  
+                  }
+          
+                  
+                  
+                  const [selectedcontact1,setselectedcontact1]=useState([])
+                  const [selectedcontact2,setselectedcontact2]=useState([])
+                  const[newcontact,setnewcontact]=useState([])
+                  
+                  const[relation,setrelation]=useState("")
+          
+                  const handlerelationchange = (e) => {
+                    setrelation(e.target.value);
+                  };
+          
+                  const [relation1,setrelation1]=useState("")
+                  React.useEffect(() => {
+                    
+                    
+                    if (relation === "Self") {
+                      setrelation("")
+                      setselectedcontact1(prevContacts => [
+                        ...prevContacts,
+                        newcontact // Add the new contact (assumed to be an object)
+                      ]);
+                      setunits(prevDeal => ({
+                        ...prevDeal,
+                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                     
+                    }
+                     else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+                      
+                      setselectedcontact2(prevContacts => [
+                        ...prevContacts,
+                        newcontact // Add the new contact for other relations
+                      ]);
+                      setunits(prevDeal => ({ ...prevDeal, relation: relation }));
+                      setunits(prevDeal => ({
+                        ...prevDeal,
+                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                      setrelation1(relation)
+                      setrelation("")
+                    }
+                  }, [relation,newcontact]);
+          
+          
+                 
+                  const handleSuggestionClick = (contact) => {
+                    handleShow22();
+                    
+                    setnewcontact(contact)
+                    // Update the selectedContacts array
+                    const updatedContacts = [...selectedContacts, contact];
+                    setSelectedContacts(updatedContacts);
+                  
+                    setInput(''); // Clear the input after selection
+                    setShowSuggestions(false); // Hide suggestions after selection
+                    //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+                  };
+          
+                 
+                   
+                  const removeContact = (id) => {
+              
+                    const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+                 
+                   
+                    const updatedContacts3 = units.owner_details.filter(contact => contact._id !== id);
+                    const updatedContacts4 = units.associated_contact.filter(contact => contact._id !== id);
+          
+                    setSelectedContacts(updatedContacts);
+          
+                    const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+                    setselectedcontact1(updatedContacts1);
+                    setunits((prevState) => ({
+                      ...prevState,
+                      owner_details: updatedContacts3,
+                    }));
+          
+                    const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
+                    setselectedcontact2(updatedContacts2)
+                    setunits((prevState) => ({
+                      ...prevState,
+                      associated_contact: updatedContacts4,
+                    }));
+          
+                  };
+
+// ========================================edit unit end===========================================================================
+
+
+// =========================================unit location start======================================================================
+
+
+                const [show12, setshow12] = useState(false);
+                const handleClose12 = () => setshow12(false);
+                const handleShow12=async()=>
+                {
+                  setshow12(true);
+
+                  const project=unitlocation.project_name
+                  const block=unitlocation.block
+                  const unit=unitlocation.unit_no
+
+                  const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                  setunits(resp.data.project.add_unit[0])
+
+                }
+
+
+                
+                                          const statesAndCities = {
+                                            AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+                                            ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+                                            Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+                                            Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+                                            Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+                                            Goa: ["North Goa", "South Goa"],
+                                            Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+                                            Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+                                            HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+                                            Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+                                            Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+                                            Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+                                            MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+                                            Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+                                            Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+                                            Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+                                            Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+                                            Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+                                            Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+                                            Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+                                            Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+                                            Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+                                            TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+                                            Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+                                            Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+                                            UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+                                            WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+                                          };
+                                          
+                                          
+                                          const states = Object.keys(statesAndCities);
+                                          const cities = statesAndCities[project.state] || [];
+                                          
+                                          const ustates = Object.keys(statesAndCities);
+                                          const ucities = statesAndCities[units.ustate] || [];
+                
+                
+                                          const [coordinates1, setCoordinates1] = useState('');
+                                          const [mapLoaded1, setMapLoaded1] = useState(false);
+                                
+                                          const handleSubmit1 = async (e) => {
+                                            e.preventDefault();
+                                            try {
+                                              const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                                params: {
+                                                  address: units.location,
+                                                  key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+                                                }
+                                              });
+                                          
+                                              if (response.data.results.length > 0) {
+                                                const { lat, lng } = response.data.results[0].geometry.location;
+                                                setCoordinates1({ lat, lng });
+                                                setunits(prevUnits => ({
+                                                  ...prevUnits,
+                                                  lattitude: lat,
+                                                  langitude: lng
+                                                }));
+                                                const addressComponents = response.data.results[0].address_components;
+                                                let uaddress = '';
+                                                let ustreet = '';
+                                                let ulocality = '';
+                                                let ucity = '';
+                                                let uzip = '';
+                                                let ustate = '';
+                                                let ucountry = '';
+                                          
+                                                // Extract address components
+                                                addressComponents.forEach(component => {
+                                                  const types = component.types;
+                                                  if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                                                  if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                                                  if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                                                  if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                                                  if (types.includes('locality')) ucity = component.long_name;
+                                                  if (types.includes('postal_code')) uzip = component.long_name;
+                                                  if (types.includes('country')) ucountry = component.long_name;
+                                                });
+                                          
+                                                // Update units state with the extracted information
+                                                setunits(prevUnits => ({
+                                                  ...prevUnits,
+                                                  uaddress,
+                                                  ustreet: ustreet.trim(),
+                                                  ulocality,
+                                                  ucity,
+                                                  uzip,
+                                                  ustate,
+                                                  ucountry,
+                                                  location: response.data.results[0].formatted_address
+                                                }));
+                                                setMapLoaded1(true);
+                                              } else {
+                                                setCoordinates1({ lat: null, lng: null });
+                                                console.log('No results found');
+                                              }
+                                          
+                                            } catch (error) {
+                                              console.error('Error fetching coordinates:', error);
+                                            }
+                                          };
+                                          
+                                          const handleMarkerDragEnd1 = async (e) => {
+                                            const newLat = e.latLng.lat();
+                                            const newLng = e.latLng.lng();
+                                            setCoordinates1({ lat: newLat, lng: newLng });
+                                          
+                                            try {
+                                              const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                                params: {
+                                                  latlng: `${newLat},${newLng}`,
+                                                  key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+                                                }
+                                              });
+                                          
+                                              if (response.data.results.length > 0) {
+                                                const addressComponents = response.data.results[0].address_components;
+                                                let uaddress = '';
+                                                let ustreet = '';
+                                                let ulocality = '';
+                                                let ucity = '';
+                                                let uzip = '';
+                                                let ustate = '';
+                                                let ucountry = '';
+                                          
+                                                addressComponents.forEach(component => {
+                                                  const types = component.types;
+                                                  if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                                                  if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                                                  if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                                                  if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                                                  if (types.includes('locality')) ucity = component.long_name;
+                                                  if (types.includes('postal_code')) uzip = component.long_name;
+                                                  if (types.includes('country')) ucountry = component.long_name;
+                                                });
+                                          
+                                                setunits(prevUnits => ({
+                                                  ...prevUnits,
+                                                  uaddress,
+                                                  ustreet: ustreet.trim(),
+                                                  ulocality,
+                                                  ucity,
+                                                  uzip,
+                                                  ustate,
+                                                  ucountry,
+                                                  location: response.data.results[0].formatted_address
+                                                }));
+                                          
+                                              } else {
+                                                console.log("No location name found");
+                                              }
+                                            } catch (error) {
+                                              console.error("Error fetching location name:", error);
+                                            }
+                                          };
+                        
+                                          const defaultCenter2 = {
+                                            lat: coordinates1.lat || parseFloat(units.lattitude), lng: coordinates1.lng || parseFloat(units.langitude)
+                                          };
+
+// ==============================================unit location end=========================================================
 
 
   return (
@@ -2070,7 +2476,21 @@ const defaultCenter1 = {
             </div> */}
             {/* <hr style={{ border: "none", borderTop: "2px solid gray",marginTop:"-10px" }} /> */}
             <div className='row'>
-                <div className='col-md-3'></div>
+                   <div className="col-md-3 d-flex justify-content-center align-items-center">
+                        <div style={{ width: 60, height: 60 }}>
+                          <CircularProgressbar
+                            value={completionPercentage}
+                            text={`${completionPercentage}%`}
+                            styles={buildStyles({
+                              pathColor: "#B85042",
+                              textColor: "#B85042",
+                              trailColor: "#f0f0f0",
+                              strokeLinecap: "round",
+                              textSize: "18px",
+                            })}
+                          />
+                        </div>
+                      </div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
                 <select className="form-control form-control-sm" >
                     <option >{lead?.stage || '---Select---'}</option>
@@ -2166,51 +2586,119 @@ const defaultCenter1 = {
                   </Select>
                 </FormControl>
               </div>
-                <div className='col-md-3' style={{marginTop:"25px"}}></div>
-                <div className='col-md-3'></div>
-
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Available For</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.available_for}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Expected Price</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.expected_price}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Quote Price</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.quote_price}</p></div>
-
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Project</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.project}</p></div>
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Block</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.block}</p></div>
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Unit Number</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.unit_number}</p></div>
-
             
+                    <div className='col-md-3'></div>
+                <div className='col-md-3' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Tag</label><p style={{fontWeight:"normal"}}>{lead.available_for}</p></div>
 
-                <div className='col-md-5' ><label style={{color:"#B85042"}}>User</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.user}</p>
-                </div>
-                <div className='col-md-3' ><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
+                <div className='col-md-4' style={{marginTop:"30px"}}><label style={{color:"#B85042"}}>Available For</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.available_for}</p></div>
+                <div className='col-md-4' style={{marginTop:"30px"}}><label style={{color:"#B85042"}}>Expected Price</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.expected_price}</p></div>
+                <div className='col-md-4' style={{marginTop:"30px"}}><label style={{color:"#B85042"}}>Quote Price</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.quote_price}</p></div>
 
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Deal Type</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.deal_type}</p>
                 </div>
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
-                  <div className='col-md-4'></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>User</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.user}</p>
+                </div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
+
+               
 
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Recived On</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
                 </div>
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-8' ><label style={{color:"#B85042"}}>Last Conduct Date/Time</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
+                </div>
+                
                 
                 <div className='col-md-12'><hr></hr></div>
 
+                <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
+                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Unit Details
+                    <Tooltip title="Update Unit..." arrow>
+                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                </Tooltip>
+                    </div>
+                    <div className='col-md-12'><hr></hr></div>
+                   
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation.road}</p></div>
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Direction</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation.direction}</p></div>
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation.facing}</p></div>
+                  
+                  <div className='col-md-12'><input type='checkbox' onChange={(e) => setShowTable(e.target.checked)}></input>Show Builtup Details</div>
+                   {
+                showTable && (
+                       <TableContainer component={Paper} style={{ height: '200px' }}>
+    <Table sx={{}} aria-label="customized table">
+    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow  style={{backgroundColor:"gray"}}>
+          {allColumnsunitdetails.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px", whiteSpace: "nowrap",lineHeight:"2px"}}>
+              {col.name}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </thead>
+      <tbody>
+        {
+         
+        unitlocation?.floor?.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+              {item}
+            </StyledTableCell >
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+           {unitlocation.cluter_details[index]}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {unitlocation.length[index]}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {unitlocation.bredth[index]}
+            </StyledTableCell>
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {unitlocation.total_area[index]} {unitlocation.measurment2[0]}
+            </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </tbody>
+          </Table>
+        </TableContainer>
+                )
+            }
+                </div>
+
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
+                    <div className='col-md-10' style={{color:"blue",fontWeight:"normal"}}>Location Details
+                    <Tooltip title="Update location..." arrow>
+                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' onClick={handleShow12} style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                </Tooltip>
+                    </div>
+               
+                  <div className='col-md-2'>
+                  <Tooltip title="View on map..." arrow>
+                      <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer",marginTop:"-5px"}} onClick={handleShow11}></img>
+                      </Tooltip>
+                  </div>
+
                     <div className='col-md-12'><hr></hr></div>
                    
                     <div className='col-md-12'><label style={{color:"#B85042"}}>Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation?.location}</p></div>
 
                     <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.lattitude}</p></div>
                     <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.langitude}</p></div>
-                    <div className='col-md-4'><Tooltip title="View on map..." arrow>
-                      <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer"}} onClick={handleShow11}></img>
-                      </Tooltip>
-                      </div>
+                    <div className='col-md-4'></div>
 
                     <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.uaddress}</p></div>
                     <div className='col-md-6'><label style={{color:"#B85042"}}>Street</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{unitlocation?.ustreet}</p></div>
@@ -2227,7 +2715,15 @@ const defaultCenter1 = {
             
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                    <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Owner Details</div>
+                    <div className='col-md-9' style={{color:"blue",fontWeight:"normal"}}>Owner Details
+                    <Tooltip title="Update Owner details..." arrow>
+                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"30px",marginLeft:"5px",marginTop:"-5px",cursor:"pointer"}} ></img>
+                                </Tooltip>
+                              
+                    </div>
+                    <div className='col-md-3'>  <Tooltip title="Change Owner..." arrow>
+                                  <img src='https://static.vecteezy.com/system/resources/thumbnails/020/589/549/small/icon-with-simple-left-arrow-and-right-arrow-vector.jpg' onClick={handleShow9} style={{height:"40px",right:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                </Tooltip></div> 
                     <div className='col-md-12'><hr></hr></div>
                    
 
@@ -2256,23 +2752,15 @@ const defaultCenter1 = {
                       </p>
                       </div>
 
-                      <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label>
+                      <div className='col-md-12'><label style={{color:"#B85042"}}>Address</label>
                     <p style={{ marginTop: "-10px", fontWeight: "normal",fontSize:"12px" }}>
-                     {item.location1}<br></br>
+                     {item.location1},
                      {item.area1},{item.city1}<br></br>
                      {item.state1},{item.pincode1}
                       </p>
                       </div>
 
-                      <div className='col-md-6'><label style={{color:"#B85042"}}>User</label>
-                    <p style={{ marginTop: "-10px", fontWeight: "normal",fontSize:"12px" }}>
-                    {item.owner.map((owner, index) => (
-                         
-                         <span key={index} style={{fontSize:"12px"}}>{owner}({item.team})<br></br></span> 
-                       ))}
-                    
-                      </p>
-                      </div>
+                   
                   
                     </>
                   ))
@@ -2281,6 +2769,8 @@ const defaultCenter1 = {
               
 
                 </div>
+
+          
 
 
 
@@ -4558,6 +5048,288 @@ fontWeight:"lighter"
 
 
 {/*==================================================== map modal end============================================================== */}
+
+
+{/* ============================================owner change modal start============================================================ */}
+
+
+<Modal show={show9} onHide={handleClose9} size='xl' animation={true}>
+            <Modal.Header>
+              <Modal.Title>Change Owner</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+                              <div id="ownerdetails" style={{padding:"5px"}}>
+                                            <div className="row" style={{width:"100%"}}>
+                                           
+                                                    <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                                                    {showSuggestions && input && filteredSuggestions.length > 0 && (
+                                                        <ul className="suggestion-list">
+                                                          {filteredSuggestions.map((suggestion, index) => (
+                                                            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                                              {suggestion.first_name}
+                                                            </li>
+                                                          ))}
+                                                        </ul>
+                                                      )}
+                                                    <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button></div>
+                                                
+                                                 <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                                                 {units.owner_details.length >= 0 && (
+                                                  <div className="contact-details">
+                                                    <table  style={{width:"100%"}}>
+                                                      
+                                                      <tbody>
+                                                       {/* Combine selectedcontact1 with units.owner_details while removing duplicates */}
+                                      {[...selectedcontact1, ...units.owner_details]
+                                        .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                        .filter((contact, index, self) => 
+                                          // Ensure that we only keep unique contacts based on _id
+                                          index === self.findIndex((c) => c._id === contact._id)
+                                        ).map(contact => (
+                                                          <StyledTableRow>
+                                                            <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                                            <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                                {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                                                <SvgIcon component={EmailIcon} />
+                                                                <span>{contact.email}</span>
+                                                            </StyledTableCell>
+                            
+                                                            <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                              {Array.isArray(contact.mobile_no)?
+                                                              contact.mobile_no.map((number, index) => (
+                                                                <span key={index}>
+                                                                  <SvgIcon component={PhoneIphoneIcon} />
+                                                                  {number}<br></br>
+                                                                </span>
+                                                              )):[]}
+                                                            </StyledTableCell>
+                            
+                                                            <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                              S/W/O <br></br>{contact.father_husband_name}
+                                                              </StyledTableCell>
+                            
+                                                              <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                              permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                                              {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                                              </StyledTableCell>
+                            
+                                                              <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                                                </StyledTableCell>
+                            
+                                                            <StyledTableCell>
+                                                              <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                                               </StyledTableCell>
+                                                            
+                                                          </StyledTableRow>
+                                                        ))}
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                )}
+                                            </div>
+                                            
+                                            <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                                            {units.associated_contact.length >= 0 && (
+                                            <div className="contact-details">
+                                                <table style={{width:"100%"}}>
+                                                    <tbody>
+                                                         {
+                                                          
+                                                          [...selectedcontact2, ...units.associated_contact]
+                                                            .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                                            .filter((contact, index, self) => 
+                                                              // Ensure that we only keep unique contacts based on _id
+                                                              index === self.findIndex((c) => c._id === contact._id)
+                                                            ).map(contact => (
+                                                            <StyledTableRow>
+                                                                <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    {contact.title} {contact.first_name} {contact.last_name}<br />
+                                                                    <SvgIcon component={EmailIcon} />
+                                                                    <span>{contact.email}</span>
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    {
+                                                                    Array.isArray(contact.mobile_no) ?
+                                                                    contact.mobile_no.map((number, index) => (
+                                                                        <span key={index}>
+                                                                            <SvgIcon component={PhoneIphoneIcon} />
+                                                                            {number}<br />
+                                                                        </span>
+                                                                    )):[]}
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    S/W/O <br />{contact.father_husband_name}
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
+                                                                </StyledTableCell>
+                                                                    
+                                                                <StyledTableCell>
+                                                                    <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                                                </StyledTableCell>
+                                                            </StyledTableRow>
+                                                        ))} 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )}
+                                        </div>
+                                        </div>
+                                        </div>
+
+        </Modal.Body>
+            <Modal.Footer>
+           
+            <Button variant="secondary" onClick={updateinventories}>
+                Change Owner
+              </Button>
+              <Button variant="secondary" onClick={handleClose9}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+            <Modal show={show22} onHide={handleClose22} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                      <Modal.Header>
+                        <Modal.Title>Choose Relation</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                      <div style={{width:"100%"}}>
+                      <div className="row">
+                              <div className="col-md-4"><label className="labels">Relation</label><select className="form-control form-control-sm" required="true" onChange={handlerelationchange}>
+                                        <option>Select</option>
+                                        <option value="Self">Self</option>
+                                        <option value="Son">Son</option>
+                                        <option value="Father">Father</option>
+                                        <option value="Mother">Mother</option>
+                                        <option value="Uncle">Uncle</option>
+                                        <option value="Other">Other</option>
+                                  </select>
+                            </div>
+                         </div>
+                     </div>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose22}>
+                          Close
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+
+
+{/* ===============================================owner change modal end=========================================================== */}
+
+
+{/*============================================ unit location details edit start================================================ */}
+
+
+<Modal show={show12} onHide={handleClose12} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                      <Modal.Header>
+                        <Modal.Title>Change Location</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                      <div style={{width:"100%"}}>
+
+                            <div className="row">
+                                        <div className="col-md-12" id='unitlocation' style={{lineHeight:"30px"}}>
+                                       
+                                        <div className="col-md-12" style={{border:"1px solid black",marginTop:"30px",padding:"10px"}}>
+                                        <div style={{border:"1px solid black"}}>
+                                        
+                                          
+                                                  <LoadScript
+                                                    googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
+                                                                                        >
+                                                            <GoogleMap
+                                                      mapContainerStyle={mapStyles1}
+                                                        zoom={13}
+                                                        center={defaultCenter2}
+                                                        >
+                                                    <Marker
+                                                      position={{ lat: defaultCenter2.lat, lng: defaultCenter2.lng }}
+                                                      draggable={true}
+                                                      onDragEnd={handleMarkerDragEnd1}
+                                                    />
+                                                    </GoogleMap>
+                                                    </LoadScript>
+                                     
+                                                  </div>
+                                                  <div className="row">
+                                                  <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" value={units.location} onChange={(e)=>setunits({...units,location:e.target.value})}/></div>
+                                                  {/* <div className='col-md-5'></div> */}
+                                                  <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit1}>Get</button></div>
+                                                  <div className='col-md-4'></div>
+                                                  <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.lattitude}  readOnly/></div>
+                                                  <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.langitude} readOnly/></div>
+                                                  <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
+                                           
+                                            <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" value={units.uaddress} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uaddress:e.target.value})}/></div>
+                                            <div className="col-md-4"></div>
+                                            <div className="col-md-8"><label className="labels">STREET</label><input type="text" value={units.ustreet} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustreet:e.target.value})}/></div>
+                                            <div className="col-md-4"></div>
+                                            <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" value={units.ulocality} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ulocality:e.target.value})}/></div>
+                                            <div className="col-md-4"><label className="labels">CITY</label>
+                                            <select type="text"  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ucity:e.target.value})}>
+                                            <option>{units.ucity}</option>
+                                            {ucities.map((city) => (
+                                              <option key={city} value={city}>
+                                                {city}
+                                              </option>
+                                            ))}
+                                            </select>
+                                            </div>
+                                            <div className="col-md-4"><label className="labels">ZIP</label><input type="text" value={units.uzip} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uzip:e.target.value})}/></div>
+                                            <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustate:e.target.value})}>
+                                                        <option>{units.ustate}</option>
+                                                        {ustates.map((state) => (
+                                                        <option key={state} value={state}>
+                                                          {state}
+                                                        </option>
+                                                         ))}
+                                                        </select>
+                                            </div>
+                                            <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ucountry:e.target.value})}>
+                                                        <option>{units.ucountry}</option>
+                                                        <option>My Team</option>
+                                                        <option>My Self</option>
+                                                        <option>All Users</option>
+                                                        </select>
+                                            </div>
+                                                  </div>
+                                                  </div>
+                                   
+                                  
+                                        </div>
+                                        </div>
+                 
+                     </div>
+                      </Modal.Body>
+                      <Modal.Footer>
+                      <Button variant="secondary" onClick={updateinventories}>
+                          Update Location
+                        </Button>
+                        <Button variant="secondary" onClick={handleClose12}>
+                          Close
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+
+
+
+{/*===================================================== unit location details edit end========================================= */}
+
+
 
 <ToastContainer/>
     </div>

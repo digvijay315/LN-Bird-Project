@@ -2692,7 +2692,6 @@ const [show9, setshow9] = useState(false);
                             document_name: [...units.document_name, ''],
                             document_Date: [...units.document_Date, ''],
                             pic: [...units.pic, ''],
-                            linkded_contact: [...units.linkded_contact, ''],
                             action12: [...units.action12, '']
                           });
                         }
@@ -2703,7 +2702,6 @@ const [show9, setshow9] = useState(false);
                             const newdocumentname = units.document_name.filter((_, i) => i !== index);
                             const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
                             const newpic = units.pic.filter((_, i) => i !== index);
-                            const newlinkedcontact = units.linkded_contact.filter((_, i) => i !== index);
                             const newaction12=units.action12.filter((_,i) => i !== index);
                             
                             setunits({
@@ -2712,7 +2710,6 @@ const [show9, setshow9] = useState(false);
                               document_name: newdocumentname,
                               document_Date: newdocumentdate,
                               pic: newpic,
-                              linkded_contact: newlinkedcontact,
                               action12:newaction12
                             });
                           }
@@ -2769,7 +2766,7 @@ const [show9, setshow9] = useState(false);
                               bredth: [...units.bredth, ''],
                               total_area: [...units.total_area, ''],
                               measurment2: [...units.measurment2, ''],
-                              action3: [...units.action3, '']
+                              action3: [...(units.action3 || []), ''] 
                             }));
                           };
                           const deleteall3=(index)=>
@@ -2810,29 +2807,33 @@ const [show9, setshow9] = useState(false);
                               });
                             };
                             const handlelengthchange = (index, event) => {
-                              const newlength = [...units.length];
-                              newlength[index] = event.target.value;
-                              setunits({
-                                ...units,
-                                length: newlength
-                              });
+                              const newLength = [...units.length];
+                              newLength[index] = event.target.value;
+                            
+                              const newTotalArea = [...units.total_area];
+                              newTotalArea[index] = newLength[index] && units.bredth[index] ? newLength[index] * units.bredth[index] : '';
+                            
+                              setunits((prev) => ({
+                                ...prev,
+                                length: newLength,
+                                total_area: newTotalArea,
+                              }));
                             };
+                            
                             const handlebredthchange = (index, event) => {
-                              const newbreadth = [...units.bredth];
-                              newbreadth[index] = event.target.value;
-                              setunits({
-                                ...units,
-                                bredth: newbreadth
-                              });
+                              const newBreadth = [...units.bredth];
+                              newBreadth[index] = event.target.value;
+                            
+                              const newTotalArea = [...units.total_area];
+                              newTotalArea[index] = units.length[index] && newBreadth[index] ? units.length[index] * newBreadth[index] : '';
+                            
+                              setunits((prev) => ({
+                                ...prev,
+                                bredth: newBreadth,
+                                total_area: newTotalArea,
+                              }));
                             };
-                            const handletotalarea = (index, event) => {
-                              const newtotalarea = [...units.total_area];
-                              newtotalarea[index] = event.target.value;
-                              setunits({
-                                ...units,
-                                total_area: newtotalarea
-                              });
-                            };
+                            
 
 
 
@@ -5843,7 +5844,7 @@ stage:selectedLead.stage
                                 </select>
                     </div>
 
-                    <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,side_open:e.target.value})}>
                                 <option>{units.side_open}</option>
                                 <option>---Select---</option>
                                 <option>1 Side Open</option>
@@ -6012,7 +6013,7 @@ stage:selectedLead.stage
                       units.floor.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
-                          <option>{units.floor}</option>
+                          <option>{units.floor[index]}</option>
                           <option>---Select---</option>
                           <option>Ground Floor</option>
                           <option>First Floor</option>
@@ -6033,7 +6034,7 @@ stage:selectedLead.stage
                       units.cluter_details.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
-                          <option>{units.cluter_details}</option>
+                          <option>{units.cluter_details[index]}</option>
                           <option>---Select---</option>
                           <option>Living Room</option>
                           <option>Lobby</option>
@@ -6059,7 +6060,7 @@ stage:selectedLead.stage
                           Array.isArray(units.length) ?
                       units.length.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.length} onChange={(event)=>handlelengthchange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.length[index]} onChange={(event)=>handlelengthchange(index,event)}/>
                       )):[]
                     }
                     </div>
@@ -6068,7 +6069,7 @@ stage:selectedLead.stage
                       Array.isArray(units.bredth) ?
                       units.bredth.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.bredth} onChange={(event)=>handlebredthchange(index,event)}/>
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.bredth[index]} onChange={(event)=>handlebredthchange(index,event)}/>
                       
                       )):[]
                     }
@@ -6078,7 +6079,7 @@ stage:selectedLead.stage
                       Array.isArray(units.total_area) ?
                       units.total_area.map((item,index)=>
                       (
-                        <input className="form-control form-control-sm"  value={units.length[index] && units.bredth[index] ? units.length[index] * units.bredth[index] : ''} style={{marginTop:"10px"}} onChange={(event)=>handletotalarea(index,event)}/>
+                        <input className="form-control form-control-sm"  value={units.length[index] && units.bredth[index] ? units.length[index] * units.bredth[index] : ''} style={{marginTop:"10px"}}  readOnly/>
                     
                       )):[]
                     }
