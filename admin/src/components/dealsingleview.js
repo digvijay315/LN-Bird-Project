@@ -1,6 +1,7 @@
-import React, { act, useEffect } from 'react'
+import React, { act, useEffect,useRef } from 'react'
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
+import '../css/mystyle.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -520,12 +521,25 @@ const viewallactivity=async()=>
 {
   try {
     const resp=await api.get('viewactivity')
-    const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
-    const filteredActivities = resp.data.activity.filter((activity) => {
-      return activity.lead === fullname; // Filter based on the full name
-    });
+     // Extract full names from owner_details and associated_contact
+     const ownerNames = lead.owner_details.map(owner => 
+      `${owner.title} ${owner.first_name} ${owner.last_name}`
+    );
+
+    const associatedNames = lead.associated_contact.map(contact => 
+      `${contact.title} ${contact.first_name} ${contact.last_name}`
+    );
+
+    // Combine both arrays into one array of full names
+    const fullNames = [...ownerNames, ...associatedNames];
+  
+    const filteredActivities = resp.data.activity.filter(activity => 
+      fullNames.some(fullName => activity.lead.includes(fullName)) // Check each full name
+    );
     setallactivity(filteredActivities)
     setfilterdata(filteredActivities)
+    console.log(filteredActivities);
+    
     
   } catch (error) {
     console.log(error);
@@ -870,6 +884,20 @@ console.log(alltask);
   'add inventory',
   'added docuemnt'
 ];
+
+const dropdownRef = useRef(null);
+  // Handle click outside dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
  const [selectactivity, setselectactivity] = useState([]);
 
@@ -1469,7 +1497,7 @@ const handleShow10=async()=>
 }
 
 
-const [progress, setProgress] = useState(deal.white_portion || 10); // Initialize with deal.whiteportion
+const [progress, setProgress] = useState(deal?.white_portion?deal.white_portion : 10); // Initialize with deal.whiteportion
 
 const handleMouseMove = (e) => {
   const progressBar = e.target.getBoundingClientRect();
@@ -2068,7 +2096,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
   price_list:[],Payment_plan:[]});
 
 
-  const[unit,setunit]=useState([])
+
   const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
                                   size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                   total_land_area:"",
@@ -2081,6 +2109,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
                                   relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
                                   document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
 
+                                  
 
 const [show9, setshow9] = useState(false);
     
@@ -2096,6 +2125,8 @@ const [show9, setshow9] = useState(false);
                     const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
                     setunits(resp.data.project.add_unit[0])
                     
+                    const resp1=await api.get(`viewdealbyid/${lead._id}`)
+                    setdeal(resp1.data.deal)
                    
                   }
                 // console.log(units.owner_details);
@@ -2107,7 +2138,8 @@ const [show9, setshow9] = useState(false);
             const block=unitlocation.block
             const unit=unitlocation.unit_no
             try {
-              const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+              const resp2=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+              const resp3=await api.put(`updatedeal/${lead._id}`,deal)
               toast.success(`Data updated successfully`,{autoClose:"2000"})
                               setTimeout(() => {
                                 window.location.reload()
@@ -2196,6 +2228,10 @@ const [show9, setshow9] = useState(false);
                         ...prevDeal,
                         owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
                       }));
+                      setdeal(prevDeal => ({
+                        ...prevDeal,
+                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
                      
                     }
                      else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
@@ -2206,6 +2242,10 @@ const [show9, setshow9] = useState(false);
                       ]);
                       setunits(prevDeal => ({ ...prevDeal, relation: relation }));
                       setunits(prevDeal => ({
+                        ...prevDeal,
+                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                      setdeal(prevDeal => ({
                         ...prevDeal,
                         associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
                       }));
@@ -2247,10 +2287,18 @@ const [show9, setshow9] = useState(false);
                       ...prevState,
                       owner_details: updatedContacts3,
                     }));
+                    setdeal((prevState) => ({
+                      ...prevState,
+                      owner_details: updatedContacts3,
+                    }));
           
                     const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
                     setselectedcontact2(updatedContacts2)
                     setunits((prevState) => ({
+                      ...prevState,
+                      associated_contact: updatedContacts4,
+                    }));
+                    setdeal((prevState) => ({
                       ...prevState,
                       associated_contact: updatedContacts4,
                     }));
@@ -2444,6 +2492,280 @@ const [show9, setshow9] = useState(false);
 // ==============================================unit location end=========================================================
 
 
+// ===================================unit details edit start=====================================================================
+
+const [show13, setshow13] = useState(false);
+
+const handleClose13 = () => setshow13(false);
+const handleShow13=async()=>
+{
+      setshow13(true);
+      const project=unitlocation.project_name
+      const block=unitlocation.block
+      const unit=unitlocation.unit_no
+
+      const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+      setunits(resp.data.project.add_unit[0])
+  
+}
+
+    const [selectedType, setSelectedType] = useState(null);
+                    
+                              const handleTypeClick1 = (type) => {
+                                setSelectedType(type);
+                            setunits((prevunits)=>({
+                              ...prevunits,
+                              category:type
+                            }))
+                        };
+
+     const [showabuiltup, setSowbuiltup] = useState(false); // Track the checkbox state
+                              
+                                                        // Handle the checkbox change to show/hide plot size section
+                                                        const handleCheckboxChange4 = (event) => {
+                                                          setSowbuiltup(event.target.checked);
+                                                        };
+    
+
+                        function addFn3() {
+     
+                          setunits((prevunits)=>({
+                            ...prevunits,
+                            floor:[...units.floor,''],
+                            cluter_details: [...units.cluter_details, ''],
+                            length: [...units.length, ''],
+                            bredth: [...units.bredth, ''],
+                            total_area: [...units.total_area, ''],
+                            measurment2: [...units.measurment2, ''],
+                            action3: [...(units.action3 || []), ''] 
+                          }));
+                        };
+                        const deleteall3=(index)=>
+                          {
+                            const newfloor = units.floor.filter((_, i) => i !== index);
+                            const newcluter = units.cluter_details.filter((_, i) => i !== index);
+                            const newlength = units.length.filter((_, i) => i !== index);
+                            const newbreadth = units.bredth.filter((_, i) => i !== index);
+                            const newtotalarea = units.total_area.filter((_, i) => i !== index);
+                            const newmeasurement = units.measurment2.filter((_, i) => i !== index);
+                            const newaction3=units.action3.filter((_,i) => i !== index);
+                            
+                            setunits({
+                              ...units,
+                              floor:newfloor,
+                              cluter_details: newcluter,
+                              length: newlength,
+                              bredth: newbreadth,
+                              total_area: newtotalarea,
+                              measurment2: newmeasurement,
+                              action3:newaction3
+                            });
+                          }
+                          const handlefloorchange = (index, event) => {
+                            const newfloor = [...units.floor];
+                            newfloor[index] = event.target.value;
+                            setunits({
+                              ...units,
+                              floor: newfloor
+                            });
+                          };
+                          const handlecluterdetails = (index, event) => {
+                            const newcluterdetails = [...units.cluter_details];
+                            newcluterdetails[index] = event.target.value;
+                            setunits({
+                              ...units,
+                              cluter_details: newcluterdetails
+                            });
+                          };
+                          const handlelengthchange = (index, event) => {
+                            const newLength = [...units.length];
+                            newLength[index] = event.target.value;
+                          
+                            const newTotalArea = [...units.total_area];
+                            newTotalArea[index] = newLength[index] && units.bredth[index] ? newLength[index] * units.bredth[index] : '';
+                          
+                            setunits((prev) => ({
+                              ...prev,
+                              length: newLength,
+                              total_area: newTotalArea,
+                            }));
+                          };
+                          
+                          const handlebredthchange = (index, event) => {
+                            const newBreadth = [...units.bredth];
+                            newBreadth[index] = event.target.value;
+                          
+                            const newTotalArea = [...units.total_area];
+                            newTotalArea[index] = units.length[index] && newBreadth[index] ? units.length[index] * newBreadth[index] : '';
+                          
+                            setunits((prev) => ({
+                              ...prev,
+                              bredth: newBreadth,
+                              total_area: newTotalArea,
+                            }));
+                          };
+                          
+
+
+
+
+
+                        const handleSuggestionClick1 = (contact, index) => {
+                          setShowSuggestions(false); 
+                          const fullContact = `${contact.title} ${contact.first_name} ${contact.last_name}`;
+                          setunits((prevUnits) => {
+                            const updatedLinkedContacts = [...prevUnits.linkded_contact];
+                            updatedLinkedContacts[index] = fullContact; // Update the specific contact at the index
+                            return {
+                              ...prevUnits,
+                              linkded_contact: updatedLinkedContacts,
+                            };
+                          });
+                          
+                        }
+
+                        
+                  function addFn6() {
+   
+                    setunits({
+                      ...units,
+                      water_source:[...units.water_source,''],
+                      water_level: [...units.water_level, ''],
+                      water_pump_type: [...units.water_pump_type, ''],
+                      action6: [...units.action6, '']
+                    });
+                  };
+                  const deleteall6=(index)=>
+                    {
+                      const newwatersource = units.water_source.filter((_, i) => i !== index);
+                      const newwaterlevel = units.water_level.filter((_, i) => i !== index);
+                      const newpumptype = units.water_pump_type.filter((_, i) => i !== index);
+                      const newaction6=units.action6.filter((_,i) => i !== index);
+                      
+                      setunits({
+                        ...units,
+                        water_source:newwatersource,
+                        water_level: newwaterlevel,
+                        water_pump_type: newpumptype,
+                        action6:newaction6
+                      });
+                    }
+                    const handlewatersourcechange = (index, event) => {
+                      const newwatersource = [...units.water_source];
+                      newwatersource[index] = event.target.value;
+                      setunits({
+                        ...units,
+                        water_source: newwatersource
+                      });
+                    };
+                    const handlewaterlevelchange = (index, event) => {
+                      const newwaterlevel = [...units.water_level];
+                      newwaterlevel[index] = event.target.value;
+                      setunits({
+                        ...units,
+                        water_level: newwaterlevel
+                      });
+                    };
+                    const handlewaterpumpchange = (index, event) => {
+                      const newwaterpump = [...units.water_pump_type];
+                      newwaterpump[index] = event.target.value;
+                      setunits({
+                        ...units,
+                        water_pump_type: newwaterpump
+                      });
+                    };
+
+
+                    
+                function addFn5() {
+   
+                  setunits({
+                    ...units,
+                    khewat_no:[...units.khewat_no,''],
+                    killa_no: [...units.killa_no, ''],
+                    share: [...units.share, ''],
+                    action5: [...units.action5, '']
+                  });
+                };
+                const deleteall5=(index)=>
+                  {
+                    const newkhewatno = units.khewat_no.filter((_, i) => i !== index);
+                    const newkillano = units.killa_no.filter((_, i) => i !== index);
+                    const newshare = units.share.filter((_, i) => i !== index);
+                    const newaction5=units.action5.filter((_,i) => i !== index);
+                    
+                    setunits({
+                      ...units,
+                      khewat_no:newkhewatno,
+                      killa_no: newkillano,
+                      share: newshare,
+                      action5:newaction5
+                    });
+                  }
+                  const handlekhewatnochange = (index, event) => {
+                    const newkhewatno = [...units.khewat_no];
+                    newkhewatno[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      khewat_no: newkhewatno
+                    });
+                  };
+                  const handlekillanochange = (index, event) => {
+                    const newkillano = [...units.killa_no];
+                    newkillano[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      killa_no: newkillano
+                    });
+                  };
+                  const handlesharenochange = (index, event) => {
+                    const newshare = [...units.share];
+                    newshare[index] = event.target.value;
+                    setunits({
+                      ...units,
+                      share: newshare
+                    });
+                  };
+
+                  const updateinventoriesunit=async()=>
+                    {
+                      const project=unitlocation.project_name
+                      const block=unitlocation.block
+                      const unit=unitlocation.unit_no
+                      try {
+                        const resp2=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+                        toast.success(`Data updated successfully`,{autoClose:"2000"})
+                                        setTimeout(() => {
+                                          window.location.reload()
+                                        }, 2000);
+                      } catch (error) {
+                        console.log(error);
+                        
+                      }
+                    }
+                                
+
+//======================================================= unit details edit end====================================================
+
+
+// =============================================delete deal start====================================================================
+
+      const deletedeal = async () => {
+          try {
+           
+              const resp=await api.delete(`removedeal/${lead._id}`);
+            toast.success('Deal deleted successfully',{autoClose:"2000"})
+            setTimeout(() => {
+              navigate('/dealdetails')
+            }, 2000);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+
+
+//============================================================ delete deal end====================================================
+
   return (
     <div style={{overflowX:"hidden"}}>
 
@@ -2455,10 +2777,25 @@ const [show9, setshow9] = useState(false);
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Deal</h6>
-          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow10}>Edit</button>
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
-          <button style={{height:"30px",borderRadius:"5px",fontSize:"14px",marginLeft:"2px",padding:"5px"}} onClick={handleToggle}>Publish On</button>
+          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}({lead.block})
+         
+            <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",backgroundColor:"brown",color:"white",textAlign:"center"}}>
+              <li>Preview</li>
+              <li>Publish</li>
+              <li>Create Booking</li>
+              <li>Matched Lead</li>
+              <li>Transfer User</li>
+              <li onClick={handleShow10}>Edit</li>
+              <li onClick={deletedeal}>Delete</li>
+            </ul>
+
+          {/* <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow10}>Edit</button> */}
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"80%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
+          {/* <button style={{height:"30px",borderRadius:"5px",fontSize:"14px",marginLeft:"2px",padding:"5px"}} onClick={handleToggle}>Publish On</button> */}
           </span>
           </h3>
         </div>
@@ -2519,11 +2856,11 @@ const [show9, setshow9] = useState(false);
                         alt="call-icon"
                         style={{ height: '25px', marginRight: '4px' }}
                       />
-                  {lead.owner_details[0]?.mobile_no[0]}</InputLabel>
+                   {lead.owner_details?.[0]?.mobile_no?.[0] || "N/A"}</InputLabel>
                   <Select
                     labelId="mobile-label"
                     id="mobile-select"
-                    value={lead.owner_details[0]?.mobile_no[0]}  // Always keep the mobile number as the value
+                    value= {lead.owner_details?.[0]?.mobile_no?.[0] || "N/A"}  // Always keep the mobile number as the value
                     style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
                     MenuProps={{
                       PaperProps: {
@@ -2621,14 +2958,14 @@ const [show9, setshow9] = useState(false);
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
                     <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Unit Details
                     <Tooltip title="Update Unit..." arrow>
-                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' onClick={handleShow13} style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
                                 </Tooltip>
                     </div>
                     <div className='col-md-12'><hr></hr></div>
                    
-                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation.road}</p></div>
-                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Direction</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation.direction}</p></div>
-                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation.facing}</p></div>
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation?.road}</p></div>
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Direction</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation?.direction}</p></div>
+                    <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{unitlocation?.facing}</p></div>
                   
                   <div className='col-md-12'><input type='checkbox' onChange={(e) => setShowTable(e.target.checked)}></input>Show Builtup Details</div>
                    {
@@ -2728,7 +3065,7 @@ const [show9, setshow9] = useState(false);
                    
 
                  {
-                  lead.owner_details.map((item)=>
+                  lead.owner_details?.map((item)=>
                   (
                     <>
                     <div className='col-md-12'><label style={{color:"#B85042"}}>Full Name</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{item.title} {item.first_name} {item.last_name}</p></div>
@@ -2964,6 +3301,7 @@ const [show9, setshow9] = useState(false);
         <span style={{fontWeight:"bold",fontSize:"12px",cursor:"pointer"}}   onClick={() => setShowDropdown(!showDropdown)} >all activity</span>
         {showDropdown && (
   <div
+  ref={dropdownRef}
     className="dropdown-container"
     style={{
       position: 'absolute',
@@ -3083,9 +3421,10 @@ const [show9, setshow9] = useState(false);
                         {allactivity.slice().reverse().map((item, index) => (
                           item.activity_name==="call"?(
                             <div id='callaction' >
-                            <div><img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' style={{height:"20px"}}></img>
-                            
-                            <span style={{marginLeft:"61%"}}>{new Date(item.createdAt).toLocaleString()}</span>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src='https://png.pngtree.com/png-clipart/20190619/original/pngtree-call-icon-3d-png-image_3990094.jpg' style={{height:"20px"}}></img>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            <span >{new Date(item.createdAt).toLocaleString()}</span>
                             {/* <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span> */}
                             <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown >
@@ -3099,6 +3438,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
+                            </div>
                             </div>
                             <span>{lead.owner} called <u> {lead.title} {lead.first_name} {lead.last_name}</u></span><br></br>
                             <span style={{fontWeight:"bold"}}>{item.call_outcome}</span> Outcome<br></br>
@@ -3116,23 +3456,12 @@ const [show9, setshow9] = useState(false);
                                   height: isExpanded ? "auto" : "80px", // Height based on expanded state
                                   transition: "height 0.3s ease", // Smooth transition for height change
                                 }}>
-                            <div><img src='https://illustoon.com/photo/2751.png' style={{height:"20px"}}></img>
-                            <span style={{fontSize:"10px"}}>you sent an email to {lead.title} {lead.first_name} {lead.last_name}</span>
-                            <img
-          src="https://cdn-icons-png.flaticon.com/512/301/301687.png"
-          style={{
-            height: "15px",
-            marginLeft:"10%",
-            cursor: "pointer",
-            marginRight: "5px",
-          }}
-          onClick={toggleExpand} // Eye icon also toggles the expand/collapse
-        />
-        <span> {item.viewcount}</span>
-                            <span style={{marginLeft:"15%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                            {/* <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span> */}
-
-                            <span  style={{marginLeft:"0%",position:"absolute",marginTop:"-10px"}}>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src='https://illustoon.com/photo/2751.png' style={{height:"20px"}}></img>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                              <span>{new Date(item.createdAt).toLocaleString()}</span>
+                            <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown >
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3144,7 +3473,9 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
+                       </div>
                             </div>
+                            <span style={{fontSize:"10px"}}>you sent an email to {lead.title} {lead.first_name} {lead.last_name}</span>
                             <span><u> {lead.email}  </u></span><br></br>
                             <div dangerouslySetInnerHTML={{ __html: item.message }} /><br></br>
                             <span style={{fontWeight:"bold"}}>{lead.owner}</span>
@@ -3158,12 +3489,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="notes"?(
                             <div id='noteaction' >
-                            <div><img src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg" style={{height:"20px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://static.vecteezy.com/system/resources/previews/001/505/060/non_2x/notes-icon-free-vector.jpg" style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"60%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                            {/* <span  style={{marginLeft:"5%"}}><img id='deletebutton' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDgCtB72sd2csn3h4Xoktuuub7vFQQ-dGBOw&s' style={{height:"20px",cursor:"pointer"}} onClick={()=>deleteactivity(item._id)}></img></span> */}
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown >
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3175,7 +3507,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> left a note</span><br></br>
                             <div dangerouslySetInnerHTML={{ __html: item.activity_note1 }} />
@@ -3186,12 +3518,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="complete call task"?(
                             <div id='completecallaction' >
-                            <div><img src="https://cdn3d.iconscout.com/3d/premium/thumb/two-way-communication-3d-icon-download-in-png-blend-fbx-gltf-file-formats--chat-chatting-people-join-call-center-pack-icons-8400040.png" style={{height:"20px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn3d.iconscout.com/3d/premium/thumb/two-way-communication-3d-icon-download-in-png-blend-fbx-gltf-file-formats--chat-chatting-people-join-call-center-pack-icons-8400040.png" style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3203,7 +3536,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} of {item.lead}</span><br></br>
                            <hr></hr>
@@ -3213,12 +3546,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="complete mail task"?(
                             <div id='completemailaction' >
-                            <div><img src="https://cdn-icons-png.flaticon.com/512/4697/4697867.png" style={{height:"20px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.flaticon.com/512/4697/4697867.png" style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3230,7 +3564,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} of {item.lead}</span><br></br>
                            <hr></hr>
@@ -3240,12 +3574,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) :  item.activity_name==="complete meeting task"?(
                             <div id='completemeetingaction' >
-                            <div><img src="https://cdn-icons-png.flaticon.com/512/1081/1081530.png" style={{height:"20px"}}></img>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.flaticon.com/512/1081/1081530.png" style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3257,7 +3592,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} with {item.lead}</span><br></br>
                            <hr></hr>
@@ -3267,12 +3602,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) :  item.activity_name==="complete site visit task"?(
                             <div id='completsitevisitaction' >
-                            <div><img src="https://cdn-icons-png.freepik.com/512/8094/8094388.png" style={{height:"20px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.freepik.com/512/8094/8094388.png" style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3284,7 +3620,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} with {item.lead}</span><br></br>
                            <hr></hr>
@@ -3294,12 +3630,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="edit"?(
                             <div id='editaction' >
-                            <div><img src="https://www.freeiconspng.com/uploads/document-edit-icon-19.png" style={{height:"20px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://www.freeiconspng.com/uploads/document-edit-icon-19.png" style={{height:"20px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3311,7 +3648,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} {item.lead} {item.edit_field} with {item.edit_value}</span><br></br>
                            <hr></hr>
@@ -3321,12 +3658,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="create call task"?(
                             <div id='createcalltaskaction' >
-                            <div><img src="https://www.shutterstock.com/image-vector/call-planner-icon-time-management-260nw-1414111730.jpg" style={{height:"40px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://www.shutterstock.com/image-vector/call-planner-icon-time-management-260nw-1414111730.jpg" style={{height:"40px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3338,7 +3676,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3348,12 +3686,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="create mail task"?(
                             <div id='createmailtaskaction' >
-                            <div><img src="https://cdn-icons-png.freepik.com/256/16294/16294372.png?semt=ais_hybrid" style={{height:"30px"}}></img>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.freepik.com/256/16294/16294372.png?semt=ais_hybrid" style={{height:"30px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3365,7 +3704,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3375,12 +3714,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="create meeting task"?(
                             <div id='createmeetingtaskaction' >
-                            <div><img src="https://t4.ftcdn.net/jpg/03/67/61/45/360_F_367614596_kyv8YYMpghwJ6pR6NHp7oyIN1IVnfHvF.jpg" style={{height:"30px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://t4.ftcdn.net/jpg/03/67/61/45/360_F_367614596_kyv8YYMpghwJ6pR6NHp7oyIN1IVnfHvF.jpg" style={{height:"30px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3392,7 +3732,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3402,12 +3742,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="create site visit task"?(
                             <div id='createsitevisittaskction' >
-                            <div><img src="https://cdn-icons-png.freepik.com/256/13156/13156025.png?semt=ais_hybrid" style={{height:"30px"}}></img>
+                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.freepik.com/256/13156/13156025.png?semt=ais_hybrid" style={{height:"30px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3419,7 +3760,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3429,12 +3770,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="deal created"?(
                             <div id='createsitevisittaskction' >
-                            <div><img src="https://cdn-icons-png.flaticon.com/512/2132/2132939.png" style={{height:"30px"}}></img>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.flaticon.com/512/2132/2132939.png" style={{height:"30px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3446,7 +3788,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3456,12 +3798,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="add inventory"?(
                             <div id='createsitevisittaskction' >
-                            <div><img src="https://icons.veryicon.com/png/o/miscellaneous/seiko-cloud-map-standard-library/add-inventory.png" style={{height:"30px"}}></img>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://icons.veryicon.com/png/o/miscellaneous/seiko-cloud-map-standard-library/add-inventory.png" style={{height:"30px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3473,7 +3816,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3483,12 +3826,13 @@ const [show9, setshow9] = useState(false);
                        
                           ) : item.activity_name==="added docuemnt"?(
                             <div id='createsitevisittaskction' >
-                            <div><img src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" style={{height:"30px"}}></img>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                              <img src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" style={{height:"30px"}}></img>
                             
-                            <span style={{marginLeft:"56%"}}>{new Date(item.createdAt).toLocaleString()}</span>
-                          
-
-                            <span  style={{marginLeft:"0%",display:"inline-block",}}>
+                              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                            
+                            <span>{new Date(item.createdAt).toLocaleString()}</span>
+                          <span  style={{marginLeft:"0%",display:"inline-block"}}>
                             <Dropdown>
                                    <Dropdown.Toggle variant="success" id="dropdown-basic" style={{border:"none",color:"black",backgroundColor:"transparent"}}>
                               </Dropdown.Toggle>
@@ -3500,7 +3844,7 @@ const [show9, setshow9] = useState(false);
                               </Dropdown.Menu>
                             </Dropdown>
                             </span>
-
+                            </div>
                             </div>
                             <span><u>{lead.owner}</u> {item.activity_name} for {item.lead}</span><br></br>
                            <hr></hr>
@@ -3550,10 +3894,10 @@ const [show9, setshow9] = useState(false);
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3631,10 +3975,10 @@ const [show9, setshow9] = useState(false);
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3671,7 +4015,7 @@ const [show9, setshow9] = useState(false);
       <tbody>
         {
          
-        lead.associated_contact.map ((item, index) => (
+        lead.associated_contact?.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
            
@@ -3715,10 +4059,10 @@ const [show9, setshow9] = useState(false);
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/tasksform')}
@@ -3808,10 +4152,10 @@ const [show9, setshow9] = useState(false);
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible3 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={handleShow8}
@@ -3903,10 +4247,10 @@ const [show9, setshow9] = useState(false);
     display: "inline-block", 
     transition: "transform 0.3s ease", // Smooth transition for rotation
     transform: isTableVisible4 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-    marginTop: "0px", // Align the arrow properly
+    marginTop: "4px", // Align the arrow properly
   }}
 >
-  ▼
+▽
 </span>
 <span 
 //  onClick={handleShow8}
@@ -4590,13 +4934,15 @@ fontWeight:"lighter"
                    <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
 
                     <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
-                    <option>Select</option>
+                        <option>{deal.deal_type}</option>
+                        <option>---Select---</option>
                         <option>Hot</option>
                         <option>Warm</option>
                         <option>Cold</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
-                    <option>Select</option>
+                        <option>{deal.transaction_type}</option>
+                        <option>---Select---</option>
                         <option>Full White</option>
                         <option>Collecter Rate</option>
                         <option>Flexiable</option>
@@ -4604,7 +4950,8 @@ fontWeight:"lighter"
                         <div className="col-md-4"></div>
 
                         <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
-                    <option>Select</option>
+                        <option>{deal.source}</option>
+                        <option>---Select---</option>
                         <option>99 Acre</option>
                         <option>News Paper</option>
                         <option>Walkin</option>
@@ -4624,14 +4971,16 @@ fontWeight:"lighter"
 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                         <div className="col-md-4"><label className="labels">Team</label><select className="form-control form-control-sm" name="team" onChange={(e)=>setdeal({...deal,team:e.target.value})}>
-                    <option>Select</option>
+                              <option>{deal.team}</option>
+                              <option>---Select---</option>
                               <option>Sales</option>
                               <option>Marketing</option>
                               <option> Post Sales</option>
                               <option> Pre Sales</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">User</label><select className="form-control form-control-sm" name="user" onChange={(e)=>setdeal({...deal,user:e.target.value})}>
-                    <option>Select</option>
+                        <option>{deal.user}</option>
+                               <option>---Select---</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
                               <option>Ramesh Singh</option>
@@ -4639,7 +4988,8 @@ fontWeight:"lighter"
                               <option>Sukram</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Visible To</label><select className="form-control form-control-sm" name="visible_to" onChange={(e)=>setdeal({...deal,visible_to:e.target.value})}>
-                    <option>Select</option>
+                        <option>{deal.visible_to}</option>
+                        <option>---Select---</option>
                         <option>Only Me</option>
                         <option>Team</option>
                         <option>All User</option>
@@ -4649,7 +4999,8 @@ fontWeight:"lighter"
                     <div className="col-md-12"><hr></hr></div>
                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Website</label>
                                       <select className="form-control form-control-sm" name="website" required="true" onChange={(e)=>setdeal({...deal,website:e.target.value})}>
-                                          <option>select</option>
+                                      <option>{deal.website}</option>
+                                          <option>---select---</option>
                                           <option>Own Website</option>
                                           <option>99 Acre</option>
                                           <option>Olx</option>
@@ -4659,7 +5010,8 @@ fontWeight:"lighter"
                                     </div>
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Social Media</label>
                                       <select className="form-control form-control-sm" name="social_media" required="true" onChange={(e)=>setdeal({...deal,social_media:e.target.value})}>
-                                          <option>select</option>
+                                      <option>{deal.social_media}</option>
+                                          <option>---select---</option>
                                           <option>Facebook</option>
                                           <option>Instagram</option>
                                           <option>Googe Page</option>
@@ -4669,13 +5021,14 @@ fontWeight:"lighter"
                                     </div>
                                     <div className="col-md-4" style={{marginTop:"10px"}}><label className="labels">Send(Matched Lead)</label>
                                       <select className="form-control form-control-sm" name="send_matchedlead" required="true" onChange={(e)=>setdeal({...deal,send_matchedlead:e.target.value})}>
-                                          <option>select</option>
+                                          <option>{deal.send_matchedlead}</option>
+                                          <option>---select---</option>
                                           <option>Message</option>
                                           <option>What's App</option>
                                           <option>Email</option>
                                           </select>
                                     </div>
-                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
+                                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea type="text" value={deal.remarks} style={{height:"100px"}} className="form-control form-control-sm"  onChange={(e)=>setdeal({...deal,remarks:e.target.value})}/></div>
                                     <div className="col-md-2"></div>
 
 
@@ -5330,6 +5683,492 @@ fontWeight:"lighter"
 {/*===================================================== unit location details edit end========================================= */}
 
 
+{/* ==================================unit details edit modal start=========================================================== */}
+
+
+<Modal show={show13} onHide={handleClose13} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                      <Modal.Header>
+                        <Modal.Title>Update Unit Details</Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+
+                      <div style={{width:"100%"}}>
+            <div className="row" id='unitdetails1'>
+             
+                    <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                               <option>{units.unit_type}</option>
+                                <option>---Select---</option>
+                                <option>Corner</option>
+                                <option> Two Side Open</option>
+                                <option>Three Side Open</option>
+                                <option>Ordinary </option>
+                                </select>
+                    </div>
+                    <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
+                    <div className="col-md-12" style={{display:"flex"}} >
+                    <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
+                      {
+                        project.category.map((type) => (
+                          <div className="col-md-3" key={type}>
+                            <button 
+                              className="form-control form-control-sm"
+                              onClick={() => handleTypeClick1(type)} 
+                              style={{  backgroundColor: selectedType === type ? 'green' : '', }}
+                            >
+                              {type}
+                            </button>
+                          </div>
+                        ))
+                      }
+                    </div>
+                    </div>
+
+                    <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
+                    <option>{units.block}</option>
+                    <option>choose</option>
+                    {
+                                project.add_block.map((item)=>
+                                (
+                                  <option>{item.block_name}</option>
+                                ))
+                               }
+                                </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
+                    <option>{units.size}</option>
+                    <option>choose</option>
+                    {
+                                project.add_size.map((item)=>
+                                (
+                                  <option>{item.size_name}</option>
+                                ))
+                               }
+                                </select>
+                    </div>
+                  
+
+                  {
+                      project.category.includes("Agricultural") &&(
+
+                          <>
+
+
+                    <div className="col-md-6"><label className="labels">Land Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,land_type:e.target.value})}>
+                                <option>{units.land_type}</option>
+                                <option>---Select---</option>
+                                <option>Crop Land</option>
+                                <option>Wood Land</option>
+                                <option>Pasture</option>
+                                </select>
+                    </div>
+                    <div className='col-md-6'></div>
+                    <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Land Details<hr></hr></div>
+
+                    <div className='col-md-3' ><label className='labels'>Khewat No</label>
+                    {
+                      Array.isArray(units.khewat_no) ?
+                      units.khewat_no.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.khewat_no} onChange={(event)=>handlekhewatnochange(index,event)}/>
+                        
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-3' ><label className='labels'>Killa No</label>
+                    {
+                      Array.isArray(units.killa_no) ?
+                      units.killa_no.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.killa_no} onChange={(event)=>handlekillanochange(index,event)}/>
+                       
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-3' ><label className='labels'>Share</label>
+                    {
+                      Array.isArray(units.share) ?
+                      units.share.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.share} onChange={(event)=>handlesharenochange(index,event)}/>
+                      )):[]
+                    }
+                    </div>
+
+                  <div className='col-md-1' style={{marginTop:"90px"}}>
+                  {
+                    Array.isArray(units.action5) ?
+                    units.action5.map((item,index)=>
+                    (
+                      
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      
+                    )):[]
+                  }
+                  </div>
+
+                       <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
+                    <div className='col-md-12'>Total Land Area:-{units.total_land_area}</div>
+                       <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Water Details<hr></hr></div>
+
+                       <div className='col-md-3' ><label className='labels'>Water Source</label>
+                    {
+                          Array.isArray(units.water_source) ?
+                      units.water_source.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewatersourcechange(index,event)}>
+                          <option>{units.water_source}</option><option>---select---</option><option>Ground Water</option><option>Canal Water</option><option>Pond Water</option><option>Rain Water</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-3' ><label className='labels'>Water Level</label>
+                    {
+                          Array.isArray(units.water_level) ?
+                      units.water_level.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterlevelchange(index,event)}>
+                          <option>{units.water_level}</option><option>---select---</option><option>100ft.</option><option>200Ft.</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+
+                    <div className='col-md-3' ><label className='labels'>Water Pump Type</label>
+                    {
+                          Array.isArray(units.water_pump_type) ?
+                      units.water_pump_type.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterpumpchange(index,event)}>
+                        <option>{units.water_pump_type}</option>  <option>---select---</option><option>Submersible Motor(15 HP)</option><option>Sumersible Motor(20 HP)</option>
+                          <option>Monoblock Motor(10HP)</option><option>Diesel Engine Pump</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-1' style={{marginTop:"90px"}}>
+                  {
+                    Array.isArray(units.action6) ?
+                    units.action6.map((item,index)=>
+                    (
+                      
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                      
+                    )):[]
+                  }
+                  </div>
+                  <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
+
+                  <div className='col-md-12' style={{color:"green",fontWeight:"bolder"}}>Basic Details<hr></hr></div>
+
+                  <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>{units.facing}</option>
+                                <option>---Select---</option>
+                                <option>Village Link Road</option>
+                                <option>Highway</option>
+                                <option>Expressway</option>
+                                <option>Unconstructed Road</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,side_open:e.target.value})}>
+                                <option>{units.side_open}</option>
+                                <option>---Select---</option>
+                                <option>1 Side Open</option>
+                                <option>2 Side Open</option>
+                                <option>3 Side Open</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                <option>{units.road}</option>
+                                <option>---Select---</option>
+                                <option>11 Ft wide</option>
+                                <option>22 Ft Wide</option>
+                                <option>33 Ft Wide</option>
+                                <option>60 Ft Wide</option>
+                                <option>100 Ft Wide</option>
+                                <option>200 Ft Wide</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,fornt_on_road:e.target.value})}>
+                                <option>{units.fornt_on_road}</option>
+                                <option>---Select---</option>
+                                <option>10 ft</option>
+                                <option>20 ft</option>
+                                <option>30 ft</option>
+                                <option>50 ft</option>
+                                <option>70 ft</option>
+                                <option>100 ft</option>
+                                <option>200 ft</option>
+                                <option>500 ft</option>
+                                <option>1000 ft</option>
+                                </select>
+                    </div>
+
+                    <div className="col-md-4"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                <option>{units.ownership}</option>
+                                <option>---Select---</option>
+                                <option>Mustraka</option>
+                                <option>Individual</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">No. Of Owner</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,total_owner:e.target.value})}>
+                                <option>{units.total_owner}</option>
+                                <option>---Select---</option>
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                </select>
+                    </div>
+              </>
+            )
+
+
+          }
+
+                      {
+                      !project.category.includes("Agricultural") &&(
+
+                          <>
+
+                    <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
+                                <option>{units.direction}</option>
+                                <option>---Select---</option>
+                                <option>East</option>
+                                <option>West</option>
+                                <option>North</option>
+                                <option>South</option>
+                                <option>North East</option>
+                                <option>South East</option>
+                                <option>South West</option>
+                                <option>North West</option>
+                               
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                <option>{units.facing}</option>
+                                <option>---Select---</option>
+                                <option>Park</option>
+                                <option>Green Belt</option>
+                                <option>Highway</option>
+                                <option>Commercial</option>
+                                <option>School</option>
+                                <option>Hospital</option>
+                                <option>Mandir</option>
+                                <option>Gurudwara</option>
+                                <option>Crech</option>
+                                <option>Clinic</option>
+                                <option>Community Centre</option>
+                                <option>1 Kanal</option>
+                                <option>14m Marla</option>
+                                <option>10 Marla</option>
+                                <option>8 Marla</option>
+                                <option>6 Marla</option>
+                                <option>4 Marla</option>
+                                <option>2 Marla</option>
+                                <option> 3 Marla</option>
+                                <option> 2 Kanal</option>
+                                </select>
+                    </div>
+                    <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                <option>{units.road}</option>
+                                <option>---Select---</option>
+                                <option>9 Mtr Wide</option>
+                                <option>12 Mtr Wide</option>
+                                <option> 18 Mtr Wide</option>
+                                <option>24 Mtr Wide</option>
+                                <option> 60 Mtr Wide</option>
+                                </select>
+                    </div>
+                    <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                <option>{units.ownership}</option>
+                                <option>---Select---</option>
+                                <option>Freehold</option>
+                                <option>Leasehold</option>
+                                <option>Co-OPerative Society</option>
+                                <option>Sale Agreement(Lal Dora)</option>
+                                </select>
+                    </div>
+                    <div className='col-md-6'><label className="labels">Stage</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,stage:e.target.value})}>
+                                <option>{units.stage}</option>
+                                <option>---Select---</option>
+                                <option>Active</option>
+                                <option>Inactive</option>
+                                </select></div>
+                    </>
+            )
+
+
+          }
+
+
+                    <div  className='col-md-6' style={{marginTop:"10px"}}>
+                        <input
+                          type="checkbox"
+                          checked={showabuiltup}
+                          onChange={handleCheckboxChange4}
+                        />
+                        <label>Show Builtup Details</label>
+                      </div>
+                      <div className='col-md-6'></div>
+              {showabuiltup && (
+                <>
+                    <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
+
+                    <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                          <option>{units.type}</option>
+                          <option>---Select---</option>
+                          <option>Duplex</option>
+                          <option>Triplex</option>
+                          <option>Independent House</option>
+                          <option>Penthouse</option>
+                          <option>Apartments</option>
+                          <option>Studio Apartments</option>
+                          <option>Bunglow</option>
+                          <option>Farmhouse</option>
+                          <option>Courtyard House</option>
+                        </select>
+                    </div>
+                    <div className='col-md-6'></div>
+                  
+                    <div className='row mt-2' style={{border:"1px dashed black",margin:"10px",marginTop:"0",padding:"10px",width:"100%"}}>
+                    <div className='col-md-2' ><label className='labels'>Floor</label>
+                    {
+                      Array.isArray(units.floor) ?
+                      units.floor.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
+                          <option>{units.floor[index]}</option>
+                          <option>---Select---</option>
+                          <option>Ground Floor</option>
+                          <option>First Floor</option>
+                          <option>Second Floor</option>
+                          <option>Lower Ground</option>
+                          <option>Upper Ground</option>
+                          <option>Third Floor</option>
+                          <option> Fourth Floor</option>
+                          <option>Lower Ground</option>
+                          <option>Lower Ground</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-2' ><label className='labels' style={{width:"500px"}}>Cluter Details</label>
+                    {
+                       Array.isArray(units.cluter_details) ?
+                      units.cluter_details.map((item,index)=>
+                      (
+                        <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
+                          <option>{units.cluter_details[index]}</option>
+                          <option>---Select---</option>
+                          <option>Living Room</option>
+                          <option>Lobby</option>
+                          <option>Bedroom</option>
+                          <option>Master Bedroom</option>
+                          <option>Kitchen</option>
+                          <option>Bathroom</option>
+                          <option>Pooja room,</option>
+                          <option>Study Room</option>
+                          <option>Frontward</option>
+                          <option>Backyard</option>
+                          <option>Balcony</option>
+                          <option>Store</option>
+                          <option>Guest Room</option>
+                          <option>Servent Room</option>
+                          <option>Dressing</option>
+                        </select>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-2' ><label className='labels'>Length</label>
+                    {
+                          Array.isArray(units.length) ?
+                      units.length.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.length[index]} onChange={(event)=>handlelengthchange(index,event)}/>
+                      )):[]
+                    }
+                    </div>
+                    <div className='col-md-2' ><label className='labels'>Breadth</label>
+                    {
+                      Array.isArray(units.bredth) ?
+                      units.bredth.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.bredth[index]} onChange={(event)=>handlebredthchange(index,event)}/>
+                      
+                      )):[]
+                    }
+                    </div>
+                      <div className='col-md-2' ><label className='labels'>Total Area</label>
+                    {
+                      Array.isArray(units.total_area) ?
+                      units.total_area.map((item,index)=>
+                      (
+                        <input className="form-control form-control-sm"  value={units.length[index] && units.bredth[index] ? units.length[index] * units.bredth[index] : ''} style={{marginTop:"10px"}}  readOnly/>
+                    
+                      )):[]
+                    }
+                    </div>
+                   
+                    <div className='col-md-1' style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(units.action3) ?
+                      units.action3.map((item,index)=>
+                      (
+                        
+                            <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                        
+                      )):[]
+                    }
+                    </div>
+                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                   
+                    </div>
+                    </>
+                    )}
+
+                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' value={units.ocupation_date} onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                    <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' value={units.age_of_construction} onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                    
+
+                    <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm" onChange={(e)=>setunits({...units,furnishing_details:e.target.value})}>
+                                <option>{units.furnishing_details}</option>
+                                <option>---Select---</option>
+                                <option>Furnished</option>
+                                <option>Unfurnished</option>
+                                <option>Semi Furnished</option>
+                                </select>
+                    </div>   
+                    {
+                      (units.furnishing_details==="Furnished" || units.furnishing_details==="Semi Furnished") && (
+                     
+                     <div className='col-md-12'><label>Enter Furnishing Details</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                    )}
+                    <div className='col-md-6'></div>
+
+                    <div className='col-md-8'><label>Furnished Items</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,furnished_item:e.target.value})}/></div>
+                 
+                </div>
+                </div>
+
+
+                      </Modal.Body>
+                      <Modal.Footer>
+                      <Button variant="secondary" onClick={updateinventoriesunit}>
+                          Update Unit
+                        </Button>
+                        <Button variant="secondary" onClick={handleClose13}>
+                          Close
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+
+
+{/*============================================ unit details edit modal end =======================================================*/}
 
 <ToastContainer/>
     </div>
