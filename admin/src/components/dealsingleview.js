@@ -39,7 +39,7 @@ const navigate=useNavigate()
     const location=useLocation() 
     const lead=location.state || {}
 
-    console.log(lead);
+    // console.log(lead);
     
     const[documents,setdouments]=useState([])
 
@@ -2777,13 +2777,13 @@ const handleShow13=async()=>
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Deal</h6>
-          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project}({lead.block})
+          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_number} <span style={{fontSize:"18px",marginLeft:"10px",color:"black"}}> {lead.project}<span style={{fontSize:"14px"}}>({lead.block})</span>
          
             <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",backgroundColor:"brown",color:"white",textAlign:"center"}}>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",padding:"10px"}}>
               <li>Preview</li>
               <li>Publish</li>
               <li>Create Booking</li>
@@ -2793,9 +2793,9 @@ const handleShow13=async()=>
               <li onClick={deletedeal}>Delete</li>
             </ul>
 
-          {/* <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow10}>Edit</button> */}
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"80%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
-          {/* <button style={{height:"30px",borderRadius:"5px",fontSize:"14px",marginLeft:"2px",padding:"5px"}} onClick={handleToggle}>Publish On</button> */}
+         
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",  position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
+     
           </span>
           </h3>
         </div>
@@ -3883,7 +3883,7 @@ const handleShow13=async()=>
         <div className='row'>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Matched Lead
+  <div className='col-md-12'> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Leads:{filterlead.length})</span>
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -3964,7 +3964,7 @@ const handleShow13=async()=>
         
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Associated Contact
+  <div className='col-md-12'> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{lead.associated_contact.length})</span>
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -4141,7 +4141,7 @@ const handleShow13=async()=>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents
+        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{documents.length})</span>
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -4236,7 +4236,7 @@ const handleShow13=async()=>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History
+<div className='col-md-12'> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{unitlocation?.previousowner_details?.length})</span>
 <span 
   onClick={toggleTableVisibility5} 
   style={{ 

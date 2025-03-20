@@ -26,6 +26,7 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
+import axios from "axios";
 
 
 function Inventorysingleview() {
@@ -52,11 +53,11 @@ const navigate=useNavigate()
       }
     }, [lead]);
   
-    const[deal,setdeal]=useState([])
+    const[deal1,setdeal1]=useState([])
     const viewdeal=async()=>
     {
       const resp=await api.get('viewdeal')
-      setdeal(resp.data.deal)
+      setdeal1(resp.data.deal)
       try {
         
       } catch (error) {
@@ -73,14 +74,14 @@ const navigate=useNavigate()
     
 
   React.useEffect(() => {
-    if (deal.length > 0) {
+    if (deal1.length > 0) {
      
         const price1 = lead.budget_min;
         const price2 = lead.budget_max;
         const requirment = lead.requirment === 'Buy' ? 'Sale' : lead.requirment;
   
         // Filter leads based on the current deal's criteria
-        const filterdeals = deal.filter(
+        const filterdeals = deal1.filter(
           (item) =>
             item.available_for === requirment &&
             item.expected_price >= parseFloat(price1) &&
@@ -92,7 +93,7 @@ const navigate=useNavigate()
    
       
     }
-  }, [deal]);
+  }, [deal1]);
 
  
   
@@ -572,11 +573,22 @@ const[filterdata,setfilterdata]=useState([])
 const viewallactivity=async()=>
 {
   try {
-    const resp=await api.get('viewactivity')
-    const fullname = `${lead.title} ${lead.first_name} ${lead.last_name}`;
-    const filteredActivities = resp.data.activity.filter((activity) => {
-      return activity.lead === fullname; // Filter based on the full name
-    });
+  const resp=await api.get('viewactivity')
+     // Extract full names from owner_details and associated_contact
+     const ownerNames = lead.owner_details.map(owner => 
+      `${owner.title} ${owner.first_name} ${owner.last_name}`
+    );
+
+    const associatedNames = lead.associated_contact.map(contact => 
+      `${contact.title} ${contact.first_name} ${contact.last_name}`
+    );
+
+    // Combine both arrays into one array of full names
+    const fullNames = [...ownerNames, ...associatedNames];
+  
+    const filteredActivities = resp.data.activity.filter(activity => 
+      fullNames.some(fullName => activity.lead.includes(fullName)) // Check each full name
+    );
     setallactivity(filteredActivities)
     setfilterdata(filteredActivities)
     
@@ -1394,422 +1406,869 @@ setactivity({...activity, edit_field: "block",edit_value:selectblock})
 
 
 
-// ==========================================edit company start=========================================================
+// ==========================================edit inventory start=========================================================
 
+const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+  category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
+  total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
+  approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
+  team:[],visible_to:"",
 
- const [contact,setcontact]=useState({title:"",first_name:"",last_name:"",country_code:[],mobile_no:[],mobile_type:[],action1:[],
-  email:[],email_type:[],action2:[],tags:"",descriptions:"",source:"",team:"",owner:"",visible_to:"",
+  location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
 
-  profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
-  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[],company_url:[],action3:[],
+  add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
+  price_list:[],Payment_plan:[]});
 
-  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-  birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action4:[],loan:[],bank:[],amount:[],action5:[],
-  social_media:[],url:[],action6:[],income:[],amount1:[],action7:[],document_no:[],document_name:[],document_pic:[],action8:[]});
-
-       const time=new Date()
-
-       const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
-        "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
-        "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
-        "Barbados +1246","Belarus +375","Belgium +32","Belize +501","Benin +229","Bermuda +1441","Bhutan +975",
-        "Bolivia +591","Bonaire, Sint Eustatius and Saba +599","Bosnia and Herzegovina +387","Botswana +267",
-        "Bouvet Island +55","Brazil +55","British Indian Ocean Territory +246","Brunei Darussalam +673","Bulgaria +359",
-        "Burkina Faso +226","Burundi +257","Cambodia +855","Cameroon +237","Canada +1","Cape Verde +238","Cayman Islands +1345",
-        "Central African Republic +236","Chad +235","Chile +56","China +86","Christmas Island +61","Cocos (Keeling) Islands +672",
-        "Colombia +57","Comoros +269","Congo +242","Congo, Democratic Republic of the Congo +242","Cook Islands +682",
-        "Costa Rica +506","Cote D'Ivoire +225","Croatia +385","Cuba +53","Curacao +599","Cyprus +357","Czech Republic +420",
-        "Denmark +45","Djibouti +253","Dominica +1767","Dominican Republic +1809","Ecuador +593","Egypt +20",
-        "El Salvador +503","Equatorial Guinea +240","Eritrea +291","Estonia +372","Ethiopia +251","Falkland Islands (Malvinas) +500",
-        "Faroe Islands +298","Fiji +679","Finland +358","France +33","French Guiana +594","French Polynesia +689",
-        "French Southern Territories +262","Gabon +241","Gambia +220","Georgia +995","Germany +49","Ghana +233","Gibraltar +350",
-        "Greece +30","Greenland +299","Grenada +1473","Guadeloupe +590","Guam +1671","Guatemala +502","Guernsey +44",
-        "Guinea +224","Guinea-Bissau +245","Guyana +592","Haiti +509","Holy See (Vatican City State) +39","Honduras +504",
-        "Hong Kong +852","Hungary +36","Iceland +354","India +91","Indonesia +62","Iran, Islamic Republic of +98","Iraq +964",
-        "Ireland +353","Isle of Man +44","Israel +972","Italy +39","Jamaica +1876","Japan +81","Jersey +44","Jordan +962",
-        "Kazakhstan +7","Kenya +254","Kiribati +686","Korea Democratic People's Republic of +850","Korea Republic of +82","Kosovo +383",
-        "Kuwait +965","Kyrgyzstan +996","Lao People's Democratic Republic +856","Latvia +371","Lebanon +961","Lesotho +266",
-        "Liberia +231","Libyan Arab Jamahiriya +218","Liechtenstein +423","Lithuania +370","Luxembourg +352","Macao +853",
-        "Macedonia, the Former Yugoslav Republic of +389","Madagascar +261","Malawi +265","Malaysia +60","Maldives +960",
-        "Mali +223","Malta +356","Marshall Islands +692","Martinique +596","Mauritania +222","Mauritius +230","Mayotte +262",
-        "Mexico +52","Micronesia, Federated States of +691","Moldova, Republic of +373","Monaco +377","Mongolia +976",
-        "Montenegro +382","Montserrat +1664","Morocco +212","Mozambique +258","Myanmar +95","Namibia +264","Nauru +674",
-        "Nepal +977","Netherlands +31","Netherlands Antilles +599","New Caledonia +687","New Zealand +64","Nicaragua +505",
-        "Niger +227","Nigeria +234","Niue +683","Norfolk Island +672","Northern Mariana Islands +1670","Norway +47",
-        "Oman +968","Pakistan +92","Palau +680","Palestinian Territory, Occupied +970","Panama +507","Papua New Guinea +675",
-        "Paraguay +595","Peru +51","Philippines +63","Pitcairn +64","Poland +48","Portugal +351","Puerto Rico +1787",
-        "Qatar +974","Reunion +262","Romania +40","Russian Federation +7","Rwanda +250","Saint Barthelemy +590",
-        "Saint Helena +290","Saint Kitts and Nevis +1869","Saint Lucia +1758","Saint Martin +590","Saint Pierre and Miquelon +508",
-        "Saint Vincent and the Grenadines +1784","Samoa +684","San Marino +378","Sao Tome and Principe +239","Saudi Arabia +966",
-        "Senegal +221","Serbia +381","Serbia and Montenegro +381","Seychelles +248","Sierra Leone +232","Singapore +65",
-        "Sint Maarten +721","Slovakia +421","Slovenia +386","Solomon Islands +677","Somalia +252","South Africa +27",
-        "South Georgia and the South Sandwich Islands +500","South Sudan +211","Spain +34","Sri Lanka +94","Sudan +249",
-        "Suriname +597","Svalbard and Jan Mayen +47","Swaziland +268","Sweden +46","Switzerland +41","Syrian Arab Republic +963",
-        "Taiwan, Province of China +886","Tajikistan +992","Tanzania, United Republic of +255","Thailand +66","Timor-Leste +670",
-        "Togo +228","Tokelau +690","Tonga +676","Trinidad and Tobago +1868","Tunisia +216","Turkey +90","Turkmenistan +7370",
-        "Turks and Caicos Islands +1649","Tuvalu +688","Uganda +256","Ukraine +380","United Arab Emirates +971",
-        "United Kingdom +44","United States +1","United States Minor Outlying Islands +1","Uruguay +598","Uzbekistan +998",
-        "Vanuatu +678","Venezuela +58","Viet Nam +84","Virgin Islands, British +1284","Virgin Islands, U.s. +1340",
-        "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
-
-
-
-  const [developer,setdeveloper]=useState({name:"",country_code1:[''],mobile_no1:[''],mobile_type1:[''],action11:[],email1:[''],email_type1:[''],
-    action22:[],company_type:"",industry:"",descriptions:"",gst_no:"",
-    source:"",team:"",owner:"",visible_to:"",area:"",location:"",city:"",pin_code:"",state:"",country:"",website:"",company_social_media1:[''],
-    company_url1:[''],action33:[],employee:[]});
-  
-const [show7, setshow7] = useState(false);
-    
-const handleClose7 = () => setshow7(false);
-const[data1,setdata1]=useState([])
-const handleShow7=async()=>
-{
-  
-    try {
-      const resp=await api.get(`viewcompanybyid/${lead._id}`)//here search contact by id
-      setshow7(true);
+   const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
+                                   size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
+                                   total_land_area:"",
+                                   water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
+                                   direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
+                                   cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
+                                   action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
+                                   furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
+                                   ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
+                                   relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
+                                   document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
      
-      setdeveloper(resp.data.developer)
-    } catch (error) {
-      console.log(error);
-    }
+                                   const statesAndCities = {
+                                    AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+                                    ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+                                    Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+                                    Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+                                    Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+                                    Goa: ["North Goa", "South Goa"],
+                                    Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+                                    Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+                                    HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+                                    Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+                                    Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+                                    Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+                                    MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+                                    Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+                                    Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+                                    Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+                                    Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+                                    Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+                                    Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+                                    Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+                                    Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+                                    Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+                                    TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+                                    Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+                                    Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+                                    UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+                                    WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+                                  };
+                                  
+                                  
+                                  const states = Object.keys(statesAndCities);
+                                  const cities = statesAndCities[project.state] || [];
+                                  
+                                  const ustates = Object.keys(statesAndCities);
+                                  const ucities = statesAndCities[units.ustate] || [];
+                                  
+                                  
+
+                                   const [show7, setshow7] = useState(false);
+
+                                   const handleClose7 = () => setshow7(false);
+                                   const handleShow7=async()=>
+                                   {
+                                         setshow7(true);
+                                   
+                                    
+                                         
+                                           const resp1 = await api.get(`viewprojectbyname/${lead.project_name}`);
+                                           setproject(resp.data.project);
+                                   
+                                         const project=lead.project_name
+                                         const block=lead.block
+                                         const unit=lead.unit_no
+                                   
+                                         const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                                         setunits(resp.data.project.add_unit[0])
+                                     
+                                   }
+        
+          //  const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+          //    category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
+          //    total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
+          //    approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
+          //    team:[],visible_to:"",
+           
+          //    location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
+           
+          //    add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
+          //    price_list:[],Payment_plan:[]});
+           
+           
+          //    const[unit,setunit]=useState([])
+          //    const[units,setunits]=useState({unit_no:"",unit_type:"",category:"",block:"",
+          //                                    size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
+          //                                    total_land_area:"",
+          //                                    water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
+          //                                    direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
+          //                                    cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
+          //                                    action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
+          //                                    furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
+          //                                    ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
+          //                                    relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
+          //                                    document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+           
+           
+           const [show14, setshow14] = useState(false);
+               
+                             const handleClose14 = () => setshow14(false);
+                           
+                             const handleShow14=async()=>
+                             {
+                               setshow14(true);
+
+                               const resp1 = await api.get(`viewprojectbyname/${lead.project_name}`);
+                      
+                              setproject(resp1.data.project[0]);
+                               const project=lead.project_name
+                               const block=lead.block
+                               const unit=lead.unit_no
+           
+                               const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                               setunits(resp.data.project.add_unit[0])
+                               
+                              
+                             }
+                      
+                           
+                             
+                    //  const updateinventories=async()=>
+                    //  {
+                    //    const project=selectedItems3[0].project_name
+                    //    const block=selectedItems3[0].block
+                    //    const unit=selectedItems3[0].unit_no
+                    //    try {
+                    //      const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+                    //      toast.success(`units updated successfully`,{autoClose:"2000"})
+                    //                      setTimeout(() => {
+                    //                        window.location.reload()
+                    //                      }, 2000);
+                    //    } catch (error) {
+                    //      console.log(error);
+                         
+                    //    }
+                    //  }
+                             
+           
+                           
+                                 
+           
+           
+                                             
+           
+           
+                                                                                     function addFnunit1() {
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         s_no1: [...(units.s_no1 || []), ''],  // Ensure s_no1 is an array
+                                                                                         url: [...(units.url || []), ''],        // Ensure url is an array
+                                                                                         action11: [...(units.action11 || []), ''] // Ensure action1 is an array
+                                                                                       });
+                                                                                     }
+           
+                                                                                     const deleteallunit1=(index)=>
+                                                                                       {
+                                                                                         // handleDeletesno(index)
+                                                                                         // handleDeletepreview(index)
+                                                                                         const newsno1 = units.s_no1.filter((_, i) => i !== index);
+                                                                                         const newurl = units.url.filter((_, i) => i !== index);
+                                                                                         const newaction1 = units.action11.filter((_, i) => i !== index);
+                                                                                         setunits({
+                                                                                           ...units,
+                                                                                           s_no1: newsno1,
+                                                                                           url: newurl,
+                                                                                           action11: newaction1
+                                                                                         });
+                                                                                       }
+           
+           
+                                                                                     const handlesno1change = (index, event) => {
+                                                                                       const newsno1 = [...units.s_no1];
+                                                                                       newsno1[index] = event.target.value;
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         s_no1: newsno1
+                                                                                       });
+                                                                                     };
+                                                                                     const handleurlChange = (index, event) => {
+                                                                                       const newurl = [...units.url];
+                                                                                       newurl[index] = event.target.value;
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         url: newurl
+                                                                                       });
+                                                                                     };
+           
+           
+                                                                                     function addFnunit() {
+                                                                                         
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         s_no: [...(units.s_no || []), ''],           // Ensure s_no is an array
+                                                                                         preview: [...(units.preview || []), ''],       // Ensure preview is an array
+                                                                                         descriptions: [...(units.descriptions || []), ''], // Ensure descriptions is an array
+                                                                                         category: [...(units.category || []), ''],     // Ensure category is an array
+                                                                                         action10: [...(units.action10 || []), '']          // Ensure action is an array
+                                                                                       });
+                                                                                     }
+                                                                                     
+                                                                                     const deleteallunit=(index)=>
+                                                                                     {
+                                                                                       // handleDeletesno(index)
+                                                                                       // handleDeletepreview(index)
+                                                                                       const newsno = units.s_no.filter((_, i) => i !== index);
+                                                                                       const newpreview = units.preview.filter((_, i) => i !== index);
+                                                                                       const newdescription = units.descriptions.filter((_, i) => i !== index);
+                                                                                       const newcategory = units.category.filter((_, i) => i !== index);
+                                                                                       const newaction = units.action10.filter((_, i) => i !== index);
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         s_no: newsno,
+                                                                                         preview: newpreview,
+                                                                                         descriptions: newdescription,
+                                                                                         category: newcategory,
+                                                                                         action10: newaction
+                                                                                       });
+                                                                                     }
+           
+           
+                                                                                     
+                                                                                     const handlesnochange = (index, event) => {
+                                                                                       const newsno = [...units.s_no];
+                                                                                       newsno[index] = event.target.value;
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         s_no: newsno
+                                                                                       });
+                                                                                     };
+                                                                                     const handlepreviewchange = (index, event) => {
+                                                                                       
+                                                                                       const newpreview = [...units.preview];
+                                                                                       const files = Array.from(event.target.files);
+                                                                                       const previewUrls = files.map(file => URL.createObjectURL(file));
+                                                                                       newpreview[index] = {
+                                                                                         files: files,
+                                                                                         previewUrls: previewUrls
+                                                                                       };
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         preview: newpreview
+                                                                                       });
+                                                                                     };
+                                                                                     
+                                                                                     
+                                                                                     const handledescriptionchange = (index, event) => {
+                                                                                       const newdescription = [...units.descriptions];
+                                                                                       newdescription[index] = event.target.value;
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         descriptions: newdescription
+                                                                                       });
+                                                                                     };
+                                                                                     const handlecategorychange = (index, event) => {
+                                                                                       const newcategory = [...units.category];
+                                                                                       newcategory[index] = event.target.value;
+                                                                                       setunits({
+                                                                                         ...units,
+                                                                                         category: newcategory
+                                                                                       });
+                                                                                     };
+                                                                                     
+                                                                                     
+                                                                                 
+                                                                                
+           
+           
+                                                    //      const addunit = () => {
+           
+                                                    //          if (units.unit_no ) 
+                                                    //            {
+                                                    //              const updateunit= [...unit,...project.add_unit, units];
+                                                    //              setunit(updateunit);
+                                                    //              setproject(prevState => ({
+                                                    //                ...prevState,
+                                                    //                add_unit: updateunit
+                                                    //              }));
+                                                                 
+                                                    //              handleClose9()
+           
+                                                    //                document.getElementById("choosedestination").value="Select"
+                                                    //              } 
+                                                    //              else
+                                                    //                {
+                                                    //                    toast.error("Please fill out all fields.");
+                                                    //                }
+                                                    //              };
+                                                    //  const deleteunit = (index) => {
+           
+           
+                                                    //    // Filter out the destination at the given index
+                                                    //    const newunit = project.add_unit.filter((_, i) => i !== index);
+                                                     
+                                                    //    // Set the updated destination details
+                                                    //    setproject(prevState => ({
+                                                    //      ...prevState,
+                                                    //      add_unit: newunit
+                                                    //    }));
+                                                    //    setunit(newunit)
+                                                    //  };
+           
+             const [activeUnit, setActiveUnit] = useState(1); // Track active unit tab
+                 const [modalSize, setModalSize] = useState('lg');
+           
+           
+           
+                                             const unitdetail1=()=>
+                                               
+                                               {
+                                                 setModalSize('lg');
+                                                 setActiveUnit(1);
+                                                 document.getElementById("unitdetails1").style.display="flex"
+                                                 document.getElementById("unitlocation").style.display="none"
+                                                 document.getElementById("ownerdetails").style.display="none"
+                                                 document.getElementById("uploadmedia").style.display="none"
+                                                 document.getElementById("documentform").style.display="none"
+                                                      
+                                             
+                                               
+                                                 // document.getElementById("unitdetail").style.color="green"
+                                                 // document.getElementById("unitlocationdetails").style.color="black"
+                                                 // document.getElementById("ownerdetails").style.color="black"
+                                                 
+                                                 
+                                               }
+                                               const unitdetail2=()=>
+                                                 {
+                                                   setModalSize('lg');
+                                                   setActiveUnit(2);
+                                                   document.getElementById("unitdetails1").style.display="none"
+                                                   document.getElementById("unitlocation").style.display="flex"
+                                                   document.getElementById("ownerdetails").style.display="none"
+                                                   document.getElementById("uploadmedia").style.display="none"
+                                                   document.getElementById("documentform").style.display="none"
+                                               
+                                                 
+                                                   // document.getElementById("unitdetail").style.color="black"
+                                                   // document.getElementById("unitlocationdetails").style.color="green"
+                                                   // document.getElementById("ownerdetails").style.color="black"
+                                                   
+                                                 }
+                                                 const unitdetail3=()=>
+                                                   {
+                                                     setModalSize('lg');
+                                                     setActiveUnit(3);
+                                                     document.getElementById("unitdetails1").style.display="none"
+                                                     document.getElementById("unitlocation").style.display="none"
+                                                     document.getElementById("ownerdetails").style.display="flex"
+                                                     document.getElementById("uploadmedia").style.display="none"
+                                                     document.getElementById("documentform").style.display="none"
+                                                 
+                                                      
+                                                   }
+           
+                                                   const unitdetail4=()=>
+                                                     {
+                                                       setModalSize('xl');
+                                                       setActiveUnit(4);
+                                                       document.getElementById("unitdetails1").style.display="none"
+                                                       document.getElementById("unitlocation").style.display="none"
+                                                       document.getElementById("ownerdetails").style.display="none"
+                                                       document.getElementById("documentform").style.display="inline-block"
+                                                       document.getElementById("uploadmedia").style.display="none"
+                                                      
+                                                     }
+           
+                                                   const unitdetail5=()=>
+                                                     {
+                                                       setModalSize('lg');
+                                                       setActiveUnit(5);
+                                                       document.getElementById("unitdetails1").style.display="none"
+                                                       document.getElementById("unitlocation").style.display="none"
+                                                       document.getElementById("ownerdetails").style.display="none"
+                                                       document.getElementById("documentform").style.display="none"
+                                                       document.getElementById("uploadmedia").style.display="inline-block"
+                                                   
+                                                        
+                                                     }
+           
+                                    const [selectedType, setSelectedType] = useState(null);
+                               
+                                         const handleTypeClick1 = (type) => {
+                                           setSelectedType(type);
+                                       setunits((prevunits)=>({
+                                         ...prevunits,
+                                         category:type
+                                       }))
+                                   };
+           
+           
+                                   function addFn12() {
+                             
+                
+                                     setunits({
+                                       ...units,
+                                       document_no:[...units.document_no,''],
+                                       document_name: [...units.document_name, ''],
+                                       document_Date: [...units.document_Date, ''],
+                                       pic: [...units.pic, ''],
+                                       action12: [...units.action12, '']
+                                     });
+                                   }
+                                 
+                                   const deleteall12=(index)=>
+                                     {
+                                       const newdocument_no = units.document_no.filter((_, i) => i !== index);
+                                       const newdocumentname = units.document_name.filter((_, i) => i !== index);
+                                       const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
+                                       const newpic = units.pic.filter((_, i) => i !== index);
+                                       const newaction12=units.action12.filter((_,i) => i !== index);
+                                       
+                                       setunits({
+                                         ...units,
+                                         document_no:newdocument_no,
+                                         document_name: newdocumentname,
+                                         document_Date: newdocumentdate,
+                                         pic: newpic,
+                                         action12:newaction12
+                                       });
+                                     }
+                                     const handledocumentnochange = (index, event) => {
+                                       const newdocumentno = [...units.document_no];
+                                       newdocumentno[index] = event.target.value;
+                                       setunits({
+                                         ...units,
+                                         document_no: newdocumentno
+                                       });
+                                     };
+                                     const handledocumentnamechange = (index, event) => {
+                                       const newdocumentname = [...units.document_name];
+                                       newdocumentname[index] = event.target.value;
+                                       setunits({
+                                         ...units,
+                                         document_name: newdocumentname
+                                       });
+                                     };
+                                     const handledocumentdatechange = (index, event) => {
+                                       const newdocumentdate = [...units.document_Date];
+                                       newdocumentdate[index] = event.target.value;
+                                       setunits({
+                                         ...units,
+                                         document_Date: newdocumentdate
+                                       });
+                                     };
+                                     const handlelinkedcontactchange = (index, event) => {
+                                       const newlinkedcontact = [...units.linkded_contact];
+                                       newlinkedcontact[index] = event.target.value;
+                                       setunits({
+                                         ...units,
+                                         linkded_contact: newlinkedcontact
+                                       });
+                                     };
+                                     const handlepicchange1 = (index, event) => {
+                                       const newpic1 = [...units.pic];
+                                       const files = Array.from(event.target.files);
+                                       newpic1[index] = {files:files}
+                                       setunits({
+                                         ...units,
+                                         pic: newpic1
+                                       });
+                                     };
+           
+           
+                                     function addFn3() {
+                
+                                       setunits((prevunits)=>({
+                                         ...prevunits,
+                                         floor:[...units.floor,''],
+                                         cluter_details: [...units.cluter_details, ''],
+                                         length: [...units.length, ''],
+                                         bredth: [...units.bredth, ''],
+                                         total_area: [...units.total_area, ''],
+                                         measurment2: [...units.measurment2, ''],
+                                         action3: [...(units.action3 || []), ''] 
+                                       }));
+                                     };
+                                     const deleteall3=(index)=>
+                                       {
+                                         const newfloor = units.floor.filter((_, i) => i !== index);
+                                         const newcluter = units.cluter_details.filter((_, i) => i !== index);
+                                         const newlength = units.length.filter((_, i) => i !== index);
+                                         const newbreadth = units.bredth.filter((_, i) => i !== index);
+                                         const newtotalarea = units.total_area.filter((_, i) => i !== index);
+                                         const newmeasurement = units.measurment2.filter((_, i) => i !== index);
+                                         const newaction3=units.action3.filter((_,i) => i !== index);
+                                         
+                                         setunits({
+                                           ...units,
+                                           floor:newfloor,
+                                           cluter_details: newcluter,
+                                           length: newlength,
+                                           bredth: newbreadth,
+                                           total_area: newtotalarea,
+                                           measurment2: newmeasurement,
+                                           action3:newaction3
+                                         });
+                                       }
+                                       const handlefloorchange = (index, event) => {
+                                         const newfloor = [...units.floor];
+                                         newfloor[index] = event.target.value;
+                                         setunits({
+                                           ...units,
+                                           floor: newfloor
+                                         });
+                                       };
+                                       const handlecluterdetails = (index, event) => {
+                                         const newcluterdetails = [...units.cluter_details];
+                                         newcluterdetails[index] = event.target.value;
+                                         setunits({
+                                           ...units,
+                                           cluter_details: newcluterdetails
+                                         });
+                                       };
+                                       const handlelengthchange = (index, event) => {
+                                         const newLength = [...units.length];
+                                         newLength[index] = event.target.value;
+                                       
+                                         const newTotalArea = [...units.total_area];
+                                         newTotalArea[index] = newLength[index] && units.bredth[index] ? newLength[index] * units.bredth[index] : '';
+                                       
+                                         setunits((prev) => ({
+                                           ...prev,
+                                           length: newLength,
+                                           total_area: newTotalArea,
+                                         }));
+                                       };
+                                       
+                                       const handlebredthchange = (index, event) => {
+                                         const newBreadth = [...units.bredth];
+                                         newBreadth[index] = event.target.value;
+                                       
+                                         const newTotalArea = [...units.total_area];
+                                         newTotalArea[index] = units.length[index] && newBreadth[index] ? units.length[index] * newBreadth[index] : '';
+                                       
+                                         setunits((prev) => ({
+                                           ...prev,
+                                           bredth: newBreadth,
+                                           total_area: newTotalArea,
+                                         }));
+                                       };
+                                       
+           
+           
+           
+           
+           
+                                     const handleSuggestionClick1 = (contact, index) => {
+                                       setShowSuggestions(false); 
+                                       const fullContact = `${contact.title} ${contact.first_name} ${contact.last_name}`;
+                                       setunits((prevUnits) => {
+                                         const updatedLinkedContacts = [...prevUnits.linkded_contact];
+                                         updatedLinkedContacts[index] = fullContact; // Update the specific contact at the index
+                                         return {
+                                           ...prevUnits,
+                                           linkded_contact: updatedLinkedContacts,
+                                         };
+                                       });
+                                       
+                                     }
+           
+                                     
+                               function addFn6() {
+                
+                                 setunits({
+                                   ...units,
+                                   water_source:[...units.water_source,''],
+                                   water_level: [...units.water_level, ''],
+                                   water_pump_type: [...units.water_pump_type, ''],
+                                   action6: [...units.action6, '']
+                                 });
+                               };
+                               const deleteall6=(index)=>
+                                 {
+                                   const newwatersource = units.water_source.filter((_, i) => i !== index);
+                                   const newwaterlevel = units.water_level.filter((_, i) => i !== index);
+                                   const newpumptype = units.water_pump_type.filter((_, i) => i !== index);
+                                   const newaction6=units.action6.filter((_,i) => i !== index);
+                                   
+                                   setunits({
+                                     ...units,
+                                     water_source:newwatersource,
+                                     water_level: newwaterlevel,
+                                     water_pump_type: newpumptype,
+                                     action6:newaction6
+                                   });
+                                 }
+                                 const handlewatersourcechange = (index, event) => {
+                                   const newwatersource = [...units.water_source];
+                                   newwatersource[index] = event.target.value;
+                                   setunits({
+                                     ...units,
+                                     water_source: newwatersource
+                                   });
+                                 };
+                                 const handlewaterlevelchange = (index, event) => {
+                                   const newwaterlevel = [...units.water_level];
+                                   newwaterlevel[index] = event.target.value;
+                                   setunits({
+                                     ...units,
+                                     water_level: newwaterlevel
+                                   });
+                                 };
+                                 const handlewaterpumpchange = (index, event) => {
+                                   const newwaterpump = [...units.water_pump_type];
+                                   newwaterpump[index] = event.target.value;
+                                   setunits({
+                                     ...units,
+                                     water_pump_type: newwaterpump
+                                   });
+                                 };
+           
+           
+                                 
+                             function addFn5() {
+                
+                               setunits({
+                                 ...units,
+                                 khewat_no:[...units.khewat_no,''],
+                                 killa_no: [...units.killa_no, ''],
+                                 share: [...units.share, ''],
+                                 action5: [...units.action5, '']
+                               });
+                             };
+                             const deleteall5=(index)=>
+                               {
+                                 const newkhewatno = units.khewat_no.filter((_, i) => i !== index);
+                                 const newkillano = units.killa_no.filter((_, i) => i !== index);
+                                 const newshare = units.share.filter((_, i) => i !== index);
+                                 const newaction5=units.action5.filter((_,i) => i !== index);
+                                 
+                                 setunits({
+                                   ...units,
+                                   khewat_no:newkhewatno,
+                                   killa_no: newkillano,
+                                   share: newshare,
+                                   action5:newaction5
+                                 });
+                               }
+                               const handlekhewatnochange = (index, event) => {
+                                 const newkhewatno = [...units.khewat_no];
+                                 newkhewatno[index] = event.target.value;
+                                 setunits({
+                                   ...units,
+                                   khewat_no: newkhewatno
+                                 });
+                               };
+                               const handlekillanochange = (index, event) => {
+                                 const newkillano = [...units.killa_no];
+                                 newkillano[index] = event.target.value;
+                                 setunits({
+                                   ...units,
+                                   killa_no: newkillano
+                                 });
+                               };
+                               const handlesharenochange = (index, event) => {
+                                 const newshare = [...units.share];
+                                 newshare[index] = event.target.value;
+                                 setunits({
+                                   ...units,
+                                   share: newshare
+                                 });
+                               };
+           
+           
+           
+           
+                                    //  const statesAndCities = {
+                                    //    AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+                                    //    ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+                                    //    Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+                                    //    Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+                                    //    Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+                                    //    Goa: ["North Goa", "South Goa"],
+                                    //    Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+                                    //    Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+                                    //    HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+                                    //    Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+                                    //    Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+                                    //    Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+                                    //    MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+                                    //    Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+                                    //    Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+                                    //    Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+                                    //    Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+                                    //    Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+                                    //    Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+                                    //    Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+                                    //    Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+                                    //    Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+                                    //    TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+                                    //    Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+                                    //    Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+                                    //    UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+                                    //    WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+                                    //  };
+                                     
+                                     
+                                    //  const states = Object.keys(statesAndCities);
+                                    //  const cities = statesAndCities[project.state] || [];
+                                     
+                                    //  const ustates = Object.keys(statesAndCities);
+                                    //  const ucities = statesAndCities[units.ustate] || [];
+           
+           
+                                     const [coordinates1, setCoordinates1] = useState('');
+                                     const [mapLoaded1, setMapLoaded1] = useState(false);
+                           
+                                     const handleSubmit1 = async (e) => {
+                                       e.preventDefault();
+                                       try {
+                                         const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                           params: {
+                                             address: units.location,
+                                             key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+                                           }
+                                         });
+                                     
+                                         if (response.data.results.length > 0) {
+                                           const { lat, lng } = response.data.results[0].geometry.location;
+                                           setCoordinates1({ lat, lng });
+                                           setunits(prevUnits => ({
+                                             ...prevUnits,
+                                             lattitude: lat,
+                                             langitude: lng
+                                           }));
+                                           const addressComponents = response.data.results[0].address_components;
+                                           let uaddress = '';
+                                           let ustreet = '';
+                                           let ulocality = '';
+                                           let ucity = '';
+                                           let uzip = '';
+                                           let ustate = '';
+                                           let ucountry = '';
+                                     
+                                           // Extract address components
+                                           addressComponents.forEach(component => {
+                                             const types = component.types;
+                                             if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                                             if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                                             if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                                             if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                                             if (types.includes('locality')) ucity = component.long_name;
+                                             if (types.includes('postal_code')) uzip = component.long_name;
+                                             if (types.includes('country')) ucountry = component.long_name;
+                                           });
+                                     
+                                           // Update units state with the extracted information
+                                           setunits(prevUnits => ({
+                                             ...prevUnits,
+                                             uaddress,
+                                             ustreet: ustreet.trim(),
+                                             ulocality,
+                                             ucity,
+                                             uzip,
+                                             ustate,
+                                             ucountry,
+                                             location: response.data.results[0].formatted_address
+                                           }));
+                                           setMapLoaded1(true);
+                                         } else {
+                                           setCoordinates1({ lat: null, lng: null });
+                                           console.log('No results found');
+                                         }
+                                     
+                                       } catch (error) {
+                                         console.error('Error fetching coordinates:', error);
+                                       }
+                                     };
+                                     
+                                     const handleMarkerDragEnd1 = async (e) => {
+                                       const newLat = e.latLng.lat();
+                                       const newLng = e.latLng.lng();
+                                       setCoordinates1({ lat: newLat, lng: newLng });
+                                     
+                                       try {
+                                         const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                           params: {
+                                             latlng: `${newLat},${newLng}`,
+                                             key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+                                           }
+                                         });
+                                     
+                                         if (response.data.results.length > 0) {
+                                           const addressComponents = response.data.results[0].address_components;
+                                           let uaddress = '';
+                                           let ustreet = '';
+                                           let ulocality = '';
+                                           let ucity = '';
+                                           let uzip = '';
+                                           let ustate = '';
+                                           let ucountry = '';
+                                     
+                                           addressComponents.forEach(component => {
+                                             const types = component.types;
+                                             if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                                             if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                                             if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                                             if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                                             if (types.includes('locality')) ucity = component.long_name;
+                                             if (types.includes('postal_code')) uzip = component.long_name;
+                                             if (types.includes('country')) ucountry = component.long_name;
+                                           });
+                                     
+                                           setunits(prevUnits => ({
+                                             ...prevUnits,
+                                             uaddress,
+                                             ustreet: ustreet.trim(),
+                                             ulocality,
+                                             ucity,
+                                             uzip,
+                                             ustate,
+                                             ucountry,
+                                             location: response.data.results[0].formatted_address
+                                           }));
+                                     
+                                         } else {
+                                           console.log("No location name found");
+                                         }
+                                       } catch (error) {
+                                         console.error("Error fetching location name:", error);
+                                       }
+                                     };
+                                    
+                                     const mapStyles1 = {
+                                       height: "500px",
+                                       width: "100%"
+                                     }
+                                   
+                                     const defaultCenter1 = {
+                                       lat: coordinates1.lat || 37.7749, lng: coordinates1.lng || -122.4194
+                                     };
+           
+           
+                                        const [showabuiltup, setSowbuiltup] = useState(false); // Track the checkbox state
+                                     
+                                                               // Handle the checkbox change to show/hide plot size section
+                                                               const handleCheckboxChange4 = (event) => {
+                                                                 setSowbuiltup(event.target.checked);
+                                                               };
+           
   
  
-}
-
-
-const basicdetails1=()=>
-  {
-    document.getElementById("basicdetails1").style.display="flex"
- 
-    document.getElementById("basic").style.color="green"
-    document.getElementById("other").style.color="black"
-     document.getElementById("professional").style.color="black"
-    document.getElementById("otherdetails").style.display="none"
-    document.getElementById("profession").style.display="none"
-  }
-  const professionaldetails1=()=>
-    {
-      document.getElementById("basicdetails1").style.display="none"
-     
-      document.getElementById("otherdetails").style.display="none"
-      document.getElementById("profession").style.display="flex"
-       document.getElementById("basic").style.color="black"
-       document.getElementById("other").style.color="black"
-         document.getElementById("professional").style.color="green"
-       
-    }
-  const otherdetails1=()=>
-    {
-      document.getElementById("basicdetails1").style.display="none"
-    
-       document.getElementById("profession").style.display="none"
-         document.getElementById("otherdetails").style.display="flex"
-       document.getElementById("basic").style.color="black"
-        document.getElementById("professional").style.color="black"
-       document.getElementById("other").style.color="green"
-    }
-
-
-
-    function addFn11() {
-        
-      setdeveloper({
-        ...developer,
-        country_code1: [...(developer.country_code1 || []), ''],
-        mobile_no1: [...(developer.mobile_no1 || []), ''],
-        mobile_type1: [...(developer.mobile_type1 || []), ''],
-        action11: [...(developer.action11 || []), '']
-      });
-    };
-
-    const deleteall11=(index)=>
-      {
-       
-        const newcountry_code = developer.country_code1.filter((_, i) => i !== index);
-        const newmobile_no = developer.mobile_no1.filter((_, i) => i !== index);
-        const newmobile_type = developer.mobile_type1.filter((_, i) => i !== index);
-        const newaction1 = developer.action11.filter((_, i) => i !== index);
-        
-        setdeveloper({
-          ...developer,
-          country_code1: newcountry_code,
-          mobile_no1: newmobile_no,
-          mobile_type1: newmobile_type,
-          action11: newaction1
-        });
-      }
-      const handlecountry_codechange1 = (index, event) => {
-        const newcountry_code1 = [...developer.country_code1];
-        newcountry_code1[index] = event.target.value;
-        setdeveloper({
-          ...developer,
-          country_code1: newcountry_code1
-        });
-      };
-      const handlemobile_nochange1 = (index, event) => {
-        const newmobile_no = [...developer.mobile_no1];
-        newmobile_no[index] = event.target.value;
-        setdeveloper({
-          ...developer,
-          mobile_no1: newmobile_no
-        });
-      };
-      const handlemobile_typechange1 = (index, event) => {
-        const newmobile_type = [...developer.mobile_type1];
-        newmobile_type[index] = event.target.value;
-        setdeveloper({
-          ...developer,
-          mobile_type1: newmobile_type
-        });
-      };
-
-      function addFn22() {
-        setdeveloper({
-          ...developer,
-          // Ensure these properties are arrays before spreading
-          email1: [...(developer.email1 || []), ''],
-          email_type1: [...(developer.email_type1 || []), ''],
-          action22: [...(developer.action22 || []), ''],
-        });
-      }
-      
-
-      const deleteall22=(index)=>
-        {
-         
-          const newemail = developer.email1.filter((_, i) => i !== index);
-          const newemail_type = developer.email_type1.filter((_, i) => i !== index);
-          const newaction2 = developer.action22.filter((_, i) => i !== index);
-          
-          setdeveloper({
-            ...developer,
-            email1: newemail,
-            email_type1: newemail_type,
-            action22: newaction2
-          });
-        }
-        const handleemailchange1 = (index, event) => {
-          const newemail = [...developer.email1];
-          newemail[index] = event.target.value;
-          setdeveloper({
-            ...developer,
-            email1: newemail
-          });
-        };
-        const handleemail_typechange1 = (index, event) => {
-          const newemail_type = [...developer.email_type1];
-          newemail_type[index] = event.target.value;
-          setdeveloper({
-            ...developer,
-            email_type1: newemail_type
-          });
-        };
-      function addFn33() {
-
-        setdeveloper({
-          ...developer,
-          company_social_media1: [...(developer.company_social_media1 || []), ''],
-          company_url1: [...(developer.company_url1 || []), ''],
-          action33: [...(developer.action33 || []), '']
-        });
-      };
-      const deleteall33=(index)=>
-        {
-         
-          const newcomapnysocialmedia = developer.company_social_media1.filter((_, i) => i !== index);
-          const newcompanyurl = developer.company_url1.filter((_, i) => i !== index);
-          const newaction3=developer.action33.filter((_,i) => i !== index);
-          
-          setdeveloper({
-            ...developer,
-            company_social_media1: newcomapnysocialmedia,
-            company_url1: newcompanyurl,
-            action33:newaction3
-          });
-        }
-        const handlecompanysocialmediachange1 = (index, event) => {
-          const newcomapnysocialmedia = [...developer.company_social_media1];
-          newcomapnysocialmedia[index] = event.target.value;
-          setdeveloper({
-            ...developer,
-            company_social_media1: newcomapnysocialmedia
-          });
-        };
-        const handlecompanyurlchange1 = (index, event) => {
-          const newcompanyurl = [...developer.company_url1];
-          newcompanyurl[index] = event.target.value;
-          setdeveloper({
-            ...developer,
-            company_url1: newcompanyurl
-          });
-        };
-
-
-        function addFn1() {
-          setcontact(prevContact => ({
-            ...prevContact,
-            country_code: [...prevContact.country_code, ''],
-            mobile_no: [...prevContact.mobile_no, ''],
-            mobile_type: [...prevContact.mobile_type, ''],
-            action1: Array.isArray(prevContact.action1) ? [...prevContact.action1, ''] : ['']
-           
-          }));
-        }
-
-        const deleteall1=(index)=>
-          {
-           
-            const newcountry_code = contact.country_code.filter((_, i) => i !== index);
-            const newmobile_no = contact.mobile_no.filter((_, i) => i !== index);
-            const newmobile_type = contact.mobile_type.filter((_, i) => i !== index);
-            const newaction1 = contact.action1.filter((_, i) => i !== index);
-            
-            setcontact({
-              ...contact,
-              country_code: newcountry_code,
-              mobile_no: newmobile_no,
-              mobile_type: newmobile_type,
-              action1: newaction1
-            });
-          }
-          const handlecountry_codechange = (index, event) => {
-            const newcountry_code = [...contact.country_code];
-            newcountry_code[index] = event.target.value;
-            setcontact((prevProfile)=>({
-              ...prevProfile,
-              country_code: newcountry_code
-            }));
-          };
-          const handlemobile_nochange = (index, event) => {
-            const newmobile_no = [...contact.mobile_no];
-            newmobile_no[index] = event.target.value;
-            setcontact((prevProfile)=>({
-              ...prevProfile,
-              mobile_no:newmobile_no
-            }));
-          };
-          const handlemobile_typechange = (index, event) => {
-            const newmobile_type = [...contact.mobile_type];
-            newmobile_type[index] = event.target.value;
-            setcontact((prevProfile)=>({
-              ...prevProfile,
-              mobile_type: newmobile_type
-            }));
-          };
-
-          function addFn2() {
-            setcontact(prevContact => ({
-              ...prevContact,
-              email: [...prevContact.email, ''],
-              email_type: [...prevContact.email_type, ''],
-              action2: Array.isArray(prevContact.action2) ? [...prevContact.action2, ''] : ['']
-             
-            }));
-          }
-
-          const deleteall2=(index)=>
-            {
-             
-              const newemail = contact.email.filter((_, i) => i !== index);
-              const newemail_type = contact.email_type.filter((_, i) => i !== index);
-              const newaction2 = contact.action2.filter((_, i) => i !== index);
-              
-              setcontact({
-                ...contact,
-                email: newemail,
-                email_type: newemail_type,
-                action2: newaction2
-              });
-            }
-            const handleemailchange = (index, event) => {
-              const newemail = [...contact.email];
-              newemail[index] = event.target.value;
-              setcontact((prevProfile)=>({
-                ...prevProfile,
-                email:newemail
-              }));
-            };
-            const handleemail_typechange = (index, event) => {
-              const newemail_type = [...contact.email_type];
-              newemail_type[index] = event.target.value;
-              setcontact((prevProfile)=>({
-                ...prevProfile,
-                email_type:newemail_type
-              }));
-            };
-
-
-             const[totalcontact,settotalcontact]=useState()
-            const[data,setdata]=useState([]);
-            const[searchdata,setsearchdata]=useState()
-            const fetchdatabyemail_mobile_tags_company=async(e)=>
-              {
-                // e.preventDefault()
-                try {
-                  const resp=await api.get(`viewcontactbyemail/${searchdata}`);
-                    const incoming=(Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]);
-                    // setdata(incoming)
-
-                  const resp1=await api.get(`viewcontactbymobile/${searchdata}`);
-                  const incoming1=(Array.isArray(resp1.data.contact) ? resp1.data.contact : [resp1.data.contact]);
-                  setdata([...incoming,...incoming1])
-
-                  const resp2=await api.get(`viewcontactbytags/${searchdata}`);
-                  const incoming2=(Array.isArray(resp2.data.contact) ? resp2.data.contact : [resp2.data.contact]);
-                  setdata([...incoming,...incoming1,...incoming2])
-                  
-                  const resp3=await api.get(`viewcontactbycompany/${searchdata}`);
-                  const incoming3=(Array.isArray(resp3.data.contact) ? resp3.data.contact : [resp3.data.contact]);
-                  setdata([...incoming,...incoming1,...incoming2,...incoming3])
-
-                  const resp4=await api.get(`viewcontactbyname/${searchdata}`);
-                  const incoming4=(Array.isArray(resp4.data.contact) ? resp4.data.contact : [resp4.data.contact]);
-                  setdata([...incoming,...incoming1,...incoming2,...incoming3,...incoming4])
-
-                } catch (error) {
-                  console.log(error);
-                }
-              }
-              const handlekeypress1=(event)=>
-              {
-                  if(event.key==="Enter")
-                      {
-                        fetchdatabyemail_mobile_tags_company()
-                          setsearchdata('')
-                      }
-                  
-              }
-
-  
-  const updatecompany=async()=>
-    {
-      try {
-    
-        const resp=await api.put(`updatecompany/${lead._id}`,developer)
-        toast.success("company updated",{ autoClose: 2000 })
-        setTimeout(() => {
-          navigate('/contactdetails')
-        }, 2000);
-        // setTimeout(() => {
-        //   handleClose1()
-        // }, 2000);
-        setTimeout(() => {
-          window.location.reload()
-        }, 2000);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    
 
 
 
 
 
 
-// =========================edit company end===================================================================================
+// =========================edit inventory end===================================================================================
 
 
 
@@ -1926,17 +2385,644 @@ const handleShow11=async()=>
 }
 
 
-const mapStyles1 = {
-  height: "500px",
-  width: "100%"
-}
+// const mapStyles1 = {
+//   height: "500px",
+//   width: "100%"
+// }
 
-const defaultCenter1 = {
+const defaultCenter2 = {
   lat: lead?.lattitude ? parseFloat(lead.lattitude) : 37.7749,
   lng: lead?.langitude ? parseFloat(lead.langitude) : -122.4194
 };
 
 // =================================================show map end=====================================================================
+
+// ===============================units edit start==================================================================================
+
+const [showTable, setShowTable] = useState(false);
+
+const allColumnsunitdetails = [
+  { id: 'sno', name: '#' },
+  { id: 'floor', name: 'Floor' },
+  { id: 'cluter', name: 'Cluters' },
+  { id: 'length', name: 'Length' },
+  { id: 'breadth', name: 'Breadth' },
+  { id: 'total_area', name: 'Total_Area' }
+];
+
+const [show13, setshow13] = useState(false);
+
+const handleClose13 = () => setshow13(false);
+const handleShow13=async()=>
+{
+      setshow13(true);
+
+        const resp1 = await api.get(`viewprojectbyname/${lead.project_name}`);
+        console.log(resp1);
+        
+        setproject(resp1.data.project[0]);
+
+      const project=lead.project_name
+      const block=lead.block
+      const unit=lead.unit_no
+
+      const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+      setunits(resp.data.project.add_unit[0])
+  
+}
+
+
+    // const [selectedType, setSelectedType] = useState(null);
+                    
+    //                           const handleTypeClick1 = (type) => {
+    //                             setSelectedType(type);
+    //                         setunits((prevunits)=>({
+    //                           ...prevunits,
+    //                           category:type
+    //                         }))
+    //                     };
+
+    //  const [showabuiltup, setSowbuiltup] = useState(false); // Track the checkbox state
+                              
+    //                                                     // Handle the checkbox change to show/hide plot size section
+    //                                                     const handleCheckboxChange4 = (event) => {
+    //                                                       setSowbuiltup(event.target.checked);
+    //                                                     };
+    
+
+    //                     function addFn3() {
+     
+    //                       setunits((prevunits)=>({
+    //                         ...prevunits,
+    //                         floor:[...units.floor,''],
+    //                         cluter_details: [...units.cluter_details, ''],
+    //                         length: [...units.length, ''],
+    //                         bredth: [...units.bredth, ''],
+    //                         total_area: [...units.total_area, ''],
+    //                         measurment2: [...units.measurment2, ''],
+    //                         action3: [...(units.action3 || []), ''] 
+    //                       }));
+    //                     };
+    //                     const deleteall3=(index)=>
+    //                       {
+    //                         const newfloor = units.floor.filter((_, i) => i !== index);
+    //                         const newcluter = units.cluter_details.filter((_, i) => i !== index);
+    //                         const newlength = units.length.filter((_, i) => i !== index);
+    //                         const newbreadth = units.bredth.filter((_, i) => i !== index);
+    //                         const newtotalarea = units.total_area.filter((_, i) => i !== index);
+    //                         const newmeasurement = units.measurment2.filter((_, i) => i !== index);
+    //                         const newaction3=units.action3.filter((_,i) => i !== index);
+                            
+    //                         setunits({
+    //                           ...units,
+    //                           floor:newfloor,
+    //                           cluter_details: newcluter,
+    //                           length: newlength,
+    //                           bredth: newbreadth,
+    //                           total_area: newtotalarea,
+    //                           measurment2: newmeasurement,
+    //                           action3:newaction3
+    //                         });
+    //                       }
+    //                       const handlefloorchange = (index, event) => {
+    //                         const newfloor = [...units.floor];
+    //                         newfloor[index] = event.target.value;
+    //                         setunits({
+    //                           ...units,
+    //                           floor: newfloor
+    //                         });
+    //                       };
+    //                       const handlecluterdetails = (index, event) => {
+    //                         const newcluterdetails = [...units.cluter_details];
+    //                         newcluterdetails[index] = event.target.value;
+    //                         setunits({
+    //                           ...units,
+    //                           cluter_details: newcluterdetails
+    //                         });
+    //                       };
+    //                       const handlelengthchange = (index, event) => {
+    //                         const newLength = [...units.length];
+    //                         newLength[index] = event.target.value;
+                          
+    //                         const newTotalArea = [...units.total_area];
+    //                         newTotalArea[index] = newLength[index] && units.bredth[index] ? newLength[index] * units.bredth[index] : '';
+                          
+    //                         setunits((prev) => ({
+    //                           ...prev,
+    //                           length: newLength,
+    //                           total_area: newTotalArea,
+    //                         }));
+    //                       };
+                          
+    //                       const handlebredthchange = (index, event) => {
+    //                         const newBreadth = [...units.bredth];
+    //                         newBreadth[index] = event.target.value;
+                          
+    //                         const newTotalArea = [...units.total_area];
+    //                         newTotalArea[index] = units.length[index] && newBreadth[index] ? units.length[index] * newBreadth[index] : '';
+                          
+    //                         setunits((prev) => ({
+    //                           ...prev,
+    //                           bredth: newBreadth,
+    //                           total_area: newTotalArea,
+    //                         }));
+    //                       };
+                          
+
+
+
+
+
+                        // const handleSuggestionClick1 = (contact, index) => {
+                        //   setShowSuggestions(false); 
+                        //   const fullContact = `${contact.title} ${contact.first_name} ${contact.last_name}`;
+                        //   setunits((prevUnits) => {
+                        //     const updatedLinkedContacts = [...prevUnits.linkded_contact];
+                        //     updatedLinkedContacts[index] = fullContact; // Update the specific contact at the index
+                        //     return {
+                        //       ...prevUnits,
+                        //       linkded_contact: updatedLinkedContacts,
+                        //     };
+                        //   });
+                          
+                        // }
+
+                        
+                  // function addFn6() {
+   
+                  //   setunits({
+                  //     ...units,
+                  //     water_source:[...units.water_source,''],
+                  //     water_level: [...units.water_level, ''],
+                  //     water_pump_type: [...units.water_pump_type, ''],
+                  //     action6: [...units.action6, '']
+                  //   });
+                  // };
+                  // const deleteall6=(index)=>
+                  //   {
+                  //     const newwatersource = units.water_source.filter((_, i) => i !== index);
+                  //     const newwaterlevel = units.water_level.filter((_, i) => i !== index);
+                  //     const newpumptype = units.water_pump_type.filter((_, i) => i !== index);
+                  //     const newaction6=units.action6.filter((_,i) => i !== index);
+                      
+                  //     setunits({
+                  //       ...units,
+                  //       water_source:newwatersource,
+                  //       water_level: newwaterlevel,
+                  //       water_pump_type: newpumptype,
+                  //       action6:newaction6
+                  //     });
+                  //   }
+                  //   const handlewatersourcechange = (index, event) => {
+                  //     const newwatersource = [...units.water_source];
+                  //     newwatersource[index] = event.target.value;
+                  //     setunits({
+                  //       ...units,
+                  //       water_source: newwatersource
+                  //     });
+                  //   };
+                  //   const handlewaterlevelchange = (index, event) => {
+                  //     const newwaterlevel = [...units.water_level];
+                  //     newwaterlevel[index] = event.target.value;
+                  //     setunits({
+                  //       ...units,
+                  //       water_level: newwaterlevel
+                  //     });
+                  //   };
+                  //   const handlewaterpumpchange = (index, event) => {
+                  //     const newwaterpump = [...units.water_pump_type];
+                  //     newwaterpump[index] = event.target.value;
+                  //     setunits({
+                  //       ...units,
+                  //       water_pump_type: newwaterpump
+                  //     });
+                  //   };
+
+
+                    
+                // function addFn5() {
+   
+                //   setunits({
+                //     ...units,
+                //     khewat_no:[...units.khewat_no,''],
+                //     killa_no: [...units.killa_no, ''],
+                //     share: [...units.share, ''],
+                //     action5: [...units.action5, '']
+                //   });
+                // };
+                // const deleteall5=(index)=>
+                //   {
+                //     const newkhewatno = units.khewat_no.filter((_, i) => i !== index);
+                //     const newkillano = units.killa_no.filter((_, i) => i !== index);
+                //     const newshare = units.share.filter((_, i) => i !== index);
+                //     const newaction5=units.action5.filter((_,i) => i !== index);
+                    
+                //     setunits({
+                //       ...units,
+                //       khewat_no:newkhewatno,
+                //       killa_no: newkillano,
+                //       share: newshare,
+                //       action5:newaction5
+                //     });
+                //   }
+                //   const handlekhewatnochange = (index, event) => {
+                //     const newkhewatno = [...units.khewat_no];
+                //     newkhewatno[index] = event.target.value;
+                //     setunits({
+                //       ...units,
+                //       khewat_no: newkhewatno
+                //     });
+                //   };
+                //   const handlekillanochange = (index, event) => {
+                //     const newkillano = [...units.killa_no];
+                //     newkillano[index] = event.target.value;
+                //     setunits({
+                //       ...units,
+                //       killa_no: newkillano
+                //     });
+                //   };
+                //   const handlesharenochange = (index, event) => {
+                //     const newshare = [...units.share];
+                //     newshare[index] = event.target.value;
+                //     setunits({
+                //       ...units,
+                //       share: newshare
+                //     });
+                //   };
+
+                  const updateinventoriesunit=async()=>
+                    {
+                      const project=lead.project_name
+                      const block=lead.block
+                      const unit=lead.unit_no
+                      try {
+                        const resp2=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+                        toast.success(`Data updated successfully`,{autoClose:"2000"})
+                                        setTimeout(() => {
+                                          window.location.reload()
+                                        }, 2000);
+                      } catch (error) {
+                        console.log(error);
+                        
+                      }
+                    }
+
+
+// ==============================================units edit end==================================================================
+
+
+// ==============================================unit location details edit start===================================================
+
+const [show12, setshow12] = useState(false);
+
+const handleClose12 = () => setshow12(false);
+const handleShow12=async()=>
+{
+      setshow12(true);
+
+        const resp1 = await api.get(`viewprojectbyname/${lead.project_name}`);
+        setproject(resp1.data.project[0]);
+
+      const project=lead.project_name
+      const block=lead.block
+      const unit=lead.unit_no
+
+      const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+      setunits(resp.data.project.add_unit[0])
+  
+}
+
+//  const [coordinates1, setCoordinates1] = useState('');
+//                                           const [mapLoaded1, setMapLoaded1] = useState(false);
+                                
+//                                           const handleSubmit1 = async (e) => {
+//                                             e.preventDefault();
+//                                             try {
+//                                               const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+//                                                 params: {
+//                                                   address: units.location,
+//                                                   key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+//                                                 }
+//                                               });
+                                          
+//                                               if (response.data.results.length > 0) {
+//                                                 const { lat, lng } = response.data.results[0].geometry.location;
+//                                                 setCoordinates1({ lat, lng });
+//                                                 setunits(prevUnits => ({
+//                                                   ...prevUnits,
+//                                                   lattitude: lat,
+//                                                   langitude: lng
+//                                                 }));
+//                                                 const addressComponents = response.data.results[0].address_components;
+//                                                 let uaddress = '';
+//                                                 let ustreet = '';
+//                                                 let ulocality = '';
+//                                                 let ucity = '';
+//                                                 let uzip = '';
+//                                                 let ustate = '';
+//                                                 let ucountry = '';
+                                          
+//                                                 // Extract address components
+//                                                 addressComponents.forEach(component => {
+//                                                   const types = component.types;
+//                                                   if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+//                                                   if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+//                                                   if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+//                                                   if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+//                                                   if (types.includes('locality')) ucity = component.long_name;
+//                                                   if (types.includes('postal_code')) uzip = component.long_name;
+//                                                   if (types.includes('country')) ucountry = component.long_name;
+//                                                 });
+                                          
+//                                                 // Update units state with the extracted information
+//                                                 setunits(prevUnits => ({
+//                                                   ...prevUnits,
+//                                                   uaddress,
+//                                                   ustreet: ustreet.trim(),
+//                                                   ulocality,
+//                                                   ucity,
+//                                                   uzip,
+//                                                   ustate,
+//                                                   ucountry,
+//                                                   location: response.data.results[0].formatted_address
+//                                                 }));
+//                                                 setMapLoaded1(true);
+//                                               } else {
+//                                                 setCoordinates1({ lat: null, lng: null });
+//                                                 console.log('No results found');
+//                                               }
+                                          
+//                                             } catch (error) {
+//                                               console.error('Error fetching coordinates:', error);
+//                                             }
+//                                           };
+                                          
+                                          // const handleMarkerDragEnd1 = async (e) => {
+                                          //   const newLat = e.latLng.lat();
+                                          //   const newLng = e.latLng.lng();
+                                          //   setCoordinates1({ lat: newLat, lng: newLng });
+                                          
+                                          //   try {
+                                          //     const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                          //       params: {
+                                          //         latlng: `${newLat},${newLng}`,
+                                          //         key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc'
+                                          //       }
+                                          //     });
+                                          
+                                          //     if (response.data.results.length > 0) {
+                                          //       const addressComponents = response.data.results[0].address_components;
+                                          //       let uaddress = '';
+                                          //       let ustreet = '';
+                                          //       let ulocality = '';
+                                          //       let ucity = '';
+                                          //       let uzip = '';
+                                          //       let ustate = '';
+                                          //       let ucountry = '';
+                                          
+                                          //       addressComponents.forEach(component => {
+                                          //         const types = component.types;
+                                          //         if (types.includes('administrative_area_level_3')) uaddress += component.long_name + ' ';
+                                          //         if (types.includes('sublocality_level_1')) ustreet += component.long_name + ' ';
+                                          //         if (types.includes('administrative_area_level_2')) ulocality = component.long_name;
+                                          //         if (types.includes('administrative_area_level_1')) ustate = component.long_name;
+                                          //         if (types.includes('locality')) ucity = component.long_name;
+                                          //         if (types.includes('postal_code')) uzip = component.long_name;
+                                          //         if (types.includes('country')) ucountry = component.long_name;
+                                          //       });
+                                          
+                                          //       setunits(prevUnits => ({
+                                          //         ...prevUnits,
+                                          //         uaddress,
+                                          //         ustreet: ustreet.trim(),
+                                          //         ulocality,
+                                          //         ucity,
+                                          //         uzip,
+                                          //         ustate,
+                                          //         ucountry,
+                                          //         location: response.data.results[0].formatted_address
+                                          //       }));
+                                          
+                                          //     } else {
+                                          //       console.log("No location name found");
+                                          //     }
+                                          //   } catch (error) {
+                                          //     console.error("Error fetching location name:", error);
+                                          //   }
+                                          // };
+                        
+                                          // const defaultCenter2 = {
+                                          //   lat: coordinates1.lat || parseFloat(units.lattitude), lng: coordinates1.lng || parseFloat(units.langitude)
+                                          // };
+
+
+
+//========================================================= unit location details edit end==========================================
+
+// =============================================change owner details start==================================================
+
+const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",
+  utype:"",ucategory:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+  expected_price:"",quote_price:"",security_deposite:"",owner_details:[],associated_contact:[],
+maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
+deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
+website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
+
+const [show9, setshow9] = useState(false);
+    
+                  const handleClose9 = () => setshow9(false);
+                  // const[fetchunit,setfetchunit]=useState([])
+                  const handleShow9=async()=>
+                  {
+                    setshow9(true);
+                    const project=lead.project_name
+                    const block=lead.block
+                    const unit=lead.unit_no
+
+                    const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                    setunits(resp.data.project.add_unit[0])
+                    
+                    const resp1=await api.get(`viewdealbyid/${lead._id}`)
+                    setdeal(resp1.data.deal)
+                   
+                  }
+                // console.log(units.owner_details);
+                
+                  
+          const updateinventories=async()=>
+          {
+            const project=lead.project_name
+            const block=lead.block
+            const unit=lead.unit_no
+            try {
+              const resp2=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+              // const resp3=await api.put(`updatedeal/${lead._id}`,deal)
+              toast.success(`Data updated successfully`,{autoClose:"2000"})
+                              setTimeout(() => {
+                                window.location.reload()
+                              }, 2000);
+            } catch (error) {
+              console.log(error);
+              
+            }
+          }
+                  
+
+                              const [input, setInput] = useState('');
+                  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+                  const [showSuggestions, setShowSuggestions] = useState(false);
+                  const [allSuggestions, setAllSuggestions] = useState([]);
+                  const [selectedContacts, setSelectedContacts] = useState([]);
+            
+                  React.useEffect(() => {
+                    const fetchSuggestions = async () => {
+                      try {
+                        const response = await api.get('viewcontact');
+                        const data = response.data.contact;
+                        
+                        // Extract the first_name field from the fetched data
+                        // const names = data.map(item => item.first_name);
+                        setAllSuggestions(data);
+                      } catch (error) {
+                        console.error('Error fetching suggestions:', error);
+                      }
+                    };
+                
+                    fetchSuggestions();
+                  }, []);
+          
+                  React.useEffect(() => {
+                    if (input) {
+                      const results = allSuggestions.filter(contact =>
+                        contact.first_name?.toLowerCase().includes(input.toLowerCase())
+                      );
+                      setFilteredSuggestions(results);
+                      setShowSuggestions(true);
+                    } else {
+                      setShowSuggestions(false)
+                    }
+                  }, [input,allSuggestions]);
+          
+                 
+                
+                  const handleInputChange = (event) => {
+                    setInput(event.target.value);
+                    handleClose2()
+                  };
+                  
+                  
+                  const [show22, setshow22] = useState(false);
+                  const handleClose22 = () => setshow22(false);
+                  const handleShow22=async()=>
+                  {
+                    setshow22(true);
+                  
+                  }
+          
+                  
+                  
+                  const [selectedcontact1,setselectedcontact1]=useState([])
+                  const [selectedcontact2,setselectedcontact2]=useState([])
+                  const[newcontact,setnewcontact]=useState([])
+                  
+                  const[relation,setrelation]=useState("")
+          
+                  const handlerelationchange = (e) => {
+                    setrelation(e.target.value);
+                  };
+          
+                  const [relation1,setrelation1]=useState("")
+                  React.useEffect(() => {
+                    
+                    
+                    if (relation === "Self") {
+                      setrelation("")
+                      setselectedcontact1(prevContacts => [
+                        ...prevContacts,
+                        newcontact // Add the new contact (assumed to be an object)
+                      ]);
+                      setunits(prevDeal => ({
+                        ...prevDeal,
+                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                      setdeal(prevDeal => ({
+                        ...prevDeal,
+                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                     
+                    }
+                     else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+                      
+                      setselectedcontact2(prevContacts => [
+                        ...prevContacts,
+                        newcontact // Add the new contact for other relations
+                      ]);
+                      setunits(prevDeal => ({ ...prevDeal, relation: relation }));
+                      setunits(prevDeal => ({
+                        ...prevDeal,
+                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                      setdeal(prevDeal => ({
+                        ...prevDeal,
+                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+                      }));
+                      setrelation1(relation)
+                      setrelation("")
+                    }
+                  }, [relation,newcontact]);
+          
+          
+                 
+                  const handleSuggestionClick = (contact) => {
+                    handleShow22();
+                    
+                    setnewcontact(contact)
+                    // Update the selectedContacts array
+                    const updatedContacts = [...selectedContacts, contact];
+                    setSelectedContacts(updatedContacts);
+                  
+                    setInput(''); // Clear the input after selection
+                    setShowSuggestions(false); // Hide suggestions after selection
+                    //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+                  };
+          
+                 
+                   
+                  const removeContact = (id) => {
+              
+                    const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+                 
+                   
+                    const updatedContacts3 = units.owner_details.filter(contact => contact._id !== id);
+                    const updatedContacts4 = units.associated_contact.filter(contact => contact._id !== id);
+          
+                    setSelectedContacts(updatedContacts);
+          
+                    const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+                    setselectedcontact1(updatedContacts1);
+                    setunits((prevState) => ({
+                      ...prevState,
+                      owner_details: updatedContacts3,
+                    }));
+                    setdeal((prevState) => ({
+                      ...prevState,
+                      owner_details: updatedContacts3,
+                    }));
+          
+                    const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
+                    setselectedcontact2(updatedContacts2)
+                    setunits((prevState) => ({
+                      ...prevState,
+                      associated_contact: updatedContacts4,
+                    }));
+                    setdeal((prevState) => ({
+                      ...prevState,
+                      associated_contact: updatedContacts4,
+                    }));
+          
+                  };
+
+// ===============================================change owner details end==============================================================
 
   return (
     <div style={{overflowX:"hidden"}}>
@@ -1949,9 +3035,23 @@ const defaultCenter1 = {
        <div style={{marginTop:"60px",backgroundColor:"white",height:"80px",paddingLeft:"80px"}}>
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Inventory</h6>
-          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_no} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}> {lead.project_name}
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
+          <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.unit_no} <span style={{fontSize:"18px",marginLeft:"10px",color:"black"}}> {lead.project_name}<span style={{fontSize:"14px"}}>({lead.block})</span>
+
+          <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px"}}>
+              <li>Preview</li>
+              <li>Publish</li>
+              <li>Create Booking</li>
+              <li>Matched Lead</li>
+              <li>Transfer User</li>
+              <li onClick={handleShow14}>Edit</li>
+              <li>Delete</li>
+            </ul>
+          
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
           </span>
           </h3>
@@ -2062,14 +3162,11 @@ const defaultCenter1 = {
 
             
 
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Project Name</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.project_name}</p>
-                </div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Unit Number</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.unit_no}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Block</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.block}</p></div>
+             
+               
 
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Category</label>
-                    <p style={{fontWeight:"normal"}}>
+                    <p style={{fontWeight:"normal",marginTop:"-10px"}}>
                       {lead.category.map((item)=>
                       (
                        <span>{item}<br></br></span>
@@ -2078,27 +3175,93 @@ const defaultCenter1 = {
                 <div className='col-md-4'><label style={{color:"#B85042"}}>Size</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.size}</p></div>
                 <div className='col-md-4'><label style={{color:"#B85042"}}>Ownership</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.ownership}</p></div>
 
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
-                    <p style={{fontWeight:"normal"}}>{new Date(lead.ocupation_date).toLocaleString()}</p>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Recived On</label>
+                    <p style={{fontWeight:"normal",marginTop:"-10px"}}>{new Date(lead.ocupation_date).toLocaleString()}</p>
                 </div>
                 
                 
                 <div className='col-md-12'><hr></hr></div>
 
+                         <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
+                                          <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Unit Details
+                                          <Tooltip title="Update Unit..." arrow>
+                                                        <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' onClick={handleShow13}  style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                                      </Tooltip>
+                                          </div>
+                                          <div className='col-md-12'><hr></hr></div>
+                                         
+                                          <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.road}</p></div>
+                                          <div className='col-md-4' ><label style={{color:"#B85042"}}>Direction</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.direction}</p></div>
+                                          <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.facing}</p></div>
+                                        
+                                        <div className='col-md-12'><input type='checkbox' onChange={(e) => setShowTable(e.target.checked)}></input>Show Builtup Details</div>
+                                         {
+                                      showTable && (
+                                             <TableContainer component={Paper} style={{ height: '200px' }}>
+                          <Table sx={{}} aria-label="customized table">
+                          <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+                              <TableRow  style={{backgroundColor:"gray"}}>
+                                {allColumnsunitdetails.map((col) => (
+                                  <StyledTableCell
+                                    key={col.id}
+                                    style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px", whiteSpace: "nowrap",lineHeight:"2px"}}>
+                                    {col.name}
+                                  </StyledTableCell>
+                                ))}
+                              </TableRow>
+                            </thead>
+                            <tbody>
+                              {
+                               
+                              lead?.floor?.map ((item, index) => (
+                                <StyledTableRow key={index}>
+                                  <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+                                    {index + 1}
+                                  </StyledTableCell>
+                                  <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+                                    {item}
+                                  </StyledTableCell >
+                                  <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+                                 {lead.cluter_details[index]}
+                                  </StyledTableCell>
+                                  <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+                                  {lead.length[index]}
+                                  </StyledTableCell>
+                                  <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+                                  {lead.bredth[index]}
+                                  </StyledTableCell>
+                                  <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+                                  {lead.total_area[index]} {lead.measurment2[0]}
+                                  </StyledTableCell>
+                                      </StyledTableRow>
+                                    ))}
+                                  </tbody>
+                                </Table>
+                              </TableContainer>
+                                      )
+                                  }
+                                      </div>
             
 
                     <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                                   <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
+                                   <div className='col-md-10' style={{color:"blue",fontWeight:"normal"}}>Location Details
+                                  <Tooltip title="Update location..." arrow>
+                                  <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' onClick={handleShow12} style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                </Tooltip>
+
+                                   </div>
+                                    <div className='col-md-2'>
+                                            <Tooltip title="View on map..." arrow>
+                                               <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer",marginTop:"-5px"}} onClick={handleShow11}></img>
+                                            </Tooltip>
+                                        </div>
                                    <div className='col-md-12'><hr></hr></div>
                                   
                                    <div className='col-md-12'><label style={{color:"#B85042"}}>Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.location}</p></div>
                
                                    <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.lattitude}</p></div>
                                    <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.langitude}</p></div>
-                                   <div className='col-md-4'><Tooltip title="View on map..." arrow>
-                                     <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer"}} onClick={handleShow11}></img>
-                                     </Tooltip>
-                                     </div>
+                                   <div className='col-md-4'></div>
                
                                    <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.uaddress}</p></div>
                                    <div className='col-md-6'><label style={{color:"#B85042"}}>Street</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.ustreet}</p></div>
@@ -2113,7 +3276,14 @@ const defaultCenter1 = {
                                </div>
 
                                       <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                                                   <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Owner Details</div>
+                                                   <div className='col-md-9' style={{color:"blue",fontWeight:"normal"}}>Owner Details
+                                                     <Tooltip title="Update Owner details..." arrow>
+                                                                                    <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"30px",marginLeft:"5px",marginTop:"-5px",cursor:"pointer"}} ></img>
+                                                                                  </Tooltip>
+                                                   </div>
+                                                    <div className='col-md-3'>  <Tooltip title="Change Owner..." arrow>
+                                                                                     <img src='https://static.vecteezy.com/system/resources/thumbnails/020/589/549/small/icon-with-simple-left-arrow-and-right-arrow-vector.jpg' onClick={handleShow9} style={{height:"40px",right:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                                                                   </Tooltip></div> 
                                                    <div className='col-md-12'><hr></hr></div>
                                                   
                                
@@ -2934,7 +4104,7 @@ const defaultCenter1 = {
 
         <div className='row'>
 
-        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+        {/* <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
   <div className='col-md-12'> Matched Lead
         <span 
           onClick={toggleTableVisibility1} 
@@ -2946,10 +4116,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3008,12 +4178,12 @@ const defaultCenter1 = {
     </Table>
   </TableContainer>
         </div>
-        </div>
+        </div> */}
 
         
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Associated Contact
+  <div className='col-md-12'> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{lead.associated_contact.length})</span>
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -3024,10 +4194,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3108,10 +4278,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/tasksform')}
@@ -3190,7 +4360,7 @@ const defaultCenter1 = {
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents
+        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Documents:{documents.length})</span>
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -3201,10 +4371,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible3 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={handleShow8}
@@ -3285,7 +4455,7 @@ const defaultCenter1 = {
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History
+<div className='col-md-12'> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total History:{lead.previousowner_details.length}</span>)
 <span 
   onClick={toggleTableVisibility5} 
   style={{ 
@@ -3296,10 +4466,10 @@ const defaultCenter1 = {
     display: "inline-block", 
     transition: "transform 0.3s ease", // Smooth transition for rotation
     transform: isTableVisible5 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-    marginTop: "0px", // Align the arrow properly
+    marginTop: "4px", // Align the arrow properly
   }}
 >
-  ▼
+▽
 </span>
 <span 
 //  onClick={handleShow8}
@@ -3850,629 +5020,1038 @@ fontWeight:"lighter"
 
 
 
-{/*============================= edit lead start====================================================================== */}
+{/*============================= edit inventory start====================================================================== */}
 
 
 
-<Modal show={show7} onHide={handleClose7} size='xl'>
-            {/* <Modal.Header>
-              <Modal.Title>Update Lead</Modal.Title>
-            </Modal.Header> */}
-            <Modal.Body>
-          
-              
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="text-right" style={{cursor:"pointer"}} onClick={()=>window.location.reload()}>Update Company</h4><input type='checkbox'  style={{marginLeft:"60%",height:"20px",width:"20px"}} /><label style={{paddingTop:"5px"}}>only show required field</label>
-                </div><hr></hr>
-               
-         
-             <div style={{display:"flex"}}>
-               <div style={{display:"flex",gap:"30px"}}>
-               <div  id='basic' onClick={basicdetails1} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}><span>Basic Details</span></div>
-                <div  id='professional' onClick={professionaldetails1} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}><span>Address</span></div>
-                <div  id='other' onClick={otherdetails1} style={{cursor:'pointer',fontWeight:"bold",width:"150px"}}><span>Employee</span></div> 
-               </div>
-						   <div style={{marginLeft:"31%"}}><input type="text" class="form-control form-control-sm" placeholder={time} value={time} style={{border:"none"}}/></div>
-					</div>
-                    <hr></hr>
-                
-                
-            
- {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
-               
-                <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
-            
-                    <div className="col-md-8"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" value={developer.name} onChange={(e)=>setdeveloper({...developer,name:e.target.value})}/></div>
-                    <div className='col-md-4'></div>
-             
-                <div className="col-md-4" > <label className="labels">Country</label>
-                    {
-                      developer.country_code1.map((item,index)=>
-                      (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
-                        <option>{developer.country_code1[index]}</option>
-                        {
-                          countrycode.map((item)=>
-                          (
-                            <option>{item}</option>
-                          ))
-                        }
-                        </select> 
-                      ))
-                    }
-                    </div>
-                    <div className="col-md-4"><label className="labels">Mobile Number</label>
-                    {
-                       developer.mobile_no1.map((item,index)=>
-                        (
-                          <input type="text" required="true" style={{marginTop:"10px"}} 
-                          className="form-control form-control-sm" 
-                          placeholder="enter phone number" 
-                          value={developer.mobile_no1[index]}
-                          onChange={(event)=>handlemobile_nochange1(index,event)}/>
-                          
-                        ))
-                    }
-                    </div>
-                    <div className="col-md-2"><label className="labels">Type</label>
-                    {
-                       developer.mobile_type1.map((item,index)=>
-                        (
-                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                         onChange={(event)=>handlemobile_typechange1(index,event)}>
-                                  <option>{developer.mobile_type1[index]}</option>
-                                  <option>Personal</option>
-                                  <option>Official</option>
-                                  <option>Home</option>
-                                  <option>Phone</option>
-                        </select>
-                          
-                        ))
-                    }
-                    </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
-                    {
-                      Array.isArray(developer.action11) ?
-                       developer.action11.map((item,index)=>
-                        (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/></div>
-                                  
-                          
-                        )):[]
-                    }
-                    </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn11}>+</button></div>
-                    
-                  <div className="col-md-8"><label className="labels">Email-Address</label>
-                    {
-                        developer.email1.map((item,index)=>
-                        (
-                          <input type="text" style={{marginTop:"10px"}}
-                          className="form-control form-control-sm" 
-                          placeholder="enter email-id"
-                          value={developer.email1[index]}
-                          onChange={(event)=>handleemailchange1(index,event)}/>
-                        ))
-                    }
-                    </div>
-                    
-                    <div className="col-md-2"><label className="labels">Type</label>
-                    {
-                       developer.email_type1.map((item,index)=>
-                        (
-                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                          onChange={(event)=>handleemail_typechange1(index,event)}>
-                                <option>{developer.email_type1[index]}</option>
-                                <option>Personal</option>
-                                <option>Official</option>
-                                <option>Business</option>
-                        </select>
-                        ))
-                    }
-                   </div>
-                  
-                   <div className="col-md-1" style={{marginTop:"90px"}}>
-                    {
-                      Array.isArray(developer.action22) ?
-                       developer.action22.map((item,index)=>
-                        (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/></div>
-                                  
-                          
-                        )):[]
-                    }
-                    </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
-                    
-                  <div className="col-md-5"><label className="labels">Company Type</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,company_type:e.target.value})}>
-                                  <option>{developer.company_type}</option>    
-                                  <option>Sole Proprietorship</option>
-                                  <option>Partnership Firm </option>
-                                  <option>Limited Liability Partnership  </option>
-                                  <option>Private Limited Companies</option>
-                                  <option>Public Limited Companies</option>
-                                  <option>One-Person Companies</option>
-                                  <option>Section 8 Company</option>
-                                  <option>Joint-Venture Company</option>
-                                  <option>Government Company</option>
-                                  <option>Non-Government Organization (NGO)</option>
-
-                        </select>
-                    </div>
-                 
-
-                <div className="col-md-6"><label className="labels">Industry</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,industry:e.target.value})}>
-                    <option>{developer.industry}</option>
-                          <optgroup label='Agriculture'>
-                                <option>Farming</option><option>horticulture</option><option>forestry</option>
-                                <option>fishing</option><option>Others</option>
-                          </optgroup>
-                          <optgroup label='Mining'>
-                                <option>Extraction of minerals</option><option>oil</option><option>gas</option>
-                                <option>other natural resources.</option>
-                          </optgroup>
-                          <optgroup label='Fishing and Hunting'>
-                                <option>Commercial fishing</option><option>aquaculture</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Forestry'>
-                                <option>Logging</option><option>timber production</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Manufacturing'>
-                                <option>Production of goods from raw materials (e.g., automotive, 
-                                  electronics, textiles, food processing)</option>
-                          </optgroup>
-                          <optgroup label='Construction'>
-                                <option>Building infrastructure</option><option>residential and commercial properties</option><option>roads</option>
-                                <option>bridges</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Utilities'>
-                                <option>Production and distribution of electricity</option><option>water</option><option>gas</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Refining'>
-                                <option>Processing raw materials like oil</option><option>metals</option><option>into usable products</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Retail'>
-                                <option>Selling goods directly to consumers</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Hospitality'>
-                                <option>Hotels</option><option>restaurants</option><option>tourism</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Healthcare'>
-                                <option>Hospitals</option><option>clinics</option><option>medical services</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Education'>
-                                <option>Schools</option><option>colleges</option><option>universities</option>
-                                <option>training centers</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Finance and Insurance'>
-                                <option>Banks</option><option>investment firms</option><option>insurance companies</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Transportation'>
-                                <option>Airlines</option><option>railways</option><option>shipping</option>
-                                <option>logistics</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Telecommunications'>
-                                <option>Internet services</option><option>phone companies</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Entertainment'>
-                                <option>Film</option><option>television</option><option>music</option>
-                                <option>gaming</option><option>sports</option><option>others</option>
-                          </optgroup>
-                          <optgroup label='Real Estate'>
-                                <option>Property sales</option><option>rentals</option><option>management</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Information Technology'>
-                                <option>Software development</option><option>data processing</option><option>IT services</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Research and Development'>
-                                <option>Innovation</option><option>scientific research</option><option>product development</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Consultancy'>
-                                <option>Professional advice in management</option><option>law</option><option>finance</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Media and Communication'>
-                                <option>Publishing</option><option>broadcasting</option><option>online media</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Government'>
-                                <option>Public administration</option><option>defense</option><option>public services</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Non-Profit Organizations'>
-                                <option>NGOs</option><option>charities</option><option>foundations</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Education (Executive)'>
-                                <option>High-level educational services</option><option>executive education</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='High-Level Decision-Making'>
-                                <option>Top management roles in large organizations</option><option>think tanks</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Green Industry'>
-                                <option>Renewable energy</option><option>environmental services</option><option>sustainability</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Biotechnology'>
-                                <option>Genetic engineering</option><option>pharmaceuticals</option><option>life sciences</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Creative Industries'>
-                                <option>Advertising</option><option>design</option><option>fashion</option><option>arts</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='E-commerce'>
-                                <option>Online</option><option>retail</option><option>digital marketplaces</option>
-                                <option>others</option>
-                          </optgroup>
-                          <optgroup label='Aerospace'>
-                                <option>Aircraft manufacturing</option><option>space exploration</option><option>satellite services</option>
-                                <option>others</option>
-                          </optgroup>
-                        </select>
-                    </div>
-
-                    
-                    
-                    <div className="col-md-8"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' value={developer.descriptions} style={{height:"100px"}} onChange={(e)=>setdeveloper({...developer,descriptions:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-
-                    <div className="col-md-8"><label className="labels">GST Number</label><input type="text" value={developer.gst_no} required="true" className="form-control form-control-sm" placeholder="enter gst no." onChange={(e)=>setdeveloper({...developer,gst_no:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-
-                
-                    
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
-                    
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,source:e.target.value})}>
-                                    <option>{developer.source}</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
-                                    <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
-                                    <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
-                                    <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
-                                    <option>Old Client</option><option>Google</option><option>Whatsapp</option>
-                             </select>
-                        </div>
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,team:e.target.value})}>
-                              <option>{developer.team}</option> 
-                              <option>Sales</option>
-                              <option>Marketing</option>
-                              <option> Post Sales</option>
-                              <option> Pre Sales</option>
-                        </select>
-                    </div>
-                    <div className="col-md-6"><label className="labels">Owner</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,owner:e.target.value})}>
-                            <option>{developer.owner}</option>
-                              <option>Suraj</option> 
-                              <option>Suresh Kumar</option>
-                              <option>Ramesh Singh</option>
-                              <option>Maanav Sharma</option>
-                              <option>Sukram</option>
-                        </select></div>
-                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,visible_to:e.target.value})}>
-                                <option>{developer.visible_to}</option>
-                                <option>My Team</option>
-                                <option>My Self</option>
-                                <option>All Users</option>
-                                </select>
-                    </div>
-                    </div>
-               
-       
-
-   {/*------------------------------------------------------------ basic details end---------------------------------------------------- */}
-                  
-  {/* -----------------------------------------address Details start------------------------------------------------------------------- */}
-
-        <div className="col-md-12" id='profession' style={{display:"none",lineHeight:"30px"}}>
-            <div className="p-3 py-5">
-               
-                <div className="row " >
-              
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}> Address</label></div>
-                    <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                    <div className="col-md-8"><label className="labels">Area</label><input type="text" value={developer.area} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,area:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-                    <div className="col-md-4"><label className="labels">Location</label><input type="text" value={developer.location} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,location:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" value={developer.city} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,city:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" value={developer.pin_code} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,pin_code:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" value={developer.state} className="form-control form-control-sm" onChange={(e)=>setdeveloper({...developer,state:e.target.value})}/></div>
-                    <div className="col-md-6"><label className="labels">Country</label><input type="text" value={developer.country} className="form-control form-control-sm"  onChange={(e)=>setdeveloper({...developer,country:e.target.value})}/></div>
-                    </div>
-                    
-                    <div className='col-md-5'></div>
-                    <div className="col-md-8"><label className="labels">Website</label><input type="text" value={developer.website} className="form-control form-control-sm"  onChange={(e)=>setdeveloper({...developer,website:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
-
-                    <div className="col-md-4"><label className="labels">Company Social-Media Page</label>
-                    {
-                      developer.company_social_media1.map((item,index)=>
-                      (
-                        <select
-                         className='form-control form-control-sm'
-                          style={{marginTop:"10px"}}
-                          onChange={(event)=>handlecompanysocialmediachange1(index,event)}>
-                        
-                        <option>{developer.company_social_media1[index]}</option>
-                        <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option>
-                        </select>
-
-                      ))
-                    }
-                    </div>
-                    <div className="col-md-6"><label className="labels">Url</label>
-                    {
-                      developer.company_url1.map((item,index)=>
-                      (
-                        <input type="text" value={developer.company_url1[index]} className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                        onChange={(event)=>handlecompanyurlchange1(index,event)}/>
-                      ))
-                    }
-                    </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
-                    {
-                      Array.isArray(developer.action33) ?
-                      developer.action33.map((item,index)=>
-                      (
-                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall33(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
-                      )):[]
-                    }
-                    </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn33}>+</button></div>
-                    <div className='col-md-12'><hr></hr></div> 
-              </div>
-            
-             </div>
-           </div>
- {/* ------------------------------------------------------professional Details end--------------------------------------------------------------  */}
-
- {/*-------------------------------------------------- employee details start--------------------------------------------------------- */}
- {/* <div className="col-md-12" id='otherdetails' style={{display:"none",marginTop:"-80px",lineHeight:"30px"}}>
-            <div className="p-3 py-5">
-               
-                <div className="row " >
-                <div className="col-md-8"><label className="labels" style={{fontSize:"16px"}}> Search Contact</label><input className='form-control form-control-sm' type='search' placeholder='enter name for search'/></div>
-                <div className="col-md-1" ><label className="labels" style={{width:"150px"}}>Quick Add Contact</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
-                <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}> Employee List</label></div>
-                 
-             </div>
-         </div>
-     </div> */}
-                        <div className="col-md-12" id="otherdetails" style={{display:"none",  lineHeight:"30px"}}>
-                    <div className="p-3 py-5">
-                        <div className="row">
-                        <div className="col-md-9">
-                            <label className="labels" style={{fontSize:"16px"}}>Search Contact</label>
-                            <input className="form-control form-control-sm" id='searchcontact' type="search" placeholder="enter email or mobile no for search" onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
-                        </div>
-                        <div className="col-md-1"></div>
-                        <div className="col-md-1">
-                            <label className="labels" style={{fontSize:"16px",width:"150px"}}>Quick Add Contact</label>
-                            <button className="form-control form-control-sm" onClick={handleShow1}>+</button>
-                        </div>
-                        <div className="col-md-10" style={{marginTop:"50px"}}>
-                            <label className="labels" style={{fontSize:"16px", marginTop:"10px"}}>Employee List</label>
-                        </div>
-                        <div className="col-md-2" style={{marginTop:"50px"}}>
-                            <label className="labels" style={{fontSize:"16px", marginTop:"10px"}}>Total Employee:</label>
-                           <span style={{color:"green",fontWeight:"bold",fontSize:"20px"}}>{totalcontact}</span> 
-                        </div>
-                        <div className='col-md-12'><hr></hr></div>
-                        <div className="row" style={{margin:"5px",padding:"10px"}}>
-                        <div style={{marginLeft:"20px",marginTop:"10px",backgroundColor:"white"}}>
-          <TableContainer component={Paper} style={{height:"400px",overflowY:"scroll"}}>
-    <Table sx={{ minWidth: 700 }} aria-label="customized table">
-     
-      <tbody>
-        {
-         
-        data.map ((item, index) => (
-          <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
-             <img src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' alt='' style={{height:"30px"}}/>
-             
-            </StyledTableCell>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
-              {item.title} {item.first_name} {item.last_name}<br></br>
-              {item.designation}
-            </StyledTableCell>
-           
-                <StyledTableCell >
-                {item.mobile_no.join(',')}<br></br>
-                {item.email.join(',')}
-                </StyledTableCell>
-              
-          </StyledTableRow>
-        ))}
-      </tbody>
-    </Table>
-
-    <Modal show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+<Modal show={show14} onHide={handleClose14} size='xl'>
             <Modal.Header>
-              <Modal.Title>Quick Add Contact</Modal.Title>
+              <Modal.Title>Update Inventory</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <div style={{width:"100%"}}>
-            <div className="row" id='basicdetails1'>
-                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
-                              <option>Select</option>
-                              <option>Mr.</option>
-                              <option>Mrs.</option>
-                              <option>Sh.</option>
-                              <option>Smt.</option>
-                              <option>Dr.</option>
-                              <option>Er.</option>
-                              <option>Col.</option>
-                              <option>Maj.</option>
-                        </select>
-                        </div>
-                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
-                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
-                </div>
-                </div>
-                <div className="row mt-3" id='basicdetails2'>
-                <div className="col-md-4" > <label className="labels">Country</label>
-                    {
-                      contact.country_code.map((item,index)=>
-                      (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
-                        <option value={item} >phone</option>
-                        {
-                          countrycode.map((item)=>
-                          (
-                            <option>{item}</option>
-                          ))
-                        }
-                        </select> 
-                      ))
-                    }
-                    </div>
-                    <div className="col-md-4"><label className="labels">Mobile Number</label>
-                    {
-                       contact.mobile_no.map((item,index)=>
-                        (
-                          <input type="text" required="true" style={{marginTop:"10px"}} 
-                          className="form-control form-control-sm" 
-                          placeholder="enter phone number" 
-                          onChange={(event)=>handlemobile_nochange(index,event)}/>
-                          
-                        ))
-                    }
-                    </div>
-                    <div className="col-md-2"><label className="labels">Type</label>
-                    {
-                       contact.mobile_type.map((item,index)=>
-                        (
-                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                         onChange={(event)=>handlemobile_typechange(index,event)}>
-                                  <option>Select Type</option>
-                                  <option>Personal</option>
-                                  <option>Official</option>
-                                  <option>Home</option>
-                                  <option>Phone</option>
-                        </select>
-                          
-                        ))
-                    }
-                    </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
-                    {
-                      Array.isArray(contact.action1) ?
-                       contact.action1.map((item,index)=>
-                        (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
-                                  
-                          
-                        )):[]
-                    }
-                    </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
-                    
-                  <div className="col-md-8"><label className="labels">Email-Address</label>
-                    {
-                        contact.email.map((item,index)=>
-                        (
-                          <input type="text" style={{marginTop:"10px"}}
-                          className="form-control form-control-sm" 
-                          placeholder="enter email-id"
-                          onChange={(event)=>handleemailchange(index,event)}/>
-                        ))
-                    }
-                    </div>
-                    
-                    <div className="col-md-2"><label className="labels">Type</label>
-                    {
-                       contact.email_type.map((item,index)=>
-                        (
-                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                          onChange={(event)=>handleemail_typechange(index,event)}>
-                                <option>Select Type</option>
-                                <option>Personal</option>
-                                <option>Official</option>
-                                <option>Business</option>
-                        </select>
-                        ))
-                    }
-                   </div>
-                  
-                   <div className="col-md-1" style={{marginTop:"90px"}}>
-                    {
-                      Array.isArray(contact.action2) ?
-                       contact.action2.map((item,index)=>
-                        (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
-                                  
-                          
-                        )):[]
-                    }
-                    </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
-                  <div className="col-md-5"><label className="labels">Designation</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,designation:e.target.value})}>
-                    <option>Select</option>
-                        <option>Developer</option>
-                        <option>HR</option>
-                        <option>Others</option>
-                        </select>
-                    </div>
-                    <div className="col-md-7"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
-                    <option>Select</option>
-                        <option>TCS</option>
-                        <option>Microsoft</option>
-                        <option>Others</option>
-                        </select>
-                    </div>
-            </div>
-          </Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" >
-                Add Contact
-              </Button>
-              <Button variant="secondary" onClick={handleClose1}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
-
-        
-  </TableContainer>
-   
-      
-     </div>
-     </div>
- </div>
-
-{/*-------------------------==================== employee details end --------------------==============================================*/}
-                
+          
  
-    
-                   
-                   
-                </div>
-              
-            </div>
- 
-                 
+         
+         
+         
+         <div style={{ display: "flex", gap: "50px" }}>
+           <div
+             id="unitdetail"
+             style={{
+               cursor: 'pointer',
+               fontWeight: 'bold',
+               backgroundColor: activeUnit === 1 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+             }}
+             onClick={unitdetail1}
+           >
+             <span>Unit</span>
+           </div>
+           <div
+             id="unitlocationdetails"
+             style={{
+               cursor: 'pointer',
+               fontWeight: 'bold',
+               backgroundColor: activeUnit === 2 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+             }}
+             onClick={unitdetail2}
+           >
+             <span>Location</span>
+           </div>
+           <div
+             id="ownerdetails1"
+             style={{
+               cursor: 'pointer',
+               fontWeight: 'bold',
+               backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+             }}
+             onClick={unitdetail3}
+           >
+             <span>Add Owner</span>
+           </div>
+           <div
+             id="adddocuments"
+             style={{
+               cursor: 'pointer',
+               fontWeight: 'bold',
+               backgroundColor: activeUnit === 4 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+             }}
+             onClick={unitdetail4}
+           >
+             <span>Add Documents</span>
+           </div>
+           <div
+             id="upload"
+             style={{
+               cursor: 'pointer',
+               fontWeight: 'bold',
+               backgroundColor: activeUnit === 5 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
+             }}
+             onClick={unitdetail5}
+           >
+             <span>Upload</span>
+           </div>
+         </div>
+         
+                       
+                       <hr></hr>
+                     <div style={{width:"100%"}}>
+                     <div className="row" id='unitdetails1'>
+                      
+                             <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                             <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                                        <option>{units.unit_type}</option>
+                                         <option>---Select---</option>
+                                         <option>Corner</option>
+                                         <option> Two Side Open</option>
+                                         <option>Three Side Open</option>
+                                         <option>Ordinary </option>
+                                         </select>
+                             </div>
+                             <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
+                             <div className="col-md-12" style={{display:"flex"}} >
+                             <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
+                               {
+                                 project.category.map((type) => (
+                                   <div className="col-md-3" key={type}>
+                                     <button 
+                                       className="form-control form-control-sm"
+                                       onClick={() => handleTypeClick1(type)} 
+                                       style={{  backgroundColor: selectedType === type ? 'green' : '', }}
+                                     >
+                                       {type}
+                                     </button>
+                                   </div>
+                                 ))
+                               }
+                             </div>
+                             </div>
+         
+                             <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
+                             <option>{units.block}</option>
+                             <option>choose</option>
+                             {
+                                         project.add_block.map((item)=>
+                                         (
+                                           <option>{item.block_name}</option>
+                                         ))
+                                        }
+                                         </select>
+                             </div>
+                             <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
+                             <option>{units.size}</option>
+                             <option>choose</option>
+                             {
+                                         project.add_size.map((item)=>
+                                         (
+                                           <option>{item.size_name}</option>
+                                         ))
+                                        }
+                                         </select>
+                             </div>
                            
-        
+         
+                           {
+                               project.category.includes("Agricultural") &&(
+         
+                                   <>
+         
+         
+                             <div className="col-md-6"><label className="labels">Land Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,land_type:e.target.value})}>
+                                         <option>{units.land_type}</option>
+                                         <option>---Select---</option>
+                                         <option>Crop Land</option>
+                                         <option>Wood Land</option>
+                                         <option>Pasture</option>
+                                         </select>
+                             </div>
+                             <div className='col-md-6'></div>
+                             <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Land Details<hr></hr></div>
+         
+                             <div className='col-md-3' ><label className='labels'>Khewat No</label>
+                             {
+                               Array.isArray(units.khewat_no) ?
+                               units.khewat_no.map((item,index)=>
+                               (
+                                 <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.khewat_no} onChange={(event)=>handlekhewatnochange(index,event)}/>
+                                 
+                               )):[]
+                             }
+                             </div>
+         
+                             <div className='col-md-3' ><label className='labels'>Killa No</label>
+                             {
+                               Array.isArray(units.killa_no) ?
+                               units.killa_no.map((item,index)=>
+                               (
+                                 <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.killa_no} onChange={(event)=>handlekillanochange(index,event)}/>
+                                
+                               )):[]
+                             }
+                             </div>
+         
+                             <div className='col-md-3' ><label className='labels'>Share</label>
+                             {
+                               Array.isArray(units.share) ?
+                               units.share.map((item,index)=>
+                               (
+                                 <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.share} onChange={(event)=>handlesharenochange(index,event)}/>
+                               )):[]
+                             }
+                             </div>
+         
+                           <div className='col-md-1' style={{marginTop:"90px"}}>
+                           {
+                             Array.isArray(units.action5) ?
+                             units.action5.map((item,index)=>
+                             (
+                               
+                                   <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                               
+                             )):[]
+                           }
+                           </div>
+         
+                                <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
+                             <div className='col-md-12'>Total Land Area:-{units.total_land_area}</div>
+                                <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Water Details<hr></hr></div>
+         
+                                <div className='col-md-3' ><label className='labels'>Water Source</label>
+                             {
+                                   Array.isArray(units.water_source) ?
+                               units.water_source.map((item,index)=>
+                               (
+                                 <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewatersourcechange(index,event)}>
+                                   <option>{units.water_source}</option><option>---select---</option><option>Ground Water</option><option>Canal Water</option><option>Pond Water</option><option>Rain Water</option>
+                                 </select>
+                               )):[]
+                             }
+                             </div>
+                             <div className='col-md-3' ><label className='labels'>Water Level</label>
+                             {
+                                   Array.isArray(units.water_level) ?
+                               units.water_level.map((item,index)=>
+                               (
+                                 <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterlevelchange(index,event)}>
+                                   <option>{units.water_level}</option><option>---select---</option><option>100ft.</option><option>200Ft.</option>
+                                 </select>
+                               )):[]
+                             }
+                             </div>
+         
+                             <div className='col-md-3' ><label className='labels'>Water Pump Type</label>
+                             {
+                                   Array.isArray(units.water_pump_type) ?
+                               units.water_pump_type.map((item,index)=>
+                               (
+                                 <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterpumpchange(index,event)}>
+                                 <option>{units.water_pump_type}</option>  <option>---select---</option><option>Submersible Motor(15 HP)</option><option>Sumersible Motor(20 HP)</option>
+                                   <option>Monoblock Motor(10HP)</option><option>Diesel Engine Pump</option>
+                                 </select>
+                               )):[]
+                             }
+                             </div>
+                             <div className='col-md-1' style={{marginTop:"90px"}}>
+                           {
+                             Array.isArray(units.action6) ?
+                             units.action6.map((item,index)=>
+                             (
+                               
+                                   <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                               
+                             )):[]
+                           }
+                           </div>
+                           <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
+         
+                           <div className='col-md-12' style={{color:"green",fontWeight:"bolder"}}>Basic Details<hr></hr></div>
+         
+                           <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                         <option>{units.facing}</option>
+                                         <option>---Select---</option>
+                                         <option>Village Link Road</option>
+                                         <option>Highway</option>
+                                         <option>Expressway</option>
+                                         <option>Unconstructed Road</option>
+                                         </select>
+                             </div>
+         
+                             <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,side_open:e.target.value})}>
+                                         <option>{units.side_open}</option>
+                                         <option>---Select---</option>
+                                         <option>1 Side Open</option>
+                                         <option>2 Side Open</option>
+                                         <option>3 Side Open</option>
+                                         </select>
+                             </div>
+         
+                             <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                         <option>{units.road}</option>
+                                         <option>---Select---</option>
+                                         <option>11 Ft wide</option>
+                                         <option>22 Ft Wide</option>
+                                         <option>33 Ft Wide</option>
+                                         <option>60 Ft Wide</option>
+                                         <option>100 Ft Wide</option>
+                                         <option>200 Ft Wide</option>
+                                         </select>
+                             </div>
+         
+                             <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,fornt_on_road:e.target.value})}>
+                                         <option>{units.fornt_on_road}</option>
+                                         <option>---Select---</option>
+                                         <option>10 ft</option>
+                                         <option>20 ft</option>
+                                         <option>30 ft</option>
+                                         <option>50 ft</option>
+                                         <option>70 ft</option>
+                                         <option>100 ft</option>
+                                         <option>200 ft</option>
+                                         <option>500 ft</option>
+                                         <option>1000 ft</option>
+                                         </select>
+                             </div>
+         
+                             <div className="col-md-4"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                         <option>{units.ownership}</option>
+                                         <option>---Select---</option>
+                                         <option>Mustraka</option>
+                                         <option>Individual</option>
+                                         </select>
+                             </div>
+                             <div className="col-md-4"><label className="labels">No. Of Owner</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,total_owner:e.target.value})}>
+                                         <option>{units.total_owner}</option>
+                                         <option>---Select---</option>
+                                         <option>1</option>
+                                         <option>2</option>
+                                         <option>3</option>
+                                         </select>
+                             </div>
+                       </>
+                     )
+         
+         
+                   }
+         
+                               {
+                               !project.category.includes("Agricultural") &&(
+         
+                                   <>
+         
+                             <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
+                                         <option>{units.direction}</option>
+                                         <option>---Select---</option>
+                                         <option>East</option>
+                                         <option>West</option>
+                                         <option>North</option>
+                                         <option>South</option>
+                                         <option>North East</option>
+                                         <option>South East</option>
+                                         <option>South West</option>
+                                         <option>North West</option>
+                                        
+                                         </select>
+                             </div>
+                             <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                         <option>{units.facing}</option>
+                                         <option>---Select---</option>
+                                         <option>Park</option>
+                                         <option>Green Belt</option>
+                                         <option>Highway</option>
+                                         <option>Commercial</option>
+                                         <option>School</option>
+                                         <option>Hospital</option>
+                                         <option>Mandir</option>
+                                         <option>Gurudwara</option>
+                                         <option>Crech</option>
+                                         <option>Clinic</option>
+                                         <option>Community Centre</option>
+                                         <option>1 Kanal</option>
+                                         <option>14m Marla</option>
+                                         <option>10 Marla</option>
+                                         <option>8 Marla</option>
+                                         <option>6 Marla</option>
+                                         <option>4 Marla</option>
+                                         <option>2 Marla</option>
+                                         <option> 3 Marla</option>
+                                         <option> 2 Kanal</option>
+                                         </select>
+                             </div>
+                             <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                         <option>{units.road}</option>
+                                         <option>---Select---</option>
+                                         <option>9 Mtr Wide</option>
+                                         <option>12 Mtr Wide</option>
+                                         <option> 18 Mtr Wide</option>
+                                         <option>24 Mtr Wide</option>
+                                         <option> 60 Mtr Wide</option>
+                                         </select>
+                             </div>
+                             <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                         <option>{units.ownership}</option>
+                                         <option>---Select---</option>
+                                         <option>Freehold</option>
+                                         <option>Leasehold</option>
+                                         <option>Co-OPerative Society</option>
+                                         <option>Sale Agreement(Lal Dora)</option>
+                                         </select>
+                             </div>
+                             <div className='col-md-6'><label className="labels">Stage</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,stage:e.target.value})}>
+                                         <option>{units.stage}</option>
+                                         <option>---Select---</option>
+                                         <option>Active</option>
+                                         <option>Inactive</option>
+                                         </select></div>
+                             </>
+                     )
+         
+         
+                   }
+         
+         
+                             <div  className='col-md-6' style={{marginTop:"10px"}}>
+                                 <input
+                                   type="checkbox"
+                                   checked={showabuiltup}
+                                   onChange={handleCheckboxChange4}
+                                 />
+                                 <label>Show Builtup Details</label>
+                               </div>
+                               <div className='col-md-6'></div>
+                       {showabuiltup && (
+                         <>
+                             <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
+         
+                             <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                                   <option>{units.type}</option>
+                                   <option>---Select---</option>
+                                   <option>Duplex</option>
+                                   <option>Triplex</option>
+                                   <option>Independent House</option>
+                                   <option>Penthouse</option>
+                                   <option>Apartments</option>
+                                   <option>Studio Apartments</option>
+                                   <option>Bunglow</option>
+                                   <option>Farmhouse</option>
+                                   <option>Courtyard House</option>
+                                 </select>
+                             </div>
+                             <div className='col-md-6'></div>
+                           
+                             <div className='row mt-2' style={{border:"1px dashed black",margin:"10px",marginTop:"0",padding:"10px",width:"100%"}}>
+                             <div className='col-md-2' ><label className='labels'>Floor</label>
+                             {
+                               Array.isArray(units.floor) ?
+                               units.floor.map((item,index)=>
+                               (
+                                 <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
+                                   <option>{units.floor[index]}</option>
+                                   <option>---Select---</option>
+                                   <option>Ground Floor</option>
+                                   <option>First Floor</option>
+                                   <option>Second Floor</option>
+                                   <option>Lower Ground</option>
+                                   <option>Upper Ground</option>
+                                   <option>Third Floor</option>
+                                   <option> Fourth Floor</option>
+                                   <option>Lower Ground</option>
+                                   <option>Lower Ground</option>
+                                 </select>
+                               )):[]
+                             }
+                             </div>
+                             <div className='col-md-2' ><label className='labels' style={{width:"500px"}}>Cluter Details</label>
+                             {
+                                Array.isArray(units.cluter_details) ?
+                               units.cluter_details.map((item,index)=>
+                               (
+                                 <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
+                                   <option>{units.cluter_details[index]}</option>
+                                   <option>---Select---</option>
+                                   <option>Living Room</option>
+                                   <option>Lobby</option>
+                                   <option>Bedroom</option>
+                                   <option>Master Bedroom</option>
+                                   <option>Kitchen</option>
+                                   <option>Bathroom</option>
+                                   <option>Pooja room,</option>
+                                   <option>Study Room</option>
+                                   <option>Frontward</option>
+                                   <option>Backyard</option>
+                                   <option>Balcony</option>
+                                   <option>Store</option>
+                                   <option>Guest Room</option>
+                                   <option>Servent Room</option>
+                                   <option>Dressing</option>
+                                 </select>
+                               )):[]
+                             }
+                             </div>
+                             <div className='col-md-2' ><label className='labels'>Length</label>
+                             {
+                                   Array.isArray(units.length) ?
+                               units.length.map((item,index)=>
+                               (
+                                 <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.length[index]} onChange={(event)=>handlelengthchange(index,event)}/>
+                               )):[]
+                             }
+                             </div>
+                             <div className='col-md-2' ><label className='labels'>Breadth</label>
+                             {
+                               Array.isArray(units.bredth) ?
+                               units.bredth.map((item,index)=>
+                               (
+                                 <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.bredth[index]} onChange={(event)=>handlebredthchange(index,event)}/>
+                               
+                               )):[]
+                             }
+                             </div>
+                               <div className='col-md-2' ><label className='labels'>Total Area</label>
+                             {
+                               Array.isArray(units.total_area) ?
+                               units.total_area.map((item,index)=>
+                               (
+                                 <input className="form-control form-control-sm"  value={units.length[index] && units.bredth[index] ? units.length[index] * units.bredth[index] : ''} style={{marginTop:"10px"}}  readOnly/>
+                             
+                               )):[]
+                             }
+                             </div>
+                            
+                             <div className='col-md-1' style={{marginTop:"90px"}}>
+                             {
+                               Array.isArray(units.action3) ?
+                               units.action3.map((item,index)=>
+                               (
+                                 
+                                     <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                 
+                               )):[]
+                             }
+                             </div>
+                             <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                            
+                             </div>
+                             </>
+                             )}
+         
+                             <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' value={units.ocupation_date} onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                             <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' value={units.age_of_construction} onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                             
+         
+                             <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm" onChange={(e)=>setunits({...units,furnishing_details:e.target.value})}>
+                                         <option>{units.furnishing_details}</option>
+                                         <option>---Select---</option>
+                                         <option>Furnished</option>
+                                         <option>Unfurnished</option>
+                                         <option>Semi Furnished</option>
+                                         </select>
+                             </div>   
+                             {
+                               (units.furnishing_details==="Furnished" || units.furnishing_details==="Semi Furnished") && (
+                              
+                              <div className='col-md-12'><label>Enter Furnishing Details</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                             )}
+                             <div className='col-md-6'></div>
+         
+                             <div className='col-md-8'><label>Furnished Items</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,furnished_item:e.target.value})}/></div>
+                          
+                         </div>
+                         </div>
+                         <div className="row">
+                         <div className="col-md-12" id='unitlocation' style={{display:"none",lineHeight:"30px"}}>
+                          <div className="p-3 py-5">
+                         <div className="col-md-12" style={{border:"1px solid black",marginTop:"30px",padding:"10px"}}>
+                         <div style={{border:"1px solid black",marginTop:"10px"}}>
+                         
+                           
+                                   <LoadScript
+                                     googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
+                                                                         >
+                                             <GoogleMap
+                                       mapContainerStyle={mapStyles1}
+                                         zoom={13}
+                                         center={defaultCenter1}
+                                         >
+                                     <Marker
+                                       position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                                       draggable={true}
+                                       onDragEnd={handleMarkerDragEnd1}
+                                     />
+                                     </GoogleMap>
+                                     </LoadScript>
+                      
+                                   </div>
+                                   <div className="row">
+                                   <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" value={units.location} onChange={(e)=>setunits({...units,location:e.target.value})}/></div>
+                                   {/* <div className='col-md-5'></div> */}
+                                   <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit1}>Get</button></div>
+                                   <div className='col-md-4'></div>
+                                   <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.lattitude}  readOnly/></div>
+                                   <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.langitude} readOnly/></div>
+                                   <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
+                            
+                             <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" value={units.uaddress} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uaddress:e.target.value})}/></div>
+                             <div className="col-md-4"></div>
+                             <div className="col-md-8"><label className="labels">STREET</label><input type="text" value={units.ustreet} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustreet:e.target.value})}/></div>
+                             <div className="col-md-4"></div>
+                             <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" value={units.ulocality} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ulocality:e.target.value})}/></div>
+                             <div className="col-md-4"><label className="labels">CITY</label>
+                             <select type="text"  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ucity:e.target.value})}>
+                             <option>{units.ucity}</option>
+                             {ucities.map((city) => (
+                               <option key={city} value={city}>
+                                 {city}
+                               </option>
+                             ))}
+                             </select>
+                             </div>
+                             <div className="col-md-4"><label className="labels">ZIP</label><input type="text" value={units.uzip} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uzip:e.target.value})}/></div>
+                             <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustate:e.target.value})}>
+                                         <option>{units.ustate}</option>
+                                         {ustates.map((state) => (
+                                         <option key={state} value={state}>
+                                           {state}
+                                         </option>
+                                          ))}
+                                         </select>
+                             </div>
+                             <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ucountry:e.target.value})}>
+                                         <option>{units.ucountry}</option>
+                                         <option>My Team</option>
+                                         <option>My Self</option>
+                                         <option>All Users</option>
+                                         </select>
+                             </div>
+                                   </div>
+                                   </div>
+                    
+                         </div>
+                         </div>
+                         </div>
+         
+                         <div id="ownerdetails" style={{padding:"5px",display:"none"}}>
+                         <div className="row" style={{width:"100%"}}>
+                        
+                                 <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                                 {showSuggestions && input && filteredSuggestions.length > 0 && (
+                                     <ul className="suggestion-list">
+                                       {filteredSuggestions.map((suggestion, index) => (
+                                         <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                           {suggestion.first_name}
+                                         </li>
+                                       ))}
+                                     </ul>
+                                   )}
+                                 <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button></div>
+                             
+                              <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                              {units.owner_details.length >= 0 && (
+                               <div className="contact-details">
+                                 <table  style={{width:"100%"}}>
+                                   
+                                   <tbody>
+                                    {/* Combine selectedcontact1 with units.owner_details while removing duplicates */}
+                   {[...selectedcontact1, ...units.owner_details]
+                     .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                     .filter((contact, index, self) => 
+                       // Ensure that we only keep unique contacts based on _id
+                       index === self.findIndex((c) => c._id === contact._id)
+                     ).map(contact => (
+                                       <StyledTableRow>
+                                         <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                         <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                             {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                             <SvgIcon component={EmailIcon} />
+                                             <span>{contact.email}</span>
+                                         </StyledTableCell>
+         
+                                         <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                           {Array.isArray(contact.mobile_no)?
+                                           contact.mobile_no.map((number, index) => (
+                                             <span key={index}>
+                                               <SvgIcon component={PhoneIphoneIcon} />
+                                               {number}<br></br>
+                                             </span>
+                                           )):[]}
+                                         </StyledTableCell>
+         
+                                         <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                           S/W/O <br></br>{contact.father_husband_name}
+                                           </StyledTableCell>
+         
+                                           <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                           permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                           {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                           </StyledTableCell>
+         
+                                           <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                 <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                             </StyledTableCell>
+         
+                                         <StyledTableCell>
+                                           <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                            </StyledTableCell>
+                                         
+                                       </StyledTableRow>
+                                     ))}
+                                   </tbody>
+                                 </table>
+                               </div>
+                             )}
+                         </div>
+                         
+                         <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                         {units.associated_contact.length >= 0 && (
+                         <div className="contact-details">
+                             <table style={{width:"100%"}}>
+                                 <tbody>
+                                      {
+                                       
+                                       [...selectedcontact2, ...units.associated_contact]
+                                         .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                         .filter((contact, index, self) => 
+                                           // Ensure that we only keep unique contacts based on _id
+                                           index === self.findIndex((c) => c._id === contact._id)
+                                         ).map(contact => (
+                                         <StyledTableRow>
+                                             <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                             <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                 {contact.title} {contact.first_name} {contact.last_name}<br />
+                                                 <SvgIcon component={EmailIcon} />
+                                                 <span>{contact.email}</span>
+                                             </StyledTableCell>
+         
+                                             <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                 {
+                                                 Array.isArray(contact.mobile_no) ?
+                                                 contact.mobile_no.map((number, index) => (
+                                                     <span key={index}>
+                                                         <SvgIcon component={PhoneIphoneIcon} />
+                                                         {number}<br />
+                                                     </span>
+                                                 )):[]}
+                                             </StyledTableCell>
+         
+                                             <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                 S/W/O <br />{contact.father_husband_name}
+                                             </StyledTableCell>
+         
+                                             <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                 permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                             </StyledTableCell>
+         
+                                             <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                             <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
+                                             </StyledTableCell>
+                                                 
+                                             <StyledTableCell>
+                                                 <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                             </StyledTableCell>
+                                         </StyledTableRow>
+                                     ))} 
+                                 </tbody>
+                             </table>
+                         </div>
+                     )}
+                     </div>
+                     </div>
+                     </div>
+         
+         
+                     <div id="uploadmedia" style={{padding:"5px",display:"none"}}>
+                        
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                              <h6 className="text-right">Upload Images</h6>
+                          </div><hr></hr>
+                          <div className="row mt-2">
+                          <table style={{marginLeft:"25px"}}>
+                          <thead >
+                            <tr>
+                              <th style={{width:"100px"}}>#</th>
+                              <th style={{width:"400px",textAlign:"center"}}>Preview</th>
+                              <th style={{width:"300px",textAlign:"center"}}>Description</th>
+                              <th style={{width:"300px",textAlign:"center"}}>Category</th>
+                              <th style={{width:"150px",textAlign:"center"}}>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <td>
+                                {
+                                Array.isArray(units.s_no)?
+                                units.s_no.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                            <input 
+                                              type="text"
+                                              className="form-control form-control-sm"
+                                              
+                                              onChange={(event) => handlesnochange(index, event)}
+                                            />
+                                            
+                                          </div>
+                                        )):[]}
+                                </td>
+                                <td>
+                                {
+                                Array.isArray(units.preview)?
+                                units.preview.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                              {name && (
+                                               <img 
+                                                 // src={typeof item === 'string' ? item : URL.createObjectURL(item)} 
+                                                 src={`${name}`}
+                                                 alt="preview" 
+                                                 style={{width: "50px", height: "50px", objectFit: "cover", marginBottom: "10px"}}
+                                               />
+                                             )}
+                                            <input 
+                                            name="preview"
+                                              type="file"
+                                              className="form-control form-control-sm"
+                                              multiple
+                                              onChange={(event) => handlepreviewchange(index, event)}
+                                            />
+                                            {
+         
+                                            }
+                                              {name.previewUrls && name.previewUrls.map((url, idx) => (
+                                                  <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                                                ))}
+                                          </div>
+                                        )):[]}
+                                </td>
+                                <td>
+                                {Array.isArray(units.descriptions)?
+                                units.descriptions.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                            <input 
+                                              type="text"
+                                              className="form-control form-control-sm"
+                                            
+                                              onChange={(event) => handledescriptionchange(index, event)}
+                                            />
+                                            
+                                          </div>
+                                        )):[]}
+                                </td>
+                                <td>
+                                {Array.isArray(units.category)?
+                                units.category.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                            <select className="form-control form-control-sm" required="true" onChange={(event) => handlecategorychange(index, event)}>
+                                                <option>select</option>
+                                                <option>Bedroom</option>
+                                                <option>Hall</option>
+                                                <option>Kitchen</option>
+                                                <option>Balcony</option>
+                                                <option>Washroom</option>
+                                                <option>Pooja Room</option>
+                                                <option>Dining Room</option>
+                                                <option>Drawing Room</option>
+                                                </select>
+                                          </div>
+                                        )):[]}
+                                </td>
+                                <td>
+                                {Array.isArray(units.action10)?
+                                units.action10.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                          
+                                            <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                          </div>
+                                        )):[]}
+                                </td>
+         
+                                </tr>
+                              </tbody>
+                        </table>
+                            </div>
+                            <div className="row mt-4">
+                            <div className="col-md-3" style={{marginLeft:"70%"}} onClick={addFnunit}><button className="form-control form-control-sm">Add Image</button></div>
+                          </div>
+                          <div className="d-flex justify-content-between align-items-center mb-3">
+                              <h6 className="text-right">Upload Videos</h6>
+                          </div><hr></hr>
+                          <div className="row mt-2">
+                          <table style={{marginLeft:"25px"}}>
+                          <thead >
+                            <tr>
+                              <th style={{width:"100px",textAlign:"center"}}>SR.NO.</th>
+                              <th style={{width:"950px",textAlign:"center"}}>URL</th>
+                              <th style={{width:"150px",textAlign:"center"}}>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                <td>
+                                {Array.isArray(units.s_no1)?
+                                units.s_no1.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                            <input 
+                                              type="text"
+                                              className="form-control form-control-sm"
+                                              value={name}
+                                              onChange={(event) => handlesno1change(index, event)}
+                                            />
+                                        
+                                          </div>
+                                        )):[]}
+                                </td>
+                                <td>
+                                {Array.isArray(units.url)?
+                                units.url.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                            <input 
+                                              type="text"
+                                              className="form-control form-control-sm"
+                                              value={name}
+                                              onChange={(event) => handleurlChange(index, event)}
+                                            />
+                                            
+                                          </div>
+                                        )):[]}
+                                        
+                                </td>
+                                <td>
+                                {Array.isArray(units.action11)?
+                                units.action11.map((name, index) => (
+                                          <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                          
+                                            <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                          </div>
+                                        )):[]}
+                                </td>
+                                </tr>
+                              </tbody>
+                        </table>
+         
+                        </div>
+                          <div className="row mt-4">
+                          <div className="col-md-3" style={{marginLeft:"70%"}} onClick={addFnunit1}><button className="form-control form-control-sm">Add Video Link</button></div>
+                         
+                          
+                          <div className="col-md-12"><hr></hr></div>
+                    
+                                        
+                                      
+                                         
+                                          <div className="col-md-2"></div>
+                          
+                                          </div>
+                        </div>
+         
+                        <div id="documentform" style={{padding:"5px",display:"none"}}>
+                       <div className="d-flex justify-content-between align-items-center mb-3">
+                         </div><hr></hr>
+         
+                      
+         
+                         <div className="row mt-2">
+         
+                         <div className='col-md-3' ><label className='labels'>Document Name</label>
+                             {
+                               Array.isArray(units.document_name) ?
+                               units.document_name.map((item,index)=>
+                               (
+                                 <select className="form-control form-control-sm" onChange={(event)=>handledocumentnamechange(index,event)} style={{marginTop:"5px"}}>
+                                 <option>Choose</option>
+                                 <option>Aadhar Card</option>
+                                 <option>Pan Card</option>
+                                 <option>Voter Id</option>
+                                 <option>Passport</option>
+                                 <option>Driving Licence</option>
+                                 <option>Other</option>
+                                 </select>
+                                 
+                               )):[]
+                             }
+                             </div>
+         
+                             <div className='col-md-2' ><label className='labels'>Document No</label>
+                             {
+                               Array.isArray(units.document_no) ?
+                               units.document_no.map((item,index)=>
+                               (
+                                 <input type="text" className="form-control form-control-sm"onChange={(event)=>handledocumentnochange(index,event)} style={{marginTop:"5px"}} />
+                                 
+                               )):[]
+                             }
+                             </div>
+         
+                             <div className='col-md-2' ><label className='labels'>Date</label>
+                             {
+                               Array.isArray(units.document_Date) ?
+                               units.document_Date.map((item,index)=>
+                               (
+                                 <input type="date" className="form-control form-control-sm"onChange={(event)=>handledocumentdatechange(index,event)} style={{marginTop:"5px"}} />
+                                 
+                               )):[]
+                             }
+                             </div>
+         
+                             {/* <div className='col-md-2' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Linked Contact</label>
+                             {
+                               Array.isArray(units.linkded_contact) ?
+                               units.linkded_contact.map((item,index)=>
+                               (
+                                 <input type="text" className="form-control form-control-sm" value={units.linkded_contact} onChange={(event)=>handlelinkedcontactchange(index,event)} style={{marginTop:"5px"}} />
+                                 
+                               )):[]
+                             }
+                             </div> */}
+                                 
+         
+                                 {/* <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={documents.linkded_contact}  placeholder="Type here For Search in Contact" required="true" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div> */}
+                                 {showSuggestions  && filteredSuggestions.length > 0 && (
+                                     <ul className="suggestion-list">
+                                       {filteredSuggestions.map((suggestion, index) => (
+                                         <li key={index} onClick={() => handleSuggestionClick1(suggestion,index)}>
+                                           {suggestion.title} {suggestion.first_name} {suggestion.last_name}
+                                         </li>
+                                       ))}
+                                     </ul>
+                                   )}
+         
+         
+                               <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
+                             {
+                               Array.isArray(units.pic) ?
+                               units.pic.map((item,index)=>
+                               (
+                                 <input type="file" className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
+                                 
+                               )):[]
+                             }
+                             </div>
+                             <div className="col-md-1" style={{marginTop:"70px"}}>
+                             {
+                               Array.isArray(units.action12)?
+                                units.action12.map((item,index)=>
+                                 (
+                                   <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                           
+                                   
+                                 )):[]
+                             }
+                             </div>
+                                 
+                                 <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={addFn12}>+</button></div>
+                                
+            
+                           
+                           </div>
+                       </div>
+         
+         
+         
+                  
+         
    
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={updatecompany}>
+            <Button variant="secondary" onClick={updateinventories}>
                 Update
               </Button>
-              <Button variant="secondary" onClick={handleClose7}>
+              <Button variant="secondary" onClick={handleClose14}>
                 Close
               </Button>
             </Modal.Footer>
@@ -4480,7 +6059,7 @@ fontWeight:"lighter"
 
 
 
-{/*============================================== edit lead end============================================================== */}
+{/*============================================== edit inventory end============================================================== */}
 
 
 
@@ -4614,10 +6193,10 @@ fontWeight:"lighter"
                                                                                               <GoogleMap
                                                                                         mapContainerStyle={mapStyles1}
                                                                                           zoom={13}
-                                                                                          center={defaultCenter1}
+                                                                                          center={defaultCenter2}
                                                                                           >
                                                                                       <Marker
-                                                                                        position={{ lat: defaultCenter1.lat, lng: defaultCenter1.lng }}
+                                                                                        position={{ lat: defaultCenter2.lat, lng: defaultCenter2.lng }}
                                                                                         draggable={true}
                                                                                        
                                                                                       />
@@ -4637,6 +6216,751 @@ fontWeight:"lighter"
 
 
 {/* =================================================show map end ===============================================================*/}
+
+
+
+{/* ============================================units edit start ==============================================================*/}
+
+
+                            <Modal show={show13} onHide={handleClose13} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                                                  <Modal.Header>
+                                                    <Modal.Title>Update Unit Details</Modal.Title>
+                                                  </Modal.Header>
+                                                  <Modal.Body>
+                            
+                                                  <div style={{width:"100%"}}>
+                                        <div className="row" id='unitdetails1'>
+                                         
+                                                <div className="col-md-8"><label className="labels">Unit Number</label><input type="text" required="true"  className="form-control form-control-sm" value={units.unit_no} placeholder="unit number" onChange={(e)=>setunits({...units,unit_no:e.target.value})}/></div>
+                                                <div className="col-md-4"><label className="labels">Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                                                           <option>{units.unit_type}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Corner</option>
+                                                            <option> Two Side Open</option>
+                                                            <option>Three Side Open</option>
+                                                            <option>Ordinary </option>
+                                                            </select>
+                                                </div>
+                                                <div className="col-md-12" style={{display:"flex"}} ><label className="labels">Category</label></div>
+                                                <div className="col-md-12" style={{display:"flex"}} >
+                                                <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
+                                                  {
+                                                    Array.isArray(project.category)?
+                                                    project.category.map((type) => (
+                                                      <div className="col-md-3" key={type}>
+                                                        <button 
+                                                          className="form-control form-control-sm"
+                                                          onClick={() => handleTypeClick1(type)} 
+                                                          style={{  backgroundColor: selectedType === type ? 'green' : '', }}
+                                                        >
+                                                          {type}
+                                                        </button>
+                                                      </div>
+                                                    )):[]
+                                                  }
+                                                </div>
+                                                </div>
+                            
+                                                <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
+                                                <option>{units.block}</option>
+                                                <option>choose</option>
+                                                {
+                                                  Array.isArray(project.add_block)?
+                                                            project.add_block.map((item)=>
+                                                            (
+                                                              <option>{item.block_name}</option>
+                                                            )):[]
+                                                           }
+                                                            </select>
+                                                </div>
+                                                <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
+                                                <option>{units.size}</option>
+                                                <option>choose</option>
+                                                {
+                                                  Array.isArray(project.add_size)?
+                                                            project.add_size.map((item)=>
+                                                            (
+                                                              <option>{item.size_name}</option>
+                                                            )):[]
+                                                           }
+                                                            </select>
+                                                </div>
+                                              
+                            
+                                              {
+
+                                                  project.category?.includes("Agricultural") &&(
+                            
+                                                      <>
+                            
+                            
+                                                <div className="col-md-6"><label className="labels">Land Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,land_type:e.target.value})}>
+                                                            <option>{units.land_type}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Crop Land</option>
+                                                            <option>Wood Land</option>
+                                                            <option>Pasture</option>
+                                                            </select>
+                                                </div>
+                                                <div className='col-md-6'></div>
+                                                <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Land Details<hr></hr></div>
+                            
+                                                <div className='col-md-3' ><label className='labels'>Khewat No</label>
+                                                {
+                                                  Array.isArray(units.khewat_no) ?
+                                                  units.khewat_no.map((item,index)=>
+                                                  (
+                                                    <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.khewat_no} onChange={(event)=>handlekhewatnochange(index,event)}/>
+                                                    
+                                                  )):[]
+                                                }
+                                                </div>
+                            
+                                                <div className='col-md-3' ><label className='labels'>Killa No</label>
+                                                {
+                                                  Array.isArray(units.killa_no) ?
+                                                  units.killa_no.map((item,index)=>
+                                                  (
+                                                    <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.killa_no} onChange={(event)=>handlekillanochange(index,event)}/>
+                                                   
+                                                  )):[]
+                                                }
+                                                </div>
+                            
+                                                <div className='col-md-3' ><label className='labels'>Share</label>
+                                                {
+                                                  Array.isArray(units.share) ?
+                                                  units.share.map((item,index)=>
+                                                  (
+                                                    <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.share} onChange={(event)=>handlesharenochange(index,event)}/>
+                                                  )):[]
+                                                }
+                                                </div>
+                            
+                                              <div className='col-md-1' style={{marginTop:"90px"}}>
+                                              {
+                                                Array.isArray(units.action5) ?
+                                                units.action5.map((item,index)=>
+                                                (
+                                                  
+                                                      <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                                  
+                                                )):[]
+                                              }
+                                              </div>
+                            
+                                                   <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
+                                                <div className='col-md-12'>Total Land Area:-{units.total_land_area}</div>
+                                                   <div className='col-md-12' style={{color:"green",fontWeight:"bolder",marginTop:"10px"}}>Water Details<hr></hr></div>
+                            
+                                                   <div className='col-md-3' ><label className='labels'>Water Source</label>
+                                                {
+                                                      Array.isArray(units.water_source) ?
+                                                  units.water_source.map((item,index)=>
+                                                  (
+                                                    <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewatersourcechange(index,event)}>
+                                                      <option>{units.water_source}</option><option>---select---</option><option>Ground Water</option><option>Canal Water</option><option>Pond Water</option><option>Rain Water</option>
+                                                    </select>
+                                                  )):[]
+                                                }
+                                                </div>
+                                                <div className='col-md-3' ><label className='labels'>Water Level</label>
+                                                {
+                                                      Array.isArray(units.water_level) ?
+                                                  units.water_level.map((item,index)=>
+                                                  (
+                                                    <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterlevelchange(index,event)}>
+                                                      <option>{units.water_level}</option><option>---select---</option><option>100ft.</option><option>200Ft.</option>
+                                                    </select>
+                                                  )):[]
+                                                }
+                                                </div>
+                            
+                                                <div className='col-md-3' ><label className='labels'>Water Pump Type</label>
+                                                {
+                                                      Array.isArray(units.water_pump_type) ?
+                                                  units.water_pump_type.map((item,index)=>
+                                                  (
+                                                    <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlewaterpumpchange(index,event)}>
+                                                    <option>{units.water_pump_type}</option>  <option>---select---</option><option>Submersible Motor(15 HP)</option><option>Sumersible Motor(20 HP)</option>
+                                                      <option>Monoblock Motor(10HP)</option><option>Diesel Engine Pump</option>
+                                                    </select>
+                                                  )):[]
+                                                }
+                                                </div>
+                                                <div className='col-md-1' style={{marginTop:"90px"}}>
+                                              {
+                                                Array.isArray(units.action6) ?
+                                                units.action6.map((item,index)=>
+                                                (
+                                                  
+                                                      <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                                  
+                                                )):[]
+                                              }
+                                              </div>
+                                              <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
+                            
+                                              <div className='col-md-12' style={{color:"green",fontWeight:"bolder"}}>Basic Details<hr></hr></div>
+                            
+                                              <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                                            <option>{units.facing}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Village Link Road</option>
+                                                            <option>Highway</option>
+                                                            <option>Expressway</option>
+                                                            <option>Unconstructed Road</option>
+                                                            </select>
+                                                </div>
+                            
+                                                <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,side_open:e.target.value})}>
+                                                            <option>{units.side_open}</option>
+                                                            <option>---Select---</option>
+                                                            <option>1 Side Open</option>
+                                                            <option>2 Side Open</option>
+                                                            <option>3 Side Open</option>
+                                                            </select>
+                                                </div>
+                            
+                                                <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                                            <option>{units.road}</option>
+                                                            <option>---Select---</option>
+                                                            <option>11 Ft wide</option>
+                                                            <option>22 Ft Wide</option>
+                                                            <option>33 Ft Wide</option>
+                                                            <option>60 Ft Wide</option>
+                                                            <option>100 Ft Wide</option>
+                                                            <option>200 Ft Wide</option>
+                                                            </select>
+                                                </div>
+                            
+                                                <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,fornt_on_road:e.target.value})}>
+                                                            <option>{units.fornt_on_road}</option>
+                                                            <option>---Select---</option>
+                                                            <option>10 ft</option>
+                                                            <option>20 ft</option>
+                                                            <option>30 ft</option>
+                                                            <option>50 ft</option>
+                                                            <option>70 ft</option>
+                                                            <option>100 ft</option>
+                                                            <option>200 ft</option>
+                                                            <option>500 ft</option>
+                                                            <option>1000 ft</option>
+                                                            </select>
+                                                </div>
+                            
+                                                <div className="col-md-4"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                                            <option>{units.ownership}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Mustraka</option>
+                                                            <option>Individual</option>
+                                                            </select>
+                                                </div>
+                                                <div className="col-md-4"><label className="labels">No. Of Owner</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,total_owner:e.target.value})}>
+                                                            <option>{units.total_owner}</option>
+                                                            <option>---Select---</option>
+                                                            <option>1</option>
+                                                            <option>2</option>
+                                                            <option>3</option>
+                                                            </select>
+                                                </div>
+                                          </>
+                                        )
+                            
+                            
+                                      }
+                            
+                                                  {
+                                                  !project.category?.includes("Agricultural") &&(
+                            
+                                                      <>
+                            
+                                                <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,direction:e.target.value})}>
+                                                            <option>{units.direction}</option>
+                                                            <option>---Select---</option>
+                                                            <option>East</option>
+                                                            <option>West</option>
+                                                            <option>North</option>
+                                                            <option>South</option>
+                                                            <option>North East</option>
+                                                            <option>South East</option>
+                                                            <option>South West</option>
+                                                            <option>North West</option>
+                                                           
+                                                            </select>
+                                                </div>
+                                                <div className="col-md-4"><label className="labels">Facing</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                                                            <option>{units.facing}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Park</option>
+                                                            <option>Green Belt</option>
+                                                            <option>Highway</option>
+                                                            <option>Commercial</option>
+                                                            <option>School</option>
+                                                            <option>Hospital</option>
+                                                            <option>Mandir</option>
+                                                            <option>Gurudwara</option>
+                                                            <option>Crech</option>
+                                                            <option>Clinic</option>
+                                                            <option>Community Centre</option>
+                                                            <option>1 Kanal</option>
+                                                            <option>14m Marla</option>
+                                                            <option>10 Marla</option>
+                                                            <option>8 Marla</option>
+                                                            <option>6 Marla</option>
+                                                            <option>4 Marla</option>
+                                                            <option>2 Marla</option>
+                                                            <option> 3 Marla</option>
+                                                            <option> 2 Kanal</option>
+                                                            </select>
+                                                </div>
+                                                <div className="col-md-4"><label className="labels">Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,road:e.target.value})}>
+                                                            <option>{units.road}</option>
+                                                            <option>---Select---</option>
+                                                            <option>9 Mtr Wide</option>
+                                                            <option>12 Mtr Wide</option>
+                                                            <option> 18 Mtr Wide</option>
+                                                            <option>24 Mtr Wide</option>
+                                                            <option> 60 Mtr Wide</option>
+                                                            </select>
+                                                </div>
+                                                <div className="col-md-6"><label className="labels">Ownership</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ownership:e.target.value})}>
+                                                            <option>{units.ownership}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Freehold</option>
+                                                            <option>Leasehold</option>
+                                                            <option>Co-OPerative Society</option>
+                                                            <option>Sale Agreement(Lal Dora)</option>
+                                                            </select>
+                                                </div>
+                                                <div className='col-md-6'><label className="labels">Stage</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,stage:e.target.value})}>
+                                                            <option>{units.stage}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Active</option>
+                                                            <option>Inactive</option>
+                                                            </select></div>
+                                                </>
+                                        )
+                            
+                            
+                                      }
+                            
+                            
+                                                <div  className='col-md-6' style={{marginTop:"10px"}}>
+                                                    <input
+                                                      type="checkbox"
+                                                      checked={showabuiltup}
+                                                      onChange={handleCheckboxChange4}
+                                                    />
+                                                    <label>Show Builtup Details</label>
+                                                  </div>
+                                                  <div className='col-md-6'></div>
+                                          {showabuiltup && (
+                                            <>
+                                                <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
+                            
+                                                <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                                                      <option>{units.type}</option>
+                                                      <option>---Select---</option>
+                                                      <option>Duplex</option>
+                                                      <option>Triplex</option>
+                                                      <option>Independent House</option>
+                                                      <option>Penthouse</option>
+                                                      <option>Apartments</option>
+                                                      <option>Studio Apartments</option>
+                                                      <option>Bunglow</option>
+                                                      <option>Farmhouse</option>
+                                                      <option>Courtyard House</option>
+                                                    </select>
+                                                </div>
+                                                <div className='col-md-6'></div>
+                                              
+                                                <div className='row mt-2' style={{border:"1px dashed black",margin:"10px",marginTop:"0",padding:"10px",width:"100%"}}>
+                                                <div className='col-md-2' ><label className='labels'>Floor</label>
+                                                {
+                                                  Array.isArray(units.floor) ?
+                                                  units.floor.map((item,index)=>
+                                                  (
+                                                    <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlefloorchange(index,event)} >
+                                                      <option>{units.floor[index]}</option>
+                                                      <option>---Select---</option>
+                                                      <option>Ground Floor</option>
+                                                      <option>First Floor</option>
+                                                      <option>Second Floor</option>
+                                                      <option>Lower Ground</option>
+                                                      <option>Upper Ground</option>
+                                                      <option>Third Floor</option>
+                                                      <option> Fourth Floor</option>
+                                                      <option>Lower Ground</option>
+                                                      <option>Lower Ground</option>
+                                                    </select>
+                                                  )):[]
+                                                }
+                                                </div>
+                                                <div className='col-md-2' ><label className='labels' style={{width:"500px"}}>Cluter Details</label>
+                                                {
+                                                   Array.isArray(units.cluter_details) ?
+                                                  units.cluter_details.map((item,index)=>
+                                                  (
+                                                    <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(event)=>handlecluterdetails(index,event)}>
+                                                      <option>{units.cluter_details[index]}</option>
+                                                      <option>---Select---</option>
+                                                      <option>Living Room</option>
+                                                      <option>Lobby</option>
+                                                      <option>Bedroom</option>
+                                                      <option>Master Bedroom</option>
+                                                      <option>Kitchen</option>
+                                                      <option>Bathroom</option>
+                                                      <option>Pooja room,</option>
+                                                      <option>Study Room</option>
+                                                      <option>Frontward</option>
+                                                      <option>Backyard</option>
+                                                      <option>Balcony</option>
+                                                      <option>Store</option>
+                                                      <option>Guest Room</option>
+                                                      <option>Servent Room</option>
+                                                      <option>Dressing</option>
+                                                    </select>
+                                                  )):[]
+                                                }
+                                                </div>
+                                                <div className='col-md-2' ><label className='labels'>Length</label>
+                                                {
+                                                      Array.isArray(units.length) ?
+                                                  units.length.map((item,index)=>
+                                                  (
+                                                    <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.length[index]} onChange={(event)=>handlelengthchange(index,event)}/>
+                                                  )):[]
+                                                }
+                                                </div>
+                                                <div className='col-md-2' ><label className='labels'>Breadth</label>
+                                                {
+                                                  Array.isArray(units.bredth) ?
+                                                  units.bredth.map((item,index)=>
+                                                  (
+                                                    <input className="form-control form-control-sm" style={{marginTop:"10px"}} value={units.bredth[index]} onChange={(event)=>handlebredthchange(index,event)}/>
+                                                  
+                                                  )):[]
+                                                }
+                                                </div>
+                                                  <div className='col-md-2' ><label className='labels'>Total Area</label>
+                                                {
+                                                  Array.isArray(units.total_area) ?
+                                                  units.total_area.map((item,index)=>
+                                                  (
+                                                    <input className="form-control form-control-sm"  value={units.length[index] && units.bredth[index] ? units.length[index] * units.bredth[index] : ''} style={{marginTop:"10px"}}  readOnly/>
+                                                
+                                                  )):[]
+                                                }
+                                                </div>
+                                               
+                                                <div className='col-md-1' style={{marginTop:"90px"}}>
+                                                {
+                                                  Array.isArray(units.action3) ?
+                                                  units.action3.map((item,index)=>
+                                                  (
+                                                    
+                                                        <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall3(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                                    
+                                                  )):[]
+                                                }
+                                                </div>
+                                                <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn3}>+</button></div>
+                                               
+                                                </div>
+                                                </>
+                                                )}
+                            
+                                                <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' value={units.ocupation_date} onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                                                <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' value={units.age_of_construction} onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                                                
+                            
+                                                <div className="col-md-6"><label className="labels">Furnishing Details</label><select id='subcategory'  className="form-control form-control-sm" onChange={(e)=>setunits({...units,furnishing_details:e.target.value})}>
+                                                            <option>{units.furnishing_details}</option>
+                                                            <option>---Select---</option>
+                                                            <option>Furnished</option>
+                                                            <option>Unfurnished</option>
+                                                            <option>Semi Furnished</option>
+                                                            </select>
+                                                </div>   
+                                                {
+                                                  (units.furnishing_details==="Furnished" || units.furnishing_details==="Semi Furnished") && (
+                                                 
+                                                 <div className='col-md-12'><label>Enter Furnishing Details</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
+                                                )}
+                                                <div className='col-md-6'></div>
+                            
+                                                <div className='col-md-8'><label>Furnished Items</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,furnished_item:e.target.value})}/></div>
+                                             
+                                            </div>
+                                            </div>
+                            
+                            
+                                                  </Modal.Body>
+                                                  <Modal.Footer>
+                                                  <Button variant="secondary" onClick={updateinventoriesunit}>
+                                                      Update Unit
+                                                    </Button>
+                                                    <Button variant="secondary" onClick={handleClose13}>
+                                                      Close
+                                                    </Button>
+                                                  </Modal.Footer>
+                                                </Modal>
+
+
+{/*================================================ units edit end ===============================================================*/}
+
+
+{/* ===================================unit location details edit start===================================================== */}
+
+                        <Modal show={show12} onHide={handleClose12} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                                              <Modal.Header>
+                                                <Modal.Title>Change Location</Modal.Title>
+                                              </Modal.Header>
+                                              <Modal.Body>
+                                              <div style={{width:"100%"}}>
+                        
+                                                    <div className="row">
+                                                                <div className="col-md-12" id='unitlocation' style={{lineHeight:"30px"}}>
+                                                               
+                                                                <div className="col-md-12" style={{border:"1px solid black",marginTop:"30px",padding:"10px"}}>
+                                                                <div style={{border:"1px solid black"}}>
+                                                                
+                                                                  
+                                                                          <LoadScript
+                                                                            googleMapsApiKey="AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc"
+                                                                                                                >
+                                                                                    <GoogleMap
+                                                                              mapContainerStyle={mapStyles1}
+                                                                                zoom={13}
+                                                                                center={defaultCenter2}
+                                                                                >
+                                                                            <Marker
+                                                                              position={{ lat: defaultCenter2.lat, lng: defaultCenter2.lng }}
+                                                                              draggable={true}
+                                                                              onDragEnd={handleMarkerDragEnd1}
+                                                                            />
+                                                                            </GoogleMap>
+                                                                            </LoadScript>
+                                                             
+                                                                          </div>
+                                                                          <div className="row">
+                                                                          <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" value={units.location} onChange={(e)=>setunits({...units,location:e.target.value})}/></div>
+                                                                          {/* <div className='col-md-5'></div> */}
+                                                                          <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit1}>Get</button></div>
+                                                                          <div className='col-md-4'></div>
+                                                                          <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.lattitude}  readOnly/></div>
+                                                                          <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={units.langitude} readOnly/></div>
+                                                                          <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
+                                                                   
+                                                                    <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" value={units.uaddress} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uaddress:e.target.value})}/></div>
+                                                                    <div className="col-md-4"></div>
+                                                                    <div className="col-md-8"><label className="labels">STREET</label><input type="text" value={units.ustreet} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustreet:e.target.value})}/></div>
+                                                                    <div className="col-md-4"></div>
+                                                                    <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" value={units.ulocality} className="form-control form-control-sm" onChange={(e)=>setunits({...units,ulocality:e.target.value})}/></div>
+                                                                    <div className="col-md-4"><label className="labels">CITY</label>
+                                                                    <select type="text"  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ucity:e.target.value})}>
+                                                                    <option>{units.ucity}</option>
+                                                                    {ucities.map((city) => (
+                                                                      <option key={city} value={city}>
+                                                                        {city}
+                                                                      </option>
+                                                                    ))}
+                                                                    </select>
+                                                                    </div>
+                                                                    <div className="col-md-4"><label className="labels">ZIP</label><input type="text" value={units.uzip} className="form-control form-control-sm" onChange={(e)=>setunits({...units,uzip:e.target.value})}/></div>
+                                                                    <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setunits({...units,ustate:e.target.value})}>
+                                                                                <option>{units.ustate}</option>
+                                                                                {ustates.map((state) => (
+                                                                                <option key={state} value={state}>
+                                                                                  {state}
+                                                                                </option>
+                                                                                 ))}
+                                                                                </select>
+                                                                    </div>
+                                                                    <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,ucountry:e.target.value})}>
+                                                                                <option>{units.ucountry}</option>
+                                                                                <option>My Team</option>
+                                                                                <option>My Self</option>
+                                                                                <option>All Users</option>
+                                                                                </select>
+                                                                    </div>
+                                                                          </div>
+                                                                          </div>
+                                                           
+                                                          
+                                                                </div>
+                                                                </div>
+                                         
+                                             </div>
+                                              </Modal.Body>
+                                              <Modal.Footer>
+                                              <Button variant="secondary" onClick={updateinventoriesunit}>
+                                                  Update Location
+                                                </Button>
+                                                <Button variant="secondary" onClick={handleClose12}>
+                                                  Close
+                                                </Button>
+                                              </Modal.Footer>
+                                            </Modal>
+
+
+{/*=============================================== unit location details edit end=============================================== */}
+
+
+{/* =======================================change owner start========================================================== */}
+
+<Modal show={show9} onHide={handleClose9} size='xl' animation={true}>
+            <Modal.Header>
+              <Modal.Title>Change Owner</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+                              <div id="ownerdetails" style={{padding:"5px"}}>
+                                            <div className="row" style={{width:"100%"}}>
+                                           
+                                                    <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                                                    {showSuggestions && input && filteredSuggestions.length > 0 && (
+                                                        <ul className="suggestion-list">
+                                                          {filteredSuggestions.map((suggestion, index) => (
+                                                            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                                              {suggestion.first_name}
+                                                            </li>
+                                                          ))}
+                                                        </ul>
+                                                      )}
+                                                    <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button></div>
+                                                
+                                                 <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                                                 {units.owner_details.length >= 0 && (
+                                                  <div className="contact-details">
+                                                    <table  style={{width:"100%"}}>
+                                                      
+                                                      <tbody>
+                                                       {/* Combine selectedcontact1 with units.owner_details while removing duplicates */}
+                                      {[...selectedcontact1, ...units.owner_details]
+                                        .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                        .filter((contact, index, self) => 
+                                          // Ensure that we only keep unique contacts based on _id
+                                          index === self.findIndex((c) => c._id === contact._id)
+                                        ).map(contact => (
+                                                          <StyledTableRow>
+                                                            <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                                            <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                                {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                                                <SvgIcon component={EmailIcon} />
+                                                                <span>{contact.email}</span>
+                                                            </StyledTableCell>
+                            
+                                                            <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                              {Array.isArray(contact.mobile_no)?
+                                                              contact.mobile_no.map((number, index) => (
+                                                                <span key={index}>
+                                                                  <SvgIcon component={PhoneIphoneIcon} />
+                                                                  {number}<br></br>
+                                                                </span>
+                                                              )):[]}
+                                                            </StyledTableCell>
+                            
+                                                            <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                              S/W/O <br></br>{contact.father_husband_name}
+                                                              </StyledTableCell>
+                            
+                                                              <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                                              permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                                              {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                                              </StyledTableCell>
+                            
+                                                              <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                                                </StyledTableCell>
+                            
+                                                            <StyledTableCell>
+                                                              <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                                               </StyledTableCell>
+                                                            
+                                                          </StyledTableRow>
+                                                        ))}
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                )}
+                                            </div>
+                                            
+                                            <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                                            {units.associated_contact.length >= 0 && (
+                                            <div className="contact-details">
+                                                <table style={{width:"100%"}}>
+                                                    <tbody>
+                                                         {
+                                                          
+                                                          [...selectedcontact2, ...units.associated_contact]
+                                                            .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                                            .filter((contact, index, self) => 
+                                                              // Ensure that we only keep unique contacts based on _id
+                                                              index === self.findIndex((c) => c._id === contact._id)
+                                                            ).map(contact => (
+                                                            <StyledTableRow>
+                                                                <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    {contact.title} {contact.first_name} {contact.last_name}<br />
+                                                                    <SvgIcon component={EmailIcon} />
+                                                                    <span>{contact.email}</span>
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    {
+                                                                    Array.isArray(contact.mobile_no) ?
+                                                                    contact.mobile_no.map((number, index) => (
+                                                                        <span key={index}>
+                                                                            <SvgIcon component={PhoneIphoneIcon} />
+                                                                            {number}<br />
+                                                                        </span>
+                                                                    )):[]}
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    S/W/O <br />{contact.father_husband_name}
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                    permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                                                </StyledTableCell>
+                            
+                                                                <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                                                <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
+                                                                </StyledTableCell>
+                                                                    
+                                                                <StyledTableCell>
+                                                                    <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                                                </StyledTableCell>
+                                                            </StyledTableRow>
+                                                        ))} 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        )}
+                                        </div>
+                                        </div>
+                                        </div>
+
+        </Modal.Body>
+            <Modal.Footer>
+           
+            <Button variant="secondary" onClick={updateinventories}>
+                Change Owner
+              </Button>
+              <Button variant="secondary" onClick={handleClose9}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+{/*================================================== change owner end================================================= */}
+
+
+
 
 <ToastContainer/>
     </div>
