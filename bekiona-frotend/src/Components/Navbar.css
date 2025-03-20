@@ -32,13 +32,13 @@
 }
 
 
-.navbar-nav .nav-item .nav-link {
+/* .navbar-nav .nav-item .nav-link {
   text-transform: lowercase; 
-}
+} */
 
-.navbar-nav .nav-item .nav-link::first-letter {
+/* .navbar-nav .nav-item .nav-link::first-letter {
   text-transform: uppercase; 
-}
+} */
 
   
   
@@ -267,6 +267,16 @@
   position: fixed;
 }
     }
+
+
+
+
+
+
+
+
+
+    
 
 
 

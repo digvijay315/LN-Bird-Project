@@ -16,6 +16,11 @@ import Swal from 'sweetalert2';
 import shampoo from '../Components/Assets/shampoo.png';
 import facewash from '../Components/Assets/facewash.png';
 import hairoil from '../Components/Assets/hair oil.png';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
 
 
@@ -118,7 +123,7 @@ const[product1,setproduct1]=useState([])
       product_quantity1: 1,
     },
   ];
-  console.log(Combo);
+
   
 
 
@@ -304,6 +309,9 @@ const[product1,setproduct1]=useState([])
 
 
 
+ 
+
+
 
   return (
     <div>
@@ -403,89 +411,6 @@ const[product1,setproduct1]=useState([])
 
 
 
-{/* <div
-  style={{
-    backgroundColor: "rgb(255, 255, 255)", 
-    padding: "2rem", 
-    fontFamily: "'Arial', sans-serif", 
-  }}
->
-  <div className="row">
-
-    <div className="col-lg-6 mb-4" style={{ padding: "20px" }}>
-      <p
-        style={{
-          fontSize: "1rem",
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          color: "#555555",
-          letterSpacing: "1px", 
-          marginBottom: "1rem", 
-        }}
-      >
-        What We Do
-      </p>
-      <h2
-        style={{
-          fontSize: "1.8rem", 
-          fontWeight: "700",
-          margin: "0 0 20px",
-          color: "#000000",
-          lineHeight: "1.6", 
-        }}
-      >
-        We Make Multi-Purpose Complexion Boosting Skin-Loving Products
-      </h2>
-      <img
-        className="img-fluid"
-        src="https://wdtlilacdemo.wpengine.com/wp-content/uploads/2023/06/Lilac-Demo-Filler-Img-768x807.webp"
-        alt="Natural Brushes"
-        style={{
-          width: "95%",
-          borderRadius: "8px",
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)", 
-          marginTop: "1rem",
-        }}
-      />
-    </div>
-
-   
-    <div className="col-lg-6 mb-4" style={{ padding: "20px" }}>
-      <img
-        src="https://wdtlilacdemo.wpengine.com/wp-content/uploads/2023/06/filler-img-03-768x764.webp"
-        alt="Facial Mask"
-        style={{
-          width: "95%",
-          borderRadius: "8px", 
-          boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)", 
-          marginBottom: "1.5rem", 
-        }}
-      />
-      <p
-        style={{
-          fontSize: "1rem", 
-          lineHeight: "1.8",
-          color: "#666666",
-          textAlign: "justify",
-        }}
-      >
-        "Nulla interdum sem sed nunc finibus maximus.<br /> Vivamus purus
-        mauris, placerat sit amet bibendum sit amet."
-      </p>
-      <p
-        style={{
-          fontSize: "1rem",
-          fontWeight: "bold",
-          color: "#555555",
-          marginTop: "1rem",
-        }}
-      >
-        - Frankie Aden
-      </p>
-    </div>
-  </div>
-</div> */}
-
 
 
 
@@ -498,74 +423,7 @@ const[product1,setproduct1]=useState([])
 {/* product cart section------------------------------------------------------------------------------------- */}
 
 
- {/* <div className="grocery">
-  <h2 className="grocery-heading text-center" style={{marginBottom: "0px"}}>Our Products</h2>
-  <div className="empty-div"></div>
-  <div className="row justify-content-center">
-    {product1.map((product, index) => (
-      <React.Fragment key={product.id}>
-       
-        <div
-          className="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center align-items-center"
-        >
-          <div
-            className="grocery-card"
-            style={{
-              width: "98%",
-              maxWidth: "280px",
-              height: "400px",
-              backgroundColor: "#fff",
-              padding: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
-              boxShadow: "0 6px 10px rgba(0, 0, 0, 0.1)",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-evenly",
-              alignItems: "center", 
-              textAlign: "center",
-            }}
-          >
-            <img
-              src={product.product_image}
-              alt={product.product_name}
-              className="grocery-card-image img-fluid"
-              style={{
-              }}
-              onClick={() => navigate('/vitamincfaceash',{state:product._id})}
-            />
-            <span className="grocery-card-name">{product.product_name}</span>
-            <p className="grocery-card-price">MRP: ₹{product.product_price}</p>
-            <button
-              onClick={() => handleprouctadd(product)}
-              className="grocery-card-button btn btn-primary"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      
-        {(index + 1) % 4 === 0 && banners.length > 0 && (
-          <div className="col-12">
-            <div className="banner text-center">
-              <img
-                className="img-fluid"
-                src={banners[(Math.floor((index + 1) / 4) - 1) % banners.length]}
-                alt={`banner-${(Math.floor((index + 1) / 4) - 1) % banners.length}`}
-                style={{
-                  marginTop: "3rem",
-                  marginBottom: "3rem",
-                  borderRadius: "10px",
-                }}
-              />
-            </div>
-          </div>
-        )}
-      </React.Fragment>
-    ))}
-  </div>
-</div>  */}
-
+ 
 
 <div className="grocery" style={{ background: 'linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)', width:"100%" }}>
   <h1
@@ -934,24 +792,34 @@ Combo Products
 
 {/* single products-------------------------------------------------------------------------- */}
 
-<div className="grocery" style={{ background: 'linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)', width:"100%" }}>
-  <h1
-    className="grocery-heading text-center"
-    style={{ marginBottom: "20px", color: "#333" }}
-  >
-Incredible Products
-  </h1>
-  <div className="empty-div"></div>
-  <div className="container">
-  <div className="row justify-content-center" > 
-    {singleProduct.map((product, index) => (
-      <React.Fragment key={product.id}>
-        <div
-        key={product.id}
+<div className="grocery" style={{ background: "linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)", width: "100%" }}>
+      <h1 className="grocery-heading text-center" style={{ marginBottom: "20px", color: "#333" }}>
+        Incredible Products
+      </h1>
+      <div className="empty-div"></div>
+      <div className="container">
+      <Swiper
+  modules={[Navigation, Pagination, Autoplay]}
+  spaceBetween={20}
+  slidesPerView={4} // Default: 1 slide for mobile
+  breakpoints={{
+    480: { slidesPerView: 2 }, // 2 slides for screens ≥ 480px
+    768: { slidesPerView: 3 }, // 3 slides for screens ≥ 768px
+    1024: { slidesPerView: 4 }, // 4 slides for screens ≥ 1024px
+  }}
+  navigation
+  pagination={{ clickable: true }}
+  autoplay={{ delay: 2000 }}
+  style={{ width: "100%", padding: "20px" }}
+>
+
+  {singleProduct.map((product) => (
+    <SwiperSlide key={product.id}>
+      <div
         className="col-12 col-sm-6 col-md-4 col-lg-3"
         style={{
           height: "550px",
-          width:"300px",
+          width: "300px",
           background: "transparent",
           display: "flex",
           justifyContent: "center",
@@ -986,65 +854,42 @@ Incredible Products
           }}
         >
           <div style={{ position: "relative", width: "100%" }}>
-          <img
-  src={product.product_image}
-  alt={product.product_name}
-  className="grocery-card-image img-fluid"
-  style={{
-    width: "100%",
-    height: "270px",
-    objectFit: "cover",
-    cursor: "pointer",
-    transition: "transform 0.3s ease",
-    borderRadius: "10px",
-    imageRendering: "crisp-edges", // Ensures sharp display
-    WebkitImageRendering: "optimize-contrast", // Better quality for WebKit browsers
-  }}
-  onClick={() => navigate("/vitamincfaceash", { state: product._id })}
-/>
-
+            <img
+              src={product.product_image}
+              alt={product.product_name}
+              className="grocery-card-image img-fluid"
+              style={{
+                width: "100%",
+                height: "270px",
+                objectFit: "cover",
+                cursor: "pointer",
+                transition: "transform 0.3s ease",
+                borderRadius: "10px",
+                imageRendering: "crisp-edges",
+                WebkitImageRendering: "optimize-contrast",
+              }}
+              onClick={() => navigate("/vitamincfaceash", { state: product._id })}
+            />
           </div>
           <span
-  className="grocery-card-name"
-  style={{
-    fontSize: "1rem",
-    height: "3rem",
-    fontWeight: "bold",
-    color: "#333",
-    marginTop: "10px",
-    display: "-webkit-box",
-    WebkitBoxOrient: "vertical",
-    WebkitLineClamp: 2,
-    overflow: "hidden",
-    maxWidth: "90%",
-    fontFamily: "'ITC Modern No 216', serif",
-  }}
->
-  {truncateText(product.product_name, 30)} {/* Adjust maxLength as needed */}
-</span>
-          <div
-            className="grocery-card-rating"
+            className="grocery-card-name"
             style={{
               fontSize: "1rem",
-              color: "#ffc107",
-              margin: "5px 0",
-              display: "flex",
-              justifyContent: "center",
+              height: "3rem",
+              fontWeight: "bold",
+              color: "#333",
+              marginTop: "10px",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+              overflow: "hidden",
+              maxWidth: "90%",
+              fontFamily: "'ITC Modern No 216', serif",
             }}
           >
-            {"★".repeat(product.rating)}
-            <span style={{ color: "#ccc", marginLeft: "5px" }}>
-              {"★".repeat(5 - product.rating)}
-            </span>
-          </div>
-          <p
-            className="grocery-card-price"
-            style={{
-              fontSize: "1rem",
-              color: "#666",
-              marginTop: "5px",
-            }}
-          >
+            {product.product_name}
+          </span>
+          <p className="grocery-card-price" style={{ fontSize: "1rem", color: "#666", marginTop: "5px" }}>
             ₹{product.product_price}
           </p>
           <button
@@ -1066,58 +911,33 @@ Incredible Products
           >
             Add to Cart
           </button>
-
-          {/* Display message if available */}
-          {cartMessage[product._id] && (
-  <p
-    style={{
-      color: "#fff", // White text for contrast
-      fontSize: "0.9rem",
-      fontWeight: "600",
-      background: "linear-gradient(45deg, #4CAF50, #45A049)", // Smooth green gradient
-      padding: "10px 15px",
-      borderRadius: "8px",
-      marginTop: "10px",
-      display: "inline-block",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)", // Soft shadow effect
-      borderLeft: "4px solid #2E7D32", // Left border for a card-like feel
-      textAlign: "center",
-      letterSpacing: "0.5px",
-      transition: "transform 0.3s ease-in-out", // Animation on hover
-    }}
-    onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")} // Slight zoom on hover
-    onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-  >
-    ✅ {cartMessage[product._id]}
-  </p>
-)}
-
-
         </div>
       </div>
-      </React.Fragment>
-    ))}
+    </SwiperSlide>
+  ))}
+</Swiper>
+
+{/* Custom CSS for smaller next/prev buttons */}
+<style>
+  {`
+  .swiper-button-next,
+  .swiper-button-prev {
+    font-size: 14px !important; /* Decrease size */
+    width: 30px !important;
+    height: 30px !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 50%;
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 14px !important; /* Arrow size */
+    color: white !important;
+  }
+  `}
+</style>
+
+      </div>
     </div>
-  </div>
-  {/* <div className="text-center mt-4">
-    <button
-      className="view-all-btn"
-      style={{
-        backgroundColor: "#333",
-        color: "#fff",
-        border: "none",
-        padding: "10px 20px",
-        borderRadius: "5px",
-        fontSize: "1rem",
-        cursor: "pointer",
-        transition: "all 0.3s ease",
-      }}
-      onClick={() => navigate("/all-products")}
-    >
-      View All
-    </button>
-  </div> */}
-</div>
 
 
 {/* video secton- start------------------------------------------------------------------- */}
@@ -1544,7 +1364,8 @@ Incredible Products
                     textAlign: "center",
                   }}
                 >
-                  <img
+
+                  {/* <img
                     src={review.product_image}
                     alt={review.name}
                     style={{
@@ -1553,7 +1374,7 @@ Incredible Products
                       height: "80px",
                       marginBottom: "10px",
                     }}
-                  />
+                  /> */}
                   <h4 style={{ color: "#222", fontWeight: "bold" }}>
                     {review.name}
                   </h4>

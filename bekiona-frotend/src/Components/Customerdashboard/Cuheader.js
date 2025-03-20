@@ -18,14 +18,12 @@ import 'jspdf-autotable';
 
 function Cuheader() {
 
+  const [utocken, setutocken] = useState('')
+  localStorage.getItem('token')
+
   const useremail = localStorage.getItem('email')
 
   const [validation, setValidation] = useState({});
-
-
-  
-
-
 
     const {cart,setcart}=useCart()
     useEffect(()=>
@@ -147,6 +145,7 @@ function Cuheader() {
   
   const handleClose4 = () => setShow4(false);
   const handleShow4 = () => {
+
     setShow4(true);
     handleClose1()
   }
@@ -301,78 +300,81 @@ useEffect(()=>
   const handlePayment = async () => {
 
     if (!validateForm()) {
-      Swal.fire({
-          title: 'Validation Error!',
-          text: 'Please correct the errors before submitting.',
-          icon: 'warning',
-          confirmButtonText: 'OK',
-      });
-      return;
-  }
+    Swal.fire({
+    title: 'Validation Error!',
+    text: 'Please correct the errors before submitting.',
+    icon: 'warning',
+    confirmButtonText: 'OK',
+    });
+    return;
+    }
     try {
-      // Step 1: Create Order on Backend
-      const { data: order } = await api.post('payment', {
-        amount: orderdata.totalPrice, // Amount in INR
-      });
-  
-      console.log('Order Created:', order);  // Debugging: Check if the order was created
-  
-      // Step 2: Razorpay Checkout Options
-      const options = {
-        key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Key ID
-        amount: parseFloat(order.amount),
-        currency: order.currency,
-        name: 'Your Company Name',
-        description: 'Test Transaction',
-        order_id: order.id,
-        handler: function (response) {
-          console.log('Payment Success Response:', response);  // Debugging: Check Razorpay response
-  
-          // Check if response contains the expected payment info
-          if (response && response.razorpay_payment_id) {
-            alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-            console.log(orderdata
-            );
-            console.log(orderdata, cart);
-            
-            // Step 3: Generate PDF Invoice after Successful Payment
-            generateInvoice(response,orderdata,companyDetails);
-  
-            // Directly update the payment status in frontend
-            setorderdata({ ...orderdata, payment_status: 'success' });
-  
-            // Call your submit function to save data
-            handleSubmit1();
-          } else {
-            alert('Payment Response Invalid');
-          }
-        },
-        prefill: {
-          name: orderdata.firstName,
-          email: 'narayanniket2@gmail.com',
-          contact: orderdata.mobileNumber,
-        },
-        theme: {
-          color: '#3399cc',
-        },
-      };
-  
-      // Step 4: Initialize Razorpay Checkout
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-      handleSubmit1();
-      
+    // Step 1: Create Order on Backend
+    const { data: order } = await api.post('payment', {
+    amount: orderdata.totalPrice, // Amount in INR
+    });
+    
+    console.log('Order Created:', order); // Debugging: Check if the order was created
+    
+    // Step 2: Razorpay Checkout Options
+    const options = {
+    key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Key ID
+    amount: parseFloat(order.amount),
+    currency: order.currency,
+    name: 'Your Company Name',
+    description: 'Test Transaction',
+    order_id: order.id,
+    handler: function (response) {
+    console.log('Payment Success Response:', response); // Debugging: Check Razorpay response
+    
+    // Check if response contains the expected payment info
+    if (response && response.razorpay_payment_id) {
+    alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+    console.log(orderdata
+    );
+    console.log(orderdata, cart);
+    
+    // Step 3: Generate PDF Invoice after Successful Payment
+    generateInvoice(response,orderdata,companyDetails);
+    
+    // Directly update the payment status in frontend
+    setorderdata({ ...orderdata, payment_status: 'success' });
+    
+    // Call your submit function to save data
+    handleSubmit1();
+    } else {
+    alert('Payment Response Invalid');
+    }
+    },
+    prefill: {
+    name: orderdata.firstName,
+    email: 'narayanniket2@gmail.com',
+    contact: orderdata.mobileNumber,
+    },
+    theme: {
+    color: '#3399cc',
+    },
+    };
+    
+    // Step 4: Initialize Razorpay Checkout
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+    handleSubmit1();
+    
     } catch (error) {
-      console.error('Error during payment:', error);
-  
-      // Handle any error (e.g., network issues)
-      alert('Payment Failed');
-      
-      // Set status to failed if payment fails
-      setorderdata({ ...orderdata, payment_status: 'failed' });
+    console.error('Error during payment:', error);
+    
+    // Handle any error (e.g., network issues)
+    alert('Payment Failed');
+    
+    // Set status to failed if payment fails
+    setorderdata({ ...orderdata, payment_status: 'failed' });
     
     }
-  };
+    };
+    
+  
+
   
   const companyDetails = [
     {
@@ -422,8 +424,11 @@ useEffect(()=>
         doc.text(`Name: ${orderdata.firstName} ${orderdata.lastName}`, marginRight, 60);
         doc.text(`Email: ${orderdata.email}`, marginRight, 70);
         doc.text(`Phone: ${orderdata.mobileNumber}`, marginRight, 80);
-        doc.text(`Address: ${orderdata.apartmentNumber} ${orderdata.area} ${orderdata.landmark} ${orderdata.selectstate} ${orderdata.pincode} India`, marginRight, 90);
-
+        const address = `Address: ${orderdata.apartmentNumber} ${orderdata.area} ${orderdata.landmark} ${orderdata.selectstate} ${orderdata.pincode} India`;
+        const maxWidth = 60; // Adjust width based on the layout
+        const wrappedAddress = doc.splitTextToSize(address, maxWidth);
+        doc.text(wrappedAddress, marginRight, 90);
+        
         doc.setFont("helvetica", "bold");
         doc.setFontSize(10);
         doc.text(`Invoice Number: ${paymentResponse.razorpay_payment_id}`, marginLeft, 100);
@@ -693,6 +698,12 @@ const removeFromCart = (index) => {
 
 const [selectedPayment, setSelectedPayment] = useState("cod");
 
+const logout = () => {
+  localStorage.removeItem("usertoken"); 
+  window.dispatchEvent(new Event("storage")); 
+  navigate("/");
+};
+
   return (
     <div>
  <div style={{position:"absolute",left:"0",right:"0",zIndex:"1000",top:"0"}}>
@@ -879,9 +890,10 @@ My Account
 <li className="dropdown-item">
 <Link to="/manageadds" style={{textDecoration:"none",color:"black"}}>Manage Address</Link>
 </li>
-<li className="dropdown-item">
-<Link to="/" style={{textDecoration:"none",color:"black"}}>Logout</Link>
+<li onClick={logout} className="dropdown-item" style={{ textDecoration: "none", color: "black", cursor:"pointer" }}>
+  Logout
 </li>
+
 </ul>
 </li>
           </ul>
@@ -1703,72 +1715,74 @@ Total Price:  <span  >
 
 {/* payment method */}
 
-<div className="fixed inset-0 flex items-center justify-center  px-4">
-            <h2 className="text-lg font-semibold">Payment</h2>
-            <p className="text-sm text-gray-500">All transactions are secure and encrypted.</p>
+<div className="fixed inset-0 flex items-center justify-center px-4">
+<h2 className="text-lg font-semibold">Payment</h2>
+<p className="text-sm text-gray-500">All transactions are secure and encrypted.</p>
 
-            {/* GoKwik Cash on Delivery */}
-            <div
-              className={`border rounded-lg p-4 mt-4 cursor-pointer ${
-                selectedPayment === "cod" ? "border-blue-500 bg-blue-50" : "border-gray-300"
-              }`}
-              onClick={() => setSelectedPayment("cod")}
-            >
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  name="payment"
-                  checked={selectedPayment === "cod"}
-                  onChange={() => setSelectedPayment("cod")}
-                  className="mr-3"
-                />
-                <span className="font-medium">Cash On Delivery</span>
-                <span className="ml-auto">💰</span>
-              </div>
+{/* GoKwik Cash on Delivery */}
+<div
+className={`border rounded-lg p-4 mt-4 cursor-pointer ${
+selectedPayment === "cod" ? "border-blue-500 bg-blue-50" : "border-gray-300"
+}`}
+onClick={() => setSelectedPayment("cod")}
+>
+<div className="flex items-center">
+<input
+type="radio"
+name="payment"
+checked={selectedPayment === "cod"}
+onChange={() => setSelectedPayment("cod")}
+className="mr-3"
+/>
+<span className="font-medium">Cash On Delivery</span>
+<span className="ml-auto">💰</span>
+</div>
 
-              {selectedPayment === "cod" && (
-                <div className="mt-3 text-center border-t pt-3">
-<img 
-  src={payment} 
-  alt="Payment process" 
-  className="mx-auto w-auto max-w-[80px] sm:max-w-[20px] md:max-w-[120px] h-auto" 
+{selectedPayment === "cod" && (
+<div className="mt-3 text-center border-t pt-3">
+<img
+src={payment}
+alt="Payment process"
+className="mx-auto w-auto max-w-[80px] sm:max-w-[20px] md:max-w-[120px] h-auto"
 />
 
 
 
-                  <p className="text-sm text-gray-600 mt-2">
-                  You will be redirected to complete your Cash on Delivery order securely.
-                  </p>
-                </div>
-              )}
-            </div>
+<p className="text-sm text-gray-600 mt-2">
+You will be redirected to complete your Cash on Delivery order securely.
+</p>
+</div>
+)}
+</div>
 
-            {/* PhonePe Payment Gateway */}
-            <div
-              className={`border rounded-lg p-4 mt-4 cursor-pointer ${
-                selectedPayment === "phonepe" ? "border-blue-500 bg-blue-50" : "border-gray-300"
-              }`}
-              onClick={() => setSelectedPayment("phonepe")}
-            >
-              <div className="flex items-center">
-                <input
-                  type="radio"
-                  name="payment"
-                  checked={selectedPayment === "phonepe"}
-                  onChange={() => setSelectedPayment("phonepe")}
-                  className="mr-3"
-                />
-                <span className="font-medium">PhonePe Payment Gateway (UPI, Cards & NetBanking)</span>
-              </div>
-              {selectedPayment === "phonepe" && (
-                <div className="mt-3 flex space-x-2 border-t pt-3">
-                  <img src={upi} alt="UPI" style={{ width: "60px", height: "40px" }} />
-                  <img src={Visa} alt="Visa" style={{ width: "60px", height: "40px" }} />
-                  <img src={rupay} alt="Rupay" style={{ width: "60px", height: "40px" }} />
-                </div>
-              )}
-            </div>
-          </div>
+{/* PhonePe Payment Gateway */}
+<div
+className={`border rounded-lg p-4 mt-4 cursor-pointer ${
+selectedPayment === "phonepe" ? "border-blue-500 bg-blue-50" : "border-gray-300"
+}`}
+onClick={() => setSelectedPayment("phonepe")}
+>
+<div className="flex items-center">
+<input
+type="radio"
+name="payment"
+checked={selectedPayment === "phonepe"}
+onChange={() => setSelectedPayment("phonepe")}
+className="mr-3"
+/>
+<span className="font-medium">PhonePe Payment Gateway (UPI, Cards & NetBanking)</span>
+</div>
+{selectedPayment === "phonepe" && (
+<div className="mt-3 flex space-x-2 border-t pt-3">
+<img src={upi} alt="UPI" style={{ width: "60px", height: "40px" }} />
+<img src={Visa} alt="Visa" style={{ width: "60px", height: "40px" }} />
+<img src={rupay} alt="Rupay" style={{ width: "60px", height: "40px" }} />
+</div>
+)}
+</div>
+</div>
+
+
 
 
 

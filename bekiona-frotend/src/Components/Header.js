@@ -11,10 +11,18 @@ import { jsPDF } from "jspdf";
 import 'jspdf-autotable';
 import { useAuth } from './authguard';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { Navbar, Nav, NavDropdown, Offcanvas, Container, } from "react-bootstrap";
 function Header() {
 const [utocken, setutocken] = useState('')
 
-localStorage.getItem('token')
+const token=localStorage.getItem('usertoken')
+useEffect(()=>
+{
+console.log(token);
+
+},[])
+
+
 
 const {cart,setcart}=useCart()
 const [formData, setFormData] = useState({
@@ -91,7 +99,7 @@ return cart.reduce(
 );
 };
 
-console.log(calculateTotalPrice);
+// console.log(calculateTotalPrice);
 
 
 useEffect(() => {
@@ -128,7 +136,7 @@ return
 
 }
 
-setShow4(true);
+setShow4(true); 
 handleClose1()
 }
 
@@ -335,86 +343,86 @@ navigate('/categoryproduct',{state:data})
 
 
 const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
-  
-  const [formErrors, setFormErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState(null);
-  
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUser({
-      ...user,
-      [name]: value,
-    });
-  };
-  
-  // Validation function
-  const validateForm = () => {
-    let newErrors = {};
-    if (!user.firstName.trim()) newErrors.firstName = "First name is required";
-    if (!user.lastName.trim()) newErrors.lastName = "Last name is required";
-  
-    // Email validation
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!user.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!emailPattern.test(user.email)) {
-      newErrors.email = "Enter a valid email address";
-    }
-  
-    // Phone number validation (Assuming 10-digit number for India)
-    const phonePattern = /^[6-9]\d{9}$/;
-    if (!user.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    } else if (!phonePattern.test(user.phone)) {
-      newErrors.phone = "Enter a valid 10-digit phone number";
-    }
-  
-    // Password validation (at least 8 characters, uppercase, lowercase, number, special char)
-    const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    if (!user.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (!passwordPattern.test(user.password)) {
-      newErrors.password =
-        "Password must be at least 8 characters, including uppercase, lowercase, number, and special character";
-    }
-  
-    setFormErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Returns true if no errors
-  };
-  
-  const handleSubmit6 = async (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-  
-    try {
-      const response = await api.post("register", user);
-  
-      setSuccessMessage(response.data.message);
-      setFormErrors({});
-      
-      // Reset form fields
-      setUser({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        password: "",
-      });
-    } catch (err) {
-      setFormErrors({ general: err.response?.data?.message || "Server error" });
-      setSuccessMessage(null);
-    }
-  };
+firstName: "",
+lastName: "",
+email: "",
+phone: "",
+password: "",
+});
+
+const [formErrors, setFormErrors] = useState({});
+const [successMessage, setSuccessMessage] = useState(null);
+
+// Handle input changes
+const handleInputChange = (e) => {
+const { name, value } = e.target;
+setUser({
+...user,
+[name]: value,
+});
+};
+
+// Validation function
+const validateForm = () => {
+let newErrors = {};
+if (!user.firstName.trim()) newErrors.firstName = "First name is required";
+if (!user.lastName.trim()) newErrors.lastName = "Last name is required";
+
+// Email validation
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!user.email.trim()) {
+newErrors.email = "Email is required";
+} else if (!emailPattern.test(user.email)) {
+newErrors.email = "Enter a valid email address";
+}
+
+// Phone number validation (Assuming 10-digit number for India)
+const phonePattern = /^[6-9]\d{9}$/;
+if (!user.phone.trim()) {
+newErrors.phone = "Phone number is required";
+} else if (!phonePattern.test(user.phone)) {
+newErrors.phone = "Enter a valid 10-digit phone number";
+}
+
+// Password validation (at least 8 characters, uppercase, lowercase, number, special char)
+const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+if (!user.password.trim()) {
+newErrors.password = "Password is required";
+} else if (!passwordPattern.test(user.password)) {
+newErrors.password =
+"Password must be at least 8 characters, including uppercase, lowercase, number, and special character";
+}
+
+setFormErrors(newErrors);
+return Object.keys(newErrors).length === 0; // Returns true if no errors
+};
+
+const handleSubmit6 = async (e) => {
+e.preventDefault();
+
+if (!validateForm()) {
+return;
+}
+
+try {
+const response = await api.post("register", user);
+
+setSuccessMessage(response.data.message);
+setFormErrors({});
+
+// Reset form fields
+setUser({
+firstName: "",
+lastName: "",
+email: "",
+phone: "",
+password: "",
+});
+} catch (err) {
+setFormErrors({ general: err.response?.data?.message || "Server error" });
+setSuccessMessage(null);
+}
+};
 
 
 
@@ -494,18 +502,56 @@ const [isOpen, setIsOpen] = useState(false);
 
 
 const removeFromCart = (index) => {
-  const updatedCart = cart.filter((_, i) => i !== index);
-  setcart(updatedCart); 
+const updatedCart = cart.filter((_, i) => i !== index);
+setcart(updatedCart);
 
-  // Show success message using SweetAlert
-  Swal.fire({
-    title: "Removed!",
-    text: "Your product has been removed from the cart.",
-    icon: "success",
-    confirmButtonText: "OK",
-  });
+// Show success message using SweetAlert
+Swal.fire({
+title: "Removed!",
+text: "Your product has been removed from the cart.",
+icon: "success",
+confirmButtonText: "OK",
+});
 };
 
+
+
+const [sidebarOpen, setSidebarOpen] = useState(false);
+const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+
+// Function to check if device is mobile based on screen width
+useEffect(() => {
+  const checkIfMobile = () => {
+    setIsMobile(window.innerWidth < 992);
+  };
+  
+  // Check initially
+  checkIfMobile();
+  
+  // Add event listener for window resize
+  window.addEventListener('resize', checkIfMobile);
+  
+  // Clean up event listener on component unmount
+  return () => {
+    window.removeEventListener('resize', checkIfMobile);
+  };
+}, []);
+
+// Function to toggle sidebar
+const toggleSidebar = () => {
+  setSidebarOpen(!sidebarOpen);
+  // Prevent body scrolling when sidebar is open
+  document.body.style.overflow = !sidebarOpen ? 'hidden' : '';
+};
+
+// Function to handle navigation click and close sidebar
+const handleNavClick = (callback) => {
+  setSidebarOpen(false);
+  document.body.style.overflow = '';
+  if (callback) {
+    callback();
+  }
+};
 
 
 
@@ -519,216 +565,111 @@ return (
 
 
 <div style={{position:"fixed",left:"0",right:"0",zIndex:"1000",top:"0"}}>
-<nav
-className="navbar navbar-expand-lg" id="navbar1"
-style={{
-backgroundColor: "#f8f9f3",
-height: "120px",
-position: "relative",
-}}
->
-<div className="container-fluid">
-{/* Mobile Toggle Button on the Left */}
-<button
-className="navbar-toggler"
-type="button"
-data-bs-toggle="collapse"
-data-bs-target="#navbarNav"
-aria-controls="navbarNav"
-aria-expanded="false"
-aria-label="Toggle navigation"
-style={{ width: "fit-content", color: "#000", marginLeft: "10px" }}
->
-<i className="fa-solid fa-bars"></i>
-</button>
 
-{/* Brand Name Centered */}
-<div
-style={{
-position: "absolute",
-top: "20px",
-left: "50%",
-transform: "translateX(-50%)",
-fontSize: "40px",
-fontWeight: "400",
-fontFamily: '"ITC Modern No 216", serif',
-}}
->
-KIONA
-</div>
+      {/* ---------------------------------------------------------------- */}
 
-{/* Cart and User Icons on the Right */}
-<div
-className="d-flex justify-content-end align-items-center"
-style={{
-position: "absolute",
-top: "40px",
-right: "20px",
-gap: "20px",
-}}
->
-{/* Cart Icon with Badge */}
-<div style={{ position: "relative", cursor: "pointer" }} onClick={handleShow1}>
-<i className="fas fa-cart-shopping" style={{ fontSize: "25px", color: "#333" }}></i>
-{length > 0 && (
-<span
-style={{
-position: "absolute",
-top: "-5px",
-right: "-10px",
-background: "red",
-color: "white",
-fontSize: "12px",
-fontWeight: "bold",
-padding: "3px 6px",
-borderRadius: "50%",
-minWidth: "20px",
-textAlign: "center",
-boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-}}
->
-{length}
-</span>
-)}
-</div>
+      {["lg"].map((expand) => (
+        <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" style={{ backgroundColor: "#f8f9f3", height: "112px" }}>
+          <Container fluid style={{ display: "flex", justifyContent: "space-between", alignItems: "center",marginTop:"75px" }}>
+            {/* Mobile Toggle Button */}
+            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} style={{ marginLeft: "-307px", width:"50px",backgroundColor:"black",marginBottom:"10px" }} />
 
-{/* User Icon */}
-<i
-onClick={handleShow}
-className="fa-regular fa-user"
-style={{
-fontSize: "25px",
-color: "#333",
-cursor: "pointer",
-}}
-></i>
-</div>
+            {/* Brand Name Centered */}
+            <Navbar.Brand
+              className="position-absolute"
+              style={{
+                left: "50%",
+                transform: "translateX(-50%)",
+                fontSize: "40px",
+                fontWeight: "400",
+                fontFamily: '"ITC Modern No 216", serif',
+                top: "10px",
+                color:"black"
+              }}
+            >
+              KIONA
+            </Navbar.Brand>
 
-{/* Navigation Links */}
-<div
-className="collapse navbar-collapse justify-content-center"
-id="navbarNav"
-style={{ marginTop: "80px" }}
->
-<ul
-className="navbar-nav"
-style={{
-gap: "20px",
-display: "flex",
-alignItems: "center",
-fontSize: "12px",
-fontWeight: "600",
-}}
->
-<li className="nav-item">
-<Link className="nav-link no-hover" to="/">
-Home
-</Link>
-</li>
-<li className="nav-item">
-<Link className="nav-link no-hover" to="/aboutus">
-About Us
-</Link>
-</li>
-{/* Product Range Dropdown */}
-<li className="nav-item dropdown">
-<a
-className="nav-link dropdown-toggle no-hover" 
-href="#"
-id="navbarDropdown"
-role="button"
-data-bs-toggle="dropdown"
-aria-expanded="false"
->
-Product
-</a>
-<ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-<li className="dropdown-item" onClick={() => navigatecategory("shampoo")} style={{cursor:"pointer"}}>
-Shampoo
-</li>
-{/* <li className="dropdown-item" onClick={() => navigatecategory("soap")} style={{cursor:"pointer"}}>
-Soap
-</li> */}
-<li className="dropdown-item" onClick={() => navigatecategory("face wash")} style={{cursor:"pointer"}}>
-Face Wash
-</li>
-{/* <li className="dropdown-item" onClick={() => navigatecategory("hair serum")} style={{cursor:"pointer"}}>
-Hair Serum
-</li> */}
-<li className="dropdown-item" onClick={() => navigatecategory("hair oil")} style={{cursor:"pointer"}}>
-Hair Oil
-</li>
-</ul>
-</li>
-<li className="nav-item">
-<Link className="nav-link no-hover" to="/blog1">
-Blogs
-</Link>
-</li>
-<li className="nav-item">
-<Link className="nav-link no-hover" to="/track-order">
-Track Your Order
-</Link>
-</li>
-<li className="nav-item">
-<Link className="nav-link no-hover" to="/contact">
-Contact Us
-</Link>
-</li>
-<li className="nav-item">
-<Link className="nav-link no-hover" to="/combo">
-Combo
-</Link>
-</li>
-{/* Terms & Conditions Dropdown */}
-<li className="nav-item dropdown">
-<a
-className="nav-link dropdown-toggle no-hover"
-href="#"
-id="termsDropdown"
-role="button"
-data-bs-toggle="dropdown"
-aria-expanded="false"
->
-Terms & Conditions
-</a>
-<ul className="dropdown-menu" aria-labelledby="termsDropdown">
-<li>
-<Link className="dropdown-item" to="/privacypolicy">
-Privacy Policy
-</Link>
-</li>
-<li>
-<Link className="dropdown-item" to="/ewaste">
-E-Waste Policy
-</Link>
-</li>
-<li>
-<Link className="dropdown-item" to="/cancelpolicy">
-Cancellation & Return Policy
-</Link>
-</li>
-<li>
-<Link className="dropdown-item" to="/deliverycancel">
-Shipping & Delivery Policy
-</Link>
-</li>
-<li>
-<Link className="dropdown-item" to="/faq">
-FAQ
-</Link>
-</li>
-<li>
-<Link className="dropdown-item" to="/term&condition">
-Terms & Conditions
-</Link>
-</li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
-</nav>
+            {/* Cart & User Icons */}
+            <div
+              className="d-flex justify-content-end align-items-center"
+              style={{
+                position: "absolute",
+                top: "40px",
+                right: "20px",
+                gap: "20px",
+              }}
+            >
+              {/* Cart Icon */}
+              <div style={{ position: "relative", cursor: "pointer" }} onClick={handleShow1}>
+                <i className="fas fa-cart-shopping" style={{ fontSize: "25px", color: "#333" }}></i>
+                {length > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-5px",
+                      right: "-10px",
+                      background: "red",
+                      color: "white",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      padding: "3px 6px",
+                      borderRadius: "50%",
+                      minWidth: "20px",
+                      textAlign: "center",
+                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+                    }}
+                  >
+                    {length}
+                  </span>
+                )}
+              </div>
+
+              {/* User Icon */}
+              <i onClick={handleShow} className="fa-regular fa-user" style={{ fontSize: "25px", color: "#333", cursor: "pointer" }}></i>
+            </div>
+
+            {/* Offcanvas Menu */}
+            <Navbar.Offcanvas id={`offcanvasNavbar-expand-${expand}`} aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`} placement="end">
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>KIONA</Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body>
+                <Nav className="justify-content-center flex-grow-1 pe-3" style={{gap:"20px"}}>
+                  <Nav.Link as={Link} to="/">Home</Nav.Link>
+                  <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
+
+                  {/* Product Dropdown */}
+                  <NavDropdown title="Products" id="offcanvasNavbarDropdown">
+                    <NavDropdown.Item onClick={() => navigatecategory("shampoo")}>Shampoo</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => navigatecategory("face wash")}>Face Wash</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => navigatecategory("hair oil")}>Hair Oil</NavDropdown.Item>
+                  </NavDropdown>
+
+                  <Nav.Link as={Link} to="/blog1">Blogs</Nav.Link>
+                  <Nav.Link as={Link} to="/track-order">Track Your Order</Nav.Link>
+                  <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
+                  <Nav.Link as={Link} to="/combo">Combo</Nav.Link>
+
+                  {/* Terms & Policies Dropdown */}
+                  <NavDropdown title="Terms & Policies" id="termsDropdown">
+                    <NavDropdown.Item as={Link} to="/privacypolicy">Privacy Policy</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/ewaste">E-Waste Policy</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/cancelpolicy">Cancellation & Return</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/deliverycancel">Shipping & Delivery</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/faq">FAQ</NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/term&condition">Terms & Conditions</NavDropdown.Item>
+                  </NavDropdown>
+                </Nav>
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
+          </Container>
+        </Navbar>
+      ))}
+
+
+
+      {/* ------------------------------------------------------------------ */}
 
 <nav
 className="navbar navbar-expand-lg" id="navbar2"
@@ -845,7 +786,7 @@ About Us
 {/* Product Range Dropdown */}
 <li className="nav-item dropdown">
 <a
-className="nav-link dropdown-toggle no-hover" 
+className="nav-link dropdown-toggle no-hover"
 href="#"
 id="navbarDropdown"
 role="button"
@@ -1228,8 +1169,8 @@ alt="Product"
 
 </div>
 <span onClick={() => removeFromCart(index)} style={{ cursor: "pointer", color: "red" }}>
-            <i className="fa-solid fa-trash"></i>
-          </span>
+<i className="fa-solid fa-trash"></i>
+</span>
 </div>
 <div className="cart-item-actions">
 <button onClick={() => decrementQuantity(index)}>-</button>
@@ -1623,8 +1564,8 @@ Go to Payment
 {/* sinup for user--------------------------------------------------------------------- */}
 
 <Modal show={show6} onHide={handleClose6}>
-    <Modal.Header closeButton>
-    <Modal.Title>
+<Modal.Header closeButton>
+<Modal.Title>
 <div className="modal-title">
 <div>
 <img
@@ -1636,88 +1577,88 @@ alt="Product"
 <span>Create Your Account</span>
 </div>
 </Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <Form onSubmit={handleSubmit6}>
-        <Form.Group controlId="formFirstName" className="mb-3">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your First name"
-            name="firstName"
-            value={user.firstName}
-            onChange={handleInputChange}
-            isInvalid={!!formErrors.firstName}
-          />
-          <Form.Control.Feedback type="invalid">{formErrors.firstName}</Form.Control.Feedback>
-        </Form.Group>
+</Modal.Header>
+<Modal.Body>
+<Form onSubmit={handleSubmit6}>
+<Form.Group controlId="formFirstName" className="mb-3">
+<Form.Label>First Name</Form.Label>
+<Form.Control
+type="text"
+placeholder="Enter your First name"
+name="firstName"
+value={user.firstName}
+onChange={handleInputChange}
+isInvalid={!!formErrors.firstName}
+/>
+<Form.Control.Feedback type="invalid">{formErrors.firstName}</Form.Control.Feedback>
+</Form.Group>
 
-        <Form.Group controlId="formLastName" className="mb-3">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your Last name"
-            name="lastName"
-            value={user.lastName}
-            onChange={handleInputChange}
-            isInvalid={!!formErrors.lastName}
-          />
-          <Form.Control.Feedback type="invalid">{formErrors.lastName}</Form.Control.Feedback>
-        </Form.Group>
+<Form.Group controlId="formLastName" className="mb-3">
+<Form.Label>Last Name</Form.Label>
+<Form.Control
+type="text"
+placeholder="Enter your Last name"
+name="lastName"
+value={user.lastName}
+onChange={handleInputChange}
+isInvalid={!!formErrors.lastName}
+/>
+<Form.Control.Feedback type="invalid">{formErrors.lastName}</Form.Control.Feedback>
+</Form.Group>
 
-        <Form.Group controlId="formEmail" className="mb-3">
-          <Form.Label>Email ID</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter your email"
-            name="email"
-            value={user.email}
-            onChange={handleInputChange}
-            isInvalid={!!formErrors.email}
-          />
-          <Form.Control.Feedback type="invalid">{formErrors.email}</Form.Control.Feedback>
-        </Form.Group>
+<Form.Group controlId="formEmail" className="mb-3">
+<Form.Label>Email ID</Form.Label>
+<Form.Control
+type="email"
+placeholder="Enter your email"
+name="email"
+value={user.email}
+onChange={handleInputChange}
+isInvalid={!!formErrors.email}
+/>
+<Form.Control.Feedback type="invalid">{formErrors.email}</Form.Control.Feedback>
+</Form.Group>
 
-        <Form.Group controlId="formPhone" className="mb-3">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control
-            type="tel"
-            placeholder="Enter your phone number"
-            name="phone"
-            value={user.phone}
-            onChange={handleInputChange}
-            isInvalid={!!formErrors.phone}
-          />
-          <Form.Control.Feedback type="invalid">{formErrors.phone}</Form.Control.Feedback>
-        </Form.Group>
+<Form.Group controlId="formPhone" className="mb-3">
+<Form.Label>Phone Number</Form.Label>
+<Form.Control
+type="tel"
+placeholder="Enter your phone number"
+name="phone"
+value={user.phone}
+onChange={handleInputChange}
+isInvalid={!!formErrors.phone}
+/>
+<Form.Control.Feedback type="invalid">{formErrors.phone}</Form.Control.Feedback>
+</Form.Group>
 
-        <Form.Group controlId="formPassword" className="mb-3">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter your password"
-            name="password"
-            value={user.password}
-            onChange={handleInputChange}
-            isInvalid={!!formErrors.password}
-          />
-          <Form.Control.Feedback type="invalid">{formErrors.password}</Form.Control.Feedback>
-        </Form.Group>
+<Form.Group controlId="formPassword" className="mb-3">
+<Form.Label>Password</Form.Label>
+<Form.Control
+type="password"
+placeholder="Enter your password"
+name="password"
+value={user.password}
+onChange={handleInputChange}
+isInvalid={!!formErrors.password}
+/>
+<Form.Control.Feedback type="invalid">{formErrors.password}</Form.Control.Feedback>
+</Form.Group>
 
-        {formErrors.general && <div className="alert alert-danger">{formErrors.general}</div>}
-        {successMessage && <div className="alert alert-success">{successMessage}</div>}
+{formErrors.general && <div className="alert alert-danger">{formErrors.general}</div>}
+{successMessage && <div className="alert alert-success">{successMessage}</div>}
 
-        <Button variant="primary" type="submit">
-          Signup
-        </Button>
-      </Form>
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={handleClose6}>
-        Close
-      </Button>
-    </Modal.Footer>
-  </Modal>
+<Button variant="primary" type="submit">
+Signup
+</Button>
+</Form>
+</Modal.Body>
+<Modal.Footer>
+<Button variant="secondary" onClick={handleClose6}>
+Close
+</Button>
+</Modal.Footer>
+</Modal>
 
 
 {/* forgot password user code----------------------------------------------------------------- */}

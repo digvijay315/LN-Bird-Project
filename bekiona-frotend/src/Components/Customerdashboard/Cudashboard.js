@@ -12,6 +12,9 @@ import { Container, Row, Col } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Swal from 'sweetalert2';
 import Cuheader from "./Cuheader";
+import shampoo from '../Assets/shampoo.png';
+import facewash from '../Assets/facewash.png';
+import hairoil from '../Assets/hair oil.png';
 
 function Cudashboard() {
 
@@ -91,31 +94,31 @@ function Cudashboard() {
     
   
     const Combo = [
-      {
-        _id: "1",
-        product_name: "Hair Care",
-        product_image: "https://thumbs.dreamstime.com/b/composition-containers-global-cosmetics-brands-poznan-poland-dec-plastic-body-care-products-including-widely-available-106604090.jpg",
-        description: "Unleash the power of Earth's essential bounty for naturally beautiful hair.",
-        product_price: 599,
-        product_quantity1: 1,
-      },
-      {
-        _id: "2",
-        product_name: "Face Care",
-        product_image: "https://thumbs.dreamstime.com/b/composition-containers-global-cosmetics-brands-poznan-poland-dec-plastic-body-care-products-including-widely-available-106604090.jpg",
-        description: "Embrace radiance naturally with the science of Earth's bounty.",
-        product_price: 599,
-        product_quantity1: 1,
-      },
-      {
-        _id: "3",
-        product_name: "Body Care",
-        product_image: "https://thumbs.dreamstime.com/b/composition-containers-global-cosmetics-brands-poznan-poland-dec-plastic-body-care-products-including-widely-available-106604090.jpg",
-        description: "Elevate your daily bath with Earth's nourishing touch for a rejuvenated you.",
-        product_price: 599,
-        product_quantity1: 1,
-      },
-    ];
+        {
+          _id: "1",
+          product_name: "At KIONA, we believe that great hair starts with proper care. Whether you want to nourish,",
+          product_image: shampoo, 
+          description: "repair, or protect your hair, our products are designed to meet every need. From strengthening shampoos to deep conditioning treatments, our range offers everything you need for soft, shiny, and manageable hair. Discover the secret to healthier hair today – when your hair looks good, you feel even better.",
+          product_price: 1196,
+          product_quantity1: 1,
+        },
+        {
+          _id: "2",
+          product_name: "Glow from Within with Our Face Care Range",
+          product_image: facewash,
+          description: "Radiant, smooth skin starts with the right care. At KIONA, we offer a curated selection of face care products to cleanse, hydrate, and rejuvenate your skin. Whether you're looking to tackle dryness, fine lines, or acne, our gentle yet effective formulas are designed to reveal your natural glow. Pamper your skin with the care it deserves, and feel confident in your beautiful complexion.",
+          product_price: 1045,
+          product_quantity1: 1,
+        },
+        {
+          _id: "3",
+          product_name: "Nourish and Pamper Your Skin with Our Body Care Collection",
+          product_image: hairoil,
+          description: "Treat your skin to the ultimate luxury with our body care essentials. From hydrating lotions to exfoliating scrubs, kIONA offers products that cleanse, moisturize, and smooth your skin, leaving it soft and radiant. Indulge in a soothing routine that not only nourishes your body but also refreshes your senses. Experience the perfect balance of care and comfort every day.",
+          product_price: 1045,
+          product_quantity1: 1,
+        },
+      ];
   
   
       const products = [
@@ -1455,62 +1458,27 @@ Nothing it doesn’t</h2>
               boxSizing: "border-box", 
             }}
           >
-            <h4 style={{ fontWeight: "bold", margin: "20px 0 10px 20px" }} className="product-name-title">
+            <h4  style={{ fontWeight: "bold", margin: "20px 0 10px 20px" }} className="product-name-title1">
               {product.product_name}
             </h4>
-            <p style={{ margin: "0 0 10px 20px",fontFamily: "'Harmonia Sans', sans-serif" }}>{product.description}</p>
-            <h6 style={{ fontWeight: "bold", margin: "20px 0 10px 20px" }}>
+            <p
+            className="description-text"
+  style={{
+    margin: "0 0 10px 20px",
+    fontFamily: "'Harmonia Sans', sans-serif",
+    fontSize: "16px", 
+    lineHeight: "1.5",
+    color: "#333", 
+    textAlign: "justify",
+  }}
+>
+  {product.description}
+</p>
+
+            {/* <h6 style={{ fontWeight: "bold", margin: "20px 0 10px 20px" }}>
             ₹ {product.product_price}
-            </h6>
-            <a
-            onClick={() => handleprouctadd(product)}
-              style={{
-                backgroundColor: "#37AFE1",
-                border: "1px solid rgba(0,0,0,0.4)",
-                color: "white",
-                fontWeight: "bold",
-                padding: "10px 20px",
-                textDecoration: "none",
-                display: "inline-block",
-                textAlign: "center",
-                borderRadius: "5px",
-                marginLeft: "20px",
-                transition:"ease 0.3s all",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.backgroundColor = "#4CC9FE")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.backgroundColor = "#37AFE1")
-              }
-            >
-              Shop Now
-            </a>
-             {/* Display message if available */}
-         {cartMessage[product._id] && (
-  <p
-    style={{
-      color: "#fff", // White text for contrast
-      fontSize: "0.9rem",
-      fontWeight: "600",
-      background: "linear-gradient(45deg, #4CAF50, #45A049)", // Smooth green gradient
-      padding: "10px 15px",
-      borderRadius: "8px",
-      marginTop: "10px",
-      display: "inline-block",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)", // Soft shadow effect
-      borderLeft: "4px solid #2E7D32", // Left border for a card-like feel
-      textAlign: "center",
-      letterSpacing: "0.5px",
-      transition: "transform 0.3s ease-in-out", // Animation on hover
-      cursor:"pointer",
-    }}
-    onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")} // Slight zoom on hover
-    onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-  >
-    ✅ {cartMessage[product._id]}
-  </p>
-)}
+            </h6> */}
+            
           </div>
           </div>
 

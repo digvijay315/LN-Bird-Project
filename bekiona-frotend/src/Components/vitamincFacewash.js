@@ -7,9 +7,47 @@ import { useLocation } from "react-router-dom";
 import api from "../Components/api";
 import { useNavigate  } from "react-router-dom";
 import Swal from 'sweetalert2';
+import Cuheader from "./Customerdashboard/Cuheader";
 
 
 function VitamincFacewash() {
+
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    // Check for token when app loads
+    const storedToken = localStorage.getItem("usertoken");
+    setToken(storedToken); // Set token state
+
+    // Function to handle token change
+    const handleStorageChange = () => {
+      const updatedToken = localStorage.getItem("usertoken");
+      setToken(updatedToken); // Update token state dynamically
+    };
+
+    // Listen for storage changes (useful for multiple tabs)
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+
+
+
+//   const token=localStorage.getItem('usertoken')
+//   const email=localStorage.getItem("email")
+
+
+// useEffect(()=>
+// { console.log(email);
+//  console.log(token)
+
+// },[])
+
+  
+
   const location = useLocation();
   const id = location.state || {};
 
@@ -174,17 +212,22 @@ function VitamincFacewash() {
 
 
 
-   
-
-
-
-
-
-  
+ 
 
   return (
     <div>
-      <Header />
+
+{/* If token exists, show Cuheader, else show Header */}
+{token ? <Cuheader /> : <Header />}
+
+
+
+      {/* {
+        token &&(
+          <Cuheader/>
+        )
+      }
+      <Header /> */}
 
       <div style={{ display: "flex", gap: "10px", padding: "20px",marginTop:"100px",padding:"90px", backgroundColor:"#fcf7ee" }}>
   {Products.map((product) => (
