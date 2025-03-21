@@ -86,10 +86,10 @@ function App() {
       <Route path='/editproject' element={<EditProjectform/>}/>
       <Route path='/leadsingleview' element={<Leadsingleview/>}/>
       <Route path='/contactsingleview' element={<Contactsingleview/>}/>
-      <Route path='/contactdetails/companysingleview' element={<Companysingleview/>}/>
-      <Route path='/dealdetails/dealsingleview' element={<Dealsingleview/>}/>
-      <Route path='/dealdetails/projectsingleview' element={<Projectsingleview/>}/>
-      <Route path='/dealdetails/inventorysingleview' element={<Inventorysingleview/>}/>
+      <Route path='/companysingleview' element={<Companysingleview/>}/>
+      <Route path='/dealsingleview' element={<Dealsingleview/>}/>
+      <Route path='/projectsingleview' element={<Projectsingleview/>}/>
+      <Route path='/inventorysingleview' element={<Inventorysingleview/>}/>
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
     </Routes> 

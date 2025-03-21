@@ -3866,7 +3866,7 @@ console.log(leadinfo);
             </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer" }} 
-             onClick={()=>navigate('companysingleview',{state:item})}
+             onClick={()=>navigate('/companysingleview',{state:item})}
             >
               {item.name}
               <br />
