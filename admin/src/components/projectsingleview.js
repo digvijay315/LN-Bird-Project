@@ -2178,11 +2178,11 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
                         alt="call-icon"
                         style={{ height: '25px', marginRight: '4px' }}
                       />
-                  {lead.developer_name.mobile_no1[0]}</InputLabel>
+                  {lead.developer_name?.mobile_no1?.[0]}</InputLabel>
                   <Select
                     labelId="mobile-label"
                     id="mobile-select"
-                    value={lead.developer_name.mobile_no1[0]}  // Always keep the mobile number as the value
+                    value={lead.developer_name?.mobile_no1?.[0]}  // Always keep the mobile number as the value
                     style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
                     MenuProps={{
                       PaperProps: {
@@ -2252,7 +2252,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
                 <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Launched On</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.launched_on).toLocaleString()}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Developer Name</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.developer_name.name}</p></div>
+                <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Developer Name</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.developer_name?.name}</p></div>
                 <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Rera Number</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.rera_number}</p></div>
 
                 <div className='col-md-5' ><label style={{color:"#B85042"}}>User</label>
