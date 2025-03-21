@@ -15,6 +15,12 @@ import Cuheader from "./Cuheader";
 import shampoo from '../Assets/shampoo.png';
 import facewash from '../Assets/facewash.png';
 import hairoil from '../Assets/hair oil.png';
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { FaCheckCircle } from "react-icons/fa";
 
 function Cudashboard() {
 
@@ -574,7 +580,7 @@ Combo Products
   <div className="empty-div"></div>
   <div className="container">
   <div className="row justify-content-center" > {/* g-3 for consistent gaps */}
-    {comboProduct.map((product, index) => (
+    {visibleCombo.map((product, index) => (
       <React.Fragment key={product.id}>
         <div
         key={product.id}
@@ -616,22 +622,22 @@ Combo Products
           }}
         >
           <div style={{ position: "relative", width: "100%" }}>
-            <img
-              src={product.product_image}
-              alt={product.product_name}
-              className="grocery-card-image img-fluid"
-              style={{
-                width: "100%",
-                height: "270px",
-                objectFit: "cover",
-                cursor: "pointer",
-                transition: "transform 0.3s ease",
-                borderRadius: "10px",
-              }}
-              onClick={() =>
-                navigate("/vitamincfaceash", { state: product._id })
-                }
-            />
+          <img
+  src={product.product_image}
+  alt={product.product_name}
+  loading="eager"
+  className="grocery-card-image"
+  style={{
+    width: "100%",
+    height: "270px",
+    objectFit: "contain",
+    cursor: "pointer",
+    transition: "transform 0.3s ease",
+    borderRadius: "10px",
+  }}
+  onClick={() => navigate("/vitamincfaceash", { state: product._id })}
+/>
+
           </div>
           <span
   className="grocery-card-name"
@@ -696,8 +702,8 @@ Combo Products
             Add to Cart
           </button>
 
-         {/* Display message if available */}
-         {cartMessage[product._id] && (
+          {/* Display message if available */}
+          {cartMessage[product._id] && (
   <p
     style={{
       color: "#fff", // White text for contrast
@@ -720,6 +726,8 @@ Combo Products
     ✅ {cartMessage[product._id]}
   </p>
 )}
+
+
 
 
 
@@ -746,11 +754,6 @@ Combo Products
     >
       View All
     </button>
-
-    
-
-
-
   </div>
 </div>
 
@@ -923,412 +926,377 @@ Combo Products
 
 {/* single products-------------------------------------------------------------------------- */}
 
-<div className="grocery">
-<h1
-className="grocery-heading text-center"
-style={{ marginBottom: "20px", color: "#333" }}
->
-Incredible Products
-</h1>
-<div className="empty-div"></div>
-<div className="container">
-<div className="row justify-content-center" > {/* g-3 for consistent gaps */}
-{singleProduct.map((product, index) => (
-  <React.Fragment key={product.id}>
-    <div
-    key={product.id}
-    className="col-12 col-sm-6 col-md-4 col-lg-3"
-    style={{
-      height: "550px",
-      width:"300px",
-      background: "transparent",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    }}
-  >
-    <div
-      className="grocery-card"
-      style={{
-        width: "100%",
-        maxWidth: "300px",
-        backgroundColor: "#fff",
-        padding: "15px",
-        border: "1px solid #ddd",
-        borderRadius: "10px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "scale(1.05)";
-        e.currentTarget.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.2)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "scale(1)";
-        e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
-      }}
-    >
-      <div style={{ position: "relative", width: "100%" }}>
-        <img
-          src={product.product_image}
-          alt={product.product_name}
-          className="grocery-card-image img-fluid"
-          style={{
-            width: "100%",
-            height: "270px",
-            objectFit: "cover",
-            cursor: "pointer",
-            transition: "transform 0.3s ease",
-            borderRadius: "10px",
-          }}
-          onClick={() =>
-            navigate("/vitamincfaceash", { state: product._id })
-            }
-        />
-      </div>
-      <span
-  className="grocery-card-name"
-  style={{
-    fontSize: "1rem",
-    height: "3rem",
-    fontWeight: "bold",
-    color: "#333",
-    marginTop: "10px",
-    display: "-webkit-box",
-    WebkitBoxOrient: "vertical",
-    WebkitLineClamp: 2,
-    overflow: "hidden",
-    maxWidth: "90%",
-    fontFamily: "'ITC Modern No 216', serif",
+<div className="grocery" style={{ background: "linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)", width: "100%" }}>
+      <h1 className="grocery-heading text-center" style={{ marginBottom: "20px", color: "#333" }}>
+        Incredible Products
+      </h1>
+      <div className="empty-div"></div>
+      <div className="container">
+      <Swiper
+  modules={[Navigation, Pagination, Autoplay]}
+  spaceBetween={20}
+  slidesPerView={4} // Default: 1 slide for mobile
+  breakpoints={{
+    480: { slidesPerView: 2 }, // 2 slides for screens ≥ 480px
+    768: { slidesPerView: 3 }, // 3 slides for screens ≥ 768px
+    1024: { slidesPerView: 4 }, // 4 slides for screens ≥ 1024px
   }}
+  navigation
+  pagination={{ clickable: true }}
+  autoplay={{ delay: 2000 }}
+  style={{ width: "100%", padding: "20px" }}
 >
-  {truncateText(product.product_name, 30)} {/* Adjust maxLength as needed */}
-</span>
 
+  {singleProduct.map((product) => (
+    <SwiperSlide key={product.id}>
       <div
-        className="grocery-card-rating"
+        className="col-12 col-sm-6 col-md-4 col-lg-3"
         style={{
-          fontSize: "1rem",
-          color: "#ffc107",
-          margin: "5px 0",
+          height: "550px",
+          width: "300px",
+          background: "transparent",
           display: "flex",
           justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {"★".repeat(product.rating)}
-        <span style={{ color: "#ccc", marginLeft: "5px" }}>
-          {"★".repeat(5 - product.rating)}
-        </span>
+        <div
+          className="grocery-card"
+          style={{
+            width: "100%",
+            maxWidth: "300px",
+            backgroundColor: "#fff",
+            padding: "15px",
+            border: "1px solid #ddd",
+            borderRadius: "10px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+            transition: "transform 0.3s ease, box-shadow 0.3s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "scale(1.05)";
+            e.currentTarget.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.2)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "scale(1)";
+            e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+          }}
+        >
+          <div style={{ position: "relative", width: "100%" }}>
+            <img
+              src={product.product_image}
+              alt={product.product_name}
+              className="grocery-card-image img-fluid"
+              style={{
+                width: "100%",
+                height: "270px",
+                objectFit: "cover",
+                cursor: "pointer",
+                transition: "transform 0.3s ease",
+                borderRadius: "10px",
+                imageRendering: "crisp-edges",
+                WebkitImageRendering: "optimize-contrast",
+              }}
+              onClick={() => navigate("/vitamincfaceash", { state: product._id })}
+            />
+          </div>
+          <span
+            className="grocery-card-name"
+            style={{
+              fontSize: "1rem",
+              height: "3rem",
+              fontWeight: "bold",
+              color: "#333",
+              marginTop: "10px",
+              display: "-webkit-box",
+              WebkitBoxOrient: "vertical",
+              WebkitLineClamp: 2,
+              overflow: "hidden",
+              maxWidth: "90%",
+              fontFamily: "'ITC Modern No 216', serif",
+            }}
+          >
+            {product.product_name}
+          </span>
+          <p className="grocery-card-price" style={{ fontSize: "1rem", color: "#666", marginTop: "5px" }}>
+            ₹{product.product_price}
+          </p>
+          <button
+            onClick={() => handleprouctadd(product)}
+            className="add-to-cart-btn"
+            style={{
+              backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)",
+              color: "white",
+              border: "none",
+              padding: "12px 30px",
+              borderRadius: "5px",
+              fontSize: "0.9rem",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              marginTop: "10px",
+              width: "80%",
+              fontWeight: "bold",
+            }}
+          >
+            Add to Cart
+          </button>
+        </div>
       </div>
-      <p
-        className="grocery-card-price"
-        style={{
-          fontSize: "1rem",
-          color: "#666",
-          marginTop: "5px",
-        }}
-      >
-        ₹{product.product_price}
-      </p>
-      <button
-        onClick={() => handleprouctadd(product)}
-        className="add-to-cart-btn"
-        style={{
-          backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)",
-          color: "white",
-          border: "none",
-          padding: "12px 30px",
-          borderRadius: "5px",
-          fontSize: "0.9rem",
-          cursor: "pointer",
-          transition: "all 0.3s ease",
-          marginTop: "10px",
-          width: "80%",
-          fontWeight: "bold",
-        }}
-      >
-        Add to Cart
-      </button>
-     
+    </SwiperSlide>
+  ))}
+</Swiper>
 
-     {/* Display message if available */}
-     {cartMessage[product._id] && (
-  <p
-    style={{
-      color: "#fff", // White text for contrast
-      fontSize: "0.9rem",
-      fontWeight: "600",
-      background: "linear-gradient(45deg, #4CAF50, #45A049)", // Smooth green gradient
-      padding: "10px 15px",
-      borderRadius: "8px",
-      marginTop: "10px",
-      display: "inline-block",
-      boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.15)", // Soft shadow effect
-      borderLeft: "4px solid #2E7D32", // Left border for a card-like feel
-      textAlign: "center",
-      letterSpacing: "0.5px",
-      transition: "transform 0.3s ease-in-out", // Animation on hover
-    }}
-    onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")} // Slight zoom on hover
-    onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
-  >
-    ✅ {cartMessage[product._id]}
-  </p>
-)}
+{/* Custom CSS for smaller next/prev buttons */}
+<style>
+  {`
+  .swiper-button-next,
+  .swiper-button-prev {
+    font-size: 14px !important; /* Decrease size */
+    width: 30px !important;
+    height: 30px !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    border-radius: 50%;
+  }
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 14px !important; /* Arrow size */
+    color: white !important;
+  }
+  `}
+</style>
 
-
-
+      </div>
     </div>
-  </div>
-  </React.Fragment>
-))}
-</div>
-</div>
-<div className="text-center mt-4">
-<button
-  className="view-all-btn"
-  style={{
-    backgroundColor: "#333",
-    color: "#fff",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: "5px",
-    fontSize: "1rem",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-  }}
-  onClick={() => navigate("/all-products")}
->
-  View All
-</button>
-</div>
-</div>
 
 
 {/* video secton- start------------------------------------------------------------------- */}
 
 <div
-style={{
-display: "flex",
-alignItems: "center",
-justifyContent: "space-between",
-padding: "50px",
-backgroundColor: "#c9bba6",
-height: "auto", // Allow height to adjust
-fontFamily: "'Arial', sans-serif",
-flexWrap: "wrap", // Wrap items for smaller screens
-}}
->
-{/* Left Section */}
-<div
-style={{
-  maxWidth: "60%",
-  flex: "1 1 60%",
-  minWidth: "300px",
-  marginBottom: "20px",
-}}
->
-<p
   style={{
-    textTransform: "uppercase",
-    fontSize: "0.9rem",
-    letterSpacing: "1px",
-    fontWeight: "600",
-    color: "black",
-    marginBottom: "10px",
-  }}
->
-  Award Winning Beauty Products
-</p>
-<h1
-  style={{
-    fontSize: "2.5rem",
-    fontWeight: "bold",
-    color: "#000",
-    marginBottom: "20px",
-    lineHeight: "1.2",
-  }}
->
-  Highly performing beauty formula
-</h1>
-<p
-  style={{
-    fontSize: "1rem",
-    color: "black",
-    marginBottom: "30px",
-    lineHeight: "1.6",
-  }}
->
-  Etiam ullamcorper facilisis porta. Donec tincidunt metus a elit tempor, a
-  condimentum sapien laoreet. Nullam metus orci, malesuada ac tincidunt
-  vitae, tincidunt eu elit. Phasellus.
-</p>
-<button
-  style={{
-    padding: "10px 20px",
-    backgroundColor: "#f5e6c8",
-    border: "none",
-    borderRadius: "5px",
-    fontSize: "1rem",
-    fontWeight: "bold",
-    color: "#000",
-    cursor: "pointer",
-    transition: "all 0.3s ease",
-  }}
-  onMouseEnter={(e) =>
-    (e.currentTarget.style.backgroundColor = "#e5d4b8")
-  }
-  onMouseLeave={(e) =>
-    (e.currentTarget.style.backgroundColor = "#f5e6c8")
-  }
->
-  Explore Now
-</button>
-</div>
-
-{/* Right Section */}
-<div
-style={{
-  textAlign: "center",
-  flex: "1 1 30%",
-  minWidth: "200px",
-}}
->
-<div
-  style={{
-    width: "80px",
-    height: "80px",
-    borderRadius: "50%",
-    backgroundColor: "#f9f4ec",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
     display: "flex",
     alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
-    margin: "0 auto",
+    justifyContent: "space-between",
+    padding: "50px",
+    backgroundColor: "#c9bba6",
+    height: "auto", // Allow height to adjust
+    fontFamily: "'Arial', sans-serif",
+    flexWrap: "wrap", // Wrap items for smaller screens
   }}
 >
+  {/* Left Section */}
   <div
     style={{
-      width: "20px",
-      height: "20px",
-      borderLeft: "10px solid transparent",
-      borderRight: "10px solid transparent",
-      borderTop: "15px solid #000",
+      maxWidth: "60%",
+      flex: "1 1 60%",
+      minWidth: "300px",
+      marginBottom: "20px",
     }}
-  ></div>
+  >
+    <p
+      style={{
+        textTransform: "uppercase",
+        fontSize: "0.9rem",
+        letterSpacing: "1px",
+        fontWeight: "600",
+        color: "black",
+        marginBottom: "10px",
+      }}
+    >
+      Discover Premium Beauty Products
+    </p>
+    <h1
+      style={{
+        fontSize: "22px",
+        fontWeight: "bold",
+        color: "#000",
+        marginBottom: "20px",
+        lineHeight: "1.2",
+      }}
+    >
+    Experience the power of nature and science with our premium beauty formulas, designed to nourish your skin and hair for a radiant glow.
+    </h1>
+    <h2 style={{ fontSize: "1.5rem", marginBottom: "15px", color: "#333" }}>
+        Why Choose Us?
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+  <p style={{ fontSize: "1rem", display: "flex",  gap: "5px", color: "#555", lineHeight: "1" }}>
+    <FaCheckCircle color="#28a745" /> Thoughtfully formulated with high-quality ingredients
+  </p>
+  <p style={{ fontSize: "1rem", display: "flex",  gap: "5px", color: "#555", lineHeight: "1" }}>
+    <FaCheckCircle color="#28a745" /> Designed for all skin and hair types
+  </p>
+  <p style={{ fontSize: "1rem", display: "flex",  gap: "5px", color: "#555", lineHeight: "1" }}>
+    <FaCheckCircle color="#28a745" /> Backed by happy customers
+  </p>
 </div>
-<p
-  style={{
-    marginTop: "10px",
-    fontSize: "0.9rem",
-    fontWeight: "600",
-    color: "#000",
-  }}
->
-  Play Video
-</p>
-</div>
+<p style={{color:"black"}}>Explore our collection and let your beauty shine naturally!</p>
 
-<style>
-{`
-  @media (max-width: 1024px) {
-    div[style*="padding: 50px"] {
-      padding: 30px; /* Reduce padding for medium screens */
-    }
 
-    h1 {
-      font-size: 2rem; /* Adjust heading font size */
-    }
 
-    button {
-      font-size: 0.9rem; /* Adjust button font size */
-      padding: 8px 16px;
-    }
+<Link to="/combo" style={{ textDecoration: "none" }}>
+  <button
+    style={{
+      padding: "10px 20px",
+      backgroundColor: "#f5e6c8",
+      border: "none",
+      borderRadius: "5px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      color: "#000",
+      cursor: "pointer",
+      transition: "all 0.3s ease",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e5d4b8")}
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f5e6c8")}
+  >
+    Explore Now
+  </button>
+</Link>
 
-    div[style*="width: 80px"] {
-      width: 70px; /* Adjust play button size */
-      height: 70px;
-    }
+  </div>
 
-    div[style*="borderTop: 15px solid"] {
-      borderTop: 12px solid #000; /* Adjust play icon size */
-    }
-  }
+  {/* Right Section */}
+  <div
+    style={{
+      textAlign: "center",
+      flex: "1 1 30%",
+      minWidth: "200px",
+    }}
+  >
+    <div
+      style={{
+        width: "80px",
+        height: "80px",
+        borderRadius: "50%",
+        backgroundColor: "#f9f4ec",
+        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        margin: "0 auto",
+      }}
+    >
+      <div
+        style={{
+          width: "20px",
+          height: "20px",
+          borderLeft: "10px solid transparent",
+          borderRight: "10px solid transparent",
+          borderTop: "15px solid #000",
+        }}
+      ></div>
+    </div>
+    <p
+      style={{
+        marginTop: "10px",
+        fontSize: "0.9rem",
+        fontWeight: "600",
+        color: "#000",
+      }}
+    >
+      Play Video
+    </p>
+  </div>
 
-  @media (max-width: 768px) {
-    div[style*="flexWrap"] {
-      flex-direction: column; /* Stack sections vertically */
-      align-items: center;
-      text-align: center;
-    }
+  <style>
+    {`
+      @media (max-width: 1024px) {
+        div[style*="padding: 50px"] {
+          padding: 30px; /* Reduce padding for medium screens */
+        }
 
-    div[style*="maxWidth: 60%"] {
-      maxWidth: 100%; /* Expand left section */
-    }
+        h1 {
+          font-size: 2rem; /* Adjust heading font size */
+        }
 
-    div[style*="flex: 1 1 30%"] {
-      margin-top: 20px; /* Add space between sections */
-    }
+        button {
+          font-size: 0.9rem; /* Adjust button font size */
+          padding: 8px 16px;
+        }
 
-    h1 {
-      font-size: 1.8rem; /* Adjust heading font size */
-    }
+        div[style*="width: 80px"] {
+          width: 70px; /* Adjust play button size */
+          height: 70px;
+        }
 
-    p {
-      font-size: 0.9rem; /* Adjust paragraph font size */
-    }
+        div[style*="borderTop: 15px solid"] {
+          borderTop: 12px solid #000; /* Adjust play icon size */
+        }
+      }
 
-    button {
-      font-size: 0.8rem; /* Adjust button font size */
-      padding: 8px 12px; /* Adjust button padding */
-    }
+      @media (max-width: 768px) {
+        div[style*="flexWrap"] {
+          flex-direction: column; /* Stack sections vertically */
+          align-items: center;
+          text-align: center;
+        }
 
-    div[style*="width: 80px"] {
-      width: 60px; /* Adjust play button size */
-      height: 60px;
-    }
+        div[style*="maxWidth: 60%"] {
+          maxWidth: 100%; /* Expand left section */
+        }
 
-    div[style*="borderTop: 15px solid"] {
-      borderTop: 10px solid #000; /* Adjust play icon size */
-    }
-  }
+        div[style*="flex: 1 1 30%"] {
+          margin-top: 20px; /* Add space between sections */
+        }
 
-  @media (max-width: 480px) {
-    div[style*="flexWrap"] {
-      padding: 20px; /* Further reduce padding */
-    }
+        h1 {
+          font-size: 1.8rem; /* Adjust heading font size */
+        }
 
-    h1 {
-      font-size: 1.5rem; /* Smaller heading */
-    }
+        p {
+          font-size: 0.9rem; /* Adjust paragraph font size */
+        }
 
-    p {
-      font-size: 0.8rem; /* Smaller text */
-    }
+        button {
+          font-size: 0.8rem; /* Adjust button font size */
+          padding: 8px 12px; /* Adjust button padding */
+        }
 
-    button {
-      font-size: 0.7rem; /* Smaller button text */
-      padding: 6px 10px;
-    }
+        div[style*="width: 80px"] {
+          width: 60px; /* Adjust play button size */
+          height: 60px;
+        }
 
-    div[style*="width: 80px"] {
-      width: 50px; /* Smaller play button */
-      height: 50px;
-    }
+        div[style*="borderTop: 15px solid"] {
+          borderTop: 10px solid #000; /* Adjust play icon size */
+        }
+      }
 
-    div[style*="borderTop: 15px solid"] {
-      borderTop: 8px solid #000; /* Smaller play icon */
-    }
-  }
-`}
-</style>
+      @media (max-width: 480px) {
+        div[style*="flexWrap"] {
+          padding: 20px; /* Further reduce padding */
+        }
+
+        h1 {
+          font-size: 1.5rem; /* Smaller heading */
+        }
+
+        p {
+          font-size: 0.8rem; /* Smaller text */
+        }
+
+        button {
+          font-size: 0.7rem; /* Smaller button text */
+          padding: 6px 10px;
+        }
+
+        div[style*="width: 80px"] {
+          width: 50px; /* Smaller play button */
+          height: 50px;
+        }
+
+        div[style*="borderTop: 15px solid"] {
+          borderTop: 8px solid #000; /* Smaller play icon */
+        }
+      }
+    `}
+  </style>
 </div>
 
 

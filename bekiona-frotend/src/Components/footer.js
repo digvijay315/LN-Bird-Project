@@ -28,13 +28,13 @@ function Footer() {
           </ul>
 
           <div className="social-media-icons">
-  <a href="#" className="icon facebook">
+  <a href="https://www.facebook.com/kionaskycosmetics" className="icon facebook">
     <i class="fa-brands fa-facebook-f"></i>
   </a>
   <a href="#" className="icon twitter">
     <i class="fa-brands fa-twitter"></i>
   </a>
-  <a href="#" className="icon instagram">
+  <a href="https://www.instagram.com/kiona_india/?igsh=MThoMmEwZHA4b2puag%3D%3D#" className="icon instagram">
     <i class="fa-brands fa-instagram"></i>
   </a>
   <a href="#" className="icon linkedin">

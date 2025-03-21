@@ -1,47 +1,15 @@
 
-
-.nav-item:hover {
-  transform: none !important;
-  background-color: transparent !important;
+.navbar-nav .nav-link,
+.navbar-nav .dropdown-toggle {
+    text-transform: capitalize;
 }
 
-
-.nav-link {
-  text-transform: lowercase;
+/* Underline on hover */
+.navbar-nav .nav-link:hover,
+.navbar-nav .dropdown-toggle:hover {
+    text-decoration: underline;
 }
 
-
-.no-hover:hover {
-  background-color: transparent !important;
-  color: inherit !important;
-}
-
-
-
-
-.navbar-nav .nav-item:hover,
-.navbar-nav .nav-link:hover {
-  transform: none !important;
-  background-color: transparent !important; 
-}
-
-
-.navbar-nav .nav-item,
-.navbar-nav .nav-link {
-  transition: none !important; 
-}
-
-
-/* .navbar-nav .nav-item .nav-link {
-  text-transform: lowercase; 
-} */
-
-/* .navbar-nav .nav-item .nav-link::first-letter {
-  text-transform: uppercase; 
-} */
-
-  
-  
 
     .navbar-toggler {
     border: none;
@@ -266,6 +234,38 @@
 .carousel-indicators{
   position: fixed;
 }
+    }
+
+
+
+    @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+  
+      /* CSS */
+      
+    }
+    
+    /* 
+      ##Device = Low Resolution Tablets, Mobiles (Landscape)
+      ##Screen = B/w 481px to 767px
+    */
+    
+    @media (min-width: 481px) and (max-width: 767px) {
+      
+      /* CSS */
+      
+    }
+    
+    /* 
+      ##Device = Most of the Smartphones Mobiles (Portrait)
+      ##Screen = B/w 320px to 479px
+    */
+    
+    @media (min-width: 320px) and (max-width: 480px) {
+      
+      .troggle-navbar-button{
+        margin-left: -303px;
+      }
+      
     }
 
 

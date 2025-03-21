@@ -572,7 +572,7 @@ return (
         <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" style={{ backgroundColor: "#f8f9f3", height: "112px" }}>
           <Container fluid style={{ display: "flex", justifyContent: "space-between", alignItems: "center",marginTop:"75px" }}>
             {/* Mobile Toggle Button */}
-            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} style={{ marginLeft: "-307px", width:"50px",backgroundColor:"black",marginBottom:"10px" }} />
+            <Navbar.Toggle  className="troggle-navbar-button" aria-controls={`offcanvasNavbar-expand-${expand}`} style={{  width:"50px",backgroundColor:"black",marginBottom:"10px" }} />
 
             {/* Brand Name Centered */}
             <Navbar.Brand

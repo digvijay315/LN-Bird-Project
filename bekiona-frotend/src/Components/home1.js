@@ -21,6 +21,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { FaCheckCircle } from "react-icons/fa";
 
 
 
@@ -973,52 +974,57 @@ Combo Products
         marginBottom: "10px",
       }}
     >
-      Award Winning Beauty Products
+      Discover Premium Beauty Products
     </p>
     <h1
       style={{
-        fontSize: "2.5rem",
+        fontSize: "22px",
         fontWeight: "bold",
         color: "#000",
         marginBottom: "20px",
         lineHeight: "1.2",
       }}
     >
-      Highly performing beauty formula
+    Experience the power of nature and science with our premium beauty formulas, designed to nourish your skin and hair for a radiant glow.
     </h1>
-    <p
-      style={{
-        fontSize: "1rem",
-        color: "black",
-        marginBottom: "30px",
-        lineHeight: "1.6",
-      }}
-    >
-      Etiam ullamcorper facilisis porta. Donec tincidunt metus a elit tempor, a
-      condimentum sapien laoreet. Nullam metus orci, malesuada ac tincidunt
-      vitae, tincidunt eu elit. Phasellus.
-    </p>
-    <button
-      style={{
-        padding: "10px 20px",
-        backgroundColor: "#f5e6c8",
-        border: "none",
-        borderRadius: "5px",
-        fontSize: "1rem",
-        fontWeight: "bold",
-        color: "#000",
-        cursor: "pointer",
-        transition: "all 0.3s ease",
-      }}
-      onMouseEnter={(e) =>
-        (e.currentTarget.style.backgroundColor = "#e5d4b8")
-      }
-      onMouseLeave={(e) =>
-        (e.currentTarget.style.backgroundColor = "#f5e6c8")
-      }
-    >
-      Explore Now
-    </button>
+    <h2 style={{ fontSize: "1.5rem", marginBottom: "15px", color: "#333" }}>
+        Why Choose Us?
+      </h2>
+      <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
+  <p style={{ fontSize: "1rem", display: "flex",  gap: "5px", color: "#555", lineHeight: "1" }}>
+    <FaCheckCircle color="#28a745" /> Thoughtfully formulated with high-quality ingredients
+  </p>
+  <p style={{ fontSize: "1rem", display: "flex",  gap: "5px", color: "#555", lineHeight: "1" }}>
+    <FaCheckCircle color="#28a745" /> Designed for all skin and hair types
+  </p>
+  <p style={{ fontSize: "1rem", display: "flex",  gap: "5px", color: "#555", lineHeight: "1" }}>
+    <FaCheckCircle color="#28a745" /> Backed by happy customers
+  </p>
+</div>
+<p style={{color:"black"}}>Explore our collection and let your beauty shine naturally!</p>
+
+
+
+<Link to="/combo" style={{ textDecoration: "none" }}>
+  <button
+    style={{
+      padding: "10px 20px",
+      backgroundColor: "#f5e6c8",
+      border: "none",
+      borderRadius: "5px",
+      fontSize: "1rem",
+      fontWeight: "bold",
+      color: "#000",
+      cursor: "pointer",
+      transition: "all 0.3s ease",
+    }}
+    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e5d4b8")}
+    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#f5e6c8")}
+  >
+    Explore Now
+  </button>
+</Link>
+
   </div>
 
   {/* Right Section */}
