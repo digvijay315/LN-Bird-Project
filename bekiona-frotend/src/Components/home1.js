@@ -1355,7 +1355,7 @@ Combo Products
         <p style={{ textAlign: "center" }}>Loading reviews...</p>
       ) : reviews.length > 0 ? (
         <Carousel interval={3000} indicators={true} controls={true}>
-          {reviews.map((review, idx) => (
+          {reviews?.map((review, idx) => (
             <Carousel.Item key={idx}>
               <Row
                 className="d-flex justify-content-center"
