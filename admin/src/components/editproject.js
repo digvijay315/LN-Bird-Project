@@ -2891,7 +2891,7 @@ const generateExcelFileunit = () => {
                               {
                                 data1.map((item)=>
                                 (
-                                  <option>{item.name}</option>
+                                  <option value={item._id}>{item.name}</option>
                                 ))
                               }
                         </select>

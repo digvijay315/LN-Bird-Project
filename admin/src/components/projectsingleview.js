@@ -23,6 +23,7 @@ import { useDropzone } from 'react-dropzone';
 import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
+import axios from 'axios';
 
 
 function Projectsingleview() {
@@ -126,9 +127,8 @@ const navigate=useNavigate()
       ];
       const allColumnsunit = [
         { id: 'sno', name: '#' },
-        { id: 'unit_no', name: 'Unit No' },
-        { id: 'project', name: 'Project' },
-        { id: 'relation', name: 'Relation' },
+        { id: 'unit_no', name: 'Details' },
+        { id: 'location', name: 'Location' },
       ];
   
       const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -1921,6 +1921,173 @@ const defaultCenter1 = {
 // =====================================================show map end=================================================================
 
 
+// ============================================edit location details start=======================================================
+
+const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",secondary_developer:"",rera_number:"",descriptions:"",
+  category:[],sub_category:[],land_area:"",measurment1:"",total_block:"",total_floor:"",
+  total_units:"",zone:[],status:"",launched_on:"",expected_competion:"",possession:"",parking_type:[],
+  approved_bank:"",approvals:[''],registration_no:[''],date:[''],pic:[''],action1:[],owner:[],
+  team:[],visible_to:"",
+
+  location:"",lattitude:"",langitude:"",address:"",street:"",locality:"",city:"",zip:"",state:"",country:"",
+
+  add_block:[],add_size:[],add_unit:[],basic_aminities:[],features_aminities:[],nearby_aminities:[],
+  price_list:[],Payment_plan:[]});
+
+
+  const [show12, setshow12] = useState(false);
+  
+  const handleClose12 = () => setshow12(false);
+  const handleShow12=async()=>
+  {
+        setshow12(true);
+        setproject(lead)
+  }
+
+  const statesAndCities = {
+    AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+    ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+    Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+    Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+    Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+    Goa: ["North Goa", "South Goa"],
+    Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+    Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+    HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+    Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+    Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+    Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+    MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+    Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+    Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+    Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+    Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+    Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+    Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+    Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+    Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+    Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+    TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+    Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+    Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+    UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+    WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+  };
+  
+  
+  const states = Object.keys(statesAndCities);
+  const cities = statesAndCities[project?.state] || [];
+
+     const [coordinates, setCoordinates] = useState('');
+           const handleSubmit = async (e) => {
+                          e.preventDefault();
+                          try {
+                            // Geocode the address entered by the user
+                            const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                              params: {
+                                address: project.location,
+                                key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc' // Replace with your API key
+                              }
+                            });
+                        
+                            // Check if we have results from the geocoding response
+                            if (response.data.results.length > 0) {
+                              const { lat, lng } = response.data.results[0].geometry.location;
+                              setCoordinates({ lat, lng });
+                              setproject(prevProject => ({
+                                ...prevProject,
+                                lattitude: lat,
+                                langitude: lng
+                              }));
+                        
+                              // Extract address components from the response
+                              const addressComponents = response.data.results[0].address_components;
+                              console.log('Geocode Response:', response.data);
+                              let address = '';
+                              let street = '';
+                              let locality = '';
+                              let city = '';
+                              let zip = '';
+                              let state = '';
+                              let country = '';
+                        
+                              // Loop through address components to populate the fields
+                              addressComponents.forEach(component => {
+                                const types = component.types;
+                        
+                                if (types.includes('administrative_area_level_3') || types.includes('political')) {
+                                  address += component.long_name + ' ';
+                                }
+                                if (types.includes('sublocality_level_1') || types.includes('sublocality')) {
+                                  locality += component.long_name + ' ';
+                                }
+                                // if (types.includes('administrative_area_level_2')) {
+                                //   locality = component.long_name;
+                                // }
+                                if (types.includes('administrative_area_level_1')) {
+                                  state = component.long_name;
+                                }
+                                if (types.includes('locality')) {
+                                  city = component.long_name;
+                                }
+                                if (types.includes('postal_code')) {
+                                  zip = component.long_name;
+                                }
+                                if (types.includes('country')) {
+                                  country = component.long_name;
+                                }
+                              });
+                        
+                              // Update the state with the extracted address components
+                              setproject(prevProject => ({
+                                ...prevProject,
+                                address,
+                                street: street.trim(),
+                                locality,
+                                city,
+                                zip,
+                                state,
+                                country,
+                                location: response.data.results[0].formatted_address
+                              }));
+                        
+                              // Optionally mark the map as loaded (if you use a map component)
+                              
+                        
+                            } else {
+                              // Handle case when no results are found
+                              setCoordinates(null);
+                              console.log('No results found');
+                            }
+                        
+                          } catch (error) {
+                            // Handle errors, such as invalid API key or issues with the network
+                            console.error('Error fetching coordinates:', error);
+                          }
+                        };
+
+                         const updateproject=async(e)=>
+                            {
+                              
+                                e.preventDefault();
+                                try {
+                                    const resp= await api.put(`updateproject/${lead._id}`,project)
+                                if(resp.status===200)
+                                    {
+                                        toast.success("Location updated...",{ autoClose: 2000 })
+                                        setTimeout(() => {
+                                          navigate('/dealdetails')
+                                        }, 2000);
+                                    }
+                                    
+                              
+                                } catch (error) {
+                                    toast.error(error.response.data.message,{ autoClose: 2000 })
+                                }
+                            }
+
+// ===========================================================edit locaiton details end================================================
+
   return (
     <div style={{overflowX:"hidden"}}>
 
@@ -1950,51 +2117,29 @@ const defaultCenter1 = {
         <span style={{ fontSize: "14px", marginLeft: "10px", color: "black" }}>
           {lead.location}
         </span>
+        
+        <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer",color:"black"}}></i>
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial"}}>
+              <li>Preview</li>
+              <li>Publish</li>
+              <li>Create Booking</li>
+              <li>Matched Lead</li>
+              <li>Transfer User</li>
+              <li onClick={handleShow7}>Edit</li>
+              <li>Delete</li>
+            </ul>
+          
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
       </h3>
     </div>
-    <button
-      style={{
-        width: "50px",
-        height: "30px",
-        borderColor: "blue",
-        borderRadius: "5px",
-        fontSize: "14px",
-        backgroundColor: "white",
-      }}
-      onClick={handleShow7}
-    >
-      Edit
-    </button>
+ 
   </div>
 
-  {/* Right Side Content */}
-  <div>
-    <button
-      style={{
-        width: "50px",
-        height: "30px",
-        borderColor: "blue",
-        borderRadius: "5px",
-        fontSize: "14px",
-        backgroundColor: "white",
-        marginRight: "10px",
-      }}
-      onClick={handleToggle}
-    >
-      {buttonText}
-    </button>
-    <button
-      style={{
-        height: "30px",
-        borderRadius: "5px",
-        fontSize: "14px",
-        padding: "5px",
-      }}
-      onClick={handleToggle}
-    >
-      Publish On
-    </button>
-  </div>
+ 
+ 
 </div>
 
       
@@ -2012,11 +2157,14 @@ const defaultCenter1 = {
             <div className='row'>
                 <div className='col-md-3'></div>
                 <div className='col-md-5'><label style={{color:"#B85042"}}>Status</label>
-                <select className="form-control form-control-sm" style={{color:"red"}}>
-                    <option >{lead?.stage || '---Select---'}</option>
-                        {/* <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option> */}
+                <select className="form-control form-control-sm">
+                    <option >{lead?.status || '---Select---'}</option>
+                    <option>---select---</option>
+                    <option>Upcoming</option>
+                              <option>Pre Launch</option>
+                              <option>Launched</option>
+                              <option>Under Construction</option>
+                              <option>Ready to Move</option>
                 </select>
                 </div>
                 <div className='col-md-4'></div>
@@ -2030,11 +2178,11 @@ const defaultCenter1 = {
                         alt="call-icon"
                         style={{ height: '25px', marginRight: '4px' }}
                       />
-                  {lead.mobile_no1}</InputLabel>
+                  {lead.developer_name.mobile_no1[0]}</InputLabel>
                   <Select
                     labelId="mobile-label"
                     id="mobile-select"
-                    value={lead.mobile_no1}  // Always keep the mobile number as the value
+                    value={lead.developer_name.mobile_no1[0]}  // Always keep the mobile number as the value
                     style={{ fontSize: '14px', boxShadow: 'none' }}  // Remove outline and any box shadow
                     MenuProps={{
                       PaperProps: {
@@ -2101,34 +2249,58 @@ const defaultCenter1 = {
                 <div className='col-md-3'></div>
 
             
-
-                <div className='col-md-5' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>User</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.owner}</p>
+                <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Launched On</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.launched_on).toLocaleString()}</p>
                 </div>
-                <div className='col-md-3' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.team}</p></div>
-                <div className='col-md-4' style={{marginTop:"50px"}}><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
+                <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Developer Name</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.developer_name.name}</p></div>
+                <div className='col-md-4' style={{marginTop:"10px"}}><label style={{color:"#B85042"}}>Rera Number</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.rera_number}</p></div>
+
+                <div className='col-md-5' ><label style={{color:"#B85042"}}>User</label>
+                    <p style={{marginTop:"-10px",fontWeight:"normal"}}>
+                      {lead?.owner?.map((item)=>
+                      (
+                        <>{item}<br></br></>
+                        
+                      ))}</p>
+                </div>
+                <div className='col-md-3' ><label style={{color:"#B85042"}}>Team</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>
+                  {lead?.team?.map((item)=>(
+                    <>
+                    {item}<br></br>
+                    </>
+                  ))}
+                  </p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Time Zone</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>Asia/Kolkata</p></div>
 
 
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Recived On</label>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Recived On</label>
                     <p style={{marginTop:"-10px",fontWeight:"normal"}}>{new Date(lead.createdAt).toLocaleString()}</p>
                 </div>
-                <div className='col-md-4' style={{marginTop:"0px"}}><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
+                <div className='col-md-4'><label style={{color:"#B85042"}}>Source</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.campegin} {lead.source}</p></div>
                 
                 <div className='col-md-12'><hr></hr></div>
 
             
 
                 <div className='row' style={{border:"1px solid gray",borderRadius:"5px",padding:"10px",margin:"10px",width:"100%"}}> 
-                                <div className='col-md-12' style={{color:"blue",fontWeight:"normal"}}>Location Details</div>
+                                <div className='col-md-10' style={{color:"blue",fontWeight:"normal"}}>Location Details
+                                        <Tooltip title="Update location..." arrow>
+                                         <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' onClick={handleShow12} style={{height:"30px",marginLeft:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
+                                            </Tooltip>
+                                                            
+                                </div>
+                                <div className='col-md-2'>
+                                             <Tooltip title="View on map..." arrow>
+                                         <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer",marginTop:"-5px"}} onClick={handleShow11}></img>
+                                         </Tooltip>
+                                  </div>
                                 <div className='col-md-12'><hr></hr></div>
                                
                                 <div className='col-md-12'><label style={{color:"#B85042"}}>Location</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead?.location}</p></div>
             
                                 <div className='col-md-4'><label style={{color:"#B85042"}}>Lattitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.lattitude}</p></div>
                                 <div className='col-md-4'><label style={{color:"#B85042"}}>Langitude</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.langitude}</p></div>
-                                <div className='col-md-4'><Tooltip title="View on map..." arrow>
-                                  <img src='https://png.pngtree.com/png-clipart/20220429/original/pngtree-pin-location-icon-with-folded-map-png-image_7581594.png' style={{height:"30px",cursor:"pointer"}} onClick={handleShow11} ></img>
-                                  </Tooltip>
+                                <div className='col-md-4'>
                                   </div>
             
                                 <div className='col-md-6'><label style={{color:"#B85042"}}>Address</label><p style={{marginTop:"-10px",fontWeight:"normal",fontSize:"12px"}}>{lead?.address}</p></div>
@@ -2912,7 +3084,7 @@ const defaultCenter1 = {
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
   <div className='col-md-12'> Matched Lead
         <span 
-          onClick={toggleTableVisibility1} 
+          onClick={toggleTableVisibility} 
           style={{ 
             position:"absolute",
             cursor: "pointer", 
@@ -2920,11 +3092,11 @@ const defaultCenter1 = {
             fontSize: "20px", 
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
-            transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            transform: isTableVisible ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -2943,7 +3115,7 @@ const defaultCenter1 = {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible ? "300px" : "0",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
     <Table sx={{}} aria-label="customized table">
@@ -2988,7 +3160,7 @@ const defaultCenter1 = {
         
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories
+  <div className='col-md-12'> Inventories <span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>({lead.add_unit.length})</span>
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -2999,10 +3171,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3021,16 +3193,16 @@ const defaultCenter1 = {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+        <TableContainer component={Paper} style={{ height: '300px' }}>
     <Table sx={{}} aria-label="customized table">
     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnsunit.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
+              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
             >
               {col.name}
             </StyledTableCell>
@@ -3040,17 +3212,18 @@ const defaultCenter1 = {
       <tbody>
         {
          
-        matchunit.map ((item, index) => (
+        lead.add_unit.map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
            
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.unit_no}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
+            <span style={{fontSize:"14px",color:"blue"}}>{item.project_name}</span><br></br>
+            {item.unit_no} ({item.block}-{item.size})
             </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.project_name}
+            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
+              {item.location}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
              
@@ -3076,10 +3249,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/tasksform')}
@@ -3169,10 +3342,10 @@ const defaultCenter1 = {
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible3 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={handleShow8}
@@ -3267,10 +3440,10 @@ const defaultCenter1 = {
     display: "inline-block", 
     transition: "transform 0.3s ease", // Smooth transition for rotation
     transform: isTableVisible4 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-    marginTop: "0px", // Align the arrow properly
+    marginTop: "4px", // Align the arrow properly
   }}
 >
-  ▼
+▽
 </span>
 <span 
 //  onClick={handleShow8}
@@ -4580,6 +4753,84 @@ fontWeight:"lighter"
 
 {/* ============================================show map end ==================================================================*/}
 
+{/* =============================================edit location details start================================================= */}
+
+                  <Modal show={show12} onHide={handleClose12} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                                <Modal.Header>
+                                 <Modal.Title>Change Location</Modal.Title>
+                                 </Modal.Header>
+                                 <Modal.Body>
+                               <div style={{width:"100%",padding:"10px"}}>
+                                                      
+                               
+                                        <div className="row " >
+                                        <div className="col-md-12" style={{border:"1px solid black",padding:"10px",borderRadius:"10px"}}>
+       
+                                        <div className="row">
+                                        <div className="col-md-6" ><label className="labels">Location</label><input  type="text" className="form-control form-control-sm" required="true" placeholder="Enter location" value={project?.location} onChange={(e)=>setproject({...project,location:e.target.value})}/></div>
+                                        {/* <div className='col-md-5'></div> */}
+                                        <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>.</label><button className="form-control form-control-sm" required="true" onClick={handleSubmit}>Get</button></div>
+                                        <div className='col-md-4'></div>
+                                        <div className="col-md-5"><label className="labels">Lattitude</label><input type="number"className="form-control form-control-sm" required="true"     value={coordinates.lat !== undefined && coordinates.lat !== "" ? coordinates.lat : lead.lattitude} readOnly/></div>
+                                        <div className="col-md-5"><label className="labels">Langitude</label><input type="number"className="form-control form-control-sm" required="true" value={coordinates.lng !== undefined && coordinates.lng !== "" ? coordinates.lng : lead.lattitude} readOnly/></div>
+                                        </div>
+                                        </div>
+                                        
+                                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address</label></div>
+                                  <div className="row" style={{border:"1px solid black",margin:"5px",padding:"10px",borderRadius:"10px"}}>
+                                  <div className="col-md-8"><label className="labels">ADDRESS</label><input type="text" value={project?.address} className="form-control form-control-sm" onChange={(e)=>setproject({...project,address:e.target.value})}/></div>
+                                  <div className="col-md-4"></div>
+                                  <div className="col-md-8"><label className="labels">STREET</label><input type="text" value={project?.street} className="form-control form-control-sm" onChange={(e)=>setproject({...project,street:e.target.value})}/></div>
+                                  <div className="col-md-4"></div>
+                                  <div className="col-md-4"><label className="labels">LOCALITY</label><input type="text" value={project?.locality} className="form-control form-control-sm" onChange={(e)=>setproject({...project,locality:e.target.value})}/></div>
+                                  <div className="col-md-4"><label className="labels">CITY</label>
+                                  <select type="text" className="form-control form-control-sm" onChange={(e)=>setproject({...project,city:e.target.value})}>
+                                <option>{project?.city} </option>
+                                  {cities.map((city) => (
+                                    <option key={city} value={city}>
+                                      {city}
+                                    </option>
+                                  ))}
+                                  </select>
+                                  </div>
+                                  <div className="col-md-4"><label className="labels">ZIP</label><input type="text" value={project?.zip} className="form-control form-control-sm" onChange={(e)=>setproject({...project,zip:e.target.value})}/></div>
+                                  <div className="col-md-6"><label className="labels">State</label><select  className="form-control form-control-sm" onChange={(e)=>setproject({...project,state:e.target.value})}>
+                                              <option>{project?.state}</option>
+                                              {states.map((state) => (
+                                              <option key={state} value={state}>
+                                                {state}
+                                              </option>
+                                              ))}
+                                              </select>
+                                  </div>
+                                        <div className="col-md-6"><label className="labels">Country</label><select  className="form-control form-control-sm"  onChange={(e)=>setproject({...project,country:e.target.value})}>
+                                                    <option>{project?.country}</option>
+                                                    <option>My Team</option>
+                                                    <option>My Self</option>
+                                                    <option>All Users</option>
+                                                    </select>
+                                        </div>
+                                        </div>
+                                  </div>
+                           
+                                                                                      
+                                                           
+                               </div>
+                                </Modal.Body>
+                                        <Modal.Footer>
+                               <Button variant="secondary" onClick={updateproject} >
+                                        Update Location
+                                  </Button>
+                               <Button variant="secondary" onClick={handleClose12}>
+                                 Close
+                              </Button>
+                           </Modal.Footer>
+                          </Modal>
+                  
+
+
+
+{/* ===========================================edit location details end ======================================================*/}
 
 <ToastContainer/>
     </div>

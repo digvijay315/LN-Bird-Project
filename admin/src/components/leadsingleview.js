@@ -24,6 +24,8 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import Icon from '@mdi/react';
+import { mdiCurrencyUsd } from '@mdi/js';
 
 
 
@@ -2811,8 +2813,20 @@ const completionPercentage = 20; // Set default value here
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Lead</h6>
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>{lead.company_name}
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
+          <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer",color:"black"}}></i>
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial"}}>
+              <li>Preview</li>
+              <li>Publish</li>
+              <li>Create Booking</li>
+              <li>Matched Lead</li>
+              <li>Transfer User</li>
+              <li onClick={handleShow7}>Edit</li>
+              <li>Delete</li>
+            </ul>
+            <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
           </span>
           </h3>
@@ -3802,7 +3816,7 @@ const completionPercentage = 20; // Set default value here
         <div className='row'>
 
           <div className='col-md-12' style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
-        <div className='col-md-12' > Deal Match
+        <div className='col-md-12' > <Icon style={{position:"absolute",marginLeft:"-20px"}} path={mdiCurrencyUsd} size={1} />Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterdeal.length} active</span>)
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -3813,11 +3827,11 @@ const completionPercentage = 20; // Set default value here
             display: "inline-block", 
             transition: "transform 0.3s ease", // Smooth transition for rotation
             transform: isTableVisible ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
+            marginTop: "4px", // Align the arrow properly
            
           }}
         >
-          ▼
+          ▽
         </span>
         <span 
          onClick={()=>navigate('/deal')}
@@ -3840,7 +3854,7 @@ const completionPercentage = 20; // Set default value here
         <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible ? "200px" : "0",overflow: "auto",transition: "height 0.3s ease"}}>
       <TableContainer component={Paper} style={{ height: '200px'}}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
           {allColumns.map((col) => (
             <StyledTableCell
@@ -3851,25 +3865,26 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
        <tbody>
         {
          
         filterdeal.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
+            {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
-            </StyledTableCell>
+            </StyledTableCell> */}
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
+            <span style={{fontWeight:"bolder",fontSize:"14px",color:"blue"}}>{item.project}</span><br></br>
+            {item.unit_number}({item.utype}-{item.usize})<br></br>
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
             {item.project}
-            </StyledTableCell>
+            </StyledTableCell> */}
 
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
+            {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
             {item.usize}
-            </StyledTableCell>
+            </StyledTableCell> */}
 
             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
             {new Date(item.createdAt).toLocaleString()}
@@ -3880,12 +3895,12 @@ const completionPercentage = 20; // Set default value here
       </tbody> 
     </Table>
   </TableContainer>
-
+ 
   </div>
   </div>
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories
+  <div className='col-md-12'> Inventories (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{matchunit.length}</span>)
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -3899,7 +3914,7 @@ const completionPercentage = 20; // Set default value here
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+            ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3964,7 +3979,24 @@ const completionPercentage = 20; // Set default value here
 
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'> Tasks
+        <div className='col-md-12'>
+  Tasks (
+  <span className="no-activity-flash" style={{ fontSize: "12px", color: "green" }}>
+     {alltask.filter(item => item.complete === "true").length}
+  </span>, 
+  <span className="no-activity-flash" style={{ fontSize: "12px", color: "blue", marginLeft: "10px" }}>
+     {alltask.filter(item => 
+      item.complete === "" && (new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date())
+    ).length}
+  </span>, 
+  <span className="no-activity-flash" style={{ fontSize: "12px", color: "red", marginLeft: "10px" }}>
+     {alltask.filter(item => 
+      item.complete === "" && (new Date(item.due_date) < new Date() || new Date(item.start_date) < new Date())
+    ).length}
+  </span>
+  )
+
+
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -3978,7 +4010,7 @@ const completionPercentage = 20; // Set default value here
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+            ▽
         </span>
         <span 
          onClick={()=>navigate('/tasksform',{state:lead})}
@@ -4057,7 +4089,7 @@ const completionPercentage = 20; // Set default value here
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents
+        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -4071,7 +4103,7 @@ const completionPercentage = 20; // Set default value here
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+            ▽
         </span>
         <span 
          onClick={handleShow8}
@@ -4166,7 +4198,7 @@ const completionPercentage = 20; // Set default value here
     marginTop: "0px", // Align the arrow properly
   }}
 >
-  ▼
+▽
 </span>
 <span 
 //  onClick={handleShow8}

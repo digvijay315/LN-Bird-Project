@@ -5,6 +5,7 @@ const fs = require('fs');
 const mongoose=require('mongoose')
 
 
+
 require('dotenv').config()
 cloudinary.config({
     cloud_name:process.env.CLOUD_NAME,
@@ -196,6 +197,10 @@ unitDetails={
             path: 'add_unit.previousowner_details', // Populate 'owner_details' inside 'add_unit'
             model: 'add_contact' // Specify the model for population
           })
+          .populate({
+            path: 'developer_name', 
+            model: 'add_developer' // Specify the model to populate
+        })
             res.status(200).send({message:"project details fetch successfully",project:resp})
         } catch (error) {
             console.log(error)

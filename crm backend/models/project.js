@@ -1,5 +1,6 @@
 const mongoose=require('mongoose')
 
+
 const blockSchema = new mongoose.Schema({
     block_name: {type: String},
     category: {type:Array},
@@ -118,7 +119,7 @@ const paymentschema = new mongoose.Schema({
 
 const project=new mongoose.Schema({
 name:{type:String},
-developer_name:{type:String},
+developer_name: { type: mongoose.Schema.Types.ObjectId, ref: "add_developer" },
 joint_venture:{type:String},
 secondary_developer:{type:String},
 rera_number:{type:String},

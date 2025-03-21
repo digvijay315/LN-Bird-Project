@@ -2418,8 +2418,6 @@ const handleShow13=async()=>
       setshow13(true);
 
         const resp1 = await api.get(`viewprojectbyname/${lead.project_name}`);
-        console.log(resp1);
-        
         setproject(resp1.data.project[0]);
 
       const project=lead.project_name
@@ -3041,7 +3039,7 @@ const [show9, setshow9] = useState(false);
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px"}}>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial"}}>
               <li>Preview</li>
               <li>Publish</li>
               <li>Create Booking</li>

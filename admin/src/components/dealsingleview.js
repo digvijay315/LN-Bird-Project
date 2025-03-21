@@ -2783,7 +2783,7 @@ const handleShow13=async()=>
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",padding:"10px"}}>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",padding:"10px",fontFamily:"arial"}}>
               <li>Preview</li>
               <li>Publish</li>
               <li>Create Booking</li>
