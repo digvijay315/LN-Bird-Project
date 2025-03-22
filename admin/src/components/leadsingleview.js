@@ -3874,7 +3874,7 @@ const completionPercentage = 20; // Set default value here
             {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell> */}
-            <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap" }}>
+            <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
               <img src='https://i.pinimg.com/736x/d3/fd/bf/d3fdbf302be1e85fe5f61594328bcb71.jpg' style={{height:"20px"}}></img>
             <span style={{fontWeight:"bolder",fontSize:"14px",color:"blue",marginLeft:"5px"}}>{item.unit_number} {item.project}</span><br></br>
             <span style={{marginLeft:"30px"}}>{item.block}-{item.usize}</span>
@@ -3888,7 +3888,7 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell> */}
 
             <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap" }}>
-            {new Date(item.createdAt).toLocaleString()}
+            Rs. {(Number(item.expected_price)).toLocaleString("en-IN")}/-
             </StyledTableCell>
 
           </StyledTableRow>
@@ -3981,15 +3981,11 @@ const completionPercentage = 20; // Set default value here
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
         <div className='col-md-12'>
-  Tasks (
-  
-  <span className="no-activity-flash" style={{ fontSize: "12px", color: "blue", marginLeft: "10px" }}>
+  Tasks (<span className="no-activity-flash" style={{ fontSize: "12px", color: "blue" }}>
      {alltask.filter(item => 
       item.complete === "" && (new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date())
     ).length} active
-  </span>
-
-  )
+  </span>)
 
 
         <span 

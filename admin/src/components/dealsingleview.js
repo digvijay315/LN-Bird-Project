@@ -3883,7 +3883,7 @@ const handleShow13=async()=>
         <div className='row'>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Leads:{filterlead.length})</span>
+  <div className='col-md-12'> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterlead.length}</span>)
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -3964,7 +3964,7 @@ const handleShow13=async()=>
         
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{lead.associated_contact.length})</span>
+  <div className='col-md-12'> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.associated_contact.length}</span>)
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -4141,7 +4141,7 @@ const handleShow13=async()=>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{documents.length})</span>
+        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -4236,7 +4236,7 @@ const handleShow13=async()=>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{unitlocation?.previousowner_details?.length})</span>
+<div className='col-md-12'> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{unitlocation?.previousowner_details?.length}</span>)
 <span 
   onClick={toggleTableVisibility5} 
   style={{ 
