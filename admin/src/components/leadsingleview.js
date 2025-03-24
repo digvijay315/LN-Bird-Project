@@ -26,7 +26,8 @@ import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import Icon from '@mdi/react';
 import { mdiCurrencyUsd } from '@mdi/js';
-
+import matcheddeal from '../icons/matcheddeal.jpg'
+import inventories from '../icons/inventories.jpg'
 
 
 function Leadsingleview() {
@@ -2798,6 +2799,17 @@ try {
 }
 };
 
+const docuemnt_images = {
+  "Adhar Card": "https://cdn.iconscout.com/icon/free/png-256/free-aadhaar-logo-icon-download-in-svg-png-gif-file-formats--unique-identity-india-citizen-information-details-logos-icons-1747945.png",
+  "Pan Card": "https://www.shutterstock.com/image-vector/dummy-pan-card-unique-identity-260nw-1681665595.jpg",
+  "Driviing Licence": "https://png.pngtree.com/png-clipart/20230818/original/pngtree-driver-license-icon-vector-isolated-white-background-picture-image_8013767.png",
+  "Voter Card": "https://www.shutterstock.com/image-vector/indian-voter-id-card-vector-260nw-1754108780.jpg",
+  "Ration Card": "https://www.businessleague.in/wp-content/uploads/2020/06/ration-card1200.jpg",
+  "Family Id": "https://thehowpedia.com/wp-content/uploads/2023/02/family-id-up-logo.png",
+  "Passoport": "https://upload.wikimedia.org/wikipedia/commons/b/bb/E-passport_preview.png",
+  "Employee Id Card": "https://5.imimg.com/data5/SELLER/Default/2024/12/475677193/WR/DK/QA/38606716/employee-id-card-500x500.png",
+};
+
 
 // =======================================================add document end==============================================================
 
@@ -3816,7 +3828,7 @@ const completionPercentage = 20; // Set default value here
         <div className='row'>
 
           <div className='col-md-12' style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
-        <div className='col-md-12' > <Icon style={{position:"absolute",marginLeft:"-20px"}} path={mdiCurrencyUsd} size={1} />Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterdeal.length} active</span>)
+        <div className='col-md-12' ><img src={matcheddeal} style={{height:"25px",paddingRight:"10px"}}></img>Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterdeal.length} active</span>)
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -3876,7 +3888,7 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell> */}
             <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
               <img src='https://i.pinimg.com/736x/d3/fd/bf/d3fdbf302be1e85fe5f61594328bcb71.jpg' style={{height:"20px"}}></img>
-            <span style={{fontWeight:"bolder",fontSize:"14px",color:"blue",marginLeft:"5px"}}>{item.unit_number} {item.project}</span><br></br>
+            <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3",marginLeft:"5px"}}>{item.unit_number} {item.project}</span><br></br>
             <span style={{marginLeft:"30px"}}>{item.block}-{item.usize}</span>
             </StyledTableCell>
             {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
@@ -3901,7 +3913,7 @@ const completionPercentage = 20; // Set default value here
   </div>
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{matchunit.length}</span>)
+  <div className='col-md-12'><img src={inventories} style={{height:"25px",paddingRight:"10px"}}/> Inventories (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{matchunit.length}</span>)
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -3938,7 +3950,7 @@ const completionPercentage = 20; // Set default value here
          
         <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnsunit.map((col) => (
             <StyledTableCell
@@ -3949,27 +3961,22 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
         {
          
         matchunit.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
+            {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
               {index + 1}
+            </StyledTableCell> */}
+               <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}>
+              <img src='https://cdn-icons-png.freepik.com/256/7875/7875876.png?semt=ais_hybrid' style={{height:"20px"}}></img>
+            <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3",marginLeft:"5px"}}>{item.unit_no} {item.project_name}</span><br></br>
+            <span style={{marginLeft:"30px"}}>{item.block}-{item.size}</span>
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-              {item.unit_no}
-            </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-              {item.project_name}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-              {item.size}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-             
-            </StyledTableCell>
+          
+         
           </StyledTableRow>
         ))}
       </tbody>
@@ -3980,7 +3987,7 @@ const completionPercentage = 20; // Set default value here
 
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'>
+        <div className='col-md-12'><img src="https://w7.pngwing.com/pngs/36/68/png-transparent-project-management-computer-icons-task-task-text-logo-project-management.png" style={{height:"25px",paddingRight:"10px"}}/>
   Tasks (<span className="no-activity-flash" style={{ fontSize: "12px", color: "blue" }}>
      {alltask.filter(item => 
       item.complete === "" && (new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date())
@@ -4024,7 +4031,7 @@ const completionPercentage = 20; // Set default value here
          
         <TableContainer component={Paper} style={{  maxHeight: '300px'}}>
     <Table sx={{}} aria-label="customized table">
-      <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+      {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
           {allColumnstask.map((col) => (
             <StyledTableCell
@@ -4035,26 +4042,49 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
         {
          
         alltask.map ((item, index) => (
-          <StyledTableRow key={index} onClick={()=>completetask(item)} style={{cursor:"pointer"}}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {index + 1}
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
+              {/* {index + 1} */}<input type='checkbox'></input>
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-              {item.activity_type}
-            </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-            {item.start_date
-              ? formatDate(new Date(item.start_date)) 
-              : formatDate(new Date(item.due_date))} 
-              {/* {item.start_date || item.due_date} {item.due_time} */}
-          </StyledTableCell>
+            <StyledTableCell style={{fontSize:"14px",color:"#0086b3",whiteSpace:"nowrap",cursor:"pointer"}}  onClick={()=>completetask(item)}>
+              <span style={{fontWeight:"bold"}}>{item.activity_type}</span> 
+            {
+              item.activity_type=="Meeting" ? (
+                <span style={{marginLeft:"5px"}}> [{item.reason}]<br></br></span>
 
-          <StyledTableCell style={{ fontSize: "12px" }}>
+              ): item.activity_type=="SiteVisit" ? (
+              <span> [{Array.isArray(item.inventory)?item.inventory.join(','):item.inventory || item.reason}]<br></br></span>
+              ) : item.activity_type=="Mail" ? (
+                <span>[{item.subject}]<br></br></span>
+                ) :  <span> [{item.reason}]<br></br></span>
+            }
+             
+
+              {item.complete === "true" ? (
+          <span style={{color:"green",fontSize:"12px"}}>{item.start_date
+          ? formatDate(new Date(item.start_date)) 
+          : formatDate(new Date(item.due_date))}.</span>
+
+        ) : (item.complete === "" && new Date(item.due_date) > new Date()) || new Date(item.start_date) > new Date() ? (
+          <span style={{color:"blue"}}>{item.start_date
+          ? formatDate(new Date(item.start_date)) 
+          : formatDate(new Date(item.due_date))}.</span>
+
+        ) : (item.complete === "" && new Date(item.due_date) < new Date()) || new Date(item.start_date) < new Date() ? (
+          <span className='no-activity-flash' style={{fontSize:"12px"}}>{item.start_date
+            ? formatDate(new Date(item.start_date)) 
+            : formatDate(new Date(item.due_date))}.</span>
+        ) : ""}  <span style={{color:"gray"}}>{item.executive}</span>
+              
+            </StyledTableCell>
+       
+
+          {/* <StyledTableCell style={{ fontSize: "12px" }}>
           {allColumnstask.map((col) => (
         col.id === "status" ? (
       <span>
@@ -4068,7 +4098,7 @@ const completionPercentage = 20; // Set default value here
       </span>
     ) : null
   ))}
-        </StyledTableCell>
+        </StyledTableCell> */}
 
           </StyledTableRow>
         ))}
@@ -4080,7 +4110,7 @@ const completionPercentage = 20; // Set default value here
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
+        <div className='col-md-12'><img src="https://www.freeiconspng.com/thumbs/document-icon/document-icon-19.png" style={{height:"25px",paddingRight:"10px"}}/> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -4117,7 +4147,7 @@ const completionPercentage = 20; // Set default value here
          
         <TableContainer component={Paper} style={{ maxHeight: '200px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
           {allColumnsdocuments.map((col) => (
             <StyledTableCell
@@ -4128,27 +4158,29 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
         {
         
         documents.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-              {index + 1}
-            </StyledTableCell>
-        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-          {item.name}
+        
+        <StyledTableCell  className="leaddocumentscolomn">
+        <img
+          src={docuemnt_images[item.name] || "default_image.png"} // Fallback to default if no match
+          alt={item.name}
+          style={{ width: 30, height: 30, marginRight: 5,cursor:"pointer" }}
+          onClick={() => handlePreviewClick(item.pic)}
+        />
+          <span style={{fontSize:"14px",color:"#0086b3"}}>{item.name}</span> [{item.number}]
+
+         <span  className="documentsactions">
+        <img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' style={{height:"20px",cursor:"pointer"}}></img>
+        <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img>
+        <img src='https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img>
+         </span>
         </StyledTableCell>
-        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-          {item.number}
-        </StyledTableCell>
-        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-              {/* Eye button to trigger image preview */}
-              <button onClick={() => handlePreviewClick(item.pic)}>
-                👁️ {/* You can replace this with an icon */}
-              </button>
-        </StyledTableCell>
+   
           
           </StyledTableRow>
         ))}
@@ -4175,7 +4207,7 @@ const completionPercentage = 20; // Set default value here
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History
+<div className='col-md-12'><img src="https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/history.png" style={{height:"25px",paddingRight:"10px"}}/>History 
 <span 
   onClick={toggleTableVisibility4} 
   style={{ 

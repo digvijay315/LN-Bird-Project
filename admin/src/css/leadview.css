@@ -41,3 +41,18 @@
   }
   
   
+  .leaddocumentscolomn {
+    position: relative;
+  }
+  
+  .documentsactions {
+    display: none;
+    position: absolute;
+    right: 0;
+   margin-top: -25px;
+  }
+  
+  .leaddocumentscolomn:hover .documentsactions {
+    display: block;
+  }
+  
