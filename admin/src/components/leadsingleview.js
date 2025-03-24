@@ -2811,6 +2811,24 @@ const docuemnt_images = {
 };
 
 
+const handleDownload = (item) => {
+  if (!item.pic) {
+    console.error("Image URL is not provided!");
+    return;
+  }
+
+  // Modify the Cloudinary URL to force download
+  const downloadUrl = item.pic.replace("/upload/", "/upload/fl_attachment/");
+
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = item.name || "downloaded_image.png"; // Set filename
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
 // =======================================================add document end==============================================================
 
 const completionPercentage = 20; // Set default value here
@@ -4175,9 +4193,9 @@ const completionPercentage = 20; // Set default value here
           <span style={{fontSize:"14px",color:"#0086b3"}}>{item.name}</span> [{item.number}]
 
          <span  className="documentsactions">
-        <img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' style={{height:"20px",cursor:"pointer"}}></img>
-        <img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img>
-        <img src='https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img>
+        <Tooltip title="download..."><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={() => handleDownload(item)} style={{height:"20px",cursor:"pointer"}}></img></Tooltip>
+        <Tooltip title="edit..."><img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img></Tooltip>
+        <Tooltip title="delete..."><img src='https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img></Tooltip>
          </span>
         </StyledTableCell>
    
