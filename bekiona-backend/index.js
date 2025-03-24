@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(cors())
 // app.use(cors({ origin: 'https://ln-bird-project-6m7b.vercel.app/' }));
 app.use(cors({
-    origin: ['https://ln-bird-project-6m7b.vercel.app', 'https://bekiona.com'], // Allow both domains
+    origin: ['https://ln-bird-project-6m7b.vercel.app', 'https://www.bekiona.com/'], // Allow both domains
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
 }));
