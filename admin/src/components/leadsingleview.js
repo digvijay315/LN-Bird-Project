@@ -4066,7 +4066,7 @@ const completionPercentage = 20; // Set default value here
         {
          
         alltask.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
             <StyledTableCell style={{ fontSize:"12px" }}>
               {/* {index + 1} */}<input type='checkbox'></input>
             </StyledTableCell>

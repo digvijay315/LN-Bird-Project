@@ -3937,7 +3937,7 @@ const handleShow13=async()=>
         {
          
         filterlead.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
          
             <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>navigate('/leadsingleview',{state:item})}>
               <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
