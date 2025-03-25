@@ -2850,14 +2850,14 @@ const completionPercentage = 20; // Set default value here
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer",color:"black"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"30px",paddingLeft:"10px",fontFamily:"arial",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"}}>
-              <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
-              <li><img src={publish} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
-              <li><img src={createbooking} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
-              <li><img src={matchedlead} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
-              <li><img src={transferuser} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
-              <li onClick={handleShow7}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
-              <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"30px",paddingLeft:"10px",fontFamily:"arial",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",fontSize:"14px"}}>
+              <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
+              <li><img src={publish} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
+              <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
+              <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
+              <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
+              <li onClick={handleShow7}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+              <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
             </ul>
             <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
@@ -3903,7 +3903,7 @@ const completionPercentage = 20; // Set default value here
         {
          
         filterdeal.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
             {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell> */}
@@ -4182,7 +4182,7 @@ const completionPercentage = 20; // Set default value here
         {
         
         documents.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
         
         <StyledTableCell className="leaddocumentscolomn">
   {/* Determine the document icon based on file extension */}
@@ -4220,7 +4220,7 @@ const completionPercentage = 20; // Set default value here
         style={{ height: "20px", cursor: "pointer" }}
       />
     </Tooltip>
-    <Tooltip title="edit...">
+    <Tooltip title="update...">
       <img
         src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png"
         style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}

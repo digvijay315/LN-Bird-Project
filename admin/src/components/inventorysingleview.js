@@ -27,7 +27,10 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import axios from "axios";
-
+import matchedlead from '../icons/matchedlead.jpg'
+import publish from '../icons/publish.jpg'
+import createbooking from '../icons/createbooking.jpg'
+import transferuser from '../icons/transferuser.jpg'
 
 function Inventorysingleview() {
 
@@ -3039,14 +3042,14 @@ const [show9, setshow9] = useState(false);
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial"}}>
-              <li>Preview</li>
-              <li>Publish</li>
-              <li>Create Booking</li>
-              <li>Matched Lead</li>
-              <li>Transfer User</li>
-              <li onClick={handleShow14}>Edit</li>
-              <li>Delete</li>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial",fontSize:"14px",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"}}>
+              <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
+              <li><img src={publish} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
+              <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
+              <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
+              <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
+              <li onClick={handleShow14}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+              <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
             </ul>
           
           <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
@@ -4234,19 +4237,19 @@ const [show9, setshow9] = useState(false);
         {
          
         lead.associated_contact.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
            <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
               <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
               <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
                 {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
                 <div style={{paddingLeft:"38px",color:"#0086b3"}}>
                 {item.mobile_no.map((contact, index) => (
-                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
-                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"20px"}}></img>{contact}</span>
+                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"15px"}}></img>{contact}</span>
                       ))} <span>mobile</span> <br></br><br></br>
                        {item.email.map((contact, index) => (
-                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
-                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"20px"}}></img>{contact}<br></br></span> 
+                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"15px",marginTop:"2px"}}></img>{contact}<br></br></span> 
                       ))}
                       </div>
             </StyledTableCell >
@@ -4503,19 +4506,19 @@ fontWeight:"lighter"
          {
           
          lead?.previousowner_details?.map ((item, index) => (
-           <StyledTableRow key={index}>
+           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
              <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
               <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
               <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
                 {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
                 <div style={{paddingLeft:"38px",color:"#0086b3"}}>
                 {item.mobile_no.map((contact, index) => (
-                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
-                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"20px"}}></img>{contact}</span>
+                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"15px"}}></img>{contact}</span>
                       ))} <span>mobile</span> <br></br><br></br>
                        {item.email.map((contact, index) => (
-                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
-                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"20px"}}></img>{contact}<br></br></span> 
+                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"15px",marginTop:"2px"}}></img>{contact}<br></br></span> 
                       ))}
                       </div>
             </StyledTableCell >

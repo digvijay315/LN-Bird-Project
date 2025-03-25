@@ -2,35 +2,44 @@ import { Link } from 'react-router-dom';
 import '../css/mystyle.css';
 import 'react-router-dom';
 import { useState } from 'react';
+import { useEffect, useRef } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import lead from '../icons/lead.jpg'
 import deal from '../icons/deal.jpg'
 import project from '../icons/project.jpg'
+
+
 function Header1() {
-    function myFunction() {
-		var x = document.getElementById("myLinks");
-		if (x.style.display === "block") {
-		  x.style.display = "none";
-		} else {
-		  x.style.display = "block";
+
+	const menuRef = useRef(null);
+	const buttonRef = useRef(null);
+	const [isOpen, setIsOpen] = useState(false);
+  
+	// Function to toggle the menu
+	const handleToggleMenu = (event) => {
+	  event.stopPropagation(); // Prevent immediate closure
+	  setIsOpen((prev) => !prev);
+	};
+  
+	// Close menu when clicking outside
+	useEffect(() => {
+	  const handleClickOutside = (event) => {
+		if (
+		  menuRef.current &&
+		  !menuRef.current.contains(event.target) &&
+		  buttonRef.current &&
+		  !buttonRef.current.contains(event.target)
+		) {
+		  setIsOpen(false);
 		}
-	  }
-	  document.addEventListener('DOMContentLoaded', function() {
-		// Ensure elements are available
-		var x = document.getElementById("myLinks");
-		var b = document.getElementById("btn");
-	
-		// Check if elements exist before adding the event listener
-		if (x && b) {
-			document.addEventListener('click', function(event) {
-				// Hide the menu if the click is outside the button
-				if (!b.contains(event.target) && !x.contains(event.target)) {
-					x.style.display = "none";
-				}
-			});
-		}
-	});
+	  };
+  
+	  document.addEventListener("click", handleClickOutside);
+	  return () => {
+		document.removeEventListener("click", handleClickOutside);
+	  };
+	}, []);
 	
 	const [show, setShow] = useState(false);
 
@@ -40,35 +49,94 @@ function Header1() {
     return ( 
         <div>
             <div class="header" style={{width:"100%",borderRadius:"5px",height:"50px",padding:"10px"}}>
-		<div class="header-left" >
-		<button id='btn' onClick={myFunction} class="dropdown-toggle" style={{marginLeft:"10%",border:"none",backgroundColor:"transparent",position:"absolute"}}>Add</button>
-		<div class="topnav">
-  		<div id="myLinks">
-			<ul style={{boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"}}>
-				<li><Link to={'/addcontact'} class="dropdown-item"><img src='https://icons.veryicon.com/png/o/object/life-icon-8/add-a-contact-4.png' style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Contact</Link></li>
-				<li><Link to={'/addcompany'} class="dropdown-item"><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0YDoMUcwmWBpTsarrB_1BqT54AR0xldyQ3Q&s' style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Add Company</Link></li>
-				<li><Link to={'/leadinfo'} class="dropdown-item"><img src={lead} style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Lead</Link></li>
-				<li><Link to={'/project'} class="dropdown-item"><img src={project} style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Project</Link></li>
-				<li><Link to={'/deal'} class="dropdown-item"><img src={deal} style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Deal</Link></li>
-				<li><Link to={'/tasksform'} class="dropdown-item"><img src='https://static.thenounproject.com/png/396666-200.png' style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Add Tasks</Link></li>
-				
-			</ul>
-  		</div>
-		</div>
-			<div class="menu-icon dw dw-menu"></div>
-			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
-			<div class="header-search">
-				<form>
-					<div class="form-group mb-0" style={{width:"320px",marginLeft:"220%",position:"relative"}}>
-						<i class="dw dw-search2 search-icon"></i>
-						<input  type="text" className="form-control search-input" placeholder="Search Here" style={{height:"35px"}}/>
-					</div>
-					{/* //<img src="https://static-00.iconduck.com/assets.00/phone-call-icon-2048x2048-jzb4bret.png"style={{height:"45px",position:"absolute",marginLeft:"110%", border:"1px solid #D3D3D3",padding:"8px"}}/> */}
-					<img src="https://cdn-icons-png.flaticon.com/512/5035/5035563.png"style={{height:"35px",position:"absolute",marginLeft:"118%", border:"1px solid #D3D3D3",padding:"8px"}}/>
-					
-				</form>
-			</div>
-		</div>
+			<div className="header-left">
+      {/* Add Button */}
+      <button
+        ref={buttonRef}
+        className="dropdown-toggle"
+        onClick={handleToggleMenu}
+        style={{
+          marginLeft: "10%",
+          border: "none",
+          backgroundColor: "transparent",
+          position: "absolute",
+          zIndex: 10,
+        }}
+      >
+        Add
+      </button>
+
+      {/* Dropdown Menu */}
+      <div className="topnav">
+        {isOpen && (
+          <div
+            ref={menuRef}
+            style={{
+              position: "absolute",
+              background: "white",
+              borderRadius: "5px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+              zIndex: 1000,
+              padding: "5px",
+			  marginLeft:"60px",
+			  marginTop:"15px",
+			  
+            }}
+          >
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, lineHeight: "1",}}>
+              <li>
+                <Link to={"/addcontact"} className="dropdown-item">
+                  <img
+                    src="https://icons.veryicon.com/png/o/object/life-icon-8/add-a-contact-4.png"
+                    style={{ height: "15px", marginRight: "10px" }}
+                    alt="Contact"
+                  />
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link to={"/addcompany"} className="dropdown-item">
+                  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0YDoMUcwmWBpTsarrB_1BqT54AR0xldyQ3Q&s"
+                    style={{ height: "15px", marginRight: "10px" }}
+                    alt="Add Company"
+                  />
+                  Add Company
+                </Link>
+              </li>
+              <li>
+                <Link to={"/leadinfo"} className="dropdown-item">
+                  <img src={lead} style={{ height: "15px", marginRight: "10px" }} alt="Lead" />
+                  Lead
+                </Link>
+              </li>
+              <li>
+                <Link to={"/project"} className="dropdown-item">
+                  <img src={project} style={{ height: "15px", marginRight: "10px" }} alt="Project" />
+                  Project
+                </Link>
+              </li>
+              <li>
+                <Link to={"/deal"} className="dropdown-item">
+                  <img src={deal} style={{ height: "15px", marginRight: "10px" }} alt="Deal" />
+                  Deal
+                </Link>
+              </li>
+              <li>
+                <Link to={"/tasksform"} className="dropdown-item">
+                  <img
+                    src="https://static.thenounproject.com/png/396666-200.png"
+                    style={{ height: "15px", marginRight: "10px" }}
+                    alt="Add Tasks"
+                  />
+                  Add Tasks
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
 		<div class="header-right" style={{marginTop:"-10px"}}>
 			<div class="user-info-dropdown">
 				<div class="dropdown">
