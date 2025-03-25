@@ -3195,11 +3195,11 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ height: '300px' }}>
+        <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnsunit.map((col) => (
             <StyledTableCell
@@ -3210,26 +3210,18 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
         {
          
         lead.add_unit.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-           
-              {index + 1}
+                 <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}>
+              <img src='https://cdn-icons-png.freepik.com/256/7875/7875876.png?semt=ais_hybrid' style={{height:"20px"}}></img>
+            <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3",marginLeft:"5px"}}>{item.unit_no} {item.project_name}</span><br></br>
+            <span style={{marginLeft:"30px"}}>{item.block}-{item.size}</span>
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-            <span style={{fontSize:"14px",color:"blue"}}>{item.project_name}</span><br></br>
-            {item.unit_no} ({item.block}-{item.size})
-            </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-              {item.location}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-             
-            </StyledTableCell>
+         
           </StyledTableRow>
         ))}
       </tbody>

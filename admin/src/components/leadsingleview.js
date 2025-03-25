@@ -28,7 +28,10 @@ import Icon from '@mdi/react';
 import { mdiCurrencyUsd } from '@mdi/js';
 import matcheddeal from '../icons/matcheddeal.jpg'
 import inventories from '../icons/inventories.jpg'
-
+import publish from '../icons/publish.jpg'
+import createbooking from '../icons/createbooking.jpg'
+import matchedlead from '../icons/matchedlead.jpg'
+import transferuser from '../icons/transferuser.jpg'
 
 function Leadsingleview() {
 
@@ -2847,14 +2850,14 @@ const completionPercentage = 20; // Set default value here
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer",color:"black"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial"}}>
-              <li>Preview</li>
-              <li>Publish</li>
-              <li>Create Booking</li>
-              <li>Matched Lead</li>
-              <li>Transfer User</li>
-              <li onClick={handleShow7}>Edit</li>
-              <li>Delete</li>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"30px",paddingLeft:"10px",fontFamily:"arial"}}>
+              <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
+              <li><img src={publish} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
+              <li><img src={createbooking} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
+              <li><img src={matchedlead} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
+              <li><img src={transferuser} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
+              <li onClick={handleShow7}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+              <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
             </ul>
             <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
@@ -3985,9 +3988,7 @@ const completionPercentage = 20; // Set default value here
          
         matchunit.map ((item, index) => (
           <StyledTableRow key={index}>
-            {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace:"nowrap" }}>
-              {index + 1}
-            </StyledTableCell> */}
+         
                <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}>
               <img src='https://cdn-icons-png.freepik.com/256/7875/7875876.png?semt=ais_hybrid' style={{height:"20px"}}></img>
             <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3",marginLeft:"5px"}}>{item.unit_no} {item.project_name}</span><br></br>
@@ -4183,21 +4184,57 @@ const completionPercentage = 20; // Set default value here
         documents.map ((item, index) => (
           <StyledTableRow key={index}>
         
-        <StyledTableCell  className="leaddocumentscolomn">
-        <img
-          src={docuemnt_images[item.name] || "default_image.png"} // Fallback to default if no match
-          alt={item.name}
-          style={{ width: 30, height: 30, marginRight: 5,cursor:"pointer" }}
-          onClick={() => handlePreviewClick(item.pic)}
-        />
-          <span style={{fontSize:"14px",color:"#0086b3"}}>{item.name}</span> [{item.number}]
+        <StyledTableCell className="leaddocumentscolomn">
+  {/* Determine the document icon based on file extension */}
+  {(() => {
+    const fileName = item.pic.toLowerCase();
+    let fileIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe2devawXGAc34_HeWIm-44fpa-pljPOnNyw&s"; // Default icon
 
-         <span  className="documentsactions">
-        <Tooltip title="download..."><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={() => handleDownload(item)} style={{height:"20px",cursor:"pointer"}}></img></Tooltip>
-        <Tooltip title="edit..."><img src='https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img></Tooltip>
-        <Tooltip title="delete..."><img src='https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png' style={{height:"20px",marginLeft:"10px",cursor:"pointer"}}></img></Tooltip>
-         </span>
-        </StyledTableCell>
+    if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png")) {
+      fileIcon = "https://i.pinimg.com/736x/c9/c1/43/c9c143f4f9bcf8e8ea5dec5047757307.jpg"; // Image icon
+    } else if (fileName.endsWith(".pdf")) {
+      fileIcon = "https://www.freeiconspng.com/thumbs/pdf-icon-png/pdf-icon-png-pdf-zum-download-2.png"; // PDF icon
+    } else if (fileName.endsWith(".doc") || fileName.endsWith(".docx")) {
+      fileIcon = "https://png.pngtree.com/png-vector/20241025/ourlarge/pngtree-blue-document-color-icon-vector-illustration-png-image_14165553.png"; // Word document icon
+    } else if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+      fileIcon = "https://img.icons8.com/?size=512&id=13654&format=png"; // Excel icon
+    }
+
+    return (
+      <img
+        src={fileIcon}
+        alt={item.name}
+        style={{ width: 30, height: 30, marginRight: 5, cursor: "pointer" }}
+        onClick={() => handlePreviewClick(item.pic)}
+      />
+    );
+  })()}
+
+  <span style={{ fontSize: "14px", color: "#0086b3" }}>{item.name}</span> [{item.number}]
+
+  <span className="documentsactions">
+    <Tooltip title="download...">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/4007/4007698.png"
+        onClick={() => handleDownload(item)}
+        style={{ height: "20px", cursor: "pointer" }}
+      />
+    </Tooltip>
+    <Tooltip title="edit...">
+      <img
+        src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png"
+        style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}
+      />
+    </Tooltip>
+    <Tooltip title="delete...">
+      <img
+        src="https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png"
+        style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}
+      />
+    </Tooltip>
+  </span>
+</StyledTableCell>
+
    
           
           </StyledTableRow>

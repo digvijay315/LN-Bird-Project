@@ -4219,7 +4219,7 @@ const [show9, setshow9] = useState(false);
          
         <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnscontact.map((col) => (
             <StyledTableCell
@@ -4229,33 +4229,27 @@ const [show9, setshow9] = useState(false);
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
         {
          
         lead.associated_contact.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-           
-              {index + 1}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-              {item.title} {item.first_name} {item.last_name}
+           <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
+              <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
+              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
+                {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
+                <div style={{paddingLeft:"38px",color:"#0086b3"}}>
+                {item.mobile_no.map((contact, index) => (
+                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"20px"}}></img>{contact}</span>
+                      ))} <span>mobile</span> <br></br><br></br>
+                       {item.email.map((contact, index) => (
+                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"20px"}}></img>{contact}<br></br></span> 
+                      ))}
+                      </div>
             </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-            {item.mobile_no.map((contact, index) => (
-                         
-                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
-             ))
-             }
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-            {item.email.map((contact, index) => (
-                         
-                         <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon} sx={{ fontSize: 14}} /> {contact}<br></br></span> 
-                      ))
-            }
-            </StyledTableCell>
           </StyledTableRow>
         ))}
       </tbody>
@@ -4494,7 +4488,7 @@ fontWeight:"lighter"
          
          <TableContainer component={Paper} style={{ height: '200px' }}>
      <Table sx={{}} aria-label="customized table">
-     <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+     {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
          <TableRow  style={{backgroundColor:"gray"}}>
            {allColumnspreviousowner.map((col) => (
              <StyledTableCell
@@ -4504,33 +4498,27 @@ fontWeight:"lighter"
              </StyledTableCell>
            ))}
          </TableRow>
-       </thead>
+       </thead> */}
         <tbody>
          {
           
          lead?.previousowner_details?.map ((item, index) => (
            <StyledTableRow key={index}>
-             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-            
-               {index + 1}
-             </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-               {item.title} {item.first_name} {item.last_name}
-             </StyledTableCell >
-             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-             {item.mobile_no.map((contact, index) => (
-                          
-                          <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 14}} />{contact}<br></br></span> 
-              ))
-              }
-             </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px",whiteSpace: "nowrap" }}>
-             {item.email.map((contact, index) => (
-                          
-                          <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={EmailIcon} sx={{ fontSize: 14}} /> {contact}<br></br></span> 
-                       ))
-             }
-             </StyledTableCell>
+             <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
+              <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
+              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
+                {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
+                <div style={{paddingLeft:"38px",color:"#0086b3"}}>
+                {item.mobile_no.map((contact, index) => (
+                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"20px"}}></img>{contact}</span>
+                      ))} <span>mobile</span> <br></br><br></br>
+                       {item.email.map((contact, index) => (
+                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"20px"}}></img>{contact}<br></br></span> 
+                      ))}
+                      </div>
+            </StyledTableCell >
            </StyledTableRow>
          ))}
        </tbody> 
