@@ -131,6 +131,8 @@ text: `Please Firstly Login`,
 icon: "error",
 confirmButtonText: "OK",
 });
+handleShow()
+handleClose1() 
 
 return
 
