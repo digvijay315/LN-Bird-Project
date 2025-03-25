@@ -24,6 +24,8 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import axios from 'axios';
+import matchedlead from '../icons/matchedlead.jpg'
+import inventories from '../icons/inventories.jpg'
 
 
 function Projectsingleview() {
@@ -3082,7 +3084,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
         <div className='row'>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Matched Lead
+  <div className='col-md-12'><img src={matchedlead} style={{height:"25px",paddingRight:"10px"}}></img> Matched Lead
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -3160,7 +3162,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
         
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories <span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>({lead.add_unit.length})</span>
+  <div className='col-md-12'><img src={inventories} style={{height:"25px",paddingRight:"10px"}}/> Inventories <span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>({lead.add_unit.length})</span>
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -3238,7 +3240,8 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
 
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'> Tasks
+        <div className='col-md-12'><img src="https://w7.pngwing.com/pngs/36/68/png-transparent-project-management-computer-icons-task-task-text-logo-project-management.png" style={{height:"25px",paddingRight:"10px"}}/>
+         Tasks
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -3331,7 +3334,8 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents
+        <div className='col-md-12'> <img src="https://www.freeiconspng.com/thumbs/document-icon/document-icon-19.png" style={{height:"25px",paddingRight:"10px"}}/>
+        Documents
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -3429,7 +3433,8 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History
+<div className='col-md-12'><img src="https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/history.png" style={{height:"25px",paddingRight:"10px"}}/>
+ History
 <span 
   onClick={toggleTableVisibility4} 
   style={{ 

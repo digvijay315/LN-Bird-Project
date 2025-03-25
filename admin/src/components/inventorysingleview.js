@@ -4181,7 +4181,8 @@ const [show9, setshow9] = useState(false);
         
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Contacts:{lead.associated_contact.length})</span>
+  <div className='col-md-12'><img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/associate-2977574-2472890.png" style={{height:"25px",paddingRight:"10px"}}/>
+   Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.associated_contact.length})</span>
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -4265,7 +4266,8 @@ const [show9, setshow9] = useState(false);
 
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'> Tasks
+        <div className='col-md-12'><img src="https://w7.pngwing.com/pngs/36/68/png-transparent-project-management-computer-icons-task-task-text-logo-project-management.png" style={{height:"25px",paddingRight:"10px"}}/>
+         Tasks
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -4358,7 +4360,8 @@ const [show9, setshow9] = useState(false);
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total Documents:{documents.length})</span>
+        <div className='col-md-12'><img src="https://www.freeiconspng.com/thumbs/document-icon/document-icon-19.png" style={{height:"25px",paddingRight:"10px"}}/>
+         Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length})</span>
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -4453,7 +4456,8 @@ const [show9, setshow9] = useState(false);
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>Total History:{lead.previousowner_details.length}</span>)
+<div className='col-md-12'><img src="https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/history.png" style={{height:"25px",paddingRight:"10px"}}/>
+ History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.previousowner_details.length}</span>)
 <span 
   onClick={toggleTableVisibility5} 
   style={{ 

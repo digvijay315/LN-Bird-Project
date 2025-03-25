@@ -11,16 +11,17 @@
   }
   .topnav a {
     border-radius: 5px;
-    font-size: 12px;
-    background-color: brown;
-    color: white;
+    font-size: 14px;
+    background-color: white;
+    color: black;
     padding: 14px 16px;
     text-decoration: none;
     display: block;
+    font-weight: bold;
   }
   .topnav a:hover
   {
-    background-color: rgb(11, 190, 50);
+   color: rgb(11, 190, 50);
   }
   .left-side-bar
   {

@@ -4,6 +4,9 @@ import 'react-router-dom';
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import lead from '../icons/lead.jpg'
+import deal from '../icons/deal.jpg'
+import project from '../icons/project.jpg'
 function Header1() {
     function myFunction() {
 		var x = document.getElementById("myLinks");
@@ -42,12 +45,12 @@ function Header1() {
 		<div class="topnav">
   		<div id="myLinks">
 			<ul>
-				<li><Link to={'/addcontact'} class="dropdown-item">Contact</Link></li>
-				<li><Link to={'/addcompany'} class="dropdown-item">Add Company</Link></li>
-				<li><Link to={'/leadinfo'} class="dropdown-item">Lead</Link></li>
-				<li><Link to={'/project'} class="dropdown-item">Project</Link></li>
-				<li><Link to={'/deal'} class="dropdown-item">Deal</Link></li>
-				<li><Link to={'/tasksform'} class="dropdown-item">Add Tasks</Link></li>
+				<li style={{borderBottom:"1px solid black",borderRadius:"5px"}}><Link to={'/addcontact'} class="dropdown-item"><img src='https://icons.veryicon.com/png/o/object/life-icon-8/add-a-contact-4.png' style={{height:"20px",marginTop:"-10px",marginRight:"10px"}}></img>Contact</Link></li>
+				<li style={{borderBottom:"1px solid black",borderRadius:"5px"}}><Link to={'/addcompany'} class="dropdown-item"><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0YDoMUcwmWBpTsarrB_1BqT54AR0xldyQ3Q&s' style={{height:"20px",marginTop:"-10px",marginRight:"10px"}}></img>Add Company</Link></li>
+				<li style={{borderBottom:"1px solid black",borderRadius:"5px"}}><Link to={'/leadinfo'} class="dropdown-item"><img src={lead} style={{height:"20px",marginTop:"-10px",marginRight:"10px"}}></img>Lead</Link></li>
+				<li style={{borderBottom:"1px solid black",borderRadius:"5px"}}><Link to={'/project'} class="dropdown-item"><img src={project} style={{height:"20px",marginTop:"-10px",marginRight:"10px"}}></img>Project</Link></li>
+				<li style={{borderBottom:"1px solid black",borderRadius:"5px"}}><Link to={'/deal'} class="dropdown-item"><img src={deal} style={{height:"20px",marginTop:"-10px",marginRight:"10px"}}></img>Deal</Link></li>
+				<li style={{borderBottom:"1px solid black",borderRadius:"5px"}}><Link to={'/tasksform'} class="dropdown-item"><img src='https://static.thenounproject.com/png/396666-200.png' style={{height:"20px",marginTop:"-10px",marginRight:"10px"}}></img>Add Tasks</Link></li>
 				
 			</ul>
   		</div>

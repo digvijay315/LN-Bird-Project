@@ -30,6 +30,7 @@ import { toWords } from 'number-to-words';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import axios from "axios";
+import matchedlead from '../icons/matchedlead.jpg'
 
 function Dealsingleview() {
 
@@ -3883,9 +3884,9 @@ const handleShow13=async()=>
         <div className='row'>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterlead.length}</span>)
+  <div className='col-md-12'><img src={matchedlead} style={{height:"25px",paddingRight:"10px"}}></img> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterlead.length}</span>)
         <span 
-          onClick={toggleTableVisibility} 
+          onClick={toggleTableVisibility}
           style={{ 
             position:"absolute",
             cursor: "pointer", 
@@ -3920,7 +3921,7 @@ const handleShow13=async()=>
          
         <TableContainer component={Paper} style={{ height: '300px' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnslead.map((col) => (
             <StyledTableCell
@@ -3931,28 +3932,33 @@ const handleShow13=async()=>
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
         {
          
         filterlead.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-           
-              {index + 1}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.title} {item.first_name} {item.last_name}
+         
+            <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
+              <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
+              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
+                {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
+                <div style={{paddingLeft:"38px",color:"#0086b3"}}>
+                {item.mobile_no.map((contact, index) => (
+                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"20px"}}></img>{contact}</span>
+                      ))} <span>mobile</span> <br></br><br></br>
+                       {item.email.map((contact, index) => (
+                         <span key={index} style={{fontSize:"14px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"20px"}}></img>{contact}<br></br></span> 
+                      ))}
+                      </div>
             </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.stage}
+            <StyledTableCell style={{fontSize:"14px",marginLeft:"50px",position:"relative" }}>
+              <span style={{fontWeight:"bold"}}>{item.stage}</span><br></br>
+              {item.owner.join(',')}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-            {item.mobile_no.map((contact, index) => (
-                         
-               <span key={index} style={{fontSize:"12px"}}>  <SvgIcon component={PhoneIphoneIcon} sx={{ fontSize: 12}} />{contact}<br></br></span> 
-            ))}
-            </StyledTableCell>
+        
           </StyledTableRow>
         ))}
       </tbody>
@@ -3964,7 +3970,7 @@ const handleShow13=async()=>
         
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.associated_contact.length}</span>)
+  <div className='col-md-12'><img src="https://cdn.iconscout.com/icon/premium/png-256-thumb/associate-2977574-2472890.png" style={{height:"25px",paddingRight:"10px"}}/> Associated Contact (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.associated_contact.length}</span>)
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -4048,7 +4054,8 @@ const handleShow13=async()=>
 
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'> Tasks
+        <div className='col-md-12'><img src="https://w7.pngwing.com/pngs/36/68/png-transparent-project-management-computer-icons-task-task-text-logo-project-management.png" style={{height:"25px",paddingRight:"10px"}}/>
+         Tasks
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -4141,7 +4148,7 @@ const handleShow13=async()=>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
+        <div className='col-md-12'><img src="https://www.freeiconspng.com/thumbs/document-icon/document-icon-19.png" style={{height:"25px",paddingRight:"10px"}}/> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -4236,7 +4243,7 @@ const handleShow13=async()=>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{unitlocation?.previousowner_details?.length}</span>)
+<div className='col-md-12'><img src="https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/history.png" style={{height:"25px",paddingRight:"10px"}}/> History (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{unitlocation?.previousowner_details?.length}</span>)
 <span 
   onClick={toggleTableVisibility5} 
   style={{ 
