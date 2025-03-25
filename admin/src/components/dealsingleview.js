@@ -3958,9 +3958,7 @@ const handleShow13=async()=>
             <StyledTableCell style={{fontSize:"14px",paddingLeft: "70px" }}>
               <span style={{fontWeight:"bold"}}>{item.stage}</span><br></br>
               {item.owner.map((contact, index) => (
-                         <span>
-                          {contact}<br></br>
-                          </span> 
+                         <span>{contact}<br></br></span>
                       ))}
             </StyledTableCell>
         

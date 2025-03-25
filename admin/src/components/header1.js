@@ -44,7 +44,7 @@ function Header1() {
 		<button id='btn' onClick={myFunction} class="dropdown-toggle" style={{marginLeft:"10%",border:"none",backgroundColor:"transparent",position:"absolute"}}>Add</button>
 		<div class="topnav">
   		<div id="myLinks">
-			<ul>
+			<ul style={{boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"}}>
 				<li><Link to={'/addcontact'} class="dropdown-item"><img src='https://icons.veryicon.com/png/o/object/life-icon-8/add-a-contact-4.png' style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Contact</Link></li>
 				<li><Link to={'/addcompany'} class="dropdown-item"><img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0YDoMUcwmWBpTsarrB_1BqT54AR0xldyQ3Q&s' style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Add Company</Link></li>
 				<li><Link to={'/leadinfo'} class="dropdown-item"><img src={lead} style={{height:"15px",marginTop:"-10px",marginRight:"10px"}}></img>Lead</Link></li>

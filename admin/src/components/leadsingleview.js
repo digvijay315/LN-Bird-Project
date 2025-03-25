@@ -2850,7 +2850,7 @@ const completionPercentage = 20; // Set default value here
             <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer",color:"black"}}></i>
             </a>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"30px",paddingLeft:"10px",fontFamily:"arial"}}>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"30px",paddingLeft:"10px",fontFamily:"arial",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"}}>
               <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
               <li><img src={publish} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
               <li><img src={createbooking} style={{height:"25px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
