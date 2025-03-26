@@ -2941,7 +2941,7 @@ const completionPercentage = 20; // Set default value here
               <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
               <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
               <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
-              <li onClick={handleShow7}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+              <li onClick={handleShow7} style={{borderBottom:"1px solid black",borderRadius:"5px"}}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
               <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
             </ul>
             <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
@@ -3992,8 +3992,8 @@ const completionPercentage = 20; // Set default value here
             {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}
             </StyledTableCell> */}
-            <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
-              <img src='https://i.pinimg.com/736x/d3/fd/bf/d3fdbf302be1e85fe5f61594328bcb71.jpg' style={{height:"20px"}}></img>
+            <StyledTableCell style={{fontSize:"12px",cursor:"pointer",whiteSpace:"wrap" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
+              <img src='https://i.pinimg.com/736x/d3/fd/bf/d3fdbf302be1e85fe5f61594328bcb71.jpg' style={{height:"15px"}}></img>
             <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3",marginLeft:"5px"}}>{item.unit_number} {item.project}</span><br></br>
             <span style={{marginLeft:"30px"}}>{item.block}-{item.usize}</span>
             </StyledTableCell>
@@ -4006,7 +4006,7 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell> */}
 
             <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap" }}>
-            Rs. {(Number(item.expected_price)).toLocaleString("en-IN")}/-
+            ₹{(Number(item.expected_price)).toLocaleString("en-IN")}/-
             </StyledTableCell>
 
           </StyledTableRow>
@@ -4155,7 +4155,7 @@ const completionPercentage = 20; // Set default value here
             <StyledTableCell style={{ fontSize:"12px" }}>
               {/* {index + 1} */}<input type='checkbox'></input>
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"14px",color:"#0086b3",whiteSpace:"nowrap",cursor:"pointer"}}  onClick={()=>completetask(item)}>
+            <StyledTableCell style={{fontSize:"14px",color:"#0086b3",whiteSpace:"wrap",cursor:"pointer"}}  onClick={()=>completetask(item)}>
               <span style={{fontWeight:"bold"}}>{item.activity_type}</span> 
             {
               item.activity_type=="Meeting" ? (
@@ -4188,7 +4188,7 @@ const completionPercentage = 20; // Set default value here
             </StyledTableCell>
        
 
-          {/* <StyledTableCell style={{ fontSize: "12px" }}>
+          <StyledTableCell style={{ fontSize: "12px" }}>
           {allColumnstask.map((col) => (
         col.id === "status" ? (
       <span>
@@ -4202,7 +4202,7 @@ const completionPercentage = 20; // Set default value here
       </span>
     ) : null
   ))}
-        </StyledTableCell> */}
+        </StyledTableCell>
 
           </StyledTableRow>
         ))}

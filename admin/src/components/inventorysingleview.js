@@ -282,6 +282,28 @@ const navigate=useNavigate()
         call()
     },[])
 
+      useEffect(()=>
+        {
+          const combinealltask=[...sitevisitdata,...meetingdata,...maildata,...calldata]
+          const ownerNames = lead.owner_details.map(owner => 
+            `${owner.title} ${owner.first_name} ${owner.last_name}`
+          );
+      
+          const associatedNames = lead.associated_contact.map(contact => 
+            `${contact.title} ${contact.first_name} ${contact.last_name}`
+          );
+      
+          // Combine both arrays into one array of full names
+          const fullNames = [...ownerNames, ...associatedNames];
+        
+          const filteredtasks = combinealltask.filter(task => 
+            fullNames.some(fullName => task.lead.includes(fullName)) // Check each full name
+          );
+          
+          setalltask(filteredtasks)
+    
+        },[sitevisitdata,meetingdata,maildata,calldata])
+
   
     
 
@@ -3048,7 +3070,7 @@ const [show9, setshow9] = useState(false);
               <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
               <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
               <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
-              <li onClick={handleShow14}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+              <li onClick={handleShow14} style={{borderBottom:"1px solid black",borderRadius:"5px"}}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
               <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
             </ul>
           
@@ -4218,7 +4240,7 @@ const [show9, setshow9] = useState(false);
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
@@ -4238,9 +4260,9 @@ const [show9, setshow9] = useState(false);
          
         lead.associated_contact.map ((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-           <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
+           <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>navigate('/contactsingleview',{state:item})}>
               <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
-              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
+              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"20px",paddingRight:"10px"}}></img>
                 {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
                 <div style={{paddingLeft:"38px",color:"#0086b3"}}>
                 {item.mobile_no.map((contact, index) => (
@@ -4264,7 +4286,11 @@ const [show9, setshow9] = useState(false);
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
         <div className='col-md-12'><img src="https://w7.pngwing.com/pngs/36/68/png-transparent-project-management-computer-icons-task-task-text-logo-project-management.png" style={{height:"25px",paddingRight:"10px"}}/>
-         Tasks
+         Tasks(<span className="no-activity-flash" style={{ fontSize: "12px", color: "blue" }}>
+     {alltask.filter(item => 
+      item.complete === "" && (new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date())
+    ).length} active
+  </span>)
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -4301,7 +4327,7 @@ const [show9, setshow9] = useState(false);
          
         <TableContainer component={Paper} style={{  maxHeight: '300px'}}>
     <Table sx={{}} aria-label="customized table">
-      <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+      {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
           {allColumnstask.map((col) => (
             <StyledTableCell
@@ -4312,24 +4338,47 @@ const [show9, setshow9] = useState(false);
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
-      <tbody>
+      </thead> */}
+       <tbody>
         {
          
         alltask.map ((item, index) => (
-          <StyledTableRow key={index} onClick={()=>completetask(item)} style={{cursor:"pointer"}}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {index + 1}
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
+              {/* {index + 1} */}<input type='checkbox'></input>
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-              {item.activity_type}
+            <StyledTableCell style={{fontSize:"14px",color:"#0086b3",whiteSpace:"wrap",cursor:"pointer"}}  onClick={()=>completetask(item)}>
+              <span style={{fontWeight:"bold"}}>{item.activity_type}</span> 
+            {
+              item.activity_type=="Meeting" ? (
+                <span style={{marginLeft:"5px"}}> [{item.reason}]<br></br></span>
+
+              ): item.activity_type=="SiteVisit" ? (
+              <span> [{Array.isArray(item.inventory)?item.inventory.join(','):item.inventory || item.reason}]<br></br></span>
+              ) : item.activity_type=="Mail" ? (
+                <span>[{item.subject}]<br></br></span>
+                ) :  <span> [{item.reason}]<br></br></span>
+            }
+             
+
+              {item.complete === "true" ? (
+          <span style={{color:"green",fontSize:"12px"}}>{item.start_date
+          ? formatDate(new Date(item.start_date)) 
+          : formatDate(new Date(item.due_date))}.</span>
+
+        ) : (item.complete === "" && new Date(item.due_date) > new Date()) || new Date(item.start_date) > new Date() ? (
+          <span style={{color:"blue"}}>{item.start_date
+          ? formatDate(new Date(item.start_date)) 
+          : formatDate(new Date(item.due_date))}.</span>
+
+        ) : (item.complete === "" && new Date(item.due_date) < new Date()) || new Date(item.start_date) < new Date() ? (
+          <span className='no-activity-flash' style={{fontSize:"12px"}}>{item.start_date
+            ? formatDate(new Date(item.start_date)) 
+            : formatDate(new Date(item.due_date))}.</span>
+        ) : ""}  <span style={{color:"gray"}}>{item.executive}</span>
+              
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-            {item.start_date
-              ? formatDate(new Date(item.start_date)) 
-              : formatDate(new Date(item.due_date))} 
-              {/* {item.start_date || item.due_date} {item.due_time} */}
-          </StyledTableCell>
+       
 
           <StyledTableCell style={{ fontSize: "12px" }}>
           {allColumnstask.map((col) => (
@@ -4337,9 +4386,9 @@ const [show9, setshow9] = useState(false);
       <span>
         {item.complete === "true" ? (
           <span style={{color:"green"}}>Complete</span>
-        ) : item.complete === "" && new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date() ? (
+        ) : (item.complete === "" && new Date(item.due_date) > new Date()) || new Date(item.start_date) > new Date() ? (
           <span style={{color:"blue"}}>Pending</span>
-        ) : item.complete === "" && new Date(item.due_date) < new Date() || new Date(item.start_date) < new Date() ? (
+        ) : (item.complete === "" && new Date(item.due_date) < new Date()) || new Date(item.start_date) < new Date() ? (
           <span className='no-activity-flash' style={{fontSize:"12px"}}>Overdue</span>
         ) : ""}
       </span>
@@ -4391,7 +4440,7 @@ const [show9, setshow9] = useState(false);
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
          
         <TableContainer component={Paper} style={{ maxHeight: '200px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
@@ -4487,7 +4536,7 @@ fontWeight:"lighter"
 </span>
 </div>
 
-<div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"10px",height: isTableVisible5 ? "200px" : "0",transition: "height 0.3s ease"}}>
+<div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible5 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
          <TableContainer component={Paper} style={{ height: '200px' }}>
      <Table sx={{}} aria-label="customized table">
@@ -4507,9 +4556,9 @@ fontWeight:"lighter"
           
          lead?.previousowner_details?.map ((item, index) => (
            <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-             <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}}>
+             <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>navigate('/contactsingleview',{state:item})}>
               <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
-              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"30px",paddingRight:"10px"}}></img>
+              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"20px",paddingRight:"10px"}}></img>
                 {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
                 <div style={{paddingLeft:"38px",color:"#0086b3"}}>
                 {item.mobile_no.map((contact, index) => (
