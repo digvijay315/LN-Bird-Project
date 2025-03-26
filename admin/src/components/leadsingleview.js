@@ -2708,6 +2708,7 @@ const selectlocation=()=>
 
 
 
+const [isLoading, setIsLoading] = useState(false);
 
 const [show8, setshow8] = useState(false);
 
@@ -2776,10 +2777,8 @@ setactivity({...activity,activity_name:"added docuemnt",lead:fullname})
 
 const updatedocumentoflead = async () => {
 try {
+  setIsLoading(true); // Show loader before API call
   const id = lead._id;  // Assuming selectedItems is the ID of the lead to update
-
- 
-  
   const resp = await api.put(`adddocumentinlead/${id}`, leaddocument, {
     headers: {
       'Content-Type': 'multipart/form-data', // Ensure proper content-type for form-data
@@ -2798,6 +2797,8 @@ try {
   }, 2000);
 } catch (error) {
   console.log(error);
+}finally {
+  setIsLoading(false); // Hide loader after API call
 }
 };
 
@@ -2859,6 +2860,7 @@ const handledocumentpicchange11 = (event) => {
   const updatesingledocument=async()=>
   {
     try {
+      setIsLoading(true); 
       const resp=await api.put(`updateleaddocumentsingle/${lead._id}`,updatedocument,config)
       if(resp.status===200)
         {
@@ -2875,7 +2877,8 @@ const handledocumentpicchange11 = (event) => {
       
     } catch (error) {
       console.log(error);
-      
+    }finally {
+      setIsLoading(false); // Hide loader after API call
     }
   }
 
@@ -2890,6 +2893,7 @@ const handledocumentpicchange11 = (event) => {
 const deletesingledocument=async(item)=>
   {
     try {
+      setIsLoading(true); 
       const document_name = { document_name: item.name }; // Wrap inside an object
       const resp=await api.delete(`deleteleadsingledocument/${lead._id}`,{data: document_name})
       if(resp.status===200)
@@ -2906,7 +2910,9 @@ const deletesingledocument=async(item)=>
       
     } catch (error) {
       console.log(error);
-      
+    }
+    finally {
+      setIsLoading(false); // Hide loader after API call
     }
   }
 
@@ -6089,6 +6095,46 @@ fontWeight:"lighter"
 
 {/*===================================================== update document end =========================================================*/}
 
+
+{/* ========================================loader start============================================================== */}
+
+<>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading document...</p>
+        </div>
+      </div>
+    )}
+  </>
+
+{/*=================================== loader end======================================================================= */}
 <ToastContainer/>
     </div>
   )
