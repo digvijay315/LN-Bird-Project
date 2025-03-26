@@ -126,11 +126,11 @@ const handleClose4 = () => setShow4(false);
 const handleShow4 = () => {
 
 if(!utocken){
-Swal.fire({
-text: `Please Firstly Login`,
-icon: "error",
-confirmButtonText: "OK",
-});
+// Swal.fire({
+// text: `Please Firstly Login`,
+// icon: "error",
+// confirmButtonText: "OK",
+// });
 handleShow()
 handleClose1() 
 
