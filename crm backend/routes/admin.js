@@ -1,6 +1,6 @@
 const express=require('express');
 const {add_contact,view_contact, view_contact_Byid, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany, view_contact_ByName} = require('../controllers/contact_details');
-const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage, update_leadstage, update_leaddocument, update_leadstagebyemail} = require('../controllers/leadinfo');
+const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage, update_leadstage, update_leaddocument, update_leadstagebyemail, update_leadsingledocument, delete_leadsingledocument} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
 const {add_developer,view_developer, view_developer_Byid, update_developer, remove_developer} = require('../controllers/add_developer');
@@ -53,6 +53,8 @@ router.put('/updatelead/:_id',upload.any('document_pic'),update_lead)
 router.put('/adddocumentinlead/:_id',upload.any('document_pic'),update_leaddocument)
 router.put('/updateleadbystage/:_id',update_leadstage)
 router.put('/updateleadbystagebyemail/:email',update_leadstagebyemail)
+router.put('/updateleaddocumentsingle/:_id',upload.any('document_pic'),update_leadsingledocument)
+router.delete('/deleteleadsingledocument/:_id',delete_leadsingledocument)
 router.get('/viewleadbycompany/:company_name',view_lead_Bycompany)
 router.get('/viewleadbystage/:stage',view_lead_Bystage)
 router.get('/viewleadbyemail/:email',view_lead_Byemail)

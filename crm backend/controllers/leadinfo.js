@@ -318,7 +318,99 @@ const lead_info=async(req,res)=>
                                     console.log(error)
                                 }
                             }
+
+                            const update_leadsingledocument = async (req, res) => {
+                                try {
+                                  const id = req.params._id; // Get lead ID from URL parameter
+                                  const { document_name, document_no } = req.body; // Get new values
+                              
+                              
+                                     // Find the lead document by ID
+                                  const user = await leadinfo.findOne({ _id: id });
+                              
+                                  if (!user) {
+                                    return res.status(404).send({ message: "Lead not found" });
+                                  }
+                              
+                                  // Ensure document_name array exists
+                                  if (!user.document_name || !Array.isArray(user.document_name)) {
+                                    return res.status(400).send({ message: "No documents found in the lead" });
+                                  }
+                              
+                                  // Find index where document_name matches
+                                  const index = user.document_name.findIndex(name => name === document_name);
+                                  
+                                  if (index === -1) {
+                                    return res.status(404).send({ message: "Document name not found" });
+                                  }
+                              
+                                  // Handle file upload if a new document image is provided
+                                  let newDocumentPic = user.document_pic[index]; // Keep existing image if no new file
+                                  if (req.files && req.files.length > 0) {
+                                    const result = await cloudinary.uploader.upload(req.files[0].path);
+                                    newDocumentPic = result.secure_url; // Replace with new uploaded image
+                                  }
+                              
+                                  // Update only the specific index
+                                  user.document_no[index] = document_no;
+                                  user.document_pic[index] = newDocumentPic;
+                              
+                                  // Save the updated document
+                                  await user.save();
+                              
+                                  res.status(200).send({ message: "Lead document updated successfully" });
+                                } catch (error) {
+                                  console.error(error);
+                                  res.status(500).send({ message: "An error occurred while updating the lead" });
+                                }
+                              };
+
+                              const delete_leadsingledocument = async (req, res) => {
+                                try {
+                                  const id = req.params._id; // Get lead ID from URL parameter
+                                  const { document_name } = req.body; // Get document_name to delete
+                      
+                              
+                                  // Find the lead document by ID
+                                  const user = await leadinfo.findOne({ _id: id });
+                              
+                                  if (!user) {
+                                    return res.status(404).send({ message: "Lead not found" });
+                                  }
+                              
+                                  // Ensure document_name array exists
+                                  if (!user.document_name || !Array.isArray(user.document_name)) {
+                                    return res.status(400).send({ message: "No documents found in the lead" });
+                                  }
+                              
+                                  // Find index where document_name matches
+                                  const index = user.document_name.findIndex(name => name === document_name);
+                              
+                                  if (index === -1) {
+                                    return res.status(404).send({ message: "Document name not found" });
+                                  }
+                              
+                                  // Remove elements at found index
+                                  user.document_name.splice(index, 1);
+                                  user.document_no.splice(index, 1);
+                                  user.document_pic.splice(index, 1);
+                              
+                                  // Save the updated document
+                                  await user.save();
+                              
+                                  res.status(200).send({ message: "Document deleted successfully" });
+                                } catch (error) {
+                                  console.error(error);
+                                  res.status(500).send({ message: "An error occurred while deleting the document" });
+                                }
+                              };
+                              
+                              
+    
+
+
                           
     module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid,view_lead_Bycompany,
-                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage,update_leaddocument,update_leadstagebyemail }
+                    view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage,update_leaddocument,update_leadstagebyemail,
+                    update_leadsingledocument,delete_leadsingledocument }
     

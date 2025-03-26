@@ -32,6 +32,7 @@ import publish from '../icons/publish.jpg'
 import createbooking from '../icons/createbooking.jpg'
 import matchedlead from '../icons/matchedlead.jpg'
 import transferuser from '../icons/transferuser.jpg'
+import { event } from 'jquery';
 
 function Leadsingleview() {
 
@@ -381,7 +382,7 @@ const navigate=useNavigate()
               }
             }, [maildata]);
 
-          console.log(alltask);
+          // console.log(alltask);
           
 
 
@@ -492,7 +493,7 @@ const fetchcdata=async(event)=>
 
 }
 
-console.log(flattenedUnits);
+// console.log(flattenedUnits);
 
 const [matchunit, setmatchunit] = useState([]); // To store matched data
 
@@ -510,12 +511,12 @@ useEffect(() => {
 
       // Check owner_details array for matches
       for (let owner of item.owner_details) {
-         console.log(owner.title);
-         console.log(owner.first_name);
-         console.log(owner.last_name);
-         console.log(lead.title);
-         console.log(lead.first_name);
-         console.log(lead.last_name);
+        //  console.log(owner.title);
+        //  console.log(owner.first_name);
+        //  console.log(owner.last_name);
+        //  console.log(lead.title);
+        //  console.log(lead.first_name);
+        //  console.log(lead.last_name);
         
         // const owner = await fetchOwnerDetails(ownerId); // Fetch owner details by ID
         if (owner && owner.title === lead.title && owner.first_name === lead.first_name && owner.last_name === lead.last_name) {
@@ -881,7 +882,7 @@ const handleactivitynoteschange=(value)=>
 }
 
 
-console.log(alltask);
+// console.log(alltask);
 
 //=================================================== internal notes end=============================================================
       
@@ -2237,10 +2238,10 @@ const fetchdatabyprojectcityname=async()=>
   
   try {
     const city=leadinfo.city2
-    console.log(city);
+    // console.log(city);
     
     const resp=await api.get(`viewprojectbycityname/${city}`)
-    console.log(resp);
+    // console.log(resp);
     
     setdata11(resp.data.project)
   } catch (error) {
@@ -2249,8 +2250,6 @@ const fetchdatabyprojectcityname=async()=>
 }
 useEffect(() => {
   fetchdatabyprojectcityname()
-   
-  
 }, [leadinfo.city2]);
 
 const allproject =[]
@@ -2802,16 +2801,6 @@ try {
 }
 };
 
-const docuemnt_images = {
-  "Adhar Card": "https://cdn.iconscout.com/icon/free/png-256/free-aadhaar-logo-icon-download-in-svg-png-gif-file-formats--unique-identity-india-citizen-information-details-logos-icons-1747945.png",
-  "Pan Card": "https://www.shutterstock.com/image-vector/dummy-pan-card-unique-identity-260nw-1681665595.jpg",
-  "Driviing Licence": "https://png.pngtree.com/png-clipart/20230818/original/pngtree-driver-license-icon-vector-isolated-white-background-picture-image_8013767.png",
-  "Voter Card": "https://www.shutterstock.com/image-vector/indian-voter-id-card-vector-260nw-1754108780.jpg",
-  "Ration Card": "https://www.businessleague.in/wp-content/uploads/2020/06/ration-card1200.jpg",
-  "Family Id": "https://thehowpedia.com/wp-content/uploads/2023/02/family-id-up-logo.png",
-  "Passoport": "https://upload.wikimedia.org/wikipedia/commons/b/bb/E-passport_preview.png",
-  "Employee Id Card": "https://5.imimg.com/data5/SELLER/Default/2024/12/475677193/WR/DK/QA/38606716/employee-id-card-500x500.png",
-};
 
 
 const handleDownload = (item) => {
@@ -2833,6 +2822,96 @@ const handleDownload = (item) => {
 
 
 // =======================================================add document end==============================================================
+
+
+//================================= update document start=========================================================================
+
+const [show14, setshow14] = useState(false);
+
+const[updatedocument,setupdatedocument]=useState({document_no:"",document_name:"",document_pic:['']})
+
+const handleClose14 = () => setshow14(false);
+const handleShow14=async(item)=>
+{
+      setupdatedocument({document_no:item.number,document_name:item.name,document_pic:item.pic})
+      setshow14(true);
+      
+   
+}
+
+const handledocumentnochange11 = ( event) => {
+  setupdatedocument({
+    ...updatedocument,
+    document_no: event.target.value
+  });
+};
+
+const handledocumentpicchange11 = (event) => {
+  
+  const files = Array.from(event.target.files);
+  setupdatedocument({
+    ...updatedocument,
+    document_pic: files
+  });
+};
+
+
+  const updatesingledocument=async()=>
+  {
+    try {
+      const resp=await api.put(`updateleaddocumentsingle/${lead._id}`,updatedocument,config)
+      if(resp.status===200)
+        {
+          Swal.fire({
+            icon: 'success',
+            title: 'Document Updated',
+            text: 'Your document has been update successfully!',
+          });
+          handleClose14()
+        }
+        setTimeout(() => {
+         navigate('/leaddetails')
+        }, 1000);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+
+
+//==================================================== update document end========================================================
+
+
+//================================================= delete document start==========================================================
+
+const deletesingledocument=async(item)=>
+  {
+    try {
+      const document_name = { document_name: item.name }; // Wrap inside an object
+      const resp=await api.delete(`deleteleadsingledocument/${lead._id}`,{data: document_name})
+      if(resp.status===200)
+        {
+          Swal.fire({
+            icon: 'success',
+            title: 'Document Deleted',
+            text: 'Your document has been deleted successfully!',
+          });
+        }
+        setTimeout(() => {
+         navigate('/leaddetails')
+        }, 1000);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+// ================================================delete document end==========================================================
 
 const completionPercentage = 20; // Set default value here
 
@@ -4187,16 +4266,16 @@ const completionPercentage = 20; // Set default value here
         <StyledTableCell className="leaddocumentscolomn">
   {/* Determine the document icon based on file extension */}
   {(() => {
-    const fileName = item.pic.toLowerCase();
+    const fileName = item?.pic?.toLowerCase();
     let fileIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe2devawXGAc34_HeWIm-44fpa-pljPOnNyw&s"; // Default icon
 
-    if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png")) {
+    if (fileName?.endsWith(".jpg") || fileName?.endsWith(".jpeg") || fileName?.endsWith(".png")) {
       fileIcon = "https://i.pinimg.com/736x/c9/c1/43/c9c143f4f9bcf8e8ea5dec5047757307.jpg"; // Image icon
-    } else if (fileName.endsWith(".pdf")) {
+    } else if (fileName?.endsWith(".pdf")) {
       fileIcon = "https://www.freeiconspng.com/thumbs/pdf-icon-png/pdf-icon-png-pdf-zum-download-2.png"; // PDF icon
-    } else if (fileName.endsWith(".doc") || fileName.endsWith(".docx")) {
+    } else if (fileName?.endsWith(".doc") || fileName?.endsWith(".docx")) {
       fileIcon = "https://png.pngtree.com/png-vector/20241025/ourlarge/pngtree-blue-document-color-icon-vector-illustration-png-image_14165553.png"; // Word document icon
-    } else if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+    } else if (fileName?.endsWith(".xlsx") || fileName?.endsWith(".xls")) {
       fileIcon = "https://img.icons8.com/?size=512&id=13654&format=png"; // Excel icon
     }
 
@@ -4221,13 +4300,14 @@ const completionPercentage = 20; // Set default value here
       />
     </Tooltip>
     <Tooltip title="update...">
-      <img
+      <img onClick={()=>handleShow14(item)}
         src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png"
         style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}
       />
     </Tooltip>
     <Tooltip title="delete...">
       <img
+      onClick={()=>deletesingledocument(item)}
         src="https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png"
         style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}
       />
@@ -5951,6 +6031,63 @@ fontWeight:"lighter"
 
 {/*========================================== add document details end ===================================================================*/}
 
+
+{/*====================================================== update document start=================================================== */}
+
+<Modal show={show14} onHide={handleClose14} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Update Documents</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                  <div className="row">
+                        <div className="col-md-3"><label className="labels">Document No.</label>
+                         
+                                <input type="text" 
+                                value={updatedocument.document_no}
+                                name='document_no'
+                                style={{marginTop:"10px"}}
+                                className="form-control form-control-sm" 
+                                onChange={(event)=>handledocumentnochange11(event)}
+                                />
+                          
+                            </div>
+                            <div className="col-md-3"><label className="labels">Document Name</label>
+                           
+                                <select
+                                className='form-control form-control-sm'
+                                style={{marginTop:"10px"}}
+                                
+                                >
+                             <option>{updatedocument.document_name}</option>
+                            </select>
+                          
+                            </div>
+                          
+                            <div className="col-md-4">
+                              <label className="labels">Document Picture</label>
+                    
+                                  <input type="file" 
+                                  name='document_pic'
+                                  style={{marginTop:"10px"}}
+                                  className="form-control form-control-sm" 
+                                  onChange={(event)=>handledocumentpicchange11(event)}
+                                  />
+                                  <img src={updatedocument.document_pic}></img>
+                        </div>
+                      </div>
+
+                      </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatesingledocument}>
+                Update Document
+              </Button>
+              <Button variant="secondary" onClick={handleClose14}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+{/*===================================================== update document end =========================================================*/}
 
 <ToastContainer/>
     </div>
