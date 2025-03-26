@@ -263,6 +263,20 @@ const navigate=useNavigate()
         call()
     },[])
 
+      useEffect(()=>
+        {
+          const combinealltask=[...sitevisitdata,...meetingdata,...maildata,...calldata]
+        
+          const fullNames= `${lead.title} ${lead.first_name} ${lead.last_name}`
+        
+          const filteredtasks = combinealltask.filter(task => 
+            (typeof fullNames === 'string' ? [fullNames] : fullNames).some(fullName => task.lead.includes(fullName))
+        );
+        
+          
+          setalltask(filteredtasks)
+    
+        },[sitevisitdata,meetingdata,maildata,calldata])
   
     
 

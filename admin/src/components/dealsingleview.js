@@ -4054,7 +4054,7 @@ const handleShow13=async()=>
           <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>navigate('/contactsingleview',{state:item})}>
               <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
               <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"20px",paddingRight:"10px"}}></img>
-                {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
+                {item.title} {item.first_name} {item.last_name}</span> <span style={{whiteSpace:"wrap"}}>{item.company_name}</span><br></br>
                 <div style={{paddingLeft:"38px",color:"#0086b3",marginTop:"2px"}}>
                 {item.mobile_no.map((contact, index) => (
                          <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>

@@ -24,6 +24,11 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import publish from '../icons/publish.jpg'
+import createbooking from '../icons/createbooking.jpg'
+import matchedlead from '../icons/matchedlead.jpg'
+import transferuser from '../icons/transferuser.jpg'
+import inventories from '../icons/inventories.jpg'
 
 function Contactsingleview() {
 
@@ -2277,9 +2282,19 @@ try {
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Contact</h6>
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.title} {lead.first_name} {lead.last_name}<span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>{lead.company_name}
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
-    
+             <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer",color:"black"}}></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"30px",paddingLeft:"10px",fontFamily:"arial",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",fontSize:"14px"}}>
+                          <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
+                          <li><img src={publish} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
+                          <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
+                          <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
+                          <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
+                          <li onClick={handleShow7} style={{borderBottom:"1px solid black",borderRadius:"5px"}}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+                          <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
+                        </ul>
+                        <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
           </span>
           </h3>
         </div>
@@ -3199,7 +3214,7 @@ try {
         
 
   <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories
+  <div className='col-md-12'><img src={inventories} style={{height:"25px",paddingRight:"10px"}}/> Inventories(<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{matchunit.length}</span>)
         <span 
           onClick={toggleTableVisibility1} 
           style={{ 
@@ -3213,7 +3228,7 @@ try {
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+           ▽
         </span>
         <span 
          onClick={()=>navigate('/addinventory',{state:lead})}
@@ -3276,7 +3291,12 @@ try {
 
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'> Tasks
+        <div className='col-md-12'><img src="https://w7.pngwing.com/pngs/36/68/png-transparent-project-management-computer-icons-task-task-text-logo-project-management.png" style={{height:"25px",paddingRight:"10px"}}/>
+         Tasks(<span className="no-activity-flash" style={{ fontSize: "12px", color: "blue" }}>
+     {alltask.filter(item => 
+      item.complete === "" && (new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date())
+    ).length} active
+  </span>)
         <span 
           onClick={toggleTableVisibility2} 
           style={{ 
@@ -3290,7 +3310,7 @@ try {
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+           ▽
         </span>
         <span 
          onClick={()=>navigate('/tasksform')}
@@ -3369,7 +3389,7 @@ try {
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-        <div className='col-md-12'> Documents
+        <div className='col-md-12'> <img src="https://www.freeiconspng.com/thumbs/document-icon/document-icon-19.png" style={{height:"25px",paddingRight:"10px"}}/> Documents (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{documents.length}</span>)
         <span 
           onClick={toggleTableVisibility3} 
           style={{ 
@@ -3383,7 +3403,7 @@ try {
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+           ▽
         </span>
         <span 
          onClick={handleShow8}
@@ -3464,7 +3484,8 @@ try {
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
-<div className='col-md-12'> History
+<div className='col-md-12'><img src="https://d1nhio0ox7pgb.cloudfront.net/_img/i_collection_png/512x512/plain/history.png" style={{height:"25px",paddingRight:"10px"}}/>
+ History
 <span 
   onClick={toggleTableVisibility4} 
   style={{ 
@@ -3478,7 +3499,8 @@ try {
     marginTop: "0px", // Align the arrow properly
   }}
 >
-  ▼
+  
+▽
 </span>
 <span 
 //  onClick={handleShow8}

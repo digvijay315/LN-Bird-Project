@@ -18,6 +18,7 @@ cloudinary.config({
 const createProject = async (req, res) => {
     try {
 
+
  
       const {
         name, developer_name, joint_venture, secondary_developer, rera_number, descriptions,
@@ -52,7 +53,7 @@ const createProject = async (req, res) => {
 
       const addunit_details = [];
       let u = 0;
-while (u < req.body.add_unit.length) {
+while (u < req.body.add_unit?.length) {
   const unit = req.body.add_unit[u];
  
 unitDetails={
@@ -175,7 +176,7 @@ unitDetails={
       });
   
       const savedProject = await newProject.save(); // Save the project
-      res.status(201).json(savedProject); // Return the saved project
+      res.status(200).json(savedProject); // Return the saved project
     } catch (error) {
       res.status(500).json({ error: 'Error creating project', message: error.message });
     }
