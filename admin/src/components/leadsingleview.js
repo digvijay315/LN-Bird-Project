@@ -3948,7 +3948,7 @@ const completionPercentage = 20; // Set default value here
         <div className='row'>
 
           <div className='col-md-12' style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
-        <div className='col-md-12' ><img src={matcheddeal} style={{height:"25px",paddingRight:"10px"}}></img>Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterdeal.length} active</span>)
+        <div className='col-md-12' ><img src={matcheddeal} style={{height:"25px",paddingRight:"10px"}}></img>Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterdeal.length}</span>)
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
