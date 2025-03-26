@@ -3963,23 +3963,24 @@ const handleShow13=async()=>
         filterlead.map ((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
          
-            <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>navigate('/leadsingleview',{state:item})}>
-              <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
+            <StyledTableCell style={{fontSize:"12px",whiteSpace:"wrap",cursor:"pointer"}} onClick={()=>navigate('/leadsingleview',{state:item})}>
+              <span style={{fontSize:"14px",color:"#0086b3",fontWeight:"bold"}}>
               <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"20px",paddingRight:"5px"}}></img>
-                {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
+                {item.title} {item.first_name} {item.last_name}</span><br></br>
+                 <div style={{whiteSpace:"wrap",marginLeft:"38px"}}>{item.company_name}</div>
                 <div style={{paddingLeft:"38px",color:"#0086b3",marginTop:"2px"}}>
                 {item.mobile_no.map((contact, index) => (
-                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                         <span key={index} style={{fontSize:"10px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
                           <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"15px"}}></img>{contact}</span>
                       ))} <span>mobile</span> <br></br><br></br>
                        {item.email.map((contact, index) => (
-                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                         <span key={index} style={{fontSize:"10px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px",whiteSpace:"nowrap"}}>
                           <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"15px",marginTop:"2px"}}></img>{contact}<br></br></span> 
                       ))}
                       </div>
             </StyledTableCell >
       
-            <StyledTableCell style={{fontSize:"14px",paddingLeft: "30px" }}>
+            <StyledTableCell style={{fontSize:"14px",paddingLeft: "10px" }}>
               <span style={{fontWeight:"bold"}}>{item.stage}</span><br></br>
               {item.owner.map((contact, index) => (
                          <span>{contact}<br></br></span>
