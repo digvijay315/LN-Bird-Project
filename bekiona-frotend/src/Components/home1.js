@@ -141,18 +141,18 @@ const[product1,setproduct1]=useState([])
       setcart([...cart, product]);
   
       // Change button color for the clicked product
-      // setButtonColors((prev) => ({
-      //   ...prev,
-      //   [product._id]: "#FF5F00",
-      // }));
+      setButtonColors((prev) => ({
+        ...prev,
+        [product._id]: "#FF5F00",
+      }));
   
       // Revert button color after 1 second
-      // setTimeout(() => {
-      //   setButtonColors((prev) => ({
-      //     ...prev,
-      //     [product._id]: "rgb(51, 51, 51)", // Original color
-      //   }));
-      // }, 1000);
+      setTimeout(() => {
+        setButtonColors((prev) => ({
+          ...prev,
+          [product._id]: "rgb(51, 51, 51)", // Original color
+        }));
+      }, 1000);
   
       // Set cart message
       setCartMessage((prev) => ({
@@ -233,19 +233,6 @@ const[product1,setproduct1]=useState([])
  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Function to render stars based on rating
     // const renderStars = (rating) => {
     //   const totalStars = 5;
@@ -308,12 +295,6 @@ const[product1,setproduct1]=useState([])
   };
 
 
-
-
- 
-
-
-
   return (
     <div>
         <Header/>
@@ -340,15 +321,6 @@ const[product1,setproduct1]=useState([])
     ))}
   </Carousel>
 </div>
-
-
-
-
-
-
-
-
-
 {/* banner main end--------------------------------------------------------------------------------------------- */}
 
 
@@ -408,17 +380,6 @@ const[product1,setproduct1]=useState([])
     More About
   </button>
 </div>
-
-
-
-
-
-
-
-
-
-
-
 {/* content end--------------------------------------------------------------------------- */}
 
 {/* product cart section------------------------------------------------------------------------------------- */}
@@ -542,8 +503,7 @@ Combo Products
             onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              // backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)", 
-              backgroundColor: cart.some((item) => item._id === product._id) ? "#FF5F00" : "rgb(51, 51, 51)", 
+              backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)",
               color: "white",
               border: "none",
               padding: "12px 30px",
@@ -583,11 +543,6 @@ Combo Products
     ✅ {cartMessage[product._id]}
   </p>
 )}
-
-
-
-
-
         </div>
       </div>
       </React.Fragment>
@@ -617,14 +572,6 @@ Combo Products
 
 
 {/* --------------------------------------------------------------------------------------------------------------- */}
-
-
-
-
-
-
-
-
 {/* collection  start----------------------------------------------------------------------- */}
 <div
       style={{
@@ -786,12 +733,6 @@ Combo Products
       `}</style>
     </div>
 
-
-
-
-
-
-
 {/* single products-------------------------------------------------------------------------- */}
 
 <div className="grocery" style={{ background: "linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)", width: "100%" }}>
@@ -802,16 +743,18 @@ Combo Products
       <div className="container">
       <Swiper
   modules={[Navigation, Pagination, Autoplay]}
-  spaceBetween={20}
-  slidesPerView={4} // Default: 1 slide for mobile
+  spaceBetween={10}
+  slidesPerView={1} // Show one slide in mobile view
+  slidesPerGroup={1} // Slide one by one
   breakpoints={{
-    480: { slidesPerView: 2 }, // 2 slides for screens ≥ 480px
-    768: { slidesPerView: 3 }, // 3 slides for screens ≥ 768px
-    1024: { slidesPerView: 4 }, // 4 slides for screens ≥ 1024px
+    480: { slidesPerView: 1, slidesPerGroup: 1 }, // Mobile
+    768: { slidesPerView: 2, slidesPerGroup: 2 }, // Tablet
+    1024: { slidesPerView: 3, slidesPerGroup: 3 }, // Desktop
+    1280: { slidesPerView: 4, slidesPerGroup: 4 }, // Large screens
   }}
-  navigation
+  navigation={true}
   pagination={{ clickable: true }}
-  autoplay={{ delay: 2000 }}
+  autoplay={{ delay: 2500, disableOnInteraction: false }}
   style={{ width: "100%", padding: "20px" }}
 >
 
@@ -1167,9 +1110,6 @@ Combo Products
   </style>
 </div>
 
-
-
-
 {/* our stander start------------------------------------------------------------------------------- */}
 <div style={{backgroundColor:"rgb(255, 255, 255)"}}>
 <div className="row" style={{ display: 'flex', justifyContent: 'space-between', gap: '20px', marginTop: "6rem", marginLeft: "3rem", marginRight: "3rem" }}>
@@ -1323,20 +1263,7 @@ Combo Products
     </div>
   </div>
 </div>
-
-
-
-
 {/* combo end-------------------------------------------------------------------------------------- */}
-
-
-
-
-
-
-
-
-
 {/* revie */}
 
 <Container fluid style={{ padding: "40px" }}>
@@ -1356,7 +1283,7 @@ Combo Products
         <p style={{ textAlign: "center" }}>Loading reviews...</p>
       ) : reviews.length > 0 ? (
         <Carousel interval={3000} indicators={true} controls={true}>
-          {reviews?.map((review, idx) => (
+          {reviews.map((review, idx) => (
             <Carousel.Item key={idx}>
               <Row
                 className="d-flex justify-content-center"
@@ -1487,10 +1414,6 @@ Combo Products
     </div>
   </div>
 </div>
-
-
-
-
 {/* blog end---------------------------------------------------------------------------------- */}
 
 <div
@@ -1537,19 +1460,7 @@ Combo Products
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
 {/* content end */}
-
-
-
-
 <Footer/>
 
 

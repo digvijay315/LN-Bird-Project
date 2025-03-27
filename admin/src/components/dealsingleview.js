@@ -259,123 +259,123 @@ const navigate=useNavigate()
   
     
 
-    const[matchsitevisitdata,setmatchsitevisitdata]=useState([])
-    const matchLeadData = (site) => {
-        const [title, firstName, lastName] = site.lead.split(" "); // Split full name into title, first name, last name
+    // const[matchsitevisitdata,setmatchsitevisitdata]=useState([])
+    // const matchLeadData = (site) => {
+    //     const [title, firstName, lastName] = site.lead.split(" "); // Split full name into title, first name, last name
       
-        if (
-          lead.title === title &&
-          lead.first_name === firstName &&
-          lead.last_name === lastName
-        ) {
-            setmatchsitevisitdata((prevData) => [...prevData, site]);
-            setalltask((prevData) => [...prevData, site]);
-        }
-      };
+    //     if (
+    //       lead.title === title &&
+    //       lead.first_name === firstName &&
+    //       lead.last_name === lastName
+    //     ) {
+    //         setmatchsitevisitdata((prevData) => [...prevData, site]);
+    //         setalltask((prevData) => [...prevData, site]);
+    //     }
+    //   };
 
      
 
 
 
 
-    useEffect(() => {
-        if (sitevisitdata.length > 0) {
-          sitevisitdata.forEach((site) => {
-            if (site.lead) {
-              // Now only need to match directly with site.lead
-              matchLeadData(site); 
-               // Assuming site contains lead.title, lead.first_name, lead.last_name
-            }
-          });
-        }
-      }, [sitevisitdata]);
+    // useEffect(() => {
+    //     if (sitevisitdata.length > 0) {
+    //       sitevisitdata.forEach((site) => {
+    //         if (site.lead) {
+    //           // Now only need to match directly with site.lead
+    //           matchLeadData(site); 
+    //            // Assuming site contains lead.title, lead.first_name, lead.last_name
+    //         }
+    //       });
+    //     }
+    //   }, [sitevisitdata]);
 
-      const[matchmeetingdata,setmatchmeetingdata]=useState([])
-      const matchleaddatawithmeeting = (meeting) => {
-          const [title, firstName, lastName] = meeting.lead.split(" "); // Split full name into title, first name, last name
+    //   const[matchmeetingdata,setmatchmeetingdata]=useState([])
+    //   const matchleaddatawithmeeting = (meeting) => {
+    //       const [title, firstName, lastName] = meeting.lead.split(" "); // Split full name into title, first name, last name
         
-          if (
-            lead.title === title &&
-            lead.first_name === firstName &&
-            lead.last_name === lastName
-          ) {
-            setmatchmeetingdata((prevData) => [...prevData, meeting]);
-            setalltask((prevData) => [...prevData, meeting]);
-          }
-        };
+    //       if (
+    //         lead.title === title &&
+    //         lead.first_name === firstName &&
+    //         lead.last_name === lastName
+    //       ) {
+    //         setmatchmeetingdata((prevData) => [...prevData, meeting]);
+    //         setalltask((prevData) => [...prevData, meeting]);
+    //       }
+    //     };
   
   
   
   
-      useEffect(() => {
-          if (meetingdata.length > 0) {
-            meetingdata.forEach((meeting) => {
-              if (meeting.lead) {
-                // Now only need to match directly with site.lead
-                matchleaddatawithmeeting(meeting);  // Assuming site contains lead.title, lead.first_name, lead.last_name
-              }
-            });
-          }
-        }, [meetingdata]);
+    //   useEffect(() => {
+    //       if (meetingdata.length > 0) {
+    //         meetingdata.forEach((meeting) => {
+    //           if (meeting.lead) {
+    //             // Now only need to match directly with site.lead
+    //             matchleaddatawithmeeting(meeting);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+    //           }
+    //         });
+    //       }
+    //     }, [meetingdata]);
 
-        const[matchmaildata,setmatchmaildata]=useState([])
-        const matchmaildatawithlead = (mail) => {
-            // const [title, firstName, lastName] = meeting.lead.split(" "); // Split full name into title, first name, last name
+    //     const[matchmaildata,setmatchmaildata]=useState([])
+    //     const matchmaildatawithlead = (mail) => {
+    //         // const [title, firstName, lastName] = meeting.lead.split(" "); // Split full name into title, first name, last name
           
-            if (
-              lead.title === mail.title2 &&
-              lead.first_name === mail.first_name &&
-              lead.last_name === mail.last_name
-            ) {
-                setmatchmaildata((prevData) => [...prevData, mail]);
-                setalltask((prevData) => [...prevData, mail]);
-            }
-          };
+    //         if (
+    //           lead.title === mail.title2 &&
+    //           lead.first_name === mail.first_name &&
+    //           lead.last_name === mail.last_name
+    //         ) {
+    //             setmatchmaildata((prevData) => [...prevData, mail]);
+    //             setalltask((prevData) => [...prevData, mail]);
+    //         }
+    //       };
     
     
     
     
-        useEffect(() => {
-            if (maildata.length > 0) {
-              maildata.forEach((mail) => {
+    //     useEffect(() => {
+    //         if (maildata.length > 0) {
+    //           maildata.forEach((mail) => {
                
-                  // Now only need to match directly with site.lead
-                  matchmaildatawithlead(mail);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+    //               // Now only need to match directly with site.lead
+    //               matchmaildatawithlead(mail);  // Assuming site contains lead.title, lead.first_name, lead.last_name
                 
-              });
-            }
-          }, [maildata]);
+    //           });
+    //         }
+    //       }, [maildata]);
     
 
-          const[matchcalldata,setmatchcalldata]=useState([])
-          const matchcalldatawithlead = (call) => {
-               const [title, firstName, lastName] = call.lead.split(" "); // Split full name into title, first name, last name
+    //       const[matchcalldata,setmatchcalldata]=useState([])
+    //       const matchcalldatawithlead = (call) => {
+    //            const [title, firstName, lastName] = call.lead.split(" "); // Split full name into title, first name, last name
             
-              if (
-                lead.title === title &&
-                lead.first_name === firstName &&
-                lead.last_name === lastName
-              ) {
-                setmatchcalldata((prevData) => [...prevData, call]);
-                setalltask((prevData) => [...prevData, call]);
-              }
-            };
+    //           if (
+    //             lead.title === title &&
+    //             lead.first_name === firstName &&
+    //             lead.last_name === lastName
+    //           ) {
+    //             setmatchcalldata((prevData) => [...prevData, call]);
+    //             setalltask((prevData) => [...prevData, call]);
+    //           }
+    //         };
       
       
       
       
-          useEffect(() => {
-              if (calldata.length > 0) {
-                calldata.forEach((call) => {
+    //       useEffect(() => {
+    //           if (calldata.length > 0) {
+    //             calldata.forEach((call) => {
                  
-                    // Now only need to match directly with site.lead
-                    matchcalldatawithlead(call);  // Assuming site contains lead.title, lead.first_name, lead.last_name
+    //                 // Now only need to match directly with site.lead
+    //                 matchcalldatawithlead(call);  // Assuming site contains lead.title, lead.first_name, lead.last_name
                   
-                });
-              }
-            }, [maildata]);
+    //             });
+    //           }
+    //         }, [maildata]);
 
-          console.log(alltask);
+    //       console.log(alltask);
           
 
 

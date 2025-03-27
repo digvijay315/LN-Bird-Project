@@ -701,8 +701,17 @@ const [selectedPayment, setSelectedPayment] = useState("cod");
 
 const logout = () => {
   localStorage.removeItem("usertoken"); 
-  window.dispatchEvent(new Event("storage")); 
-  navigate("/");
+  window.dispatchEvent(new Event("storage")); // Notify other components
+  navigate("/"); // Redirect to home page
+
+  // Prevent navigating back to the dashboard after logout
+  setTimeout(() => {
+    window.history.pushState(null, null, window.location.href);
+  }, 0);
+
+  window.onpopstate = () => {
+    navigate("/"); // If back button is pressed, redirect to home/login page
+  };
 };
 
   return (
@@ -806,7 +815,7 @@ const logout = () => {
                     <NavDropdown.Item as={Link} to="/myorders">My Orders</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/personalinfo">Personal Info</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/manageadds">Manage Address</NavDropdown.Item>
-                    <NavDropdown.Item onClick={logout}  as={Link} to="/faq">Logout</NavDropdown.Item>
+                    <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                   </NavDropdown>
                 </Nav>
               </Offcanvas.Body>
