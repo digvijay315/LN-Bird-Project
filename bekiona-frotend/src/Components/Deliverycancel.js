@@ -58,8 +58,8 @@ function Deliverycancel() {
               The estimated delivery time for orders will depend on your location and the shipping method selected:
             </p>
             <ul style={{ paddingLeft: "20px" }}>
-              <li style={{ fontFamily:"'Harmonia Sans', sans-serif" }}>Domestic Orders (India): 3-7 business days.</li>
-              <li style={{ fontFamily:"'Harmonia Sans', sans-serif" }}>International Orders: 7-14 business days (subject to customs processing).</li>
+              <li style={{ fontFamily:"'Harmonia Sans', sans-serif" }}>Domestic Orders (India): 8-14 business days.</li>
+              <li style={{ fontFamily:"'Harmonia Sans', sans-serif" }}>International Orders: 14-20 business days (subject to customs processing).</li>
             </ul>
           </section>
 
