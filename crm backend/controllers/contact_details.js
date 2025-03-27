@@ -276,7 +276,145 @@ const add_contact = async (req, res) => {
                 //       console.error('Error updating related deals:', error);
                 //     }
                 //   };
-                  
+
+                      const add_contactdocument = async (req, res) => {
+                                            try {
+                                              const id = req.params._id;  // Get lead ID from URL parameter
+                                              const user = await addcontact.findOne({ _id: id });  // Find the lead by ID
+                                          
+                                              if (!user) {
+                                                return res.send({ message: "Lead not found" });
+                                              }
+                                          
+                                              // Initialize arrays to hold new data
+                                              const newDocumentNo = req.body.document_no || [];
+                                              const newDocumentName = req.body.document_name || [];
+                                              const newDocumentPic = [];
+                                          
+                                              // Process files (if any)
+                                              if (req.files) {
+                                                // Upload files to Cloudinary and get the URLs
+                                                for (let file of req.files) {
+                                                  const result = await cloudinary.uploader.upload(file.path);
+                                                  newDocumentPic.push(result.secure_url);  // Store the URL of the uploaded image
+                                                  // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+                                                  // fs.unlinkSync(file.path);
+                                                }
+                                              }
+                                          
+                                              // Retrieve the current document fields (if any) from the user document
+                                              const oldDocumentNo = user.document_no || [];
+                                              const oldDocumentName = user.document_name || [];
+                                              const oldDocumentPic = user.document_pic || [];
+                                          
+                                              // Combine old and new document fields
+                                              const updatedDocumentNo = [...oldDocumentNo, ...newDocumentNo];  // Append new document numbers to the existing ones
+                                              const updatedDocumentName = [...oldDocumentName, ...newDocumentName];  // Append new document names to the existing ones
+                                              const updatedDocumentPic = [...oldDocumentPic, ...newDocumentPic];  // Append new document pictures to the existing ones
+                                          
+                                              // Prepare updated fields object
+                                              const updatedFields = {
+                                                ...req.body,  // Keep other fields intact from the request body
+                                                document_no: updatedDocumentNo,  // Updated document_no array
+                                                document_name: updatedDocumentName,  // Updated document_name array
+                                                document_pic: updatedDocumentPic,  // Updated document_pic array
+                                              };
+                                          
+                                              // Update the lead document in the database
+                                              const resp = await addcontact.findByIdAndUpdate(id, updatedFields, { new: true });
+                                          
+                                              // Return a success message
+                                              res.status(200).send({ message: "Lead updated successfully" });
+                                            } catch (error) {
+                                              console.error(error);  // Log error for debugging
+                                              res.status(500).send({ message: "An error occurred while updating the lead" });
+                                            }
+                                          };
+
+                     const update_contactsingledocument = async (req, res) => {
+                                                try {
+                                                  const id = req.params._id; // Get lead ID from URL parameter
+                                                  const { document_name, document_no } = req.body; // Get new values
+                                              
+                                              
+                                                     // Find the lead document by ID
+                                                  const user = await addcontact.findOne({ _id: id });
+                                              
+                                                  if (!user) {
+                                                    return res.status(404).send({ message: "Lead not found" });
+                                                  }
+                                              
+                                                  // Ensure document_name array exists
+                                                  if (!user.document_name || !Array.isArray(user.document_name)) {
+                                                    return res.status(400).send({ message: "No documents found in the lead" });
+                                                  }
+                                              
+                                                  // Find index where document_name matches
+                                                  const index = user.document_name.findIndex(name => name === document_name);
+                                                  
+                                                  if (index === -1) {
+                                                    return res.status(404).send({ message: "Document name not found" });
+                                                  }
+                                              
+                                                  // Handle file upload if a new document image is provided
+                                                  let newDocumentPic = user.document_pic[index]; // Keep existing image if no new file
+                                                  if (req.files && req.files.length > 0) {
+                                                    const result = await cloudinary.uploader.upload(req.files[0].path);
+                                                    newDocumentPic = result.secure_url; // Replace with new uploaded image
+                                                  }
+                                              
+                                                  // Update only the specific index
+                                                  user.document_no[index] = document_no;
+                                                  user.document_pic[index] = newDocumentPic;
+                                              
+                                                  // Save the updated document
+                                                  await user.save();
+                                              
+                                                  res.status(200).send({ message: "Contact document updated successfully" });
+                                                } catch (error) {
+                                                  console.error(error);
+                                                  res.status(500).send({ message: "An error occurred while updating the lead" });
+                                                }
+                                              };
+                  const delete_contactsingledocument = async (req, res) => {
+                                                try {
+                                                  const id = req.params._id; // Get lead ID from URL parameter
+                                                  const { document_name } = req.body; // Get document_name to delete
+                                      
+                                              
+                                                  // Find the lead document by ID
+                                                  const user = await addcontact.findOne({ _id: id });
+                                              
+                                                  if (!user) {
+                                                    return res.status(404).send({ message: "Lead not found" });
+                                                  }
+                                              
+                                                  // Ensure document_name array exists
+                                                  if (!user.document_name || !Array.isArray(user.document_name)) {
+                                                    return res.status(400).send({ message: "No documents found in the lead" });
+                                                  }
+                                              
+                                                  // Find index where document_name matches
+                                                  const index = user.document_name.findIndex(name => name === document_name);
+                                              
+                                                  if (index === -1) {
+                                                    return res.status(404).send({ message: "Document name not found" });
+                                                  }
+                                              
+                                                  // Remove elements at found index
+                                                  user.document_name.splice(index, 1);
+                                                  user.document_no.splice(index, 1);
+                                                  user.document_pic.splice(index, 1);
+                                              
+                                                  // Save the updated document
+                                                  await user.save();
+                                              
+                                                  res.status(200).send({ message: "Document deleted successfully" });
+                                                } catch (error) {
+                                                  console.error(error);
+                                                  res.status(500).send({ message: "An error occurred while deleting the document" });
+                                                }
+                                              };
                   
                   
 
@@ -284,4 +422,4 @@ const add_contact = async (req, res) => {
 
     module.exports={add_contact,view_contact,view_contact_Byid,remove_contact,update_contact,
                     view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany,
-                view_contact_ByName};
+                view_contact_ByName,update_contactsingledocument,delete_contactsingledocument,add_contactdocument};

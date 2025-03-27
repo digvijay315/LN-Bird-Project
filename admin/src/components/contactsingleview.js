@@ -11,7 +11,7 @@ import Table from '@mui/material/Table';
 import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import api from "../api";
-import { Tooltip } from 'react-bootstrap';
+import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, FormControl, InputLabel, Checkbox, ListItemText } from '@mui/material';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -2187,6 +2187,7 @@ setactivity({...activity, edit_field: "block",edit_value:selectblock})
 
 
 
+const [isLoading, setIsLoading] = useState(false);
 
 const [show8, setshow8] = useState(false);
 
@@ -2255,33 +2256,154 @@ setactivity({...activity,activity_name:"added docuemnt",lead:fullname})
 
 const updatedocumentoflead = async () => {
 try {
+  setIsLoading(true)
   const id = lead._id;  // Assuming selectedItems is the ID of the lead to update
 
- 
-  
-  const resp = await api.put(`adddocumentinlead/${id}`, leaddocument, {
+  const resp = await api.put(`adddocumentincontact/${id}`, leaddocument, {
     headers: {
       'Content-Type': 'multipart/form-data', // Ensure proper content-type for form-data
     },
   });
   const resp1=await api.post('addactivity',activity)
 
-  toast.success("Document added Successfully...", { autoClose: 2000 });
+  if(resp1.status===200)
+    {
+      Swal.fire({
+        icon: 'success',
+        title: 'Document Added',
+        text: 'Your document has been added successfully!',
+      });
+    }
 
-  // After success, navigate to the lead details page or reload
-  // setTimeout(() => {
-  //   navigate('/leaddetails');
-  // }, 2000);
   setTimeout(() => {
     window.location.reload();  // If necessary, reload the page
   }, 2000);
 } catch (error) {
   console.log(error);
+} finally {
+  setIsLoading(false); // Hide loader after API call
 }
 };
 
+const handleDownload = (item) => {
+  if (!item.pic) {
+    console.error("Image URL is not provided!");
+    return;
+  }
+
+  // Modify the Cloudinary URL to force download
+  const downloadUrl = item.pic.replace("/upload/", "/upload/fl_attachment/");
+
+  const link = document.createElement("a");
+  link.href = downloadUrl;
+  link.download = item.name || "downloaded_image.png"; // Set filename
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
 
 // =======================================================add document end==============================================================
+
+//================================= update document start=========================================================================
+
+const [show14, setshow14] = useState(false);
+
+const[updatedocument,setupdatedocument]=useState({document_no:"",document_name:"",document_pic:['']})
+
+const handleClose14 = () => setshow14(false);
+const handleShow14=async(item)=>
+{
+      setupdatedocument({document_no:item.number,document_name:item.name,document_pic:item.pic})
+      setshow14(true);
+      
+   
+}
+
+const handledocumentnochange11 = ( event) => {
+  setupdatedocument({
+    ...updatedocument,
+    document_no: event.target.value
+  });
+};
+
+const handledocumentpicchange11 = (event) => {
+  
+  const files = Array.from(event.target.files);
+  setupdatedocument({
+    ...updatedocument,
+    document_pic: files
+  });
+};
+
+
+  const updatesingledocument=async()=>
+  {
+    try {
+      setIsLoading(true); 
+      const resp=await api.put(`updatecontactdocumentsingle/${lead._id}`,updatedocument,config)
+      if(resp.status===200)
+        {
+          Swal.fire({
+            icon: 'success',
+            title: 'Document Updated',
+            text: 'Your document has been update successfully!',
+          });
+          handleClose14()
+        }
+        setTimeout(() => {
+         navigate('/contactdetails')
+        }, 1000);
+      
+    } catch (error) {
+      console.log(error);
+    }finally {
+      setIsLoading(false); // Hide loader after API call
+    }
+  }
+
+
+
+
+//==================================================== update document end========================================================
+
+
+//================================================= delete document start==========================================================
+
+const deletesingledocument=async(item)=>
+  {
+    try {
+      setIsLoading(true); 
+      const document_name = { document_name: item.name }; // Wrap inside an object
+      const resp=await api.delete(`deletecontactsingledocument/${lead._id}`,{data: document_name})
+      if(resp.status===200)
+        {
+          Swal.fire({
+            icon: 'success',
+            title: 'Document Deleted',
+            text: 'Your document has been deleted successfully!',
+          });
+        }
+        setTimeout(() => {
+         navigate('/contactdetails')
+        }, 1000);
+      
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error...',
+        text: `Error coming!!! ${error}`,
+      });
+    }
+    finally {
+      setIsLoading(false); // Hide loader after API call
+    }
+  }
+
+
+// ================================================delete document end==========================================================
+
 
 
 
@@ -2305,8 +2427,10 @@ try {
                           <li><img src={publish} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
                           <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
                           <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
-                          <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
-                          <li onClick={handleShow7} style={{borderBottom:"1px solid black",borderRadius:"5px"}}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+                          <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User
+                          <span style={{content: '""',position: "absolute",bottom: "60px",left: "10px",right: "10px",height: "1px",backgroundColor: "black"}}></span>
+                          </li>
+                          <li onClick={handleShow7}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
                           <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
                         </ul>
                         <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
@@ -3262,11 +3386,11 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible1 ? "200px" : "0",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
+        <TableContainer component={Paper} style={{ height: '200px' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow  style={{backgroundColor:"gray"}}>
           {allColumnsunit.map((col) => (
             <StyledTableCell
@@ -3277,25 +3401,20 @@ try {
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
-      <tbody>
+      </thead> */}
+       <tbody>
         {
          
         matchunit.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-           
-              {index + 1}
+         
+               <StyledTableCell style={{fontSize:"12px",whiteSpace: "nowrap",cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}>
+              <img src='https://cdn-icons-png.freepik.com/256/7875/7875876.png?semt=ais_hybrid' style={{height:"20px"}}></img>
+            <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3",marginLeft:"5px"}}>{item.unit_no} {item.project_name}</span><br></br>
+            <span style={{marginLeft:"30px"}}>{item.block}-{item.size}</span>
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.unit_no}
-            </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.project_name}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-             
-            </StyledTableCell>
+          
+         
           </StyledTableRow>
         ))}
       </tbody>
@@ -3364,19 +3483,42 @@ try {
         {
          
         alltask.map ((item, index) => (
-          <StyledTableRow key={index} onClick={()=>completetask(item)} style={{cursor:"pointer"}}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {index + 1}
+          <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
+              {/* {index + 1} */}<input type='checkbox'></input>
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-              {item.activity_type}
+            <StyledTableCell style={{fontSize:"14px",color:"#0086b3",whiteSpace:"wrap",cursor:"pointer"}}  onClick={()=>completetask(item)}>
+              <span style={{fontWeight:"bold"}}>{item.activity_type}</span> 
+            {
+              item.activity_type=="Meeting" ? (
+                <span style={{marginLeft:"5px"}}> [{item.reason}]<br></br></span>
+
+              ): item.activity_type=="SiteVisit" ? (
+              <span> [{Array.isArray(item.inventory)?item.inventory.join(','):item.inventory || item.reason}]<br></br></span>
+              ) : item.activity_type=="Mail" ? (
+                <span>[{item.subject}]<br></br></span>
+                ) :  <span> [{item.reason}]<br></br></span>
+            }
+             
+
+              {item.complete === "true" ? (
+          <span style={{color:"green",fontSize:"12px"}}>{item.start_date
+          ? formatDate(new Date(item.start_date)) 
+          : formatDate(new Date(item.due_date))}.</span>
+
+        ) : (item.complete === "" && new Date(item.due_date) > new Date()) || new Date(item.start_date) > new Date() ? (
+          <span style={{color:"blue"}}>{item.start_date
+          ? formatDate(new Date(item.start_date)) 
+          : formatDate(new Date(item.due_date))}.</span>
+
+        ) : (item.complete === "" && new Date(item.due_date) < new Date()) || new Date(item.start_date) < new Date() ? (
+          <span className='no-activity-flash' style={{fontSize:"12px"}}>{item.start_date
+            ? formatDate(new Date(item.start_date)) 
+            : formatDate(new Date(item.due_date))}.</span>
+        ) : ""}  <span style={{color:"gray"}}>{item.executive}</span>
+              
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-            {item.start_date
-              ? formatDate(new Date(item.start_date)) 
-              : formatDate(new Date(item.due_date))} 
-              {/* {item.start_date || item.due_date} {item.due_time} */}
-          </StyledTableCell>
+       
 
           <StyledTableCell style={{ fontSize: "12px" }}>
           {allColumnstask.map((col) => (
@@ -3384,9 +3526,9 @@ try {
       <span>
         {item.complete === "true" ? (
           <span style={{color:"green"}}>Complete</span>
-        ) : item.complete === "" && new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date() ? (
+        ) : (item.complete === "" && new Date(item.due_date) > new Date()) || new Date(item.start_date) > new Date() ? (
           <span style={{color:"blue"}}>Pending</span>
-        ) : item.complete === "" && new Date(item.due_date) < new Date() || new Date(item.start_date) < new Date() ? (
+        ) : (item.complete === "" && new Date(item.due_date) < new Date()) || new Date(item.start_date) < new Date() ? (
           <span className='no-activity-flash' style={{fontSize:"12px"}}>Overdue</span>
         ) : ""}
       </span>
@@ -3437,11 +3579,11 @@ try {
         </span>
         </div>
 
-        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
+        <div style={{backgroundColor:"white",marginTop:"10px",position:"sticky",zIndex:10,height: isTableVisible3 ? "200px" : "0",overflow: "hidden",transition: "height 0.3s ease"}}>
          
-        <TableContainer component={Paper} style={{ maxHeight: '200px', overflow: 'auto' }}>
+        <TableContainer component={Paper} style={{ height: '200px', overflow: 'auto' }}>
     <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+    {/* <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow style={{backgroundColor:"gray"}}>
           {allColumnsdocuments.map((col) => (
             <StyledTableCell
@@ -3452,31 +3594,70 @@ try {
             </StyledTableCell>
           ))}
         </TableRow>
-      </thead>
+      </thead> */}
       <tbody>
-        {
-        
-        documents.map ((item, index) => (
-          <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-              {index + 1}
-            </StyledTableCell>
-        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-          {item.name}
-        </StyledTableCell>
-        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-          {item.number}
-        </StyledTableCell>
-        <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px"}}>
-              {/* Eye button to trigger image preview */}
-              <button onClick={() => handlePreviewClick(item.pic)}>
-                👁️ {/* You can replace this with an icon */}
-              </button>
-        </StyledTableCell>
+          {
           
-          </StyledTableRow>
-        ))}
-      </tbody>
+          documents.map ((item, index) => (
+            <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+          
+          <StyledTableCell className="leaddocumentscolomncontact">
+    {/* Determine the document icon based on file extension */}
+    {(() => {
+      const fileName = item?.pic?.toLowerCase();
+      let fileIcon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe2devawXGAc34_HeWIm-44fpa-pljPOnNyw&s"; // Default icon
+  
+      if (fileName?.endsWith(".jpg") || fileName?.endsWith(".jpeg") || fileName?.endsWith(".png")) {
+        fileIcon = "https://i.pinimg.com/736x/c9/c1/43/c9c143f4f9bcf8e8ea5dec5047757307.jpg"; // Image icon
+      } else if (fileName?.endsWith(".pdf")) {
+        fileIcon = "https://www.freeiconspng.com/thumbs/pdf-icon-png/pdf-icon-png-pdf-zum-download-2.png"; // PDF icon
+      } else if (fileName?.endsWith(".doc") || fileName?.endsWith(".docx")) {
+        fileIcon = "https://png.pngtree.com/png-vector/20241025/ourlarge/pngtree-blue-document-color-icon-vector-illustration-png-image_14165553.png"; // Word document icon
+      } else if (fileName?.endsWith(".xlsx") || fileName?.endsWith(".xls")) {
+        fileIcon = "https://img.icons8.com/?size=512&id=13654&format=png"; // Excel icon
+      }
+  
+      return (
+        <img
+          src={fileIcon}
+          alt={item.name}
+          style={{ width: 30, height: 30, marginRight: 5, cursor: "pointer" }}
+          onClick={() => handlePreviewClick(item.pic)}
+        />
+      );
+    })()}
+  
+    <span style={{ fontSize: "14px", color: "#0086b3" }}>{item.name}</span> [{item.number}]
+  
+    <span className="documentsactionscontact">
+      <Tooltip title="download...">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/4007/4007698.png"
+          onClick={() => handleDownload(item)}
+          style={{ height: "20px", cursor: "pointer" }}
+        />
+      </Tooltip>
+      <Tooltip title="update...">
+        <img onClick={()=>handleShow14(item)}
+          src="https://icons.veryicon.com/png/o/miscellaneous/linear-small-icon/edit-246.png"
+          style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}
+        />
+      </Tooltip>
+      <Tooltip title="delete...">
+        <img
+        onClick={()=>deletesingledocument(item)}
+          src="https://png.pngtree.com/png-clipart/20220926/original/pngtree-delete-button-3d-icon-png-image_8633077.png"
+          style={{ height: "20px", marginLeft: "10px", cursor: "pointer" }}
+        />
+      </Tooltip>
+    </span>
+  </StyledTableCell>
+  
+     
+            
+            </StyledTableRow>
+          ))}
+        </tbody>
 
        {/* Modal or Image Preview */}
        {openPreview && (
@@ -4784,6 +4965,106 @@ fontWeight:"lighter"
 
 
 {/*========================================== add document details end ===================================================================*/}
+
+
+{/*====================================================== update document start=================================================== */}
+
+<Modal show={show14} onHide={handleClose14} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Update Documents</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                  <div className="row">
+                        <div className="col-md-3"><label className="labels">Document No.</label>
+                         
+                                <input type="text" 
+                                value={updatedocument.document_no}
+                                name='document_no'
+                                style={{marginTop:"10px"}}
+                                className="form-control form-control-sm" 
+                                onChange={(event)=>handledocumentnochange11(event)}
+                                />
+                          
+                            </div>
+                            <div className="col-md-3"><label className="labels">Document Name</label>
+                           
+                                <select
+                                className='form-control form-control-sm'
+                                style={{marginTop:"10px"}}
+                                
+                                >
+                             <option>{updatedocument.document_name}</option>
+                            </select>
+                          
+                            </div>
+                          
+                            <div className="col-md-4">
+                              <label className="labels">Document Picture</label>
+                    
+                                  <input type="file" 
+                                  name='document_pic'
+                                  style={{marginTop:"10px"}}
+                                  className="form-control form-control-sm" 
+                                  onChange={(event)=>handledocumentpicchange11(event)}
+                                  />
+                                  <img src={updatedocument.document_pic}></img>
+                        </div>
+                      </div>
+
+                      </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updatesingledocument}>
+                Update Document
+              </Button>
+              <Button variant="secondary" onClick={handleClose14}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+{/*===================================================== update document end =========================================================*/}
+
+
+{/* ========================================loader start============================================================== */}
+
+<>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading document...</p>
+        </div>
+      </div>
+    )}
+  </>
+
+{/*=================================== loader end======================================================================= */}
+
 
 
 <ToastContainer/>

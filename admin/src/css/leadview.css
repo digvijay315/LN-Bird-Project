@@ -55,4 +55,19 @@
   .leaddocumentscolomn:hover .documentsactions {
     display: block;
   }
+
+  .leaddocumentscolomncontact {
+    position: relative;
+  }
+  
+  .documentsactionscontact {
+    display: none;
+    position: absolute;
+    right: 0;
+   margin-top: -25px;
+  }
+  
+  .leaddocumentscolomncontact:hover .documentsactionscontact {
+    display: block;
+  } 
   
