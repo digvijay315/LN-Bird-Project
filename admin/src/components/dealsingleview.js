@@ -2813,7 +2813,9 @@ const handleShow13=async()=>
               <li><img src={publish} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
               <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
               <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
-              <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User</li>
+              <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User
+              <span style={{content: '""',position: "absolute",bottom: "60px",left: "10px",right: "10px",height: "1px",backgroundColor: "black"}}></span>
+              </li>
               <li onClick={handleShow10} style={{borderBottom:"1px solid black",borderRadius:"5px"}}><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
               <li onClick={deletedeal}><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
             </ul>
@@ -3083,9 +3085,9 @@ const handleShow13=async()=>
                                 </Tooltip>
                               
                     </div>
-                    <div className='col-md-3'>  <Tooltip title="Change Owner..." arrow>
+                    {/* <div className='col-md-3'>  <Tooltip title="Change Owner..." arrow>
                                   <img src='https://static.vecteezy.com/system/resources/thumbnails/020/589/549/small/icon-with-simple-left-arrow-and-right-arrow-vector.jpg' onClick={handleShow9} style={{height:"40px",right:"5px",cursor:"pointer",marginTop:"-5px"}} ></img>
-                                </Tooltip></div> 
+                                </Tooltip></div>  */}
                     <div className='col-md-12'><hr></hr></div>
                    
 

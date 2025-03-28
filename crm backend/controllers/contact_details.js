@@ -416,10 +416,68 @@ const add_contact = async (req, res) => {
                                                 }
                                               };
                   
-                  
+                                            //   const addbulkcontacts = async (req, res) => {
+                                            //     try {
+                                            //         const contacts = req.body
+                                            
+                                            //         if (!Array.isArray(contacts)) {
+                                            //         return res.status(400).send({ message: 'Invalid data format. Expected an array of employees.' });
+                                            //         }
+                                            
+                                            //          // Iterate over each employee and save to the database
+                                            //          const savedcontacts = [];
+                                            //         for (const contact of contacts) {
+                                            //         const {  title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
+                                            //             source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
+                                            //             company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
+                                            //             father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
+                                            //             birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
+                                            //             income, amount1, document_no, document_name,document_pic, relation, lastcommunication } = contact;
+                                            
+                                            //         const contact_data = new addcontact({ title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
+                                            //             source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
+                                            //             company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
+                                            //             father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
+                                            //             birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
+                                            //             income, amount1, document_no, document_name,document_pic, relation, lastcommunication})
+                                            
+                                            //         const savedcontact = await contact_data.save();  // Save each employee
+                                            //         savedcontacts.push(savedcontact);
+                                            //         }
+                                            
+                                            //     res.status(200).send({ message: 'Contacts saved successfully', contacts: savedcontacts });
+                                            
+                                            //     } catch (error) {
+                                            //         console.error('Error occurred during saving data:', error);
+                                            //         res.status(500).send({ message: 'An error occurred while saving employee data', error });
+                                            //     }
+                                            // }
 
+                                            const addbulkcontacts = async (req, res) => {
+                                                try {
+                                                    let contacts = req.body;
+                                                    
+                                              // If contacts is an object with numeric keys, convert it into an array
+                                                    if (!Array.isArray(contacts)) {
+                                                        contacts = Object.values(contacts); // Extract values as an array
+                                                    }
+
+                                                    if (!Array.isArray(contacts)) {
+                                                        return res.status(400).send({ message: 'Invalid data format. Expected an array of contacts.' });
+                                                    }
+                                            
+                                                    // Use insertMany for bulk insert
+                                                    const savedContacts = await addcontact.insertMany(contacts);
+                                            
+                                                    res.status(200).send({ message: 'Contacts saved successfully', contacts: savedContacts });
+                                                } catch (error) {
+                                                    console.error('Error occurred during saving data:', error);
+                                                    res.status(500).send({ message: 'An error occurred while saving contact data', error });
+                                                }
+                                            };
+                                            
                 
 
     module.exports={add_contact,view_contact,view_contact_Byid,remove_contact,update_contact,
                     view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany,
-                view_contact_ByName,update_contactsingledocument,delete_contactsingledocument,add_contactdocument};
+                view_contact_ByName,update_contactsingledocument,delete_contactsingledocument,add_contactdocument,addbulkcontacts};

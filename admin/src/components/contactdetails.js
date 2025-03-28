@@ -28,6 +28,9 @@ import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import Swal from 'sweetalert2'; 
 
 
 
@@ -139,11 +142,31 @@ function Fetchcontact() {
               toast.error("please select first",{autoClose:"2000"})
               return
             }
+
+            // Show confirmation message
+            const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, delete it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+
             const resp = selectedItems.map(async (itemId) => {
               await api.delete(`deletecontact/${itemId}`);
             });
             
-            toast.success('Selected items deleted successfully',{autoClose:"2000"})
+              Swal.fire({
+                          icon: 'success',
+                          title: 'Contact Deleted',
+                          text: 'Selected items deleted successfully!',
+                        });
             setTimeout(() => {
               window.location.reload();
             }, 2000);
@@ -2611,8 +2634,135 @@ const handleMouseUp = () => {
                       };
 
 
+ // =====================================import and download sample data code start====================================================
 
-console.log(leadinfo);
+ const contactdata = [
+  { title:"mr.",first_name:"alex",last_name:"dow",country_code:['+91','+92'].join(', '),mobile_no:['7047752734','9755882635'].join(', '),
+    mobile_type:['home','personal'].join(', '),
+    email:['alex@gmail.com','xyz@gmail.com'].join(', '),email_type:['personal','home'].join(', '),tags:"no",descriptions:"my account",
+    source:"online",team:"marketing",owner:"suraj",visible_to:"all",
+  
+    profession_category:"engineer",profession_subcategory:"it",designation:"developer",company_name:"papaya palette",country_code1:"+91",
+    company_phone:"99554459405",
+    company_email:"papaya@gmail.com",area:"sec 63",location:"worx ways",city:"noida",pincode:"201301",state:"up",country:"india",
+    industry:"it",company_social_media:['papaya@facebook.com','papaya@twitter.com'].join(', '),company_url:['papaya.com','papayapalette.com'].join(', '),
+  
+    father_husband_name:"jon dow",h_no:"13",area1:"bishanpura",location1:"sec 58",city1:"noida",pincode1:"201301",state1:"up",
+    country1:"india",gender:"male",maritial_status:"married",
+    birth_date:"26th feb 1993",anniversary_date:"25th feb 2025",education:['btec','bsi.it'].join(', '),degree:['enginner','mern'].join(', '),
+    school_college:['skmu','interanshala'].join(', '),loan:['personal','home'].join(', '),bank:['sbi','pnb'].join(', '),amount:['100','200'].join(', '),
+    social_media:['facebook','twitter'].join(', '),url:['alex12548.facebook.com','alex@twitter.com'].join(', '),
+    income:['personal','job'].join(', '),amount1:['10000','25000'].join(', '),document_no:['01','02'].join(', '),
+    document_name:['aadhar card','pan card'].join(', '),document_pic:['url.cloudinary.com','url2.cloudinary.com'].join(', ')
+  }
+];
+
+const generateExcelFileunit = () => {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new();
+
+  // Convert the data into a worksheet
+  const ws = XLSX.utils.json_to_sheet(contactdata);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  // Generate the Excel file as a Blob
+  const excelFile = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+
+  // Save the file using file-saver
+  const blob = new Blob([excelFile], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  saveAs(blob, 'data.xlsx');
+};
+
+
+const [show7, setshow7] = useState(false);
+const handleClose7 = () => setshow7(false);
+const handleShow7=async()=>
+{
+  setshow7(true);
+
+}
+
+const handleFileChange = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    if (data.length > 0) {
+      const updatecontact = data.map((row) => {
+        let newcontact = {}; // Instead of spreading undefined 'contact', create a new object
+
+        Object.keys(row).forEach((key) => {
+          if (Array.isArray(contact[key])) {
+            newcontact[key] = row[key] ? row[key].split(', ') : []; // Convert string back to array
+          } else {
+            newcontact[key] = row[key];
+          }
+        });
+
+        return newcontact;
+      });
+
+      setcontact(updatecontact); // Properly update state with new contact data
+    } else {
+      toast.error('No data found in the Excel file.');
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+};
+
+
+  const addcontact=async(e)=>
+    {
+        e.preventDefault();
+        try {
+
+           // Show confirmation message
+           const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure want to import data?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, import it!",
+          });
+      
+          if (!result.isConfirmed) {
+            return; // Stop execution if user cancels
+          }
+            const resp= await api.post('addbulkcontact',contact,config)
+            handleClose7()
+        if(resp.status===200)
+            {
+              Swal.fire({
+                icon: 'success',
+                title: 'Import',
+                text: 'Contacts Imported successfully!',
+              });
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+            }
+            
+      
+        } catch (error) {
+            toast.error(error.response.data.message,{ autoClose: 3000 })
+        }
+    }
+
+//======================================import and download sample data code end===========================================================
+
+
 
 
 
@@ -2626,14 +2776,19 @@ console.log(leadinfo);
       <div style={{marginTop:"60px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Contact </h3>
-        <Tooltip title="Export Data.." arrow>
+       
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
             <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
-        </button></Tooltip>
-            <ul class="dropdown-menu" id="exporttoexcel"> 
+        </button>
+            <ul class="dropdown-menu" id="exporttoexcel" style={{textAlign:"left",padding:"0px",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",fontFamily:"arial",fontSize:"14px",lineHeight:"30px"}}> 
             
-            <li  onClick={exportToExcel} >Export Data</li>
-              
+            <li  onClick={exportToExcel} ><img src="https://static.thenounproject.com/png/1960252-200.png" style={{height:"20px",marginTop:"5px"}}></img>
+            Export Data
+            </li>
+            <li  onClick={handleShow7}><img src="https://www.svgrepo.com/show/447311/database-import.svg" style={{height:"20px",marginTop:"5px"}}></img>
+            Import Data</li>
+            <li  onClick={generateExcelFileunit}><img src="https://static.thenounproject.com/png/2406231-200.png"  style={{height:"20px",marginTop:"5px"}}></img>
+            Download Data(sample)</li>
             </ul>
             
 
@@ -4391,6 +4546,7 @@ console.log(leadinfo);
                 <div className="row mt-3" id='basicdetails2'>
                 <div className="col-md-4" > <label className="labels">Country</label>
                     {
+                      Array.isArray(contact.country_code)?
                       contact.country_code.map((item,index)=>
                       (
                         <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
@@ -4402,11 +4558,12 @@ console.log(leadinfo);
                           ))
                         }
                         </select> 
-                      ))
+                      )):[]
                     }
                     </div>
                     <div className="col-md-4"><label className="labels">Mobile Number</label>
                     {
+                      Array.isArray(contact.mobile_no)?
                        contact.mobile_no.map((item,index)=>
                         (
                           <input type="text" required="true" style={{marginTop:"10px"}} 
@@ -4414,11 +4571,12 @@ console.log(leadinfo);
                           placeholder="enter phone number" 
                           onChange={(event)=>handlemobile_nochange(index,event)}/>
                           
-                        ))
+                        )):[]
                     }
                     </div>
                     <div className="col-md-2"><label className="labels">Type</label>
                     {
+                      Array.isArray(contact.mobile_type)?
                        contact.mobile_type.map((item,index)=>
                         (
                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
@@ -4430,11 +4588,12 @@ console.log(leadinfo);
                                   <option>Phone</option>
                         </select>
                           
-                        ))
+                        )):[]
                     }
                     </div>
                     <div className="col-md-1" style={{marginTop:"90px"}}>
                     {
+
                       Array.isArray(contact.action1) ?
                        contact.action1.map((item,index)=>
                         (
@@ -4448,18 +4607,20 @@ console.log(leadinfo);
                     
                   <div className="col-md-8"><label className="labels">Email-Address</label>
                     {
+                       Array.isArray(contact.email)?
                         contact.email.map((item,index)=>
                         (
                           <input type="text" style={{marginTop:"10px"}}
                           className="form-control form-control-sm" 
                           placeholder="enter email-id"
                           onChange={(event)=>handleemailchange(index,event)}/>
-                        ))
+                        )):[]
                     }
                     </div>
                     
                     <div className="col-md-2"><label className="labels">Type</label>
                     {
+                       Array.isArray(contact.email_type)?
                        contact.email_type.map((item,index)=>
                         (
                           <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
@@ -4469,7 +4630,7 @@ console.log(leadinfo);
                                 <option>Official</option>
                                 <option>Business</option>
                         </select>
-                        ))
+                        )):[]
                     }
                    </div>
                   
@@ -4985,6 +5146,29 @@ console.log(leadinfo);
             </Modal.Footer>
           </Modal>
 
+
+{/* =============================================import file modal start ============================================================*/}
+
+                    <Modal show={show7} onHide={handleClose7} size='lg'>
+                                <Modal.Header>
+                                  <Modal.Title>Import Units Data</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                    
+                                <input type="file" accept=".xlsx,.xls" onChange={handleFileChange}  id="import-file" />
+                    
+                                </Modal.Body>
+                                <Modal.Footer>
+                                <Button variant="secondary" onClick={addcontact}>
+                                    Add Contact
+                                  </Button>
+                                  <Button variant="secondary" onClick={handleClose7}>
+                                    Close
+                                  </Button>
+                                </Modal.Footer>
+                              </Modal>
+
+{/*=============================================== import file modal end============================================================= */}
 
 
           <ToastContainer/>
