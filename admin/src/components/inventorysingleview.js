@@ -2851,6 +2851,11 @@ maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
 website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
+
+
+
+
+
 const [show9, setshow9] = useState(false);
     
                   const handleClose9 = () => setshow9(false);
@@ -2865,8 +2870,8 @@ const [show9, setshow9] = useState(false);
                     const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
                     setunits(resp.data.project.add_unit[0])
                     
-                    const resp1=await api.get(`viewdealbyid/${lead._id}`)
-                    setdeal(resp1.data.deal)
+                    // const resp1=await api.get(`viewdealbyid/${lead._id}`)
+                    // setdeal(resp1.data.deal)
                    
                   }
                 // console.log(units.owner_details);
@@ -2877,9 +2882,14 @@ const [show9, setshow9] = useState(false);
             const project=lead.project_name
             const block=lead.block
             const unit=lead.unit_no
+
+            const payload = {
+              owner_details: units.owner_details,
+              associated_contact: units.associated_contact
+            };
             try {
               const resp2=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
-              // const resp3=await api.put(`updatedeal/${lead._id}`,deal)
+              const resp3=await api.put(`updatedealowner/${project}/${block}/${unit}`,payload)
               toast.success(`Data updated successfully`,{autoClose:"2000"})
                               setTimeout(() => {
                                 window.location.reload()
@@ -2955,44 +2965,44 @@ const [show9, setshow9] = useState(false);
                   };
           
                   const [relation1,setrelation1]=useState("")
-                  React.useEffect(() => {
-                    
-                    
-                    if (relation === "Self") {
-                      setrelation("")
-                      setselectedcontact1(prevContacts => [
-                        ...prevContacts,
-                        newcontact // Add the new contact (assumed to be an object)
-                      ]);
-                      setunits(prevDeal => ({
-                        ...prevDeal,
-                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
-                      }));
-                      setdeal(prevDeal => ({
-                        ...prevDeal,
-                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
-                      }));
-                     
-                    }
-                     else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
-                      
-                      setselectedcontact2(prevContacts => [
-                        ...prevContacts,
-                        newcontact // Add the new contact for other relations
-                      ]);
-                      setunits(prevDeal => ({ ...prevDeal, relation: relation }));
-                      setunits(prevDeal => ({
-                        ...prevDeal,
-                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
-                      }));
-                      setdeal(prevDeal => ({
-                        ...prevDeal,
-                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
-                      }));
-                      setrelation1(relation)
-                      setrelation("")
-                    }
-                  }, [relation,newcontact]);
+                    React.useEffect(() => {
+                                    
+                                    
+                                    if (relation === "Self") {
+                                      setrelation("")
+                                      setselectedcontact1(prevContacts => [
+                                        ...prevContacts,
+                                        newcontact // Add the new contact (assumed to be an object)
+                                      ]);
+                                      setunits(prevDeal => ({
+                                        ...prevDeal,
+                                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+                                      }));
+                                      setdeal(prevDeal => ({
+                                        ...prevDeal,
+                                        owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+                                      }));
+                                     
+                                    }
+                                     else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+                                      
+                                      setselectedcontact2(prevContacts => [
+                                        ...prevContacts,
+                                        newcontact // Add the new contact for other relations
+                                      ]);
+                                      setunits(prevDeal => ({ ...prevDeal, relation: relation }));
+                                      setunits(prevDeal => ({
+                                        ...prevDeal,
+                                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+                                      }));
+                                      setdeal(prevDeal => ({
+                                        ...prevDeal,
+                                        associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+                                      }));
+                                      setrelation1(relation)
+                                      setrelation("")
+                                    }
+                                  }, [relation,newcontact]);
           
           
                  
@@ -7003,6 +7013,38 @@ fontWeight:"lighter"
 
 {/*================================================== change owner end================================================= */}
 
+{/*====================================== relation modal start=============================================================== */}
+
+                 <Modal show={show22} onHide={handleClose22} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
+                                    <Modal.Header>
+                                      <Modal.Title>Choose Relation</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+                                    <div style={{width:"100%"}}>
+                                    <div className="row">
+                                            <div className="col-md-4"><label className="labels">Relation</label><select className="form-control form-control-sm" required="true" onChange={handlerelationchange}>
+                                                      <option>Select</option>
+                                                      <option value="Self">Self</option>
+                                                      <option value="Son">Son</option>
+                                                      <option value="Father">Father</option>
+                                                      <option value="Mother">Mother</option>
+                                                      <option value="Uncle">Uncle</option>
+                                                      <option value="Other">Other</option>
+                                                </select>
+                                          </div>
+                                       </div>
+                                   </div>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                      <Button variant="secondary" onClick={handleClose22}>
+                                        Close
+                                      </Button>
+                                    </Modal.Footer>
+                                  </Modal>
+              
+
+
+{/*========================================== relation modal end============================================================= */}
 
 
 

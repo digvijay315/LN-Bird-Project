@@ -147,12 +147,12 @@ const[product1,setproduct1]=useState([])
       }));
   
       // Revert button color after 1 second
-      setTimeout(() => {
-        setButtonColors((prev) => ({
-          ...prev,
-          [product._id]: "rgb(51, 51, 51)", // Original color
-        }));
-      }, 1000);
+      // setTimeout(() => {
+      //   setButtonColors((prev) => ({
+      //     ...prev,
+      //     [product._id]: "rgb(51, 51, 51)", // Original color
+      //   }));
+      // }, 1000);
   
       // Set cart message
       setCartMessage((prev) => ({
@@ -503,7 +503,9 @@ Combo Products
             onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)",
+                backgroundColor: cart.some(item => item._id === product._id) 
+                ? "green"  // Change this to your desired color when item is in cart
+                : "rgb(51, 51, 51)",
               color: "white",
               border: "none",
               padding: "12px 30px",
@@ -517,6 +519,29 @@ Combo Products
             }}
           >
             Add to Cart
+          </button>
+
+          <button
+            // onClick={() => handleprouctadd(product)}
+            className="add-to-cart-btn"
+            style={{
+              // backgroundColor: cart.some(item => item._id === product._id) 
+              // ? "green"  // Change this to your desired color when item is in cart
+              // : "rgb(51, 51, 51)",
+              backgroundColor:"rgb(51, 51, 51)",
+              color: "white",
+              border: "none",
+              padding: "12px 30px",
+              borderRadius: "5px",
+              fontSize: "0.9rem",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              marginTop: "10px",
+              width: "80%",
+              fontWeight: "bold",
+            }}
+          >
+            Buy Now
           </button>
 
           {/* Display message if available */}
@@ -841,7 +866,9 @@ Combo Products
             onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)",
+              backgroundColor: cart.some(item => item._id === product._id) 
+              ? "green"  // Change this to your desired color when item is in cart
+              : "rgb(51, 51, 51)",
               color: "white",
               border: "none",
               padding: "12px 30px",
@@ -855,6 +882,28 @@ Combo Products
             }}
           >
             Add to Cart
+          </button>
+          <button
+            // onClick={() => handleprouctadd(product)}
+            className="add-to-cart-btn"
+            style={{
+              // backgroundColor: cart.some(item => item._id === product._id) 
+              // ? "green"  // Change this to your desired color when item is in cart
+              // : "rgb(51, 51, 51)",
+              backgroundColor:"rgb(51, 51, 51)",
+              color: "white",
+              border: "none",
+              padding: "12px 30px",
+              borderRadius: "5px",
+              fontSize: "0.9rem",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              marginTop: "10px",
+              width: "80%",
+              fontWeight: "bold",
+            }}
+          >
+            Buy Now
           </button>
         </div>
       </div>

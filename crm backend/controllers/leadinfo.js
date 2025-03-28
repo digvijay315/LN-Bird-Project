@@ -184,15 +184,13 @@ const lead_info=async(req,res)=>
                         const id = req.params._id;
                         const user = await leadinfo.findOne({ _id: id });
               
-                
-                
-                
                         if (!user) {
                             return res.send({ message: "Lead not found" });
                         }
                       
+                        const olddocuments=user.document_pic
                         // Create an object to hold fields to be updated
-                        const updatedFields = { ...req.body };
+                        let updatedFields = { ...req.body };
                 
                         // Only process files if they are provided
                         if (req.files) {
@@ -207,6 +205,10 @@ const lead_info=async(req,res)=>
                             if (newDocumentPic.length > 0) {
                                 updatedFields.document_pic = newDocumentPic; // Update document_pic with new images
                             }
+                        }
+
+                        if(!req.files){
+                            updatedFields.document_pic = olddocuments; 
                         }
                 
                         // Update the lead document with the new data

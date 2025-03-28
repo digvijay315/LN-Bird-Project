@@ -158,6 +158,8 @@ const add_deal = async (req, res) => {
                     {
                         try {
                             const id=req.params._id;
+                            console.log(id);
+                            
                             const user=await adddeal.findOne({_id:id})
                             if(!user)
                                 {
@@ -180,8 +182,6 @@ const add_deal = async (req, res) => {
                     const update_dealbyprojectandunit = async (req, res) => {
                         try {
                          
-                     
-                          
                           const { project, block,unit_number } = req.params;  // Extract project and unit from URL params
                           const { newstage } = req.body;  // Extract new stage from request body
                       
@@ -198,6 +198,32 @@ const add_deal = async (req, res) => {
                             return res.status(400).send({ message: "No deal found with the specified unit number and block" });
                           }
                       
+                          // Return success message with the count of updated deals
+                          return res.status(200).send({ message: `${result.modifiedCount} deal(s) updated successfully` });
+                      
+                        } catch (error) {
+                          console.error(error);
+                          return res.status(500).send({ message: "Internal Server Error" });
+                        }
+                      };
+                      
+
+                      const update_dealbyprojectandunitforownerdetails = async (req, res) => {
+                        try {
+                         
+                          const { project, block,unit_number } = req.params;  // Extract project and unit from URL params
+                          
+                        
+                          // Update all matching deals in a single operation
+                          const result = await adddeal.updateMany(
+                            { project: project, block: block, unit_number: unit_number },
+                            { $set: { owner_details: req.body.owner_details,associated_contact:req.body.associated_contact } }
+                          );
+                      
+                          // If no deals were updated
+                          if (result.matchedCount === 0) {
+                            return res.status(400).send({ message: "No deal found with the specified unit number and block" });
+                          }
                           // Return success message with the count of updated deals
                           return res.status(200).send({ message: `${result.modifiedCount} deal(s) updated successfully` });
                       
@@ -270,5 +296,5 @@ const add_deal = async (req, res) => {
         
     
     module.exports={add_deal,view_deal,view_deal_Bystage,remove_deal,update_deal,view_deal_Byid,update_dealbysingle,update_dealbyowner,
-        update_dealbyprojectandunit,view_deal_Byproject
+        update_dealbyprojectandunit,view_deal_Byproject,update_dealbyprojectandunitforownerdetails
     };

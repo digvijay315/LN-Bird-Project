@@ -2684,42 +2684,165 @@ const handleShow7=async()=>
 
 }
 
+// const handleFileChange = (event) => {
+//   const file = event.target.files[0];
+//   if (!file) return;
+
+//   const reader = new FileReader();
+//   reader.onload = (e) => {
+//     const arrayBuffer = e.target.result;
+//     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+//     const sheetName = workbook.SheetNames[0];
+//     const sheet = workbook.Sheets[sheetName];
+//     const data = XLSX.utils.sheet_to_json(sheet);
+
+//     if (data.length > 0) {
+//       const updatecontact = data.map((row) => {
+//         let newcontact = {}; // Instead of spreading undefined 'contact', create a new object
+
+//         Object.keys(row).forEach((key) => {
+//           if (Array.isArray(contact[key])) {
+//             newcontact[key] = row[key] ? row[key].split(', ') : []; // Convert string back to array
+//           } else {
+//             newcontact[key] = row[key];
+//           }
+//         });
+
+//         return newcontact;
+//       });
+
+//       setcontact(updatecontact); // Properly update state with new contact data
+//     } else {
+//       toast.error('No data found in the Excel file.');
+//     }
+//   };
+
+//   reader.readAsArrayBuffer(file);
+// };
+
+// const handleFileChange = (event) => {
+//   const file = event.target.files[0];
+//   if (!file) return;
+
+//   const reader = new FileReader();
+//   reader.onload = (e) => {
+//     const arrayBuffer = e.target.result;
+//     const workbook = XLSX.read(arrayBuffer, { type: "array" });
+//     const sheetName = workbook.SheetNames[0];
+//     const sheet = workbook.Sheets[sheetName];
+//     const data = XLSX.utils.sheet_to_json(sheet);
+
+//     if (data.length > 0) {
+//       const updatecontact = data.map((row) => {
+//         let newcontact = {}; // Create a new contact object
+
+//         Object.keys(row).forEach((key) => {
+//           let value = row[key];
+
+//           // Automatically detect and convert CSV-style values back to arrays
+//           if (typeof value === "string" && value.includes(",")) {
+//             newcontact[key] = value.split(",").map((v) => v.trim());
+//           } else {
+//             newcontact[key] = value;
+//           }
+//         });
+
+//         return newcontact;
+//       });
+
+//       setcontact(updatecontact); // Update state with the new contact data
+//     } else {
+//       toast.error("No data found in the Excel file.");
+//     }
+//   };
+
+//   reader.readAsArrayBuffer(file);
+// };
+
+
+const databaseFields = [
+  "title", "first_name", "last_name", "country_code", "mobile_no", "mobile_type",
+  "email", "email_type", "tags", "descriptions", "source", "team", "owner", "visible_to",
+  "profession_category", "profession_subcategory", "designation", "company_name",
+  "company_phone", "company_email", "area", "location", "city", "pincode", "state", "country",
+  "industry", "company_social_media", "company_url", "father_husband_name", "h_no", "area1",
+  "location1", "city1", "pincode1", "state1", "country1", "gender", "maritial_status",
+  "birth_date", "anniversary_date", "education", "degree", "school_college", "loan",
+  "bank", "amount", "social_media", "url", "income", "amount1", "document_no",
+  "document_name", "document_pic"
+];
+
+const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
+const [mappedFields, setMappedFields] = useState({}); // Store user-selected mapping
+const [selectedFile, setSelectedFile] = useState(null); // Store uploaded file
+
+// 🔹 Step 1: Extract Headers from Excel File
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
+  setSelectedFile(file); // Store file for later use
+
   const reader = new FileReader();
   reader.onload = (e) => {
     const arrayBuffer = e.target.result;
-    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json(sheet);
 
     if (data.length > 0) {
-      const updatecontact = data.map((row) => {
-        let newcontact = {}; // Instead of spreading undefined 'contact', create a new object
-
-        Object.keys(row).forEach((key) => {
-          if (Array.isArray(contact[key])) {
-            newcontact[key] = row[key] ? row[key].split(', ') : []; // Convert string back to array
-          } else {
-            newcontact[key] = row[key];
-          }
-        });
-
-        return newcontact;
-      });
-
-      setcontact(updatecontact); // Properly update state with new contact data
+      setExcelHeaders(Object.keys(data[0])); // Extract column headers
     } else {
-      toast.error('No data found in the Excel file.');
+      toast.error("No data found in the Excel file.");
     }
   };
 
   reader.readAsArrayBuffer(file);
 };
 
+// 🔹 Step 2: Process & Map Data Based on User Selection
+const handleProcessFile = () => {
+  if (!selectedFile) {
+    toast.error("No file selected. Please upload a file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    if (data.length > 0) {
+      const updatecontact = data.map((row) => {
+        let newcontact = {};
+
+        Object.keys(row).forEach((key) => {
+          let mappedKey = mappedFields[key] || key; // Use mapped key or original key
+          let value = row[key];
+
+          // Automatically detect and convert CSV-style values to arrays
+          if (typeof value === "string" && value.includes(",")) {
+            newcontact[mappedKey] = value.split(",").map((v) => v.trim());
+          } else {
+            newcontact[mappedKey] = value;
+          }
+        });
+
+        return newcontact;
+      });
+
+      setcontact(updatecontact); // Update state with processed data
+    } else {
+      toast.error("No data found in the Excel file.");
+    }
+  };
+
+  reader.readAsArrayBuffer(selectedFile);
+};
 
   const addcontact=async(e)=>
     {
@@ -2960,7 +3083,7 @@ const handleFileChange = (event) => {
       </div>
      
           <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
-          <TableContainer component={Paper} style={{ maxHeight: '400px', overflow: 'auto' }}>
+          <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TableRow>
@@ -5155,7 +5278,74 @@ const handleFileChange = (event) => {
                                 </Modal.Header>
                                 <Modal.Body>
                     
-                                <input type="file" accept=".xlsx,.xls" onChange={handleFileChange}  id="import-file" />
+                                <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold text-center mb-4 text-gray-800">
+        📂 Upload & Map Your Excel Data
+      </h1>
+
+      {/* File Upload Input */}
+      <div className="flex flex-col items-center space-y-4">
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept=".xlsx, .xls"
+          className="block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-600 file:text-white
+            hover:file:bg-blue-700 cursor-pointer"
+        />
+      </div>
+
+      {/* Mapping UI */}
+      {excelHeaders.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-2 text-gray-700">🗺️ Map Your Excel Columns</h3>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            {excelHeaders.map((header, index) => (
+              <div key={index} style={{padding:"5px"}}>
+                <span className="labels" style={{fontFamily:"arial"}}>{header} ➝</span>
+                <select
+                style={{width:"30%"}}
+                className="form-control form-comtrol-sm"
+                  onChange={(e) =>
+                    setMappedFields((prev) => ({
+                      ...prev,
+                      [header]: e.target.value,
+                    }))
+                  }
+                
+                >
+                  <option value="">Select Field</option>
+                  {databaseFields.map((dbField, idx) => (
+                    <option key={idx} value={dbField} >
+                      {dbField}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+          </div>
+          <button style={{backgroundColor:"gray",width:"150px"}}
+            onClick={handleProcessFile}
+            className="mt-4 w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition-all"
+          >
+            ✅ Process File
+          </button>
+        </div>
+      )} 
+
+      {/* Show Processed Data */}
+      {contact.length > 0 && (
+        <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+          <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
+          <pre className="text-sm text-gray-600 overflow-x-auto">
+            {JSON.stringify(contact, null, 2)}
+          </pre>
+        </div>
+      )}
+    </div>
                     
                                 </Modal.Body>
                                 <Modal.Footer>
