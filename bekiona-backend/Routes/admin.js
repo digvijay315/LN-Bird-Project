@@ -12,6 +12,7 @@ const { registerUser, loginUser, getAllUsers, getUserByEmail, getmail, deleteUse
 const { addReview, getReviews, getallReviews, getCustomerSatisfaction } = require('../Controllers/review');
 const usercontact = require('../Modals/contact');
 const { usercontacts, getContact, deleteContact } = require('../Controllers/contact');
+const {send_mailotp,verifyotpandlogin} = require('../Controllers/loginwithotp');
 const router=express.Router()
 
 
@@ -56,6 +57,8 @@ router.post('/banner',upload.any(),createBanner)
   router.post('/register',registerUser);
   router.post('/logins',loginUser);
 
+  router.post('/otplogin', send_mailotp);
+  router.post('/verifyotpforlogin', verifyotpandlogin);
 
 
 router.post('/review', addReview);

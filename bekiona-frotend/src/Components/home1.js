@@ -44,7 +44,7 @@ const {cart,setcart}=useCart()
   useEffect(()=>
   {
     getproduct()
-  })
+  },[])
 
  
 const[product1,setproduct1]=useState([])
@@ -146,14 +146,6 @@ const[product1,setproduct1]=useState([])
         [product._id]: "#FF5F00",
       }));
   
-      // Revert button color after 1 second
-      // setTimeout(() => {
-      //   setButtonColors((prev) => ({
-      //     ...prev,
-      //     [product._id]: "rgb(51, 51, 51)", // Original color
-      //   }));
-      // }, 1000);
-  
       // Set cart message
       setCartMessage((prev) => ({
         ...prev,
@@ -169,9 +161,9 @@ const[product1,setproduct1]=useState([])
       }, 2000);
     } else {
       Swal.fire({
-        title: "Error!",
+        title: "Warning!",
         text: "Product already in your cart",
-        icon: "error",
+        icon: "warning",
         confirmButtonText: "OK",
       });
     }
@@ -521,13 +513,13 @@ Combo Products
             Add to Cart
           </button>
 
-          <button
+          {/* <button
             // onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              // backgroundColor: cart.some(item => item._id === product._id) 
-              // ? "green"  // Change this to your desired color when item is in cart
-              // : "rgb(51, 51, 51)",
+              backgroundColor: cart.some(item => item._id === product._id) 
+              ? "green"  // Change this to your desired color when item is in cart
+              : "rgb(51, 51, 51)",
               backgroundColor:"rgb(51, 51, 51)",
               color: "white",
               border: "none",
@@ -542,7 +534,7 @@ Combo Products
             }}
           >
             Buy Now
-          </button>
+          </button> */}
 
           {/* Display message if available */}
           {cartMessage[product._id] && (
@@ -883,13 +875,13 @@ Combo Products
           >
             Add to Cart
           </button>
-          <button
+          {/* <button
             // onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              // backgroundColor: cart.some(item => item._id === product._id) 
-              // ? "green"  // Change this to your desired color when item is in cart
-              // : "rgb(51, 51, 51)",
+              backgroundColor: cart.some(item => item._id === product._id) 
+              ? "green"  // Change this to your desired color when item is in cart
+              : "rgb(51, 51, 51)",
               backgroundColor:"rgb(51, 51, 51)",
               color: "white",
               border: "none",
@@ -904,7 +896,7 @@ Combo Products
             }}
           >
             Buy Now
-          </button>
+          </button> */}
         </div>
       </div>
     </SwiperSlide>

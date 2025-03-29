@@ -49,7 +49,7 @@ useEffect(()=>
 const clength=cart.length
 setlength(clength)
 setFormData({...formData,cartItems:cart})
-})
+},[])
 
 
 
@@ -125,18 +125,7 @@ const [show4, setShow4] = useState(false);
 const handleClose4 = () => setShow4(false);
 const handleShow4 = () => {
 
-if(!utocken){
-// Swal.fire({
-// text: `Please Firstly Login`,
-// icon: "error",
-// confirmButtonText: "OK",
-// });
-handleShow()
-handleClose1() 
 
-return
-
-}
 
 setShow4(true); 
 handleClose1()
@@ -492,6 +481,100 @@ confirmButtonText: "OK",
 };
 
 
+// ===================================login with otp start=======================================================================
+
+const loginwithotp = async (e) => {
+  e.preventDefault();
+  
+  try {
+  const response = await api.post("otplogin",{email:loginDetails.email});
+  
+  
+  if (response.status === 200) {
+  Swal.fire({
+  title: "Successful!",
+  text: `otp send plz check your email id`,
+  icon: "success",
+  confirmButtonText: "OK",
+  });
+  
+  handleClose();
+  handleShow8()
+  } else {
+  Swal.fire({
+  title: " Failed",
+  text: response.data.message || "Invalid email or password.",
+  icon: "error",
+  confirmButtonText: "Try Again",
+  });
+  }
+  } catch (error) {
+  Swal.fire({
+  title: "Error",
+  text: error.response?.data?.message || "Server error. Please try again later.",
+  icon: "error",
+  confirmButtonText: "OK",
+  });
+  }
+  };
+
+
+// ================================================login with otp end==============================================================
+
+// ============================================verify otp start===========================================================
+
+
+const [show8, setShow8] = useState(false);
+
+const handleClose8 = () => setShow8(false);
+const handleShow8 = () =>setShow8(true);
+
+const[otp,setotp]=useState()
+
+const verifyotpandlogin = async (e) => {
+  e.preventDefault();
+  
+  try {
+  const response = await api.post("verifyotpforlogin", {email:loginDetails.email,otp:otp});
+  
+  
+  if (response.status === 200) {
+  Swal.fire({
+  title: "Login Successful!",
+  text: `Welcome back, ${response.data.user}!`,
+  icon: "success",
+  confirmButtonText: "OK",
+  });
+  
+  const token=response.data.token
+  login(token);
+  navigate('/cudasboard')
+  localStorage.setItem('email',loginDetails.email)
+  localStorage.setItem('usertoken',token)
+  setutocken(response.data.token)
+  
+  // Clear the form and close the modal
+  setLoginDetails({ email: "", password: "" });
+  handleClose();
+  } else {
+  Swal.fire({
+  title: "Login Failed",
+  text: response.data.message || "Invalid email or password.",
+  icon: "error",
+  confirmButtonText: "Try Again",
+  });
+  }
+  } catch (error) {
+  Swal.fire({
+  title: "Error",
+  text: error.response?.data?.message || "Server error. Please try again later.",
+  icon: "error",
+  confirmButtonText: "OK",
+  });
+  }
+  };
+
+// ========================================================verify otp end=====================================================
 
 
 
@@ -1103,7 +1186,26 @@ boxShadow: "0 4px 8px rgba(255, 87, 34, 0.2)",
 transition: "all 0.3s ease",
 }}
 >
-CONTINUE
+Login
+</button>
+<button
+onClick={loginwithotp}
+style={{
+width: "100%",
+backgroundColor: "#FF5722",
+color: "white",
+padding: "12px",
+border: "none",
+borderRadius: "4px",
+cursor: "pointer",
+fontWeight: "bold",
+fontSize: "14px",
+marginBottom: "10px",
+boxShadow: "0 4px 8px rgba(255, 87, 34, 0.2)",
+transition: "all 0.3s ease",
+}}
+>
+Login With Otp
 </button>
 <button
 type="button"
@@ -1769,6 +1871,64 @@ Send Reset Link
 </Modal.Footer>
 </Modal>
 
+
+{/* =============================verify otp modal start================================================================ */}
+
+<Modal show={show8} onHide={handleClose8} centered>
+<Modal.Header>
+<Modal.Title>
+Verify Otp
+</Modal.Title>
+</Modal.Header>
+<Modal.Body
+style={{
+padding: "20px",
+fontFamily: "'Arial', sans-serif",
+}}
+>
+
+<input
+type="number"
+placeholder="Enter your otp "
+style={{
+width: "100%",
+padding: "12px",
+fontSize: "14px",
+border: "1px solid #ddd",
+borderRadius: "4px",
+marginBottom: "20px",
+outline: "none",
+boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+}}
+onChange={(e)=>setotp(e.target.value)}
+/>
+
+
+</Modal.Body>
+<Modal.Footer
+style={{
+borderTop: "1px solid #dee2e6",
+display: "flex",
+justifyContent: "space-between",
+}}
+>
+<Button
+variant="secondary"
+onClick={handleClose8}
+>
+Close
+</Button>
+<Button
+variant="primary"
+onClick={verifyotpandlogin}
+>
+Verify Otp
+</Button>
+</Modal.Footer>
+</Modal>
+
+
+{/* ======================================verify otp end==================================================== */}
 
 
 

@@ -62,7 +62,7 @@ function Cuheader() {
       const clength=cart.length
       setlength(clength)
       setorderdata({...orderdata,cartItems:cart})
-    })
+    },[])
   
     
     
@@ -238,13 +238,13 @@ useEffect(()=>
   
   },[cart])
 
-useEffect(()=>
-  {
+// useEffect(()=>
+//   {
    
-    console.log(cart.product_image);
+//     console.log(cart.product_image);
     
   
-  },[cart])
+//   },[cart])
   
   
   const handleSubmit1 = async (e) => {

@@ -34,9 +34,9 @@ function Manageadds() {
       });
   }, []);
 
-  console.log(addressData);
+  // console.log(addressData);
   
-  console.log(addressData.email);
+  // console.log(addressData.email);
   
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);
