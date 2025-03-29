@@ -202,12 +202,12 @@ const[product1,setproduct1]=useState([])
        }
      } catch (error) {
        console.error("Error fetching reviews:", error.response || error.message);
-       Swal.fire({
-         title: "Error!",
-         text: "Failed to fetch reviews. Please try again.",
-         icon: "error",
-         confirmButtonText: "OK",
-       });
+      //  Swal.fire({
+      //    title: "Error!",
+      //    text: "Failed to fetch reviews. Please try again.",
+      //    icon: "error",
+      //    confirmButtonText: "OK",
+      //  });
      } finally {
        setLoading(false);
      }
