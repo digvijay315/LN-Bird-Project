@@ -33,6 +33,7 @@ landmark: "",
 firstName: "",
 lastName: "",
 mobileNumber: "",
+email:"",
 addressType: "Home",
 pincode: "",
 setDefault: false,
@@ -49,7 +50,7 @@ useEffect(()=>
 const clength=cart.length
 setlength(clength)
 setFormData({...formData,cartItems:cart})
-},[])
+},[cart])
 
 
 
@@ -815,7 +816,7 @@ position: "absolute",
 top: "-5px",
 right: "-10px",
 background: "red",
-color: "white",
+color: "red",
 fontSize: "12px",
 fontWeight: "bold",
 padding: "3px 6px",
@@ -1524,6 +1525,27 @@ fontSize: "14px",
 }}
 />
 </div>
+
+<div className="col-md-6">
+<label htmlFor="lastName" className="form-label">
+Email Id
+</label>
+<input
+type="text"
+className="form-control"
+id="lastName"
+name="lastName"
+value={formData.lastName}
+onChange={handleChange}
+placeholder="e.g. Doe"
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+</div>
+
 <div className="mb-3">
 <div className="form-check">
 <input
