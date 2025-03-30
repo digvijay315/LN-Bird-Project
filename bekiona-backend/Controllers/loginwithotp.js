@@ -18,20 +18,64 @@ const send_mailotp = async (req, res) => {
             return res.status(400).send('No recipients provided.');
         }
 
+        // const transporter = nodemailer.createTransport({
+        //     service: 'gmail',
+        //     auth: {
+        //         user: 'digvijaykumar.315@gmail.com',
+        //         pass: 'cuay fuho ucki htpk'
+        //     }
+        // });
+
+        // const transporter = nodemailer.createTransport({
+        //     host: "smtp.gmail.com",
+        //     port: 465, // Use 587 for TLS, 465 for SSL
+        //     secure: true, // True for SSL, false for TLS
+        //     auth: {
+        //         user: 'digvijaykumar.315@gmail.com',
+        //         pass: 'cuay fuho ucki htpk'
+        //     }
+        // });
+
         const transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: "smtp.gmail.com",
+            port: 465, // Use TLS
+            secure: true, // Use false for TLS
             auth: {
                 user: 'digvijaykumar.315@gmail.com',
-                pass: 'cuay fuho ucki htpk'
-            }
+                pass: 'cuay fuho ucki htpk' // Use App Password
+            },
+           
         });
 
+        // const transporter = nodemailer.createTransport({
+        //     host: "mail.onlinerealestatecrm.in", // Your cPanel mail server
+        //     port: 465, // Use 465 for SSL (or 587 for TLS)
+        //     secure: true, // true for SSL
+        //     auth: {
+        //         user: "_mainaccount@onlinerealestatecrm.in", // Your cPanel email
+        //         pass: "5:[5dX23KpLtpY" // Your actual email password (not cPanel login)
+        //     }
+        // });
+        
+        
+        
+        // const mailOptions = {
+        //     from: "er.abdhesh@gmail.com", // Must match your SMTP user
+        //     to: email, // Recipient's email
+        //     subject: "Your OTP Code",
+        //     text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+        // };
         const mailOptions = {
-            from: 'digvijaykumar.315@gmail.com',
-            // to:email,
-            subject: "Your OTP Code",
-            text: `Your OTP is ${otp}. It is valid for 5 minutes.`,
+            from: '"Bekiona" <digvijaykumar.315@gmail.com>',
+            to: email,
+            subject: "Your OTP Code from Bekiona",
+            html: `<p>Hello,</p>
+                   <p>Your OTP is <strong>${otp}</strong>. It is valid for 5 minutes.</p>
+                   <p>If you did not request this, please ignore this email.</p>
+                   <p>Best regards,<br>Bekiona Team</p>`,
         };
+        
+        
 
        
             await transporter.sendMail({ ...mailOptions, to: email });
