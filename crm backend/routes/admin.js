@@ -1,5 +1,5 @@
 const express=require('express');
-const {add_contact,view_contact, view_contact_Byid, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany, view_contact_ByName, update_contactsingledocument, delete_contactsingledocument, add_contactdocument, addbulkcontacts} = require('../controllers/contact_details');
+const {add_contact,view_contact, view_contact_Byid, remove_contact, update_contact, view_contact_Byemail, view_contact_Bymobile, view_contact_Bytags, view_contact_Bycompany, view_contact_ByName, update_contactsingledocument, delete_contactsingledocument, add_contactdocument, addbulkcontacts, update_contactforbulkupload} = require('../controllers/contact_details');
 const {lead_info,leadinfo_find, view_lead_Byleadtype, remove_lead, update_lead, view_lead_Byid, view_lead_Bycompany, view_lead_Byemail, view_lead_Bymobile, view_lead_Bystage, update_leadstage, update_leaddocument, update_leadstagebyemail, update_leadsingledocument, delete_leadsingledocument} = require('../controllers/leadinfo');
 const lead_info_personal = require('../controllers/leadinfo_personal');
 const upload=require('../middlewares/file');
@@ -39,6 +39,7 @@ router.get('/viewcontactbycompany/:company_name',view_contact_Bycompany)
 router.put('/updatecontact/:_id',upload.any('document_pic'),update_contact)
 router.put('/adddocumentincontact/:_id',upload.any('document_pic'),add_contactdocument)
 router.put('/updatecontactdocumentsingle/:_id',upload.any('document_pic'),update_contactsingledocument)
+router.put('/updatecontactforbulkupload',upload.any('document_pic'),update_contactforbulkupload)
 router.delete('/deletecontact/:_id',remove_contact)
 router.delete('/deletecontactsingledocument/:_id',delete_contactsingledocument)
 router.post('/contact/sendmail',upload.array('attachments', 10),send_mail)

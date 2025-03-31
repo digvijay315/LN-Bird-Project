@@ -1,6 +1,7 @@
 
 const addcontact = require('../models/add_contact');
 const adddeal = require('../models/deal.js');
+const addactivity = require("../models/activity");
 
 const cloudinary=require('cloudinary').v2
 const fs=require('fs')
@@ -457,27 +458,143 @@ const add_contact = async (req, res) => {
                                                 try {
                                                     let contacts = req.body;
                                                     
-                                              // If contacts is an object with numeric keys, convert it into an array
-                                                    if (!Array.isArray(contacts)) {
-                                                        contacts = Object.values(contacts); // Extract values as an array
-                                                    }
-
-                                                    if (!Array.isArray(contacts)) {
-                                                        return res.status(400).send({ message: 'Invalid data format. Expected an array of contacts.' });
-                                                    }
+                                                    
                                             
-                                                    // Use insertMany for bulk insert
-                                                    const savedContacts = await addcontact.insertMany(contacts);
+                                                    // Ensure contacts is always an array
+                                                    if (!Array.isArray(contacts)) {
+                                                        contacts = Object.values(contacts); // Converts object with keys '0', '1', etc. into an array
+                                                    }
+                                                    
+                                           
+                                                 
+                                                    let savedContacts = [];
                                             
-                                                    res.status(200).send({ message: 'Contacts saved successfully', contacts: savedContacts });
+                                                    for (let contact of contacts) {
+                                                        const { 
+                                                            title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
+                                                            source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
+                                                            company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
+                                                            father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
+                                                            birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
+                                                            income, amount1, document_no, document_name, relation, lastcommunication
+                                                        } = contact;
+                                            
+                                                        let newDocumentPic = [];
+                                            
+                                                        // Check if there are files to upload
+                                                        if (req.files && req.files.length > 0) {
+                                                            for (let file of req.files) {
+                                                                const result = await cloudinary.uploader.upload(file.path);
+                                                                newDocumentPic.push(result.secure_url);
+                                                            }
+                                                        }
+                                            
+                                                        // Create a new contact object
+                                                        const newContact = new addcontact({
+                                                            title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
+                                                            source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
+                                                            company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
+                                                            father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
+                                                            birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
+                                                            income, amount1, document_no, document_name, document_pic: newDocumentPic, relation, lastcommunication
+                                                        });
+                                            
+                                                        // Save each contact
+                                                        const resp = await newContact.save();
+                                                        savedContacts.push(resp);
+                                                    }
+                                                   
+                                                    
+                                            
+                                                    res.status(200).send({ message: "Contacts saved", contacts: savedContacts });
+                                            
                                                 } catch (error) {
-                                                    console.error('Error occurred during saving data:', error);
-                                                    res.status(500).send({ message: 'An error occurred while saving contact data', error });
+                                                    console.log(error);
+                                                    res.status(500).send({ message: "Error saving contacts", error });
                                                 }
+                                                
                                             };
-                                            
+
+                                            const update_contactforbulkupload = async (req, res) => {
+                                                try {
+                                                  const contacts = Array.isArray(req.body) ? req.body : [req.body]; // Ensure it's an array
+                                              
+                                                  if (contacts.length === 0) {
+                                                    return res.status(400).json({ message: "No contacts provided!" });
+                                                  }
+                                              
+                                                  let updatedContacts = [];
+                                              
+                                                  for (let contact of contacts) {
+                                                    let { mobile_no } = contact;
+                                              
+                                                    if (!mobile_no) {
+                                                      continue; // Skip if mobile_no is missing
+                                                    }
+                                              
+                                                    // Ensure mobile_no is always treated as an array
+                                                    const mobileNumbers = Array.isArray(mobile_no) ? mobile_no : [mobile_no];
+                                              
+                                                    // Find existing contact by mobile_no
+                                                    let existingContact = await addcontact.findOne({
+                                                      mobile_no: { $in: mobileNumbers },
+                                                    });
+                                              
+                                                    if (!existingContact) {
+                                                      continue; // Skip if no matching contact found
+                                                    }
+                                              
+                                                    let updatedFields = {};
+                                                    let editFields = []; // Store updated field names
+                                                    let editValues = []; 
+                                              
+                                                    // Only update fields that are missing in the existing contact
+                                                    for (let key in contact) {
+                                                        if (
+                                                          !existingContact[key] || // If the field is missing
+                                                          existingContact[key] === "" || // If it's an empty string
+                                                          (Array.isArray(existingContact[key]) && existingContact[key].length === 0) // If it's an empty array
+                                                        ) {
+                                                          updatedFields[key] = contact[key]; // Set the new value
+                                                          editFields.push(key); 
+                                                          editValues.push(contact[key]); // Track updated value
+                                                        }
+                                                      }
+                                              
+                                                    // Update contact in the database
+                                                    const updatedContact = await addcontact.findOneAndUpdate(
+                                                      { mobile_no: { $in: mobileNumbers } },
+                                                      { $set: updatedFields },
+                                                      { new: true }
+                                                    );
+                                              
+                                                    updatedContacts.push(updatedContact);
+
+                                                    await addactivity.create({
+                                                        activity_name: "edit",
+                                                        lead: `${existingContact.title || ""} ${existingContact.first_name || ""} ${existingContact.last_name || ""}`.trim(), 
+                                                        edit_field: editFields.join(", "), // Convert updated fields to a string
+                                                        edit_value: editValues.join(", "),
+                                                        date: new Date(), // Log timestamp
+                                                      });
+                                                  }
+                                              
+                                                  res.status(200).json({
+                                                    message: `${updatedContacts.length} contacts updated successfully!`,
+                                                    updatedContacts,
+                                                  });
+                                              
+                                                } catch (error) {
+                                                  console.error("Error updating contacts:", error);
+                                                  res.status(500).json({ message: "Internal Server Error" });
+                                                }
+                                              };
+                                              
+                                              
+                                              
                 
 
     module.exports={add_contact,view_contact,view_contact_Byid,remove_contact,update_contact,
                     view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany,
-                view_contact_ByName,update_contactsingledocument,delete_contactsingledocument,add_contactdocument,addbulkcontacts};
+                view_contact_ByName,update_contactsingledocument,delete_contactsingledocument,add_contactdocument,addbulkcontacts,
+            update_contactforbulkupload};

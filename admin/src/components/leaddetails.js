@@ -524,10 +524,10 @@ const[countall,setcountall]=useState('')
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
-        lineHeight:"15px"
+        lineHeight:"0px"
       },
       [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
+        fontSize: "12px",
       },
     }));
     
@@ -2519,12 +2519,12 @@ const handleallblockchange = (event) => {
               )}
             </div>
 
-      <div style={{marginLeft:"80px",marginTop:"-20px",backgroundColor:"white",top:"100px",position:"sticky",zIndex:10}}>
-      <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
+      <div style={{marginLeft:"70px",marginTop:"-20px",backgroundColor:"white",top:"100px",position:"sticky",zIndex:10,}}>
+      <TableContainer component={Paper} style={{ maxHeight: '700px',overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow >
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell>
             <input
               type="checkbox"
               checked={selectAll}
@@ -2534,7 +2534,7 @@ const handleallblockchange = (event) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer' }}
+              style={{ cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -2548,7 +2548,7 @@ const handleallblockchange = (event) => {
          
         currentItems.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems.includes(item._id)}
@@ -2557,19 +2557,19 @@ const handleallblockchange = (event) => {
               {index + 1}
             </StyledTableCell>
 
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell >
               
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px", cursor: "pointer"}} 
               onClick={() => leadsingleview(item)}
             >
               {item.title} {item.first_name} {item.last_name}
               <br />
-              <SvgIcon component={PhoneIphoneIcon} />
+              <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"14px"}} />
               <span>{item.mobile_no}</span>
               <br />
-              <SvgIcon component={EmailIcon} />
+              <SvgIcon component={EmailIcon} style={{fontSize:"14px"}}/>
               <span>{item.email}</span>
             </StyledTableCell>
             {visibleColumns
@@ -2577,7 +2577,7 @@ const handleallblockchange = (event) => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                  style={{ padding: "10px" }}
                 >
                    {col.id === 'budget' 
                     ?(

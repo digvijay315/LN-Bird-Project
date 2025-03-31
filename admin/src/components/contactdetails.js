@@ -303,6 +303,7 @@ const renderPageNumbers = () => {
       [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
         color: theme.palette.common.white,
+          lineHeight:"0px"
       },
       [`&.${tableCellClasses.body}`]: {
         fontSize: 14,
@@ -2776,6 +2777,9 @@ const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
 const [mappedFields, setMappedFields] = useState({}); // Store user-selected mapping
 const [selectedFile, setSelectedFile] = useState(null); // Store uploaded file
 
+const [duplicateEntries, setDuplicateEntries] = useState([]);
+const [pendingContacts, setPendingContacts] = useState([]);
+const [showPopup, setShowPopup] = useState(false);
 // 🔹 Step 1: Extract Headers from Excel File
 const handleFileChange = (event) => {
   const file = event.target.files[0];
@@ -2817,7 +2821,7 @@ const handleProcessFile = () => {
     const data = XLSX.utils.sheet_to_json(sheet);
 
     if (data.length > 0) {
-      const updatecontact = data.map((row) => {
+      const mappedContacts = data.map((row) => {
         let newcontact = {};
 
         Object.keys(row).forEach((key) => {
@@ -2835,7 +2839,8 @@ const handleProcessFile = () => {
         return newcontact;
       });
 
-      setcontact(updatecontact); // Update state with processed data
+      // setcontact(updatecontact); // Update state with processed data
+      checkForDuplicates(mappedContacts); // Call duplicate check after mapping
     } else {
       toast.error("No data found in the Excel file.");
     }
@@ -2844,9 +2849,59 @@ const handleProcessFile = () => {
   reader.readAsArrayBuffer(selectedFile);
 };
 
+
+const[allcontacts,setallcontacts]=useState([])
+const checkForDuplicates = async (contacts) => {
+  try {
+    // Fetch existing contacts from the database
+    const response = await api.get("http://localhost:5000/viewcontact");
+
+    // Extract all mobile numbers from existing contacts into a Set
+    const existingMobileNos = new Set();
+    response.data.contact.forEach((existing) => {
+      if (Array.isArray(existing.mobile_no)) {
+        existing.mobile_no.forEach((num) => existingMobileNos.add(num.trim()));
+      } else if (typeof existing.mobile_no === "string") {
+        existingMobileNos.add(existing.mobile_no.trim());
+      }
+    });
+
+    let newContacts = [];
+    let duplicates = [];
+
+    contacts.forEach((contact) => {
+      let contactNumber = contact.mobile_no?.toString().trim(); // Convert to string
+
+      if (existingMobileNos.has(contactNumber)) {
+        duplicates.push(contact);
+      } else {
+        newContacts.push(contact);
+      }
+    });
+
+    // Update state to display new contacts and duplicates
+    setDuplicateEntries(duplicates);
+    setPendingContacts(newContacts);
+
+    // ✅ No popup: Data is now shown with "Add" & "Update" buttons in UI
+    setallcontacts([...newContacts, ...duplicates]); // Store processed data
+  } catch (error) {
+    console.error("Error checking for duplicates:", error);
+  }
+};
+
+
+
+
+// console.log(pendingContacts);
+// console.log(duplicateEntries);
+// console.log(contact);
+
+
+
   const addcontact=async(e)=>
     {
-        e.preventDefault();
+      
         try {
 
            // Show confirmation message
@@ -2863,8 +2918,8 @@ const handleProcessFile = () => {
           if (!result.isConfirmed) {
             return; // Stop execution if user cancels
           }
-            const resp= await api.post('addbulkcontact',contact,config)
-            handleClose7()
+            const resp= await api.post('addbulkcontact',pendingContacts,config)
+            
         if(resp.status===200)
             {
               Swal.fire({
@@ -2872,9 +2927,7 @@ const handleProcessFile = () => {
                 title: 'Import',
                 text: 'Contacts Imported successfully!',
               });
-              setTimeout(() => {
-                window.location.reload();
-              }, 2000);
+           
             }
             
       
@@ -2882,6 +2935,46 @@ const handleProcessFile = () => {
             toast.error(error.response.data.message,{ autoClose: 3000 })
         }
     }
+
+    const updatecontactforbulkupload = async (e) => {
+      try {
+        // Show confirmation message
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          text: "Are you sure you want to update the data?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, update it!",
+        });
+    
+        if (!result.isConfirmed) {
+          return; // Stop execution if user cancels
+        }
+    
+        // Loop through each duplicate contact and send a request one by one
+        const updatePromises = duplicateEntries.map((contact1) =>
+          api.put("updatecontactforbulkupload", contact1, config)
+        );
+    
+        // Wait for all update requests to complete
+        await Promise.all(updatePromises);
+    
+        // Show success message
+        Swal.fire({
+          icon: "success",
+          title: "Update",
+          text: "Contacts updated successfully!",
+        });
+    
+      } catch (error) {
+        toast.error(error.response?.data?.message || "An error occurred", { autoClose: 3000 });
+      }
+    };
+    
+
+   
 
 //======================================import and download sample data code end===========================================================
 
@@ -3087,7 +3180,7 @@ const handleProcessFile = () => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell>
             <input
               type="checkbox"
               checked={selectAll}
@@ -3097,7 +3190,7 @@ const handleProcessFile = () => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{   cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -3111,7 +3204,7 @@ const handleProcessFile = () => {
          
         currentItems.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell >
               <input 
                 type="checkbox"
                 checked={selectedItems.includes(item._id)}
@@ -3120,7 +3213,7 @@ const handleProcessFile = () => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px", cursor: "pointer" }} 
               onClick={() => navigate('/contactsingleview',{state:item})}
             >
               {item.title} {item.first_name} {item.last_name}
@@ -3146,7 +3239,7 @@ const handleProcessFile = () => {
             </StyledTableCell>
 
             <StyledTableCell 
-              style={{ padding: "10px",  fontFamily: "times new roman" }} 
+              style={{ padding: "10px" }} 
              
             >
               {item.h_no} {item.area1}
@@ -3159,7 +3252,7 @@ const handleProcessFile = () => {
             </StyledTableCell>
 
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman" }} 
+              style={{ padding: "10px" }} 
              
             >
               {item.profession_category} ({item.profession_subcategory})
@@ -3173,7 +3266,7 @@ const handleProcessFile = () => {
             {visibleColumns
               .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'professionaldetails' && col.id !== 'address')
               .map((col) => (
-                <StyledTableCell key={col.id} style={{ padding: "10px", fontFamily: "Times New Roman" }}>
+                <StyledTableCell key={col.id} style={{ padding: "10px" }}>
                 {col.id === "createdAt" ? (
                   formatDate(item[col.id]) // Format createdAt date
                 ) : col.id === "ownership" ? (
@@ -4110,7 +4203,7 @@ const handleProcessFile = () => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow >
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell >
             <input
               type="checkbox"
               checked={selectAll1}
@@ -4120,7 +4213,7 @@ const handleProcessFile = () => {
           {visibleColumns1.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{  cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -4134,7 +4227,7 @@ const handleProcessFile = () => {
          
         currentItems1.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems1.includes(item._id)}
@@ -4143,7 +4236,7 @@ const handleProcessFile = () => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer" }} 
+              style={{ padding: "10px",cursor:"pointer" }} 
              onClick={()=>navigate('/companysingleview',{state:item})}
             >
               {item.name}
@@ -4159,7 +4252,7 @@ const handleProcessFile = () => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                  style={{ padding: "10px"}}
                 >
                   {
                     col.id=='address' ?
@@ -4624,11 +4717,11 @@ const handleProcessFile = () => {
          
         data.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{  fontSize: "10px" }}>
              <img src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' alt='' style={{height:"30px"}}/>
              
             </StyledTableCell>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer",fontSize: "10px" }}  >
               {item.title} {item.first_name} {item.last_name}<br></br>
               {item.designation}
             </StyledTableCell>
@@ -5274,14 +5367,14 @@ const handleProcessFile = () => {
 
                     <Modal show={show7} onHide={handleClose7} size='lg'>
                                 <Modal.Header>
-                                  <Modal.Title>Import Units Data</Modal.Title>
+                                  <Modal.Title>Import Contact Data</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                     
                                 <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold text-center mb-4 text-gray-800">
+      <h3 className="text-2xl font-bold text-center mb-4 text-gray-800">
         📂 Upload & Map Your Excel Data
-      </h1>
+      </h3>
 
       {/* File Upload Input */}
       <div className="flex flex-col items-center space-y-4">
@@ -5301,32 +5394,31 @@ const handleProcessFile = () => {
       {/* Mapping UI */}
       {excelHeaders.length > 0 && (
         <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-2 text-gray-700">🗺️ Map Your Excel Columns</h3>
+          <h5 className="text-lg font-semibold mb-2 text-gray-700">🗺️ Map Your Excel Columns</h5>
           <div className="grid grid-cols-2 gap-4 mb-4">
-            {excelHeaders.map((header, index) => (
-              <div key={index} style={{padding:"5px"}}>
-                <span className="labels" style={{fontFamily:"arial"}}>{header} ➝</span>
-                <select
-                style={{width:"30%"}}
-                className="form-control form-comtrol-sm"
-                  onChange={(e) =>
-                    setMappedFields((prev) => ({
-                      ...prev,
-                      [header]: e.target.value,
-                    }))
-                  }
-                
-                >
-                  <option value="">Select Field</option>
-                  {databaseFields.map((dbField, idx) => (
-                    <option key={idx} value={dbField} >
-                      {dbField}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
-          </div>
+          {excelHeaders.map((header, index) => (
+            <div key={index} className="flex items-center gap-2 p-2">
+              <span className="labels font-sans">{header} ➝</span>
+              <select
+                className="form-control form-control-sm w-1/3 p-1 border border-gray-300 rounded"
+                onChange={(e) =>
+                  setMappedFields((prev) => ({
+                    ...prev,
+                    [header]: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Select Field</option>
+                {databaseFields.map((dbField, idx) => (
+                  <option key={idx} value={dbField}>
+                    {dbField}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
+
           <button style={{backgroundColor:"gray",width:"150px"}}
             onClick={handleProcessFile}
             className="mt-4 w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition-all"
@@ -5337,21 +5429,50 @@ const handleProcessFile = () => {
       )} 
 
       {/* Show Processed Data */}
-      {contact.length > 0 && (
-        <div className="mt-6 bg-gray-100 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
-          <pre className="text-sm text-gray-600 overflow-x-auto">
-            {JSON.stringify(contact, null, 2)}
-          </pre>
-        </div>
-      )}
+      {allcontacts.length > 0 && (
+  <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+    <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
+    
+    <div className="mb-4">
+      <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>New Contacts</h4>
+      <pre className="text-sm text-gray-600 overflow-x-auto" >
+        {JSON.stringify(pendingContacts, null, 2)}
+      </pre>
+      <button className="form-control form-control-sm" onClick={addcontact} style={{width:"150px"}}>
+        ➕ Add Contact
+      </button>
     </div>
+
+    <div>
+      <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>Duplicate Contacts</h4>
+      <pre className="text-sm text-gray-600 overflow-x-auto">
+        {JSON.stringify(duplicateEntries, null, 2)}
+      </pre>
+      <button className="form-control form-control-sm" style={{width:"200px"}} onClick={updatecontactforbulkupload}>
+        🔄 Update Contacts
+      </button>
+    </div>
+  </div>
+)}
+
+    </div>
+
+    {/* {showPopup && (
+      <div className="popup-container">
+        <div className="popup">
+          <h3>Duplicate Contacts Found</h3>
+          <p>Some contacts already exist. Do you want to update them?</p>
+          <button className="form-control form-control-sm" onClick={handleSkipDuplicates}>Skip</button>
+          <button className="form-control form-control-sm" >Update</button>
+        </div>
+      </div>
+    )} */}
                     
                                 </Modal.Body>
                                 <Modal.Footer>
-                                <Button variant="secondary" onClick={addcontact}>
+                                {/* <Button variant="secondary" onClick={addcontact}>
                                     Add Contact
-                                  </Button>
+                                  </Button> */}
                                   <Button variant="secondary" onClick={handleClose7}>
                                     Close
                                   </Button>
