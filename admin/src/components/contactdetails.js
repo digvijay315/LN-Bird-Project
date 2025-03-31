@@ -2866,8 +2866,9 @@ const handleProcessFile = () => {
 const[allcontacts,setallcontacts]=useState([])
 const checkForDuplicates = async (contacts) => {
   try {
+    setIsLoading(true);
     // Fetch existing contacts from the database
-    const response = await api.get("http://localhost:5000/viewcontact");
+    const response = await api.get("viewcontact");
 
     // Extract all mobile numbers from existing contacts into a Set
     const existingMobileNos = new Set();
@@ -2900,6 +2901,8 @@ const checkForDuplicates = async (contacts) => {
     setallcontacts([...newContacts, ...duplicates]); // Store processed data
   } catch (error) {
     console.error("Error checking for duplicates:", error);
+  }finally {
+    setIsLoading(false); // Hide loader after API call
   }
 };
 
@@ -5480,23 +5483,7 @@ const checkForDuplicates = async (contacts) => {
         </div>
       </div>
     )} */}
-                    
-                                </Modal.Body>
-                                <Modal.Footer>
-                                {/* <Button variant="secondary" onClick={addcontact}>
-                                    Add Contact
-                                  </Button> */}
-                                  <Button variant="secondary" onClick={handleClose7}>
-                                    Close
-                                  </Button>
-                                </Modal.Footer>
-                              </Modal>
-
-{/*=============================================== import file modal end============================================================= */}
-
-{/* ========================================loader start============================================================== */}
-
-<>
+    <>
     {isLoading && (
       <div style={{
         position: "fixed",
@@ -5531,6 +5518,23 @@ const checkForDuplicates = async (contacts) => {
       </div>
     )}
   </>
+                    
+                                </Modal.Body>
+                                <Modal.Footer>
+                                {/* <Button variant="secondary" onClick={addcontact}>
+                                    Add Contact
+                                  </Button> */}
+                                  <Button variant="secondary" onClick={handleClose7}>
+                                    Close
+                                  </Button>
+                                </Modal.Footer>
+                              </Modal>
+
+{/*=============================================== import file modal end============================================================= */}
+
+{/* ========================================loader start============================================================== */}
+
+
 
 {/*=================================== loader end======================================================================= */}
 
