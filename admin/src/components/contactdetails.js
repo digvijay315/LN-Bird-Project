@@ -82,6 +82,7 @@ function Fetchcontact() {
     React.useEffect(()=>{fetchdata()},[])
     React.useEffect(()=>{fetchcdata()},[])
 
+    const [isLoading, setIsLoading] = useState(false);
 /*-------------------------------------------------------------------fetching all contact data start---------------------------------------------------------------------------- */                                                     
     const[data,setdata]=useState([]);
     const [filteredData, setFilteredData] = useState([]);
@@ -2805,8 +2806,14 @@ const handleFileChange = (event) => {
   reader.readAsArrayBuffer(file);
 };
 
+
+
 // 🔹 Step 2: Process & Map Data Based on User Selection
 const handleProcessFile = () => {
+  try {
+    
+ 
+  setIsLoading(true);
   if (!selectedFile) {
     toast.error("No file selected. Please upload a file first.");
     return;
@@ -2847,6 +2854,12 @@ const handleProcessFile = () => {
   };
 
   reader.readAsArrayBuffer(selectedFile);
+} catch (error) {
+    console.log(error);
+    
+}finally {
+  setIsLoading(false); // Hide loader after API call
+}
 };
 
 
@@ -5481,6 +5494,45 @@ const checkForDuplicates = async (contacts) => {
 
 {/*=============================================== import file modal end============================================================= */}
 
+{/* ========================================loader start============================================================== */}
+
+<>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading data...</p>
+        </div>
+      </div>
+    )}
+  </>
+
+{/*=================================== loader end======================================================================= */}
 
           <ToastContainer/>
         </div>
