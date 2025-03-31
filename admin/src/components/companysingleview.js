@@ -24,6 +24,10 @@ import { toast, ToastContainer } from "react-toastify";
 import Dropdown from 'react-bootstrap/Dropdown';
 import "react-circular-progressbar/dist/styles.css";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import matchedlead from '../icons/matchedlead.jpg'
+import publish from '../icons/publish.jpg'
+import createbooking from '../icons/createbooking.jpg'
+import transferuser from '../icons/transferuser.jpg'
 
 function Companysingleview() {
 
@@ -1904,8 +1908,23 @@ const completionPercentage = 20; // Set default value here
         <div  style={{padding:"10px",borderRadius:"10px"}} >
           <h6>Company</h6>
           <h3 style={{fontWeight:"normal",color:"blue",fontFamily:"times-new-roman"}}>{lead.name} <span style={{fontSize:"14px",marginLeft:"10px",color:"black"}}>
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"20px",backgroundColor:"white"}} onClick={handleShow7}>Edit</button>
-          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px",marginLeft:"70%",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
+          <a class=" dropdown"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-three-dots-vertical" style={{fontSize:"24px",cursor:"pointer"}}></i>
+            </a>
+
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style={{cursor:"pointer",lineHeight:"25px",paddingLeft:"10px",fontFamily:"arial",fontSize:"14px",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)"}}>
+              <li><img src='https://png.pngtree.com/png-clipart/20230502/original/pngtree-vision-line-icon-png-image_9133793.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Preview</li>
+              <li><img src={publish} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Publish</li>
+              <li><img src={createbooking} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Create Booking</li>
+              <li><img src={matchedlead} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Matched Lead</li>
+              <li><img src={transferuser} style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Transfer User
+              <span style={{content: '""',position: "absolute",bottom: "50px",left: "10px",right: "10px",height: "1px",backgroundColor: "black"}}></span>
+              </li>
+              <li><img src='https://icons.veryicon.com/png/o/miscellaneous/iconfonts/edit-423.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Edit</li>
+              <li><img src='https://static-00.iconduck.com/assets.00/delete-icon-932x1024-nylj0i2z.png' style={{height:"20px",paddingRight:"10px",paddingTop:"5px"}}></img>Delete</li>
+            </ul>
+          
+          <button style={{width:"50px",height:"30px",borderColor:"blue",borderRadius:"5px",fontSize:"14px", position: "absolute",  right: "10px",backgroundColor:"white"}} onClick={handleToggle}>{buttonText}</button>
     
           </span>
           </h3>
@@ -2830,177 +2849,6 @@ const completionPercentage = 20; // Set default value here
 
         <div className='row'>
 
-        
-
-  <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'> Inventories
-        <span 
-          onClick={toggleTableVisibility1} 
-          style={{ 
-            position:"absolute",
-            cursor: "pointer", 
-            right: "50px", 
-            fontSize: "20px", 
-            display: "inline-block", 
-            transition: "transform 0.3s ease", // Smooth transition for rotation
-            transform: isTableVisible1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
-          }}
-        >
-          ▼
-        </span>
-        <span 
-         onClick={()=>navigate('/addinventory',{state:lead})}
-          style={{ 
-            position:"absolute",
-            cursor: "pointer", 
-            right: "15px", 
-            fontSize: "30px", 
-            display: "inline-block", 
-            transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "-7px", // Align the arrow properly
-      fontWeight:"lighter"
-          }}
-        >
-          +
-        </span>
-        </div>
-
-        <div style={{backgroundColor:"white",width:"100%",overflowX:"scroll",overflowY:"scroll",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"20px",height: isTableVisible1 ? "300px" : "0",transition: "height 0.3s ease"}}>
-         
-        <TableContainer component={Paper} style={{ maxHeight: '300px' }}>
-    <Table sx={{}} aria-label="customized table">
-    <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
-        <TableRow  style={{backgroundColor:"gray"}}>
-          {allColumnsunit.map((col) => (
-            <StyledTableCell
-              key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px" }}
-            >
-              {col.name}
-            </StyledTableCell>
-          ))}
-        </TableRow>
-      </thead>
-      <tbody>
-        {
-         
-        matchunit.map ((item, index) => (
-          <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-           
-              {index + 1}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.unit_no}
-            </StyledTableCell >
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {item.project_name}
-            </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-             
-            </StyledTableCell>
-          </StyledTableRow>
-        ))}
-      </tbody>
-    </Table>
-  </TableContainer>
-        </div>
-        </div>
-
-
-        <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-        <div className='col-md-12'> Tasks
-        <span 
-          onClick={toggleTableVisibility2} 
-          style={{ 
-            position:"absolute",
-            cursor: "pointer", 
-            right: "50px", 
-            fontSize: "20px", 
-            display: "inline-block", 
-            transition: "transform 0.3s ease", // Smooth transition for rotation
-            transform: isTableVisible2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
-            marginTop: "0px", // Align the arrow properly
-          }}
-        >
-          ▼
-        </span>
-        <span 
-         onClick={()=>navigate('/tasksform')}
-          style={{ 
-            position:"absolute",
-            cursor: "pointer", 
-            right: "15px", 
-            fontSize: "30px", 
-            display: "inline-block", 
-            transition: "transform 0.3s ease", // Smooth transition for rotation
-            marginTop: "-7px", // Align the arrow properly
-      fontWeight:"lighter"
-          }}
-        >
-          +
-        </span>
-        </div>
-
-        <div style={{backgroundColor:"white",width:"100%",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible2 ? "300px" : "0",transition: "height 0.3s ease",overflow:"auto"}}>
-         
-        <TableContainer component={Paper} style={{  maxHeight: '300px'}}>
-    <Table sx={{}} aria-label="customized table">
-      <thead style={{ position: "sticky", top: 0, zIndex: 10 }}>
-        <TableRow style={{backgroundColor:"gray"}}>
-          {allColumnstask.map((col) => (
-            <StyledTableCell
-              key={col.id}
-              style={{ fontFamily: "times new roman", cursor: 'pointer',fontSize:"12px",lineHeight:"5px" }}
-            >
-              {col.name}
-            </StyledTableCell>
-          ))}
-        </TableRow>
-      </thead>
-      <tbody>
-        {
-         
-        alltask.map ((item, index) => (
-          <StyledTableRow key={index} onClick={()=>completetask(item)} style={{cursor:"pointer"}}>
-            <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
-              {index + 1}
-            </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-              {item.activity_type}
-            </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-            {item.start_date
-              ? formatDate(new Date(item.start_date)) 
-              : formatDate(new Date(item.due_date))} 
-              {/* {item.start_date || item.due_date} {item.due_time} */}
-          </StyledTableCell>
-
-          <StyledTableCell style={{ fontSize: "12px" }}>
-          {allColumnstask.map((col) => (
-        col.id === "status" ? (
-      <span>
-        {item.complete === "true" ? (
-          <span style={{color:"green"}}>Complete</span>
-        ) : item.complete === "" && new Date(item.due_date) > new Date() || new Date(item.start_date) > new Date() ? (
-          <span style={{color:"blue"}}>Pending</span>
-        ) : item.complete === "" && new Date(item.due_date) < new Date() || new Date(item.start_date) < new Date() ? (
-          <span className='no-activity-flash' style={{fontSize:"12px"}}>Overdue</span>
-        ) : ""}
-      </span>
-    ) : null
-  ))}
-        </StyledTableCell>
-
-          </StyledTableRow>
-        ))}
-      </tbody> 
-    </Table>
-  </TableContainer>
-        </div>
-        </div>
-
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
 
         <div className='col-md-12'> Documents
@@ -3017,7 +2865,7 @@ const completionPercentage = 20; // Set default value here
             marginTop: "0px", // Align the arrow properly
           }}
         >
-          ▼
+            ▽
         </span>
         <span 
          onClick={handleShow8}
@@ -3112,7 +2960,7 @@ const completionPercentage = 20; // Set default value here
     marginTop: "0px", // Align the arrow properly
   }}
 >
-  ▼
+▽
 </span>
 <span 
 //  onClick={handleShow8}
