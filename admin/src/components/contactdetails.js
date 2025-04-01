@@ -2477,7 +2477,11 @@ const handleMouseUp = () => {
                   setshow5(true);
                   try {
                     const resp1 = await api.get(`viewcontactbyid/${selectedItems}`);
-                    setleadinfo(resp1.data.contact)
+                    // Assuming resp1.data.contact.mobile_no is an array, we take the first element
+                      const contact = resp1.data.contact;
+                      const updatedContact = { ...contact, mobile_no: contact.mobile_no[0] };  // Set only the first mobile number
+                      
+                      setleadinfo(updatedContact);  // Set the lead info with the updated mobile_no
                   
                   } catch (error) {
                     console.error("Error fetching lead data:", error);
@@ -5452,7 +5456,16 @@ const checkForDuplicates = async (contacts) => {
     <div className="mb-4">
       <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>New Contacts</h4>
       <pre className="text-sm text-gray-600 overflow-x-auto" >
-        {JSON.stringify(pendingContacts, null, 2)}
+      {JSON.stringify(
+      pendingContacts.map(({ title, first_name, last_name, mobile_no }) => ({
+        title,
+        first_name,
+        last_name,
+        mobile_no,
+      })),
+      null,
+      2
+    )}
       </pre>
       <button className="form-control form-control-sm" onClick={addcontact} style={{width:"150px"}}>
         ➕ Add Contact
@@ -5462,7 +5475,16 @@ const checkForDuplicates = async (contacts) => {
     <div>
       <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>Duplicate Contacts</h4>
       <pre className="text-sm text-gray-600 overflow-x-auto">
-        {JSON.stringify(duplicateEntries, null, 2)}
+      {JSON.stringify(
+      duplicateEntries.map(({ title, first_name, last_name, mobile_no }) => ({
+        title,
+        first_name,
+        last_name,
+        mobile_no,
+      })),
+      null,
+      2
+    )}
       </pre>
       <button className="form-control form-control-sm" style={{width:"200px"}} onClick={updatecontactforbulkupload}>
         🔄 Update Contacts

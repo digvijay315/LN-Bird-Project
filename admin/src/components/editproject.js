@@ -38,7 +38,7 @@ function EditProjectform() {
   const location=useLocation()
   const id=location.state.id[0]
 
-  console.log(id);
+   const [isLoading, setIsLoading] = useState(false);
   
     
        
@@ -2578,58 +2578,300 @@ const handleShow7=async()=>
 
 }
 
+// const handleFileChange = (event) => {
+//   const file = event.target.files[0];
+//   if (!file) return;
+
+//   const reader = new FileReader();
+//   reader.onload = (e) => {
+//     const arrayBuffer = e.target.result;
+//     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+//     const sheetName = workbook.SheetNames[0];
+//     const sheet = workbook.Sheets[sheetName];
+//     const data = XLSX.utils.sheet_to_json(sheet);
+
+//     // Ensure the data has at least one row
+//     if (data.length > 0) {
+//       const updatedUnits = data.map((row) => {
+//         // Create a new unit object by copying the base unit template
+//         const newUnit = { ...units };
+
+//         // Iterate through each key in the row (Excel columns)
+//         Object.keys(row).forEach((key) => {
+//           // Check if the key exists in the unit's state and update
+//           if (newUnit.hasOwnProperty(key)) {
+//             if (Array.isArray(newUnit[key])) {
+//               // If the field is an array (like khewat_no, water_source), push the value
+//               newUnit[key] = [...newUnit[key], row[key]];
+//             } else {
+//               // Otherwise, just assign the value directly
+//               newUnit[key] = row[key];
+//             }
+//           }
+//         });
+
+//         return newUnit;
+//       });
+
+//       // Update the unit state and project state
+//       setunit((prevUnit) => [...prevUnit, ...updatedUnits]); // Append new units to the list
+//       setproject((prevState) => ({
+//         ...prevState,
+//         add_unit: [...prevState.add_unit, ...updatedUnits] // Add the new units to the project state
+//       }));
+
+//       // Close any modal or reset other states
+//       handleClose7();
+//       document.getElementById('choosedestination').value = 'Select';
+//     } else {
+//       toast.error('No data found in the Excel file.');
+//     }
+//   };
+
+//   reader.readAsArrayBuffer(file); // Use readAsArrayBuffer instead of readAsBinaryString
+// };
+
+// ===========================================add to unit start=================================================================
+
+
+const databasefieldsunit = [
+    'project_name', 'unit_no', 'unit_type','category','block','size','land_type',
+    'khewat_no','killa_no','share','total_land_area','water_source','water_level','water_pump_type','direction',
+    'side_open','fornt_on_road','total_owner','facing','road','ownership','stage','type','floor','cluter_details',
+    'length','bredth','total_area','measurment2','ocupation_date','age_of_construction','furnishing_details',
+    'enter_furnishing_details','furnished_item','location','lattitude','langitude','uaddress','ustreet','ulocality',
+    'ucity','uzip','ustate','ucountry','owner_details','associated_contact','relation','s_no','preview','descriptions',
+    'category','s_no1','url','document_name','document_no','document_Date','linkded_contact','pic'];
+
+const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
+const [mappedFields, setMappedFields] = useState({}); // Store user-selected mapping
+const [selectedFile, setSelectedFile] = useState(null); // Store uploaded file
+
+const [duplicateEntries, setDuplicateEntries] = useState([]);
+const [pendingContacts, setPendingContacts] = useState([]);
+const [showPopup, setShowPopup] = useState(false);
+// 🔹 Step 1: Extract Headers from Excel File
 const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
+  setSelectedFile(file); // Store file for later use
+
   const reader = new FileReader();
   reader.onload = (e) => {
     const arrayBuffer = e.target.result;
-    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
     const sheetName = workbook.SheetNames[0];
     const sheet = workbook.Sheets[sheetName];
     const data = XLSX.utils.sheet_to_json(sheet);
 
-    // Ensure the data has at least one row
     if (data.length > 0) {
-      const updatedUnits = data.map((row) => {
-        // Create a new unit object by copying the base unit template
-        const newUnit = { ...units };
-
-        // Iterate through each key in the row (Excel columns)
-        Object.keys(row).forEach((key) => {
-          // Check if the key exists in the unit's state and update
-          if (newUnit.hasOwnProperty(key)) {
-            if (Array.isArray(newUnit[key])) {
-              // If the field is an array (like khewat_no, water_source), push the value
-              newUnit[key] = [...newUnit[key], row[key]];
-            } else {
-              // Otherwise, just assign the value directly
-              newUnit[key] = row[key];
-            }
-          }
-        });
-
-        return newUnit;
-      });
-
-      // Update the unit state and project state
-      setunit((prevUnit) => [...prevUnit, ...updatedUnits]); // Append new units to the list
-      setproject((prevState) => ({
-        ...prevState,
-        add_unit: [...prevState.add_unit, ...updatedUnits] // Add the new units to the project state
-      }));
-
-      // Close any modal or reset other states
-      handleClose7();
-      document.getElementById('choosedestination').value = 'Select';
+      setExcelHeaders(Object.keys(data[0])); // Extract column headers
     } else {
-      toast.error('No data found in the Excel file.');
+      toast.error("No data found in the Excel file.");
     }
   };
 
-  reader.readAsArrayBuffer(file); // Use readAsArrayBuffer instead of readAsBinaryString
+  reader.readAsArrayBuffer(file);
 };
+
+
+
+
+// 🔹 Step 2: Process & Map Data Based on User Selection
+const handleProcessFile = () => {
+  try {
+    
+ 
+  setIsLoading(true);
+  if (!selectedFile) {
+    toast.error("No file selected. Please upload a file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    if (data.length > 0) {
+      const updatedUnits = data.map((row) => {
+        let newcontact = {};
+
+        Object.keys(row).forEach((key) => {
+          let mappedKey = mappedFields[key] || key; // Use mapped key or original key
+          let value = row[key];
+
+          // Automatically detect and convert CSV-style values to arrays
+          if (typeof value === "string" && value.includes(",")) {
+            newcontact[mappedKey] = value.split(",").map((v) => v.trim());
+          } else {
+            newcontact[mappedKey] = value;
+          }
+        });
+
+        return newcontact;
+      });
+
+      // setunit((prevUnit) => [...prevUnit, ...updatedUnits]); // Append new units to the list
+      // setproject((prevState) => ({
+      //   ...prevState,
+      //   add_unit: [...prevState.add_unit, ...updatedUnits] // Add the new units to the project state
+      // }));
+      // setcontact(updatecontact); // Update state with processed data
+      checkForDuplicates(updatedUnits); // Call duplicate check after mapping
+    } else {
+      toast.error("No data found in the Excel file.");
+    }
+  };
+
+  reader.readAsArrayBuffer(selectedFile);
+} catch (error) {
+    console.log(error);
+    
+}finally {
+  setIsLoading(false); // Hide loader after API call
+}
+};
+
+const [allcontacts, setallcontacts] = useState([]);
+
+const normalizeMobile = (mobile) => {
+  return mobile?.toString().replace(/\D/g, "").trim(); // Remove non-digits & trim spaces
+};
+
+const checkForDuplicates = async (contacts) => {
+  try {
+    setIsLoading(true);
+
+    // Fetch existing units
+    const response = await api.get("viewproject");
+    const allunits = response.data.project.flatMap(project => project.add_unit);
+
+    // Fetch all contacts
+    const contactResponse = await api.get("viewcontact");
+    const contactList = contactResponse.data.contact; // Assuming [{_id, mobile_no: []}]
+
+
+
+    // Create a mapping of mobile_no to ObjectId
+    const mobileToIdMap = new Map();
+    contactList.forEach(contact => {
+      if (Array.isArray(contact.mobile_no)) {
+        contact.mobile_no.forEach(mobile => {
+          const normalizedMobile = normalizeMobile(mobile);
+          if (normalizedMobile) {
+            mobileToIdMap.set(normalizedMobile, contact._id);
+          }
+        });
+      }
+    });
+
+   
+
+    let newContacts = [];
+    let duplicates = [];
+
+    contacts.forEach((contact, index) => {
+
+
+      // Ensure `owner_details` is an array
+      let updatedOwnerDetails = [];
+      if (Array.isArray(contact.owner_details)) {
+        updatedOwnerDetails = contact.owner_details.map(mobile => {
+          const normalizedMobile = normalizeMobile(mobile);
+          return mobileToIdMap.get(normalizedMobile) || mobile; // Replace with ObjectId if found
+        });
+      } else if (contact.owner_details) {
+        // If single string, convert to an array
+        const normalizedMobile = normalizeMobile(contact.owner_details);
+        updatedOwnerDetails = [mobileToIdMap.get(normalizedMobile) || contact.owner_details];
+      }
+
+        // Ensure `owner_details` is an array
+        let updatedassociatedcontact = [];
+        if (Array.isArray(contact.associated_contact)) {
+          updatedassociatedcontact = contact.associated_contact.map(mobile => {
+            const normalizedMobile = normalizeMobile(mobile);
+            return mobileToIdMap.get(normalizedMobile) || mobile; // Replace with ObjectId if found
+          });
+        } else if (contact.associated_contact) {
+          // If single string, convert to an array
+          const normalizedMobile = normalizeMobile(contact.associated_contact);
+          updatedassociatedcontact = [mobileToIdMap.get(normalizedMobile) || contact.associated_contact];
+        }
+
+  
+
+      // Create updated unitDetails object
+      const unitDetails = {
+        ...contact,
+        owner_details: updatedOwnerDetails, 
+        associated_contact:updatedassociatedcontact
+      };
+
+      // Check if duplicate
+      const isDuplicate = allunits.some(unit =>
+        unit.project_name === contact.project_name &&
+        unit.unit_no === contact.unit_no &&
+        unit.block === contact.block
+      );
+
+      if (isDuplicate) {
+        duplicates.push(unitDetails);
+      } else {
+        newContacts.push(unitDetails);
+      }
+    });
+
+    // Update state with new contacts and duplicates
+    setDuplicateEntries(duplicates);
+    setPendingContacts(newContacts);
+    setallcontacts([...newContacts, ...duplicates]);
+
+  } catch (error) {
+    console.error("❌ Error checking for duplicates:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+const addunits = () => {
+  // Step 1: Identify duplicates within pendingContacts
+  const seen = new Set();
+  const uniqueUnits = [];
+  const allUnitsWithColor = [];
+
+  pendingContacts.forEach((unit) => {
+    const unitIdentifier = `${unit.project_name}-${unit.unit_no}-${unit.block}`; // Unique identifier for each unit
+    
+    if (seen.has(unitIdentifier)) {
+      // If the unit is a duplicate, mark it as duplicate and set color
+      unit.isDuplicate = true;
+      allUnitsWithColor.push(unit); // Add duplicate unit
+    } else {
+      // Otherwise, add to the unique units list and mark as non-duplicate
+      seen.add(unitIdentifier);
+      unit.isDuplicate = false;
+      allUnitsWithColor.push(unit); // Add unique unit
+    }
+  });
+
+  // Step 2: Update state with all units (including duplicates)
+  setunit((prevUnit) => [...prevUnit, ...allUnitsWithColor]); // Append all units (unique + duplicate) to the unit list
+  setproject((prevState) => ({
+    ...prevState,
+    add_unit: [...prevState.add_unit, ...allUnitsWithColor], // Add all units to the project state
+  }));
+
+
+};
+
+// ========================================add unit in project end===================================================================
 
 
 const [show8, setshow8] = useState(false);
@@ -3804,7 +4046,7 @@ const generateExcelFileunit = () => {
           
          
       project.add_unit.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index}  style={{ color: item.isDuplicate ? "red" : "black",  }}   className={item.isDuplicate ? 'no-activity-flash' : ''}>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
              {item.unit_no}
             </StyledTableCell>
@@ -5358,7 +5600,107 @@ const generateExcelFileunit = () => {
             </Modal.Header>
             <Modal.Body>
 
-            <input type="file" accept=".xlsx,.xls" onChange={handleFileChange}  id="import-file" />
+            <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+      <h3 className="text-2xl font-bold text-center mb-4 text-gray-800">
+        📂 Upload & Map Your Excel Data
+      </h3>
+
+      {/* File Upload Input */}
+      <div className="flex flex-col items-center space-y-4">
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept=".xlsx, .xls"
+          className="block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-600 file:text-white
+            hover:file:bg-blue-700 cursor-pointer"
+        />
+      </div>
+
+      {/* Mapping UI */}
+      {excelHeaders.length > 0 && (
+        <div className="mt-6">
+          <h5 className="text-lg font-semibold mb-2 text-gray-700">🗺️ Map Your Excel Columns</h5>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+          {excelHeaders.map((header, index) => (
+            <div key={index} className="flex items-center gap-2 p-2">
+              <span className="labels font-sans">{header} ➝</span>
+              <select
+                className="form-control form-control-sm w-1/3 p-1 border border-gray-300 rounded"
+                onChange={(e) =>
+                  setMappedFields((prev) => ({
+                    ...prev,
+                    [header]: e.target.value,
+                  }))
+                }
+              >
+                <option value="">Select Field</option>
+                {databasefieldsunit.map((dbField, idx) => (
+                  <option key={idx} value={dbField}>
+                    {dbField}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
+
+          <button style={{backgroundColor:"gray",width:"150px"}}
+            onClick={handleProcessFile}
+            className="mt-4 w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition-all"
+          >
+            ✅ Process File
+          </button>
+        </div>
+      )} 
+
+      {/* Show Processed Data */}
+      {allcontacts.length > 0 && (
+  <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+    <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
+    
+    <div className="mb-4">
+      <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>New Units</h4>
+      <pre className="text-sm text-gray-600 overflow-x-auto" >
+      {JSON.stringify(
+      pendingContacts.map(({ project_name, block, unit_no }) => ({
+        project_name,
+        block,
+        unit_no,
+      })),
+      null,
+      2
+    )}
+      </pre>
+      <button className="form-control form-control-sm"  style={{width:"150px"}} onClick={addunits}>
+        ➕ Add Units
+      </button>
+    </div>
+
+    <div>
+      <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>Duplicate Units</h4>
+      <pre className="text-sm text-gray-600 overflow-x-auto">
+      {JSON.stringify(
+      duplicateEntries.map(({ project_name, block, unit_no}) => ({
+        project_name,
+        block,
+        unit_no,
+      })),
+      null,
+      2
+    )}
+      </pre>
+      <button className="form-control form-control-sm" style={{width:"200px"}}>
+        🔄 Update Units
+      </button>
+    </div>
+  </div>
+)}
+
+    </div>
 
             </Modal.Body>
             <Modal.Footer>
