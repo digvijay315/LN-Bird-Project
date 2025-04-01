@@ -3028,12 +3028,12 @@ const checkForDuplicates = async (contacts) => {
       if (Array.isArray(contact.owner_details)) {
         updatedOwnerDetails = contact.owner_details.map(mobile => {
           const normalizedMobile = normalizeMobile(mobile);
-          return mobileToIdMap.get(normalizedMobile) || mobile; // Replace with ObjectId if found
+          return mobileToIdMap.get(normalizedMobile) || []; // Replace with ObjectId if found
         });
       } else if (contact.owner_details) {
         // If single string, convert to an array
         const normalizedMobile = normalizeMobile(contact.owner_details);
-        updatedOwnerDetails = [mobileToIdMap.get(normalizedMobile) || contact.owner_details];
+        updatedOwnerDetails = [mobileToIdMap.get(normalizedMobile) || []];
       }
 
         // Ensure `owner_details` is an array
@@ -3041,12 +3041,12 @@ const checkForDuplicates = async (contacts) => {
         if (Array.isArray(contact.associated_contact)) {
           updatedassociatedcontact = contact.associated_contact.map(mobile => {
             const normalizedMobile = normalizeMobile(mobile);
-            return mobileToIdMap.get(normalizedMobile) || mobile; // Replace with ObjectId if found
+            return mobileToIdMap.get(normalizedMobile) || []; // Replace with ObjectId if found
           });
         } else if (contact.associated_contact) {
           // If single string, convert to an array
           const normalizedMobile = normalizeMobile(contact.associated_contact);
-          updatedassociatedcontact = [mobileToIdMap.get(normalizedMobile) || contact.associated_contact];
+          updatedassociatedcontact = [mobileToIdMap.get(normalizedMobile) || []];
         }
 
   
