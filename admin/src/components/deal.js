@@ -428,22 +428,43 @@ const fetchDeals = async () => {
     const response = await api.get('viewdeal'); // Get all deals from API
     setDeals(response.data.deal);
   } catch (error) {
+
     console.error('Error fetching deals:', error);
   }
 };
+
+const[fetchingdeal,setfeatchingdeal]=useState([])
+const fetchDealsinventory
+ = async () => {
+  try {
+    const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
+    console.log(response);
+    
+    setfeatchingdeal(response.data.project.add_unit[0]);
+  } catch (error) {
+    console.error('Error fetching deals:', error);
+  }
+};
+
+React.useEffect(()=>
+{
+  fetchDealsinventory()
+
+},[deal.project,deal.block,deal.unit_number])
+
 
 
 
 
 // Function to update a deal on the server (based on deal ID)
-const updateDealApi = async (updatedDeal) => {
-  try {
-    await api.put(`updatedeal/${updatedDeal._id}`, updatedDeal); // PUT request to update the deal
-    // console.log('Deal updated successfully:', updatedDeal);
-  } catch (error) {
-    console.error('Error updating deal:', error);
-  }
-};
+// const updateDealApi = async (updatedDeal) => {
+//   try {
+//     await api.put(`updatedeal/${updatedDeal._id}`, updatedDeal); // PUT request to update the deal
+//     // console.log('Deal updated successfully:', updatedDeal);
+//   } catch (error) {
+//     console.error('Error updating deal:', error);
+//   }
+// };
 
 // Fetch all deals and data2 when the component mounts
 React.useEffect(() => {
@@ -453,41 +474,44 @@ React.useEffect(() => {
 
 // Recalculate matched leads for each deal whenever data2 changes
 React.useEffect(() => {
-  if (data2.length > 0 && deals.length > 0) {
-    const updatedDeals = deals.map((deal) => {
+  if (data2.length >0) {
+   
       const price = deal.expected_price;
       const availableFor = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
+      const propertytype=fetchingdeal.category[0]
+      const unittype=fetchingdeal.unit_type
+      const facing=fetchingdeal.facing
+      const road=fetchingdeal.road
+
+      console.log(price,availableFor,propertytype,unittype,facing,road);
+      
 
       // Filter leads based on the current deal's criteria
       const filteredLeads = data2.filter(
         (item) =>
           item.requirment === availableFor &&
           price >= parseFloat(item.budget_min) &&
-          price <= parseFloat(item.budget_max)
+          price <= parseFloat(item.budget_max) &&
+           propertytype==item.property_type[0]  &&
+           unittype==item.unit_type[0] &&
+           facing == item.facing[0]  &&
+           road==item.road[0]
       );
+console.log(filteredLeads);
 
       // Create a new deal object with updated matched leads and matched lead count
-      return {
+      setdeal({
         ...deal,
         matchedleads: filteredLeads,
         matchinglead: filteredLeads.length, // Update the matched lead count
-      };
-    });
-
-    // Only update deals if there is a meaningful change
-    if (JSON.stringify(previousDealsRef.current) !== JSON.stringify(updatedDeals)) {
-      setdeal(updatedDeals); // Update the state with the updated deals
-      previousDealsRef.current = updatedDeals; // Update the previousDealsRef
-
-      // Send updates to the server in a separate async function
-      (async () => {
-        for (const updatedDeal of updatedDeals) {
-          await updateDealApi(updatedDeal); // Update each deal on the server
-        }
-      })();
-    }
+      })
+    
   }
-}, [data2, deals]); // Trigger this effect whenever `data2` or `deals` changes
+}, [deal.source]); // Trigger this effect whenever `data2` or `deals` changes
+
+console.log(deal.matchinglead);
+
+
 
 // Debugging: log the updated deals and data2
 // React.useEffect(() => {
@@ -496,20 +520,20 @@ React.useEffect(() => {
 // }, [deals, data2]);
 
            
-            React.useEffect(() => {
-              const price=deal.expected_price
-              const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
-              const filteredLeads = data2.filter(item => 
-                item.requirment === availableFor && 
-                price >= parseFloat(item.budget_min) && 
-                price <= parseFloat(item.budget_max)
-              );
-              setdeal(prevDeal => ({
-                ...prevDeal,
-                matchedleads: filteredLeads,
-                matchinglead: filteredLeads.length
-            })); // Update the state with the filtered leads
-          }, [ data2,deal.available_for,deal.expected_price]);
+          //   React.useEffect(() => {
+          //     const price=deal.expected_price
+          //     const availableFor = deal.available_for === "Sale" ? "Buy" : deal.available_for;
+          //     const filteredLeads = data2.filter(item => 
+          //       item.requirment === availableFor && 
+          //       price >= parseFloat(item.budget_min) && 
+          //       price <= parseFloat(item.budget_max)
+          //     );
+          //     setdeal(prevDeal => ({
+          //       ...prevDeal,
+          //       matchedleads: filteredLeads,
+          //       matchinglead: filteredLeads.length
+          //   })); // Update the state with the filtered leads
+          // }, [ data2,deal.available_for,deal.expected_price]);
        
 
 

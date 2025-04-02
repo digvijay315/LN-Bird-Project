@@ -506,7 +506,7 @@ const result=resp.data.product[0]
                           onChange={(event)=>handleImageChange(event)}
                           required
                         />
-                        <img src={`${product.product_image}`}></img>
+                        <img src={`${product.product_image}`} style={{height:"100px"}}></img>
                       </div>
         
                       {/* Product Description */}

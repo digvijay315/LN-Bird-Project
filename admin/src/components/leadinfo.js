@@ -20,7 +20,9 @@ function Leadinfo() {
 
 
 
-const facing=["East","West","South","North","North East","South East","North West","South West"];
+const facing=["Park","Green Belt","Highway","Commercial","School","Hospital","Mandir","Gurudwara","Crech","Clinic","Community Centre",
+              "1 Kanal","14m Marla","10 Marla","8 Marla","6 Marla","4 Marla","2 Marla","3 Marla","2 Kanal"];
+
 const [facings, setfacings] = useState([]);
 
 const handlefacingChange = (event) => {
@@ -47,7 +49,9 @@ const handlefacingChange = (event) => {
   }
 };
 
-const road=["9 mtr road","12 mtr road","60 mtr road","100 mtr road"];
+const road=["9 Mtr Wide","12 Mtr Wide","18 Mtr Wide","24 Mtr Wide","60 Mtr Wide"];       
+
+
 
 const [roads, setroads] = useState([]);
 

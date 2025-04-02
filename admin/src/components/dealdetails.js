@@ -505,6 +505,8 @@ function Dealdetails() {
                   React.useEffect(()=>{fetchdatabystage_rejectcount()},[])
 
 
+  //=========================================== matched lead code start=========================================================
+
                   const dealallColumns = [
                     { id: 'unit_number', name: 'Unit Number' },
                     { id: 'location', name: 'Project Name' },
@@ -612,42 +614,42 @@ function Dealdetails() {
                   
 
                  
-                  useEffect(() => {
-                    const filterLeadsByRemovedColumns = () => {
-                       let newFilteredLeads = [...leaddata];
-                       const price = deal1[0]?.expected_price;
-                       const availableFor = deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
-                      if(lead1.length!==0){
-                      // If the 'price' column is removed, don't filter based on price
-                      newFilteredLeads = !removedColumns.includes('price')
-                        ? leaddata.filter((item) => item.requirment === availableFor)
-                        : leaddata.filter(
-                            (item) =>
-                              item.requirment === availableFor &&
-                              price >= parseFloat(item.budget_min) &&
-                              price <= parseFloat(item.budget_max)
-                          );
+                  // useEffect(() => {
+                  //   const filterLeadsByRemovedColumns = () => {
+                  //      let newFilteredLeads = [...leaddata];
+                  //      const price = deal1[0]?.expected_price;
+                  //      const availableFor = deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
+                  //     if(lead1.length!==0){
+                  //     // If the 'price' column is removed, don't filter based on price
+                  //     newFilteredLeads = !removedColumns.includes('price')
+                  //       ? leaddata.filter((item) => item.requirment === availableFor)
+                  //       : leaddata.filter(
+                  //           (item) =>
+                  //             item.requirment === availableFor &&
+                  //             price >= parseFloat(item.budget_min) &&
+                  //             price <= parseFloat(item.budget_max)
+                  //         );
                       
                 
-                      setlead1(newFilteredLeads); // Update filtered leads
-                    };
-                  }
+                  //     setlead1(newFilteredLeads); // Update filtered leads
+                  //   };
+                  // }
 
-                  if(lead1.length==0){
-                    let newFilteredLeads = [...leaddata];
-                    const availableForFallback =deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
-                    newFilteredLeads = leaddata.filter((item) =>
-                      item.requirment === availableForFallback // Use availableFor as fallback
-                    );
-                    setlead1(newFilteredLeads);
-                  }
+                  // if(lead1.length==0){
+                  //   let newFilteredLeads = [...leaddata];
+                  //   const availableForFallback =deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
+                  //   newFilteredLeads = leaddata.filter((item) =>
+                  //     item.requirment === availableForFallback // Use availableFor as fallback
+                  //   );
+                  //   setlead1(newFilteredLeads);
+                  // }
               
-                    filterLeadsByRemovedColumns(); // Trigger filtering when removedColumns change
+                  //   filterLeadsByRemovedColumns(); // Trigger filtering when removedColumns change
                 
-                  }, [removedColumns]);
+                  // }, [removedColumns]);
                 
 
-
+// =================================matched lead code end=======================================================================
 
                   React.useEffect(()=>{fetchcdata()},[])
 

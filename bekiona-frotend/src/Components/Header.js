@@ -214,7 +214,7 @@ console.log('Order Created:', order); // Debugging: Check if the order was creat
 
 // Step 2: Razorpay Checkout Options
 const options = {
-key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Key ID
+key: 'rzp_live_YBXf8NJT3Al7Qc', // Replace with your Key ID
 amount: order.amount,
 currency: order.currency,
 name: 'Your Company Name',
@@ -1494,7 +1494,7 @@ type="text"
 className="form-control"
 id="lastName"
 name="lastName"
-value={formData.lastName}
+
 onChange={handleChange}
 placeholder="e.g. Doe"
 style={{
@@ -1535,7 +1535,6 @@ type="text"
 className="form-control"
 id="lastName"
 name="lastName"
-value={formData.lastName}
 onChange={handleChange}
 placeholder="e.g. Doe"
 style={{

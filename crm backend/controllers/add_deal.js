@@ -158,7 +158,7 @@ const add_deal = async (req, res) => {
                     {
                         try {
                             const id=req.params._id;
-                            console.log(id);
+                         
                             
                             const user=await adddeal.findOne({_id:id})
                             if(!user)
