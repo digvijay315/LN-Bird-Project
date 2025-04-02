@@ -1458,13 +1458,106 @@ const handleOwnerChange = (event) => {
                 };
 
 
-
-                // console.log(leadinfo.matched_deal);
-                // console.log(leadinfo.facing);
-                // console.log(leadinfo.road);
-
-
 //======================----------------------------------all array addFn3,delete and handle change event--------------======================
+
+// ==============================================search loaction from google start========================================================
+
+                        const [coordinates, setCoordinates] = useState('');
+                        const getlocation = async (e) => {
+                                        e.preventDefault();
+                                        try {
+                                          // Geocode the address entered by the user
+                                          const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                            params: {
+                                              address: leadinfo.search_location,
+                                              key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc' // Replace with your API key
+                                            }
+                                          });
+                                      
+                                          // Check if we have results from the geocoding response
+                                          if (response.data.results.length > 0) {
+                                            const { lat, lng } = response.data.results[0].geometry.location;
+                                            setCoordinates({ lat, lng });
+                                            setleadinfo(prevlead => ({
+                                              ...prevlead,
+                                              lattitude: lat,
+                                              longitude: lng
+                                            }));
+                                      
+                                            // Extract address components from the response
+                                            const addressComponents = response.data.results[0].address_components;
+                                            console.log('Geocode Response:', response.data);
+                                            let address = '';
+                                            let street = '';
+                                            let locality = '';
+                                            let city = '';
+                                            let zip = '';
+                                            let state = '';
+                                            let country = '';
+                                      
+                                            // Loop through address components to populate the fields
+                                            addressComponents.forEach(component => {
+                                              const types = component.types;
+                                      
+                                              if (types.includes('administrative_area_level_3') || types.includes('political')) {
+                                                address += component.long_name + ' ';
+                                              }
+                                              if (types.includes('sublocality_level_1') || types.includes('sublocality')) {
+                                                locality += component.long_name + ' ';
+                                              }
+                                              // if (types.includes('administrative_area_level_2')) {
+                                              //   locality = component.long_name;
+                                              // }
+                                              if (types.includes('administrative_area_level_1')) {
+                                                state = component.long_name;
+                                              }
+                                              if (types.includes('locality')) {
+                                                city = component.long_name;
+                                              }
+                                              if (types.includes('postal_code')) {
+                                                zip = component.long_name;
+                                              }
+                                              if (types.includes('country')) {
+                                                country = component.long_name;
+                                              }
+                                            });
+                                      
+                                            // Update the state with the extracted address components
+                                            setleadinfo(prevlead => ({
+                                              ...prevlead,
+                                              street_address:address,
+                                              // street: street.trim(),
+                                              // block:locality,
+                                              city2:city,
+                                              pincode2: zip,
+                                              state2:state,
+                                              country2:country,
+                                              location: response.data.results[0].formatted_address
+                                            }));
+                                      
+                                            // Optionally mark the map as loaded (if you use a map component)
+                                            
+                                      
+                                          } else {
+                                            // Handle case when no results are found
+                                            setCoordinates(null);
+                                            console.log('No results found');
+                                          }
+                                      
+                                        } catch (error) {
+                                          // Handle errors, such as invalid API key or issues with the network
+                                          console.error('Error fetching coordinates:', error);
+                                        }
+                                      };
+
+
+//================================================ search location from google end=====================================================
+
+
+
+
+
+
 return ( 
         <div>
             <Header1/>
@@ -1928,18 +2021,19 @@ return (
 
                        <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
                         <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
-                        <div className="col-md-4"></div>
+                       <div className="col-md-2"></div>
+                        <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
                         <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
                         <div className="col-md-4"></div>
-                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
                     
-                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
                     {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
                     </div>
                     </div>
