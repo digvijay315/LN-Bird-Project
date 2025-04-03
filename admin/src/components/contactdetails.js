@@ -3200,7 +3200,7 @@ const checkForDuplicates = async (contacts) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TableRow >
-          <StyledTableCell style={{backgroundColor:"#0086b3"}}>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll}
@@ -3210,7 +3210,7 @@ const checkForDuplicates = async (contacts) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{   cursor: 'pointer',backgroundColor:"#0086b3" }}
+              style={{   cursor: 'pointer',backgroundColor:"gray" }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -3236,7 +3236,7 @@ const checkForDuplicates = async (contacts) => {
               style={{ padding: "10px", cursor: "pointer" }} 
               onClick={() => navigate('/contactsingleview',{state:item})}
             >
-              {item.title} {item.first_name} {item.last_name}
+              <span style={{color:"#0086b3",fontWeight:"bold"}}>{item.title} {item.first_name} {item.last_name}</span>
               <br />
               {
                 item.mobile_no.map((item1)=>
