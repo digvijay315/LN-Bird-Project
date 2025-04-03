@@ -2902,27 +2902,34 @@ const handleFileChange = (event) => {
   const file = event.target.files[0];
   if (!file) return;
 
+  setIsLoading(true); // Start loading
   setSelectedFile(file); // Store file for later use
 
   const reader = new FileReader();
   reader.onload = (e) => {
-    const arrayBuffer = e.target.result;
-    const workbook = XLSX.read(arrayBuffer, { type: "array" });
-    const sheetName = workbook.SheetNames[0];
-    const sheet = workbook.Sheets[sheetName];
-    const data = XLSX.utils.sheet_to_json(sheet);
+    try {
+      const arrayBuffer = e.target.result;
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet);
 
-    if (data.length > 0) {
-      let headers = Object.keys(data[0]);
-      setExcelHeaders(headers.slice(0, -18));
-      
-    } else {
-      toast.error("No data found in the Excel file.");
+      if (data.length > 0) {
+        let headers = Object.keys(data[0]);
+        setExcelHeaders(headers); // Set headers
+      } else {
+        toast.error("No data found in the Excel file.");
+      }
+    } catch (error) {
+      toast.error("Error processing the Excel file.");
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
   reader.readAsArrayBuffer(file);
 };
+
 
 
 
