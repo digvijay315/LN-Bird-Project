@@ -7,15 +7,35 @@ import { useCart } from './cartcontext'
 import Swal from 'sweetalert2';
 import Footer from './footer';
 import Carousel from 'react-bootstrap/Carousel';
+import Cuheader from './Customerdashboard/Cuheader';
 // import { useNavigate  } from "react-router-dom";
 
 function Category() {
 
   const [cartMessage, setCartMessage] = useState({}); // Individual messages for each product
     const [buttonColors, setButtonColors] = useState({}); // Track button color per product
-  
-
     const {cart,setcart}=useCart()
+
+     const [token, setToken] = useState(null);
+    
+      useEffect(() => {
+        // Check for token when app loads
+        const storedToken = localStorage.getItem("usertoken");
+        setToken(storedToken); // Set token state
+    
+        // Function to handle token change
+        const handleStorageChange = () => {
+          const updatedToken = localStorage.getItem("usertoken");
+          setToken(updatedToken); // Update token state dynamically
+        };
+    
+        // Listen for storage changes (useful for multiple tabs)
+        window.addEventListener("storage", handleStorageChange);
+    
+        return () => {
+          window.removeEventListener("storage", handleStorageChange);
+        };
+      }, []);
     
     const location=useLocation()
     const category=location.state
@@ -51,49 +71,41 @@ function Category() {
         };
 
 
-          const handleprouctadd = (product) => {
-              const isProductInCart = cart.some((item) => item._id === product._id);
-            
-              if (!isProductInCart) {
-                // Add product to the cart
-                setcart([...cart, product]);
-            
-                // Change button color for the clicked product
-                setButtonColors((prev) => ({
-                  ...prev,
-                  [product._id]: "#FF5F00",
-                }));
-            
-                // Revert button color after 1 second
-                setTimeout(() => {
-                  setButtonColors((prev) => ({
-                    ...prev,
-                    [product._id]: "rgb(51, 51, 51)", // Original color
-                  }));
-                }, 1000);
-            
-                // Set cart message
-                setCartMessage((prev) => ({
-                  ...prev,
-                  [product._id]: "Your product has been added to the cart!",
-                }));
-            
-                // Hide the message after 2 seconds
-                setTimeout(() => {
-                  setCartMessage((prev) => ({
-                    ...prev,
-                    [product._id]: "",
-                  }));
-                }, 2000);
-              } else {
-                Swal.fire({
-                  title: "Error!",
-                  text: "Product already in your cart",
-                  icon: "error",
-                  confirmButtonText: "OK",
-                });
-              }
-            };
+           const handleprouctadd = (product) => {
+                       const isProductInCart = cart.some((item) => item._id === product._id);
+                     
+                       if (!isProductInCart) {
+                         // Add product to the cart
+                         setcart([...cart, product]);
+                     
+                         // Change button color for the clicked product
+                         setButtonColors((prev) => ({
+                           ...prev,
+                           [product._id]: "#FF5F00",
+                         }));
+                     
+                         // Set cart message
+                         setCartMessage((prev) => ({
+                           ...prev,
+                           [product._id]: "Your product has been added to the cart!",
+                         }));
+                     
+                         // Hide the message after 2 seconds
+                         setTimeout(() => {
+                           setCartMessage((prev) => ({
+                             ...prev,
+                             [product._id]: "",
+                           }));
+                         }, 2000);
+                       } else {
+                         Swal.fire({
+                           title: "Warning!",
+                           text: "Product already in your cart",
+                           icon: "warning",
+                           confirmButtonText: "OK",
+                         });
+                       }
+                     };
             
 
               const truncateText = (text, maxLength) => {
@@ -149,7 +161,9 @@ function Category() {
     
   return (
     <>
-    <Header/>
+    {/* If token exists, show Cuheader, else show Header */}
+    {token ? <Cuheader /> : <Header />}
+    {/* <Header/> */}
 
 
     <div className="container-fluid p-0">
@@ -300,7 +314,9 @@ function Category() {
             onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              backgroundColor: buttonColors[product._id] || "rgb(51, 51, 51)",
+              backgroundColor: cart.some(item => item._id === product._id) 
+              ? "green"  // Change this to your desired color when item is in cart
+              : "rgb(51, 51, 51)",
               color: "white",
               border: "none",
               padding: "12px 30px",

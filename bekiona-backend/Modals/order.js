@@ -7,9 +7,9 @@ const order = new mongoose.Schema({
   mobileNumber: String,
   email: String,
   apartmentNumber: String,
-  selectstate: String,
+  orderid: String,
   area: String,
-  landmark: String,
+  landmark: String, 
   addressType: String,
   pincode: String,
   cartItems: [

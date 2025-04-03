@@ -42,9 +42,11 @@ const getUserByEmail = async (req, res) => {
 
 const getTotalUsers = async (req, res) => {
   try {
-    const userCount = await User.countDocuments(); // Get total users count
+    const userCount = await User.countDocuments(); // Count total users
+
     res.status(200).json({ totalUsers: userCount });
-  } catch (err) {
+  } catch (error) {
+    console.error("Error fetching user count:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

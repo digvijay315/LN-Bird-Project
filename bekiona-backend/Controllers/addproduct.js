@@ -129,20 +129,26 @@ const delete_product = async (req, res) => {
     
     try {
         const id = req.params._id; // Get product ID from URL parameter
-        const updatedData = req.body; // Get updated data from the request body
+        let updatedData = req.body; // Get updated data from the request body
     
-        
+        const existingProduct = await addproduct.findById(id);
+
+        if (!existingProduct) {
+            return res.status(404).send({ message: 'Product not found' });
+        }
 
         // If there are new files, upload them to Cloudinary
-        if (req.files) {
+        if (req.files && req.files.length > 0) {
             const newDocumentPic = [];
             for (let file of req.files) {
                 const result = await cloudinary.uploader.upload(file.path);
                 newDocumentPic.push(result.secure_url);
             }
-            updatedData.product_image = newDocumentPic; // Update the product image field
+            updatedData.product_image = newDocumentPic; // Update product image
+        } else {
+            // Retain the existing product image if no new files are uploaded
+            updatedData.product_image = existingProduct.product_image;
         }
-
         // Find the product by ID and update it
         const updatedProduct = await addproduct.findByIdAndUpdate(
             id, // Find product by ID

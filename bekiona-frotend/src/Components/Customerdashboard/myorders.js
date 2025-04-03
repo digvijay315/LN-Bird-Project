@@ -9,15 +9,9 @@ function Myorders() {
           const toggleSidebar = () => {
             setIsSidebarCollapsed(!isSidebarCollapsed);
           };
-        
-
-
-
-
-
-
-
+     
     const email=localStorage.getItem('email')
+    console.log(email);
     const[allorders,setallorders]=useState([])
 
     const getallorders=async()=>

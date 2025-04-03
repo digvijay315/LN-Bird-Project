@@ -199,7 +199,7 @@ const user=localStorage.getItem('email')
           </h2>
 
           {/* First Name and Last Name */}
-          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+          <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>               
             <input
               type="text"
               name="firstName"
@@ -222,7 +222,7 @@ const user=localStorage.getItem('email')
               placeholder="LastName"
               value={userInfo.lastName}
               onChange={handleChange}
-              disabled={!isEditing.lastName}
+              // disabled={!isEditing.lastName}
               style={{
                 flex: 1,
                 padding: "12px",
@@ -233,7 +233,7 @@ const user=localStorage.getItem('email')
                 outline: isEditing.name ? "2px solid #007bff" : "none",
               }}
             />
-            {(!isEditing.firstName && !isEditing.name) && (
+            {(!isEditing.firstName &&  !isEditing.lastName) && (
               <button
                 onClick={() => {
                   // handleEdit("firstName");

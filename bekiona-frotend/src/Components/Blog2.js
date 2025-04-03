@@ -3,10 +3,33 @@ import Header from './Header'
 import { useLocation } from 'react-router-dom';
 import api from '../Components/api'
 import Footer from "./footer";
+import Cuheader from "./Customerdashboard/Cuheader";
 
 
 
 function Blog2() {
+
+   const [token, setToken] = useState(null);
+  
+    useEffect(() => {
+      // Check for token when app loads
+      const storedToken = localStorage.getItem("usertoken");
+      setToken(storedToken); // Set token state
+  
+      // Function to handle token change
+      const handleStorageChange = () => {
+        const updatedToken = localStorage.getItem("usertoken");
+        setToken(updatedToken); // Update token state dynamically
+      };
+  
+      // Listen for storage changes (useful for multiple tabs)
+      window.addEventListener("storage", handleStorageChange);
+  
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+      };
+    }, []);
+  
 
 
      const location = useLocation()
@@ -39,7 +62,9 @@ function Blog2() {
 
   return (
     <div>
-        <Header/>
+      {/* If token exists, show Cuheader, else show Header */}
+      {token ? <Cuheader /> : <Header />}
+        {/* <Header/> */}
         <div
   style={{
     backgroundColor:"rgba(223, 255, 191, 0.18)",

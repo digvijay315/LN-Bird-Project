@@ -14,6 +14,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Navbar, Nav, NavDropdown, Offcanvas, Container, } from "react-bootstrap";
 function Header() {
 const [utocken, setutocken] = useState('')
+const [validation1, setValidation1] = useState({});
+
 
 const token=localStorage.getItem('usertoken')
 useEffect(()=>
@@ -94,22 +96,31 @@ i === index && item.product_quantity1 > 1
 
 // Calculate total price
 const calculateTotalPrice = () => {
-return cart.reduce(
+// Calculate Subtotal (total without GST)
+const subtotal = cart.reduce(
 (total, item) => total + parseFloat(item.product_price) * item.product_quantity1,
 0
 );
+
+const gstPercentage = 18; // Example: 18% GST (you can change this value)
+const gstAmount = (subtotal * gstPercentage) / 100; // Calculate GST
+
+const total = subtotal + gstAmount; // Final total price including GST
+
+return { subtotal, gstAmount, total };
 };
 
-// console.log(calculateTotalPrice);
-
-
 useEffect(() => {
-const total = calculateTotalPrice();
+const { subtotal, gstAmount, total } = calculateTotalPrice(); // Get values
+
 setFormData(prevData => ({
 ...prevData,
-totalPrice: total,
+totalPrice: total, // The final price after adding GST
+subtotal: subtotal, // Subtotal without GST
+gstAmount: gstAmount, // GST amount
 }));
-}, [formData.cartItems]);
+}, [formData.cartItems]); // Dependency array includes cartItems to recalculate on cart update
+
 
 
 const [show1, setShow1] = useState(false);
@@ -117,7 +128,7 @@ const [show1, setShow1] = useState(false);
 const handleClose1 = () => setShow1(false);
 const handleShow1 = () => {
 setShow1(true);
-};
+}; 
 
 
 
@@ -128,7 +139,7 @@ const handleShow4 = () => {
 
 
 
-setShow4(true); 
+setShow4(true);
 handleClose1()
 }
 
@@ -139,11 +150,61 @@ handleClose1()
 
 const handleChange = (e) => {
 const { name, value, type, checked } = e.target;
-setFormData({
-...formData,
-[name]: type === "checkbox" ? checked : value,
+
+setFormData((prevData) => {
+const newData = { ...prevData, [name]: type === "checkbox" ? checked : value };
+validateField(name, newData[name]); // ✅ Validate field on change
+return newData;
 });
 };
+
+const validateField = (name, value) => {
+setValidation1((prevValidation) => {
+let newValidation = { ...prevValidation };
+
+// Trim value for proper validation
+const trimmedValue = value?.toString().trim();
+
+// Required Fields
+if (["firstName", "lastName", "mobileNumber", "apartmentNumber", "selectstate", "landmark", "area", "pincode", "apartmentName"].includes(name) && !trimmedValue) {
+newValidation[name] = `${name.replace(/([A-Z])/g, " $1")} is required!`;
+} else {
+delete newValidation[name];
+}
+
+// Mobile Number Validation
+if (name === "mobileNumber" && trimmedValue && !/^\d{10}$/.test(trimmedValue)) {
+newValidation.mobileNumber = "Enter a valid 10-digit Mobile Number!";
+}
+
+// Pincode Validation
+if (name === "pincode" && trimmedValue && !/^\d{6}$/.test(trimmedValue)) {
+newValidation.pincode = "Enter a valid 6-digit Pincode!";
+}
+
+return newValidation;
+});
+};
+
+const validateForm1 = () => {
+let newValidation = {};
+
+if (!formData.firstName?.trim()) newValidation.firstName = "First Name is required!";
+if (!formData.lastName?.trim()) newValidation.lastName = "Last Name is required!";
+if (!formData.mobileNumber?.trim() || !/^\d{10}$/.test(formData.mobileNumber))
+newValidation.mobileNumber = "Enter a valid 10-digit Mobile Number!";
+if (!formData.apartmentNumber?.trim()) newValidation.apartmentNumber = "Apartment Number is required!";
+if (!formData.apartmentName?.trim()) newValidation.apartmentName = "Apartment Name is required!";
+if (!formData.landmark?.trim()) newValidation.landmark = "Landmark is required!";
+if (!formData.area?.trim()) newValidation.area = "Area is required!";
+if (!formData.pincode?.trim() || !/^\d{6}$/.test(formData.pincode))
+newValidation.pincode = "Enter a valid 6-digit Pincode!";
+
+setValidation1(newValidation);
+
+return Object.keys(newValidation).length === 0; // ✅ Return true if no errors
+};
+
 
 const handleAddressType = (type) => {
 setFormData({ ...formData, addressType: type });
@@ -157,86 +218,103 @@ console.log("Form Data Submitted:", formData);
 
 
 
-const handleSubmit1 = async (e) => {
+// const handleSubmit1 = async (e) => {
 
-try {
-const response = await api.post('createOrder', formData);
-console.log('Response:', formData);
+// try {
+// const response = await api.post('createOrder', formData);
+// console.log('Response:', formData);
 
-// Success Alert with "OK" button
-Swal.fire({
-title: 'Success!',
-text: 'Order created successfully!',
-icon: 'success',
-confirmButtonText: 'OK',
-}).then(() => {
-// Clear form fields and reload the window
-setFormData({
-firstName: '',
-lastName: '',
-mobileNumber: '',
-apartmentNumber: '',
-apartmentName: '',
-area: '',
-landmark: '',
-addressType: 'Home',
-setDefault: false,
-cartItems: [],
-totalPrice: 0,
-payment_status:""
-});
+// // Success Alert with "OK" button
+// Swal.fire({
+// title: 'Success!',
+// text: 'Order created successfully!',
+// icon: 'success',
+// confirmButtonText: 'OK',
+// }).then(() => {
+// // Clear form fields and reload the window
+// setFormData({
+// firstName: '',
+// lastName: '',
+// email:'',
+// mobileNumber: '',
+// apartmentNumber: '',
+// apartmentName: '',
+// area: '',
+// landmark: '',
+// addressType: 'Home',
+// setDefault: false,
+// cartItems: [],
+// totalPrice: 0,
+// payment_status:""
+// });
 
-// Reload the window (optional)
-window.location.reload();
-});
-} catch (error) {
-console.error('Error creating order:', error);
+// // Reload the window (optional)
+// window.location.reload();
+// });
+// } catch (error) {
+// console.error('Error creating order:', error);
 
-// Error Alert
-Swal.fire({
-title: 'Error!',
-text: 'Failed to create order. Please try again.',
-icon: 'error',
-confirmButtonText: 'Retry',
-});
-}
-};
+// // Error Alert
+// Swal.fire({
+// title: 'Error!',
+// text: 'Failed to create order. Please try again.',
+// icon: 'error',
+// confirmButtonText: 'Retry',
+// });
+// }
+// };
 
 
 const handlePayment = async () => {
+if (!validateForm1()) {
+Swal.fire({
+title: 'Validation Error!',
+text: 'Please fill all required fields correctly.',
+icon: 'error',
+confirmButtonText: 'OK',
+});
+return;
+}
+
 try {
 // Step 1: Create Order on Backend
-const { data: order } = await api.post('payment', {
-amount: formData.totalPrice, // Amount in INR
-});
+const { data: order } = await api.post('payment', { formData });
 
-console.log('Order Created:', order); // Debugging: Check if the order was created
+console.log('Order Created:', order);
 
 // Step 2: Razorpay Checkout Options
 const options = {
-key: 'rzp_live_YBXf8NJT3Al7Qc', // Replace with your Key ID
+key: 'rzp_test_kh59VKLP3zCcop',
 amount: order.amount,
 currency: order.currency,
 name: 'Your Company Name',
 description: 'Test Transaction',
 order_id: order.id,
 handler: function (response) {
-console.log('Payment Success Response:', response); // Debugging: Check Razorpay response
+console.log('Payment Success Response:', response);
 
-// Check if response contains the expected payment info
 if (response && response.razorpay_payment_id) {
-alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
+Swal.fire({
+title: 'Payment Successful!',
+text: `Payment ID: ${response.razorpay_payment_id}`,
+icon: 'success',
+confirmButtonText: 'OK',
+});
+
+console.log(formData, cart);
 
 // Step 3: Generate PDF Invoice after Successful Payment
-generateInvoice(response);
+generateInvoice(response, formData, companyDetails);
 
-// Directly update the payment status in frontend
+// Update payment status
 setFormData({ ...formData, payment_status: 'success' });
-
-// Call your submit function to save data
-handleSubmit1();
 } else {
-alert('Payment Response Invalid');
+Swal.fire({
+title: 'Payment Error!',
+text: 'Payment Response Invalid',
+icon: 'error',
+confirmButtonText: 'Try Again',
+});
 }
 },
 prefill: {
@@ -256,55 +334,152 @@ rzp.open();
 } catch (error) {
 console.error('Error during payment:', error);
 
-// Handle any error (e.g., network issues)
-alert('Payment Failed');
+Swal.fire({
+title: 'Payment Failed',
+text: 'Something went wrong. Please try again!',
+icon: 'error',
+confirmButtonText: 'OK',
+});
 
-// Set status to failed if payment fails
 setFormData({ ...formData, payment_status: 'failed' });
-handleSubmit1();
 }
 };
 
+
 const companyDetails = [
 {
-name: 'My Company',
-logo: 'https://upload.wikimedia.org/wikipedia/commons/c/c0/Horned_logo.jpeg', // Relative URL to the public folder
-address: '456 Business Rd, City, State, 789101',
-contact: 'support@mycompany.com',
+name: 'KIONA',
+logo: 'E:/niket2/Ecommerce/eco/src/Components/Assets/Logo (2).png', // Ensure this path is accessible
+address: 'Office no 326, Kashi Plaza, Kamrej, Surat - 394185',
+contact: 'support@kiona.com',
 },
 ];
 
+const generateInvoice = (paymentResponse, formData, companyDetails) => {
+console.log("Order Data:", formData);
 
-
-
-const generateInvoice = (paymentResponse) => {
 const doc = new jsPDF();
+const company = companyDetails?.[0] || {}; // Ensure company is defined
 
-// --- Add Company Details ---
-// doc.setFontSize(12);
-// doc.text(companyDetails.name, 20, 30);
-// doc.text(companyDetails.address, 20, 40);
-// doc.text(`Contact: ${companyDetails.contact}`, 20, 50);
+const marginLeft = 20;
+const marginRight = 140;
+let cursorY = 20;
+const lineSpacing = 7;
 
-// // --- Invoice Header ---
-// doc.setFontSize(16);
-// doc.text('Invoice', 20, 70);
+// Function to add page header
+const addPageHeader = (pageNumber) => {
+doc.setFontSize(18);
+doc.setFont("helvetica", "bold");
+doc.text("INVOICE", 105, 20, { align: "center" });
+
+if (company.logo) {
+doc.addImage(company.logo, "JPEG", marginLeft, 25, 50, 20);
+}
 
 doc.setFontSize(12);
-doc.text(`Invoice Number: ${paymentResponse.razorpay_payment_id}`, 20, 80);
-doc.text(`Order ID: ${paymentResponse.razorpay_order_id}`, 20, 90);
-doc.text(`Transaction Date: ${new Date().toLocaleDateString()}`, 20, 100);
+doc.setFont("helvetica", "bold");
+doc.text("Company Details", marginLeft, 50);
+doc.text("Customer Details", marginRight, 50);
 
-// --- Product Details ---
-doc.text('Product Details:', 20, 110);
+doc.setFont("helvetica", "normal");
+doc.setFontSize(10);
 
-// --- Footer ---
-// doc.text('Thank you for your purchase!', 20, 150);
-// doc.text(`For queries, contact us at: ${companyDetails.contact}`, 20, 160);
+doc.text(company.name, marginLeft, 60);
+doc.text(company.address, marginLeft, 60 + lineSpacing);
+doc.text(`Contact: ${company.contact}`, marginLeft, 60 + 2 * lineSpacing);
 
-// --- Save the PDF ---
-doc.save('invoice.pdf');
+const firstName = formData?.firstName || "";
+const lastName = formData?.lastName || "";
+const email = formData?.email || "";
+const mobileNumber = formData?.mobileNumber || "";
+
+doc.text(`Name: ${firstName} ${lastName}`, marginRight, 60);
+doc.text(`Email: ${email}`, marginRight, 60 + lineSpacing);
+doc.text(`Phone: ${mobileNumber}`, marginRight, 60 + 2 * lineSpacing);
+
+const addressParts = [
+formData?.apartmentNumber || "",
+formData?.area || "",
+formData?.landmark || "",
+formData?.selectstate || "",
+formData?.pincode || "",
+].filter(part => part.trim() !== "");
+
+const address = `Address: ${addressParts.join(", ")} India`;
+const wrappedAddress = doc.splitTextToSize(address, 60);
+doc.text(wrappedAddress, marginRight, 80 + 2 * lineSpacing);
+
+doc.setFont("helvetica", "bold");
+doc.text(`Invoice Number: ${paymentResponse?.razorpay_payment_id || "N/A"}`, marginLeft, 100);
+doc.text(`Order ID: ${paymentResponse?.razorpay_order_id || "N/A"}`, marginLeft, 100 + lineSpacing);
+doc.text(`Transaction Date: ${new Date().toLocaleDateString()}`, marginLeft, 100 + 2 * lineSpacing);
+
+doc.setFontSize(10);
+doc.text(`Page ${pageNumber}`, 105, 285, { align: "center" });
 };
+
+addPageHeader(1);
+cursorY = 140;
+
+doc.setFont("helvetica", "bold");
+doc.text("Product Details", marginLeft, cursorY);
+cursorY += 10;
+
+doc.autoTable({
+startY: cursorY,
+head: [["S.No", "Product Name", "Quantity", "Unit Price", "Total"]],
+body: formData?.cartItems?.map((product, index) => [
+index + 1,
+product.product_name,
+product.product_quantity1,
+product.product_price,
+(product.product_quantity1 * product.product_price),
+]) || [],
+theme: "grid",
+headStyles: { fillColor: [0, 102, 204], textColor: [255, 255, 255] },
+styles: { fontSize: 10, cellPadding: 3 },
+columnStyles: { 0: { cellWidth: 15 }, 1: { cellWidth: 60 }, 2: { cellWidth: 25 }, 3: { cellWidth: 35 }, 4: { cellWidth: 35 } },
+margin: { top: 10 },
+didDrawPage: function (data) {
+if (data.pageNumber > 1) {
+doc.setPage(data.pageNumber);
+addPageHeader(data.pageNumber);
+}
+},
+});
+
+const totalPages = doc.internal.getNumberOfPages();
+doc.setPage(totalPages);
+
+let finalY = doc.lastAutoTable.finalY + 10;
+const summaryX = marginRight - 20;
+const summaryWidth = 70;
+const summaryHeight = 40;
+
+doc.setLineWidth(0.5);
+doc.rect(summaryX, finalY, summaryWidth, summaryHeight);
+
+doc.setFont("helvetica", "bold");
+doc.text("Summary", summaryX + 5, finalY + 7);
+doc.setFont("helvetica", "normal");
+
+const subtotal = formData?.subtotal || 0;
+const gstAmount = formData?.gstAmount || 18;
+const totalPrice = formData?.totalPrice || 0;
+doc.text(`Subtotal: ${subtotal}`, summaryX + 5, finalY + 17);
+doc.text(`GST (${gstAmount}%): ${(subtotal * (gstAmount / 100)).toFixed(2)}`, summaryX + 5, finalY + 27);
+doc.text(`Grand Total: ${totalPrice}`, summaryX + 5, finalY + 37);
+
+finalY += summaryHeight + 10;
+
+doc.setFont("helvetica", "italic");
+doc.text("Thank you for your purchase!", marginLeft, finalY);
+doc.text(`For queries, contact us at: ${company.contact}`, marginLeft, finalY + 10);
+
+doc.save(`Invoice_${paymentResponse?.razorpay_payment_id || "N/A"}.pdf`);
+};
+
+
 
 
 
@@ -485,39 +660,39 @@ confirmButtonText: "OK",
 // ===================================login with otp start=======================================================================
 
 const loginwithotp = async (e) => {
-  e.preventDefault();
-  
-  try {
-  const response = await api.post("otplogin",{email:loginDetails.email});
-  
-  
-  if (response.status === 200) {
-  Swal.fire({
-  title: "Successful!",
-  text: `otp send plz check your email id`,
-  icon: "success",
-  confirmButtonText: "OK",
-  });
-  
-  handleClose();
-  handleShow8()
-  } else {
-  Swal.fire({
-  title: " Failed",
-  text: response.data.message || "Invalid email or password.",
-  icon: "error",
-  confirmButtonText: "Try Again",
-  });
-  }
-  } catch (error) {
-  Swal.fire({
-  title: "Error",
-  text: error.response?.data?.message || "Server error. Please try again later.",
-  icon: "error",
-  confirmButtonText: "OK",
-  });
-  }
-  };
+e.preventDefault();
+
+try {
+const response = await api.post("otplogin",{email:loginDetails.email});
+
+
+if (response.status === 200) {
+Swal.fire({
+title: "Successful!",
+text: `otp send plz check your email id`,
+icon: "success",
+confirmButtonText: "OK",
+});
+
+handleClose();
+handleShow8()
+} else {
+Swal.fire({
+title: " Failed",
+text: response.data.message || "Invalid email or password.",
+icon: "error",
+confirmButtonText: "Try Again",
+});
+}
+} catch (error) {
+Swal.fire({
+title: "Error",
+text: error.response?.data?.message || "Server error. Please try again later.",
+icon: "error",
+confirmButtonText: "OK",
+});
+}
+};
 
 
 // ================================================login with otp end==============================================================
@@ -533,47 +708,47 @@ const handleShow8 = () =>setShow8(true);
 const[otp,setotp]=useState()
 
 const verifyotpandlogin = async (e) => {
-  e.preventDefault();
-  
-  try {
-  const response = await api.post("verifyotpforlogin", {email:loginDetails.email,otp:otp});
-  
-  
-  if (response.status === 200) {
-  Swal.fire({
-  title: "Login Successful!",
-  text: `Welcome back, ${response.data.user}!`,
-  icon: "success",
-  confirmButtonText: "OK",
-  });
-  
-  const token=response.data.token
-  login(token);
-  navigate('/cudasboard')
-  localStorage.setItem('email',loginDetails.email)
-  localStorage.setItem('usertoken',token)
-  setutocken(response.data.token)
-  
-  // Clear the form and close the modal
-  setLoginDetails({ email: "", password: "" });
-  handleClose();
-  } else {
-  Swal.fire({
-  title: "Login Failed",
-  text: response.data.message || "Invalid email or password.",
-  icon: "error",
-  confirmButtonText: "Try Again",
-  });
-  }
-  } catch (error) {
-  Swal.fire({
-  title: "Error",
-  text: error.response?.data?.message || "Server error. Please try again later.",
-  icon: "error",
-  confirmButtonText: "OK",
-  });
-  }
-  };
+e.preventDefault();
+
+try {
+const response = await api.post("verifyotpforlogin", {email:loginDetails.email,otp:otp});
+
+
+if (response.status === 200) {
+Swal.fire({
+title: "Login Successful!",
+text: `Welcome back, ${response.data.user}!`,
+icon: "success",
+confirmButtonText: "OK",
+});
+
+const token=response.data.token
+login(token);
+navigate('/cudasboard')
+localStorage.setItem('email',loginDetails.email)
+localStorage.setItem('usertoken',token)
+setutocken(response.data.token)
+
+// Clear the form and close the modal
+setLoginDetails({ email: "", password: "" });
+handleClose();
+} else {
+Swal.fire({
+title: "Login Failed",
+text: response.data.message || "Invalid email or password.",
+icon: "error",
+confirmButtonText: "Try Again",
+});
+}
+} catch (error) {
+Swal.fire({
+title: "Error",
+text: error.response?.data?.message || "Server error. Please try again later.",
+icon: "error",
+confirmButtonText: "OK",
+});
+}
+};
 
 // ========================================================verify otp end=====================================================
 
@@ -607,36 +782,36 @@ const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
 
 // Function to check if device is mobile based on screen width
 useEffect(() => {
-  const checkIfMobile = () => {
-    setIsMobile(window.innerWidth < 992);
-  };
-  
-  // Check initially
-  checkIfMobile();
-  
-  // Add event listener for window resize
-  window.addEventListener('resize', checkIfMobile);
-  
-  // Clean up event listener on component unmount
-  return () => {
-    window.removeEventListener('resize', checkIfMobile);
-  };
+const checkIfMobile = () => {
+setIsMobile(window.innerWidth < 992);
+};
+
+// Check initially
+checkIfMobile();
+
+// Add event listener for window resize
+window.addEventListener('resize', checkIfMobile);
+
+// Clean up event listener on component unmount
+return () => {
+window.removeEventListener('resize', checkIfMobile);
+};
 }, []);
 
 // Function to toggle sidebar
 const toggleSidebar = () => {
-  setSidebarOpen(!sidebarOpen);
-  // Prevent body scrolling when sidebar is open
-  document.body.style.overflow = !sidebarOpen ? 'hidden' : '';
+setSidebarOpen(!sidebarOpen);
+// Prevent body scrolling when sidebar is open
+document.body.style.overflow = !sidebarOpen ? 'hidden' : '';
 };
 
 // Function to handle navigation click and close sidebar
 const handleNavClick = (callback) => {
-  setSidebarOpen(false);
-  document.body.style.overflow = '';
-  if (callback) {
-    callback();
-  }
+setSidebarOpen(false);
+document.body.style.overflow = '';
+if (callback) {
+callback();
+}
 };
 
 
@@ -652,110 +827,112 @@ return (
 
 <div style={{position:"fixed",left:"0",right:"0",zIndex:"1000",top:"0"}}>
 
-      {/* ---------------------------------------------------------------- */}
+{/* ---------------------------------------------------------------- */}
 
-      {["lg"].map((expand) => (
-        <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" style={{ backgroundColor: "#f8f9f3", height: "112px" }}>
-          <Container fluid style={{ display: "flex", justifyContent: "space-between", alignItems: "center",marginTop:"75px" }}>
-            {/* Mobile Toggle Button */}
-            <Navbar.Toggle  className="troggle-navbar-button" aria-controls={`offcanvasNavbar-expand-${expand}`} style={{  width:"50px",backgroundColor:"black",marginBottom:"10px" }} />
+{["lg"].map((expand) => (
+<Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" style={{ backgroundColor: "#f8f9f3", height: "112px" }}>
+<Container fluid style={{ display: "flex", justifyContent: "space-between", alignItems: "center",marginTop:"75px" }}>
+{/* Mobile Toggle Button */}
+<Navbar.Toggle className="troggle-navbar-button" aria-controls={`offcanvasNavbar-expand-${expand}`} style={{ width:"50px",backgroundColor:"black",marginBottom:"10px" }} />
 
-            {/* Brand Name Centered */}
-            <Navbar.Brand
-              className="position-absolute"
-              style={{
-                left: "50%",
-                transform: "translateX(-50%)",
-                fontSize: "40px",
-                fontWeight: "400",
-                fontFamily: '"ITC Modern No 216", serif',
-                top: "10px",
-                color:"black"
-              }}
-            >
-              KIONA
-            </Navbar.Brand>
+{/* Brand Name Centered */}
+<Navbar.Brand
+className="position-absolute"
+style={{
+left: "50%",
+transform: "translateX(-50%)",
+fontSize: "40px",
+fontWeight: "400",
+fontFamily: '"ITC Modern No 216", serif',
+top: "10px",
+color:"black",
+cursor:"pointer"
+}}
+onClick={() => navigate("/")}
+>
+KIONA
+</Navbar.Brand>
 
-            {/* Cart & User Icons */}
-            <div
-              className="d-flex justify-content-end align-items-center"
-              style={{
-                position: "absolute",
-                top: "40px",
-                right: "20px",
-                gap: "20px",
-              }}
-            >
-              {/* Cart Icon */}
-              <div style={{ position: "relative", cursor: "pointer" }} onClick={handleShow1}>
-                <i className="fas fa-cart-shopping" style={{ fontSize: "25px", color: "#333" }}></i>
-                {length > 0 && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: "-5px",
-                      right: "-10px",
-                      background: "red",
-                      color: "white",
-                      fontSize: "12px",
-                      fontWeight: "bold",
-                      padding: "3px 6px",
-                      borderRadius: "50%",
-                      minWidth: "20px",
-                      textAlign: "center",
-                      boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
-                    }}
-                  >
-                    {length}
-                  </span>
-                )}
-              </div>
+{/* Cart & User Icons */}
+<div
+className="d-flex justify-content-end align-items-center"
+style={{
+position: "absolute",
+top: "40px",
+right: "20px",
+gap: "20px",
+}}
+>
+{/* Cart Icon */}
+<div style={{ position: "relative", cursor: "pointer" }} onClick={handleShow1}>
+<i className="fas fa-cart-shopping" style={{ fontSize: "25px", color: "#333" }}></i>
+{length > 0 && (
+<span
+style={{
+position: "absolute",
+top: "-5px",
+right: "-10px",
+background: "red",
+color: "white",
+fontSize: "12px",
+fontWeight: "bold",
+padding: "3px 6px",
+borderRadius: "50%",
+minWidth: "20px",
+textAlign: "center",
+boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
+}}
+>
+{length}
+</span>
+)}
+</div>
 
-              {/* User Icon */}
-              <i onClick={handleShow} className="fa-regular fa-user" style={{ fontSize: "25px", color: "#333", cursor: "pointer" }}></i>
-            </div>
+{/* User Icon */}
+<i onClick={handleShow} className="fa-regular fa-user" style={{ fontSize: "25px", color: "#333", cursor: "pointer" }}></i>
+</div>
 
-            {/* Offcanvas Menu */}
-            <Navbar.Offcanvas id={`offcanvasNavbar-expand-${expand}`} aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`} placement="end">
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>KIONA</Offcanvas.Title>
-              </Offcanvas.Header>
-              <Offcanvas.Body>
-                <Nav className="justify-content-center flex-grow-1 pe-3" style={{gap:"20px"}}>
-                  <Nav.Link as={Link} to="/">Home</Nav.Link>
-                  <Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
+{/* Offcanvas Menu */}
+<Navbar.Offcanvas id={`offcanvasNavbar-expand-${expand}`} aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`} placement="end">
+<Offcanvas.Header closeButton>
+<Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>KIONA</Offcanvas.Title>
+</Offcanvas.Header>
+<Offcanvas.Body>
+<Nav className="justify-content-center flex-grow-1 pe-3" style={{gap:"20px"}}>
+<Nav.Link as={Link} to="/">Home</Nav.Link>
+<Nav.Link as={Link} to="/aboutus">About Us</Nav.Link>
 
-                  {/* Product Dropdown */}
-                  <NavDropdown title="Products" id="offcanvasNavbarDropdown">
-                    <NavDropdown.Item onClick={() => navigatecategory("shampoo")}>Shampoo</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => navigatecategory("face wash")}>Face Wash</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => navigatecategory("hair oil")}>Hair Oil</NavDropdown.Item>
-                  </NavDropdown>
+{/* Product Dropdown */}
+<NavDropdown title="Products" id="offcanvasNavbarDropdown">
+<NavDropdown.Item onClick={() => navigatecategory("shampoo")}>Shampoo</NavDropdown.Item>
+<NavDropdown.Item onClick={() => navigatecategory("face wash")}>Face Wash</NavDropdown.Item>
+<NavDropdown.Item onClick={() => navigatecategory("hair oil")}>Hair Oil</NavDropdown.Item>
+</NavDropdown>
 
-                  <Nav.Link as={Link} to="/blog1">Blogs</Nav.Link>
-                  <Nav.Link as={Link} to="/track-order">Track Your Order</Nav.Link>
-                  <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
-                  <Nav.Link as={Link} to="/combo">Combo</Nav.Link>
+<Nav.Link as={Link} to="/blog1">Blogs</Nav.Link>
+<Nav.Link as={Link} to="/track-order">Track Your Order</Nav.Link>
+<Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
+<Nav.Link as={Link} to="/combo">Combo</Nav.Link>
 
-                  {/* Terms & Policies Dropdown */}
-                  <NavDropdown title="Terms & Policies" id="termsDropdown">
-                    <NavDropdown.Item as={Link} to="/privacypolicy">Privacy Policy</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/ewaste">E-Waste Policy</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/cancelpolicy">Cancellation & Return</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/deliverycancel">Shipping & Delivery</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/faq">FAQ</NavDropdown.Item>
-                    <NavDropdown.Item as={Link} to="/term&condition">Terms & Conditions</NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-              </Offcanvas.Body>
-            </Navbar.Offcanvas>
-          </Container>
-        </Navbar>
-      ))}
+{/* Terms & Policies Dropdown */}
+<NavDropdown title="Terms & Policies" id="termsDropdown">
+<NavDropdown.Item as={Link} to="/privacypolicy">Privacy Policy</NavDropdown.Item>
+<NavDropdown.Item as={Link} to="/ewaste">E-Waste Policy</NavDropdown.Item>
+<NavDropdown.Item as={Link} to="/cancelpolicy">Cancellation & Return</NavDropdown.Item>
+<NavDropdown.Item as={Link} to="/deliverycancel">Shipping & Delivery</NavDropdown.Item>
+<NavDropdown.Item as={Link} to="/faq">FAQ</NavDropdown.Item>
+<NavDropdown.Item as={Link} to="/term&condition">Terms & Conditions</NavDropdown.Item>
+</NavDropdown>
+</Nav>
+</Offcanvas.Body>
+</Navbar.Offcanvas>
+</Container>
+</Navbar>
+))}
 
 
 
-      {/* ------------------------------------------------------------------ */}
+{/* ------------------------------------------------------------------ */}
 
 <nav
 className="navbar navbar-expand-lg" id="navbar2"
@@ -1287,7 +1464,9 @@ alt="Product"
 ))}
 <div className="cart-total">
 <h3>
-Total Price: <span>₹{parseFloat(calculateTotalPrice()).toFixed(2)}</span>
+Total Price: <span >
+₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
+</span>
 </h3>
 </div>
 
@@ -1338,7 +1517,7 @@ boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
 maxWidth: "600px",
 }}
 >
-<form onSubmit={handleSubmit1}>
+<form>
 <h5 style={{ marginBottom: "20px", fontWeight: "600" }}>
 *Area Details
 </h5>
@@ -1362,6 +1541,7 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.apartmentNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation1.apartmentNumber}</span>}
 </div>
 {/* <div className="col-md-6">
 <label htmlFor="apartmentNumber" className="form-label">
@@ -1401,6 +1581,7 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.apartmentName && <span style={{ color: "red", fontSize: "12px" }}>{validation1.apartmentName}</span>}
 </div>
 </div>
 <div className="mb-3 row">
@@ -1422,6 +1603,7 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.area && <span style={{ color: "red", fontSize: "12px" }}>{validation1.area}</span>}
 </div>
 <div className="col-md-6">
 <label htmlFor="StreetDetails" className="form-label">
@@ -1441,6 +1623,7 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.landmark && <span style={{ color: "red", fontSize: "12px" }}>{validation1.landmark}</span>}
 </div>
 </div>
 <div className="col-md-6 mb-3">
@@ -1452,7 +1635,7 @@ type="text"
 className="form-control"
 id="pincode"
 name="pincode"
-
+required
 onChange={handleChange}
 style={{
 borderRadius: "5px",
@@ -1460,6 +1643,7 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.pincode && <span style={{ color: "red", fontSize: "12px" }}>{validation1.pincode}</span>}
 </div>
 <h5 style={{ marginTop: "20px", fontWeight: "600" }}>
 Personal Details
@@ -1484,6 +1668,7 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.firstName && <span style={{ color: "red", fontSize: "12px" }}>{validation1.firstName}</span>}
 </div>
 <div className="col-md-6">
 <label htmlFor="lastName" className="form-label">
@@ -1494,15 +1679,17 @@ type="text"
 className="form-control"
 id="lastName"
 name="lastName"
-
+value={formData.lastName}
 onChange={handleChange}
 placeholder="e.g. Doe"
+required
 style={{
 borderRadius: "5px",
 padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.lastName && <span style={{ color: "red", fontSize: "12px" }}>{validation1.lastName}</span>}
 </div>
 </div>
 <div className="col-md-6 mb-3">
@@ -1524,17 +1711,19 @@ padding: "10px",
 fontSize: "14px",
 }}
 />
+{validation1.mobileNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation1.mobileNumber}</span>}
 </div>
 
 <div className="col-md-6">
-<label htmlFor="lastName" className="form-label">
+<label htmlFor="email" className="form-label">
 Email Id
 </label>
 <input
 type="text"
 className="form-control"
-id="lastName"
-name="lastName"
+id="email"
+name="email"
+value={formData.email }
 onChange={handleChange}
 placeholder="e.g. Doe"
 style={{
@@ -1665,8 +1854,56 @@ borderRadius: "5px",
 </div>
 </div>
 ))}
-<div style={{ fontWeight: "600", fontSize: "18px", marginTop: "20px" }}>
-Total Price: <span>₹{parseFloat(calculateTotalPrice()).toFixed(2)}</span>
+<div style={{
+fontWeight: "600",
+fontSize: "20px",
+marginTop: "20px",
+color: "#333",
+textAlign: "left",
+letterSpacing: "0.5px",
+borderBottom: "2px solid #ddd",
+paddingBottom: "10px"
+}}>
+<strong>Subtotal:</strong>
+<span style={{ color: "#333", fontSize: "18px", fontWeight: "400" }}>
+₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
+</span>
+</div>
+
+<div style={{
+fontWeight: "600",
+fontSize: "20px",
+marginTop: "10px",
+color: "#333",
+textAlign: "left",
+letterSpacing: "0.5px",
+borderBottom: "2px solid #ddd",
+paddingBottom: "10px"
+}}>
+<strong>GST (18%):</strong>
+<span style={{ color: "#e74c3c", fontSize: "18px", fontWeight: "400" }}>
+₹{formData.gstAmount ? formData.gstAmount.toFixed(2) : '0.00'}
+</span>
+</div>
+
+<div style={{
+fontWeight: "700",
+fontSize: "22px",
+marginTop: "10px",
+color: "#333",
+textAlign: "left",
+letterSpacing: "0.5px",
+paddingTop: "10px",
+borderTop: "2px solid #ddd"
+}}>
+<strong>Total Price:</strong>
+<span style={{
+color: "#27ae60",
+fontSize: "20px",
+fontWeight: "500"
+}}>
+₹{formData.totalPrice ? formData.totalPrice.toFixed(2) : '0.00'}
+</span>
 </div>
 </div>
 </div>

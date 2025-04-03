@@ -91,23 +91,15 @@ function App() {
      <Route path='/blog2' element={<Blog2/>}/>
      <Route path='/categoryproduct' element={<Category/>}/>
      <Route path='/combo' element={<Combo/>}/>
-     <Route path='/personalinfo' element={<Personalinfo/>}/>
-     <Route path='/manageadds' element={<Manageadds/>}/>
+     <Route path='/personalinfo' element={<PrivateRoute><Personalinfo/></PrivateRoute>}/>
+     <Route path='/manageadds' element={<PrivateRoute><Manageadds/></PrivateRoute>}/>
      <Route path='/cudasboard' element={<PrivateRoute><Cudashboard/></PrivateRoute>}/>
-     <Route path='/myorders' element={<Myorders/>}/>
+     <Route path='/myorders' element={<PrivateRoute><Myorders/></PrivateRoute>}/>
      </Routes>
-
-     {/* <Sidebarcu/>
-     <Personalinfo/> */}
-     {/* <Cuheader/> */}
-
      </div>
      </BrowserRouter>
      
 </AuthProvider>
-
-
-
     
   );
 }

@@ -19,12 +19,15 @@ import { Navbar, Nav, NavDropdown, Offcanvas, Container, } from "react-bootstrap
 
 function Cuheader() {
 
-  const [utocken, setutocken] = useState('')
-  localStorage.getItem('token')
-
   const useremail = localStorage.getItem('email')
 
   const [validation, setValidation] = useState({});
+
+
+
+  
+
+
 
     const {cart,setcart}=useCart()
     useEffect(()=>
@@ -33,7 +36,7 @@ function Cuheader() {
     },[])
    
     
-    const [orderdata, setorderdata] = useState({
+    const [formData, setFormData] = useState({
       apartmentNumber: "",
       selectstate: "",
       area: "",
@@ -61,8 +64,8 @@ function Cuheader() {
     {
       const clength=cart.length
       setlength(clength)
-      setorderdata({...orderdata,cartItems:cart})
-    },[])
+      setFormData({...formData,cartItems:cart})
+    })
   
     
     
@@ -123,13 +126,13 @@ function Cuheader() {
   useEffect(() => {
     const { subtotal, gstAmount, total } = calculateTotalPrice(); // Get values
   
-    setorderdata(prevData => ({
+    setFormData(prevData => ({
       ...prevData,
       totalPrice: total, // The final price after adding GST
       subtotal: subtotal, // Subtotal without GST
       gstAmount: gstAmount, // GST amount
     }));
-  }, [orderdata.cartItems]); // Dependency array includes cartItems to recalculate on cart update
+  }, [formData.cartItems]); // Dependency array includes cartItems to recalculate on cart update
   
   
   
@@ -146,7 +149,6 @@ function Cuheader() {
   
   const handleClose4 = () => setShow4(false);
   const handleShow4 = () => {
-
     setShow4(true);
     handleClose1()
   }
@@ -158,50 +160,56 @@ function Cuheader() {
   
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
-    setorderdata((prevData) => ({
-        ...prevData,
-        [name]: type === "checkbox" ? checked : value,
-    }));
 
-    validateField(name, value);
+    setFormData((prevData) => {
+        const newData = { ...prevData, [name]: type === "checkbox" ? checked : value };
+        validateField(name, newData[name]); // ✅ Validate field on change
+        return newData;
+    });
 };
+
 
 const validateField = (name, value) => {
-  let newValidation = { ...validation };
+  setValidation((prevValidation) => {
+    let newValidation = { ...prevValidation };
 
-  // Required Fields
-  if (["firstName", "lastName","mobileNumber", "apartmentNumber", "selectstate","landmark", "area", "pincode"].includes(name) && !value.trim()) {
+    // Trim value for proper validation
+    const trimmedValue = value?.toString().trim();
+
+    // Required Fields
+    if (["firstName", "lastName", "mobileNumber", "apartmentNumber", "selectstate", "landmark", "area", "pincode","apartmentName"].includes(name) && !trimmedValue) {
       newValidation[name] = `${name.replace(/([A-Z])/g, " $1")} is required!`;
-  } else {
+    } else {
       delete newValidation[name];
-  }
+    }
 
-  // Mobile Number Validation
-  if (name === "mobileNumber" && value.trim() && !/^\d{10}$/.test(value)) {
+    // Mobile Number Validation
+    if (name === "mobileNumber" && trimmedValue && !/^\d{10}$/.test(trimmedValue)) {
       newValidation.mobileNumber = "Enter a valid 10-digit Mobile Number!";
-  }
+    }
 
-  // Pincode Validation
-  if (name === "pincode" && value.trim() && !/^\d{6}$/.test(value)) {
+    // Pincode Validation
+    if (name === "pincode" && trimmedValue && !/^\d{6}$/.test(trimmedValue)) {
       newValidation.pincode = "Enter a valid 6-digit Pincode!";
-  }
+    }
 
-  setValidation(newValidation);
+    return newValidation;
+  });
 };
+
 
 const validateForm = () => {
   let newValidation = {};
 
-  if (!orderdata.firstName.trim()) newValidation.firstName = "First Name is required!";
-  if (!orderdata.lastName.trim()) newValidation.lastName = "Last Name is required!";
-  if (!orderdata.mobileNumber.trim() || !/^\d{10}$/.test(orderdata.mobileNumber)) 
+  if (!formData.firstName?.trim()) newValidation.firstName = "First Name is required!";
+  if (!formData.lastName?.trim()) newValidation.lastName = "Last Name is required!";
+  if (!formData.mobileNumber?.trim() || !/^\d{10}$/.test(formData.mobileNumber)) 
       newValidation.mobileNumber = "Enter a valid 10-digit Mobile Number!";
-  if (!orderdata.apartmentNumber.trim()) newValidation.apartmentNumber = "Apartment Number is required!";
-  if (!orderdata.selectstate.trim()) newValidation.selectstate = "State is required!";
-  if (!orderdata.landmark.trim()) newValidation.landmark = "Landmark is required!";
-  if (!orderdata.area.trim()) newValidation.area = "Area is required!";
-  if (!orderdata.pincode.trim() || !/^\d{6}$/.test(orderdata.pincode)) 
+  if (!formData.apartmentNumber?.trim()) newValidation.apartmentNumber = "Apartment Number is required!";
+  if (!formData.apartmentName?.trim()) newValidation.apartmentName = "Apartment Number is required!";
+  if (!formData.landmark?.trim()) newValidation.landmark = "Landmark is required!";
+  if (!formData.area?.trim()) newValidation.area = "Area is required!";
+  if (!formData.pincode?.trim() || !/^\d{6}$/.test(formData.pincode))  
       newValidation.pincode = "Enter a valid 6-digit Pincode!";
 
   setValidation(newValidation);
@@ -210,21 +218,22 @@ const validateForm = () => {
 };
 
 
+
   
   
   const handleAddressType = (type) => {
-    setorderdata({ ...orderdata, addressType: type });
+    setFormData({ ...formData, addressType: type });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", orderdata);
+    console.log("Form Data Submitted:", formData);
   };
   
   
  useEffect(()=>
 {      
-  setorderdata({...orderdata,email:useremail})
+  setFormData({...setFormData,email:useremail})
   
   
 
@@ -232,150 +241,157 @@ const validateForm = () => {
 
 useEffect(()=>
   {
-    setorderdata({...orderdata,product_image:cart.product_image})
+    setFormData({...setFormData,product_image:cart.product_image})
    
     
   
   },[cart])
 
-// useEffect(()=>
-//   {
+useEffect(()=>
+  {
    
-//     console.log(cart.product_image);
+    console.log(cart.product_image);
     
   
-//   },[cart])
+  },[cart])
   
   
-  const handleSubmit1 = async (e) => {
+  // const handleSubmit1 = async (e) => {
   
-    try {
-      const response = await api.post('createOrder', orderdata);
-      console.log(response);
-      console.log(orderdata.email);
+  //   try {
+  //     const response = await api.post('createOrder', orderdata);
+  //     console.log(response);
+  //     console.log(orderdata.email);
       
       
-      console.log('Response:', orderdata);
+  //     console.log('Response:', orderdata);
   
-      // Success Alert with "OK" button
-      Swal.fire({
-        title: 'Success!',
-        text: 'Order created successfully!',
-        icon: 'success',
-        confirmButtonText: 'OK',
-      }).then(() => {
-        // Clear form fields and reload the window
-        setorderdata({
-          firstName: '',
-          lastName: '',
-          email: '',
-          mobileNumber: '',
-          apartmentNumber: '',
-          selectstate: '',
-          area: '',
-          landmark: '',
-          addressType: 'Home',
-          setDefault: false,
-          cartItems: [],
-          totalPrice: 0,
-          payment_status:""
-        });
+  //     // Success Alert with "OK" button
+  //     Swal.fire({
+  //       title: 'Success!',
+  //       text: 'Order created successfully!',
+  //       icon: 'success',
+  //       confirmButtonText: 'OK',
+  //     }).then(() => {
+  //       // Clear form fields and reload the window
+  //       setorderdata({
+  //         firstName: '',
+  //         lastName: '',
+  //         email: '',
+  //         mobileNumber: '',
+  //         apartmentNumber: '',
+  //         selectstate: '',
+  //         area: '',
+  //         landmark: '',
+  //         addressType: 'Home',
+  //         setDefault: false,
+  //         cartItems: [],
+  //         totalPrice: 0,
+  //         payment_status:""
+  //       });
   
-        // Reload the window (optional)
-        window.location.reload();
-      });
-    } catch (error) {
-      console.error('Error creating order:', error);
+  //       // Reload the window (optional)
+  //       window.location.reload();
+  //     });
+  //   } catch (error) {
+  //     console.error('Error creating order:', error);
   
-      // Error Alert
-      Swal.fire({
-        title: 'Error!',
-        text: 'Failed to create order. Please try again.',
-        icon: 'error',
-        confirmButtonText: 'Retry',
-      });
-    }
-  };
+  //     // Error Alert
+  //     Swal.fire({
+  //       title: 'Error!',
+  //       text: 'Failed to create order. Please try again.',
+  //       icon: 'error',
+  //       confirmButtonText: 'Retry',
+  //     });
+  //   }
+  // };
 
   
   const handlePayment = async () => {
-
     if (!validateForm()) {
-    Swal.fire({
-    title: 'Validation Error!',
-    text: 'Please correct the errors before submitting.',
-    icon: 'warning',
-    confirmButtonText: 'OK',
-    });
-    return;
+      Swal.fire({
+        title: 'Validation Error!',
+        text: 'Please fill all required fields correctly.',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+      return;
     }
-    try {
-    // Step 1: Create Order on Backend
-    const { data: order } = await api.post('payment', {
-    amount: orderdata.totalPrice, // Amount in INR
-    });
-    
-    console.log('Order Created:', order); // Debugging: Check if the order was created
-    
-    // Step 2: Razorpay Checkout Options
-    const options = {
-    key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Key ID
-    amount: parseFloat(order.amount),
-    currency: order.currency,
-    name: 'Your Company Name',
-    description: 'Test Transaction',
-    order_id: order.id,
-    handler: function (response) {
-    console.log('Payment Success Response:', response); // Debugging: Check Razorpay response
-    
-    // Check if response contains the expected payment info
-    if (response && response.razorpay_payment_id) {
-    alert(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-    console.log(orderdata
-    );
-    console.log(orderdata, cart);
-    
-    // Step 3: Generate PDF Invoice after Successful Payment
-    generateInvoice(response,orderdata,companyDetails);
-    
-    // Directly update the payment status in frontend
-    setorderdata({ ...orderdata, payment_status: 'success' });
-    
-    // Call your submit function to save data
-    handleSubmit1();
-    } else {
-    alert('Payment Response Invalid');
-    }
-    },
-    prefill: {
-    name: orderdata.firstName,
-    email: 'narayanniket2@gmail.com',
-    contact: orderdata.mobileNumber,
-    },
-    theme: {
-    color: '#3399cc',
-    },
-    };
-    
-    // Step 4: Initialize Razorpay Checkout
-    const rzp = new window.Razorpay(options);
-    rzp.open();
-    handleSubmit1();
-    
-    } catch (error) {
-    console.error('Error during payment:', error);
-    
-    // Handle any error (e.g., network issues)
-    alert('Payment Failed');
-    
-    // Set status to failed if payment fails
-    setorderdata({ ...orderdata, payment_status: 'failed' });
-    
-    }
-    };
-    
   
-
+    try {
+      // Step 1: Create Order on Backend
+      const { data: order } = await api.post('payment', { formData });
+  
+      console.log('Order Created:', order); // Debugging: Check if the order was created
+  
+      // Step 2: Razorpay Checkout Options
+      const options = {
+        key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Razorpay Key ID
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Your Company Name',
+        description: 'Test Transaction',
+        order_id: order.id,
+        handler: function (response) {
+          console.log('Payment Success Response:', response); // Debugging: Check Razorpay response
+  
+          if (response && response.razorpay_payment_id) {
+            Swal.fire({
+              title: 'Payment Successful!',
+              text: `Payment ID: ${response.razorpay_payment_id}`,
+              icon: 'success',
+              confirmButtonText: 'OK',
+            });
+  
+            console.log(formData);
+            console.log(formData, cart);
+  
+            // Step 3: Generate PDF Invoice after Successful Payment
+            generateInvoice(response, formData, companyDetails);
+  
+            // Update payment status in the frontend
+            setFormData({ ...formData, payment_status: 'success' });
+  
+            // Call your submit function to save data
+            // handleSubmit1();
+          } else {
+            Swal.fire({
+              title: 'Payment Error!',
+              text: 'Payment Response Invalid',
+              icon: 'error',
+              confirmButtonText: 'Try Again',
+            });
+          }
+        },
+        prefill: {
+          name: formData.firstName,
+          email: 'narayanniket2@gmail.com',
+          contact: formData.mobileNumber,
+        },
+        theme: {
+          color: '#3399cc',
+        },
+      };
+  
+      // Step 4: Initialize Razorpay Checkout
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+  
+    } catch (error) {
+      console.error('Error during payment:', error);
+  
+      Swal.fire({
+        title: 'Payment Failed',
+        text: 'Something went wrong. Please try again!',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+  
+      // Set status to failed if payment fails
+      setFormData({ ...formData, payment_status: 'failed' });
+    }
+  };
+  
   
   const companyDetails = [
     {
@@ -418,13 +434,20 @@ useEffect(()=>
         doc.setFont("helvetica", "normal");
         doc.setFontSize(10);
 
+        
+        const lineSpacing = 5; // Adjust this value for more spacing
+
         doc.text(company.name, marginLeft, 60);
-        doc.text(company.address, marginLeft, 70);
-        doc.text(`Contact: ${company.contact}`, marginLeft, 80);
+        doc.text(company.address, marginLeft, 60 + lineSpacing);
+        doc.text(`Contact: ${company.contact}`, marginLeft, 60 + 2 * lineSpacing);
+        
+
+        
 
         doc.text(`Name: ${orderdata.firstName} ${orderdata.lastName}`, marginRight, 60);
-        doc.text(`Email: ${orderdata.email}`, marginRight, 70);
-        doc.text(`Phone: ${orderdata.mobileNumber}`, marginRight, 80);
+        doc.text(`Email: ${orderdata.email}`, marginRight, 60 + lineSpacing);
+        doc.text(`Phone: ${orderdata.mobileNumber}`, marginRight, 60 + 2 * lineSpacing);
+        
         const address = `Address: ${orderdata.apartmentNumber} ${orderdata.area} ${orderdata.landmark} ${orderdata.selectstate} ${orderdata.pincode} India`;
         const maxWidth = 60; // Adjust width based on the layout
         const wrappedAddress = doc.splitTextToSize(address, maxWidth);
@@ -433,8 +456,8 @@ useEffect(()=>
         doc.setFont("helvetica", "bold");
         doc.setFontSize(10);
         doc.text(`Invoice Number: ${paymentResponse.razorpay_payment_id}`, marginLeft, 100);
-        doc.text(`Order ID: ${paymentResponse.razorpay_order_id}`, marginLeft, 110);
-        doc.text(`Transaction Date: ${new Date().toLocaleDateString()}`, marginLeft, 120);
+        doc.text(`Order ID: ${paymentResponse.razorpay_order_id}`, marginLeft, 100 + lineSpacing);
+        doc.text(`Transaction Date: ${new Date().toLocaleDateString()}`, marginLeft, 100 + 2 * lineSpacing);
 
         // Show Page Number at the bottom of every page
         doc.setFontSize(10);
@@ -735,8 +758,10 @@ const logout = () => {
                 fontWeight: "400",
                 fontFamily: '"ITC Modern No 216", serif',
                 top: "10px",
-                color:"black"
+                color:"black",
+                cursor:"pointer "
               }}
+              onClick={() => navigate("/cudasboard")}
             >
               KIONA
             </Navbar.Brand>
@@ -810,8 +835,7 @@ const logout = () => {
                   </NavDropdown>
 
                          {/* customer account details */}
-                         <NavDropdown title="My Account" id="termsDropdown">
-                    {/* <NavDropdown.Item as={Link} to="/privacypolicy">Dashboard</NavDropdown.Item> */}
+                         <NavDropdown title={useremail} id="termsDropdown">
                     <NavDropdown.Item as={Link} to="/myorders">My Orders</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/personalinfo">Personal Info</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/manageadds">Manage Address</NavDropdown.Item>
@@ -1093,7 +1117,7 @@ const logout = () => {
                <div className="cart-total">
                <h3>
 Total Price:  <span  >
-₹{orderdata.subtotal ? orderdata.subtotal.toFixed(2) : '0.00'}
+₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
 </span>
 </h3>
 </div>
@@ -1115,366 +1139,374 @@ Total Price:  <span  >
 {/* billing form modal------------------------------------------------------------------------- */}
 
 
-<Modal show={show4} onHide={handleClose4}  size="xl">
-    <Modal.Header closeButton>
-      <Modal.Title>  <div>
-      <h3>Add New Address</h3>
-     </div></Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-    <div
-  className="container"
-  style={{
-    display: "flex",
-    gap: "2rem",
-    flexWrap: "wrap",
-    padding: "20px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "8px",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-  }}
+<Modal show={show4} onHide={handleClose4} size="xl">
+<Modal.Header closeButton>
+<Modal.Title> <div>
+<h3>Add New Address</h3>
+</div></Modal.Title>
+</Modal.Header>
+<Modal.Body>
+<div
+className="container"
+style={{
+display: "flex",
+gap: "2rem",
+flexWrap: "wrap",
+padding: "20px",
+backgroundColor: "#f9f9f9",
+borderRadius: "8px",
+boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+}}
 >
-  {/* Form Section */}
-  <div
-    style={{
-      flex: "1",
-      backgroundColor: "#ffffff",
-      borderRadius: "8px",
-      padding: "20px",
-      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-      maxWidth: "600px",
-    }}
-  >
-    <form onSubmit={handleSubmit1}>
-
-    <h5 style={{ marginTop: "20px", fontWeight: "600" }}>
-        Personal Details
-      </h5>
-      <div className="mb-3 row">
-        <div className="col-md-6">
-          <label htmlFor="firstName" className="form-label">
-            First Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="firstName"
-            name="firstName"
-            value={orderdata.firstName}
-            onChange={handleChange}
-            placeholder="e.g. John"
-            required
-            style={{
-              borderRadius: "5px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
-          />
-          {validation.firstName && <span style={{ color: "red", fontSize: "12px" }}>{validation.firstName}</span>}
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="lastName" className="form-label">
-            Last Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="lastName"
-            name="lastName"
-            value={orderdata.lastName}
-            onChange={handleChange}
-            placeholder="e.g. Doe"
-            style={{
-              borderRadius: "5px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
-          />
-            {validation.lastName && <span style={{ color: "red", fontSize: "12px" }}>{validation.lastName}</span>}
-        </div>
-      </div>
-      <div className="col-md-6 mb-3">
-        <label htmlFor="mobileNumber" className="form-label">
-          Mobile Number
-        </label>
-        <input
-          type="tel"
-          className="form-control"
-          id="mobileNumber"
-          name="mobileNumber"
-          value={orderdata.mobileNumber}
-          onChange={handleChange}
-          placeholder="e.g. 9876543210"
-          required
-          style={{
-            borderRadius: "5px",
-            padding: "10px",
-            fontSize: "14px",
-          }}
-        />
-          {validation.mobileNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation.mobileNumber}</span>}
-      </div>
-
-
-
-
-
-      <h5 style={{ marginBottom: "20px", fontWeight: "600" }}>
-        *Address Details
-      </h5>
-      <div className="mb-3 row">
-        <div className="col-md-6">
-          <label htmlFor="apartmentNumber" className="form-label">
-            *Apartment Name / House No.
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="apartmentNumber"
-            name="apartmentNumber"
-            value={orderdata.apartmentNumber}
-            onChange={handleChange}
-            placeholder="e.g. 12/228"
-            required
-            style={{
-              borderRadius: "5px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
-          />
-            {validation.apartmentNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation.apartmentNumber}</span>}
-        </div>
-        <div className="col-md-6">
-  <label htmlFor="state" className="form-label">
-    *Select State
-  </label>
-  <select
-    className="form-control"
-    id="state"
-    name="selectstate"
-    value={orderdata.selectstate}
-    onChange={handleChange}
-    style={{
-      borderRadius: "5px",
-      padding: "10px",
-      fontSize: "14px",
-    }}
-  >
-    <option value="" disabled>
-      Select a state
-    </option>
-    {indianStates.map((state, index) => (
-      <option key={index} value={state}>
-        {state}
-      </option>
-    ))}
-  </select>
-  {validation.selectstate && <span style={{ color: "red", fontSize: "12px" }}>{validation.selectstate}</span>}
+{/* Form Section */}
+<div
+style={{
+flex: "1",
+backgroundColor: "#ffffff",
+borderRadius: "8px",
+padding: "20px",
+boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+maxWidth: "600px",
+}}
+>
+<form>
+<h5 style={{ marginBottom: "20px", fontWeight: "600" }}>
+*Area Details
+</h5>
+<div className="mb-3 row">
+<div className="col-md-6">
+<label htmlFor="apartmentNumber" className="form-label">
+*Apartment / House No.
+</label>
+<input
+type="text"
+className="form-control"
+id="apartmentNumber"
+name="apartmentNumber"
+value={formData.apartmentNumber}
+onChange={handleChange}
+placeholder="e.g. 12/228"
+required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.apartmentNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation.apartmentNumber}</span>}
 </div>
-      </div>
-      <div className="mb-3 row">
-        <div className="col-md-6">
-          <label htmlFor="area" className="form-label">
-          *Area
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="area"
-            name="area"
-            onChange={handleChange}
-            placeholder="e.g. 12/228"
-            required
-            style={{
-              borderRadius: "5px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
-          />
-            {validation.area && <span style={{ color: "red", fontSize: "12px" }}>{validation.area}</span>}
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="StreetDetails" className="form-label">
-          *Street Details/Landmark
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="landmark"
-            name="landmark"
-           
-            onChange={handleChange}
-            placeholder="e.g. Park Avenue"
-            style={{
-              borderRadius: "5px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
-          />
-            {validation.landmark && <span style={{ color: "red", fontSize: "12px" }}>{validation.landmark}</span>}
-        </div>
+{/* <div className="col-md-6">
+<label htmlFor="apartmentNumber" className="form-label">
+*user email
+</label>
+<input
+type="text"
+className="form-control"
+id="apartmentNumber"
+name="apartmentNumber"
+value={useremail}
+// onChange={handleChange}
+// placeholder="e.g. 12/228"
+// required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+</div> */}
+<div className="col-md-6">
+<label htmlFor="apartmentName" className="form-label">
+*Apartment Name
+</label>
+<input
+type="text"
+className="form-control"
+id="apartmentName"
+name="apartmentName"
+value={formData.apartmentName} 
+onChange={handleChange}
+placeholder="e.g. Park Avenue"
+required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.apartmentName && <span style={{ color: "red", fontSize: "12px" }}>{validation.apartmentName}</span>}
+</div>
+</div>
+<div className="mb-3 row">
+<div className="col-md-6">
+<label htmlFor="area" className="form-label">
+*Area
+</label>
+<input
+type="text"
+className="form-control"
+id="area"
+name="area"
+onChange={handleChange}
+placeholder="e.g. 12/228"
+required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.area && <span style={{ color: "red", fontSize: "12px" }}>{validation.area}</span>}
+</div>
+<div className="col-md-6">
+<label htmlFor="StreetDetails" className="form-label">
+*Street Details/Landmark
+</label>
+<input
+type="text"
+className="form-control"
+id="landmark"
+name="landmark"
 
-        <div className="col-md-6">
-          <label htmlFor="StreetDetails" className="form-label">
-          *user email
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="email"
-            name="email"
-           value={useremail}
-           readOnly
-            // onChange={handleChange}
-            // placeholder="e.g. Park Avenue"
-            style={{
-              borderRadius: "5px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
-          />
-        </div>
-      </div>
-      <div className="col-md-6 mb-3">
-        <label htmlFor="landmark" className="form-label">
-          *Pincode
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="pincode"
-          name="pincode"
-          
-          onChange={handleChange}
-          style={{
-            borderRadius: "5px",
-            padding: "10px",
-            fontSize: "14px",
-          }}
-        />
-          {validation.pincode && <span style={{ color: "red", fontSize: "12px" }}>{validation.pincode}</span>}
-      </div>
-      
-      <div className="mb-3">
-        <div className="form-check">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="setDefault"
-            name="setDefault"
-            checked={orderdata.setDefault}
-            onChange={handleChange}
-          />
-          <label htmlFor="setDefault" className="form-check-label">
-            Set as Default Address
-          </label>
-        </div>
-      </div>
-      <h5 style={{ marginTop: "20px", fontWeight: "600" }}>Address Type</h5>
-      <div className="mb-3 address-type" style={{ marginBottom: "20px" }}>
-        <button
-          type="button"
-          className={`btn ${
-            orderdata.addressType === "Home"
-              ? "btn-primary"
-              : "btn-outline-primary"
-          }`}
-          onClick={() => handleAddressType("Home")}
-          style={{
-            marginRight: "10px",
-            fontSize: "14px",
-            padding: "8px 15px",
-            borderRadius: "5px",
-          }}
-        >
-          <i
-            className="fa-solid fa-house"
-            style={{ marginRight: "5px" }}
-          ></i>
-          Home
-        </button>
-        <button
-          type="button"
-          className={`btn ${
-            orderdata.addressType === "Office"
-              ? "btn-primary"
-              : "btn-outline-primary"
-          }`}
-          onClick={() => handleAddressType("Office")}
-          style={{
-            marginRight: "10px",
-            fontSize: "14px",
-            padding: "8px 15px",
-            borderRadius: "5px",
-          }}
-        >
-          <i
-            className="fa-solid fa-building"
-            style={{ marginRight: "5px" }}
-          ></i>
-          Office
-        </button>
-        <button
-          type="button"
-          className={`btn ${
-            orderdata.addressType === "Other"
-              ? "btn-primary"
-              : "btn-outline-primary"
-          }`}
-          onClick={() => handleAddressType("Other")}
-          style={{
-            marginRight: "10px",
-            fontSize: "14px",
-            padding: "8px 15px",
-            borderRadius: "5px",
-          }}
-        >
-          <i
-            className="fa-solid fa-ellipsis"
-            style={{ marginRight: "5px" }}
-          ></i>
-          Other
-        </button>
-      </div>
-    </form>
-  </div>
+onChange={handleChange}
+placeholder="e.g. Park Avenue"
+required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.landmark && <span style={{ color: "red", fontSize: "12px" }}>{validation.landmark}</span>}
+</div>
+</div>
+<div className="col-md-6 mb-3">
+<label htmlFor="landmark" className="form-label">
+*Pincode
+</label>
+<input
+type="text"
+className="form-control"
+id="pincode"
+name="pincode"
+required
+onChange={handleChange}
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.pincode && <span style={{ color: "red", fontSize: "12px" }}>{validation.pincode}</span>}
+</div>
+<h5 style={{ marginTop: "20px", fontWeight: "600" }}>
+Personal Details
+</h5>
+<div className="mb-3 row">
+<div className="col-md-6">
+<label htmlFor="firstName" className="form-label">
+First Name
+</label>
+<input
+type="text"
+className="form-control"
+id="firstName"
+name="firstName"
+value={formData.firstName}
+onChange={handleChange}
+placeholder="e.g. John"
+required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.firstName && <span style={{ color: "red", fontSize: "12px" }}>{validation.firstName}</span>}
+</div>
+<div className="col-md-6">
+<label htmlFor="lastName" className="form-label">
+Last Name
+</label>
+<input
+type="text"
+className="form-control"
+id="lastName"
+name="lastName"
+value={formData.lastName}
+onChange={handleChange}
+placeholder="e.g. Doe"
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.lastName && <span style={{ color: "red", fontSize: "12px" }}>{validation.lastName}</span>}
+</div>
+</div>
+<div className="col-md-6 mb-3">
+<label htmlFor="mobileNumber" className="form-label">
+Mobile Number
+</label>
+<input
+type="tel"
+className="form-control"
+id="mobileNumber"
+name="mobileNumber"
+value={formData.mobileNumber}
+onChange={handleChange}
+placeholder="e.g. 9876543210"
+required
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+{validation.mobileNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation.mobileNumber}</span>}
+</div>
 
-  {/* Cart Section */}
-  <div
-    style={{
-      flex: "1",
-      backgroundColor: "#ffffff",
-      borderRadius: "8px",
-      padding: "20px",
-      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-      maxWidth: "400px",
-    }}
-  >
-    <h5 style={{ marginBottom: "20px", fontWeight: "600" }}>Cart Items</h5>
-    {cart.map((item, index) => (
-      <div
-        key={index}
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "15px",
-          padding: "10px",
-          border: "1px solid #ddd",
-          borderRadius: "5px",
-        }}
-      >
-        
-        <div>
-          <div style={{ fontWeight: "600", marginBottom: "5px" }}>
-            {item.product_name}
-          </div>
-          <div style={{ fontSize: "14px", color: "#555" }}>
-            ₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)}  <span style={{marginLeft:"13rem"}}>Quantity {item.product_quantity1}</span>
-          </div>
-        </div>
-      </div>
-    ))}
+<div className="col-md-6">
+<label htmlFor="email" className="form-label">
+Email Id
+</label>
+<input
+type="text"
+className="form-control"
+id="email"
+name="email"
+value={formData.email    }
+onChange={handleChange}
+placeholder="e.g. Doe"
+style={{
+borderRadius: "5px",
+padding: "10px",
+fontSize: "14px",
+}}
+/>
+</div>
+
+<div className="mb-3">
+<div className="form-check">
+<input
+type="checkbox"
+className="form-check-input"
+id="setDefault"
+name="setDefault"
+checked={formData.setDefault}
+onChange={handleChange} 
+/>
+<label htmlFor="setDefault" className="form-check-label">
+Set as Default Address
+</label>
+</div>
+</div>
+<h5 style={{ marginTop: "20px", fontWeight: "600" }}>Address Type</h5>
+<div className="mb-3 address-type" style={{ marginBottom: "20px" }}>
+<button
+type="button"
+className={`btn ${
+formData.addressType === "Home"
+? "btn-primary"
+: "btn-outline-primary"
+}`}
+onClick={() => handleAddressType("Home")}
+style={{
+marginRight: "10px",
+fontSize: "14px",
+padding: "8px 15px",
+borderRadius: "5px",
+}}
+>
+<i
+className="fa-solid fa-house"
+style={{ marginRight: "5px" }}
+></i>
+Home
+</button>
+<button
+type="button"
+className={`btn ${
+formData.addressType === "Office" 
+? "btn-primary"
+: "btn-outline-primary"
+}`}
+onClick={() => handleAddressType("Office")}
+style={{
+marginRight: "10px",
+fontSize: "14px",
+padding: "8px 15px",
+borderRadius: "5px",
+}}
+>
+<i
+className="fa-solid fa-building"
+style={{ marginRight: "5px" }}
+></i>
+Office
+</button>
+<button
+type="button"
+className={`btn ${
+formData.addressType === "Other"
+? "btn-primary"
+: "btn-outline-primary"
+}`}
+onClick={() => handleAddressType("Other")}
+style={{
+marginRight: "10px",
+fontSize: "14px",
+padding: "8px 15px",
+borderRadius: "5px",
+}}
+>
+<i
+className="fa-solid fa-ellipsis"
+style={{ marginRight: "5px" }}
+></i>
+Other
+</button>
+</div>
+</form>
+</div>
+
+{/* Cart Section */}
+<div
+style={{
+flex: "1",
+backgroundColor: "#ffffff",
+borderRadius: "8px",
+padding: "20px",
+boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+maxWidth: "400px",
+}}
+>
+<h5 style={{ marginBottom: "20px", fontWeight: "600" }}>Cart Items</h5>
+{cart.map((item, index) => (
+<div
+key={index}
+style={{
+display: "flex",
+justifyContent: "space-between",
+alignItems: "center",
+marginBottom: "15px",
+padding: "10px",
+border: "1px solid #ddd",
+borderRadius: "5px",
+}}
+>
+
+<div>
+<div style={{ fontWeight: "600", marginBottom: "5px" }}>
+{item.product_name}
+</div>
+<div style={{ fontSize: "14px", color: "#555" }}>
+₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)} <span style={{marginLeft:"13rem"}}>Quantity {item.product_quantity1}</span>
+</div>
+</div>
+</div>
+))}
 <div style={{
   fontWeight: "600", 
   fontSize: "20px", 
@@ -1487,7 +1519,7 @@ Total Price:  <span  >
 }}>
   <strong>Subtotal:</strong> 
   <span style={{ color: "#333", fontSize: "18px", fontWeight: "400" }}>
-    ₹{orderdata.subtotal ? orderdata.subtotal.toFixed(2) : '0.00'}
+    ₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
   </span>
 </div>
 
@@ -1499,11 +1531,11 @@ Total Price:  <span  >
   textAlign: "left",
   letterSpacing: "0.5px",
   borderBottom: "2px solid #ddd",
-  paddingBottom: "10px"
+  paddingBottom: "10px"         
 }}>
   <strong>GST (18%):</strong> 
   <span style={{ color: "#e74c3c", fontSize: "18px", fontWeight: "400" }}>
-    ₹{orderdata.gstAmount ? orderdata.gstAmount.toFixed(2) : '0.00'}
+    ₹{formData.gstAmount ? formData.gstAmount.toFixed(2) : '0.00'}
   </span>
 </div>
 
@@ -1523,100 +1555,22 @@ Total Price:  <span  >
     fontSize: "20px", 
     fontWeight: "500"
   }}>
-    ₹{orderdata.totalPrice ? orderdata.totalPrice.toFixed(2) : '0.00'}
+    ₹{formData.totalPrice ? formData.totalPrice.toFixed(2) : '0.00'}
   </span>
 </div>
-
-
-  </div>
-</div>
-
-
-{/* payment method */}
-
-<div className="fixed inset-0 flex items-center justify-center px-4">
-<h2 className="text-lg font-semibold">Payment</h2>
-<p className="text-sm text-gray-500">All transactions are secure and encrypted.</p>
-
-{/* GoKwik Cash on Delivery */}
-<div
-className={`border rounded-lg p-4 mt-4 cursor-pointer ${
-selectedPayment === "cod" ? "border-blue-500 bg-blue-50" : "border-gray-300"
-}`}
-onClick={() => setSelectedPayment("cod")}
->
-<div className="flex items-center">
-<input
-type="radio"
-name="payment"
-checked={selectedPayment === "cod"}
-onChange={() => setSelectedPayment("cod")}
-className="mr-3"
-/>
-<span className="font-medium">Cash On Delivery</span>
-<span className="ml-auto">💰</span>
-</div>
-
-{selectedPayment === "cod" && (
-<div className="mt-3 text-center border-t pt-3">
-<img
-src={payment}
-alt="Payment process"
-className="mx-auto w-auto max-w-[80px] sm:max-w-[20px] md:max-w-[120px] h-auto"
-/>
-
-
-
-<p className="text-sm text-gray-600 mt-2">
-You will be redirected to complete your Cash on Delivery order securely.
-</p>
-</div>
-)}
-</div>
-
-{/* PhonePe Payment Gateway */}
-<div
-className={`border rounded-lg p-4 mt-4 cursor-pointer ${
-selectedPayment === "phonepe" ? "border-blue-500 bg-blue-50" : "border-gray-300"
-}`}
-onClick={() => setSelectedPayment("phonepe")}
->
-<div className="flex items-center">
-<input
-type="radio"
-name="payment"
-checked={selectedPayment === "phonepe"}
-onChange={() => setSelectedPayment("phonepe")}
-className="mr-3"
-/>
-<span className="font-medium">PhonePe Payment Gateway (UPI, Cards & NetBanking)</span>
-</div>
-{selectedPayment === "phonepe" && (
-<div className="mt-3 flex space-x-2 border-t pt-3">
-<img src={upi} alt="UPI" style={{ width: "60px", height: "40px" }} />
-<img src={Visa} alt="Visa" style={{ width: "60px", height: "40px" }} />
-<img src={rupay} alt="Rupay" style={{ width: "60px", height: "40px" }} />
-</div>
-)}
 </div>
 </div>
 
-
-
-
-
-
-
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={handleClose4}>
-        Close
-      </Button>
-      <Button variant="primary" onClick={handlePayment}>
-       Go to Payment
-      </Button>
-    </Modal.Footer>
-  </Modal>
+</Modal.Body>
+<Modal.Footer>
+<Button variant="secondary" onClick={handleClose4}>
+Close
+</Button>
+<Button variant="primary" onClick={handlePayment}>
+Go to Payment
+</Button>
+</Modal.Footer>
+</Modal>
 
 
 

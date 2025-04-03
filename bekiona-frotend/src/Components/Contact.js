@@ -1,10 +1,33 @@
-import React, {  useState } from "react";
+import React, {  useState, useEffect } from "react";
 import './Contact.css';
 import Header from './Header';
 import Footer from './footer';
 import api from './api';
+import Cuheader from "./Customerdashboard/Cuheader";
 
 function Contact() {
+
+  const [token, setToken] = useState(null);
+  
+    useEffect(() => {
+      // Check for token when app loads
+      const storedToken = localStorage.getItem("usertoken");
+      setToken(storedToken); // Set token state
+  
+      // Function to handle token change
+      const handleStorageChange = () => {
+        const updatedToken = localStorage.getItem("usertoken");
+        setToken(updatedToken); // Update token state dynamically
+      };
+  
+      // Listen for storage changes (useful for multiple tabs)
+      window.addEventListener("storage", handleStorageChange);
+  
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+      };
+    }, []);
+  
 
   const [contactForm, setContactForm] = useState({
     name: "",
@@ -62,7 +85,9 @@ function Contact() {
     <div>
 
         <div>
-            <Header/>
+          {/* If token exists, show Cuheader, else show Header */}
+{token ? <Cuheader /> : <Header />}
+            {/* <Header/> */}
         </div>
  {/*star contaus page------------------------------------------------------------------------------  */}
  <div className='container' style={{textAlign:"center", marginTop:"10rem"}}>

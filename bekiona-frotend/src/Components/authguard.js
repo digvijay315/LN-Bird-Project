@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Navigate, } from "react-router-dom";
+import Banner from './Admin/Banner';
+
 
 // Create AuthContext
 const AuthContext = createContext();
@@ -18,8 +21,6 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
     }
   }, []); // Run once on mount
-
-
 
 
   const login = (token) => {

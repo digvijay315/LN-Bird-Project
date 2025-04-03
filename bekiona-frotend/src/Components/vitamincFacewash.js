@@ -100,49 +100,43 @@ function VitamincFacewash() {
   const { cart, setcart } = useCart();
 
   // Add to Cart function
-     const handleprouctadd = (product) => {
-     const isProductInCart = cart.some((item) => item._id === product._id);
-   
-     if (!isProductInCart) {
-       // Add product to the cart
-       setcart([...cart, product]);
-   
-       // Change button color for the clicked product
-       setButtonColors((prev) => ({
-         ...prev,
-         [product._id]: "#FF5F00",
-       }));
-   
-       // Revert button color after 1 second
-       setTimeout(() => {
-         setButtonColors((prev) => ({
-           ...prev,
-           [product._id]: "#c8b89a", // Original color
-         }));
-       }, 1000);
-   
-       // Set cart message
-       setCartMessage((prev) => ({
-         ...prev,
-         [product._id]: "Your product has been added to the cart!",
-       }));
-   
-       // Hide the message after 2 seconds
-       setTimeout(() => {
-         setCartMessage((prev) => ({
-           ...prev,
-           [product._id]: "",
-         }));
-       }, 2000);
-     } else {
-       Swal.fire({
-         title: "Error!",
-         text: "Product already in your cart",
-         icon: "error",
-         confirmButtonText: "OK",
-       });
-     }
-   };
+  
+    const handleprouctadd = (product) => {
+      const isProductInCart = cart.some((item) => item._id === product._id);
+    
+      if (!isProductInCart) {
+        // Add product to the cart
+        setcart([...cart, product]);
+    
+        // Change button color for the clicked product
+        setButtonColors((prev) => ({
+          ...prev,
+          [product._id]: "#FF5F00",
+        }));
+    
+        // Set cart message
+        setCartMessage((prev) => ({
+          ...prev,
+          [product._id]: "Your product has been added to the cart!",
+        }));
+    
+        // Hide the message after 2 seconds
+        setTimeout(() => {
+          setCartMessage((prev) => ({
+            ...prev,
+            [product._id]: "",
+          }));
+        }, 2000);
+      } else {
+        Swal.fire({
+          title: "Warning!",
+          text: "Product already in your cart",
+          icon: "warning",
+          confirmButtonText: "OK",
+        });
+      }
+    };
+    
    
 
 
@@ -209,6 +203,26 @@ function VitamincFacewash() {
     
         fetchReviews();
       }, [pid]);
+
+
+
+
+
+
+      const productUrl = encodeURIComponent(`https://yourwebsite.com/product/${pid}`);
+      const productImage = encodeURIComponent(Products[0]?.product_image || "default-image.jpg");
+      const productName = encodeURIComponent(Products[0]?.product_name || "Product");
+      
+      // ✅ Facebook Share
+      const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${productUrl}&picture=${productImage}&text=${productName}`;
+      
+      // ✅ Twitter Share
+      const twitterShare = `https://twitter.com/intent/tweet?url=${productUrl}&text=${productName}&picture=${productImage}`;
+      
+      // ✅ LinkedIn Share
+      const linkedinShare = `https://www.linkedin.com/sharing/share-offsite/?url=&text=${productName}${productUrl}&picture=${productImage}`;
+
+
 
 
 
@@ -280,7 +294,9 @@ function VitamincFacewash() {
            onClick={() => handleprouctadd(product)}
             style={{
               padding: "10px 20px",
-              backgroundColor: buttonColors[product._id] || "#c8b89a",
+              backgroundColor: cart.some(item => item._id === product._id) 
+              ? "green"  // Change this to your desired color when item is in cart
+              : "#c8b89a",
               border: "none",
               borderRadius: "5px",
               cursor: "pointer",
@@ -336,12 +352,12 @@ function VitamincFacewash() {
           <p>SKU: {product.product_sku}</p>
           <p>Categories: {product.product_category}</p>
           {/* <p>Tag: {product.tag}</p> */}
-          <p>
-            Share:{" "}
-            <span style={{ color: "#0077b5", margin: "0 5px" }}>LinkedIn</span>
-            <span style={{ color: "#1da1f2", margin: "0 5px" }}>Twitter</span>
-            <span style={{ color: "#3b5998", margin: "0 5px" }}>Facebook</span>
-          </p>
+          <p style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+  Share:{" "}
+  <a href={linkedinShare} target="_blank" rel="noopener noreferrer" style={{ color: "#0077b5", textDecoration: "none" }}>LinkedIn</a>
+  <a href={twitterShare} target="_blank" rel="noopener noreferrer" style={{ color: "#1da1f2", textDecoration: "none" }}>Twitter</a>
+  <a href={facebookShare} target="_blank" rel="noopener noreferrer" style={{ color: "#3b5998", textDecoration: "none" }}>Facebook</a>
+</p>
         </div>
       </div>
     </div>
@@ -616,7 +632,9 @@ function VitamincFacewash() {
             onClick={() => handleprouctadd(product)}
             className="add-to-cart-btn"
             style={{
-              backgroundColor:  buttonColors[product._id] || "rgb(51, 51, 51)",
+              backgroundColor: cart.some(item => item._id === product._id) 
+              ? "green"  // Change this to your desired color when item is in cart
+              : "rgb(51, 51, 51)",
               color: "white",
               border: "none",
               padding: "12px 30px",

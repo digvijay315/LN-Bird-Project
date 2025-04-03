@@ -3,10 +3,33 @@ import api from './api'
 import Header from './Header';
 import { useNavigate } from 'react-router-dom';
 import Footer from "./footer";
+import Cuheader from "./Customerdashboard/Cuheader";
 
 
 function Blog1() {
   const [blogPosts, setBlogPosts] = useState([]);
+
+  const [token, setToken] = useState(null);
+  
+    useEffect(() => {
+      // Check for token when app loads
+      const storedToken = localStorage.getItem("usertoken");
+      setToken(storedToken); // Set token state
+  
+      // Function to handle token change
+      const handleStorageChange = () => {
+        const updatedToken = localStorage.getItem("usertoken");
+        setToken(updatedToken); // Update token state dynamically
+      };
+  
+      // Listen for storage changes (useful for multiple tabs)
+      window.addEventListener("storage", handleStorageChange);
+  
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+      };
+    }, []);
+  
 
   // Fetch blog posts from the backend
   useEffect(() => {
@@ -30,7 +53,10 @@ function Blog1() {
 
   return (
     <div>
-      <Header />
+     
+     {/* If token exists, show Cuheader, else show Header */}
+     {token ? <Cuheader /> : <Header />}
+      {/* <Header /> */}
 
       <div
   style={{
