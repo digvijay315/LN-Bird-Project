@@ -3200,7 +3200,7 @@ const checkForDuplicates = async (contacts) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
         <TableRow >
-          <StyledTableCell style={{backgroundColor:"#808000"}}>
+          <StyledTableCell style={{backgroundColor:"#0086b3"}}>
             <input
               type="checkbox"
               checked={selectAll}
@@ -3210,7 +3210,7 @@ const checkForDuplicates = async (contacts) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{   cursor: 'pointer',backgroundColor:"#808000" }}
+              style={{   cursor: 'pointer',backgroundColor:"#0086b3" }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}

@@ -2889,18 +2889,7 @@ const databasefieldsunit = [
     'ucity','uzip','ustate','ucountry','owner_details','associated_contact','relation','s_no','preview','descriptions',
     'category','s_no1','url','document_name','document_no','document_Date','linkded_contact','pic'];
 
-    const databaseFields = [
-      "title", "first_name", "last_name", "country_code", "mobile_no", "mobile_type",
-      "email", "email_type", "tags", "descriptions", "source", "team", "owner", "visible_to",
-      "profession_category", "profession_subcategory", "designation", "company_name",
-      "company_phone", "company_email", "area", "location", "city", "pincode", "state", "country",
-      "industry", "company_social_media", "company_url", "father_husband_name", "h_no", "area1",
-      "location1", "city1", "pincode1", "state1", "country1", "gender", "maritial_status",
-      "birth_date", "anniversary_date", "education", "degree", "school_college", "loan",
-      "bank", "amount", "social_media", "url", "income", "amount1", "document_no",
-      "document_name", "document_pic"
-    ];
-
+  
 const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
 const [mappedFields, setMappedFields] = useState({}); // Store user-selected mapping
 const [selectedFile, setSelectedFile] = useState(null); // Store uploaded file
@@ -3115,18 +3104,42 @@ const checkForDuplicates = async (contacts) => {
     
     // If there are new contacts, stop and prompt the user to re-upload
     if (newContactList.length > 0) {
-      await api.post("addbulkcontact",newContactList);
       Swal.fire({
-        title: "Success",
-        icon: "success",
-        text: `${newContactList.length} new contacts added. Please refresh the page and re-upload the Excel sheet.`,
-      }).then(() => {
-        window.location.reload(); // Reload only after the user clicks "OK"
+        title: "Are you sure?",
+        icon: "warning",
+        text: `Do you want to add ${newContactList.length} new contacts?`,
+        showCancelButton: true,
+        confirmButtonText: "Yes, add them!",
+        cancelButtonText: "No, cancel",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          setIsLoading(true); // Show loading state
+    
+          try {
+            await api.post("addbulkcontact", newContactList);
+    
+            Swal.fire({
+              title: "Success",
+              icon: "success",
+              text: `${newContactList.length} new contacts added. Please refresh the page and re-upload the Excel sheet.`,
+            }).then(() => {
+              window.location.reload(); // Reload after user clicks "OK"
+            });
+          } catch (error) {
+            Swal.fire({
+              title: "Error",
+              icon: "error",
+              text: "Something went wrong while adding contacts.",
+            });
+          }
+    
+          setIsLoading(false); // Hide loading state
+        }
       });
-      
-      setIsLoading(false);
+    
       return; // Stop further execution
     }
+    
 
     // Update state only if no new contacts were found
     setDuplicateEntries(duplicates);
@@ -3466,8 +3479,14 @@ const unitdata = [
     length:[''],bredth:[''],total_area:[''],measurment2:[''],ocupation_date:'',age_of_construction:'',furnishing_details:'',
     enter_furnishing_details:'',furnished_item:'',location:'',lattitude:'',langitude:'',uaddress:'',ustreet:'',ulocality:'',
     ucity:'',uzip:'',ustate:'',ucountry:'',owner_details:[],associated_contact:[],relation:'',s_no:[''],preview:[''],descriptions:[''],
-    category:[''],s_no1:[''],url:[''],document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:['']
-  }
+    category:[''],s_no1:[''],url:[''],document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],
+    owner_title:"Mr.",owner_first_name:"alex",owner_last_name:"kumar",owner_country_code:"91",owner_mobile_no:"9944554411",
+    owner_mobile_type:"personal",owner_email:"alex@gmail.com",owner_email_type:"personal",owner_father_name:"jon",
+    associated_title:"Mr.",associated_first_name:"jon",associated_last_name:"dow",associated_country_code:"91",
+    associated_mobile_no:"9454226644",associated_mobile_type:"personal",associated_email:"jon@gmail.com",associated_email_type:"home",
+    associated_father_name:"alex"
+  }															
+
 ];
 
 const generateExcelFileunit = () => {
