@@ -51,6 +51,8 @@ const lead_info=new mongoose.Schema({
     timeline:{type:String},
     facing:{type:Array},
     road:{type:Array},
+    direction:{type:String},
+    unit_type2:{type:String},
     transaction_type:{type:String},
     furnishing:{type:String},
     profession_category:{type:String},

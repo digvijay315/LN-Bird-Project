@@ -458,8 +458,6 @@ const add_contact = async (req, res) => {
                                                 try {
                                                     let contacts = req.body;
                                                     
-                                                    
-                                            
                                                     // Ensure contacts is always an array
                                                     if (!Array.isArray(contacts)) {
                                                         contacts = Object.values(contacts); // Converts object with keys '0', '1', etc. into an array

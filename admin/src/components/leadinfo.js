@@ -112,13 +112,13 @@ const handlematcheddealChange = (event) => {
 
 
 const options = {
-  property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
+  property_type: ["Residential", "Commercial","Agricultural","Industrial","Institutional"],
   sub_type: {
-    RESIDENTIAL: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
-    COMMERCIAL: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
-    AGRICULTURE: ["LAND", "FARM HOUSE"],
-    INDUSTRIAL: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
-    INSTITUTIONAL: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
+    Residential: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
+    Commercial: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
+    Agricultural: ["LAND", "FARM HOUSE"],
+    Industrial: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
+    Institutional: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
   },
   unit_type: {
     PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
@@ -607,8 +607,8 @@ const handleOwnerChange = (event) => {
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-        lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],transaction_type:"",
-        white_portion:"",furnishing:"",matched_deal:[],
+        lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+        unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
         profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
         company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
@@ -1613,14 +1613,15 @@ return (
                     </select></div>
                     <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadData?.mobile_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_type:e.target.value})}>
-                    <option>{leadData?.mobile_type || '---Personal---'}</option>
+                    <option>{leadData?.mobile_type || '---select---'}</option>
+                        <option>Personal</option>
                         <option>Home</option>
                         <option>Office</option>
                         <option>Mobile</option>
                         </select></div>
                     <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadData?.email[0] || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email_type:e.target.value})}>
-                    <option>{leadData?.email_type || '---Personal---'}</option>
+                    <option>{leadData?.email_type || '---select---'}</option>
                         <option>Personal</option>
                         <option>Office</option>
                         <option>Business</option>
@@ -2093,6 +2094,20 @@ return (
                     ))}
                 </Select>
                     </div>
+                    <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,direction:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>East</option>
+                                <option>West</option>
+                                <option>North</option>
+                                <option>South</option>
+                                <option>North East</option>
+                                <option>South East</option>
+                                <option>South West</option>
+                                <option>North West</option>
+                               
+                                </select>
+                    </div>
+
                     <div className="col-md-4"><label className="labels">Funding</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
                     <option>Select</option>
@@ -2134,7 +2149,14 @@ return (
                        }
                         </select>
                     </div>     
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Property Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,unit_type2:e.target.value})}>
+                                <option>---Select---</option>
+                                <option>Corner</option>
+                                <option> Two Side Open</option>
+                                <option>Three Side Open</option>
+                                <option>Ordinary </option>
+                                </select>
+                    </div>
 
                     <div className="col-md-4"><label className="labels">Transaction Type</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
@@ -2330,13 +2352,13 @@ return (
                             </div>
                             <div className="col-md-4"><label className="labels">School/College/University</label>
                             {
-                               Array.isArray(leadinfo.degree)?
+                               Array.isArray(leadinfo.school_college)?
                             leadinfo.school_college.map((name, index) => (
                                         <div key={index} style={{marginTop:"10px"}}>
                                         <input
                                             type="text"
                                             className="form-control form-control-sm"
-                                            defaultValue={leadData?.school_college[index] || '---Select---'}
+                                            defaultValue={leadData?.school_college[index] || ''}
                                             onChange={(event) => handleschool_collegeChange(index, event)}
                                         />
                                         
@@ -2372,7 +2394,7 @@ return (
                             </div>
                             <div className="col-md-3"><label className="labels">Bank</label>
                             {
-                               Array.isArray(leadinfo.degree)?
+                               Array.isArray(leadinfo.bank)?
                             leadinfo.bank.map((item,index)=>
                             (
                                 <select type="text" 
@@ -2380,7 +2402,7 @@ return (
                                 className="form-control form-control-sm"
                                 onChange={(event)=>handlebankchange(index,event)}
                                 >
-                                <option>defaultValue={leadData?.bank[index] || '---Select---'}</option>
+                                <option>{leadData?.bank[index] || '---Select---'}</option>
                                     <option>State Bank of India (SBI) </option><option>Punjab National Bank (PNB)</option><option>Bank of Baroda</option><option>Canara Bank</option>
                                     <option>Union Bank of India</option><option>Bank of India (BOI)</option><option>Indian Bank </option><option>Central Bank of India</option>
                                     <option>Indian Overseas Bank (IOB)</option><option>UCO Bank</option><option>Bank of Maharashtra</option><option></option>
@@ -2404,7 +2426,7 @@ return (
                             </div>
                             <div className="col-md-3"><label className="labels">Amount</label>
                             {
-                               Array.isArray(leadinfo.degree)?
+                               Array.isArray(leadinfo.amount)?
                             leadinfo.amount.map((item,index)=>
                             (
                                 <input type="text" 

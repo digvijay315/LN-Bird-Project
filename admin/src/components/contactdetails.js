@@ -591,7 +591,7 @@ const allColumns = [
         { id: 'professionaldetails', name: 'Professional Details' },
         { id: 'tags', name: 'Tags' },
         { id: 'source', name: 'Source' },
-        { id: 'lastcommunication', name: 'Last Communication' },
+        { id: 'lastcommunication', name: 'Last_Communication' },
         { id: 'actionable', name: 'Actionable' },
         { id: 'ownership', name: 'Ownership' },
         { id: 'createdAt', name: 'Add On' },
@@ -3199,8 +3199,8 @@ const checkForDuplicates = async (contacts) => {
           <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
-        <TableRow>
-          <StyledTableCell>
+        <TableRow >
+          <StyledTableCell style={{backgroundColor:"#808000"}}>
             <input
               type="checkbox"
               checked={selectAll}
@@ -3210,7 +3210,7 @@ const checkForDuplicates = async (contacts) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{   cursor: 'pointer' }}
+              style={{   cursor: 'pointer',backgroundColor:"#808000" }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -3223,7 +3223,7 @@ const checkForDuplicates = async (contacts) => {
         {
          
         currentItems.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} >
             <StyledTableCell >
               <input 
                 type="checkbox"

@@ -28,6 +28,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import Tooltip from '@mui/material/Tooltip';
+import Swal from 'sweetalert2';
 
 
 
@@ -2888,13 +2889,25 @@ const databasefieldsunit = [
     'ucity','uzip','ustate','ucountry','owner_details','associated_contact','relation','s_no','preview','descriptions',
     'category','s_no1','url','document_name','document_no','document_Date','linkded_contact','pic'];
 
+    const databaseFields = [
+      "title", "first_name", "last_name", "country_code", "mobile_no", "mobile_type",
+      "email", "email_type", "tags", "descriptions", "source", "team", "owner", "visible_to",
+      "profession_category", "profession_subcategory", "designation", "company_name",
+      "company_phone", "company_email", "area", "location", "city", "pincode", "state", "country",
+      "industry", "company_social_media", "company_url", "father_husband_name", "h_no", "area1",
+      "location1", "city1", "pincode1", "state1", "country1", "gender", "maritial_status",
+      "birth_date", "anniversary_date", "education", "degree", "school_college", "loan",
+      "bank", "amount", "social_media", "url", "income", "amount1", "document_no",
+      "document_name", "document_pic"
+    ];
+
 const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
 const [mappedFields, setMappedFields] = useState({}); // Store user-selected mapping
 const [selectedFile, setSelectedFile] = useState(null); // Store uploaded file
 
 const [duplicateEntries, setDuplicateEntries] = useState([]);
 const [pendingContacts, setPendingContacts] = useState([]);
-const [showPopup, setShowPopup] = useState(false);
+
 // 🔹 Step 1: Extract Headers from Excel File
 const handleFileChange = (event) => {
   const file = event.target.files[0];
@@ -2911,7 +2924,9 @@ const handleFileChange = (event) => {
     const data = XLSX.utils.sheet_to_json(sheet);
 
     if (data.length > 0) {
-      setExcelHeaders(Object.keys(data[0])); // Extract column headers
+      let headers = Object.keys(data[0]);
+      setExcelHeaders(headers.slice(0, -18));
+      
     } else {
       toast.error("No data found in the Excel file.");
     }
@@ -2988,6 +3003,7 @@ const normalizeMobile = (mobile) => {
   return mobile?.toString().replace(/\D/g, "").trim(); // Remove non-digits & trim spaces
 };
 
+
 const checkForDuplicates = async (contacts) => {
   try {
     setIsLoading(true);
@@ -2998,9 +3014,7 @@ const checkForDuplicates = async (contacts) => {
 
     // Fetch all contacts
     const contactResponse = await api.get("viewcontact");
-    const contactList = contactResponse.data.contact; // Assuming [{_id, mobile_no: []}]
-
-
+    const contactList = contactResponse.data.contact; // Existing contacts
 
     // Create a mapping of mobile_no to ObjectId
     const mobileToIdMap = new Map();
@@ -3015,50 +3029,75 @@ const checkForDuplicates = async (contacts) => {
       }
     });
 
-   
-
     let newContacts = [];
     let duplicates = [];
+    let newContactList = []; // Stores new contacts to be created
 
-    contacts.forEach((contact, index) => {
-
-
-      // Ensure `owner_details` is an array
+    contacts.forEach((contact) => {
       let updatedOwnerDetails = [];
+      let updatedAssociatedContact = [];
+
+      // Check and update `owner_details`
       if (Array.isArray(contact.owner_details)) {
         updatedOwnerDetails = contact.owner_details.map(mobile => {
           const normalizedMobile = normalizeMobile(mobile);
-          return mobileToIdMap.get(normalizedMobile) || []; // Replace with ObjectId if found
-        });
+          return mobileToIdMap.get(normalizedMobile) || null; // Replace with ObjectId if found
+        }).filter(Boolean);
       } else if (contact.owner_details) {
-        // If single string, convert to an array
         const normalizedMobile = normalizeMobile(contact.owner_details);
-        updatedOwnerDetails = [mobileToIdMap.get(normalizedMobile) || []];
+        const existingId = mobileToIdMap.get(normalizedMobile);
+        if (existingId) {
+          updatedOwnerDetails = [existingId];
+        } else {
+          // If contact not found, add it to newContactList
+          newContactList.push({
+            title:contact.owner_title,
+            first_name: contact.owner_first_name || "Unknown Owner",
+            last_name:contact.owner_last_name || "Unknown Owner",
+            country_code:contact.owner_country_code || [],
+             mobile_no: contact.owner_mobile_no || [],
+             mobile_type: contact.owner_mobile_type || [],
+             email:contact.owner_email || [],
+             email_type:contact.owner_email_type || [],
+             father_husband_name:contact.owner_father_name
+          });
+        }
       }
 
-        // Ensure `owner_details` is an array
-        let updatedassociatedcontact = [];
-        if (Array.isArray(contact.associated_contact)) {
-          updatedassociatedcontact = contact.associated_contact.map(mobile => {
-            const normalizedMobile = normalizeMobile(mobile);
-            return mobileToIdMap.get(normalizedMobile) || []; // Replace with ObjectId if found
+      // Check and update `associated_contact`
+      if (Array.isArray(contact.associated_contact)) {
+        updatedAssociatedContact = contact.associated_contact.map(mobile => {
+          const normalizedMobile = normalizeMobile(mobile);
+          return mobileToIdMap.get(normalizedMobile) || null;
+        }).filter(Boolean);
+      } else if (contact.associated_contact) {
+        const normalizedMobile = normalizeMobile(contact.associated_contact);
+        const existingId = mobileToIdMap.get(normalizedMobile);
+        if (existingId) {
+          updatedAssociatedContact = [existingId];
+        } else {
+          newContactList.push({
+            title:contact.associated_title,
+            first_name: contact.associated_first_name || "Unknown Owner",
+            last_name:contact.associated_last_name || "Unknown Owner",
+             mobile_no: contact.associated_mobile_no || [],
+             mobile_type: contact.associated_mobile_type || [],
+             country_code:contact.associated_country_code || [],
+             email:contact.associated_email || [],
+             email_type: contact.associated_email_type || [],
+             father_husband_name:contact.associated_father_name
           });
-        } else if (contact.associated_contact) {
-          // If single string, convert to an array
-          const normalizedMobile = normalizeMobile(contact.associated_contact);
-          updatedassociatedcontact = [mobileToIdMap.get(normalizedMobile) || []];
         }
+      }
 
-  
-
-      // Create updated unitDetails object
+      // Create updated unit object **inside the loop**
       const unitDetails = {
         ...contact,
-        owner_details: updatedOwnerDetails, 
-        associated_contact:updatedassociatedcontact
+        owner_details: updatedOwnerDetails,
+        associated_contact: updatedAssociatedContact
       };
 
-      // Check if duplicate
+      // Check if unit is duplicate
       const isDuplicate = allunits.some(unit =>
         unit.project_name === contact.project_name &&
         unit.unit_no === contact.unit_no &&
@@ -3072,7 +3111,24 @@ const checkForDuplicates = async (contacts) => {
       }
     });
 
-    // Update state with new contacts and duplicates
+    
+    
+    // If there are new contacts, stop and prompt the user to re-upload
+    if (newContactList.length > 0) {
+      await api.post("addbulkcontact",newContactList);
+      Swal.fire({
+        title: "Success",
+        icon: "success",
+        text: `${newContactList.length} new contacts added. Please refresh the page and re-upload the Excel sheet.`,
+      }).then(() => {
+        window.location.reload(); // Reload only after the user clicks "OK"
+      });
+      
+      setIsLoading(false);
+      return; // Stop further execution
+    }
+
+    // Update state only if no new contacts were found
     setDuplicateEntries(duplicates);
     setPendingContacts(newContacts);
     setallcontacts([...newContacts, ...duplicates]);
@@ -3083,6 +3139,104 @@ const checkForDuplicates = async (contacts) => {
     setIsLoading(false);
   }
 };
+
+
+
+// const checkForDuplicates = async (contacts) => {
+//   try {
+//     setIsLoading(true);
+
+//     // Fetch existing units
+//     const response = await api.get("viewproject");
+//     const allunits = response.data.project.flatMap(project => project.add_unit);
+
+//     // Fetch all contacts
+//     const contactResponse = await api.get("viewcontact");
+//     const contactList = contactResponse.data.contact; // Assuming [{_id, mobile_no: []}]
+
+
+
+//     // Create a mapping of mobile_no to ObjectId
+//     const mobileToIdMap = new Map();
+//     contactList.forEach(contact => {
+//       if (Array.isArray(contact.mobile_no)) {
+//         contact.mobile_no.forEach(mobile => {
+//           const normalizedMobile = normalizeMobile(mobile);
+//           if (normalizedMobile) {
+//             mobileToIdMap.set(normalizedMobile, contact._id);
+//           }
+//         });
+//       }
+//     });
+
+   
+
+//     let newContacts = [];
+//     let duplicates = [];
+
+//     contacts.forEach((contact, index) => {
+
+
+//       // Ensure `owner_details` is an array
+//       let updatedOwnerDetails = [];
+//       if (Array.isArray(contact.owner_details)) {
+//         updatedOwnerDetails = contact.owner_details.map(mobile => {
+//           const normalizedMobile = normalizeMobile(mobile);
+//           return mobileToIdMap.get(normalizedMobile) || []; // Replace with ObjectId if found
+//         });
+//       } else if (contact.owner_details) {
+//         // If single string, convert to an array
+//         const normalizedMobile = normalizeMobile(contact.owner_details);
+//         updatedOwnerDetails = [mobileToIdMap.get(normalizedMobile) || []];
+//       }
+
+//         // Ensure `owner_details` is an array
+//         let updatedassociatedcontact = [];
+//         if (Array.isArray(contact.associated_contact)) {
+//           updatedassociatedcontact = contact.associated_contact.map(mobile => {
+//             const normalizedMobile = normalizeMobile(mobile);
+//             return mobileToIdMap.get(normalizedMobile) || []; // Replace with ObjectId if found
+//           });
+//         } else if (contact.associated_contact) {
+//           // If single string, convert to an array
+//           const normalizedMobile = normalizeMobile(contact.associated_contact);
+//           updatedassociatedcontact = [mobileToIdMap.get(normalizedMobile) || []];
+//         }
+
+  
+
+//       // Create updated unitDetails object
+//       const unitDetails = {
+//         ...contact,
+//         owner_details: updatedOwnerDetails, 
+//         associated_contact:updatedassociatedcontact
+//       };
+
+//       // Check if duplicate
+//       const isDuplicate = allunits.some(unit =>
+//         unit.project_name === contact.project_name &&
+//         unit.unit_no === contact.unit_no &&
+//         unit.block === contact.block
+//       );
+
+//       if (isDuplicate) {
+//         duplicates.push(unitDetails);
+//       } else {
+//         newContacts.push(unitDetails);
+//       }
+//     });
+
+//     // Update state with new contacts and duplicates
+//     setDuplicateEntries(duplicates);
+//     setPendingContacts(newContacts);
+//     setallcontacts([...newContacts, ...duplicates]);
+
+//   } catch (error) {
+//     console.error("❌ Error checking for duplicates:", error);
+//   } finally {
+//     setIsLoading(false);
+//   }
+// };
 
 
 const addunits = () => {
@@ -4581,7 +4735,7 @@ const generateExcelFileunit = () => {
                                 </select>
                     </div>
 
-                    <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Side Open</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,side_open:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>1 Side Open</option>
                                 <option>2 Side Open</option>
@@ -4600,7 +4754,7 @@ const generateExcelFileunit = () => {
                                 </select>
                     </div>
 
-                    <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,facing:e.target.value})}>
+                    <div className="col-md-4"><label className="labels">Front On Road</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,fornt_on_road:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>10 ft</option>
                                 <option>20 ft</option>

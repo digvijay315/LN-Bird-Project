@@ -475,10 +475,13 @@ React.useEffect(() => {
 // Recalculate matched leads for each deal whenever data2 changes
 React.useEffect(() => {
   if (data2.length >0) {
-   
+    
+      const project=deal.project
+      const block=deal.block
+      const unit=deal.unit_number
       const price = deal.expected_price;
       const availableFor = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
-      const propertytype=fetchingdeal.category[0]
+      const propertytype=fetchingdeal.category
       const unittype=fetchingdeal.unit_type
       const facing=fetchingdeal.facing
       const road=fetchingdeal.road
@@ -492,12 +495,16 @@ React.useEffect(() => {
           item.requirment === availableFor &&
           price >= parseFloat(item.budget_min) &&
           price <= parseFloat(item.budget_max) &&
-           propertytype==item.property_type[0]  &&
-           unittype==item.unit_type[0] &&
-           facing == item.facing[0]  &&
-           road==item.road[0]
+          propertytype.some(type => item.property_type.includes(type)) &&
+           unittype==item.unit_type2 && 
+           item.facing.includes(facing)  &&
+           item.road.includes(road) &&
+
+           item.area2.includes(project) &&
+           item.block.includes(block) &&
+           (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit == unit : true)
       );
-console.log(filteredLeads);
+
 
       // Create a new deal object with updated matched leads and matched lead count
       setdeal({
