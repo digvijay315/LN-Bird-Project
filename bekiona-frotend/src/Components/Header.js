@@ -284,7 +284,7 @@ console.log('Order Created:', order);
 
 // Step 2: Razorpay Checkout Options
 const options = {
-key: 'rzp_test_kh59VKLP3zCcop',
+key: 'rzp_live_YBXf8NJT3Al7Qc',
 amount: order.amount,
 currency: order.currency,
 name: 'Your Company Name',
