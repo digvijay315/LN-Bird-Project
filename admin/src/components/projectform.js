@@ -3055,7 +3055,14 @@ const checkForDuplicates = async (contacts) => {
              mobile_type: contact.owner_mobile_type || [],
              email:contact.owner_email || [],
              email_type:contact.owner_email_type || [],
-             father_husband_name:contact.owner_father_name
+             father_husband_name:contact.owner_father_name,
+             h_no:contact.owner_hno,
+             area1:contact.owner_area,
+             location1:contact.owner_location,
+             city1:contact.owner_city,
+             pincode1:contact.owner_pincode,
+             state1:contact.owner_state,
+             country1:contact.owner_country,
           });
         }
       }
@@ -3081,7 +3088,15 @@ const checkForDuplicates = async (contacts) => {
              country_code:contact.associated_country_code || [],
              email:contact.associated_email || [],
              email_type: contact.associated_email_type || [],
-             father_husband_name:contact.associated_father_name
+             father_husband_name:contact.associated_father_name,
+             h_no:contact.associated_hno,
+             area1:contact.associated_area,
+             location1:contact.associated_location,
+             city1:contact.associated_city,
+             pincode1:contact.associated_pincode,
+             state1:contact.associated_state,
+             country1:contact.associated_country,
+
           });
         }
       }
@@ -3488,7 +3503,10 @@ const unitdata = [
     ucity:'',uzip:'',ustate:'',ucountry:'',owner_details:[],associated_contact:[],relation:'',s_no:[''],preview:[''],descriptions:[''],
     category:[''],s_no1:[''],url:[''],document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],
     owner_title:"Mr.",owner_first_name:"alex",owner_last_name:"kumar",owner_country_code:"91",owner_mobile_no:"9944554411",
-    owner_mobile_type:"personal",owner_email:"alex@gmail.com",owner_email_type:"personal",owner_father_name:"jon",
+    owner_mobile_type:"personal",owner_email:"alex@gmail.com",owner_email_type:"personal",owner_father_name:"jon",owner_hno:"f13",
+    owner_area:"bishanpura",owner_location:"sec 58",owner_city:"noida",owner_pincode:"201301",owner_state:"up",owner_country:"india",
+    associated_hno:"f13",associated_area:"bishanpura",associated_location:"sec58",associated_city:"noida",associated_pincode:"201301",
+    associated_state:"up",associated_country:"india",
     associated_title:"Mr.",associated_first_name:"jon",associated_last_name:"dow",associated_country_code:"91",
     associated_mobile_no:"9454226644",associated_mobile_type:"personal",associated_email:"jon@gmail.com",associated_email_type:"home",
     associated_father_name:"alex"

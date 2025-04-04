@@ -26,7 +26,8 @@ import api from "../api";
 import '../css/deal.css';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { toWords } from 'number-to-words';
-
+import { CircularProgress, Typography, Box } from "@mui/material";
+import Swal from "sweetalert2";
 
 function Dealdetails() {
   const navigate=useNavigate()
@@ -141,6 +142,7 @@ function Dealdetails() {
         [`&.${tableCellClasses.head}`]: {
           backgroundColor: theme.palette.common.black,
           color: theme.palette.common.white,
+            lineHeight:"0px"
         },
         [`&.${tableCellClasses.body}`]: {
           fontSize: 14,
@@ -247,15 +249,15 @@ function Dealdetails() {
       const allColumns = [
         { id: 'sno', name: '#' },
         { id: 'details', name: 'Details' },
-        { id: 'owner_details', name: 'Owner Details' },
-        { id: 'associated_contact', name: 'Associated Contact' },
+        { id: 'owner_details', name: 'Owner_Details' },
+        { id: 'associated_contact', name: 'Associated_Contact' },
         { id: 'expected_price', name: 'Expectation' },
-        { id: 'matchinglead', name: 'Matched Lead' },
+        { id: 'matchinglead', name: 'Matched_Lead' },
         { id: 'stage', name: 'Status' },
         { id: 'user', name: 'Assigned To' },
         { id: 'remarks', name: 'Remarks' },
-        { id: 'follow_up', name: 'Follow Up' },
-        { id: 'last_contacted', name: 'Last Contacted Date & Time' },
+        { id: 'follow_up', name: 'Follow_Up' },
+        { id: 'last_contacted', name: 'Last_Contacted_Date_&_Time' },
         { id: 'available_for', name: 'Available For' },
         { id: 'mobile_type', name: 'Mobile Type' },
         { id: 'email_type', name: 'Email Type' },
@@ -507,6 +509,8 @@ function Dealdetails() {
 
   //=========================================== matched lead code start=========================================================
 
+                  const [matchedLeads, setMatchedLeads] = useState([]);
+
                   const dealallColumns = [
                     { id: 'unit_number', name: 'Unit Number' },
                     { id: 'location', name: 'Project Name' },
@@ -527,28 +531,106 @@ function Dealdetails() {
                     { id: 'source', name: 'Source' },
                     { id: 'recived_on', name: 'Recived On' },
                     { id: 'site_visit', name: 'Site Visit' },
-                    { id: 'owner', name: 'User' }
+                    { id: 'matchperctange', name: 'Match Percentage ' }
                   ]
                     
                     
                   const [show1, setshow1] = useState(false);
     
-                  const handleClose1 = () => setshow1(false);
-                  const handleShow1=async()=>
+                  const handleClose1 = () => 
+                    {
+                      setshow1(false);
+                    
+                      
+                    }
+                  const handleShow1=()=>
                   {
+                    
                     setshow1(true);
                    
                   }
                   const[deal1,setdeal1]=useState([])
                   const[lead1,setlead1]=useState([])
                   const[deallocation,setdeallocation]=useState("")
-                  const handleMatchLeadClick=(item)=>
-                  {
-                    handleShow1()
-                    setdeal1([item])
-                    setdeallocation(item.location);
-                    setlead1(item.matchedleads)
-                  }
+
+                  const[fetchingdeal,setfeatchingdeal]=useState([])
+                  const handleMatchLeadClick = async (item) => {
+                    try {
+                      handleShow1();
+                      setdeal1([item]);
+                  
+                      const response = await api.get(`viewprojectforinventories/${item.project}/${item.unit_number}/${item.block}`);
+                      setfeatchingdeal(response.data.project.add_unit[0]);
+                      setdeallocation(item.location);
+                      setlead1(item.matchedleads);
+                      
+                    } catch (error) {
+                      console.error("Error fetching project details:", error);
+                      Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Failed to fetch project details. Please try again later.',
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                      }).then(()=>
+                      {
+                        window.location.reload()
+                      });
+                    }
+                  };
+                  
+              
+                  
+                  useEffect(() => {
+                    if (!lead1 || lead1.length === 0) return; // Exit if no leads
+                    
+                    const project = deal1[0].project;
+                    const block = deal1[0].block;
+                    const unit = deal1[0].unit_number;
+                    const price = deal1[0].expected_price;
+                    const propertytype = Array.isArray(fetchingdeal.category) ? fetchingdeal.category : [fetchingdeal.category];
+                    const unittype = fetchingdeal.unit_type;
+                    const facing = fetchingdeal.facing;
+                    const road = fetchingdeal.road;
+                    const city = fetchingdeal.ucity;
+                    const direction = fetchingdeal.direction;
+                  
+                  
+                    // Process each lead
+                    const updatedLeads = lead1.map((item) => {
+                      let matchScore = 0;
+                  
+                      // **Matching Conditions (Total: 100%)**
+                      
+                      // **Major Matches (50%)**
+                      if (item.city2 === city) matchScore += 15; // 15%
+                      if (item.area2.includes(project)) matchScore += 15; // 15%
+                      if (item.block.includes(block)) matchScore += 10; // 10%
+                      if (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit === unit : true) matchScore += 10; // 10%
+                  
+                      // **Other Conditions (50%)**
+          
+                      if (price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)) matchScore += 10; // 10%
+                      if (Array.isArray(item.property_type) && propertytype.some(type => item.property_type.includes(type))) matchScore += 10; // 10%
+                      if (unittype === item.unit_type2) matchScore += 10; // 10%
+                      if (item.facing.includes(facing)) matchScore += 5; // 5%
+                      if (item.road.includes(road)) matchScore += 5; // 5%
+                      if (item.direction === direction) matchScore += 10; // **Now 10% instead of 5%**
+
+                  
+                      // **Final Match Percentage**
+                      const matchPercentage = matchScore;
+                      return { ...item, matchPercentage };
+                    });
+                  
+                    setMatchedLeads(updatedLeads);
+                  
+                  }, [lead1, deal1, fetchingdeal]);
+                  
+                  
+
+
+
                
                   const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
                   const [selectAll1, setSelectAll1] = useState(false);
@@ -958,14 +1040,14 @@ function Dealdetails() {
                     { id: 'sno', name: '#' },
                     { id: 'details', name: 'Details' },
                     { id: 'status', name: 'Status' },
-                    { id: 'ownerdetails', name: 'Owner Details' },
-                    { id: 'owneraddress', name: ' Owner Address' },
-                    { id: 'associatedcontact', name: 'Associated Contact ' },
+                    { id: 'ownerdetails', name: 'Owner_Details' },
+                    { id: 'owneraddress', name: ' Owner_Address' },
+                    { id: 'associatedcontact', name: 'Associated_Contact ' },
                     { id: 'remarks', name: 'Remarks ' },
-                    { id: 'locationbrief', name: 'Location Brief' },
+                    { id: 'locationbrief', name: 'Location_Brief' },
                     { id: 'ownership', name: 'OwnerShip' },
-                    { id: 'followup', name: 'Follow Up' },
-                    { id: 'lastconduct', name: 'Last Conduct Date & Time' },
+                    { id: 'followup', name: 'Follow_Up' },
+                    { id: 'lastconduct', name: 'Last_Conduct_Date_&_Time' },
                   ];
                   const [selectedItems3, setSelectedItems3] = useState([]); // To track selected rows
                   const [selectAll3, setSelectAll3] = useState(false); // To track the state of the "Select All" checkbox
@@ -3822,7 +3904,7 @@ const handleallblockchange = (event) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll}
@@ -3832,7 +3914,7 @@ const handleallblockchange = (event) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -3846,7 +3928,7 @@ const handleallblockchange = (event) => {
          
         currentItems.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems.includes(item._id)}
@@ -3854,8 +3936,8 @@ const handleallblockchange = (event) => {
               />
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman",cursor:"pointer" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
-            <span style={{fontWeight:"bolder"}}>{item.unit_number}</span>({item.utype})<br></br>
+            <StyledTableCell style={{ cursor:"pointer" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
+            <span style={{fontWeight:"bolder",color:"#0086b3"}}>{item.unit_number}</span>({item.utype})<br></br>
              {item.ucategory} {item.usize}<br></br>
              {/* {item.ulocality} {item.ucity} */}{item.project}
             </StyledTableCell>
@@ -3865,7 +3947,7 @@ const handleallblockchange = (event) => {
               .map((col) => (
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px", fontFamily: "times new roman",cursor: col.id === 'matchinglead' ? 'pointer' : 'default' }}
+                style={{ padding: "10px", cursor: col.id === 'matchinglead' ? 'pointer' : 'default' }}
                 onClick={col.id === 'matchinglead' ? () => handleMatchLeadClick(item) : undefined} // Handle click if it's 'matchlead'
               >
                 {col.id === 'owner_details' && Array.isArray(item.owner_details) ? (
@@ -4035,7 +4117,7 @@ const handleallblockchange = (event) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll1}
@@ -4045,7 +4127,7 @@ const handleallblockchange = (event) => {
           {leadallColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -4060,10 +4142,9 @@ const handleallblockchange = (event) => {
     
       <tbody>
         {
-         
-         lead1.map ((item, index) => (
+         matchedLeads.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell >
               <input 
                 type="checkbox"
                 checked={selectedItems1.includes(item._id)}
@@ -4072,7 +4153,7 @@ const handleallblockchange = (event) => {
               {index + 1}
             </StyledTableCell>
 
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell >
              {item.title} {item.first_name} {item.last_name} <br></br>
              {
               Array.isArray(item.mobile_no) 
@@ -4113,7 +4194,28 @@ const handleallblockchange = (event) => {
                 Max:  {item.budget_max}
               
               </>
-            ) : (
+            ) :   col.id === 'matchperctange' ? (
+              <>
+                  <Box position="relative" display="inline-flex">
+            <CircularProgress variant="determinate" value={item.matchPercentage} size={40} thickness={4} />
+            <Box
+              top={0}
+              left={0}
+              bottom={0}
+              right={0}
+              position="absolute"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography variant="caption" component="div" color="textSecondary">
+                {item.matchPercentage}%
+              </Typography>
+            </Box>
+          </Box>
+              
+              </>
+            ): (
               item[col.id]
             )}
                   
@@ -4272,7 +4374,7 @@ const handleallblockchange = (event) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll2}
@@ -4282,7 +4384,7 @@ const handleallblockchange = (event) => {
           {visibleColumns2.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{   cursor: 'pointer',backgroundColor:"gray" }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -4296,7 +4398,7 @@ const handleallblockchange = (event) => {
          
         currentItems2.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell >
               <input 
                 type="checkbox"
                 checked={selectedItems2.includes(item._id)}
@@ -4305,7 +4407,7 @@ const handleallblockchange = (event) => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer"}} onClick={()=>navigate('/projectsingleview',{state:item})} >
+              style={{ padding: "10px", cursor:"pointer",color:"#0086b3",fontWeight:"bold"}} onClick={()=>navigate('/projectsingleview',{state:item})} >
               {item.name}
           
             </StyledTableCell>
@@ -4314,7 +4416,7 @@ const handleallblockchange = (event) => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                  style={{ padding: "10px",}}
                 >
                   {
                     col.id==='location' ?
@@ -4528,7 +4630,7 @@ const handleallblockchange = (event) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableCell style={{ backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll3}
@@ -4538,7 +4640,7 @@ const handleallblockchange = (event) => {
           {visibleColumns3.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{   cursor: 'pointer',backgroundColor:"gray" }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -4552,7 +4654,7 @@ const handleallblockchange = (event) => {
          
          currentItems3.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems3.includes(item)}
@@ -4561,12 +4663,10 @@ const handleallblockchange = (event) => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", fontFamily: "times new roman",cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}  >
-              <span style={{fontWeight:"bolder",fontSize:"18px"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
+              style={{ padding: "10px", cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}  >
+              <span style={{fontWeight:"bolder",fontSize:"18px",color:"#0086b3",fontWeight:"bold"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
-               {/* {item.ulocality} {item.ucity}  */}{item.project_name}
-                {/* project.locality  project.city */}
-          
+              {item.project_name}
             </StyledTableCell>
             {visibleColumns3
               .filter((col) => col.id !== 'details' && col.id !== 'sno')
@@ -4752,7 +4852,7 @@ const handleallblockchange = (event) => {
                               ))}
                             </ul>
                           )}
-                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={handleShow1}>+</button></div>
+                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} >+</button></div>
                     
                      <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
                      {selectedcontact1.length >= 0 && (
@@ -4763,13 +4863,13 @@ const handleallblockchange = (event) => {
                           {selectedcontact1.map(contact => (
                               <StyledTableRow>
                                 <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
                                     <SvgIcon component={EmailIcon} />
                                     <span>{contact.email}</span>
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
                                   {contact.mobile_no.map((number, index) => (
                                     <span key={index}>
                                       <SvgIcon component={PhoneIphoneIcon} />
@@ -4778,16 +4878,16 @@ const handleallblockchange = (event) => {
                                   ))}
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{ cursor: 'pointer' }}>
                                   S/W/O <br></br>{contact.father_husband_name}
                                   </StyledTableCell>
 
-                                  <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  <StyledTableCell  style={{   cursor: 'pointer' }}>
                                   permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
                                   {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
                                   </StyledTableCell>
 
-                                  <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                  <StyledTableCell style={{  cursor: 'pointer' }}>
                                         <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
                                     </StyledTableCell>
 
@@ -4813,13 +4913,13 @@ const handleallblockchange = (event) => {
                               selectedcontact2.map(contact => (
                                 <StyledTableRow>
                                     <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         {contact.title} {contact.first_name} {contact.last_name}<br />
                                         <SvgIcon component={EmailIcon} />
                                         <span>{contact.email}</span>
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         {
                                         Array.isArray(contact.mobile_no) ?
                                         contact.mobile_no.map((number, index) => (
@@ -4830,15 +4930,15 @@ const handleallblockchange = (event) => {
                                         )):[]}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         S/W/O <br />{contact.father_husband_name}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{ cursor: 'pointer' }}>
                                     <span style={{color:"orange",fontWeight:"bolder"}}>{relation1}</span>
                                     </StyledTableCell>
                                         
@@ -6229,13 +6329,13 @@ stage:selectedLead.stage
             ).map(contact => (
                               <StyledTableRow>
                                 <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
                                     <SvgIcon component={EmailIcon} />
                                     <span>{contact.email}</span>
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
                                   {Array.isArray(contact.mobile_no)?
                                   contact.mobile_no.map((number, index) => (
                                     <span key={index}>
@@ -6245,16 +6345,16 @@ stage:selectedLead.stage
                                   )):[]}
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
                                   S/W/O <br></br>{contact.father_husband_name}
                                   </StyledTableCell>
 
-                                  <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  <StyledTableCell  style={{   cursor: 'pointer' }}>
                                   permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
                                   {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
                                   </StyledTableCell>
 
-                                  <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                  <StyledTableCell style={{  cursor: 'pointer' }}>
                                         <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
                                     </StyledTableCell>
 
@@ -6285,13 +6385,13 @@ stage:selectedLead.stage
                                 ).map(contact => (
                                 <StyledTableRow>
                                     <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         {contact.title} {contact.first_name} {contact.last_name}<br />
                                         <SvgIcon component={EmailIcon} />
                                         <span>{contact.email}</span>
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         {
                                         Array.isArray(contact.mobile_no) ?
                                         contact.mobile_no.map((number, index) => (
@@ -6302,15 +6402,15 @@ stage:selectedLead.stage
                                         )):[]}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         S/W/O <br />{contact.father_husband_name}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                         permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
                                     <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
                                     </StyledTableCell>
                                         

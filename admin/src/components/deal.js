@@ -485,38 +485,40 @@ React.useEffect(() => {
       const unittype=fetchingdeal.unit_type
       const facing=fetchingdeal.facing
       const road=fetchingdeal.road
-
-      console.log(price,availableFor,propertytype,unittype,facing,road);
-      
+      const city=fetchingdeal.ucity
 
       // Filter leads based on the current deal's criteria
       const filteredLeads = data2.filter(
         (item) =>
-          item.requirment === availableFor &&
-          price >= parseFloat(item.budget_min) &&
-          price <= parseFloat(item.budget_max) &&
-          propertytype.some(type => item.property_type.includes(type)) &&
-           unittype==item.unit_type2 && 
-           item.facing.includes(facing)  &&
-           item.road.includes(road) &&
+          item.requirment === availableFor 
+          // price >= parseFloat(item.budget_min) &&
+          // price <= parseFloat(item.budget_max) &&
+          // propertytype.some(type => item.property_type.includes(type)) &&
+          //  unittype==item.unit_type2 && 
+          //  item.facing.includes(facing)  &&
+          //  item.road.includes(road) &&
 
-           item.area2.includes(project) &&
-           item.block.includes(block) &&
-           (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit == unit : true)
+          //  item.area2.includes(project) &&
+          //  item.block.includes(block) &&
+          //  item.city2==city &&
+          //  (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit == unit : true)
       );
 
 
       // Create a new deal object with updated matched leads and matched lead count
+      console.log(filteredLeads);
+      
       setdeal({
         ...deal,
-        matchedleads: filteredLeads,
+        matchedleads: filteredLeads._id,
         matchinglead: filteredLeads.length, // Update the matched lead count
       })
     
   }
 }, [deal.source]); // Trigger this effect whenever `data2` or `deals` changes
 
-console.log(deal.matchinglead);
+
+
 
 
 

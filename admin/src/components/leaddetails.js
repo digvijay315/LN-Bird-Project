@@ -421,7 +421,7 @@ const[countall,setcountall]=useState('')
       { id: 'requirment', name: 'Requirment' },
       { id: 'budget', name: 'Budget' },
       { id: 'location', name: 'Location' },
-      { id: 'matcheddeal', name: 'Matched Deal' },
+      { id: 'matcheddeal', name: 'Matched_Deal' },
       { id: 'stage', name: 'Status' },
       { id: 'source', name: 'Source' },
       { id: 'owner', name: 'OwnerShip' },
@@ -2524,7 +2524,7 @@ const handleallblockchange = (event) => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10 }}>
         <TableRow >
-          <StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll}
@@ -2534,7 +2534,7 @@ const handleallblockchange = (event) => {
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer',backgroundColor:"gray" }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -2564,7 +2564,7 @@ const handleallblockchange = (event) => {
               style={{ padding: "10px", cursor: "pointer"}} 
               onClick={() => leadsingleview(item)}
             >
-              {item.title} {item.first_name} {item.last_name}
+              <span style={{color:"#0086b3",fontWeight:"bold"}}>{item.title} {item.first_name} {item.last_name}</span>
               <br />
               <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"14px"}} />
               <span>{item.mobile_no}</span>
