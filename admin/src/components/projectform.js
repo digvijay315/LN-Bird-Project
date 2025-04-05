@@ -2915,8 +2915,8 @@ const handleFileChange = (event) => {
       const data = XLSX.utils.sheet_to_json(sheet);
 
       if (data.length > 0) {
-        let headers = Object.keys(data[0]).slice(0, -32);
-        setExcelHeaders(headers); // Set headers
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`);
+        setExcelHeaders(headers); // Set headers manually
       } else {
         toast.error("No data found in the Excel file.");
       }
