@@ -2803,8 +2803,8 @@ const checkForDuplicates = async (contacts) => {
           // If contact not found, add it to newContactList
           newContactList.push({
             title:contact.owner_title,
-            first_name: contact.owner_first_name || "Unknown Owner",
-            last_name:contact.owner_last_name || "Unknown Owner",
+            first_name: contact.owner_first_name || "",
+            last_name:contact.owner_last_name || "",
             country_code:contact.owner_country_code || [],
              mobile_no: contact.owner_mobile_no || [],
              mobile_type: contact.owner_mobile_type || [],
@@ -2836,8 +2836,8 @@ const checkForDuplicates = async (contacts) => {
         } else {
           newContactList.push({
             title:contact.associated_title,
-            first_name: contact.associated_first_name || "Unknown Owner",
-            last_name:contact.associated_last_name || "Unknown Owner",
+            first_name: contact.associated_first_name || "",
+            last_name:contact.associated_last_name || "",
              mobile_no: contact.associated_mobile_no || [],
              mobile_type: contact.associated_mobile_type || [],
              country_code:contact.associated_country_code || [],
