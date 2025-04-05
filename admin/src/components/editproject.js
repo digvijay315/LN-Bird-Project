@@ -2763,6 +2763,8 @@ const checkForDuplicates = async (contacts) => {
     const response = await api.get("viewproject");
     const allunits = response.data.project.flatMap(project => project.add_unit);
 
+    
+
     // Fetch all contacts
     const contactResponse = await api.get("viewcontact");
     const contactList = contactResponse.data.contact; // Existing contacts
@@ -2865,9 +2867,9 @@ const checkForDuplicates = async (contacts) => {
 
       // Check if unit is duplicate
       const isDuplicate = allunits.some(unit =>
-        unit.project_name === contact.project_name &&
-        unit.unit_no === contact.unit_no &&
-        unit.block === contact.block
+        unit.project_name == unitDetails.project_name &&
+        unit.unit_no == unitDetails.unit_no &&
+        unit.block == unitDetails.block
       );
 
       if (isDuplicate) {
