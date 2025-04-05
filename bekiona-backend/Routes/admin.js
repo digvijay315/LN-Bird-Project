@@ -3,12 +3,12 @@ const {add_product,viewproduct, delete_product,edit_product, viewproductbyid, vi
 const upload=require('../Middleware/file');
 const { uploadBanner, getAllBanners, deleteBanner, editBanner, createBanner } = require('../Controllers/addbanner');
 const uploadFields = require('../Middleware/bannerfile');
-const { createOrder, getAllOrders, vieworderbyemail } = require('../Controllers/order');
+const { createOrder, getAllOrders, vieworderbyemail, getTotalOrders } = require('../Controllers/order');
 const { signup, login } = require('../Controllers/user');
 const protectRoute=require('../Middleware/routemiddle');
 const payment = require('../Controllers/payment');
 const { createBlog, getBlogs, deleteBlog, editBlog, viewblogbyid } = require('../Controllers/blog');
-const { registerUser, loginUser, getAllUsers, getUserByEmail, getmail, deleteUserByEmail, getTotalUsers, getTotalUsersByEmail, getTotalUsersByEmailDomain, getTotalUsersByExactEmail } = require('../Controllers/registation');
+const { registerUser, loginUser, getAllUsers, getUserByEmail, getmail, deleteUserByEmail, getTotalUsers, getTotalUsersByEmail, getTotalUsersByEmailDomain, getTotalUsersByExactEmail, deleteUserById } = require('../Controllers/registation');
 const { addReview, getReviews, getallReviews, getCustomerSatisfaction } = require('../Controllers/review');
 const usercontact = require('../Modals/contact');
 const { usercontacts, getContact, deleteContact } = require('../Controllers/contact');
@@ -64,14 +64,15 @@ router.post('/banner',upload.any(),createBanner)
 router.post('/review', addReview);
 router.get('/getreview/:productId', getReviews);
 router.get('/allreview', getallReviews);
-router.get('/alluser/:email', getUserByEmail)
+router.get('/alluser', getAllUsers)                         
 router.put('/getmail/:email',getmail)
 router.post('/contact',usercontacts)
 router.get('/getcontact', getContact)
 router.delete('/contactdelete/:id', deleteContact)
-router.delete('/deletealluser/:email', deleteUserByEmail)
+router.delete('/deletealluser/:_id', deleteUserById)
 router.get('/totaluser',getTotalUsers)
 router.get('/getcustomersetification',getCustomerSatisfaction)
+router.get('/totalorders', getTotalOrders);
  
 
 module.exports=router

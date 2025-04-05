@@ -120,7 +120,7 @@ function Allproductlist() {
             variant="contained"
             color="secondary"
             size="small"
-            onClick={() => handleDelete(params.row)}
+            onClick={() => confirmAndDeleteProduct(params.row)}
           >
             Delete
           </Button>
@@ -129,6 +129,23 @@ function Allproductlist() {
     },
   ];
  
+
+  const confirmAndDeleteProduct = (row) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this product?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(row);
+      }
+    });
+  };
 
   const handleDelete = async(row) => {
     try {

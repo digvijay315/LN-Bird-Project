@@ -97,6 +97,25 @@ function Blog() {
     };
 
 
+
+    const confirmAndDeleteBlog = (id) => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to delete this blog?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          deleteBlog(id); // 👈 call actual delete if confirmed
+        }
+      });
+    };
+
+
     const deleteBlog = async (id) => {
       try {
         const response = await api.delete(`deleteblog/${id}`); // Adjust endpoint as per your backend
@@ -107,6 +126,7 @@ function Blog() {
             icon: "success",
             confirmButtonText: "OK",
           });
+          
           // Refresh the blog list
           fetchBlogs();
         }
@@ -315,7 +335,7 @@ function Blog() {
               <td>
                 <Button
                   variant="danger"
-                  onClick={() => deleteBlog(blog._id)}
+                  onClick={() => confirmAndDeleteBlog(blog._id)}
                   style={{ marginRight: "10px" }}
                 >
                   Delete

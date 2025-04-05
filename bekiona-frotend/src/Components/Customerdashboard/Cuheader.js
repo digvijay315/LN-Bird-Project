@@ -45,6 +45,8 @@ function Cuheader() {
       firstName: "",
       lastName: "",
       mobileNumber: "",
+      selectstate: "",
+      selectcity: "",
       addressType: "Home",
       pincode: "",
       setDefault: false,
@@ -159,7 +161,7 @@ function Cuheader() {
   
   
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, } = e.target;
 
     setFormData((prevData) => {
         const newData = { ...prevData, [name]: type === "checkbox" ? checked : value };
@@ -177,7 +179,7 @@ const validateField = (name, value) => {
     const trimmedValue = value?.toString().trim();
 
     // Required Fields
-    if (["firstName", "lastName", "mobileNumber", "apartmentNumber", "selectstate", "landmark", "area", "pincode","apartmentName"].includes(name) && !trimmedValue) {
+    if (["firstName", "lastName", "mobileNumber", "apartmentNumber", "selectstate", "landmark", "area", "pincode","apartmentName","selectstate","selectstate"].includes(name) && !trimmedValue) {
       newValidation[name] = `${name.replace(/([A-Z])/g, " $1")} is required!`;
     } else {
       delete newValidation[name];
@@ -207,6 +209,8 @@ const validateForm = () => {
       newValidation.mobileNumber = "Enter a valid 10-digit Mobile Number!";
   if (!formData.apartmentNumber?.trim()) newValidation.apartmentNumber = "Apartment Number is required!";
   if (!formData.apartmentName?.trim()) newValidation.apartmentName = "Apartment Number is required!";
+  if (!formData.selectstate.trim()) newValidation.selectstate = "State is required!";
+  if (!formData.selectcity.trim()) newValidation.selectcity = "city is required!";
   if (!formData.landmark?.trim()) newValidation.landmark = "Landmark is required!";
   if (!formData.area?.trim()) newValidation.area = "Area is required!";
   if (!formData.pincode?.trim() || !/^\d{6}$/.test(formData.pincode))  
@@ -307,90 +311,85 @@ useEffect(()=>
   // };
 
   
-  const handlePayment = async () => {
-    if (!validateForm()) {
-      Swal.fire({
-        title: 'Validation Error!',
-        text: 'Please fill all required fields correctly.',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
-      return;
-    }
-  
-    try {
-      // Step 1: Create Order on Backend
-      const { data: order } = await api.post('payment', { formData });
-  
-      console.log('Order Created:', order); // Debugging: Check if the order was created
-  
-      // Step 2: Razorpay Checkout Options
-      const options = {
-        key: 'rzp_test_kh59VKLP3zCcop', // Replace with your Razorpay Key ID
-        amount: order.amount,
-        currency: order.currency,
-        name: 'Your Company Name',
-        description: 'Test Transaction',
-        order_id: order.id,
-        handler: function (response) {
-          console.log('Payment Success Response:', response); // Debugging: Check Razorpay response
-  
-          if (response && response.razorpay_payment_id) {
-            Swal.fire({
-              title: 'Payment Successful!',
-              text: `Payment ID: ${response.razorpay_payment_id}`,
-              icon: 'success',
-              confirmButtonText: 'OK',
-            });
-  
-            console.log(formData);
-            console.log(formData, cart);
-  
-            // Step 3: Generate PDF Invoice after Successful Payment
-            generateInvoice(response, formData, companyDetails);
-  
-            // Update payment status in the frontend
-            setFormData({ ...formData, payment_status: 'success' });
-  
-            // Call your submit function to save data
-            // handleSubmit1();
-          } else {
-            Swal.fire({
-              title: 'Payment Error!',
-              text: 'Payment Response Invalid',
-              icon: 'error',
-              confirmButtonText: 'Try Again',
-            });
-          }
-        },
-        prefill: {
-          name: formData.firstName,
-          email: 'narayanniket2@gmail.com',
-          contact: formData.mobileNumber,
-        },
-        theme: {
-          color: '#3399cc',
-        },
-      };
-  
-      // Step 4: Initialize Razorpay Checkout
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-  
-    } catch (error) {
-      console.error('Error during payment:', error);
-  
-      Swal.fire({
-        title: 'Payment Failed',
-        text: 'Something went wrong. Please try again!',
-        icon: 'error',
-        confirmButtonText: 'OK',
-      });
-  
-      // Set status to failed if payment fails
-      setFormData({ ...formData, payment_status: 'failed' });
-    }
-  };
+ const handlePayment = async () => {
+     if (!validateForm()) {
+       Swal.fire({
+         title: 'Validation Error!',
+         text: 'Please fill all required fields correctly.',
+         icon: 'error',
+         confirmButtonText: 'OK',
+       });
+       return;
+     }
+   
+     try {
+       // Step 1: Create Order on Backend
+       const { data: order } = await api.post('payment', { formData });
+       console.log('Order Created:', order);
+   
+       // Step 2: Razorpay Checkout Options
+       const options = {
+         key: 'rzp_test_kh59VKLP3zCcop',
+         amount: order.amount,
+         currency: order.currency,
+         name: 'Your Company Name',
+         description: 'Test Transaction',
+         order_id: order.id,
+         handler: function (response) {
+           console.log('Payment Success Response:', response);
+   
+           if (response && response.razorpay_payment_id) {
+             Swal.fire({
+               title: 'Payment Successful!',
+               text: 'Thank You for Shopping with Kiona! Keep shopping like this 🛍️😊',
+             //   text: `Payment ID: ${response.razorpay_payment_id}`,
+               icon: 'success',
+               confirmButtonText: 'OK',
+             }).then(() => {
+                 handleClose4(); // 👈 Close the modal here
+                 setcart([]);
+                 setFormData({ ...formData, payment_status: 'success' });
+                 generateInvoice(response, formData, companyDetails);
+                 navigate("/");
+             });
+   
+             console.log(formData, cart);
+           } else {
+             Swal.fire({
+               title: 'Payment Error!',
+               text: 'Payment Response Invalid',
+               icon: 'error',
+               confirmButtonText: 'Try Again',
+             });
+           }
+         },
+         prefill: {
+           name: formData.firstName,
+           email: 'narayanniket2@gmail.com',
+           contact: formData.mobileNumber,
+         },
+         theme: {
+           color: '#3399cc',
+         },
+       };
+   
+       // Step 3: Initialize Razorpay Checkout
+       const rzp = new window.Razorpay(options);
+       rzp.open();
+   
+     } catch (error) {
+       console.error('Error during payment:', error);
+   
+       Swal.fire({
+         title: 'Payment Failed',
+         text: 'Something went wrong. Please try again!',
+         icon: 'error',
+         confirmButtonText: 'OK',
+       });
+   
+       setFormData({ ...formData, payment_status: 'failed' });
+     }
+   };
   
   
   const companyDetails = [
@@ -703,6 +702,22 @@ useEffect(()=>
     "Puducherry",
   ];
 
+  const indianCities = [
+    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", 
+    "Pune", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", 
+    "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", 
+    "Ludhiana", "Agra", "Nashik", "Ranchi", "Meerut", "Faridabad", "Allahabad", 
+    "Amritsar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Noida", "Howrah", 
+    "Gwalior", "Jabalpur", "Vijayawada", "Jodhpur", "Raipur", "Kota", "Guwahati", 
+    "Chandigarh", "Solapur", "Hubballi-Dharwad", "Tiruchirappalli", "Bareilly", 
+    "Mysore", "Tiruppur", "Gurgaon", "Aligarh", "Jalandhar", "Bhubaneswar", "Salem", 
+    "Warangal", "Moradabad", "Bhiwandi", "Kolhapur", "Bikaner", "Jhansi", "Thiruvananthapuram", 
+    "Guntur", "Dehradun", "Asansol", "Nanded", "Ujjain", "Gaya", "Tirunelveli", "Malegaon", 
+    "Udaipur", "Hosur", "Kurnool", "Belgaum", "Ambattur", "Tirupati", "Nagaur", "Mangalore", 
+    "Erode", "Jamnagar", "Bokaro", "Aizawl", "Mathura", "Kollam", "Panaji", "Shillong", 
+    "Imphal", "Itanagar", "Gangtok", "Port Blair", "Diu", "Silvassa"
+  ];
+
 
 
 const removeFromCart = (index) => {
@@ -736,6 +751,10 @@ const logout = () => {
     navigate("/"); // If back button is pressed, redirect to home/login page
   };
 };
+
+
+
+
 
   return (
     <div>
@@ -1280,6 +1299,66 @@ fontSize: "14px",
 {validation.landmark && <span style={{ color: "red", fontSize: "12px" }}>{validation.landmark}</span>}
 </div>
 </div>
+<div className="d-flex justify-content-between" style={{ gap: "20px" }}>
+  {/* State Dropdown */}
+  <div className="col-md-6">
+    <label htmlFor="state" className="form-label">
+      *Select State
+    </label>
+    <select
+      className="form-control"
+      id="state"
+      name="selectstate"
+      value={formData.selectstate}
+      onChange={handleChange}
+      style={{
+        borderRadius: "5px",
+        padding: "10px",
+        fontSize: "14px",
+      }}
+    >
+      <option value="" disabled>
+        Select a state
+      </option>
+      {indianStates.map((state, index) => (
+        <option key={index} value={state}>
+          {state}
+        </option>
+      ))}
+    </select>
+    {validation.selectstate && <span style={{ color: "red", fontSize: "12px" }}>{validation.selectstate}</span>}
+  </div>
+
+  {/* City Dropdown */}
+  <div className="col-md-6">
+    <label htmlFor="city" className="form-label">
+      *Select City
+    </label>
+    <select
+      className="form-control"
+      id="city"
+      name="selectcity"
+      value={formData.selectcity}
+      onChange={handleChange}
+      style={{
+        borderRadius: "5px",
+        padding: "10px",
+        fontSize: "14px",
+      }}
+    >
+      <option value="" disabled>
+        Select a city
+      </option>
+      {indianCities.map((city, index) => (
+        <option key={index} value={city}>
+          {city}
+        </option>
+      ))}
+    </select>
+    {validation.selectcity && <span style={{ color: "red", fontSize: "12px" }}>{validation.selectcity}</span>}
+  </div>
+</div>
+
 <div className="col-md-6 mb-3">
 <label htmlFor="landmark" className="form-label">
 *Pincode

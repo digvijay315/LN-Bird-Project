@@ -35,4 +35,14 @@ const vieworderbyemail= async(req,res)=>
       }
   }
 
-module.exports = { createOrder, getAllOrders,vieworderbyemail };
+
+  const getTotalOrders = async (req, res) => {
+    try {
+      const totalOrders = await Order.countDocuments(); // Count all orders
+      res.status(200).json({ totalOrders });
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  };
+
+module.exports = { createOrder, getAllOrders,vieworderbyemail,getTotalOrders };

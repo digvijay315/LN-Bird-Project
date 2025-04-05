@@ -32,6 +32,8 @@ function Dashboard() {
       const fetchOrders = async () => {
         try {
           const response = await api.get('getAllOrders'); // Adjust the URL
+          console.log(response);
+          
           const formattedOrders = response.data.map((order, index) => ({
             id: index + 1, // Add an ID for the DataGrid
             firstName: order.firstName,
@@ -42,10 +44,15 @@ function Dashboard() {
             orderid: order.orderid,
             area: order.area,
             landmark: order.landmark,
+            selectstate: order.selectstate,
+            selectcity:order.selectcity,
             addressType: order.addressType,
             pincode: order.pincode,
-            productName: order.cartItems.map((item) => item.product_name).join(', '),
+            productName: order.cartItems
+            .map((item) => `${item.product_name} × ${item.product_quantity1}`)
+            .join(', '),
             productPrice: order.cartItems.reduce((sum, item) => sum + item.product_price, 0),
+            productQuantity1: order.cartItems.reduce((sum, item) => sum + item.product_quantity1, 0),
             productQuantity: order.cartItems.reduce((sum, item) => sum + item.product_quantity, 0),
             totalPrice: order.totalPrice,
             paymentMode: order.setDefault ? 'Default' : 'Custom', // Example logic
@@ -60,6 +67,9 @@ function Dashboard() {
   
       fetchOrders();
     }, []);
+
+ 
+    
   
     const columns = [
       { field: 'id', headerName: 'ID', width: 70 },
@@ -68,15 +78,17 @@ function Dashboard() {
       { field: 'email', headerName: 'User-Email', width: 190 },
       { field: 'mobileNumber', headerName: 'Mobile No.', width: 120 },
       { field: 'apartmentNumber', headerName: 'Apartment Number', width: 160 },
-      { field: 'orderid', headerName: 'Order Id', width: 180 },
       { field: 'area', headerName: 'Area', width: 120 },
       { field: 'landmark', headerName: 'Landmark', width: 120 },
+      { field: 'selectcity', headerName: 'City', width: 120 },
+      { field: 'selectstate', headerName: 'State', width: 120 },
       { field: 'addressType', headerName: 'Address Type', width: 120 },
       { field: 'pincode', headerName: 'Pincode', width: 90 },
       { field: 'productName', headerName: 'Product Name', width: 150 },
       { field: 'productPrice', headerName: 'Product Price', width: 120 },
       { field: 'productQuantity', headerName: 'Product Quantity', width: 150 },
       { field: 'totalPrice', headerName: 'Total Price', width: 120 },
+      { field: 'orderid', headerName: 'Order Id', width: 180 },
       { field: 'paymentMode', headerName: 'Payment Mode', width: 120 },
     ];
 
@@ -194,6 +206,25 @@ function Dashboard() {
 
     fetchSatisfaction();
   }, []);
+
+
+  const [totalOrders, setTotalOrders] = useState(0);
+  const goal = 1000; // You can adjust this as needed
+  const progress = Math.min((totalOrders / goal) * 100, 100); // capped at 100%
+
+  useEffect(() => {
+    const fetchTotalOrders = async () => {
+      try {
+        const response = await api.get('/totalorders'); // adjust your API
+        setTotalOrders(response.data.totalOrders); // or response.data.length if array
+      } catch (error) {
+        console.error('Failed to fetch total orders:', error);
+      }
+    };
+
+    fetchTotalOrders();
+  }, []);
+  
   
 
 
@@ -222,50 +253,44 @@ function Dashboard() {
           <div className="row g-4">
             {/* Card 1: Products Sold */}
             <div className="col-md-3">
-              <div
-                style={{
-                  border: "none",
-                  borderRadius: 15,
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  padding: 20,
-                  transition: "transform 0.3s ease-in-out",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div>
-                    <h2 style={{ color: "#0d6efd", margin: 0 }}>850</h2>
-                    <p style={{ margin: 0, color: "#6c757d" }}>Products Sold</p>
-                  </div>
-                  <i className="fa fa-shopping-cart" style={{ fontSize: 40, color: "#0d6efd" }} />
-                </div>
-                <div
-                  style={{
-                    width: "100%",
-                    height: 8,
-                    backgroundColor: "#e9ecef",
-                    borderRadius: 10,
-                    marginTop: 10,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "70%",
-                      height: "100%",
-                      backgroundColor: "#0d6efd",
-                      borderRadius: 10,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
+      <div
+        style={{
+          border: "none",
+          borderRadius: 15,
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          padding: 20,
+          transition: "transform 0.3s ease-in-out",
+        }}
+        onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div>
+            <h2 style={{ color: "#0d6efd", margin: 0 }}>{totalOrders}</h2>
+            <p style={{ margin: 0, color: "#6c757d" }}>Order Product</p>
+          </div>
+          <i className="fa fa-shopping-cart" style={{ fontSize: 40, color: "#0d6efd" }} />
+        </div>
+        <div
+          style={{
+            width: "100%",
+            height: 8,
+            backgroundColor: "#e9ecef",
+            borderRadius: 10,
+            marginTop: 10,
+          }}
+        >
+       <div
+            style={{
+              width: `${progress}%`,
+              height: "100%",
+              backgroundColor: "#0d6efd",
+              borderRadius: 10,
+            }}
+          />
+        </div>
+      </div>
+    </div>
 
             {/* Card 2: Net Profit */}
             <div className="col-md-3">

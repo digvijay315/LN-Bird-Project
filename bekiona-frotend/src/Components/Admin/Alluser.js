@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import api from '../api';
+import Swal from 'sweetalert2';
 
 function Alluser() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -20,10 +21,11 @@ function Alluser() {
   const fetchuser=async()=>
   {
     try {
-      const response = await api.get(`alluser/${userEmail}`)
+      const response = await api.get(`alluser`)
+
    
       
-      setUsers([response.data]);
+      setUsers(response.data);
       
     } catch (error) {
       console.log(error);
@@ -36,22 +38,44 @@ console.log(users);
   useEffect(()=>
   {
     fetchuser()
-  },[userEmail])
+  },[])
   
 
   // Handle user deletion
-  const handleDelete = async () => {
+  const confirmAndDelete = (id) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to delete this user?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+      }
+    });
+  };
+
+  const handleDelete = async (id) => {
     try {
-      const response = await api.delete(`deletealluser/${userEmail}`);  // API URL for deleting user
+      const response = await api.delete(`deletealluser/${id}`);  // API URL for deleting user
       if (response.status === 200) {
         // Remove the deleted user from the state
         alert('User deleted successfully!');
       }
+      setTimeout(() => {
+        window.location.reload()
+       }, 2000);
     } catch (error) {
       console.error('Error deleting user:', error);
       alert('Failed to delete user. Please try again.');
     }
   };
+
+ 
 
   return (
     <div>
@@ -107,7 +131,7 @@ console.log(users);
       <td>
         <button
           className="btn btn-danger"
-          onClick={() => handleDelete(user._id)}
+          onClick={() => confirmAndDelete(user._id)}
         >
           Delete
         </button>

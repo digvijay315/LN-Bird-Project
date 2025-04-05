@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useCart } from '../cartcontext'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import "../Home.css";
 import Footer from "../footer";
 import { useEffect } from "react";
@@ -21,6 +21,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { FaCheckCircle } from "react-icons/fa";
+import Header from "../Header";
 
 function Cudashboard() {
 
@@ -298,12 +299,34 @@ function Cudashboard() {
     };
 
 
-
+const [token, setToken] = useState(null);
+  
+    useEffect(() => {
+      // Check for token when app loads
+      const storedToken = localStorage.getItem("usertoken");
+      setToken(storedToken); // Set token state
+  
+      // Function to handle token change
+      const handleStorageChange = () => {
+        const updatedToken = localStorage.getItem("usertoken");
+        setToken(updatedToken); // Update token state dynamically
+      };
+  
+      // Listen for storage changes (useful for multiple tabs)
+      window.addEventListener("storage", handleStorageChange);
+  
+      return () => {
+        window.removeEventListener("storage", handleStorageChange);
+      };
+    }, []);
+  
+  
 
 
   return (
     <div>
-   <Cuheader/>
+   {/* If token exists, show Cuheader, else show Header */}
+   {token ? <Cuheader /> : <Header />}
   
 
 {/* banner start----------------------------------------------------------------------------------------------- */}

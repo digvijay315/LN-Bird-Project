@@ -12,6 +12,8 @@ const order = new mongoose.Schema({
   landmark: String, 
   addressType: String,
   pincode: String,
+  selectstate:String,
+  selectcity:String,
   cartItems: [
     {
       product_image: [],

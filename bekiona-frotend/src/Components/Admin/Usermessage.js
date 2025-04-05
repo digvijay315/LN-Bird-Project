@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from './Sidebar';
 import api from '../api'
+import Swal from 'sweetalert2';
 
 function Usermessage() {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -24,6 +25,23 @@ function Usermessage() {
   }, []);
 
   // Delete message handler
+  const confirmAndDeleteMessage = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to delete this message?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id); // 🔥 delete only if confirmed
+      }
+    });
+  };
+
   const handleDelete = async (id) => {
     try {
       const response = await api.delete(`contactdelete/${id}`);  
@@ -32,6 +50,10 @@ function Usermessage() {
         alert('Message deleted successfully!');
       
       }
+
+      setTimeout(() => {
+        window.location.reload()
+       }, 2000);
     } catch (error) {
       console.error("Error deleting message:", error);
       alert('Failed to delete message. Please try again.');
@@ -75,7 +97,7 @@ function Usermessage() {
                   <td>
                     <button
                       className="btn btn-danger"
-                      onClick={() => handleDelete(message._id)} // Pass the message ID to the delete function
+                      onClick={() => confirmAndDeleteMessage(message._id)} // Pass the message ID to the delete function
                     >
                       Delete
                     </button>

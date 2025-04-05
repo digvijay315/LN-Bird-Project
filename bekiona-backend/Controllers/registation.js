@@ -7,14 +7,14 @@ const registerUser = async (req, res) => {
 
 
   try {
-    const { firstName, lastName, email, phone, password, apartmentNumber, selectstate, area, landmark, addressType, pincode } = req.body;
+    const { firstName, lastName, email, phone, password, apartmentNumber, selectstate, area, landmark, addressType, pincode,selectcity } = req.body;
  
     // Check if the user already exists
     let user = await User.findOne({ email:email });
      if (user) return res.status(400).json({ message: "User already exists" });
 
     // Create a new user
-    user = new User({ firstName, lastName,  email, phone, password, apartmentNumber, selectstate, area, landmark, addressType, pincode });
+    user = new User({ firstName, lastName,  email, phone, password, apartmentNumber, selectstate, area, landmark, addressType, pincode,selectcity });
     await user.save();
 
     res.status(201).json({ message: "User registered successfully" });
@@ -24,19 +24,15 @@ const registerUser = async (req, res) => {
 };
 
 
-const getUserByEmail = async (req, res) => {
-  const { email } = req.params; // Get email from URL parameters
-
+const getAllUsers = async (req, res) => {
   try {
-    const user = await User.findOne({ email }); // Find user by email
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json(user);
+    const users = await User.find(); // Get all users
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 
@@ -52,19 +48,41 @@ const getTotalUsers = async (req, res) => {
 };
 
 
-const deleteUserByEmail = async (req, res) => {
-  const { email } = req.params; // Get email from URL parameters
+// const deleteUserById = async (req, res) => {
+//   const  id  = req.params; 
+// console.log(id);
 
+//   try {
+//     const userid = await User.findById();
+//     const deletedUser = await User.findByIdAndDelete(id); 
+//     if (!deletedUser) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+//     res.status(200).json({ message: "User deleted successfully", deletedUser });
+//   } catch (err) {
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+const deleteUserById = async (req, res) => {
   try {
-    const deletedUser = await User.findOneAndDelete({ email }); // Find and delete user by email
-    if (!deletedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json({ message: "User deleted successfully", deletedUser });
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+      const  id  = req.params; // Get the ID from request parameters
+      console.log(id);
+      
+      const deletedUser = await User.findByIdAndDelete(id);
+
+      if (!deletedUser) {
+          return res.status(404).json({ message: "user not found" });
+      }
+
+      res.status(200).json({ message: "user deleted successfully" });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 };
+
+
+
 
 
 
@@ -123,5 +141,5 @@ const loginUser = async (req, res) => {
   
 
 module.exports = {
-  registerUser, loginUser, getUserByEmail, getmail, deleteUserByEmail, getTotalUsers
+  registerUser, loginUser,  getmail, deleteUserById, getTotalUsers,getAllUsers
 };

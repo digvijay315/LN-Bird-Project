@@ -27,6 +27,9 @@ const UserSchema = new mongoose.Schema({
   selectstate:{
     type: String
   },
+  selectcity:{
+    type: String
+  },
   area:{
      type: String
   },
