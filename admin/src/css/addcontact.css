@@ -247,3 +247,15 @@ button:hover{
     transform: scale(1.1);
     
 }
+
+
+.zoom-card {
+    transition: transform 0.3s ease;
+  }
+  
+  .zoom-card:hover {
+    transform: scale(1.05);
+    z-index: 1;
+    color: #007bff;
+  }
+  

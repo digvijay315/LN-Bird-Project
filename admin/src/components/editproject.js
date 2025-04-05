@@ -2670,7 +2670,7 @@ const handleFileChange = (event) => {
       const data = XLSX.utils.sheet_to_json(sheet,{ header: 1 });
 
       if (data.length > 0) {
-        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`);
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`).slice(0,-32);;
         setExcelHeaders(headers); // Set headers manually
       } else {
         toast.error("No data found in the Excel file.");
@@ -2962,6 +2962,17 @@ const addunits = () => {
   }));
 
 
+};
+
+const headerSuggestions = {
+  owner_details: "Suggestion: Enter owner mobile no",
+  associated_contact: "Suggestion: Enter associated mobile no",
+  unit_no: "Suggestion: Enter unit no",
+  block: "Suggestion: Enter Block",
+  project_name: "Suggestion: Project Name",
+  unit_type:"Suggestion: Select unit type",
+  size:"Suggestion: Size of unit"
+  // Add more as needed
 };
 
 // ========================================add unit in project end===================================================================
@@ -5722,40 +5733,49 @@ const generateExcelFileunit = () => {
 
       {/* Mapping UI */}
       {excelHeaders.length > 0 && (
-        <div className="mt-6">
-          <h5 className="text-lg font-semibold mb-2 text-gray-700">🗺️ Map Your Excel Columns</h5>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-          {excelHeaders.map((header, index) => (
-            <div key={index} className="flex items-center gap-2 p-2">
-              <span className="labels font-sans">{header} ➝</span>
-              <select
-                className="form-control form-control-sm w-1/3 p-1 border border-gray-300 rounded"
-                onChange={(e) =>
-                  setMappedFields((prev) => ({
-                    ...prev,
-                    [header]: e.target.value,
-                  }))
-                }
-              >
-                <option value="">Select Field</option>
-                {databasefieldsunit.map((dbField, idx) => (
-                  <option key={idx} value={dbField}>
-                    {dbField}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-        </div>
+  <div className="mt-4">
+    <h5 className="text-lg font-semibold mb-3 text-gray-700">🗺️ Map Your Excel Columns</h5>
 
-          <button style={{backgroundColor:"gray",width:"150px"}}
-            onClick={handleProcessFile}
-            className="mt-4 w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition-all"
-          >
-            ✅ Process File
-          </button>
+    <div className="row">
+      {excelHeaders.map((header, index) => (
+        <div key={index} className="col-md-4 mb-3 ">
+          <div className="p-2 border rounded shadow-sm bg-light zoom-card">
+            <label className="form-label fw-semibold">{header} ➝</label>
+            <select
+              className="form-control form-control-sm"
+              onChange={(e) =>
+                setMappedFields((prev) => ({
+                  ...prev,
+                  [header]: e.target.value,
+                }))
+              }
+            >
+              <option value="">Select a field</option>
+              {databasefieldsunit.map((dbField, idx) => (
+                <option key={idx} value={dbField}>
+                  {dbField}
+                </option>
+              ))}
+            </select>
+             {/* ✅ Suggestion Text */}
+             {headerSuggestions[header] && (
+              <small  style={{color:"blue"}}>{headerSuggestions[header]}</small>
+            )}
+          </div>
         </div>
-      )} 
+      ))}
+    </div>
+
+    <button
+      style={{ backgroundColor: "gray", width: "200px" }}
+      onClick={handleProcessFile}
+      className="mt-3 btn btn-success fw-semibold"
+    >
+      ✅ Process File
+    </button>
+  </div>
+)}
+
 
       {/* Show Processed Data */}
       {allcontacts.length > 0 && (
@@ -5763,40 +5783,54 @@ const generateExcelFileunit = () => {
     <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
     
     <div className="mb-4">
-      <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>New Units</h4>
-      <pre className="text-sm text-gray-600 overflow-x-auto" >
-      {JSON.stringify(
-      pendingContacts.map(({ project_name, block, unit_no }) => ({
-        project_name,
-        block,
-        unit_no,
-      })),
-      null,
-      2
-    )}
-      </pre>
-      <button className="form-control form-control-sm"  style={{width:"150px"}} onClick={addunits}>
-        ➕ Add Units
-      </button>
-    </div>
+  <h4 className="font-semibold text-gray-800 mb-3" style={{ fontFamily: "arial" }}>
+    New Units
+  </h4>
+
+  <div className="row">
+    {pendingContacts.map((entry, index) => (
+      <div key={index} className="col-md-4 mb-3">
+        <div className="p-2 border rounded bg-light">
+          <p className="mb-1"><strong>Project:</strong> {entry.project_name}</p>
+          <p className="mb-1"><strong>Block:</strong> {entry.block}</p>
+          <p className="mb-0"><strong>Unit No:</strong> {entry.unit_no}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button
+    className="btn btn-primary mt-2"
+    style={{ width: "150px" }}
+    onClick={addunits}
+  >
+    ➕ Add Units
+  </button>
+</div>
+
 
     <div>
-      <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>Duplicate Units</h4>
-      <pre className="text-sm text-gray-600 overflow-x-auto">
-      {JSON.stringify(
-      duplicateEntries.map(({ project_name, block, unit_no}) => ({
-        project_name,
-        block,
-        unit_no,
-      })),
-      null,
-      2
-    )}
-      </pre>
-      <button className="form-control form-control-sm" style={{width:"200px"}}>
-        🔄 Update Units
-      </button>
-    </div>
+  <h4 className="font-semibold text-gray-800 mb-3" style={{ fontFamily: "arial" }}>
+    Duplicate Units
+  </h4>
+
+  <div className="row">
+    {duplicateEntries.map((entry, index) => (
+      <div key={index} className="col-md-4 mb-3">
+        <div className="p-2 border rounded bg-light">
+          <p className="mb-1"><strong>Project:</strong> {entry.project_name}</p>
+          <p className="mb-1"><strong>Block:</strong> {entry.block}</p>
+          <p className="mb-0"><strong>Unit No:</strong> {entry.unit_no}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button className="btn btn-secondary mt-3" style={{ width: "200px" }}>
+    🔄 Update Units
+  </button>
+</div>
+
   </div>
 )}
 
