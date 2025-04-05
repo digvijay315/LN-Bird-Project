@@ -510,7 +510,7 @@ React.useEffect(() => {
       
       setdeal({
         ...deal,
-        matchedleads: filteredLeads._id,
+        matchedleads: filteredLeads.map(item => item._id),
         matchinglead: filteredLeads.length, // Update the matched lead count
       })
     
