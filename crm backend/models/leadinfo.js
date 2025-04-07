@@ -37,6 +37,8 @@ const lead_info=new mongoose.Schema({
     area_metric:{type:String},
     search_location:{type:String},
     street_address:{type:String},
+    range:{type:String},
+    range_unit:{type:String},
     city2:{type:String},
     area2:{type:Array},
     block:{type:Array},

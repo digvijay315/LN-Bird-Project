@@ -16,7 +16,7 @@ const lead_info=async(req,res)=>
         try {
             const{title,first_name,last_name,country_code,mobile_no,mobile_type,email,email_type,tags,descriptions,stage,lead_type,
                 owner,team,visible_to,campegin,source,sub_source,refrencer_no,intrested_project,requirment,property_type,purpose,nri,
-                sub_type,unit_type,budget_min,budget_max,minimum_area,maximum_area,area_metric,search_location,street_address,city2,
+                sub_type,unit_type,budget_min,budget_max,minimum_area,maximum_area,area_metric,search_location,street_address,range,range_unit,city2,
                 area2,block,pincode2,country2,state2,lattitude,longitude,specific_unit,specific_unitdetails,funding,timeline,facing,
                 road,direction,unit_type2,transaction_type,furnishing,profession_category,profession_subcategory,designation,company_name,country_code1,
                 company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url, 
@@ -45,7 +45,7 @@ const lead_info=async(req,res)=>
             
                 const newleadinfo=new leadinfo({title,first_name,last_name,country_code,mobile_no,mobile_type,email,email_type,tags,descriptions,stage,lead_type,
                     owner,team,visible_to,campegin,source,sub_source,refrencer_no,intrested_project,requirment,property_type,purpose,nri,
-                    sub_type,unit_type,budget_min,budget_max,minimum_area,maximum_area,area_metric,search_location,street_address,city2,
+                    sub_type,unit_type,budget_min,budget_max,minimum_area,maximum_area,area_metric,search_location,street_address,range,range_unit,city2,
                     area2,block,pincode2,country2,state2,lattitude,longitude,specific_unit,specific_unitdetails,funding,timeline,facing,
                     road,direction,unit_type2,transaction_type,furnishing,profession_category,profession_subcategory,designation,company_name,country_code1,
                     company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url, 

@@ -50,7 +50,7 @@ const add_deal=new mongoose.Schema({
     website:{type:String},
     social_media:{type:String},
     send_matchedlead:{type:String},
-    matchedleads:{type:Array},
+    matchedleads:[{ type: mongoose.Schema.Types.ObjectId, ref: 'leadinfos' }],
     matchinglead:{type:String},
     remarks:{type:String},
 },{timestamps:true})

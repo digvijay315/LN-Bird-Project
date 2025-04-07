@@ -2912,10 +2912,10 @@ const handleFileChange = (event) => {
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
       const sheetName = workbook.SheetNames[0];
       const sheet = workbook.Sheets[sheetName];
-      const data = XLSX.utils.sheet_to_json(sheet);
+      const data = XLSX.utils.sheet_to_json(sheet,{ header: 1 });
 
       if (data.length > 0) {
-        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`);
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`).slice(0,-32);;
         setExcelHeaders(headers); // Set headers manually
       } else {
         toast.error("No data found in the Excel file.");
@@ -6064,39 +6064,47 @@ const generateExcelFileunit = () => {
 
       {/* Mapping UI */}
       {excelHeaders.length > 0 && (
-        <div className="mt-6">
-          <h5 className="text-lg font-semibold mb-2 text-gray-700">🗺️ Map Your Excel Columns</h5>
-          <div className="grid grid-cols-2 gap-4 mb-4">
-          {excelHeaders.map((header, index) => (
-            <div key={index} className="flex items-center gap-2 p-2">
-              <span className="labels font-sans">{header} ➝</span>
-              <select
-                className="form-control form-control-sm w-1/3 p-1 border border-gray-300 rounded"
-                onChange={(e) =>
-                  setMappedFields((prev) => ({
-                    ...prev,
-                    [header]: e.target.value,
-                  }))
-                }
-              >
-                <option value="">Select Field</option>
-                {databasefieldsunit.map((dbField, idx) => (
-                  <option key={idx} value={dbField}>
-                    {dbField}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ))}
-        </div>
-
-          <button style={{backgroundColor:"gray",width:"150px"}}
-            onClick={handleProcessFile}
-            className="mt-4 w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition-all"
-          >
-            ✅ Process File
-          </button>
-        </div>
+         <div className="mt-4">
+         <h5 className="text-lg font-semibold mb-3 text-gray-700">🗺️ Map Your Excel Columns</h5>
+     
+         <div className="row">
+           {excelHeaders.map((header, index) => (
+             <div key={index} className="col-md-4 mb-3 ">
+               <div className="p-2 border rounded shadow-sm bg-light zoom-card">
+                 <label className="form-label fw-semibold">{header} ➝</label>
+                 <select
+                   className="form-control form-control-sm"
+                   onChange={(e) =>
+                     setMappedFields((prev) => ({
+                       ...prev,
+                       [header]: e.target.value,
+                     }))
+                   }
+                 >
+                   <option value="">Select a field</option>
+                   {databasefieldsunit.map((dbField, idx) => (
+                     <option key={idx} value={dbField}>
+                       {dbField}
+                     </option>
+                   ))}
+                 </select>
+                  {/* ✅ Suggestion Text */}
+                  {/* {headerSuggestions[header] && (
+                   <small  style={{color:"blue"}}>{headerSuggestions[header]}</small>
+                 )} */}
+               </div>
+             </div>
+           ))}
+         </div>
+     
+         <button
+           style={{ backgroundColor: "gray", width: "200px" }}
+           onClick={handleProcessFile}
+           className="mt-3 btn btn-success fw-semibold"
+         >
+           ✅ Process File
+         </button>
+       </div>
       )} 
 
       {/* Show Processed Data */}

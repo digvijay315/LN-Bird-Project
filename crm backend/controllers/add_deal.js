@@ -98,7 +98,7 @@ const add_deal = async (req, res) => {
         {
             try {
                 const resp=await adddeal.find() .populate('owner_details')  // Populate owner_details with contact data
-                .populate('associated_contact');  // Populate associated_contact with contact data
+                .populate('associated_contact').populate('matchedleads');  // Populate associated_contact with contact data
                 res.status(200).send({message:"deal details fetch successfully",deal:resp})
             } catch (error) {
                 console.log(error)

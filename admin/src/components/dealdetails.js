@@ -26,7 +26,7 @@ import api from "../api";
 import '../css/deal.css';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { toWords } from 'number-to-words';
-import { CircularProgress, Typography, Box } from "@mui/material";
+import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
 import Swal from "sweetalert2";
 
 function Dealdetails() {
@@ -530,8 +530,8 @@ function Dealdetails() {
                     { id: 'stage', name: 'Stage' },
                     { id: 'source', name: 'Source' },
                     { id: 'recived_on', name: 'Recived On' },
-                    { id: 'site_visit', name: 'Site Visit' },
-                    { id: 'matchperctange', name: 'Match Percentage ' }
+                    { id: 'site_visit', name: 'Site Visit' }
+                  
                   ]
                     
                     
@@ -549,21 +549,99 @@ function Dealdetails() {
                     setshow1(true);
                    
                   }
+
                   const[deal1,setdeal1]=useState([])
                   const[lead1,setlead1]=useState([])
                   const[deallocation,setdeallocation]=useState("")
 
                   const[fetchingdeal,setfeatchingdeal]=useState([])
-                  const handleMatchLeadClick = async (item) => {
+
+              const handleMatchLeadClick = async (item) => {
                     try {
                       handleShow1();
+                      setMatchedLeads([]);
+
                       setdeal1([item]);
-                  
-                      const response = await api.get(`viewprojectforinventories/${item.project}/${item.unit_number}/${item.block}`);
-                      setfeatchingdeal(response.data.project.add_unit[0]);
                       setdeallocation(item.location);
                       setlead1(item.matchedleads);
+
+                      const response = await api.get(`viewprojectforinventories/${item.project}/${item.unit_number}/${item.block}`);
+                      setfeatchingdeal(response.data.project.add_unit[0]);
+
+                      if (!item.matchedleads || item.matchedleads.length === 0) return;
+
+                      const project = item.project;
+                      const block = item.block;
+                      const unit = item.unit_number;
+                      const price = item.expected_price;
+                      const propertytype = Array.isArray(response.data.project.add_unit[0].category) 
+                        ? response.data.project.add_unit[0].category 
+                        : [response.data.project.add_unit[0].category];
+                      const unittype = response.data.project.add_unit[0].unit_type;
+                      const facing = response.data.project.add_unit[0].facing;
+                      const road = response.data.project.add_unit[0].road;
+                      const city = response.data.project.add_unit[0].ucity;
+                      const direction = response.data.project.add_unit[0].direction;
+
+                      const deallat = parseFloat(response.data.project.add_unit[0].lattitude);
+                      const deallang = parseFloat(response.data.project.add_unit[0].langitude);
                       
+
+                      const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
+                        const R = 6371; // Radius of the earth in km
+                        const dLat = (lat2 - lat1) * Math.PI / 180;
+                        const dLon = (lon2 - lon1) * Math.PI / 180;
+                        const a =
+                          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(lat1 * Math.PI / 180) *
+                          Math.cos(lat2 * Math.PI / 180) *
+                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                  
+                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                        return R * c;
+                      };
+
+                      const updatedLeads = item.matchedleads.map((lead) => {
+                        let matchScore = 0;
+                        if (lead.city2 === city) matchScore += 15;
+                        if (lead.area2.includes(project)) matchScore += 15;
+                        if (lead.block.includes(block)) matchScore += 10;
+                        if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
+
+                        if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 10;
+                         if (Array.isArray(lead.property_type) && propertytype.some(type => lead.property_type.includes(type))) matchScore += 10;
+                        if (unittype === lead.unit_type2) matchScore += 10;
+                        if (lead.facing.includes(facing)) matchScore += 5;
+                        if (lead.road.includes(road)) matchScore += 5;
+                        if (lead.direction && lead.direction === direction) matchScore += 10;
+
+
+                        let locationMatch = 0;
+                    if (lead.lattitude && lead.longitude) {
+                      const leadLat = parseFloat(lead.lattitude);
+                      const leadLng = parseFloat(lead.longitude);
+                      
+                      const distance = getDistanceInKm(deallat, deallang, leadLat, leadLng);
+
+                  
+                      
+                      if (distance <= 1) locationMatch = 25;
+                      else if (distance <= 2) locationMatch = 17;
+                      else if (distance <= 3) locationMatch = 15;
+                      else if (distance <= 4) locationMatch = 12;
+                      else if (distance <= 5) locationMatch = 10;
+                      else if (distance <= 8) locationMatch = 7;
+                      else if (distance <= 11) locationMatch = 5;
+
+                      matchScore += locationMatch;
+                      // return { ...lead, matchPercentage: matchScore, distance: distance.toFixed(2), locationMatch };
+                    }
+
+                        return { ...lead, matchPercentage: matchScore };
+                      });
+
+                      setMatchedLeads(updatedLeads);
+
                     } catch (error) {
                       console.error("Error fetching project details:", error);
                       Swal.fire({
@@ -572,60 +650,58 @@ function Dealdetails() {
                         text: 'Failed to fetch project details. Please try again later.',
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'OK',
-                      }).then(()=>
-                      {
-                        window.location.reload()
                       });
                     }
                   };
+
                   
               
                   
-                  useEffect(() => {
-                    if (!lead1 || lead1.length === 0) return; // Exit if no leads
+                  // useEffect(() => {
+                  //   if (!lead1 || lead1.length === 0) return; // Exit if no leads
                     
-                    const project = deal1[0].project;
-                    const block = deal1[0].block;
-                    const unit = deal1[0].unit_number;
-                    const price = deal1[0].expected_price;
-                    const propertytype = Array.isArray(fetchingdeal.category) ? fetchingdeal.category : [fetchingdeal.category];
-                    const unittype = fetchingdeal.unit_type;
-                    const facing = fetchingdeal.facing;
-                    const road = fetchingdeal.road;
-                    const city = fetchingdeal.ucity;
-                    const direction = fetchingdeal.direction;
+                  //   const project = deal1[0].project;
+                  //   const block = deal1[0].block;
+                  //   const unit = deal1[0].unit_number;
+                  //   const price = deal1[0].expected_price;
+                  //   const propertytype = Array.isArray(fetchingdeal.category) ? fetchingdeal.category : [fetchingdeal.category];
+                  //   const unittype = fetchingdeal.unit_type;
+                  //   const facing = fetchingdeal.facing;
+                  //   const road = fetchingdeal.road;
+                  //   const city = fetchingdeal.ucity;
+                  //   const direction = fetchingdeal.direction;
                   
                   
-                    // Process each lead
-                    const updatedLeads = lead1.map((item) => {
-                      let matchScore = 0;
+                  //   // Process each lead
+                  //   const updatedLeads = lead1.map((item) => {
+                  //     let matchScore = 0;
                   
-                      // **Matching Conditions (Total: 100%)**
+                  //     // **Matching Conditions (Total: 100%)**
                       
-                      // **Major Matches (50%)**
-                      if (item.city2 === city) matchScore += 15; // 15%
-                      if (item.area2.includes(project)) matchScore += 15; // 15%
-                      if (item.block.includes(block)) matchScore += 10; // 10%
-                      if (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit === unit : true) matchScore += 10; // 10%
+                  //     // **Major Matches (50%)**
+                  //     if (item.city2 === city) matchScore += 15; // 15%
+                  //     if (item.area2.includes(project)) matchScore += 15; // 15%
+                  //     if (item.block.includes(block)) matchScore += 10; // 10%
+                  //     if (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit === unit : true) matchScore += 10; // 10%
                   
-                      // **Other Conditions (50%)**
+                  //     // **Other Conditions (50%)**
           
-                      if (price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)) matchScore += 10; // 10%
-                      if (Array.isArray(item.property_type) && propertytype.some(type => item.property_type.includes(type))) matchScore += 10; // 10%
-                      if (unittype === item.unit_type2) matchScore += 10; // 10%
-                      if (item.facing.includes(facing)) matchScore += 5; // 5%
-                      if (item.road.includes(road)) matchScore += 5; // 5%
-                      if (item.direction === direction) matchScore += 10; // **Now 10% instead of 5%**
+                  //     if (price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)) matchScore += 10; // 10%
+                  //     if (Array.isArray(item.property_type) && propertytype.some(type => item.property_type.includes(type))) matchScore += 10; // 10%
+                  //     if (unittype === item.unit_type2) matchScore += 10; // 10%
+                  //     if (item.facing.includes(facing)) matchScore += 5; // 5%
+                  //     if (item.road.includes(road)) matchScore += 5; // 5%
+                  //     if (item.direction === direction) matchScore += 10; // **Now 10% instead of 5%**
 
                   
-                      // **Final Match Percentage**
-                      const matchPercentage = matchScore;
-                      return { ...item, matchPercentage };
-                    });
+                  //     // **Final Match Percentage**
+                  //     const matchPercentage = matchScore;
+                  //     return { ...item, matchPercentage };
+                  //   });
                   
-                    setMatchedLeads(updatedLeads);
+                  //   setMatchedLeads(updatedLeads);
                   
-                  }, [lead1, deal1, fetchingdeal]);
+                  // }, [lead1, deal1, fetchingdeal]);
                   
                   
 
@@ -652,7 +728,7 @@ function Dealdetails() {
                     if (selectedItems1.includes(id)) {
                       setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
                     } else {
-                      setSelectedItems1([...selectedItems, id]);
+                      setSelectedItems1([...selectedItems1, id]);
                     
                     }
                   };
@@ -3725,6 +3801,33 @@ const handleallblockchange = (event) => {
 // ===================================================edit deal end====================================================================
 
 
+// useEffect(() => {
+//   const updateDealsWithMatchedLeads = async () => {
+//     if (deals.length > 0 && leads.length > 0) {
+//       const updatedDeals = deals.map((deal) => {
+//         const dealType = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
+
+//         const matchingLeads = leads.filter(
+//           (lead) => lead.requirment === dealType
+//         );
+
+//         const matchedLeadIds = matchingLeads.map((lead) => lead._id);
+
+//         return {
+//           ...deal,
+//           matchedleads: matchedLeadIds,
+//           matchinglead: matchedLeadIds.length,
+//         };
+//       });
+
+//       setDeals(updatedDeals); // or however you're updating all deal state
+//     }
+//   };
+
+//   updateDealsWithMatchedLeads();
+// }, [deals, leads]);
+
+
                   
     return (
         <div>
@@ -4021,7 +4124,7 @@ const handleallblockchange = (event) => {
       <div style={{display:"flex",fontSize:"20px",gap:"10px",justifyContent:"right",paddingRight:"60px", marginTop:"10px"}}>{renderPageNumbers()}</div></div> */}
       
 
-      <Modal show={show1} onHide={handleClose1} size='xl' style={{transition:"0.5s ease-in"}}>
+      <Modal  show={show1} onHide={handleClose1} size='xl' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
               <Modal.Title>Matched Lead for {deallocation}</Modal.Title>
             </Modal.Header>
@@ -4142,7 +4245,8 @@ const handleallblockchange = (event) => {
     
       <tbody>
         {
-         matchedLeads.map ((item, index) => (
+         [...matchedLeads]
+         .sort((a, b) => b.matchPercentage - a.matchPercentage) .map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >
               <input 
@@ -4194,25 +4298,89 @@ const handleallblockchange = (event) => {
                 Max:  {item.budget_max}
               
               </>
-            ) :   col.id === 'matchperctange' ? (
+            ) :   col.id === 'score' ? (
               <>
-                  <Box position="relative" display="inline-flex">
-            <CircularProgress variant="determinate" value={item.matchPercentage} size={40} thickness={4} />
-            <Box
-              top={0}
-              left={0}
-              bottom={0}
-              right={0}
-              position="absolute"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Typography variant="caption" component="div" color="textSecondary">
-                {item.matchPercentage}%
-              </Typography>
-            </Box>
-          </Box>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+
+{/* Circular Progress with dynamic color and percentage in center */}
+<Box position="relative" display="inline-flex">
+  <CircularProgress
+    variant="determinate"
+    value={item.matchPercentage}
+    size={40}
+    thickness={3}
+    style={{
+      color:
+        item.matchPercentage >= 80
+          ? '#4caf50' // Green
+          : item.matchPercentage >= 50
+          ? '#ff9800' // Orange
+          : '#f44336', // Red
+      transition: 'all 3s ease-in-out',
+    }}
+  />
+  <Box
+    top={0}
+    left={0}
+    bottom={0}
+    right={0}
+    position="absolute"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Typography
+      variant="caption"
+      component="div"
+      style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
+    >
+      {item.matchPercentage}%
+    </Typography>
+  </Box>
+</Box>
+
+{/* Linear Progress with same color logic and center text */}
+<Box width="100%" position="relative">
+  <LinearProgress
+    variant="determinate"
+    value={item.matchPercentage}
+    style={{
+      height: 6,
+      borderRadius: 6,
+      backgroundColor: '#eee',
+      transition: 'all 3s ease-in-out',
+    }}
+    sx={{
+      '& .MuiLinearProgress-bar': {
+        borderRadius: 6,
+        backgroundColor:
+          item.matchPercentage >= 80
+            ? '#4caf50'
+            : item.matchPercentage >= 50
+            ? '#ff9800'
+            : '#f44336',
+        transition: 'all 0.5s ease-in-out',
+      },
+    }}
+  />
+  <Box
+    position="absolute"
+    top={0}
+    left="50%"
+    transform="translateX(-50%)"
+    height="100%"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Typography variant="caption" style={{ color: '#000', fontWeight: 'bold' }}>
+      {item.matchPercentage}%
+    </Typography>
+  </Box>
+</Box>
+
+</Box>
+
               
               </>
             ): (
