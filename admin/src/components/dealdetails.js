@@ -523,8 +523,11 @@ function Dealdetails() {
                   ]
 
                   const leadallColumns = [
-                    { id: 'lead_details', name: 'Lead Details' },
                     { id: 'score', name: 'Score' },
+                
+                    { id: 'lead_details', name: 'Lead Details' },
+                    { id: 'matched_percentange', name: 'Matched %' },
+                    
                     { id: 'requirment', name: 'Requirment' },
                     { id: 'budget', name: 'Budget' },
                     { id: 'stage', name: 'Stage' },
@@ -3975,8 +3978,8 @@ const handleallblockchange = (event) => {
       {/* <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute"}}>
    
       
-      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-      <select id="itemsPerPage" value={itemsPerPage}  style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage}  style={{fontSize:"16px",height:"30px"}}>
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -3988,8 +3991,8 @@ const handleallblockchange = (event) => {
 
     <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
       
-      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",height:"30px"}}>
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -4116,8 +4119,8 @@ const handleallblockchange = (event) => {
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}></span></h5>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}></span></h5>
         </footer>
       </div>
     {/* <div style={{height:"100px"}}>
@@ -4139,7 +4142,7 @@ const handleallblockchange = (event) => {
           {dealallColumns.map((col) => (
             // Only render columns that are NOT in the removedColumns list
             !removedColumns.includes(col.id) && (
-              <StyledTableCell key={col.id} style={{ fontFamily: 'times new roman' }}>
+              <StyledTableCell key={col.id} >
                 <span>{col.name}</span>
 
                 {/* Conditionally render '-' button based on showRemoveButtons */}
@@ -4197,7 +4200,7 @@ const handleallblockchange = (event) => {
                 !removedColumns.includes(col.id) &&
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px", fontFamily: "times new roman" }}
+                style={{ padding: "10px" }}
                 
               >
                 {item[col.id]}
@@ -4257,8 +4260,20 @@ const handleallblockchange = (event) => {
               {index + 1}
             </StyledTableCell>
 
-            <StyledTableCell >
-             {item.title} {item.first_name} {item.last_name} <br></br>
+            
+            
+            {leadallColumns
+              .filter((col) => col.id !== 'sno' )
+              .map((col) => (
+                <StyledTableCell 
+                key={col.id} 
+                style={{ padding: "10px" }}
+                
+              >
+                
+                { col.id === 'lead_details' ? (
+              <>
+                {item.title} {item.first_name} {item.last_name} <br></br>
              {
               Array.isArray(item.mobile_no) 
                 ? item.mobile_no.map((mobile, index) => (
@@ -4272,20 +4287,8 @@ const handleallblockchange = (event) => {
                     <span style={{ color: "#9400D3" }}>{item.mobile_no}</span> 
                 </div> 
             }
-
-
-            </StyledTableCell>
-            
-            {leadallColumns
-              .filter((col) => col.id !== 'sno' && col.id !=='lead_details' )
-              .map((col) => (
-                <StyledTableCell 
-                key={col.id} 
-                style={{ padding: "10px", fontFamily: "times new roman" }}
-                
-              >
-                
-                {col.id === 'stage' ? (
+              </>
+            ) : col.id === 'stage' ? (
               <>
                 {item.stage} <br />
                 <span style={{ color: item.lead_type === 'Hot' ? 'red' : item.lead_type === 'Warm' ? 'green' : item.lead_type === 'Cold' ? 'blue' : 'black' }}>
@@ -4294,8 +4297,8 @@ const handleallblockchange = (event) => {
               </>
             ) :   col.id === 'budget' ? (
               <>
-                Min:  {item.budget_min} <br />
-                Max:  {item.budget_max}
+                Min:  ₹{Number(item.budget_min)?.toLocaleString('en-IN')}/- <br />
+                Max:  ₹{Number(item.budget_max)?.toLocaleString('en-IN')}/-
               
               </>
             ) :   col.id === 'score' ? (
@@ -4338,7 +4341,13 @@ const handleallblockchange = (event) => {
     </Typography>
   </Box>
 </Box>
+</Box>
 
+              
+              </>
+            ):  col.id === 'matched_percentange' ? (
+              <>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
 {/* Linear Progress with same color logic and center text */}
 <Box width="100%" position="relative">
   <LinearProgress
@@ -4383,7 +4392,12 @@ const handleallblockchange = (event) => {
 
               
               </>
-            ): (
+            ):col.id === 'requirment' ? (
+              <>
+                {item.requirment}<br></br>
+                {item.unit_type} ({item.sub_type.join(',')})
+              </>
+            ) :(
               item[col.id]
             )}
                   
@@ -4487,8 +4501,8 @@ const handleallblockchange = (event) => {
 
 <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
 
-<label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange1} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+<label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange1} style={{fontSize:"16px",height:"30px"}}>
   <option value="5">10</option>
   <option value="10">15</option>
   <option value="20">20</option>
@@ -4626,12 +4640,12 @@ const handleallblockchange = (event) => {
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Project <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Ready To Move <span style={{color:"blue",fontSize:"25px"}}>{totalreadytomove}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Under Construction <span style={{color:"red",fontSize:"25px"}}>{totalunderconstruction}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Pre Launch <span style={{color:"gray",fontSize:"25px"}}>{totalprelaunch}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Upcoming <span style={{color:"pink",fontSize:"25px"}}>{totalupcoming}</span></h5>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          <h5 style={{lineHeight:"50px"}}>Total Project <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
+          <h5 style={{lineHeight:"50px"}}>Ready To Move <span style={{color:"blue",fontSize:"25px"}}>{totalreadytomove}</span></h5>
+          <h5 style={{lineHeight:"50px"}}>Under Construction <span style={{color:"red",fontSize:"25px"}}>{totalunderconstruction}</span></h5>
+          <h5 style={{lineHeight:"50px"}}>Pre Launch <span style={{color:"gray",fontSize:"25px"}}>{totalprelaunch}</span></h5>
+          <h5 style={{lineHeight:"50px"}}>Upcoming <span style={{color:"pink",fontSize:"25px"}}>{totalupcoming}</span></h5>
         </footer>
       </div>
 
@@ -4743,8 +4757,8 @@ const handleallblockchange = (event) => {
 
 <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
 
-<label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange2} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+<label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange2} style={{fontSize:"16px",height:"30px"}}>
   <option value="5">10</option>
   <option value="10">15</option>
   <option value="20">20</option>
@@ -4841,7 +4855,7 @@ const handleallblockchange = (event) => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                  style={{ padding: "10px" }}
                 >
                   {
                     col.id==='ownerdetails' ?
@@ -4910,13 +4924,13 @@ const handleallblockchange = (event) => {
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Inventories <span style={{color:"black",fontSize:"25px"}}>{totalinventories}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Residential <span style={{color:"green",fontSize:"25px"}}>{totalResidential}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Commercial <span style={{color:"blue",fontSize:"25px"}}>{totalcommercial}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Agriculture <span style={{color:"orange",fontSize:"25px"}}>{totalagriculture}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Industrial <span style={{color:"red",fontSize:"25px"}}>{totalindustrial}</span></h5>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}> Institutional <span style={{color:"gray",fontSize:"25px"}}>{totalinstitutional}</span></h5>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          <h5 style={{lineHeight:"50px"}}>Total Inventories <span style={{color:"black",fontSize:"25px"}}>{totalinventories}</span></h5>
+          <h5 style={{lineHeight:"50px"}}> Residential <span style={{color:"green",fontSize:"25px"}}>{totalResidential}</span></h5>
+          <h5 style={{lineHeight:"50px"}}> Commercial <span style={{color:"blue",fontSize:"25px"}}>{totalcommercial}</span></h5>
+          <h5 style={{lineHeight:"50px"}}> Agriculture <span style={{color:"orange",fontSize:"25px"}}>{totalagriculture}</span></h5>
+          <h5 style={{lineHeight:"50px"}}> Industrial <span style={{color:"red",fontSize:"25px"}}>{totalindustrial}</span></h5>
+          <h5 style={{lineHeight:"50px"}}> Institutional <span style={{color:"gray",fontSize:"25px"}}>{totalinstitutional}</span></h5>
         </footer>
       </div>
 

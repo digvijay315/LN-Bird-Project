@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import {React, useState,useEffect,useRef} from "react";
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { toast, ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { utils, writeFile } from "xlsx";
 import '../css/hover.css';
-import { useRef } from "react";
+
 import api from "../api";
 import EmailIcon from '@mui/icons-material/Email';
 import { SvgIcon } from "@mui/material";
@@ -24,6 +24,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
+
 
 function Leadfetch() {
 
@@ -73,13 +74,13 @@ function Leadfetch() {
       const navigate=useNavigate();
 
 /*-------------------lead crud operations start---------------------------lead crud operations start------------------------------------lead crud operations start*/
-React.useEffect(()=>{fetchdata()},[])
-React.useEffect(()=>{fetchdatabystage_incomingcount()},[])  
-React.useEffect(()=>{fetchdatabystage_prospectcount()},[]) 
-React.useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
-React.useEffect(()=>{fetchdatabystage_woncount()},[]) 
-React.useEffect(()=>{fetchdatabystage_lostcount()},[])
-React.useEffect(()=>{fetchdatabystage_opportunitycount()},[])
+useEffect(()=>{fetchdata()},[])
+useEffect(()=>{fetchdatabystage_incomingcount()},[])  
+useEffect(()=>{fetchdatabystage_prospectcount()},[]) 
+useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
+useEffect(()=>{fetchdatabystage_woncount()},[]) 
+useEffect(()=>{fetchdatabystage_lostcount()},[])
+useEffect(()=>{fetchdatabystage_opportunitycount()},[])
 
 
 
@@ -102,8 +103,8 @@ const[countall,setcountall]=useState('')
     }
   
   }
-  React.useEffect(()=>{fetchdata()},[])
-  React.useEffect(()=>{fetchdatabystage_incomingcount()},[])
+  useEffect(()=>{fetchdata()},[])
+  useEffect(()=>{fetchdatabystage_incomingcount()},[])
  
 
 
@@ -650,20 +651,21 @@ const[countall,setcountall]=useState('')
 
   //===========================------------------------------ update lead start=====================================---------------------------------
    
-    const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
-      email:"",email_type:"",tags:"",descriptions:"",stage:"",lead_type:"",owner:"",team:"",visible_to:"",campegin:"",source:"",
-      sub_source:"",refrencer_no:"",intrested_project:"",
-      requirment:"",property_type:"",purpose:"",nri:"",sub_type:"",unit_type:"",budget_min:"",budget_max:"",minimum_area:"",
-      maximum_area:"",area_metric:"",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
-      lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:"",road:"",transaction_type:"",
-      furnishing:"",
-      profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
-      company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[],company_url:[],action3:[],
+    const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+          email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
+          sub_source:"",refrencer_no:"",intrested_project:"",
+          requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+          maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+          lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:"",block3:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+          unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
+          profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+          company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+  
+          father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+          birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+          social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
+         })
 
-      father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-      birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action4:[],loan:[],bank:[],amount:[],action5:[],
-      social_media:[],url:[],action6:[],income:[],amount1:[],action7:[],document_no:[],document_name:[],document_pic:[],action8:[]
-     })
      const requirment=["Buy","Rent","Lease"];
                         const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
                      
@@ -1563,7 +1565,10 @@ const handleMouseUp = () => {
   window.removeEventListener('mouseup', handleMouseUp);
 };
 
-const facing=["East","West","South","North","North East","South East","North West","South West"];
+
+const facing=["Park","Green Belt","Highway","Commercial","School","Hospital","Mandir","Gurudwara","Crech","Clinic","Community Centre",
+  "1 Kanal","14m Marla","10 Marla","8 Marla","6 Marla","4 Marla","2 Marla","3 Marla","2 Kanal"];
+
 const [facings, setfacings] = useState([]);
 
 const handlefacingChange = (event) => {
@@ -1590,7 +1595,7 @@ const handlefacingChange = (event) => {
   }
 };
 
-const road=["9 mtr road","12 mtr road","60 mtr road","100 mtr road"];
+const road=["9 Mtr Wide","12 Mtr Wide","18 Mtr Wide","24 Mtr Wide","60 Mtr Wide"];  
 
 const [roads, setroads] = useState([]);
 
@@ -1956,13 +1961,13 @@ const handleallblockchange = (event) => {
 
 
                                               const options = {
-                                                property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
+                                                property_type: ["Residential", "Commercial","Agricultural","Industrial","Institutional"],
                                                 sub_type: {
-                                                  RESIDENTIAL: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
-                                                  COMMERCIAL: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
-                                                  AGRICULTURE: ["LAND", "FARM HOUSE"],
-                                                  INDUSTRIAL: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
-                                                  INSTITUTIONAL: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
+                                                  Residential: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
+                                                  Commercial: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
+                                                  Agricultural: ["LAND", "FARM HOUSE"],
+                                                  Industrial: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
+                                                  Institutional: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
                                                 },
                                                 unit_type: {
                                                   PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
@@ -2353,6 +2358,136 @@ const handleallblockchange = (event) => {
 
 
 
+  // ==============================================search loaction from google start========================================================
+                                                
+                                                    
+                       
+                                              const inputRef = useRef(null);
+                                              const apiKey = 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc';
+                                            
+                                              useEffect(() => {
+                                                const scriptExists = document.querySelector('#google-maps-script');
+                                                if (!scriptExists) {
+                                                  const script = document.createElement('script');
+                                                  script.id = 'google-maps-script';
+                                                  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+                                                  script.async = true;
+                                                  script.defer = true;
+                                                  script.onload = initializeAutocomplete;
+                                                  document.body.appendChild(script);
+                                                } else {
+                                                  initializeAutocomplete();
+                                                }
+                                              }, []);
+                                            
+                                              const initializeAutocomplete = () => {
+                                                if (!inputRef.current || !window.google) return;
+                                            
+                                                const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+                                                  types: ['geocode']
+                                                });
+                                            
+                                                autocomplete.addListener('place_changed', () => {
+                                                  const place = autocomplete.getPlace();
+                                                  if (!place.geometry) return;
+                                            
+                                                  const lat = place.geometry.location.lat();
+                                                  const lng = place.geometry.location.lng();
+                                            
+                                                  const components = place.address_components;
+                                                  let address = '', city = '', zip = '', state = '', country = '';
+                                            
+                                                  components.forEach(component => {
+                                                    const types = component.types;
+                                                    if (types.includes('route') || types.includes('sublocality')) {
+                                                      address += component.long_name + ' ';
+                                                    }
+                                                    if (types.includes('locality')) {
+                                                      city = component.long_name;
+                                                    }
+                                                    if (types.includes('postal_code')) {
+                                                      zip = component.long_name;
+                                                    }
+                                                    if (types.includes('administrative_area_level_1')) {
+                                                      state = component.long_name;
+                                                    }
+                                                    if (types.includes('country')) {
+                                                      country = component.long_name;
+                                                    }
+                                                  });
+                                            
+                                                  setleadinfo(prev => ({
+                                                    ...prev,
+                                                    search_location: place.formatted_address,
+                                                    street_address: address.trim(),
+                                                    city2: city,
+                                                    pincode2: zip,
+                                                    state2: state,
+                                                    country2: country,
+                                                    lattitude: lat,
+                                                    longitude: lng
+                                                  }));
+                                                });
+                                              };
+                                            
+                                              const getlocation = async (e) => {
+                                                e.preventDefault();
+                                                try {
+                                                  const res = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                                    params: {
+                                                      address: leadinfo.search_location,
+                                                      key: apiKey
+                                                    }
+                                                  });
+                                            
+                                                  if (res.data.results.length > 0) {
+                                                    const result = res.data.results[0];
+                                                    const lat = result.geometry.location.lat;
+                                                    const lng = result.geometry.location.lng;
+                                            
+                                                    const components = result.address_components;
+                                                    let address = '', city = '', zip = '', state = '', country = '';
+                                            
+                                                    components.forEach(component => {
+                                                      const types = component.types;
+                                                      if (types.includes('route') || types.includes('sublocality')) {
+                                                        address += component.long_name + ' ';
+                                                      }
+                                                      if (types.includes('locality')) {
+                                                        city = component.long_name;
+                                                      }
+                                                      if (types.includes('postal_code')) {
+                                                        zip = component.long_name;
+                                                      }
+                                                      if (types.includes('administrative_area_level_1')) {
+                                                        state = component.long_name;
+                                                      }
+                                                      if (types.includes('country')) {
+                                                        country = component.long_name;
+                                                      }
+                                                    });
+                                            
+                                                    setleadinfo(prev => ({
+                                                      ...prev,
+                                                      street_address: address.trim(),
+                                                      city2: city,
+                                                      pincode2: zip,
+                                                      state2: state,
+                                                      country2: country,
+                                                      lattitude: lat,
+                                                      longitude: lng
+                                                    }));
+                                                  }
+                                                } catch (err) {
+                                                  console.error('Geocode error:', err);
+                                                }
+                                              };
+                      
+                                                
+                                                
+//================================================ search location from google end=====================================================
+
+
 
 
   return ( 
@@ -2656,6 +2791,7 @@ const handleallblockchange = (event) => {
               <Modal.Title>Update Lead</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+              
           
                 <div className="d-flex justify-content-between align-items-center experience" style={{fontFamily:"times new roman",fontWeight:"bold"}}>
                 <span onClick={leadinfobasic} id="span1" style={{cursor:"pointer"}}>Basic Details</span>
@@ -2838,7 +2974,8 @@ const handleallblockchange = (event) => {
               
 <div className="row mt-2" id="leadinforequirment" style={{display:"none"}}>
                 <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadinfo.requirment}</option>
+                    <option>---Select---</option>
                        {
                         requirment.map(item=>
                             (
@@ -2944,6 +3081,7 @@ const handleallblockchange = (event) => {
                                 }
                                 value={leadinfo.budget_max}
                               >
+                                <option>{leadinfo.budget_max}</option>
                                 <option>---Select---</option>
                                 {filteredMaxBudgetOptions.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2958,6 +3096,7 @@ const handleallblockchange = (event) => {
                         {leadinfo.requirment === "Buy" && (
                        <>
                         <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <option>{leadinfo.budget_min}</option>
                         <option>---Select---</option>
                         {buyBudgetOptions.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2968,6 +3107,7 @@ const handleallblockchange = (event) => {
                       
                       
                         <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                       <option>{leadinfo.budget_max}</option>
                         <option>---Select---</option>
                         {filteredMaxBudgetOptionsbuy.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2978,7 +3118,9 @@ const handleallblockchange = (event) => {
                         </>
                       )}
                         <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
-                        <option>Select</option>
+                        <option>{leadinfo.minimum_area}</option>
+                       <option>{leadinfo.minimum_area}</option>
+                        <option>---Select---</option>
                         {areaoptions.map((option) => (
                                   <option key={option.value} value={option.value}>
                                     {option.label}
@@ -2987,7 +3129,8 @@ const handleallblockchange = (event) => {
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
-                        <option>Select</option>
+                        <option>{leadinfo.maximum_area}</option>
+                        <option>---Select---</option>
                         {filteredarea.map((option) => (
                                   <option key={option.value} value={option.value}>
                                     {option.label}
@@ -2997,7 +3140,8 @@ const handleallblockchange = (event) => {
                         </select></div>
                    
                         <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
-                      
+                      <option>{leadinfo.area_metric}</option>
+                      <option>---select---</option>
                         <option>Sq Yard</option>
                         <option>Marla</option>
                         <option>Acre</option>
@@ -3110,20 +3254,29 @@ const handleallblockchange = (event) => {
                         <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" value={leadinfo.specific_unit} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
                     </div>
 
-                       <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
-                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
-                        <div className="col-md-4"></div>
+                    <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
+                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                       <div className="col-md-2"></div>
+                        <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
                         <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                        {/* <div className="col-md-2"><label className="labels">Range</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}/></div>
+                        <div className="col-md-2"><label className="labels">Unit</label>
+                        <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range_unit:e.target.value})}>
+                          <option>---select---</option>
+                          <option>K.M</option>
+                        </select>
+                        </div> */}
                         <div className="col-md-4"></div>
-                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+
+                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
                     
-                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
                     {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
                     </div>
                     </div>
@@ -3134,7 +3287,7 @@ const handleallblockchange = (event) => {
                     <div className="col-md-4"><label className="labels">Facing</label>
                     <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
-                    value={facings}
+                    value={leadinfo.facing?leadinfo.facing:facings}
                     onChange={handlefacingChange}
                     renderValue={(selected) => selected.join(', ')}
                 >
@@ -3144,21 +3297,22 @@ const handleallblockchange = (event) => {
                  <MenuItem value="select-all">
                     <Checkbox checked={facings.length === facing.length} />
                     <ListItemText
-                      primary={leadinfo?.facing || '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                      primary={'---select all---'} // Display leadData.matched_deal or fallback to '---select---'
                     />
                   </MenuItem>
                     {facing.map((name) => (
                         <MenuItem key={name} value={name}>
-                            <Checkbox checked={facings.indexOf(name) > -1} />
+                           <Checkbox checked={leadinfo.facing.includes(name)} />
                             <ListItemText primary={name} />
                         </MenuItem>
                     ))}
+                    
                 </Select>
                     </div>
                     <div className="col-md-4"><label className="labels">Road</label>
                     <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
-                    value={roads}
+                    value={leadinfo.road?leadinfo.road:roads}
                     onChange={handleroadChange}
                     renderValue={(selected) => selected.join(', ')}
                 >
@@ -3168,20 +3322,37 @@ const handleallblockchange = (event) => {
                 <MenuItem value="select-all">
                     <Checkbox checked={roads.length === road.length} />
                     <ListItemText
-                      primary={leadinfo?.road || '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                      primary={'---select all---'} // Display leadData.matched_deal or fallback to '---select---'
                     />
                   </MenuItem>
                     {road.map((name) => (
                         <MenuItem key={name} value={name}>
-                            <Checkbox checked={roads.indexOf(name) > -1} />
+                              <Checkbox checked={leadinfo.road.includes(name)} />
                             <ListItemText primary={name} />
                         </MenuItem>
                     ))}
                 </Select>
                     </div>
+
+                    <div className="col-md-4"><label className="labels">Direction</label><select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,direction:e.target.value})}>
+                                <option>{leadinfo.direction}</option>
+                                <option>---Select---</option>
+                                <option>East</option>
+                                <option>West</option>
+                                <option>North</option>
+                                <option>South</option>
+                                <option>North East</option>
+                                <option>South East</option>
+                                <option>South West</option>
+                                <option>North West</option>
+                               
+                                </select>
+                    </div>
+
                     <div className="col-md-4"><label className="labels">Funding</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadinfo.funding}</option>
+                    <option>---Select---</option>
                    {
                     funding.map(item=>
                         (
@@ -3194,7 +3365,8 @@ const handleallblockchange = (event) => {
                    
                     <div className="col-md-4"><label className="labels">Timeline</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadinfo.timeline}</option>
+                    <option>---Select---</option>
                       {
                         timeline.map(item=>
                             (
@@ -3210,7 +3382,8 @@ const handleallblockchange = (event) => {
                 
                     <div className="col-md-4"><label className="labels">Furnishing</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadinfo.furnishing}</option>
+                    <option>---Select---</option>
                        {
                         furnishing.map(item=>
                             (
@@ -3220,11 +3393,20 @@ const handleallblockchange = (event) => {
                        }
                         </select>
                     </div>     
-                    <div className="col-md-4"></div>
+                   <div className="col-md-4"><label className="labels">Property Unit Type</label><select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,unit_type2:e.target.value})}>
+                               <option>{leadinfo.unit_type2}</option>
+                                <option>---Select---</option>
+                                <option>Corner</option>
+                                <option> Two Side Open</option>
+                                <option>Three Side Open</option>
+                                <option>Ordinary </option>
+                                </select>
+                    </div>
 
                     <div className="col-md-4"><label className="labels">Transaction Type</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
-                    <option>Select</option>
+                    <option>{leadinfo.transaction_type}</option>
+                    <option>---Select---</option>
                      {
                         transaction_type.map(item=>
                             (
@@ -3253,7 +3435,7 @@ const handleallblockchange = (event) => {
                     <div className="col-md-4"><label className="labels">Send Matched Deal</label>
                     <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
-                    value={matchdeals}
+                    value={leadinfo.matched_deal?leadinfo.matched_deal:matchdeals}
                     onChange={handlematcheddealChange}
                     renderValue={(selected) => selected.join(', ')}
                 >
@@ -3372,7 +3554,7 @@ const handleallblockchange = (event) => {
                                         <select className="form-control form-control-sm"
                                             onChange={(event) => handleeducationChange(index, event)}
                                         >
-                                            <option>{data1.education[index]}</option>
+                                            <option>{leadinfo.education[index]}</option>
                                             <option>choose</option>
                                             <option>Kindergaren</option><option>School</option><option>Primery Education</option><option> Secondary Education</option><option>Master</option><option>Commerce</option>
                                             <option>Vocational Education</option>
@@ -3391,7 +3573,7 @@ const handleallblockchange = (event) => {
                                             className="form-control form-control-sm"
                                             onChange={(event) => handledegreeChange(index, event)}
                                         >
-                                          <option>{data1.degree[index]}</option>
+                                          <option>{leadinfo.degree[index]}</option>
                                             <option>choose</option>
                                             <optgroup label='Bachelor’s '>
                                                 <option>Bachelor of Arts (BA) </option><option>Bachelor of Science (BS or BSc) </option><option>Bachelor of Fine Arts (BFA)</option><option> Bachelor of Education (BEd) </option>
@@ -3428,7 +3610,7 @@ const handleallblockchange = (event) => {
                                         <input
                                             type="text"
                                             className="form-control form-control-sm"
-                                            defaultValuevalue={data1.school_college[index]}
+                                            defaultValuevalue={leadinfo.school_college[index]}
                                             onChange={(event) => handleschool_collegeChange(index, event)}
                                         />
                                         
@@ -3457,7 +3639,7 @@ const handleallblockchange = (event) => {
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleloanchange(index,event)}
                                 >
-                                <option>{data1.loan[index]}</option><option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
+                                <option>{leadinfo.loan[index]}</option><option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
                                 <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                                 </select>
                             )):[]
@@ -3473,7 +3655,7 @@ const handleallblockchange = (event) => {
                                 className="form-control form-control-sm"
                                 onChange={(event)=>handlebankchange(index,event)}
                                 >
-                                  <option>{data1.bank[index]}</option>
+                                  <option>{leadinfo.bank[index]}</option>
                                 <option>Select</option>
                                     <option>State Bank of India (SBI) </option><option>Punjab National Bank (PNB)</option><option>Bank of Baroda</option><option>Canara Bank</option>
                                     <option>Union Bank of India</option><option>Bank of India (BOI)</option><option>Indian Bank </option><option>Central Bank of India</option>
@@ -3503,7 +3685,7 @@ const handleallblockchange = (event) => {
                             (
                                 <input type="text" 
                                 style={{marginTop:"10px"}}
-                                defaultValue={data1.amount[index]}
+                                defaultValue={leadinfo.amount[index]}
                                 className="form-control form-control-sm"
                                 onCanPlay={(event)=>handleamountchange(index,event)} />
                             )):[]
@@ -3530,7 +3712,7 @@ const handleallblockchange = (event) => {
                                 className='form-control form-control-sm'
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handlesocial_mediachange(index,event)}>
-                                <option>{data1.social_media[index]}</option>
+                                <option>{leadinfo.social_media[index]}</option>
                                 <option>select</option>
                                 <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                                 </select>
@@ -3544,7 +3726,7 @@ const handleallblockchange = (event) => {
                             leadinfo.url.map((item,index)=>
                             (
                                 <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                                defaultValue={data1.url[index]}
+                                defaultValue={leadinfo.url[index]}
                                 onChange={(event)=>handleurlChange(index,event)}/>
                             )):[]
                             }
@@ -3569,7 +3751,7 @@ const handleallblockchange = (event) => {
                                 className='form-control form-control-sm'
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handleincomechange(index,event)}>
-                            <option>{data1.income[index]}</option>
+                            <option>{leadinfo.income[index]}</option>
                             <option>select</option>
                             <option>Personal Income</option><option>Business Income</option>
                             </select>
@@ -3583,7 +3765,7 @@ const handleallblockchange = (event) => {
                             (
                                 <input type="text" 
                                 style={{marginTop:"10px"}}
-                                defaultValue={data1.amount1[index]}
+                                defaultValue={leadinfo.amount1[index]}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleamount1change(index,event)}
                                 />
@@ -3609,7 +3791,7 @@ const handleallblockchange = (event) => {
                                 <input type="text" 
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm" 
-                                defaultValue={data1.document_no[index]}
+                                defaultValue={leadinfo.document_no[index]}
                                 onChange={(event)=>handledocumentnochange(index,event)}
                                 />
                             )):[]
@@ -3624,7 +3806,7 @@ const handleallblockchange = (event) => {
                                 className='form-control form-control-sm'
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handledocumentnamechange(index,event)}>
-                            <option>{data1.document_name[index]}</option>
+                            <option>{leadinfo.document_name[index]}</option>
                             <option>select</option>
                             <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
                             <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>

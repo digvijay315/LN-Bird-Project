@@ -13,7 +13,7 @@
     "@mui/icons-material": "^5.16.5",
     "@mui/material": "^5.16.5",
     "@mui/x-date-pickers": "^7.8.0",
-    "@react-google-maps/api": "^2.19.3",
+    "@react-google-maps/api": "^2.20.6",
     "@syncfusion/ej2-react-calendars": "^26.1.38",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",

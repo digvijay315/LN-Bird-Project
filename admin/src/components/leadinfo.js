@@ -1,4 +1,4 @@
-import {React, useState,useEffect } from "react";
+import {React, useState,useEffect,useRef} from "react";
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { toast, ToastContainer } from "react-toastify";
@@ -1466,94 +1466,127 @@ const handleOwnerChange = (event) => {
 
 // ==============================================search loaction from google start========================================================
 
-                        const [coordinates, setCoordinates] = useState('');
+                    
+                        const inputRef = useRef(null);
+                        const apiKey = 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc';
+                      
+                        useEffect(() => {
+                          const scriptExists = document.querySelector('#google-maps-script');
+                          if (!scriptExists) {
+                            const script = document.createElement('script');
+                            script.id = 'google-maps-script';
+                            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+                            script.async = true;
+                            script.defer = true;
+                            script.onload = initializeAutocomplete;
+                            document.body.appendChild(script);
+                          } else {
+                            initializeAutocomplete();
+                          }
+                        }, []);
+                      
+                        const initializeAutocomplete = () => {
+                          if (!inputRef.current || !window.google) return;
+                      
+                          const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+                            types: ['geocode']
+                          });
+                      
+                          autocomplete.addListener('place_changed', () => {
+                            const place = autocomplete.getPlace();
+                            if (!place.geometry) return;
+                      
+                            const lat = place.geometry.location.lat();
+                            const lng = place.geometry.location.lng();
+                      
+                            const components = place.address_components;
+                            let address = '', city = '', zip = '', state = '', country = '';
+                      
+                            components.forEach(component => {
+                              const types = component.types;
+                              if (types.includes('route') || types.includes('sublocality')) {
+                                address += component.long_name + ' ';
+                              }
+                              if (types.includes('locality')) {
+                                city = component.long_name;
+                              }
+                              if (types.includes('postal_code')) {
+                                zip = component.long_name;
+                              }
+                              if (types.includes('administrative_area_level_1')) {
+                                state = component.long_name;
+                              }
+                              if (types.includes('country')) {
+                                country = component.long_name;
+                              }
+                            });
+                      
+                            setleadinfo(prev => ({
+                              ...prev,
+                              search_location: place.formatted_address,
+                              street_address: address.trim(),
+                              city2: city,
+                              pincode2: zip,
+                              state2: state,
+                              country2: country,
+                              lattitude: lat,
+                              longitude: lng
+                            }));
+                          });
+                        };
+                      
                         const getlocation = async (e) => {
-                                        e.preventDefault();
-                                        try {
-                                          // Geocode the address entered by the user
-                                          const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
-                                            params: {
-                                              address: leadinfo.search_location,
-                                              key: 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc' // Replace with your API key
-                                            }
-                                          });
-                                      
-                                          // Check if we have results from the geocoding response
-                                          if (response.data.results.length > 0) {
-                                            const { lat, lng } = response.data.results[0].geometry.location;
-                                            setCoordinates({ lat, lng });
-                                            setleadinfo(prevlead => ({
-                                              ...prevlead,
-                                              lattitude: lat,
-                                              longitude: lng
-                                            }));
-                                      
-                                            // Extract address components from the response
-                                            const addressComponents = response.data.results[0].address_components;
-                                            console.log('Geocode Response:', response.data);
-                                            let address = '';
-                                            let street = '';
-                                            let locality = '';
-                                            let city = '';
-                                            let zip = '';
-                                            let state = '';
-                                            let country = '';
-                                      
-                                            // Loop through address components to populate the fields
-                                            addressComponents.forEach(component => {
-                                              const types = component.types;
-                                      
-                                              if (types.includes('administrative_area_level_3') || types.includes('political')) {
-                                                address += component.long_name + ' ';
-                                              }
-                                              if (types.includes('sublocality_level_1') || types.includes('sublocality')) {
-                                                locality += component.long_name + ' ';
-                                              }
-                                              // if (types.includes('administrative_area_level_2')) {
-                                              //   locality = component.long_name;
-                                              // }
-                                              if (types.includes('administrative_area_level_1')) {
-                                                state = component.long_name;
-                                              }
-                                              if (types.includes('locality')) {
-                                                city = component.long_name;
-                                              }
-                                              if (types.includes('postal_code')) {
-                                                zip = component.long_name;
-                                              }
-                                              if (types.includes('country')) {
-                                                country = component.long_name;
-                                              }
-                                            });
-                                      
-                                            // Update the state with the extracted address components
-                                            setleadinfo(prevlead => ({
-                                              ...prevlead,
-                                              street_address:address,
-                                              // street: street.trim(),
-                                              // block:locality,
-                                              city2:city,
-                                              pincode2: zip,
-                                              state2:state,
-                                              country2:country,
-                                              location: response.data.results[0].formatted_address
-                                            }));
-                                      
-                                            // Optionally mark the map as loaded (if you use a map component)
-                                            
-                                      
-                                          } else {
-                                            // Handle case when no results are found
-                                            setCoordinates(null);
-                                            console.log('No results found');
-                                          }
-                                      
-                                        } catch (error) {
-                                          // Handle errors, such as invalid API key or issues with the network
-                                          console.error('Error fetching coordinates:', error);
-                                        }
-                                      };
-
+                          e.preventDefault();
+                          try {
+                            const res = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                              params: {
+                                address: leadinfo.search_location,
+                                key: apiKey
+                              }
+                            });
+                      
+                            if (res.data.results.length > 0) {
+                              const result = res.data.results[0];
+                              const lat = result.geometry.location.lat;
+                              const lng = result.geometry.location.lng;
+                      
+                              const components = result.address_components;
+                              let address = '', city = '', zip = '', state = '', country = '';
+                      
+                              components.forEach(component => {
+                                const types = component.types;
+                                if (types.includes('route') || types.includes('sublocality')) {
+                                  address += component.long_name + ' ';
+                                }
+                                if (types.includes('locality')) {
+                                  city = component.long_name;
+                                }
+                                if (types.includes('postal_code')) {
+                                  zip = component.long_name;
+                                }
+                                if (types.includes('administrative_area_level_1')) {
+                                  state = component.long_name;
+                                }
+                                if (types.includes('country')) {
+                                  country = component.long_name;
+                                }
+                              });
+                      
+                              setleadinfo(prev => ({
+                                ...prev,
+                                street_address: address.trim(),
+                                city2: city,
+                                pincode2: zip,
+                                state2: state,
+                                country2: country,
+                                lattitude: lat,
+                                longitude: lng
+                              }));
+                            }
+                          } catch (err) {
+                            console.error('Geocode error:', err);
+                          }
+                        };
 
 //================================================ search location from google end=====================================================
 
@@ -2025,17 +2058,18 @@ return (
                     </div>
 
                        <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
-                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
                        <div className="col-md-2"></div>
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
                         <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">Range</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}/></div>
+                        {/* <div className="col-md-2"><label className="labels">Range</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}/></div>
                         <div className="col-md-2"><label className="labels">Unit</label>
                         <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range_unit:e.target.value})}>
                           <option>---select---</option>
                           <option>K.M</option>
                         </select>
-                        </div>
+                        </div> */}
+                        <div className="col-md-4"></div>
 
                     <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
