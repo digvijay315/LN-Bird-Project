@@ -288,11 +288,11 @@ const handlePayment = async () => {
     try {
       // Step 1: Create Order on Backend
       const { data: order } = await api.post('payment', { formData });
-      console.log('Order Created:', order);
   
       // Step 2: Razorpay Checkout Options
       const options = {
         key: 'rzp_live_YBXf8NJT3Al7Qc',
+        // key: 'rzp_test_kh59VKLP3zCcop',
         amount: order.amount,
         currency: order.currency,
         name: 'Your Company Name',

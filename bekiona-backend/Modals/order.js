@@ -8,6 +8,8 @@ const order = new mongoose.Schema({
   email: String,
   apartmentNumber: String,
   orderid: String,
+  tracking_id: String,
+  shipment_id:String,
   area: String,
   landmark: String, 
   addressType: String,

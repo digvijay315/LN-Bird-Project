@@ -1,0 +1,29 @@
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
+import api from '../Components/api'
+
+function Trackorder() {
+
+    // React: Make API call to your backend
+    const[tracking_id,settracking_id]=useState("3245987")
+
+    const trackOrder = async () => {
+    const res = await api.post(`track-order/${tracking_id}`);
+
+    console.log("Tracking Info:", res);
+  };
+useEffect(()=>
+{
+    trackOrder()
+},[])
+  
+  return (
+    <div>
+
+            <h2>track your order</h2>
+      
+    </div>
+  )
+}
+
+export default Trackorder

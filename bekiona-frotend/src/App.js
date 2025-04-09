@@ -44,6 +44,7 @@ import Cudashboard from './Components/Customerdashboard/Cudashboard';
 import Myorders from './Components/Customerdashboard/myorders';
 import Usermessage from './Components/Admin/Usermessage';
 import Alluser from './Components/Admin/Alluser';
+import Trackorder from './Components/trackorder';
 
 
 
@@ -95,6 +96,7 @@ function App() {
      <Route path='/manageadds' element={<PrivateRoute><Manageadds/></PrivateRoute>}/>
      <Route path='/cudasboard' element={<PrivateRoute><Cudashboard/></PrivateRoute>}/>
      <Route path='/myorders' element={<PrivateRoute><Myorders/></PrivateRoute>}/>
+     <Route path='/track-order' element={<Trackorder/>}/>
      </Routes>
      </div>
      </BrowserRouter>

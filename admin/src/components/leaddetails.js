@@ -651,20 +651,20 @@ const[countall,setcountall]=useState('')
 
   //===========================------------------------------ update lead start=====================================---------------------------------
    
-    const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-          email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
-          sub_source:"",refrencer_no:"",intrested_project:"",
-          requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-          maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-          lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:"",block3:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
-          unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
-          profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
-          company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
-  
-          father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-          birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-          social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
-         })
+       const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+           email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
+           sub_source:"",refrencer_no:"",intrested_project:"",
+           requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+           maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+           lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+           unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
+           profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+           company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+   
+           father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+           birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+           social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
+          })
 
      const requirment=["Buy","Rent","Lease"];
                         const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
@@ -1624,141 +1624,133 @@ const handleroadChange = (event) => {
 };
 
 
-const[data11,setdata11]=useState([]);
-const fetchdatabyprojectcityname=async()=>
-{
-  
-  try {
-    const city=leadinfo.city2
-    console.log(city);
-    
-    const resp=await api.get(`viewprojectbycityname/${city}`)
-    console.log(resp);
-    
-    setdata11(resp.data.project)
-  } catch (error) {
-    console.log(error);
-  }
-}
-useEffect(() => {
-  fetchdatabyprojectcityname()
-   
-  
-}, [leadinfo.city2]);
+       const[data11,setdata11]=useState([]);
+                                      const fetchdatabyprojectcityname=async()=>
+                                      {
+                                        
+                                        try {
+                                          const city=leadinfo.city3
+                                          const resp=await api.get(`viewprojectbycityname/${city}`)
+                                          console.log(resp);
+                                          
+                                          setdata11(resp.data.project)
+                                        } catch (error) {
+                                          console.log(error);
+                                        }
+                                      }
+                                      useEffect(() => {
+                                        fetchdatabyprojectcityname()
+                                         
+                                        
+                                      }, [leadinfo.city3]);
 
-const allproject =[]
-data11.map((item)=>
-(
-    allproject.push(item.name)
-))
+                                      const allproject =[]
+                                      data11.map((item)=>
+                                      (
+                                          allproject.push(item.name)
+                                      ))
 
-const [units, setunits] = useState([]);
+                                      const [units, setunits] = useState([]);
+                                    
+                                      const [allblocks, setallblocks] = useState([]);
+                                    
+                                    
+                                      const fetchdatabyprojectname = async (projectNames) => {
+                                        try {
+                                          // Initialize a temporary array to hold all fetched units
+                                          const allUnits = [];
+                                      
+                                          // Fetch the data sequentially for each project
+                                          for (const projectName of projectNames) {
+                                            const resp = await api.get(`viewprojectbyname/${projectName}`);
+                                            const allFetchedUnits = resp.data.project; // Assuming resp.data.project is an array of units
+                                            allUnits.push(...allFetchedUnits); // Accumulate the fetched units
+                                          }
+                                      
+                                          // Update the state with the accumulated units
+                                          setunits(allUnits);
+                                        } catch (error) {
+                                          console.log(error);
+                                        }
+                                      };
+                                      
+                                      
+                                      useEffect(() => {
+                                        if (units.length >= 0) {
+                                         
+                                          const collectedblocks=units.flatMap(item=>item.add_block)
+                                 
+                                          setallblocks(collectedblocks) 
+                                         
+                                        }
+                                      }, [units]);
+                                    
+                                     
+                                     
+                                      
+                                    
+                                      
+                                      
+                                      
+                                      const handleprojectchange = (event) => {
+                                        const selectproject = event.target.value;
+                                    
+                                        // If the "Select All" option is selected
+                                        if (selectproject.includes('select-all')) {
+                                          // If all projects are already selected, deselect all
+                                          if (leadinfo.area_project.length === allproject.length) {
+                                            setleadinfo((prev) => {
+                                              const updateproject = { ...prev, area_project: [] }; // Deselect all
+                                              return updateproject;
+                                            });
+                                          } else {
+                                            // Select all projects
+                                            setleadinfo((prev) => {
+                                              const updateproject = { ...prev, area_project: allproject }; // Select all
+                                              fetchdatabyprojectname(allproject); // Fetch data with the selected projects
+                                              return updateproject;
+                                            });
+                                          }
+                                        } else {
+                                          // Handle individual project selection/deselection
+                                          setleadinfo((prev) => {
+                                            const updateproject = { ...prev, area_project: selectproject };
+                                            fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+                                            return updateproject;
+                                          });
+                                        }
+                                      };
+                                    
+                               
+                                    
+                                      const handleallblockchange = (event) => {
+                                        const selectblocks = event.target.value;
+                                    
+                                        // If the "Select All" option is selected
+                                        if (selectblocks.includes("select-all")) {
+                                          // If all blocks are selected, deselect all
+                                          if (leadinfo.block3.length === allblocks.length) {
+                                            setleadinfo((prev) => {
+                                              const updateblock = { ...prev, block3: [] }; // Deselect all
+                                              return updateblock;
+                                            });
+                                          } else {
+                                            // Select all blocks
+                                            const allBlockNames = allblocks.map(project => project.block_name);
+                                            setleadinfo((prev) => {
+                                              const updateblock = { ...prev, block3: allBlockNames }; // Select all
+                                              return updateblock;
+                                            });
+                                          }
+                                        } else {
+                                          // Handle individual block selection or deselection
+                                          setleadinfo((prev) => {
+                                            const updateblock = { ...prev, block3: selectblocks };
+                                            return updateblock;
+                                          });
+                                        }
+                                      }
 
-const [allblocks, setallblocks] = useState([]);
-
-
-const fetchdatabyprojectname = async (projectNames) => {
-
-  try {
-    
-      const resp = await api.get(`viewprojectbyname/${projectNames}`);
-      const allFetchedUnits= resp.data.project; 
-      setunits(allFetchedUnits);// Assuming resp.data.project is an array of units for that project
-    
-
-  
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-useEffect(() => {
-  if (units.length >= 0) {
-   
-    const collectedblocks=units.flatMap(item=>item.add_block)
-
-    setallblocks(collectedblocks) 
-   
-  }
-}, [units]);
-
-
-
-
-
-
-
-
-const handleprojectchange = (event) => {
-  const selectproject = event.target.value;
-
-  // If the "Select All" option is selected
-  if (selectproject.includes('select-all')) {
-    // If all projects are already selected, deselect all
-    if (leadinfo.area2.length === allproject.length) {
-      setleadinfo((prev) => {
-        const updateproject = { ...prev, area2: [] }; // Deselect all
-        return updateproject;
-      });
-    } else {
-      // Select all projects
-      setleadinfo((prev) => {
-        const updateproject = { ...prev, area2: allproject }; // Select all
-        fetchdatabyprojectname(allproject); // Fetch data with the selected projects
-        return updateproject;
-      });
-    }
-  } else {
-    // Handle individual project selection/deselection
-    setleadinfo((prev) => {
-      const updateproject = { ...prev, area2: selectproject };
-      fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-      return updateproject;
-    });
-  }
-};
-
-
-// const handleallunitschange = (event) => {
- 
-//   const selectunit = event.target.value
-
-  
-//     setdeal((prev) => {
-//       const updateunit = { ...prev, unit_number: selectunit };
-//       return updateunit; // Return the updated state
-//     });
-//   };
-
-
-     
-const handleallblockchange = (event) => {
-  const selectblocks = event.target.value;
-
-  // If the "Select All" option is selected
-  if (selectblocks.includes("select-all")) {
-    // If all blocks are selected, deselect all
-    if (leadinfo.block.length === allblocks.length) {
-      setleadinfo((prev) => {
-        const updateblock = { ...prev, block: [] }; // Deselect all
-        return updateblock;
-      });
-    } else {
-      // Select all blocks
-      const allBlockNames = allblocks.map(project => project.block_name);
-      setleadinfo((prev) => {
-        const updateblock = { ...prev, block: allBlockNames }; // Select all
-        return updateblock;
-      });
-    }
-  } else {
-    // Handle individual block selection or deselection
-    setleadinfo((prev) => {
-      const updateblock = { ...prev, block: selectblocks };
-      return updateblock;
-    });
-  }
-}
 
   const asianCountries = [
     "Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
@@ -1802,7 +1794,7 @@ const handleallblockchange = (event) => {
   };
 
   const states = Object.keys(statesAndCities);
-  const cities = statesAndCities[leadinfo.state2] || [];
+  const cities = statesAndCities[leadinfo.state3] || [];
 
 
   const selectlocation=()=>
@@ -3157,102 +3149,103 @@ const handleallblockchange = (event) => {
                              
                          </div>
 
-                           <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
-                        <div className="col-md-5"><label className="labels">Country</label>
-                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}>
-                        <option>{leadinfo.country2}</option>
-                    {asianCountries.map((country, index) => (
-                      <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
-                        {country}
-                      </option>
-                    ))}
-                          </select>
-                        </div>
-                       
-                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}>
-                        <option value="">{leadinfo.state2}</option>
-                      {states.map((state) => (
-                        <option key={state} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                          </select>
-                        </div>
-                        <div className="col-md-2"></div>
-
-                        <div className="col-md-5"><label className="labels">City</label>
-                        {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
-                          <option>---select country---</option>
-                          <option>India</option>
-                          </select> */}
-                             <select
-                    className="form-control form-control-sm"
-                    value={leadinfo.city2}
-                    onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}
-                    disabled={!leadinfo.state2 || cities.length === 0} // Disable if no state or invalid state
-                  >
-                    <option value="">--Select City--</option>
-                    {cities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                        </div>
-                        <div className="col-md-5">
-                      <label className="labels">Area/Project</label>
-                      <Select
-                        className="form-control form-control-sm"
-                        multiple
-                        value={leadinfo.area2}
-                        onChange={handleprojectchange}
-                        style={{ border: 'none' }}
-                        renderValue={(selected) => selected.join(', ')}
-                        label="Area/Project"
-                      >
-                        {/* "Select All" MenuItem */}
-                        <MenuItem value="select-all">
-                          <Checkbox checked={leadinfo.area2.length === allproject.length} />
-                          <ListItemText primary="--- Select All ---" />
-                        </MenuItem>
-
-                        {/* Individual Project MenuItems */}
-                        {allproject.map((project) => (
-                          <MenuItem key={project} value={project}>
-                            <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
-                            <ListItemText primary={project} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </div>
-                    <div className="col-md-5">
-                        <label className="labels">Block</label>
-                        <Select
-                          className="form-control form-control-sm"
-                          multiple
-                          value={leadinfo.block}
-                          onChange={handleallblockchange}
-                          style={{ border: "none" }}
-                          renderValue={(selected) => selected.join(', ')}
-                          label="Block"
-                        >
-                          {/* "Select All" MenuItem */}
-                          <MenuItem value="select-all">
-                            <Checkbox checked={leadinfo.block.length === allblocks.length} />
-                            <ListItemText primary="--- Select All ---" />
-                          </MenuItem>
-
-                          {/* Individual Block MenuItems */}
-                          {allblocks.map((project) => (
-                            <MenuItem key={project.block_name} value={project.block_name}>
-                              <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
-                              <ListItemText primary={project.block_name} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </div>
-                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" value={leadinfo.specific_unit} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
-                    </div>
+                                  <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
+                                                  <div className="col-md-5"><label className="labels">Country</label>
+                                                  <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country3:e.target.value})}>
+                                                  <option>India</option>
+                                              {asianCountries.map((country, index) => (
+                                                <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
+                                                  {country}
+                                                </option>
+                                              ))}
+                                                    </select>
+                                                  </div>
+                                                 
+                                                  <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
+                                                  <option value="">--Select State--</option>
+                                                {states.map((state) => (
+                                                  <option key={state} value={state}>
+                                                    {state}
+                                                  </option>
+                                                ))}
+                                                    </select>
+                                                  </div>
+                                                  <div className="col-md-2"></div>
+                          
+                                                  <div className="col-md-5"><label className="labels">City</label>
+                                                  {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
+                                                    <option>---select country---</option>
+                                                    <option>India</option>
+                                                    </select> */}
+                                                       <select
+                                              className="form-control form-control-sm"
+                                              value={leadinfo.city3}
+                                              onChange={(e)=>setleadinfo({...leadinfo,city3:e.target.value})}
+                                              disabled={!leadinfo.state3 || cities.length === 0} // Disable if no state or invalid state
+                                            >
+                                              <option value="">--Select City--</option>
+                                              {cities.map((city) => (
+                                                <option key={city} value={city}>
+                                                  {city}
+                                                </option>
+                                              ))}
+                                            </select>
+                                                  </div>
+                                                  <div className="col-md-5">
+                                                <label className="labels">Area/Project</label>
+                                                <Select
+                                                  className="form-control form-control-sm"
+                                                  multiple
+                                                  value={leadinfo.area_project}
+                                                  onChange={handleprojectchange}
+                                                  style={{ border: 'none' }}
+                                                  renderValue={(selected) => selected.join(', ')}
+                                                  label="Area/Project"
+                                                >
+                                                  {/* "Select All" MenuItem */}
+                                                  <MenuItem value="select-all">
+                                                    <Checkbox checked={leadinfo.area_project.length === allproject.length} />
+                                                    <ListItemText primary="--- Select All ---" />
+                                                  </MenuItem>
+                          
+                                                  {/* Individual Project MenuItems */}
+                                                  {allproject.map((project) => (
+                                                    <MenuItem key={project} value={project}>
+                                                      <Checkbox checked={leadinfo.area_project.indexOf(project) > -1} />
+                                                      <ListItemText primary={project} />
+                                                    </MenuItem>
+                                                  ))}
+                                                </Select>
+                                              </div>
+                                                  <div className="col-md-5">
+                                                  <label className="labels">Block</label>
+                                                  <Select
+                                                    className="form-control form-control-sm"
+                                                    multiple
+                                                    value={leadinfo.block3}
+                                                    onChange={handleallblockchange}
+                                                    style={{ border: "none" }}
+                                                    renderValue={(selected) => selected.join(', ')}
+                                                    label="Block"
+                                                  >
+                                                    {/* "Select All" MenuItem */}
+                                                    <MenuItem value="select-all">
+                                                      <Checkbox checked={leadinfo.block3.length === allblocks.length} />
+                                                      <ListItemText primary="--- Select All ---" />
+                                                    </MenuItem>
+                          
+                                                    {/* Individual Block MenuItems */}
+                                                    {[...new Map(allblocks.map(item => [item.block_name, item])).values()].map((project) => (
+                                                      <MenuItem key={project.block_name} value={project.block_name}>
+                                                        <Checkbox checked={leadinfo.block3.indexOf(project.block_name) > -1} />
+                                                        <ListItemText primary={project.block_name} />
+                                                      </MenuItem>
+                                                    ))}
+                                                  </Select>
+                                                </div>
+                                           
+                                                  <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                                              </div>
 
                     <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
                         <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>

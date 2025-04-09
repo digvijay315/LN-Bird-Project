@@ -607,7 +607,7 @@ const handleOwnerChange = (event) => {
         sub_source:"",refrencer_no:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-        lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+        lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
         unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
         profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
         company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
@@ -618,7 +618,7 @@ const handleOwnerChange = (event) => {
        })
 
        const states = Object.keys(statesAndCities);
-       const cities = statesAndCities[leadinfo.state2] || [];
+       const cities = statesAndCities[leadinfo.state3] || [];
         
         const navigate=useNavigate()
         const config = {
@@ -1046,9 +1046,7 @@ const handleOwnerChange = (event) => {
                                       {
                                         
                                         try {
-                                          const city=leadinfo.city2
-                                          console.log(city);
-                                          
+                                          const city=leadinfo.city3
                                           const resp=await api.get(`viewprojectbycityname/${city}`)
                                           console.log(resp);
                                           
@@ -1061,7 +1059,7 @@ const handleOwnerChange = (event) => {
                                         fetchdatabyprojectcityname()
                                          
                                         
-                                      }, [leadinfo.city2]);
+                                      }, [leadinfo.city3]);
 
                                       const allproject =[]
                                       data1.map((item)=>
@@ -1117,15 +1115,15 @@ const handleOwnerChange = (event) => {
                                         // If the "Select All" option is selected
                                         if (selectproject.includes('select-all')) {
                                           // If all projects are already selected, deselect all
-                                          if (leadinfo.area2.length === allproject.length) {
+                                          if (leadinfo.area_project.length === allproject.length) {
                                             setleadinfo((prev) => {
-                                              const updateproject = { ...prev, area2: [] }; // Deselect all
+                                              const updateproject = { ...prev, area_project: [] }; // Deselect all
                                               return updateproject;
                                             });
                                           } else {
                                             // Select all projects
                                             setleadinfo((prev) => {
-                                              const updateproject = { ...prev, area2: allproject }; // Select all
+                                              const updateproject = { ...prev, area_project: allproject }; // Select all
                                               fetchdatabyprojectname(allproject); // Fetch data with the selected projects
                                               return updateproject;
                                             });
@@ -1133,7 +1131,7 @@ const handleOwnerChange = (event) => {
                                         } else {
                                           // Handle individual project selection/deselection
                                           setleadinfo((prev) => {
-                                            const updateproject = { ...prev, area2: selectproject };
+                                            const updateproject = { ...prev, area_project: selectproject };
                                             fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
                                             return updateproject;
                                           });
@@ -1148,23 +1146,23 @@ const handleOwnerChange = (event) => {
                                         // If the "Select All" option is selected
                                         if (selectblocks.includes("select-all")) {
                                           // If all blocks are selected, deselect all
-                                          if (leadinfo.block.length === allblocks.length) {
+                                          if (leadinfo.block3.length === allblocks.length) {
                                             setleadinfo((prev) => {
-                                              const updateblock = { ...prev, block: [] }; // Deselect all
+                                              const updateblock = { ...prev, block3: [] }; // Deselect all
                                               return updateblock;
                                             });
                                           } else {
                                             // Select all blocks
                                             const allBlockNames = allblocks.map(project => project.block_name);
                                             setleadinfo((prev) => {
-                                              const updateblock = { ...prev, block: allBlockNames }; // Select all
+                                              const updateblock = { ...prev, block3: allBlockNames }; // Select all
                                               return updateblock;
                                             });
                                           }
                                         } else {
                                           // Handle individual block selection or deselection
                                           setleadinfo((prev) => {
-                                            const updateblock = { ...prev, block: selectblocks };
+                                            const updateblock = { ...prev, block3: selectblocks };
                                             return updateblock;
                                           });
                                         }
@@ -1961,7 +1959,7 @@ return (
 
                            <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
                         <div className="col-md-5"><label className="labels">Country</label>
-                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}>
+                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country3:e.target.value})}>
                         <option>India</option>
                     {asianCountries.map((country, index) => (
                       <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
@@ -1971,7 +1969,7 @@ return (
                           </select>
                         </div>
                        
-                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}>
+                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
                         <option value="">--Select State--</option>
                       {states.map((state) => (
                         <option key={state} value={state}>
@@ -1989,9 +1987,9 @@ return (
                           </select> */}
                              <select
                     className="form-control form-control-sm"
-                    value={leadinfo.city2}
-                    onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}
-                    disabled={!leadinfo.state2 || cities.length === 0} // Disable if no state or invalid state
+                    value={leadinfo.city3}
+                    onChange={(e)=>setleadinfo({...leadinfo,city3:e.target.value})}
+                    disabled={!leadinfo.state3 || cities.length === 0} // Disable if no state or invalid state
                   >
                     <option value="">--Select City--</option>
                     {cities.map((city) => (
@@ -2006,7 +2004,7 @@ return (
                       <Select
                         className="form-control form-control-sm"
                         multiple
-                        value={leadinfo.area2}
+                        value={leadinfo.area_project}
                         onChange={handleprojectchange}
                         style={{ border: 'none' }}
                         renderValue={(selected) => selected.join(', ')}
@@ -2014,14 +2012,14 @@ return (
                       >
                         {/* "Select All" MenuItem */}
                         <MenuItem value="select-all">
-                          <Checkbox checked={leadinfo.area2.length === allproject.length} />
+                          <Checkbox checked={leadinfo.area_project.length === allproject.length} />
                           <ListItemText primary="--- Select All ---" />
                         </MenuItem>
 
                         {/* Individual Project MenuItems */}
                         {allproject.map((project) => (
                           <MenuItem key={project} value={project}>
-                            <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
+                            <Checkbox checked={leadinfo.area_project.indexOf(project) > -1} />
                             <ListItemText primary={project} />
                           </MenuItem>
                         ))}
@@ -2032,7 +2030,7 @@ return (
                         <Select
                           className="form-control form-control-sm"
                           multiple
-                          value={leadinfo.block}
+                          value={leadinfo.block3}
                           onChange={handleallblockchange}
                           style={{ border: "none" }}
                           renderValue={(selected) => selected.join(', ')}
@@ -2040,14 +2038,14 @@ return (
                         >
                           {/* "Select All" MenuItem */}
                           <MenuItem value="select-all">
-                            <Checkbox checked={leadinfo.block.length === allblocks.length} />
+                            <Checkbox checked={leadinfo.block3.length === allblocks.length} />
                             <ListItemText primary="--- Select All ---" />
                           </MenuItem>
 
                           {/* Individual Block MenuItems */}
-                          {allblocks.map((project) => (
+                          {[...new Map(allblocks.map(item => [item.block_name, item])).values()].map((project) => (
                             <MenuItem key={project.block_name} value={project.block_name}>
-                              <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
+                              <Checkbox checked={leadinfo.block3.indexOf(project.block_name) > -1} />
                               <ListItemText primary={project.block_name} />
                             </MenuItem>
                           ))}

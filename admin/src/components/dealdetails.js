@@ -606,9 +606,9 @@ function Dealdetails() {
 
                       const updatedLeads = item.matchedleads.map((lead) => {
                         let matchScore = 0;
-                        if (lead.city2 === city) matchScore += 15;
-                        if (lead.area2.includes(project)) matchScore += 15;
-                        if (lead.block.includes(block)) matchScore += 10;
+                        if (lead.city3 === city) matchScore += 15;
+                        if (lead.area_project.includes(project)) matchScore += 15;
+                        if (lead.block3.includes(block)) matchScore += 10;
                         if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
 
                         if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 10;
@@ -3829,6 +3829,54 @@ const handleallblockchange = (event) => {
 
 //   updateDealsWithMatchedLeads();
 // }, [deals, leads]);
+
+
+
+
+// ===================================update deal each time while adding or delete lead start================================================
+
+useEffect(() => {
+  if (leaddata.length > 0 && data.length > 0) {
+    const updatedDeals = data.map((singleDeal) => {
+      const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
+
+      const matchedLeads = leaddata.filter(
+        (lead) => lead.requirment === availableFor
+      );
+
+      return {
+        ...singleDeal,
+        matchedleads: matchedLeads.map((lead) => lead._id),
+        matchinglead: matchedLeads.length,
+      };
+    });
+
+    // setDealList(updatedDeals);
+
+    // 🔁 Call PUT method for each updated deal
+    console.log(updatedDeals);
+    
+    updatedDeals.forEach(async (deal) => {
+      try {
+        const response = await api.put(`updatedeal/${deal._id}`,deal);
+
+        if (!response.status===200) {
+          console.error(`Failed to update deal ${deal._id}`);
+        } else {
+          console.log(`Successfully updated deal ${deal._id}`);
+        }
+      } catch (err) {
+        console.error(`Error updating deal ${deal._id}:`, err);
+      }
+    });
+  }
+}, [data,leaddata]);
+
+
+
+
+
+// ===================================update deal each time while adding or delete lead  end===========================================
 
 
                   

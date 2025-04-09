@@ -419,38 +419,38 @@ const handleallunitschange = (event) => {
 
 
 // ===============================add deal state,and function start=====================================================================
-const [deals, setDeals] = useState([]);
+// const [deals, setDeals] = useState([]);
 
-const previousDealsRef = useRef([]);
-// Function to fetch multiple deals (assuming you fetch all deals from the backend)
-const fetchDeals = async () => {
-  try {
-    const response = await api.get('viewdeal'); // Get all deals from API
-    setDeals(response.data.deal);
-  } catch (error) {
+// const previousDealsRef = useRef([]);
+// // Function to fetch multiple deals (assuming you fetch all deals from the backend)
+// const fetchDeals = async () => {
+//   try {
+//     const response = await api.get('viewdeal'); // Get all deals from API
+//     setDeals(response.data.deal);
+//   } catch (error) {
 
-    console.error('Error fetching deals:', error);
-  }
-};
+//     console.error('Error fetching deals:', error);
+//   }
+// };
 
-const[fetchingdeal,setfeatchingdeal]=useState([])
-const fetchDealsinventory
- = async () => {
-  try {
-    const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
-    console.log(response);
+// const[fetchingdeal,setfeatchingdeal]=useState([])
+// const fetchDealsinventory
+//  = async () => {
+//   try {
+//     const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
+//     console.log(response);
     
-    setfeatchingdeal(response.data.project.add_unit[0]);
-  } catch (error) {
-    console.error('Error fetching deals:', error);
-  }
-};
+//     setfeatchingdeal(response.data.project.add_unit[0]);
+//   } catch (error) {
+//     console.error('Error fetching deals:', error);
+//   }
+// };
 
-React.useEffect(()=>
-{
-  fetchDealsinventory()
+// React.useEffect(()=>
+// {
+//   fetchDealsinventory()
 
-},[deal.project,deal.block,deal.unit_number])
+// },[deal.project,deal.block,deal.unit_number])
 
 
 
@@ -467,10 +467,10 @@ React.useEffect(()=>
 // };
 
 // Fetch all deals and data2 when the component mounts
-React.useEffect(() => {
-  fetchDeals();
+// React.useEffect(() => {
+//   fetchDeals();
   
-}, []); // Empty dependency array ensures this runs only once when the component mounts
+// }, []); // Empty dependency array ensures this runs only once when the component mounts
 
 // Recalculate matched leads for each deal whenever data2 changes
 React.useEffect(() => {
