@@ -22,7 +22,7 @@ const lead_info=async(req,res)=>
                 company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url, 
                 father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,birth_date,
                 anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,income,amount1,
-                document_no,document_name,document_pic,lastcommunication}=req.body;
+                document_no,document_name,document_pic,lastcommunication,matcheddeals,matchingdeal}=req.body;
                 
                 // const user=await leadinfo.findOne({email})
                 // if(user)
@@ -51,7 +51,7 @@ const lead_info=async(req,res)=>
                     company_phone,company_email,area,location,city,pincode,state,country,industry,company_social_media,company_url, 
                     father_husband_name,h_no,area1,location1,city1,pincode1,state1,country1,gender,maritial_status,birth_date,
                     anniversary_date,education,degree,school_college,loan,bank,amount,social_media,url,income,amount1,
-                    document_no,document_name,document_pic:newDocumentPic,lastcommunication})
+                    document_no,document_name,document_pic:newDocumentPic,lastcommunication,matcheddeals,matchingdeal})
                 
                     const resp=await newleadinfo.save();
                     res.status(200).send({message:"lead information saved",lead:resp})
@@ -64,7 +64,7 @@ const lead_info=async(req,res)=>
     const leadinfo_find=async(req,res)=>
         {
             try {
-                const resp=await leadinfo.find()
+                const resp=await leadinfo.find().populate('matcheddeals')
                 if(!resp)
                     {
                         return res.send("no lead infomartion available")

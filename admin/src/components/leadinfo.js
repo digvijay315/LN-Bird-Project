@@ -608,14 +608,14 @@ const handleOwnerChange = (event) => {
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
         lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
-        unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
+        unit_type2:"",white_portion:"",furnishing:"",
         profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
         company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
         father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
         birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-        social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
-       })
+        social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],
+        matcheddeals:[],matchingdeal:"",})
 
        const states = Object.keys(statesAndCities);
        const cities = statesAndCities[leadinfo.state3] || [];
@@ -1589,6 +1589,51 @@ const handleOwnerChange = (event) => {
 //================================================ search location from google end=====================================================
 
 
+//========================================= matched deal code start==================================================================
+                 
+   const[data2,setdata2]=useState([]);
+        const fetchdata2=async()=>
+        {
+          
+          try {
+            const resp=await api.get('viewdeal')
+            setdata2(resp.data.deal)
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+  useEffect(()=>
+    {fetchdata2()},[])
+
+                          useEffect(() => {
+                          if (data2.length >0) {
+                            
+                             
+                              const availableFor = leadinfo.requirment === 'Buy' ? 'Sale' : leadinfo.requirment;
+                              
+                        
+                              // Filter leads based on the current deal's criteria
+                              const filtereddeals = data2.filter(
+                                (item) =>
+                                  item.available_for === availableFor 
+                                
+                              );
+                        
+                        
+                              // Create a new deal object with updated matched leads and matched lead count
+                            
+                              
+                              setleadinfo({
+                                ...leadinfo,
+                                matcheddeals: filtereddeals.map(item => item._id),
+                                matchingdeal: filtereddeals.length, // Update the matched lead count
+                              })
+                            
+                          }
+                        }, [leadinfo.requirment]); // Trigger this effect whenever `data2` or `deals` changes
+
+// ================================================matched deals code end===========================================================
 
 
 

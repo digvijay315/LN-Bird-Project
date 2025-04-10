@@ -335,83 +335,83 @@ const handleallunitschange = (event) => {
     /*-------------------------------------------------------------------form next and prev buttons display code start----------------------------------------------------- */
 
  
-  function handler()
-    {
-        document.getElementById("projectform").style.display="none";
-        document.getElementById("basicform").style.display="flex";
+  // function handler()
+  //   {
+  //       document.getElementById("projectform").style.display="none";
+  //       document.getElementById("basicform").style.display="flex";
 
-        document.getElementById("projectbtn").style.display="none";
-        document.getElementById("basicbtn").style.display="block";
-        document.getElementById("prevbtn").style.display="block";
+  //       document.getElementById("projectbtn").style.display="none";
+  //       document.getElementById("basicbtn").style.display="block";
+  //       document.getElementById("prevbtn").style.display="block";
 
-        document.getElementById("projectlabel").style.color="black";
-        document.getElementById("basiclabel").style.color="green";
-    }
-    function handler2()
-    {
-        document.getElementById("projectform").style.display="block";
-        document.getElementById("basicform").style.display="none";
+  //       document.getElementById("projectlabel").style.color="black";
+  //       document.getElementById("basiclabel").style.color="green";
+  //   }
+  //   function handler2()
+  //   {
+  //       document.getElementById("projectform").style.display="block";
+  //       document.getElementById("basicform").style.display="none";
 
-        document.getElementById("projectbtn").style.display="block";
-        document.getElementById("basicbtn").style.display="none";
-        document.getElementById("prevbtn").style.display="none";
+  //       document.getElementById("projectbtn").style.display="block";
+  //       document.getElementById("basicbtn").style.display="none";
+  //       document.getElementById("prevbtn").style.display="none";
 
-        document.getElementById("projectlabel").style.color="green";
-        document.getElementById("basiclabel").style.color="black";
-    }
-    function handler3()
-    {
-      document.getElementById("photolabel").style.color="green";
-      document.getElementById("basiclabel").style.color="black";
+  //       document.getElementById("projectlabel").style.color="green";
+  //       document.getElementById("basiclabel").style.color="black";
+  //   }
+  //   function handler3()
+  //   {
+  //     document.getElementById("photolabel").style.color="green";
+  //     document.getElementById("basiclabel").style.color="black";
 
-      document.getElementById("photosform").style.display="block";
-      document.getElementById("basicform").style.display="none";
+  //     document.getElementById("photosform").style.display="block";
+  //     document.getElementById("basicform").style.display="none";
 
-      document.getElementById("basicbtn").style.display="none";
-      document.getElementById("prevbtn").style.display="none";
-      document.getElementById("photosbtn").style.display="block";
-      document.getElementById("prevbtn1").style.display="block";
-    }
-    function handler4()
-    {
-      document.getElementById("photolabel").style.color="black";
-      document.getElementById("basiclabel").style.color="green";
+  //     document.getElementById("basicbtn").style.display="none";
+  //     document.getElementById("prevbtn").style.display="none";
+  //     document.getElementById("photosbtn").style.display="block";
+  //     document.getElementById("prevbtn1").style.display="block";
+  //   }
+  //   function handler4()
+  //   {
+  //     document.getElementById("photolabel").style.color="black";
+  //     document.getElementById("basiclabel").style.color="green";
 
-      document.getElementById("photosform").style.display="none";
-      document.getElementById("basicform").style.display="block";
+  //     document.getElementById("photosform").style.display="none";
+  //     document.getElementById("basicform").style.display="block";
 
-      document.getElementById("basicbtn").style.display="block";
-      document.getElementById("prevbtn").style.display="block";
-      document.getElementById("photosbtn").style.display="none";
-      document.getElementById("prevbtn1").style.display="none";
-    }
-    function handler5()
-    {
-      document.getElementById("photolabel").style.color="black";
-      document.getElementById("ownerlabel").style.color="green";
+  //     document.getElementById("basicbtn").style.display="block";
+  //     document.getElementById("prevbtn").style.display="block";
+  //     document.getElementById("photosbtn").style.display="none";
+  //     document.getElementById("prevbtn1").style.display="none";
+  //   }
+  //   function handler5()
+  //   {
+  //     document.getElementById("photolabel").style.color="black";
+  //     document.getElementById("ownerlabel").style.color="green";
 
-      document.getElementById("photosform").style.display="none";
-      document.getElementById("ownerform").style.display="block";
+  //     document.getElementById("photosform").style.display="none";
+  //     document.getElementById("ownerform").style.display="block";
 
-      document.getElementById("photosbtn").style.display="none";
-      document.getElementById("prevbtn1").style.display="none";
-      document.getElementById("ownerbtn").style.display="block";
-      document.getElementById("prevbtn2").style.display="block";
+  //     document.getElementById("photosbtn").style.display="none";
+  //     document.getElementById("prevbtn1").style.display="none";
+  //     document.getElementById("ownerbtn").style.display="block";
+  //     document.getElementById("prevbtn2").style.display="block";
     
-    }
-    function handler6()
-    {
-      document.getElementById("photolabel").style.color="green";
-      document.getElementById("ownerlabel").style.color="black";
+  //   }
+  //   function handler6()
+  //   {
+  //     document.getElementById("photolabel").style.color="green";
+  //     document.getElementById("ownerlabel").style.color="black";
 
-      document.getElementById("photosform").style.display="block";
-      document.getElementById("ownerform").style.display="none";
+  //     document.getElementById("photosform").style.display="block";
+  //     document.getElementById("ownerform").style.display="none";
 
-      document.getElementById("photosbtn").style.display="block";
-      document.getElementById("prevbtn1").style.display="block";
-      document.getElementById("ownerbtn").style.display="none";
-      document.getElementById("prevbtn2").style.display="none";
-    }
+  //     document.getElementById("photosbtn").style.display="block";
+  //     document.getElementById("prevbtn1").style.display="block";
+  //     document.getElementById("ownerbtn").style.display="none";
+  //     document.getElementById("prevbtn2").style.display="none";
+  //   }
 
 
 /*-------------------------------------------------------------------form next and prev buttons display code end----------------------------------------------------- */

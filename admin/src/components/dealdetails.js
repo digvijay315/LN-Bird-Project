@@ -3835,6 +3835,8 @@ const handleallblockchange = (event) => {
 
 // ===================================update deal each time while adding or delete lead start================================================
 
+
+
 useEffect(() => {
   if (leaddata.length > 0 && data.length > 0) {
     const updatedDeals = data.map((singleDeal) => {

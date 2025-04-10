@@ -1450,7 +1450,8 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
 // ==============================----------------------add unit start===========================================---------------------------
                                           const[unit,setunit]=useState([])
-                                          const[units,setunits]=useState({project_name:"",unit_no:"",unit_type:"",category:"",block:"",
+                                          const[units,setunits]=useState({project_name:"",unit_no:"",unit_type:"",category:"",
+                                                                          sub_category:[],block:"",
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                                                           total_land_area:"",
                                                                           water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
@@ -1677,6 +1678,29 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                                 image: newpic1
                                                                               });
                                                                             };
+                                                                     
+                                                                            const handleSubCategoryChange1 = (event) => {
+                                                                              const {
+                                                                                target: { value },
+                                                                              } = event;
+                                                                              // Ensure the value is an array if multiple options are selected
+                                                                              setunits({ ...units, sub_category: typeof value === "string" ? value.split(",") : value });
+                                                                          
+                                                                            };
+                                                              
+                                                                            const handleToggle1 = (value) => {
+                                                                              const currentIndex = units.sub_category.indexOf(value);
+                                                                              const newChecked = [...units.sub_category];
+                                                                          
+                                                                              if (currentIndex === -1) {
+                                                                                newChecked.push(value);
+                                                                              } else {
+                                                                                newChecked.splice(currentIndex, 1);
+                                                                              }
+                                                                          
+                                                                              setunits({ ...units, sub_category: newChecked });
+                                                                         
+                                                                            };  
                                                                      
 
 
@@ -4306,6 +4330,34 @@ const generateExcelFileunit = () => {
                       }
                     </div>
                     </div>
+
+                    <div className="col-md-6"><label className="labels">Sub Category</label>
+                    
+                    <Select
+                    className='form-control form-control-sm'
+                    style={{border:"none"}}
+          labelId="subcategory-label"
+          id="subcategory"
+          multiple
+          value={units.sub_category}
+          onChange={handleSubCategoryChange1}
+          renderValue={(selected) => selected.join(", ")} 
+        >
+          <MenuItem value="">
+            <em>Select</em>
+          </MenuItem>
+          {project.sub_category.map((subCategory) => (
+            <MenuItem key={subCategory} value={subCategory}>
+              <Checkbox
+                checked={units.sub_category.indexOf(subCategory) > -1}
+                onChange={() => handleToggle1(subCategory)}
+              />
+              <ListItemText primary={subCategory} />
+            </MenuItem>
+          ))}
+        </Select>
+                    </div>
+                    <div className='col-md-6'></div>
 
                     <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
                     <option>choose</option>

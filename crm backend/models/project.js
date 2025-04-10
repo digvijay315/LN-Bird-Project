@@ -45,6 +45,7 @@ const blockSchema = new mongoose.Schema({
     unit_no: {type: String},
     unit_type: {type:String},
     category: {type: Array },
+    sub_category: {type: Array },
     block: { type: String},
     size: {type: String},
     direction: {type: String},

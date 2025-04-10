@@ -64,6 +64,7 @@ unitDetails={
   associated_contact: unit.associated_contact,
   unit_type: unit.unit_type,
   category: unit.category,
+  sub_category:unit.sub_category,
   block: unit.block,
   size: unit.size,
   direction: unit.direction,
@@ -311,6 +312,7 @@ unitDetails={
                     associated_contact: unit.associated_contact,
                     unit_type: unit.unit_type,
                     category: unit.category,
+                    sub_category:unit.sub_category,
                     block: unit.block,
                     size: unit.size,
                     direction: unit.direction,
@@ -440,6 +442,8 @@ unitDetails={
                 try {
                   // Retrieve project_name, block, and unit_no from request params or body
                   const { project_name, block, unit_no } = req.params; // Assuming you are sending these in the request body
+             
+                  
                   
                   // Perform the query on the project model and filter the add_unit array using $elemMatch
                   // const project = await addproject.findOne(
@@ -533,6 +537,7 @@ unitDetails={
               associated_contact:unit.associated_contact,
               unit_type: unit.unit_type,
               category: unit.category,
+              sub_category:unit.sub_category,
               block: unit.block,
               size: unit.size,
               direction: unit.direction,
@@ -684,6 +689,7 @@ unitDetails={
                         associated_contact: unit.associated_contact,
                         unit_type: unit.unit_type,
                         category: unit.category,
+                        sub_category:unit.sub_category,
                         block: unit.block,
                         size: unit.size,
                         direction: unit.direction,

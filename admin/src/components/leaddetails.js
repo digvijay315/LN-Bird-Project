@@ -24,6 +24,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
+import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
+import Swal from "sweetalert2";
 
 
 function Leadfetch() {
@@ -422,7 +424,7 @@ const[countall,setcountall]=useState('')
       { id: 'requirment', name: 'Requirment' },
       { id: 'budget', name: 'Budget' },
       { id: 'location', name: 'Location' },
-      { id: 'matcheddeal', name: 'Matched_Deal' },
+      { id: 'matchingdeal', name: 'Matched_Deal' },
       { id: 'stage', name: 'Status' },
       { id: 'source', name: 'Source' },
       { id: 'owner', name: 'OwnerShip' },
@@ -2480,6 +2482,263 @@ const handleroadChange = (event) => {
 //================================================ search location from google end=====================================================
 
 
+// ======================================update lead each time while adding or delete deals start========================================
+
+
+  const[dealdata,setdealdata]=useState([])
+    const fetchdealdata=async(event)=>
+        {
+          
+          try {
+            const resp=await api.get('viewdeal')
+            const all=(resp.data.deal)
+            setdealdata(all)
+          } catch (error) {
+            console.log(error);
+          }
+        
+        }
+
+        useEffect(()=>
+        {
+          fetchdealdata()
+
+        },[])
+
+
+useEffect(() => {
+  if (dealdata.length > 0 && data.length > 0) {
+    const updatedleads = data.map((singlelead) => {
+      const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.available_for;
+
+      const matcheddeals = dealdata.filter(
+        (deal) => deal.available_for === availableFor
+      );
+
+      return {
+        ...singlelead,
+        matcheddeals: matcheddeals.map((lead) => lead._id),
+        matchingdeal: matcheddeals.length,
+      };
+    });
+
+    // setDealList(updatedDeals);
+
+    // 🔁 Call PUT method for each updated deal
+  
+    
+    updatedleads.forEach(async (lead) => {
+      try {
+        const response = await api.put(`updatelead/${lead._id}`,lead);
+
+        if (!response.status===200) {
+          console.error(`Failed to update deal ${lead._id}`);
+        } else {
+          console.log(`Successfully updated deal ${lead._id}`);
+        }
+      } catch (err) {
+        console.error(`Error updating deal ${lead._id}:`, err);
+      }
+    });
+  }
+}, [data,dealdata]);
+
+// ======================================update lead each time while adding or delete deals start========================================
+
+
+// ================================modal for showing matching leads start==============================================================
+
+ const [matcheddeals, setMatcheddeals] = useState([]);
+                        
+                  const dealallColumns = [
+                    { id: 'score', name: 'Score' },
+                    { id: 'unit_number', name: 'Unit Number' },
+                    { id: 'matched_percentange', name: 'Matched %' },
+                    { id: 'location', name: 'Project Name' },
+                    { id: 'block', name: 'Block' },
+                    { id: 'available_for', name: 'For' },
+                    { id: 'size', name: 'Size' },
+                    { id: 'project_category', name: 'Category' },
+                    { id: 'project_subcategory', name: 'Sub Category' },
+                    { id: 'expected_price', name: 'Price' }
+                  ]
+
+                  const leadallColumns = [
+                   
+                
+                    { id: 'lead_details', name: 'Lead Details' },
+                 
+                    
+                    { id: 'requirment', name: 'Requirment' },
+                    { id: 'budget', name: 'Budget' },
+                    { id: 'stage', name: 'Stage' },
+                    { id: 'source', name: 'Source' },
+                    { id: 'recived_on', name: 'Recived On' },
+                    { id: 'site_visit', name: 'Site Visit' }
+                  
+                  ]
+
+
+                    const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
+                                    const [selectAll1, setSelectAll1] = useState(false);
+                                    const handleSelectAll1 = () => {
+                                      
+                                      setSelectAll1(!selectAll1);
+                                      if (!selectAll1) {
+                                        // Add all current page item IDs to selectedItems
+                                        setSelectedItems1(lead1.map((item) => item._id));
+                                      } else {
+                                        // Deselect all
+                                        setSelectedItems1([]);
+                                     
+                                      }
+                                    };
+                                  
+                                    const handleRowSelect1 = (id) => {
+                                     
+                                      if (selectedItems1.includes(id)) {
+                                        setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
+                                      } else {
+                                        setSelectedItems1([...selectedItems1, id]);
+                                      
+                                      }
+                                    };
+
+
+                                          
+                                                      const [show11, setshow11] = useState(false);
+                                        
+                                                      const handleClose11 = () => 
+                                                        {
+                                                          setshow11(false);
+                                                        
+                                                          
+                                                        }
+                                                      const handleShow11=()=>
+                                                      {
+                                                        
+                                                        setshow11(true);
+                                                       
+                                                      }
+
+                                       const[deal1,setdeal1]=useState([])
+                                                      const[lead1,setlead1]=useState([])
+                                                      const[deallocation,setdeallocation]=useState("")
+                                    
+                                                      const[fetchingdeal,setfeatchingdeal]=useState([])
+                                    
+                                                      const handleMatchLeadClick = async (item) => {
+                                                        try {
+                                                          setMatcheddeals([]);
+                                                          handleShow11();
+                                                          setlead1([item]);
+                                                          setdeal1(item.matcheddeals);
+                                                      
+                                                          const allUpdateddeals = [];
+                                                      
+                                                          const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
+                                                            const R = 6371;
+                                                            const dLat = (lat2 - lat1) * Math.PI / 180;
+                                                            const dLon = (lon2 - lon1) * Math.PI / 180;
+                                                            const a =
+                                                              Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                                                              Math.cos(lat1 * Math.PI / 180) *
+                                                              Math.cos(lat2 * Math.PI / 180) *
+                                                              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+                                                            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                                                            return R * c;
+                                                          };
+                                                      
+                                                          for (const deal of item.matcheddeals) {
+                                                            try {
+                                                        
+                                                              const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
+                                                              const unitData = response?.data?.project?.add_unit?.[0];
+                                                              
+                                                              
+                                                              if (!unitData) {
+                                                                console.warn(`No unit found for: Project=${deal.project}, Block=${deal.block}, Unit=${deal.unit_number}`);
+                                                                continue;
+                                                              }
+                                                      
+                                                              const project = deal.project;
+                                                              const block = deal.block;
+                                                              const unit = deal.unit_number;
+                                                              const price = deal.expected_price;
+                                                      
+                                                              const propertytype = Array.isArray(unitData.category) ? unitData.category : [unitData.category];
+                                                              const unittype = unitData.unit_type;
+                                                              const facing = unitData.facing;
+                                                              const road = unitData.road;
+                                                              const city = unitData.ucity;
+                                                              const direction = unitData.direction;
+                                                              const deallat = parseFloat(unitData.lattitude);
+                                                              const deallang = parseFloat(unitData.langitude);
+                                                      
+                                                            
+                                                                let matchScore = 0;
+                                                      
+                                                                // if (lead.city3 === city) matchScore += 15;
+                                                                // if (lead.area_project.includes(project)) matchScore += 15;
+                                                                // if (lead.block3.includes(block)) matchScore += 10;
+                                                                // if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
+                                                      
+                                                                // if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 10;
+                                                                // if (Array.isArray(lead.property_type) && propertytype.some(type => lead.property_type.includes(type))) matchScore += 10;
+                                                                // if (unittype === lead.unit_type2) matchScore += 10;
+                                                                // if (lead.facing.includes(facing)) matchScore += 5;
+                                                                // if (lead.road.includes(road)) matchScore += 5;
+                                                                // if (lead.direction && lead.direction === direction) matchScore += 10;
+                                                      
+                                                                // if (lead.lattitude && lead.longitude) {
+                                                                //   const leadLat = parseFloat(lead.lattitude);
+                                                                //   const leadLng = parseFloat(lead.longitude);
+                                                                //   const distance = getDistanceInKm(deallat, deallang, leadLat, leadLng);
+                                                      
+                                                                //   let locationMatch = 0;
+                                                                //   if (distance <= 1) locationMatch = 25;
+                                                                //   else if (distance <= 2) locationMatch = 17;
+                                                                //   else if (distance <= 3) locationMatch = 15;
+                                                                //   else if (distance <= 4) locationMatch = 12;
+                                                                //   else if (distance <= 5) locationMatch = 10;
+                                                                //   else if (distance <= 8) locationMatch = 7;
+                                                                //   else if (distance <= 11) locationMatch = 5;
+                                                      
+                                                                //   matchScore += locationMatch;
+                                                                // }
+                                                      
+                                                                const updatedDeal = { ...deal, matchPercentage: matchScore };
+                                                     
+                                                                allUpdateddeals.push(updatedDeal);
+                                                              
+                                                            } catch (dealError) {
+                                                              console.warn(`Error fetching unit for deal: ${deal.project}, ${deal.unit_number}, ${deal.block}`, dealError.message);
+                                                              continue; // Skip current deal if there's an error
+                                                            }
+                                                          }
+                                                          setMatcheddeals(allUpdateddeals);
+                                                      
+                                                          
+                                                        } catch (error) {
+                                                          console.error("Error during matching process:", error);
+                                                          Swal.fire({
+                                                            icon: 'error',
+                                                            title: 'Error!',
+                                                            text: 'Something went wrong while matching leads. Please try again later.',
+                                                            confirmButtonColor: '#d33',
+                                                            confirmButtonText: 'OK',
+                                                          });
+                                                        }
+                                                      };
+                                                      
+                                                
+                                                      
+
+
+
+// ==============================modal for showing matching leads end==============================================================
+
+
 
 
   return ( 
@@ -2702,10 +2961,12 @@ const handleroadChange = (event) => {
             {visibleColumns
               .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')
               .map((col) => (
+                
                 <StyledTableCell 
-                  key={col.id} 
-                  style={{ padding: "10px" }}
-                >
+                key={col.id} 
+                style={{ padding: "10px", cursor: col.id === 'matchingdeal' ? 'pointer' : 'default' }}
+                onClick={col.id === 'matchingdeal' ? () => handleMatchLeadClick(item) : undefined} // Handle click if it's 'matchlead'
+              >
                    {col.id === 'budget' 
                     ?(
                       <>
@@ -4243,6 +4504,283 @@ const handleroadChange = (event) => {
           </Modal>
 
 
+
+{/*=============================== modal for showing matching deals======================================================================== */}
+
+
+  <Modal  show={show11} onHide={handleClose11} size='xl' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Matched Deals for {deallocation}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <TableHead>
+      
+
+        {/* Render the column headers */}
+        <TableRow>
+          {leadallColumns.map((col) => (
+            // Only render columns that are NOT in the removedColumns list
+          
+              <StyledTableCell key={col.id} >
+                <span>{col.name}</span>
+
+              
+              </StyledTableCell>
+            
+          ))}
+           <TableRow>
+          {/* Single Filter Image Icon */}
+          <StyledTableCell >
+            <Tooltip title="Click to toggle filter" arrow>
+              <img
+                src="https://static-00.iconduck.com/assets.00/filter-icon-1024x1024-g4w8llud.png"
+                alt="filter"
+                style={{ height: '35px', border: 'none', cursor: 'pointer' }}
+                // Toggle the visibility of '-' buttons
+              />
+            </Tooltip>
+          </StyledTableCell>
+        </TableRow>
+        </TableRow>
+      </TableHead>
+    
+      <tbody>
+        {
+         
+        lead1.map ((item, index) => (
+          <StyledTableRow key={index}>
+            
+            {leadallColumns
+              .filter((col) => col.id !== 'sno')
+              .map((col) => (
+              
+                <StyledTableCell 
+                key={col.id} 
+                style={{ padding: "10px" }}
+                
+              >
+                {item[col.id]}
+              </StyledTableCell>
+              ))}
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+  <div style={{marginTop:"10px",backgroundColor:"gray",padding:"12px",height:"60px",display:"flex",gap:"10px"}}>
+     
+      <input id="search" type="text"  className="form-control form-control-sm form-control form-control-sm-sm" placeholder="Type here for search" style={{width:"25%"}} />
+      <div style={{marginLeft:"45%"}}><button className="form-control form-control-sm">Send Details</button></div>
+      <div><button className="form-control form-control-sm">Mark As Intrested</button></div>
+      </div>
+
+      <TableContainer component={Paper} style={{marginTop:"20px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell>
+          {dealallColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+              
+            </StyledTableCell>
+          ))}
+      
+        </TableRow>
+       
+      </TableHead>
+    
+      <tbody>
+        {
+         [...matcheddeals]
+         .sort((a, b) => b.matchPercentage - a.matchPercentage) .map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell >
+              <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            
+            
+            {dealallColumns
+              .filter((col) => col.id !== 'sno' )
+              .map((col) => (
+                <StyledTableCell 
+                key={col.id} 
+                style={{ padding: "10px" }}
+                
+              >
+                
+                { col.id === 'lead_details' ? (
+              <>
+                {item.title} {item.first_name} {item.last_name} <br></br>
+             {
+              Array.isArray(item.mobile_no) 
+                ? item.mobile_no.map((mobile, index) => (
+                    <div key={index}>
+                      <SvgIcon component={PhoneIphoneIcon} />
+                      <span style={{ color: "#9400D3" }}>{mobile}</span>
+                    </div>
+                  ))
+                :  <div>
+                    <SvgIcon component={PhoneIphoneIcon} />  
+                    <span style={{ color: "#9400D3" }}>{item.mobile_no}</span> 
+                </div> 
+            }
+              </>
+            ) : col.id === 'stage' ? (
+              <>
+                {item.stage} <br />
+                <span style={{ color: item.lead_type === 'Hot' ? 'red' : item.lead_type === 'Warm' ? 'green' : item.lead_type === 'Cold' ? 'blue' : 'black' }}>
+                  {item.lead_type}
+                </span>
+              </>
+            ) :   col.id === 'budget' ? (
+              <>
+                Min:  ₹{Number(item.budget_min)?.toLocaleString('en-IN')}/- <br />
+                Max:  ₹{Number(item.budget_max)?.toLocaleString('en-IN')}/-
+              
+              </>
+            ) :   col.id === 'score' ? (
+              <>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+
+{/* Circular Progress with dynamic color and percentage in center */}
+<Box position="relative" display="inline-flex">
+  <CircularProgress
+    variant="determinate"
+    value={item.matchPercentage}
+    size={40}
+    thickness={3}
+    style={{
+      color:
+        item.matchPercentage >= 80
+          ? '#4caf50' // Green
+          : item.matchPercentage >= 50
+          ? '#ff9800' // Orange
+          : '#f44336', // Red
+      transition: 'all 3s ease-in-out',
+    }}
+  />
+  <Box
+    top={0}
+    left={0}
+    bottom={0}
+    right={0}
+    position="absolute"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Typography
+      variant="caption"
+      component="div"
+      style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
+    >
+      {item.matchPercentage}%
+    </Typography>
+  </Box>
+</Box>
+</Box>
+
+              
+              </>
+            ):  col.id === 'matched_percentange' ? (
+              <>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+{/* Linear Progress with same color logic and center text */}
+<Box width="100%" position="relative">
+  <LinearProgress
+    variant="determinate"
+    value={item.matchPercentage}
+    style={{
+      height: 6,
+      borderRadius: 6,
+      backgroundColor: '#eee',
+      transition: 'all 3s ease-in-out',
+    }}
+    sx={{
+      '& .MuiLinearProgress-bar': {
+        borderRadius: 6,
+        backgroundColor:
+          item.matchPercentage >= 80
+            ? '#4caf50'
+            : item.matchPercentage >= 50
+            ? '#ff9800'
+            : '#f44336',
+        transition: 'all 0.5s ease-in-out',
+      },
+    }}
+  />
+  <Box
+    position="absolute"
+    top={0}
+    left="50%"
+    transform="translateX(-50%)"
+    height="100%"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Typography variant="caption" style={{ color: '#000', fontWeight: 'bold' }}>
+      {item.matchPercentage}%
+    </Typography>
+  </Box>
+</Box>
+
+</Box>
+
+              
+              </>
+            ):col.id === 'requirment' ? (
+              <>
+                {item.requirment}<br></br>
+                {item.unit_type} ({item.sub_type.join(',')})
+              </>
+            ) :(
+              item[col.id]
+            )}
+                  
+
+             
+              </StyledTableCell>
+              ))}
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+      
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose11}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+
+{/* ===================================modal for showing matching deals end =======================================================*/}
 
 
 
