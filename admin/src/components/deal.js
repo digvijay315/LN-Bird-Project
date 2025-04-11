@@ -473,32 +473,33 @@ const handleallunitschange = (event) => {
 // }, []); // Empty dependency array ensures this runs only once when the component mounts
 
 // Recalculate matched leads for each deal whenever data2 changes
-React.useEffect(() => {
-  if (data2.length >0) {
+// React.useEffect(() => {
+//   if (data2.length >0) {
     
      
-      const availableFor = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
+//       const availableFor = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
   
 
-      // Filter leads based on the current deal's criteria
-      const filteredLeads = data2.filter(
-        (item) =>
-          item.requirment === availableFor 
+//       // Filter leads based on the current deal's criteria
+//       const filteredLeads = data2.filter(
+//         (item) =>
+//           item.requirment === availableFor 
+      
         
-      );
+//       );
 
 
-      // Create a new deal object with updated matched leads and matched lead count
+//       // Create a new deal object with updated matched leads and matched lead count
     
       
-      setdeal({
-        ...deal,
-        matchedleads: filteredLeads.map(item => item._id),
-        matchinglead: filteredLeads.length, // Update the matched lead count
-      })
+//       setdeal({
+//         ...deal,
+//         matchedleads: filteredLeads.map(item => item._id),
+//         matchinglead: filteredLeads.length, // Update the matched lead count
+//       })
     
-  }
-}, [deal.source]); // Trigger this effect whenever `data2` or `deals` changes
+//   }
+// }, [deal.source]); // Trigger this effect whenever `data2` or `deals` changes
 
 
 

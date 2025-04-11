@@ -511,29 +511,36 @@ function Dealdetails() {
 
                   const [matchedLeads, setMatchedLeads] = useState([]);
 
+                  const[fetchingdeal,setfeatchingdeal]=useState([])
                   const dealallColumns = [
-                    { id: 'unit_number', name: 'Unit Number' },
-                    { id: 'location', name: 'Project Name' },
-                    { id: 'block', name: 'Block' },
+                    // { id: 'unit_number', name: 'Unit Number' },
+                    // { id: 'location', name: 'Project Name' },
+                    // { id: 'block', name: 'Block' },
                     { id: 'available_for', name: 'For' },
-                    { id: 'size', name: 'Size' },
                     { id: 'project_category', name: 'Category' },
-                    { id: 'project_subcategory', name: 'Sub Category' },
-                    { id: 'expected_price', name: 'Price' }
+                    { id: 'project_subcategory', name: 'Sub_Category' },
+                    { id: 'unit_type', name: 'Unit_Type' },
+                    { id: 'location', name: 'Location' },
+                    { id: 'facing', name: 'Facing' },
+                    { id: 'road', name: 'Road' },
+                    { id: 'direction', name: 'Direction' },
+                
+                    { id: 'size', name: 'Size' },
+                    { id: 'price', name: 'Price' }
                   ]
 
                   const leadallColumns = [
                     { id: 'score', name: 'Score' },
                 
-                    { id: 'lead_details', name: 'Lead Details' },
-                    { id: 'matched_percentange', name: 'Matched %' },
+                    { id: 'lead_details', name: 'Lead_Details' },
+                    { id: 'matched_percentange', name: 'Matched(%)' },
                     
                     { id: 'requirment', name: 'Requirment' },
                     { id: 'budget', name: 'Budget' },
                     { id: 'stage', name: 'Stage' },
                     { id: 'source', name: 'Source' },
-                    { id: 'recived_on', name: 'Recived On' },
-                    { id: 'site_visit', name: 'Site Visit' }
+                    { id: 'recived_on', name: 'Recived_On' },
+                    { id: 'site_visit', name: 'Site_Visit' }
                   
                   ]
                     
@@ -557,7 +564,7 @@ function Dealdetails() {
                   const[lead1,setlead1]=useState([])
                   const[deallocation,setdeallocation]=useState("")
 
-                  const[fetchingdeal,setfeatchingdeal]=useState([])
+              
 
               const handleMatchLeadClick = async (item) => {
                     try {
@@ -580,6 +587,9 @@ function Dealdetails() {
                       const propertytype = Array.isArray(response.data.project.add_unit[0].category) 
                         ? response.data.project.add_unit[0].category 
                         : [response.data.project.add_unit[0].category];
+                      const subtype = Array.isArray(response.data.project.add_unit[0].sub_category) 
+                        ? response.data.project.add_unit[0].sub_category 
+                        : [response.data.project.add_unit[0].sub_category];
                       const unittype = response.data.project.add_unit[0].unit_type;
                       const facing = response.data.project.add_unit[0].facing;
                       const road = response.data.project.add_unit[0].road;
@@ -606,17 +616,41 @@ function Dealdetails() {
 
                       const updatedLeads = item.matchedleads.map((lead) => {
                         let matchScore = 0;
-                        if (lead.city3 === city) matchScore += 15;
-                        if (lead.area_project.includes(project)) matchScore += 15;
-                        if (lead.block3.includes(block)) matchScore += 10;
+                        if (lead.city3 === city) matchScore += 5;
+                        if (lead.area_project.includes(project)) matchScore += 5;
+                        if (lead.block3.includes(block)) matchScore += 5;
                         if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
 
                         if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 10;
-                         if (Array.isArray(lead.property_type) && propertytype.some(type => lead.property_type.includes(type))) matchScore += 10;
+
+                        if (
+                          Array.isArray(lead.property_type) &&
+                          propertytype.some(type =>
+                            lead.property_type.some(leadType =>
+                              leadType.toLowerCase().includes(type.toLowerCase())
+                            )
+                          )
+                        ) {
+                          matchScore += 10;
+                        }
+                        
+                        if (
+                          Array.isArray(lead.sub_type) &&
+                          subtype.some(type =>
+                            lead.sub_type.some(leadType =>
+                              leadType.toLowerCase().includes(type.toLowerCase())
+                            )
+                          )
+                        ) {
+                          matchScore += 10;
+                        }
+                        
                         if (unittype === lead.unit_type2) matchScore += 10;
                         if (lead.facing.includes(facing)) matchScore += 5;
                         if (lead.road.includes(road)) matchScore += 5;
                         if (lead.direction && lead.direction === direction) matchScore += 10;
+
+                 
 
 
                         let locationMatch = 0;
@@ -3835,45 +3869,171 @@ const handleallblockchange = (event) => {
 
 // ===================================update deal each time while adding or delete lead start================================================
 
+// const[unitData,setunitData]=useState([])
+// const fetchunitfordeal=async(item)=>
+// {
+//   try {
+//     console.log(item);
+    
+//     const response = await api.get(`viewprojectforinventories/${item.project}/${item.unit_number}/${item.block}`);
+//     setunitData(response?.data?.project?.add_unit?.[0]);
+    
+//   } catch (error) {
+//     console.log(error);
+    
+//   }
+// }
+
+
+// useEffect(() => {
+//   if (leaddata.length > 0 && data.length > 0) {
+//     const updatedDeals = data.map((singleDeal) => {
+//       fetchunitfordeal(singleDeal)
+//       const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
+//       const price=singleDeal.expected_price;
+//       const propertytype=unitData.category
+//      console.log(propertytype);
+     
+
+//       const matchedLeads = leaddata.filter(
+//         (lead) => lead.requirment === availableFor
+//       );
+
+//       return {
+//         ...singleDeal,
+//         matchedleads: matchedLeads.map((lead) => lead._id),
+//         matchinglead: matchedLeads.length,
+//       };
+//     });
+
+  
+    
+//     updatedDeals.forEach(async (deal) => {
+//       try {
+//         const response = await api.put(`updatedeal/${deal._id}`,deal);
+
+//         // if (!response.status===200) {
+//         //   console.error(`Failed to update deal ${deal._id}`);
+//         // }
+//         // else {
+//         //   console.log(`Successfully updated deal ${deal._id}`);
+//         // }
+//       } catch (err) {
+//         console.error(`Error updating deal ${deal._id}:`, err);
+//       }
+//     });
+//   }
+// }, [data,leaddata]);
+
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+ 
+
+  
+  const R = 6371; // Radius of the Earth in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+    Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // in kilometers
+  return distance;
+}
 
 
 useEffect(() => {
-  if (leaddata.length > 0 && data.length > 0) {
-    const updatedDeals = data.map((singleDeal) => {
-      const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
-
-      const matchedLeads = leaddata.filter(
-        (lead) => lead.requirment === availableFor
-      );
-
-      return {
-        ...singleDeal,
-        matchedleads: matchedLeads.map((lead) => lead._id),
-        matchinglead: matchedLeads.length,
-      };
-    });
-
-    // setDealList(updatedDeals);
-
-    // 🔁 Call PUT method for each updated deal
-    console.log(updatedDeals);
-    
-    updatedDeals.forEach(async (deal) => {
+  const fetchMatchingLeads = async () => {
+    if (leaddata.length > 0 && data.length > 0) {
       try {
-        const response = await api.put(`updatedeal/${deal._id}`,deal);
+        const updatedDeals = await Promise.all(
+          data.map(async (singleDeal) => {
+            try {
+              const response = await api.get(
+                `viewprojectforinventories/${singleDeal.project}/${singleDeal.unit_number}/${singleDeal.block}`
+              );
 
-        if (!response.status===200) {
-          console.error(`Failed to update deal ${deal._id}`);
-        } else {
-          console.log(`Successfully updated deal ${deal._id}`);
+              const unitData = response?.data?.project?.add_unit?.[0];
+
+              const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
+              const price=unitData?.expected_price;
+
+              const propertytype = unitData?.category;
+              const subtype=unitData?.sub_category;
+
+              const facing=unitData?.facing;
+              const road=unitData?.road;
+              const direction=unitData?.direction;
+              
+              const unitlat= parseFloat(unitData?.lattitude) || 0;
+              const unitlang= parseFloat(unitData?.langitude || 0);
+
+
+              const matchedLeads = leaddata.filter((lead) => {
+                const leadLat = parseFloat(lead.lattitude || 0);
+                const leadLng = parseFloat(lead.longitude || 0);
+              
+                const distance = getDistanceFromLatLonInKm(unitlat, unitlang, leadLat, leadLng);
+            
+       
+              
+                return (
+                  
+                  lead.requirment === availableFor &&
+                  (
+                    lead.facing.includes(facing) ||
+                    lead.road.includes(road) ||
+                    lead.direction == direction ||
+                    (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) ||
+                    lead.property_type.includes(propertytype) ||
+                    lead.sub_type.includes(subtype) || 
+                    lead.area_project.includes(singleDeal.project) ||
+                    lead.block3.includes(singleDeal.block) ||
+                    lead.specific_unit == singleDeal.unit_number ||
+                    distance <= lead.range
+                  )
+                );
+              });
+            
+              
+              return {
+                ...singleDeal,
+                matchedleads: matchedLeads.map((lead) => lead._id),
+                matchinglead: matchedLeads.length,
+              };
+            } catch (err) {
+              console.error(`Error fetching unit data for deal ${singleDeal._id}:`, err);
+              return singleDeal; // return as-is if there's an error
+            }
+          })
+        );
+
+     
+
+   
+        for (const deal of updatedDeals) {
+          try {
+            const response = await api.put(`updatedeal/${deal._id}`, deal);
+            // if (response.status !== 200) {
+            //   console.error(`Failed to update deal ${deal._id}`);
+            // } else {
+            //   console.log(`Successfully updated deal ${deal._id}`);
+            // }
+          } catch (err) {
+            console.error(`Error updating deal ${deal._id}:`, err);
+          }
         }
-      } catch (err) {
-        console.error(`Error updating deal ${deal._id}:`, err);
-      }
-    });
-  }
-}, [data,leaddata]);
 
+      } catch (error) {
+        console.error("Error in fetchMatchingLeads:", error);
+      }
+    }
+  };
+
+  fetchMatchingLeads();
+}, [data, leaddata]);
 
 
 
@@ -4179,7 +4339,7 @@ useEffect(() => {
 
       <Modal  show={show1} onHide={handleClose1} size='xl' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
-              <Modal.Title>Matched Lead for {deallocation}</Modal.Title>
+              <Modal.Title>Matched Lead for<br></br> <span style={{color:"blue",fontWeight:"normal",fontSize:"16px"}}>{fetchingdeal.unit_no} {fetchingdeal.project_name} ({fetchingdeal.block})</span></Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <TableContainer component={Paper}>
@@ -4192,7 +4352,7 @@ useEffect(() => {
           {dealallColumns.map((col) => (
             // Only render columns that are NOT in the removedColumns list
             !removedColumns.includes(col.id) && (
-              <StyledTableCell key={col.id} >
+              <StyledTableCell key={col.id} style={{backgroundColor:"gray",}} >
                 <span>{col.name}</span>
 
                 {/* Conditionally render '-' button based on showRemoveButtons */}
@@ -4222,16 +4382,16 @@ useEffect(() => {
           ))}
            <TableRow>
           {/* Single Filter Image Icon */}
-          <StyledTableCell >
+          {/* <StyledTableCell >
             <Tooltip title="Click to toggle filter" arrow>
               <img
                 src="https://static-00.iconduck.com/assets.00/filter-icon-1024x1024-g4w8llud.png"
                 alt="filter"
-                style={{ height: '35px', border: 'none', cursor: 'pointer' }}
+                style={{ height: '25px', border: 'none', cursor: 'pointer' }}
                 onClick={handleFilterClick} // Toggle the visibility of '-' buttons
               />
             </Tooltip>
-          </StyledTableCell>
+          </StyledTableCell> */}
         </TableRow>
         </TableRow>
       </TableHead>
@@ -4250,10 +4410,52 @@ useEffect(() => {
                 !removedColumns.includes(col.id) &&
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px" }}
+                style={{ padding: "10px",fontSize:"12px",backgroundColor:"white" }}
                 
               >
-                {item[col.id]}
+              {col.id === 'unit_type' ?
+                  (
+                      <>
+                       {fetchingdeal.unit_type}
+                       </>
+                    ) : col.id === 'location' ?
+                    (
+                        <>
+                         {fetchingdeal.location}
+                         </>
+                      ) : 
+                      col.id === 'facing' ?
+                    (
+                        <>
+                         {fetchingdeal.facing}
+                         </>
+                      ) :
+                      col.id === 'road' ?
+                    (
+                        <>
+                         {fetchingdeal.road}
+                         </>
+                      ) :
+                      col.id === 'direction' ?
+                    (
+                        <>
+                         {fetchingdeal.direction}
+                         </>
+                      ) : col.id === 'size' ?
+                      (
+                          <>
+                           {fetchingdeal.size}
+                           </>
+                        ) : 
+                        col.id === 'price' ?
+                      (
+                          <>
+                           ₹{Number(item.expected_price)?.toLocaleString('en-IN')}/-
+                           </>
+                        ) : item[col.id]
+              }
+
+               
               </StyledTableCell>
               ))}
               
@@ -4317,7 +4519,7 @@ useEffect(() => {
               .map((col) => (
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px" }}
+                style={{ padding: "10px",fontSize:"12px" }}
                 
               >
                 
@@ -4328,7 +4530,7 @@ useEffect(() => {
               Array.isArray(item.mobile_no) 
                 ? item.mobile_no.map((mobile, index) => (
                     <div key={index}>
-                      <SvgIcon component={PhoneIphoneIcon} />
+                      <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"10px"}} />
                       <span style={{ color: "#9400D3" }}>{mobile}</span>
                     </div>
                   ))
@@ -4444,10 +4646,28 @@ useEffect(() => {
               </>
             ):col.id === 'requirment' ? (
               <>
-                {item.requirment}<br></br>
-                {item.unit_type} ({item.sub_type.join(',')})
-              </>
-            ) :(
+               {item.property_type.map((ptype, pIndex) =>
+                item.unit_type.map((utype, uIndex) =>
+                  item.sub_type.map((stype, sIndex) => (
+                    <div key={`${pIndex}-${uIndex}-${sIndex}`}>
+                      {ptype} {utype} {stype}
+                    </div>
+                  ))
+                )
+              )}
+              {item.search_location?item.search_location:item.area_project.join(',')}
+            </>
+            
+            
+            ) : col.id === 'recived_on' ? (
+              <>
+          
+          {new Date(item.createdAt).toLocaleDateString()}
+
+            </>
+            
+            
+            ) :( 
               item[col.id]
             )}
                   
