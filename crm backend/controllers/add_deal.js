@@ -3,6 +3,7 @@ const adddeal = require('../models/deal.js');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs'); 
+const axios = require('axios');
 
 
 
@@ -294,7 +295,43 @@ const add_deal = async (req, res) => {
                                 }
                             }
         
+
+                            
+
+                        const getUnitDetails = async (req, res) => {
+                        try {
+                            const { deals } = req.body;
+
+                            const unitDetails = await Promise.all(
+                            deals.map(async (deal) => {
+                                try {
+                                const response = await axios.get(
+                                    `${process.env.API_URL}/viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`
+                                );
+                                const unitData = response.data?.project?.add_unit?.[0] || null;
+
+                                return {
+                                   
+                                    unitData,
+                                };
+                                } catch (err) {
+                                // console.error(`Error fetching unit for ${deal.project} ${deal.unit_number}`, err.message);
+                                return null;
+                                }
+                            })
+                            );
+
+                            res.status(200).json(unitDetails.filter(Boolean)); // remove nulls
+                        } catch (error) {
+                            console.error("Error in getUnitDetails:", error.message);
+                            res.status(500).json({ message: 'Internal server error' });
+                        }
+                        };
+
+                       
+
+
     
     module.exports={add_deal,view_deal,view_deal_Bystage,remove_deal,update_deal,view_deal_Byid,update_dealbysingle,update_dealbyowner,
-        update_dealbyprojectandunit,view_deal_Byproject,update_dealbyprojectandunitforownerdetails
+        update_dealbyprojectandunit,view_deal_Byproject,update_dealbyprojectandunitforownerdetails,getUnitDetails
     };

@@ -30,6 +30,10 @@ import Swal from "sweetalert2";
 
 function Leadfetch() {
 
+       const [isLoading, setIsLoading] = useState(false);
+       const [isLoading1, setIsLoading1] = useState(false);
+
+
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
     "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
     "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
@@ -2538,79 +2542,87 @@ const handleroadChange = (event) => {
         
         useEffect(() => {
           const updateLeads = async () => {
-            if (dealdata.length > 0 && data.length > 0) {
+            if (dealdata.length === 0 || data.length === 0) return;
+        
+            try {
+              setIsLoading(true)
+              // 1. Fetch all unit details for all deals in one API call
+              const res = await api.post('/getUnitDetails', { deals: dealdata });
+              const unitDetails = res.data;
+       
+        
+              
+              
+              // 2. Process all leads
               const updatedleads = await Promise.all(
                 data.map(async (singlelead) => {
                   const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.requirment;
-                  const minprice = singlelead.budget_min;
-                  const maxprice = singlelead.budget_max;
-
-                  const minsize=singlelead.minimum_area
-                  const maxsize=singlelead.maximum_area
-
-                  const areaproject=singlelead.area_project
-                  const block=singlelead.block3
-                  const specificunit=singlelead.specific_unit
-
-                  const leadlat=singlelead.lattitude
-                  const leadlong=singlelead.longitude
-        
+                  const minprice = parseFloat(singlelead.budget_min);
+                  const maxprice = parseFloat(singlelead.budget_max);
+                  const minsize = parseFloat(singlelead.minimum_area);
+                  const maxsize = parseFloat(singlelead.maximum_area);
+                  const areaproject = singlelead.area_project;
+                  const block = singlelead.block3;
+                  const specificunit = singlelead.specific_unit;
+                  const leadlat = singlelead.lattitude;
+                  const leadlong = singlelead.longitude;
                   const propertytype = singlelead.property_type;
                   const subtype = singlelead.sub_type;
-                  const unit_type=singlelead.unit_type
-
+                  const unit_type = singlelead.unit_type || [];
                   const facing = singlelead.facing;
                   const road = singlelead.road;
                   const direction = singlelead.direction;
-
-                  const range=singlelead.range
+                  const range = singlelead.range;
         
                   const matcheddeals = [];
         
                   for (const deal of dealdata) {
-                    try {
-                      const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
-                      const unitData = response?.data?.project?.add_unit?.[0];
-
-                      const distance = getDistanceFromLatLonInKm(unitData.lattitude, unitData.langitude, leadlat, leadlong);
-
-                      const unitsize=unitData.size
-                      const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
-
-                          // Default values
-                          let unittype = '';
-                          let size = 0;
-
-                          if (match) {
-                            unittype = match[1] + " " + match[2].trim(); // "2 Kanal"
-                            size = parseFloat(match[3]); // 4840.00
-                          }
-                
-                      if (
-                        deal.available_for === availableFor &&
-                        unitData &&
-                        (
-                          (facing && unitData.facing && facing.includes(unitData.facing)) ||
-                          (road && unitData.road && road.includes(unitData.road)) ||
-                          (direction && unitData.direction && direction === unitData.direction) ||
-                          (unitData.expected_price >= parseFloat(minprice) && unitData.expected_price <= parseFloat(maxprice)) ||
-                          (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt)) ) ||
-                          (subtype && unitData.sub_category && subtype.includes(unitData.sub_category)) ||
-                          (areaproject && unitData.project_name && areaproject.includes(unitData.project_name)) ||
-                          (block && unitData.block && block.includes(unitData.block)) ||
-                          (specificunit && unitData.unit_no && specificunit==unitData.unit_no) ||
-                            unit_type.includes(unittype) || 
-                          (size >= parseFloat(minsize) && size <= parseFloat(maxsize)) ||
-                          distance <= range
-                          
-                        )
-                      ) {
-                        matcheddeals.push(deal);
-                      }
-                    } catch (err) {
-                      console.error(`Error fetching deal data for project ${deal.project}:`, err);
+                 
+                    const unitInfo = unitDetails.find(
+                      (u) =>
+                        u.unitData?.project_name?.toLowerCase().trim() === deal.project?.toLowerCase().trim() &&
+                        u.unitData?.unit_no?.toString().trim() === deal.unit_number?.toString().trim() &&
+                        u.unitData?.block?.toLowerCase().trim() === deal.block?.toLowerCase().trim()
+                    );
+                    
+                   
+                    
+                    const unitData = unitInfo?.unitData;
+                    if (!unitData) continue;
+        
+                    const distance = getDistanceFromLatLonInKm(unitData.lattitude, unitData.langitude, leadlat, leadlong);
+                    const unitsize = unitData.size;
+                    const match = unitsize?.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
+        
+                    let unittype = '';
+                    let size = 0;
+                    if (match) {
+                      unittype = match[1] + " " + match[2].trim();
+                      size = parseFloat(match[3]);
+                    }
+        
+                    if (
+                      deal.available_for === availableFor &&
+                      (
+                        (facing && unitData.facing && facing.includes(unitData.facing)) ||
+                        (road && unitData.road && road.includes(unitData.road)) ||
+                        (direction && unitData.direction && direction === unitData.direction) ||
+                        (deal.expected_price >= minprice && deal.expected_price <= maxprice) ||
+                        (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt))) ||
+                        (subtype && unitData.sub_category && subtype.includes(unitData.sub_category)) ||
+                        (areaproject && unitData.project_name && areaproject.includes(unitData.project_name)) ||
+                        (block && unitData.block && block.includes(unitData.block)) ||
+                        (specificunit && unitData.unit_no && specificunit === unitData.unit_no) ||
+                        (unit_type.includes(unittype)) ||
+                        (size >= minsize && size <= maxsize) ||
+                        (distance <= range)
+                      )
+                    ) {
+                      matcheddeals.push(deal);
                     }
                   }
+                
+                  
         
                   return {
                     ...singlelead,
@@ -2619,25 +2631,30 @@ const handleroadChange = (event) => {
                   };
                 })
               );
-        
-              // PUT method for each updated lead
-              for (const lead of updatedleads) {
-                try {
-                  const response = await api.put(`updatelead/${lead._id}`, lead);
-                  if (response.status !== 200) {
-                    console.error(`Failed to update lead ${lead._id}`);
-                  } else {
-                    console.log(`Successfully updated lead ${lead._id}`);
+    
+              // 3. Update all leads (PUT)
+              await Promise.all(
+                updatedleads.map(async (lead) => {
+                  try {
+                    await api.put(`updatelead/${lead._id}`, lead);
+                    // console.log(`Successfully updated lead ${lead._id}`);
+                  } catch (err) {
+                    console.error(`Error updating lead ${lead._id}:`, err);
                   }
-                } catch (err) {
-                  console.error(`Error updating lead ${lead._id}:`, err);
-                }
-              }
+                })
+              );
+            } catch (error) {
+              console.error("Error updating leads:", error);
+            }
+            finally
+            {
+              setIsLoading(false)
             }
           };
         
           updateLeads();
         }, [data, dealdata]);
+        
         
 
 // ======================================update lead each time while adding or delete deals start========================================
@@ -2722,7 +2739,7 @@ const handleroadChange = (event) => {
                                     
                                                       const handleMatchLeadClick = async (item) => {
                                                         try {
-                                                         
+                                                            setIsLoading1(true)
                                                           setMatcheddeals([]);
                                                           handleShow11();
                                                           setlead1([item]);
@@ -2852,6 +2869,9 @@ const handleroadChange = (event) => {
                                                             confirmButtonColor: '#d33',
                                                             confirmButtonText: 'OK',
                                                           });
+                                                        } finally
+                                                        {
+                                                          setIsLoading1(false)
                                                         }
                                                       };
                                                       
@@ -4922,6 +4942,10 @@ const handleroadChange = (event) => {
               <>
                ₹{Number(item.expected_price)?.toLocaleString('en-IN')}/-
               </>
+            ) :  col.id === 'available_from' ? (
+              <>
+               {new Date(item.createdAt).toLocaleDateString()}
+              </>
             ) :(
               item[col.id]
             )}
@@ -4937,6 +4961,41 @@ const handleroadChange = (event) => {
     </Table>
   </TableContainer>
       
+  <>
+    {isLoading1 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(9, 101, 52, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading matched data...</p>
+        </div>
+      </div>
+    )}
+  </>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose11}>
@@ -4949,6 +5008,42 @@ const handleroadChange = (event) => {
 
 {/* ===================================modal for showing matching deals end =======================================================*/}
 
+
+<>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading data...</p>
+        </div>
+      </div>
+    )}
+  </>
 
 
           <ToastContainer/>
