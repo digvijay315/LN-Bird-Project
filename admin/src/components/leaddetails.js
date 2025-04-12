@@ -2506,42 +2506,139 @@ const handleroadChange = (event) => {
         },[])
 
 
-useEffect(() => {
-  if (dealdata.length > 0 && data.length > 0) {
-    const updatedleads = data.map((singlelead) => {
-      const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.available_for;
-
-      const matcheddeals = dealdata.filter(
-        (deal) => deal.available_for === availableFor
-      );
-
-      return {
-        ...singlelead,
-        matcheddeals: matcheddeals.map((lead) => lead._id),
-        matchingdeal: matcheddeals.length,
-      };
-    });
-
-    // setDealList(updatedDeals);
-
-    // 🔁 Call PUT method for each updated deal
-  
-    
-    updatedleads.forEach(async (lead) => {
-      try {
-        const response = await api.put(`updatelead/${lead._id}`,lead);
-
-        if (!response.status===200) {
-          console.error(`Failed to update deal ${lead._id}`);
-        } else {
-          console.log(`Successfully updated deal ${lead._id}`);
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+          lat1 = parseFloat(lat1);
+          lon1 = parseFloat(lon1);
+          lat2 = parseFloat(lat2);
+          lon2 = parseFloat(lon2);
+        
+          // Check for NaN values
+          if (
+            isNaN(lat1) || isNaN(lon1) ||
+            isNaN(lat2) || isNaN(lon2)
+          ) {
+            console.warn("Invalid coordinates:", { lat1, lon1, lat2, lon2 });
+            return null; // or return 0 or -1 based on your use-case
+          }
+        
+          const R = 6371; // Radius of the Earth in km
+          const dLat = (lat2 - lat1) * (Math.PI / 180);
+          const dLon = (lon2 - lon1) * (Math.PI / 180);
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) *
+            Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const distance = R * c; // in kilometers
+        
+          return distance;
         }
-      } catch (err) {
-        console.error(`Error updating deal ${lead._id}:`, err);
-      }
-    });
-  }
-}, [data,dealdata]);
+        
+        useEffect(() => {
+          const updateLeads = async () => {
+            if (dealdata.length > 0 && data.length > 0) {
+              const updatedleads = await Promise.all(
+                data.map(async (singlelead) => {
+                  const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.requirment;
+                  const minprice = singlelead.budget_min;
+                  const maxprice = singlelead.budget_max;
+
+                  const minsize=singlelead.minimum_area
+                  const maxsize=singlelead.maximum_area
+
+                  const areaproject=singlelead.area_project
+                  const block=singlelead.block3
+                  const specificunit=singlelead.specific_unit
+
+                  const leadlat=singlelead.lattitude
+                  const leadlong=singlelead.longitude
+        
+                  const propertytype = singlelead.property_type;
+                  const subtype = singlelead.sub_type;
+                  const unit_type=singlelead.unit_type
+
+                  const facing = singlelead.facing;
+                  const road = singlelead.road;
+                  const direction = singlelead.direction;
+
+                  const range=singlelead.range
+        
+                  const matcheddeals = [];
+        
+                  for (const deal of dealdata) {
+                    try {
+                      const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
+                      const unitData = response?.data?.project?.add_unit?.[0];
+
+                      const distance = getDistanceFromLatLonInKm(unitData.lattitude, unitData.langitude, leadlat, leadlong);
+
+                      const unitsize=unitData.size
+                      const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
+
+                          // Default values
+                          let unittype = '';
+                          let size = 0;
+
+                          if (match) {
+                            unittype = match[1] + " " + match[2].trim(); // "2 Kanal"
+                            size = parseFloat(match[3]); // 4840.00
+                          }
+                
+                      if (
+                        deal.available_for === availableFor &&
+                        unitData &&
+                        (
+                          (facing && unitData.facing && facing.includes(unitData.facing)) ||
+                          (road && unitData.road && road.includes(unitData.road)) ||
+                          (direction && unitData.direction && direction === unitData.direction) ||
+                          (unitData.expected_price >= parseFloat(minprice) && unitData.expected_price <= parseFloat(maxprice)) ||
+                          (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt)) ) ||
+                          (subtype && unitData.sub_category && subtype.includes(unitData.sub_category)) ||
+                          (areaproject && unitData.project_name && areaproject.includes(unitData.project_name)) ||
+                          (block && unitData.block && block.includes(unitData.block)) ||
+                          (specificunit && unitData.unit_no && specificunit==unitData.unit_no) ||
+                            unit_type.includes(unittype) || 
+                          (size >= parseFloat(minsize) && size <= parseFloat(maxsize)) ||
+                          distance <= range
+                          
+                        )
+                      ) {
+                        matcheddeals.push(deal);
+                      }
+                    } catch (err) {
+                      console.error(`Error fetching deal data for project ${deal.project}:`, err);
+                    }
+                  }
+        
+                  return {
+                    ...singlelead,
+                    matcheddeals: matcheddeals.map((lead) => lead._id),
+                    matchingdeal: matcheddeals.length,
+                  };
+                })
+              );
+        
+              // PUT method for each updated lead
+              for (const lead of updatedleads) {
+                try {
+                  const response = await api.put(`updatelead/${lead._id}`, lead);
+                  if (response.status !== 200) {
+                    console.error(`Failed to update lead ${lead._id}`);
+                  } else {
+                    console.log(`Successfully updated lead ${lead._id}`);
+                  }
+                } catch (err) {
+                  console.error(`Error updating lead ${lead._id}:`, err);
+                }
+              }
+            }
+          };
+        
+          updateLeads();
+        }, [data, dealdata]);
+        
 
 // ======================================update lead each time while adding or delete deals start========================================
 
@@ -2552,30 +2649,26 @@ useEffect(() => {
                         
                   const dealallColumns = [
                     { id: 'score', name: 'Score' },
-                    { id: 'unit_number', name: 'Unit Number' },
+                    { id: 'unit_number', name: 'Unit' },
                     { id: 'matched_percentange', name: 'Matched %' },
-                    { id: 'location', name: 'Project Name' },
+                    { id: 'project', name: 'Project Name' },
                     { id: 'block', name: 'Block' },
-                    { id: 'available_for', name: 'For' },
+                    { id: 'category', name: 'Category' },
                     { id: 'size', name: 'Size' },
-                    { id: 'project_category', name: 'Category' },
-                    { id: 'project_subcategory', name: 'Sub Category' },
-                    { id: 'expected_price', name: 'Price' }
+                    { id: 'owner', name: 'owner' },
+                    { id: 'expected_price', name: 'Price' },
+                    { id: 'available_from', name: 'Avilable_From' },
+                    { id: 'user', name: 'User' }
                   ]
 
                   const leadallColumns = [
-                   
-                
-                    { id: 'lead_details', name: 'Lead Details' },
-                 
-                    
                     { id: 'requirment', name: 'Requirment' },
                     { id: 'budget', name: 'Budget' },
-                    { id: 'stage', name: 'Stage' },
-                    { id: 'source', name: 'Source' },
-                    { id: 'recived_on', name: 'Recived On' },
-                    { id: 'site_visit', name: 'Site Visit' }
-                  
+                    { id: 'size', name: 'Size' },
+                    { id: 'timeline', name: 'Timeline' },
+                    { id: 'facing', name: 'Facing' },
+                    { id: 'road', name: 'Road' },
+                    { id: 'direction', name: 'Direction' },
                   ]
 
 
@@ -2621,18 +2714,49 @@ useEffect(() => {
                                                        
                                                       }
 
-                                       const[deal1,setdeal1]=useState([])
+                                                     const[deal1,setdeal1]=useState([])
+                                                      const[displaylead,setdisplaylead]=useState()
                                                       const[lead1,setlead1]=useState([])
-                                                      const[deallocation,setdeallocation]=useState("")
-                                    
-                                                      const[fetchingdeal,setfeatchingdeal]=useState([])
+                                                      const [unitDataMap, setUnitDataMap] = useState({});
+
                                     
                                                       const handleMatchLeadClick = async (item) => {
                                                         try {
+                                                         
                                                           setMatcheddeals([]);
                                                           handleShow11();
                                                           setlead1([item]);
+                                                          setdisplaylead(item)
                                                           setdeal1(item.matcheddeals);
+
+                                                          const unitMap = {};
+
+                                                          const fetchPromises = item.matcheddeals.map(async (item1) => {
+                                                            const key = `${item1.project}-${item1.unit_number}-${item1.block}`;
+                                                        
+                                                            if (!unitMap[key]) { // Avoid duplicate calls
+                                                              try {
+                                                                const response = await api.get(
+                                                                  `viewprojectforinventories/${item1.project}/${item1.unit_number}/${item1.block}`
+                                                                );
+                                                                
+                                                                // Store the unit data in unitMap by item1._id
+                                                                unitMap[item1._id] = response.data.project.add_unit[0];
+                                                              } catch (err) {
+                                                                console.error(`Error fetching unit data for ${item1._id}`, err);
+                                                                unitMap[item1._id] = null; // If error occurs, set null for that unit
+                                                              }
+                                                            }
+                                                          });
+
+                                                          await Promise.all(fetchPromises);
+                                                      
+                                                      
+                                                          setUnitDataMap(unitMap); // Set unitMap once outside the loop
+                                                        
+                                                        
+
+
                                                       
                                                           const allUpdateddeals = [];
                                                       
@@ -2737,7 +2861,6 @@ useEffect(() => {
 
 
 // ==============================modal for showing matching leads end==============================================================
-
 
 
 
@@ -4510,7 +4633,9 @@ useEffect(() => {
 
   <Modal  show={show11} onHide={handleClose11} size='xl' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
-              <Modal.Title>Matched Deals for {deallocation}</Modal.Title>
+              <Modal.Title>Matched Deals for<br></br>
+              <span style={{color:"blue",fontWeight:"normal",fontSize:"16px"}}>{displaylead?.title} {displaylead?.first_name} {displaylead?.last_name}</span>
+              </Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <TableContainer component={Paper}>
@@ -4523,16 +4648,13 @@ useEffect(() => {
           {leadallColumns.map((col) => (
             // Only render columns that are NOT in the removedColumns list
           
-              <StyledTableCell key={col.id} >
+              <StyledTableCell key={col.id} style={{backgroundColor:"gray"}}>
                 <span>{col.name}</span>
-
-              
               </StyledTableCell>
             
           ))}
            <TableRow>
-          {/* Single Filter Image Icon */}
-          <StyledTableCell >
+          {/* <StyledTableCell >
             <Tooltip title="Click to toggle filter" arrow>
               <img
                 src="https://static-00.iconduck.com/assets.00/filter-icon-1024x1024-g4w8llud.png"
@@ -4541,7 +4663,7 @@ useEffect(() => {
                 // Toggle the visibility of '-' buttons
               />
             </Tooltip>
-          </StyledTableCell>
+          </StyledTableCell> */}
         </TableRow>
         </TableRow>
       </TableHead>
@@ -4558,10 +4680,61 @@ useEffect(() => {
               
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px" }}
-                
-              >
-                {item[col.id]}
+                style={{ padding: "10px",fontSize:"12px" }}
+                >
+                {
+                  col.id=='budget'?
+                  (
+                  <>
+                   Min:  ₹{Number(item.budget_min)?.toLocaleString('en-IN')}/- <br />
+                   Max:  ₹{Number(item.budget_max)?.toLocaleString('en-IN')}/-
+
+                  </>
+                  ) : col.id === 'requirment' ? (
+                    <>
+                     {item.property_type.map((ptype, pIndex) =>
+                      item.unit_type.map((utype, uIndex) =>
+                        item.sub_type.map((stype, sIndex) => (
+                          <div key={`${pIndex}-${uIndex}-${sIndex}`}>
+                            {ptype} {utype} {stype}
+                          </div>
+                        ))
+                      )
+                    )}
+                    {item.search_location?item.search_location:item.area_project.join(',')}
+                  </>
+                  
+                  
+                  ) :  col.id=='size'?
+                  (
+                  <>
+                   Min:{item.minimum_area} {item.area_metric}<br />
+                   Max:{item.maximum_area} {item.area_metric}
+
+                  </>
+                  ) :  col.id=='road'?
+                  (
+                  <>
+                  {
+                    item.road.map((road)=>
+                    (
+                     <span>{road} <br></br></span>
+                    ))
+                  }
+
+                  </>
+                  ) : col.id=='facing'?
+                  (
+                  <>
+                  {
+                    item.facing.map((facing)=>
+                    (
+                     <span>{facing} <br></br></span>
+                    ))
+                  }
+
+                  </>
+                  ) : item[col.id]}
               </StyledTableCell>
               ))}
               
@@ -4607,7 +4780,7 @@ useEffect(() => {
       <tbody>
         {
          [...matcheddeals]
-         .sort((a, b) => b.matchPercentage - a.matchPercentage) .map ((item, index) => (
+         .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >
               <input 
@@ -4625,41 +4798,11 @@ useEffect(() => {
               .map((col) => (
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px" }}
+                style={{ padding: "10px",fontSize:"12px" }}
                 
               >
                 
-                { col.id === 'lead_details' ? (
-              <>
-                {item.title} {item.first_name} {item.last_name} <br></br>
-             {
-              Array.isArray(item.mobile_no) 
-                ? item.mobile_no.map((mobile, index) => (
-                    <div key={index}>
-                      <SvgIcon component={PhoneIphoneIcon} />
-                      <span style={{ color: "#9400D3" }}>{mobile}</span>
-                    </div>
-                  ))
-                :  <div>
-                    <SvgIcon component={PhoneIphoneIcon} />  
-                    <span style={{ color: "#9400D3" }}>{item.mobile_no}</span> 
-                </div> 
-            }
-              </>
-            ) : col.id === 'stage' ? (
-              <>
-                {item.stage} <br />
-                <span style={{ color: item.lead_type === 'Hot' ? 'red' : item.lead_type === 'Warm' ? 'green' : item.lead_type === 'Cold' ? 'blue' : 'black' }}>
-                  {item.lead_type}
-                </span>
-              </>
-            ) :   col.id === 'budget' ? (
-              <>
-                Min:  ₹{Number(item.budget_min)?.toLocaleString('en-IN')}/- <br />
-                Max:  ₹{Number(item.budget_max)?.toLocaleString('en-IN')}/-
-              
-              </>
-            ) :   col.id === 'score' ? (
+             {  col.id === 'score' ? (
               <>
           <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
 
@@ -4750,16 +4893,40 @@ useEffect(() => {
 
               
               </>
-            ):col.id === 'requirment' ? (
+            ):col.id === 'category' ? (
               <>
-                {item.requirment}<br></br>
-                {item.unit_type} ({item.sub_type.join(',')})
+                {unitDataMap[item._id].category.join(',') || 'Loading...'}
+              </>
+            ) : col.id === 'size' ? (
+              <>
+                {unitDataMap[item._id].size || 'Loading...'}
+              </>
+            ) : col.id === 'owner' ? (
+              <>
+              {unitDataMap[item._id]?.owner_details?.length > 0 ? (
+                unitDataMap[item._id].owner_details.map((owner, index) => (
+                  <div key={index} style={{whiteSpace:"nowrap"}}>
+                    {`${owner.title || ''} ${owner.first_name || ''} ${owner.last_name || ''}`}
+                    <div>
+                      {owner.mobile_no?.map((mobile, i) => (
+                        <div key={i}>{owner.country_code[i]}{mobile}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                'Loading...'
+              )}
+            </>
+            ) : col.id === 'expected_price' ? (
+              <>
+               ₹{Number(item.expected_price)?.toLocaleString('en-IN')}/-
               </>
             ) :(
               item[col.id]
             )}
                   
-
+                
              
               </StyledTableCell>
               ))}

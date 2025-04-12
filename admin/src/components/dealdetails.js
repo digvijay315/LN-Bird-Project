@@ -564,10 +564,11 @@ function Dealdetails() {
                   const[lead1,setlead1]=useState([])
                   const[deallocation,setdeallocation]=useState("")
 
-              
+                 const [isLoading, setIsLoading] = useState(false);
 
               const handleMatchLeadClick = async (item) => {
                     try {
+                      setIsLoading(true)
                       handleShow1();
                       setMatchedLeads([]);
 
@@ -598,6 +599,18 @@ function Dealdetails() {
 
                       const deallat = parseFloat(response.data.project.add_unit[0].lattitude);
                       const deallang = parseFloat(response.data.project.add_unit[0].langitude);
+
+                      const unitsize=response.data.project.add_unit[0].size
+                      const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
+      
+                        // Default values
+                        let unittypeofsize = '';
+                        let size = 0;
+      
+                        if (match) {
+                          unittypeofsize = match[1] + " " + match[2].trim(); // "2 Kanal"
+                          size = parseFloat(match[3]); // 4840.00
+                        }
                       
 
                       const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
@@ -621,7 +634,11 @@ function Dealdetails() {
                         if (lead.block3.includes(block)) matchScore += 5;
                         if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
 
-                        if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 10;
+                        if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 5;
+
+                        if (size >= parseFloat(lead.minimum_area) && size <= parseFloat(lead.maximum_area)) matchScore += 5;
+
+                        if (lead.unit_type.includes(unittypeofsize)) matchScore += 5;
 
                         if (
                           Array.isArray(lead.property_type) &&
@@ -650,6 +667,25 @@ function Dealdetails() {
                         if (lead.road.includes(road)) matchScore += 5;
                         if (lead.direction && lead.direction === direction) matchScore += 10;
 
+                        if (lead.timeline) {
+                          switch (lead.timeline) {
+                            case "Urgent":
+                              matchScore += 10;
+                              break;
+                            case "Within 15 Days":
+                              matchScore += 7.5;
+                              break;
+                            case "Within 1 Month":
+                              matchScore += 5;
+                              break;
+                            case "Not Confirmed":
+                              matchScore += 2.5;
+                              break;
+                            default:
+                              // optional: no points if timeline is unknown or empty
+                              break;
+                          }
+                        }
                  
 
 
@@ -688,6 +724,9 @@ function Dealdetails() {
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'OK',
                       });
+                    } finally
+                    {
+                      setIsLoading(false)
                     }
                   };
 
@@ -3948,6 +3987,7 @@ useEffect(() => {
   const fetchMatchingLeads = async () => {
     if (leaddata.length > 0 && data.length > 0) {
       try {
+        setIsLoading(true)
         const updatedDeals = await Promise.all(
           data.map(async (singleDeal) => {
             try {
@@ -3977,7 +4017,18 @@ useEffect(() => {
               
                 const distance = getDistanceFromLatLonInKm(unitlat, unitlang, leadLat, leadLng);
             
-       
+                const unitsize=unitData.size
+                const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
+
+                  // Default values
+                  let unittype = '';
+                  let size = 0;
+
+                  if (match) {
+                    unittype = match[1] + " " + match[2].trim(); // "2 Kanal"
+                    size = parseFloat(match[3]); // 4840.00
+                  }
+                 
               
                 return (
                   
@@ -3987,11 +4038,13 @@ useEffect(() => {
                     lead.road.includes(road) ||
                     lead.direction == direction ||
                     (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) ||
-                    lead.property_type.includes(propertytype) ||
-                    lead.sub_type.includes(subtype) || 
+                    lead.property_type.some(pt => propertytype.includes(pt)) ||
+                    lead.sub_type.some(st => subtype.includes(st)) || 
                     lead.area_project.includes(singleDeal.project) ||
                     lead.block3.includes(singleDeal.block) ||
-                    lead.specific_unit == singleDeal.unit_number ||
+                    lead.specific_unit == singleDeal.unit_number || 
+                    lead.unit_type.includes(unittype) || 
+                    (size >= parseFloat(lead.minimum_area) && size <= parseFloat(lead.maximum_area)) ||
                     distance <= lead.range
                   )
                 );
@@ -4028,6 +4081,10 @@ useEffect(() => {
 
       } catch (error) {
         console.error("Error in fetchMatchingLeads:", error);
+      }
+      finally
+      {
+        setIsLoading(false)
       }
     }
   };
@@ -4501,7 +4558,7 @@ useEffect(() => {
       <tbody>
         {
          [...matchedLeads]
-         .sort((a, b) => b.matchPercentage - a.matchPercentage) .map ((item, index) => (
+         .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >
               <input 
@@ -4681,6 +4738,43 @@ useEffect(() => {
       </tbody>
     </Table>
   </TableContainer>
+
+  <>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading data...</p>
+        </div>
+      </div>
+    )}
+  </>
+                    
       
             </Modal.Body>
             <Modal.Footer>
@@ -5116,7 +5210,7 @@ useEffect(() => {
             </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}  >
-              <span style={{fontWeight:"bolder",fontSize:"18px",color:"#0086b3",fontWeight:"bold"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
+              <span style={{fontWeight:"bolder",fontSize:"18px",color:"#0086b3"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
               {item.project_name}
             </StyledTableCell>
@@ -7613,6 +7707,43 @@ stage:selectedLead.stage
             </Modal.Footer>
           </Modal>
 
+
+          <>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading data...</p>
+        </div>
+      </div>
+    )}
+  </>
+                    
 
 
 

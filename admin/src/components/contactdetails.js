@@ -2879,7 +2879,7 @@ const checkForDuplicates = async (contacts) => {
     const existingMobileNos = new Set();
     response.data.contact.forEach((existing) => {
       if (Array.isArray(existing.mobile_no)) {
-        existing.mobile_no.forEach((num) => existingMobileNos.add(num.trim()));
+        existing.mobile_no.forEach((num) => existingMobileNos.add(String(num).trim()));
       } else if (typeof existing.mobile_no === "string") {
         existingMobileNos.add(existing.mobile_no.trim());
       }
