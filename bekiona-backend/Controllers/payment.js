@@ -60,50 +60,50 @@ const payment = async (req, res) => {
 
               
             // ✅ Create shipping order in NimbusPost
-        const nimbusPayload = {
-    consignee: {
-      name: firstName + " " + lastName,
-      address: `${area}, ${landmark}, ${selectstate}`,
-      address_2: apartmentNumber || "",
-      city: selectstate,
-      state: selectstate,
-      pincode: pincode,
-      phone: phone,
-    },
-    order: {
-      order_number: orderid,
-      shipping_charges: 0,
-      discount: 0,
-      cod_charges: 0,
-      payment_type: "prepaid", // or "cod" if COD
-      total: amount,
-      package_weight: 500, // in grams
-      package_length: 10,
-      package_height: 10,
-      package_breadth: 10
-    },
-    order_items: [
-      {
-        name: "Ecommerce Product",
-        qty: "1",
-        price: amount,
-        sku: "sku001"
-      }
-    ],
-    pickup_warehouse_id: "3", // Replace with actual warehouse ID
-    rto_warehouse_id: "3"      // Replace with actual RTO warehouse ID
-  };
+  //       const nimbusPayload = {
+  //   consignee: {
+  //     name: firstName + " " + lastName,
+  //     address: `${area}, ${landmark}, ${selectstate}`,
+  //     address_2: apartmentNumber || "",
+  //     city: selectstate,
+  //     state: selectstate,
+  //     pincode: pincode,
+  //     phone: phone,
+  //   },
+  //   order: {
+  //     order_number: orderid,
+  //     shipping_charges: 0,
+  //     discount: 0,
+  //     cod_charges: 0,
+  //     payment_type: "prepaid", // or "cod" if COD
+  //     total: amount,
+  //     package_weight: 500, // in grams
+  //     package_length: 10,
+  //     package_height: 10,
+  //     package_breadth: 10
+  //   },
+  //   order_items: [
+  //     {
+  //       name: "Ecommerce Product",
+  //       qty: "1",
+  //       price: amount,
+  //       sku: "sku001"
+  //     }
+  //   ],
+  //   pickup_warehouse_id: "3", // Replace with actual warehouse ID
+  //   rto_warehouse_id: "3"      // Replace with actual RTO warehouse ID
+  // };
   
-  const nimbusResponse = await axios.post(
-    'https://ship.nimbuspost.com/api/shipments/create',
-    nimbusPayload,
-    {
-      headers: {
-        'NP-API-KEY': '0c12b436df7c7b6a35d1c9e0150fe497c04327fa182076',
-        'Content-Type': 'application/json'
-      }
-    }
-  );
+  // const nimbusResponse = await axios.post(
+  //   'https://ship.nimbuspost.com/api/shipments/create',
+  //   nimbusPayload,
+  //   {
+  //     headers: {
+  //       'NP-API-KEY': '0c12b436df7c7b6a35d1c9e0150fe497c04327fa182076',
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }
+  // );
   
 //   console.log("NimbusPost Response:", nimbusResponse.data);
   

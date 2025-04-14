@@ -2633,18 +2633,16 @@ const handleroadChange = (event) => {
               );
     
               // 3. Update all leads (PUT)
-              await Promise.all(
-                updatedleads.map(async (lead) => {
-                  try {
-                    await api.put(`updatelead/${lead._id}`, lead);
-                    // console.log(`Successfully updated lead ${lead._id}`);
-                  } catch (err) {
-                    console.error(`Error updating lead ${lead._id}:`, err);
-                  }
-                })
-              );
-            } catch (error) {
-              console.error("Error updating leads:", error);
+             
+              try {
+                await api.put('bulkupdate', { leads: updatedleads });
+                console.log('All leads updated successfully');
+              } catch (err) {
+                console.error('Error updating leads:', err);
+              }
+            } 
+            catch (err) {
+              console.error('Error updating leads:', err);
             }
             finally
             {

@@ -409,12 +409,36 @@ const lead_info=async(req,res)=>
                               
                               
 
-                    
+                              const updatemany= async (req, res) => {
+                                const { leads } = req.body;
+                            
+                             
+                                
+                                if  (!Array.isArray(leads)) {
+                                return res.status(400).json({ message: 'Invalid leads data' });
+                                }
+                            
+                                const bulkOps = leads.map((lead) => ({
+                                updateOne: {
+                                    filter: { _id: lead._id },
+                                    update: { $set: lead },
+                                },
+                                }));
+                            
+                                try {
+                                await leadinfo.bulkWrite(bulkOps);
+                                res.status(200).json({ message: 'All leads updated successfully' });
+                                } catch (error) {
+                                console.error('Bulk update error:', error);
+                                res.status(500).json({ message: 'Bulk update failed', error });
+                                }
+                            }
+      
     
 
 
                           
     module.exports={lead_info,leadinfo_find,view_lead_Byleadtype,remove_lead,update_lead,view_lead_Byid,view_lead_Bycompany,
                     view_lead_Byemail,view_lead_Bymobile,view_lead_Bystage,update_leadstage,update_leaddocument,update_leadstagebyemail,
-                    update_leadsingledocument,delete_leadsingledocument }
+                    update_leadsingledocument,delete_leadsingledocument,updatemany }
     
