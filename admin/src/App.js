@@ -48,6 +48,7 @@ import Companysingleview from './components/companysingleview.js';
 import Dealsingleview from './components/dealsingleview.js';
 import Projectsingleview from './components/projectsingleview.js';
 import Inventorysingleview from './components/inventorysingleview.js';
+import Sendmail from './components/sendmail.js';
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
       <Route path='/inventorysingleview' element={<Inventorysingleview/>}/>
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
+      <Route path='/sendmail' element={<Sendmail/>}/>
     </Routes> 
    </div>
    </BrowserRouter>

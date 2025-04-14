@@ -724,6 +724,7 @@ function Dealdetails() {
                         confirmButtonColor: '#d33',
                         confirmButtonText: 'OK',
                       });
+                    
                     } finally
                     {
                       setIsLoading(false)
@@ -791,7 +792,7 @@ function Dealdetails() {
                     setSelectAll1(!selectAll1);
                     if (!selectAll1) {
                       // Add all current page item IDs to selectedItems
-                      setSelectedItems1(lead1.map((item) => item._id));
+                      setSelectedItems1(lead1.map((item) => item));
                     } else {
                       // Deselect all
                       setSelectedItems1([]);
@@ -802,7 +803,7 @@ function Dealdetails() {
                   const handleRowSelect1 = (id) => {
                    
                     if (selectedItems1.includes(id)) {
-                      setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
+                      setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id._id));
                     } else {
                       setSelectedItems1([...selectedItems1, id]);
                     
@@ -4387,7 +4388,7 @@ useEffect(() => {
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}></span></h5>
+          <h6 style={{lineHeight:"50px"}}>Total Deals <span style={{color:"green",fontSize:"20px"}}>{data.length}</span></h6>
         </footer>
       </div>
     {/* <div style={{height:"100px"}}>
@@ -4524,7 +4525,7 @@ useEffect(() => {
   <div style={{marginTop:"10px",backgroundColor:"gray",padding:"12px",height:"60px",display:"flex",gap:"10px"}}>
      
       <input id="search" type="text"  className="form-control form-control-sm form-control form-control-sm-sm" placeholder="Type here for search" style={{width:"25%"}} />
-      <div style={{marginLeft:"45%"}}><button className="form-control form-control-sm">Send Details</button></div>
+      <div style={{marginLeft:"45%"}}><button className="form-control form-control-sm"  onClick={()=>navigate('/sendmail',{state:{deal1,selectedItems1}})}>Send Details</button></div>
       <div><button className="form-control form-control-sm">Mark As Intrested</button></div>
       </div>
 
@@ -4563,8 +4564,8 @@ useEffect(() => {
             <StyledTableCell >
               <input 
                 type="checkbox"
-                checked={selectedItems1.includes(item._id)}
-                onChange={() => handleRowSelect1(item._id)}
+                checked={selectedItems1.includes(item)}
+                onChange={() => handleRowSelect1(item)}
               />
               {index + 1}
             </StyledTableCell>
@@ -5005,11 +5006,11 @@ useEffect(() => {
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px"}}>Total Project <span style={{color:"green",fontSize:"25px"}}>{totalproject}</span></h5>
-          <h5 style={{lineHeight:"50px"}}>Ready To Move <span style={{color:"blue",fontSize:"25px"}}>{totalreadytomove}</span></h5>
-          <h5 style={{lineHeight:"50px"}}>Under Construction <span style={{color:"red",fontSize:"25px"}}>{totalunderconstruction}</span></h5>
-          <h5 style={{lineHeight:"50px"}}>Pre Launch <span style={{color:"gray",fontSize:"25px"}}>{totalprelaunch}</span></h5>
-          <h5 style={{lineHeight:"50px"}}>Upcoming <span style={{color:"pink",fontSize:"25px"}}>{totalupcoming}</span></h5>
+          <h6 style={{lineHeight:"50px"}}>Total Project <span style={{color:"green",fontSize:"20px"}}>{totalproject}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Ready To Move <span style={{color:"blue",fontSize:"20px"}}>{totalreadytomove}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Under Construction <span style={{color:"red",fontSize:"20px"}}>{totalunderconstruction}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Pre Launch <span style={{color:"gray",fontSize:"20px"}}>{totalprelaunch}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Upcoming <span style={{color:"pink",fontSize:"20px"}}>{totalupcoming}</span></h6>
         </footer>
       </div>
 
@@ -5119,7 +5120,7 @@ useEffect(() => {
 </div>
 
 
-<div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
+<div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"68%",position:"absolute"}}>
 
 <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
 <select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange2} style={{fontSize:"16px",height:"30px"}}>
@@ -5288,13 +5289,13 @@ useEffect(() => {
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
-          <h5 style={{lineHeight:"50px"}}>Total Inventories <span style={{color:"black",fontSize:"25px"}}>{totalinventories}</span></h5>
-          <h5 style={{lineHeight:"50px"}}> Residential <span style={{color:"green",fontSize:"25px"}}>{totalResidential}</span></h5>
-          <h5 style={{lineHeight:"50px"}}> Commercial <span style={{color:"blue",fontSize:"25px"}}>{totalcommercial}</span></h5>
-          <h5 style={{lineHeight:"50px"}}> Agriculture <span style={{color:"orange",fontSize:"25px"}}>{totalagriculture}</span></h5>
-          <h5 style={{lineHeight:"50px"}}> Industrial <span style={{color:"red",fontSize:"25px"}}>{totalindustrial}</span></h5>
-          <h5 style={{lineHeight:"50px"}}> Institutional <span style={{color:"gray",fontSize:"25px"}}>{totalinstitutional}</span></h5>
+          <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
+          <h6 style={{lineHeight:"50px"}}>Total Inventories <span style={{color:"black",fontSize:"20px"}}>{totalinventories}</span></h6>
+          <h6 style={{lineHeight:"50px"}}> Residential <span style={{color:"green",fontSize:"20px"}}>{totalResidential}</span></h6>
+          <h6 style={{lineHeight:"50px"}}> Commercial <span style={{color:"blue",fontSize:"20px"}}>{totalcommercial}</span></h6>
+          <h6 style={{lineHeight:"50px"}}> Agriculture <span style={{color:"orange",fontSize:"20px"}}>{totalagriculture}</span></h6>
+          <h6 style={{lineHeight:"50px"}}> Industrial <span style={{color:"red",fontSize:"20px"}}>{totalindustrial}</span></h6>
+          <h6 style={{lineHeight:"50px"}}> Institutional <span style={{color:"gray",fontSize:"20px"}}>{totalinstitutional}</span></h6>
         </footer>
       </div>
 

@@ -2694,7 +2694,7 @@ const handleroadChange = (event) => {
                                       setSelectAll1(!selectAll1);
                                       if (!selectAll1) {
                                         // Add all current page item IDs to selectedItems
-                                        setSelectedItems1(lead1.map((item) => item._id));
+                                        setSelectedItems1(deal1.map((item) => item._id));
                                       } else {
                                         // Deselect all
                                         setSelectedItems1([]);
@@ -2702,12 +2702,12 @@ const handleroadChange = (event) => {
                                       }
                                     };
                                   
-                                    const handleRowSelect1 = (id) => {
+                                    const handleRowSelect1 = (deal) => {
                                      
-                                      if (selectedItems1.includes(id)) {
-                                        setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
+                                      if (selectedItems1.includes(deal)) {
+                                        setSelectedItems1(selectedItems1.filter((itemId) => itemId !== deal._id));
                                       } else {
-                                        setSelectedItems1([...selectedItems1, id]);
+                                        setSelectedItems1([...selectedItems1, deal]);
                                       
                                       }
                                     };
@@ -2769,10 +2769,6 @@ const handleroadChange = (event) => {
                                                       
                                                           setUnitDataMap(unitMap); // Set unitMap once outside the loop
                                                         
-                                                        
-
-
-                                                      
                                                           const allUpdateddeals = [];
                                                       
                                                           const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
@@ -2789,12 +2785,8 @@ const handleroadChange = (event) => {
                                                           };
                                                       
                                                           for (const deal of item.matcheddeals) {
-                                                            try {
-                                                        
-                                                              const response = await api.get(`viewprojectforinventories/${deal.project}/${deal.unit_number}/${deal.block}`);
-                                                              const unitData = response?.data?.project?.add_unit?.[0];
-                                                              
-                                                              
+                                                         
+                                                            const unitData = unitMap[deal._id];
                                                               if (!unitData) {
                                                                 console.warn(`No unit found for: Project=${deal.project}, Block=${deal.block}, Unit=${deal.unit_number}`);
                                                                 continue;
@@ -2805,61 +2797,132 @@ const handleroadChange = (event) => {
                                                               const unit = deal.unit_number;
                                                               const price = deal.expected_price;
                                                       
-                                                              const propertytype = Array.isArray(unitData.category) ? unitData.category : [unitData.category];
-                                                              const unittype = unitData.unit_type;
+                                                              const propertytype = Array.isArray(unitData.category) 
+                                                              ? unitData.category 
+                                                              : [unitData.category];
+                                                            const subtype = Array.isArray(unitData.sub_category) 
+                                                              ? unitData.sub_category 
+                                                              : [unitData.sub_category];
                                                               const facing = unitData.facing;
                                                               const road = unitData.road;
                                                               const city = unitData.ucity;
                                                               const direction = unitData.direction;
                                                               const deallat = parseFloat(unitData.lattitude);
                                                               const deallang = parseFloat(unitData.langitude);
+                                                              const unittype = unitData.unit_type;
+
+                                                              const unitsize=unitData.size
+                                                              const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
+                                              
+                                                                // Default values
+                                                                let unittypeofsize = '';
+                                                                let size = 0;
+                                              
+                                                                if (match) {
+                                                                  unittypeofsize = match[1] + " " + match[2].trim(); // "2 Kanal"
+                                                                  size = parseFloat(match[3]); // 4840.00
+                                                                }
                                                       
+                                                                
+                                                              
+                                                                
                                                             
                                                                 let matchScore = 0;
                                                       
-                                                                // if (lead.city3 === city) matchScore += 15;
-                                                                // if (lead.area_project.includes(project)) matchScore += 15;
-                                                                // if (lead.block3.includes(block)) matchScore += 10;
-                                                                // if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
+                                                                if (item.city3 === city) matchScore += 5;
+                                                                if (item.area_project.includes(project)) matchScore += 5;
+                                                                if (item.block3.includes(block)) matchScore += 5;
+                                                                if (item.specific_unit && item.specific_unit.trim() === unit) matchScore += 10;
+
+                                                                
+                                                        if (price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)) matchScore += 5;
+
+                                                        if (size >= parseFloat(item.minimum_area) && size <= parseFloat(item.maximum_area)) matchScore += 5;
+
+                                                        if (item.unit_type.includes(unittypeofsize)) matchScore += 5;
+                                                                          
+                                                        if (
+                                                          Array.isArray(item.property_type) &&
+                                                          propertytype.some(type =>
+                                                            item.property_type.some(leadType =>
+                                                              leadType.toLowerCase().includes(type.toLowerCase())
+                                                            )
+                                                          )
+                                                        ) {
+                                                          matchScore += 10;
+                                                        }
+                                                        
+                                                        if (
+                                                          Array.isArray(item.sub_type) &&
+                                                          subtype.some(type =>
+                                                            item.sub_type.some(leadType =>
+                                                              leadType.toLowerCase().includes(type.toLowerCase())
+                                                            )
+                                                          )
+                                                        ) {
+                                                          matchScore += 10;
+                                                        }
+
+                                                        if (unittype == item.unit_type2) matchScore += 10;
+                                                        if (item.facing.includes(facing)) matchScore += 5;
+                                                        if (item.road.includes(road)) matchScore += 5;
+                                                        if (item.direction && item.direction == direction) matchScore += 10;
+                                                                
+                                                        if (item.timeline) {
+                                                          switch (item.timeline) {
+                                                            case "Urgent":
+                                                              matchScore += 10;
+                                                              break;
+                                                            case "Within 15 Days":
+                                                              matchScore += 7.5;
+                                                              break;
+                                                            case "Within 1 Month":
+                                                              matchScore += 5;
+                                                              break;
+                                                            case "Not Confirmed":
+                                                              matchScore += 2.5;
+                                                              break;
+                                                            default:
+                                                              // optional: no points if timeline is unknown or empty
+                                                              break;
+                                                          }
+                                                        }
+
+                                                        let locationMatch = 0;
+                                                        if (item.lattitude && item.longitude) {
+                                                          const leadLat = parseFloat(item.lattitude);
+                                                          const leadLng = parseFloat(item.longitude);
+                                                          
+                                                          const distance = getDistanceInKm(deallat, deallang, leadLat, leadLng);
+                                    
                                                       
-                                                                // if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 10;
-                                                                // if (Array.isArray(lead.property_type) && propertytype.some(type => lead.property_type.includes(type))) matchScore += 10;
-                                                                // if (unittype === lead.unit_type2) matchScore += 10;
-                                                                // if (lead.facing.includes(facing)) matchScore += 5;
-                                                                // if (lead.road.includes(road)) matchScore += 5;
-                                                                // if (lead.direction && lead.direction === direction) matchScore += 10;
-                                                      
-                                                                // if (lead.lattitude && lead.longitude) {
-                                                                //   const leadLat = parseFloat(lead.lattitude);
-                                                                //   const leadLng = parseFloat(lead.longitude);
-                                                                //   const distance = getDistanceInKm(deallat, deallang, leadLat, leadLng);
-                                                      
-                                                                //   let locationMatch = 0;
-                                                                //   if (distance <= 1) locationMatch = 25;
-                                                                //   else if (distance <= 2) locationMatch = 17;
-                                                                //   else if (distance <= 3) locationMatch = 15;
-                                                                //   else if (distance <= 4) locationMatch = 12;
-                                                                //   else if (distance <= 5) locationMatch = 10;
-                                                                //   else if (distance <= 8) locationMatch = 7;
-                                                                //   else if (distance <= 11) locationMatch = 5;
-                                                      
-                                                                //   matchScore += locationMatch;
-                                                                // }
+                                                          
+                                                          if (distance <= 1) locationMatch = 25;
+                                                          else if (distance <= 2) locationMatch = 17;
+                                                          else if (distance <= 3) locationMatch = 15;
+                                                          else if (distance <= 4) locationMatch = 12;
+                                                          else if (distance <= 5) locationMatch = 10;
+                                                          else if (distance <= 8) locationMatch = 7;
+                                                          else if (distance <= 11) locationMatch = 5;
+                                    
+                                                          matchScore += locationMatch;
+                                                          
+                                                        }
+                                    
+                                                         
                                                       
                                                                 const updatedDeal = { ...deal, matchPercentage: matchScore };
                                                      
                                                                 allUpdateddeals.push(updatedDeal);
                                                               
-                                                            } catch (dealError) {
-                                                              console.warn(`Error fetching unit for deal: ${deal.project}, ${deal.unit_number}, ${deal.block}`, dealError.message);
-                                                              continue; // Skip current deal if there's an error
-                                                            }
+                                                          
                                                           }
                                                           setMatcheddeals(allUpdateddeals);
                                                       
                                                           
                                                         } catch (error) {
-                                                          console.error("Error during matching process:", error);
+                                                          console.error("Error during matching process:", error)
+                                                          
                                                           Swal.fire({
                                                             icon: 'error',
                                                             title: 'Error!',
@@ -2880,6 +2943,7 @@ const handleroadChange = (event) => {
 
 // ==============================modal for showing matching leads end==============================================================
 
+console.log(selectedItems1);
 
 
   return ( 
@@ -3165,15 +3229,15 @@ const handleroadChange = (event) => {
       </tbody>
     </Table>
   </TableContainer>
-  <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Lead <span style={{color:"green",fontSize:"25px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Untouched Lead <span style={{color:"red",fontSize:"25px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>No Followups Lead <span style={{color:"gray",fontSize:"25px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Returning Lead <span style={{color:"black",fontSize:"25px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Returning No Followup Lead <span style={{color:"#D11414",fontSize:"25px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Over Due Task Lead <span style={{color:"#04A9A9",fontSize:"25px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Unassigned Lead<span style={{color:"#A90490",fontSize:"25px"}}>{countall}</span></h6>
+  <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"20px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
+          <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>No Followups Lead- <span style={{color:"gray",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Returning Lead- <span style={{color:"black",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Returning No Followup Lead- <span style={{color:"#D11414",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Over Due Task Lead- <span style={{color:"#04A9A9",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Unassigned Lead-<span style={{color:"#A90490",fontSize:"20px"}}>{countall}</span></h6>
           
         </footer>
   </div>
@@ -4764,7 +4828,7 @@ const handleroadChange = (event) => {
   <div style={{marginTop:"10px",backgroundColor:"gray",padding:"12px",height:"60px",display:"flex",gap:"10px"}}>
      
       <input id="search" type="text"  className="form-control form-control-sm form-control form-control-sm-sm" placeholder="Type here for search" style={{width:"25%"}} />
-      <div style={{marginLeft:"45%"}}><button className="form-control form-control-sm">Send Details</button></div>
+      <div style={{marginLeft:"45%"}}><button className="form-control form-control-sm" onClick={()=>navigate('/sendmail',{state:{lead1,selectedItems1}})}>Send Details</button></div>
       <div><button className="form-control form-control-sm">Mark As Intrested</button></div>
       </div>
 
@@ -4803,8 +4867,8 @@ const handleroadChange = (event) => {
             <StyledTableCell >
               <input 
                 type="checkbox"
-                checked={selectedItems1.includes(item._id)}
-                onChange={() => handleRowSelect1(item._id)}
+                checked={selectedItems1.includes(item)}
+                onChange={() => handleRowSelect1(item)}
               />
               {index + 1}
             </StyledTableCell>
