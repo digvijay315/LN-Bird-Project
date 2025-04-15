@@ -504,19 +504,25 @@ const renderPageNumbers1 = () => {
 
 
 
-    const StyledTableCell = styled(TableCell)(({ theme }) => ({
-      [`&.${tableCellClasses.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-      },
-      [`&.${tableCellClasses.body}`]: {
-        fontSize: 14,
-      },
-    }));
+      const StyledTableCell = styled(TableCell)(({ theme }) => ({
+        [`&.${tableCellClasses.head}`]: {
+          backgroundColor: 'gray', // use string or valid color code
+          color: theme.palette.common.white,
+          lineHeight: '0px',
+          fontSize: '12px', // added here for consistency
+        },
+        [`&.${tableCellClasses.body}`]: {
+          fontSize: '10px', // changed to '12px' from 12
+        },
+      }));
+
+      
     
     const StyledTableRow = styled(TableRow)(({ theme }) => ({
       '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
+        lineHeight: '0px',
+        fontSize: '12px', 
       },
       // hide last border
       '&:last-child td, &:last-child th': {
@@ -2186,8 +2192,8 @@ const [show10, setshow10] = useState(false);
       <div id="sitevisitpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute",display:"none"}}>
    
       
-      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",height:"30px"}}>
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -2200,8 +2206,8 @@ const [show10, setshow10] = useState(false);
     <div id="followuppagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:"none"}}>
    
       
-      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangefollowup} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangefollowup} style={{fontSize:"16px",height:"30px"}}>
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="20">20</option>
@@ -2214,8 +2220,8 @@ const [show10, setshow10] = useState(false);
     <div id="meetingpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:"none"}}>
    
       
-   <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
-   <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangemeeting} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+   <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+   <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangemeeting} style={{fontSize:"16px",height:"30px"}}>
      <option value="5">5</option>
      <option value="10">10</option>
      <option value="20">20</option>
@@ -2239,7 +2245,7 @@ const [show10, setshow10] = useState(false);
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
             <input
               type="checkbox"
               checked={selectAll1}
@@ -2249,7 +2255,7 @@ const [show10, setshow10] = useState(false);
           {visibleColumns1.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -2263,7 +2269,7 @@ const [show10, setshow10] = useState(false);
          
         currentItems.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems1.includes(item._id)}
@@ -2272,7 +2278,7 @@ const [show10, setshow10] = useState(false);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
               onClick={() => handleShow2(item)}
             >
                {item.title2} {item.first_name} {item.last_name}
@@ -2284,26 +2290,26 @@ const [show10, setshow10] = useState(false);
               <span>{item.email}</span>
             </StyledTableCell>
 
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
               {item.due_date}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
               <b>{item.title}</b> <br></br>
               {item.remarks}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
               {item.activity_type}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
             {item.executive}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
               
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
              {item.stage}
             </StyledTableCell>
-            <StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
             {item.status}
             </StyledTableCell>
       
@@ -2314,8 +2320,8 @@ const [show10, setshow10] = useState(false);
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          {/* <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
         </footer>
       </div>
 
@@ -2331,7 +2337,7 @@ const [show10, setshow10] = useState(false);
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>
+          <StyledTableCell >
             <input
               type="checkbox"
               checked={selectAll}
@@ -2341,7 +2347,7 @@ const [show10, setshow10] = useState(false);
           {visibleColumns.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{  cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -2355,7 +2361,7 @@ const [show10, setshow10] = useState(false);
          
         currentItems2.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems.includes(item._id)}
@@ -2364,7 +2370,7 @@ const [show10, setshow10] = useState(false);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
               onClick={() => handleShow2(item)}
             >
               {item.title2} {item.first_name} {item.last_name}
@@ -2377,7 +2383,7 @@ const [show10, setshow10] = useState(false);
               <span>{item.email}</span>
             </StyledTableCell>
            
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                 {
                   Array.isArray(item.project) ? 
                     item.project.map((project, index) => (
@@ -2387,33 +2393,31 @@ const [show10, setshow10] = useState(false);
                 }
 
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                  
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                  
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}  >
                 {item.executive}
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px" ,fontSize:"12px"}}  >
                  {item.title}
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}  >
                  
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                  {item.remark}
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                 {item.stage}
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman" }}  >
+                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                 
                 </StyledTableCell>
-                {/* <StyledTableCell>
-              <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" style={{height:"50px",width:"50px",cursor:"pointer"}}></img>
-            </StyledTableCell> */}
+             
             
           </StyledTableRow>
         ))}
@@ -2421,8 +2425,8 @@ const [show10, setshow10] = useState(false);
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          {/* <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
         </footer>
       </div>
 
@@ -2438,7 +2442,7 @@ const [show10, setshow10] = useState(false);
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>
+          <StyledTableCell >
             <input
               type="checkbox"
               checked={selectAll2}
@@ -2448,7 +2452,7 @@ const [show10, setshow10] = useState(false);
           {visibleColumns2.map((col) => (
             <StyledTableCell
               key={col.id}
-              style={{ fontFamily: "times new roman",  cursor: 'pointer' }}
+              style={{  cursor: 'pointer' }}
               onClick={() => handleSort(col.id)}
             >
               {col.name}
@@ -2462,7 +2466,7 @@ const [show10, setshow10] = useState(false);
          
         currentItems1.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell>
               <input 
                 type="checkbox"
                 checked={selectedItems2.includes(item._id)}
@@ -2471,7 +2475,7 @@ const [show10, setshow10] = useState(false);
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman" }} 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
               onClick={() => handleShow2(item)}
             >
               {item.title2} {item.first_name} {item.last_name}
@@ -2485,44 +2489,44 @@ const [show10, setshow10] = useState(false);
            
                 <StyledTableCell 
                  
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                  style={{ padding: "10px",fontSize:"12px" }}
                 >
                   {item.due_date}
                 </StyledTableCell>
 
                 <StyledTableCell 
                  
-                  style={{ padding: "10px", fontFamily: "times new roman" }}
+                  style={{ padding: "10px",fontSize:"12px" }}
                 >
                   {item.title}
                 </StyledTableCell>
                 <StyledTableCell 
                  
-                 style={{ padding: "10px", fontFamily: "times new roman" }}
+                 style={{ padding: "10px" ,fontSize:"12px"}}
                >
                  {item.activity_type}
                </StyledTableCell>
                <StyledTableCell 
                  
-                 style={{ padding: "10px", fontFamily: "times new roman" }}
+                 style={{ padding: "10px" ,fontSize:"12px"}}
                >
                   {item.executive}
                </StyledTableCell>
                <StyledTableCell 
                  
-                 style={{ padding: "10px", fontFamily: "times new roman" }}
+                 style={{ padding: "10px" ,fontSize:"12px"}}
                >
                  
                </StyledTableCell>
                <StyledTableCell 
                  
-                 style={{ padding: "10px", fontFamily: "times new roman" }}
+                 style={{ padding: "10px",fontSize:"12px" }}
                >
                 {item.stage}
                </StyledTableCell>
                <StyledTableCell 
                  
-                 style={{ padding: "10px", fontFamily: "times new roman" }}
+                 style={{ padding: "10px" ,fontSize:"12px"}}
                >
                
                </StyledTableCell>
@@ -2534,8 +2538,8 @@ const [show10, setshow10] = useState(false);
     </Table>
   </TableContainer>
     <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
-          <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
-          {/* <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px""}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
         </footer>
       </div>
        

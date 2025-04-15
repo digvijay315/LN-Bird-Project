@@ -329,11 +329,32 @@ const add_deal = async (req, res) => {
                         };
 
                        
-                                                // Example: PUT /update-multiple-leads
+                          const dealupdatemany= async (req, res) => {
+                                                        const { deals } = req.body;
+                                                        if  (!Array.isArray(deals)) {
+                                                        return res.status(400).json({ message: 'Invalid deals data' });
+                                                        }
+                                                    
+                                                        const bulkOps = deals.map((deal) => ({
+                                                        updateOne: {
+                                                            filter: { _id: deal._id },
+                                                            update: { $set: deal },
+                                                        },
+                                                        }));
+                                                    
+                                                        try {
+                                                        await adddeal.bulkWrite(bulkOps);
+                                                        res.status(200).json({ message: 'All deals updated successfully' });
+                                                        } catch (error) {
+                                                        console.error('Bulk update error:', error);
+                                                        res.status(500).json({ message: 'Bulk update failed', error });
+                                                        }
+                                                    }
+                              
                  
 
 
     
     module.exports={add_deal,view_deal,view_deal_Bystage,remove_deal,update_deal,view_deal_Byid,update_dealbysingle,update_dealbyowner,
-        update_dealbyprojectandunit,view_deal_Byproject,update_dealbyprojectandunitforownerdetails,getUnitDetails
+        update_dealbyprojectandunit,view_deal_Byproject,update_dealbyprojectandunitforownerdetails,getUnitDetails,dealupdatemany
     };

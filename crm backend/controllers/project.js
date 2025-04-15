@@ -509,6 +509,13 @@ unitDetails={
                   // Retrieve project_name, block, and unit_no from the URL parameters (params)
                   const { project_name, block, unit_no } = req.params;
 
+                  const exitproject=await addproject.findOne({name:project_name})
+                  if(!exitproject)
+                  {
+                    res.status(404).send('project not found')
+                    return
+                  }
+
                   const project = await addproject.findOne({
                     'add_unit': { $elemMatch: { project_name, block, unit_no } }
                 });
@@ -516,6 +523,7 @@ unitDetails={
                 if (!project) {
                   return res.status(404).send({ message: "No project found matching the criteria" });
               }
+    
       
               // Step 2: Find the index of the unit to update
               const unitIndex = project.add_unit.findIndex(unit => unit.unit_no === unit_no);
@@ -525,6 +533,8 @@ unitDetails={
 
               const existingUnit = project.add_unit[unitIndex];
               const unit = req.body
+             
+              
 
               let previousOwnerDetails = existingUnit.owner_details || [];
          

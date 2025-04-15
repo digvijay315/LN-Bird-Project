@@ -288,6 +288,22 @@ const[countall,setcountall]=useState('')
           toast.error("please select first",{autoClose:"2000"})
           return
         }
+
+         // Show confirmation message
+                    const result = await Swal.fire({
+                      title: "Are you sure?",
+                      text: "You won't be able to revert this!",
+                      icon: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#d33",
+                      cancelButtonColor: "#3085d6",
+                      confirmButtonText: "Yes, delete it!",
+                    });
+                
+                    if (!result.isConfirmed) {
+                      return; // Stop execution if user cancels
+                    }
+
         const resp = selectedItems.map(async (itemId) => {
           await api.delete(`removelead/${itemId}`);
         });
@@ -1062,6 +1078,22 @@ const[countall,setcountall]=useState('')
               try {
                 
                 const id=data1._id
+
+                 // Show confirmation message
+                            const result = await Swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#d33",
+                              cancelButtonColor: "#3085d6",
+                              confirmButtonText: "Yes, update it!",
+                            });
+                        
+                            if (!result.isConfirmed) {
+                              return; // Stop execution if user cancels
+                            }
+
                 const resp=await api.put(`updatelead/${id}`,leadinfo,config)
                 toast.success("lead updated",{ autoClose: 2000 })
                 setTimeout(() => {
@@ -3152,15 +3184,15 @@ console.log(selectedItems1);
               
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer"}} 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px"}} 
               onClick={() => leadsingleview(item)}
             >
-              <span style={{color:"#0086b3",fontWeight:"bold"}}>{item.title} {item.first_name} {item.last_name}</span>
+              <span style={{color:"#0086b3",fontWeight:"bold",fontSize:"13px"}}>{item.title} {item.first_name} {item.last_name}</span>
               <br />
-              <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"14px"}} />
+              <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}} />
               <span>{item.mobile_no}</span>
               <br />
-              <SvgIcon component={EmailIcon} style={{fontSize:"14px"}}/>
+              <SvgIcon component={EmailIcon} style={{fontSize:"12px"}}/>
               <span>{item.email}</span>
             </StyledTableCell>
             {visibleColumns
@@ -3169,7 +3201,7 @@ console.log(selectedItems1);
                 
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px", cursor: col.id === 'matchingdeal' ? 'pointer' : 'default' }}
+                style={{ padding: "10px", cursor: col.id === 'matchingdeal' ? 'pointer' : 'default' ,fontSize:"12px"}}
                 onClick={col.id === 'matchingdeal' ? () => handleMatchLeadClick(item) : undefined} // Handle click if it's 'matchlead'
               >
                    {col.id === 'budget' 

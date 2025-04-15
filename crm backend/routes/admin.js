@@ -16,11 +16,12 @@ const {addpayment_details,view_payment} = require('../controllers/addpayment_det
 const {inventory_details,view_inventory, remove_inventory, view_inventory_Bydeveloper, view_inventory_Bylocation, update_inventory}=require('../controllers/addinventory');
 const send_mail = require('../controllers/sendmail');
 const {createProject,view_project, view_projectbyname, view_projectbycityname, remove_project, view_project_Byid, update_project, view_projectforinventories, update_projectforinventories, update_projectaddunit, delete_projectforinventories} = require('../controllers/project');
-const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner, update_dealbyprojectandunit, view_deal_Byproject, update_dealbyprojectandunitforownerdetails, getUnitDetails } = require('../controllers/add_deal');
+const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_deal_Byid, update_dealbysingle, update_dealbyowner, update_dealbyprojectandunit, view_deal_Byproject, update_dealbyprojectandunitforownerdetails, getUnitDetails,updateMany, dealupdatemany } = require('../controllers/add_deal');
  const uploadFields = require('../middlewares/multifile');
 const upload1 = require('../middlewares/multifile');
 const { add_activity, view_activity, remove_activity, update_activity, view_activitybyid } = require('../controllers/addactivity');
 const { sendmessage, makecall } = require('../controllers/sendsms');
+
 
 
 const router=express.Router()
@@ -97,6 +98,8 @@ router.post('/getUnitDetails',getUnitDetails)
 router.post('/leadinfopersonal',upload.any('file'),lead_info_personal)
 
 router.post('/leadinforequirment',lead_info_requirment)
+
+router.put('/dealbulkupdate',dealupdatemany)
 
 router.put('/bulkupdate',updatemany)
 

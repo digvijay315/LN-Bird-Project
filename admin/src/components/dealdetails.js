@@ -55,6 +55,22 @@ function Dealdetails() {
               toast.error("please select first",{autoClose:"2000"})
               return
             }
+
+             // Show confirmation message
+                        const result = await Swal.fire({
+                          title: "Are you sure?",
+                          text: "You won't be able to revert this!",
+                          icon: "warning",
+                          showCancelButton: true,
+                          confirmButtonColor: "#d33",
+                          cancelButtonColor: "#3085d6",
+                          confirmButtonText: "Yes, delete it!",
+                        });
+                    
+                        if (!result.isConfirmed) {
+                          return; // Stop execution if user cancels
+                        }
+
             const resp = selectedItems.map(async (itemId) => {
               await api.delete(`removedeal/${itemId}`);
             });
@@ -76,6 +92,22 @@ function Dealdetails() {
               toast.error("please select first",{autoClose:"2000"})
               return
             }
+
+             // Show confirmation message
+             const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, delete it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+
             const resp = selectedItems2.map(async (itemId) => {
               await api.delete(`deleteproject/${itemId}`);
             });
@@ -90,6 +122,29 @@ function Dealdetails() {
         };
 
       
+    // ===================================search deal via search box start========================================================
+
+    const[searchinput,setsearchinput]=useState('')
+      const handlesearchchange=(e)=>
+      {
+        setsearchinput(e.target.value)
+      }
+
+      const handlekeypress2=(event)=>
+        {
+            if(event.key==="Enter")
+                {
+                    setdata(data.filter((item)=>
+                    (
+                      item.project==searchinput
+                    )))
+                    document.getElementById("dealsearch").value=''
+                }
+            
+        }
+
+
+    //=========================================== search deal via search box end===============================================
 
        
          
@@ -886,6 +941,10 @@ function Dealdetails() {
 
 // =================================matched lead code end=======================================================================
 
+
+// ==========================================project code start======================================================================
+
+
                   React.useEffect(()=>{fetchcdata()},[])
 
                   const[cdata,setcdata]=useState([]);
@@ -938,6 +997,7 @@ function Dealdetails() {
                     }
                   
                   }
+  
                   
                   const[totalinventories,settotalinventories]=useState(0)
                   const [totalResidential, setTotalResidential] = useState(0);
@@ -1186,7 +1246,33 @@ function Dealdetails() {
                     }
                   };
 
-                 
+      
+
+ // ===================================search deal via search box start========================================================
+
+                      const[projectsearchinput,setprojectsearchinput]=useState('')
+                      const handleprojectsearchchange=(e)=>
+                      {
+                        setprojectsearchinput(e.target.value)
+                      }
+
+                      const handlekeypress3=(event)=>
+                        {
+                            if(event.key==="Enter")
+                                {
+                                    setcdata(cdata.filter((item)=>
+                                    (
+                                      item.name==projectsearchinput
+                                    )))
+                                    document.getElementById("projectsearch").value=''
+                                }
+                            
+                        }
+
+
+  //=========================================== search deal via search box end===============================================
+
+  //========================================= units code start =======================================================================
 
                   const allunitColumns = [
                   
@@ -1328,6 +1414,35 @@ function Dealdetails() {
                       </div>
                     );
                   };
+
+
+          
+ // ===================================search deal via search box start========================================================
+
+                const[unitsearchinput,setunitsearchinput]=useState('')
+                const handleunitsearchchange=(e)=>
+                {
+                  setunitsearchinput(e.target.value)
+                }
+
+                const handlekeypress4=(event)=>
+                  {
+                      if(event.key==="Enter")
+                          {
+                              setFlattenedUnits(flattenedUnits.filter((item)=>
+                              (
+                                item.project_name==unitsearchinput
+                              )))
+                              document.getElementById("unitsearch").value=''
+                          }
+                      
+                  }
+
+
+//=========================================== search deal via search box end===============================================
+
+  
+              
 
                   const[dealdata,setdealdata]=useState([])
                   const[note,setnote]=useState(dealdata.descriptions)
@@ -2647,7 +2762,7 @@ const [show9, setshow9] = useState(false);
                     
                    
                   }
-                console.log(units.owner_details);
+                // console.log(units.owner_details);
                 
                   
           const updateinventories=async()=>
@@ -2656,12 +2771,38 @@ const [show9, setshow9] = useState(false);
             const block=selectedItems3[0].block
             const unit=selectedItems3[0].unit_no
             try {
+
+               // Show confirmation message
+            const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, update it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+
               const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+             
               toast.success(`units updated successfully`,{autoClose:"2000"})
                               setTimeout(() => {
                                 window.location.reload()
                               }, 2000);
             } catch (error) {
+              Swal.fire({
+                title: "not found?",
+                text: "The project is not found plz check !",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "ok",
+              });
               console.log(error);
               
             }
@@ -3382,9 +3523,24 @@ const deleteinventories=async()=>
     const project=selectedItems3[0].project_name
     const block=selectedItems3[0].block
     const unit=selectedItems3[0].unit_no
-    console.log(project);
     
     try {
+
+       // Show confirmation message
+       const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      });
+  
+      if (!result.isConfirmed) {
+        return; // Stop execution if user cancels
+      }
+
       const resp=await api.delete(`deleteprojectforinventories/${project}/${unit}/${block}`)
       toast.success(`units deleted successfully`,{autoClose:"2000"})
                       setTimeout(() => {
@@ -3857,6 +4013,22 @@ const handleallblockchange = (event) => {
         const updatedeal=async()=>
         {
           try {
+
+             // Show confirmation message
+             const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, update it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+
             const resp=await api.put(`updatedeal/${selectedItems}`,deal)
             if(resp.status===200)
             {
@@ -3992,12 +4164,17 @@ useEffect(() => {
         const updatedDeals = await Promise.all(
           data.map(async (singleDeal) => {
             try {
-              const response = await api.get(
-                `viewprojectforinventories/${singleDeal.project}/${singleDeal.unit_number}/${singleDeal.block}`
-              );
+              // const response = await api.get(
+              //   `viewprojectforinventories/${singleDeal.project}/${singleDeal.unit_number}/${singleDeal.block}`
+              // );
 
-              const unitData = response?.data?.project?.add_unit?.[0];
-
+              const unitData =flattenedUnits.find((unit)=>
+              (
+                unit.project_name==singleDeal.project &&
+                unit.unit_no==singleDeal.unit_number &&
+                unit.block==singleDeal.block
+              ))
+             
               const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
               const price=unitData?.expected_price;
 
@@ -4067,18 +4244,15 @@ useEffect(() => {
      
 
    
-        for (const deal of updatedDeals) {
+    
           try {
-            const response = await api.put(`updatedeal/${deal._id}`, deal);
-            // if (response.status !== 200) {
-            //   console.error(`Failed to update deal ${deal._id}`);
-            // } else {
-            //   console.log(`Successfully updated deal ${deal._id}`);
-            // }
+            const response = await api.put(`dealbulkupdate`, {deals:updatedDeals});
+            console.log('all dealupdated');
+            
           } catch (err) {
-            console.error(`Error updating deal ${deal._id}:`, err);
+            console.error(`Error updating deal :`, err);
           }
-        }
+        
 
       } catch (error) {
         console.error("Error in fetchMatchingLeads:", error);
@@ -4170,7 +4344,7 @@ useEffect(() => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/>
-      <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for tasks calls etc." style={{width:"25%"}} />
+      <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} />
      
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
@@ -4310,7 +4484,7 @@ useEffect(() => {
               />
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell style={{ cursor:"pointer" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
+            <StyledTableCell style={{ cursor:"pointer",fontSize:"12px" }} onClick={()=>navigate('/dealsingleview',{state:item})}>
             <span style={{fontWeight:"bolder",color:"#0086b3"}}>{item.unit_number}</span>({item.utype})<br></br>
              {item.ucategory} {item.usize}<br></br>
              {/* {item.ulocality} {item.ucity} */}{item.project}
@@ -4321,7 +4495,7 @@ useEffect(() => {
               .map((col) => (
                 <StyledTableCell 
                 key={col.id} 
-                style={{ padding: "10px", cursor: col.id === 'matchinglead' ? 'pointer' : 'default' }}
+                style={{ padding: "10px", cursor: col.id === 'matchinglead' ? 'pointer' : 'default',fontSize:"12px" }}
                 onClick={col.id === 'matchinglead' ? () => handleMatchLeadClick(item) : undefined} // Handle click if it's 'matchlead'
               >
                 {col.id === 'owner_details' && Array.isArray(item.owner_details) ? (
@@ -4817,7 +4991,7 @@ useEffect(() => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="projectsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+<input id="projectsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleprojectsearchchange(e)} onKeyDown={handlekeypress3} />
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
@@ -4954,7 +5128,7 @@ useEffect(() => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor:"pointer",color:"#0086b3",fontWeight:"bold"}} onClick={()=>navigate('/projectsingleview',{state:item})} >
+              style={{ padding: "10px", cursor:"pointer",color:"#0086b3",fontWeight:"bold",fontSize:"13px"}} onClick={()=>navigate('/projectsingleview',{state:item})} >
               {item.name}
           
             </StyledTableCell>
@@ -4963,7 +5137,7 @@ useEffect(() => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px",}}
+                  style={{ padding: "10px",fontSize:"12px"}}
                 >
                   {
                     col.id==='location' ?
@@ -5058,7 +5232,7 @@ useEffect(() => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+<input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleunitsearchchange(e)} onKeyDown={handlekeypress4}/>
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
@@ -5210,8 +5384,8 @@ useEffect(() => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor:"pointer" }} onClick={()=>navigate('/inventorysingleview',{state:item})}  >
-              <span style={{fontWeight:"bolder",fontSize:"18px",color:"#0086b3"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
+              style={{ padding: "10px", cursor:"pointer",fontSize:"12px" }} onClick={()=>navigate('/inventorysingleview',{state:item})}  >
+              <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
               {item.category} {item.size} <br></br>
               {item.project_name}
             </StyledTableCell>
@@ -5220,7 +5394,7 @@ useEffect(() => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px" }}
+                  style={{ padding: "10px",fontSize:"12px" }}
                 >
                   {
                     col.id==='ownerdetails' ?

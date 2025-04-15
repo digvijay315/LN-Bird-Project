@@ -372,6 +372,7 @@ const renderPageNumbers = () => {
           const resp1 = await api.get(`viewcontactbyid/${item}`); // Use ID to search contact
           const emailData = resp1.data.contact.email;
 
+          
           await api.put(`updatecontact/${item}`, {
             lastcommunication: currentDateTime,
           });
@@ -1189,13 +1190,26 @@ const allColumns = [
           try {
             
             const id=data1._id
+
+             // Show confirmation message
+             const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, update it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+
             const resp=await api.put(`updatecontact/${id}`,contact,config)
             toast.success("contact updated",{ autoClose: 2000 })
-            setTimeout(() => {
-              navigate('/contactdetails')
-            }, 2000);
             // setTimeout(() => {
-            //   handleClose1()
+            //   navigate('/contactdetails')
             // }, 2000);
             setTimeout(() => {
               window.location.reload()
@@ -3234,33 +3248,29 @@ const checkForDuplicates = async (contacts) => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px", cursor: "pointer" }} 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
               onClick={() => navigate('/contactsingleview',{state:item})}
             >
-              <span style={{color:"#0086b3",fontWeight:"bold"}}>{item.title} {item.first_name} {item.last_name}</span>
+              <span style={{color:"#0086b3",fontWeight:"bold",fontSize:"13px"}}>{item.title} {item.first_name} {item.last_name}</span>
               <br />
               {
                 item.mobile_no.map((item1)=>
                 (
                   <>
-                  <SvgIcon component={PhoneIphoneIcon} />
+                  <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}} />
               <span>{item1}</span>
               <br />
             
               </>
                 ))
               }
-                {/* <SvgIcon component={EmailIcon} />
-                <span>{item.email}</span> */}
-              {/* <SvgIcon component={PhoneIphoneIcon} />
-              <span>{item.mobile_no}</span>
-              <br /> */}
-              <SvgIcon component={EmailIcon} />
+            
+              <SvgIcon component={EmailIcon} style={{fontSize:"12px"}}/>
               <span>{item.email}</span>
             </StyledTableCell>
 
             <StyledTableCell 
-              style={{ padding: "10px" }} 
+              style={{ padding: "10px",fontSize:"12px" }} 
              
             >
               {item.h_no} {item.area1}
@@ -3273,7 +3283,7 @@ const checkForDuplicates = async (contacts) => {
             </StyledTableCell>
 
             <StyledTableCell 
-              style={{ padding: "10px" }} 
+              style={{ padding: "10px",fontSize:"12px" }} 
              
             >
               {item.profession_category} ({item.profession_subcategory})
@@ -3287,7 +3297,7 @@ const checkForDuplicates = async (contacts) => {
             {visibleColumns
               .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'professionaldetails' && col.id !== 'address')
               .map((col) => (
-                <StyledTableCell key={col.id} style={{ padding: "10px" }}>
+                <StyledTableCell key={col.id} style={{ padding: "10px",fontSize:"12px" }}>
                 {col.id === "createdAt" ? (
                   formatDate(item[col.id]) // Format createdAt date
                 ) : col.id === "ownership" ? (
@@ -3531,7 +3541,7 @@ const checkForDuplicates = async (contacts) => {
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
                     <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,source:e.target.value}))} >
-                                    <option>{data1.source}</option><option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
+                                    <option>{data1.source}</option><option>---Select---</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
                                     <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
                                     <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
                                     <option>Refrence</option><option>Facebook</option><option>Instagram</option><option>Linkdin</option>
@@ -3540,7 +3550,7 @@ const checkForDuplicates = async (contacts) => {
                         </div>
                         <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,team:e.target.value}))} >
                               <option>{data1.team}</option> 
-                              <option>Select</option> 
+                              <option>---Select---</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
                               <option> Post Sales</option>
@@ -3550,7 +3560,7 @@ const checkForDuplicates = async (contacts) => {
                     <div className="col-md-6"><label className="labels">Owner</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,owner:e.target.value}))} >
                               <option>{data1.owner}</option>     
-                              <option>Select</option>
+                              <option>---Select---</option>
                               <option>Suraj</option> 
                               <option>Suresh Kumar</option>
                               <option>Ramesh Singh</option>
@@ -3561,7 +3571,7 @@ const checkForDuplicates = async (contacts) => {
                         </div>
                         <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,visible_to:e.target.value}))} >
                                <option>{data1.visible_to}</option> 
-                                <option>Select</option>
+                                <option>---Select---</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
@@ -4257,7 +4267,7 @@ const checkForDuplicates = async (contacts) => {
               {index + 1}
             </StyledTableCell>
             <StyledTableCell 
-              style={{ padding: "10px",cursor:"pointer" }} 
+              style={{ padding: "10px",cursor:"pointer",fontSize:"12px" }} 
              onClick={()=>navigate('/companysingleview',{state:item})}
             >
               {item.name}
@@ -4273,7 +4283,7 @@ const checkForDuplicates = async (contacts) => {
               .map((col) => (
                 <StyledTableCell 
                   key={col.id} 
-                  style={{ padding: "10px"}}
+                  style={{ padding: "10px",fontSize:"12px"}}
                 >
                   {
                     col.id=='address' ?

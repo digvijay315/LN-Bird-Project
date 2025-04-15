@@ -110,6 +110,22 @@ viewprojectbyid()
       
         e.preventDefault();
         try {
+
+           // Show confirmation message
+           const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, update it!",
+          });
+      
+          if (!result.isConfirmed) {
+            return; // Stop execution if user cancels
+          }
+
             const resp= await api.put(`updateproject/${id}`,project,config)
         if(resp.status===200)
             {
