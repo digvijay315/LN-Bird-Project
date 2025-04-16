@@ -96,6 +96,7 @@ useEffect(()=>{fetchdatabystage_opportunitycount()},[])
 
 
 const[countall,setcountall]=useState('')
+const[allleaddataforsearch,setallleaddataforsearch]=useState([])
   const[data,setdata]=useState([]);
   const fetchdata=async(event)=>
   {
@@ -104,6 +105,7 @@ const[countall,setcountall]=useState('')
       const resp=await api.get('leadinfo')
       const all=(resp.data.lead)
       setdata(all)
+      setallleaddataforsearch(all)
       setcountall(all.length)
     } catch (error) {
       console.log(error);
@@ -3132,14 +3134,67 @@ const handleroadChange = (event) => {
                                         }
                           
                           
-                                      
-
-
-
-
+                                    
 
 // =================================================send details code end=======================================================
 
+
+// =======================================lead search box code start============================================================
+
+
+                          const [searchTermlead, setSearchTermlead] = useState('');
+                          const [suggestionslead, setSuggestionslead] = useState([]);
+                          
+                                          const handleSearchChangelead = (e) => {
+                                            const value = e.target.value;
+                                            setSearchTermlead(value);
+                          
+                                            if (value.trim() === '') {
+                                              setSuggestionslead([]);
+                                              return;
+                                            }
+                          
+                                            const filtered = allleaddataforsearch.filter(item =>
+                                            {
+                                              const titlematch=item.title && item.title.toLowerCase().includes(value.toLowerCase())
+                                              const firstnamematch =item.first_name && item.first_name.toLowerCase().includes(value.toLowerCase());
+                                              const lastnamematch =item.last_name && item.last_name.toLowerCase().includes(value.toLowerCase());
+                          
+                                              const mobile_no =
+                                                Array.isArray(item.mobile_no) &&
+                                                item.mobile_no.some(mobile =>
+                                                  String(mobile).toLowerCase().includes(value.toLowerCase())
+                                                );
+
+                                                const email =
+                                                Array.isArray(item.email) &&
+                                                item.email.some(emailid =>
+                                                  String(emailid).toLowerCase().includes(value.toLowerCase())
+                                                );
+                          
+                                              
+                          
+                                              return titlematch || firstnamematch || lastnamematch || mobile_no || email;
+                                              
+                                           } );
+                          
+                                            setSuggestionslead(filtered); // Limit to 5 suggestions
+                                          };
+                          
+                                          const handleSuggestionClicklead = (item) => {
+                                
+                                          
+                                            setSearchTermlead(`${item.title} ${item.first_name} ${item.last_name} -${item.mobile_no.join(',')} -${item.email.join(',')}`);
+                                            setSuggestionslead([]);
+                                            setdata([item])
+                          
+                                            // You can also do something with the selected item (e.g. set selectedDeal)
+                                          };
+                          
+                                       
+
+
+// ================================================lead search box code end=======================================================
 
   return ( 
     <div>
@@ -3196,7 +3251,59 @@ const handleroadChange = (event) => {
    
  <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and lead type"  style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+{/* <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and lead type"  style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
+
+<input
+              // ref={wrapperRef}
+              id="search"
+              type="text"
+              className="form-control form-control-sm"
+              placeholder="Search for lead via name, mobile no and email"
+              style={{ width: "25%" }}
+              value={searchTermlead}
+              onChange={(e) => handleSearchChangelead(e)}
+              // onKeyDown={handleKeyPress2}
+              autoComplete="off"
+            />
+          {suggestionslead.length > 0 && (
+  <ul
+    className="list-group position-absolute"
+    style={{
+      width: "20%",
+      zIndex: 1000,
+      marginTop: "40px",
+      fontSize: "14px",
+      cursor: "pointer",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+      backgroundColor: "#fff",
+      borderRadius: "4px",
+      maxHeight: "300px",
+      overflowY: "auto",
+    }}
+  >
+    {suggestionslead.map((item, index) => {
+
+      return (
+              <li
+                key={index}
+                className="suggestion-item px-2 py-1"
+                onClick={() => handleSuggestionClicklead(item)}
+                style={{
+                  borderBottom: "1px solid #e0e0e0",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
+              >
+                <strong>{item.title} {item.first_name} {item.last_name}</strong><br />
+                <span style={{ color: "#555" }}>
+                  Mobile(s): {item.mobile_no.join(',')} <br />
+                  email(s):{item.email.join(',')}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
@@ -5056,7 +5163,7 @@ const handleroadChange = (event) => {
     
       <tbody>
         {
-         [...matcheddeals]
+         matcheddeals
          .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >

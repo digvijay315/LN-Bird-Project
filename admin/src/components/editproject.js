@@ -1466,7 +1466,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
 // ==============================----------------------add unit start===========================================---------------------------
                                           const[unit,setunit]=useState([])
-                                          const[units,setunits]=useState({project_name:"",unit_no:"",unit_type:"",category:"",
+                                          const[units,setunits]=useState({project_name:project?.name || "",unit_no:"",unit_type:"",category:"",
                                                                           sub_category:[],block:"",
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                                                           total_land_area:"",
@@ -3279,7 +3279,7 @@ const generateExcelFileunit = () => {
                 <div className="col-md-6"><label className="labels">Name</label><input type="text" value={project.name} required="true" className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
                 <div className='col-md-6'></div>
                     <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,developer_name:e.target.value})}>
-                             <option>{project.developer_name}</option>
+                             <option>{project.developer_name.name}</option>
                               <option>---Select---</option>
                               {
                                 data1.map((item)=>

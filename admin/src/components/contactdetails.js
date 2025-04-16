@@ -87,12 +87,14 @@ function Fetchcontact() {
     const[data,setdata]=useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const[totalcontact,settotalcontact]=useState()
+    const[contactforsearch,setcontactforsearch]=useState([])
     const fetchdata=async(event)=>
     {
       
       try {
         const resp=await api.get('viewcontact')
         setdata(resp.data.contact)
+        setcontactforsearch(resp.data.contact)
         const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
         settotalcontact(countcontact.length)
         setFilteredData(countcontact);
@@ -3013,7 +3015,62 @@ const checkForDuplicates = async (contacts) => {
 
 //======================================import and download sample data code end===========================================================
 
+// =======================================lead search box code start============================================================
 
+
+                          const [searchTermcontact, setSearchTermcontact] = useState('');
+                          const [suggestionscontact, setSuggestionscontact] = useState([]);
+                          
+                                          const handleSearchChangecontact = (e) => {
+                                            const value = e.target.value;
+                                            setSearchTermcontact(value);
+                          
+                                            if (value.trim() === '') {
+                                              setSuggestionscontact([]);
+                                              return;
+                                            }
+                          
+                                            const filtered = contactforsearch.filter(item =>
+                                            {
+                                              const titlematch=item.title && item.title.toLowerCase().includes(value.toLowerCase())
+                                              const firstnamematch =item.first_name && item.first_name.toLowerCase().includes(value.toLowerCase());
+                                              const lastnamematch =item.last_name && item.last_name.toLowerCase().includes(value.toLowerCase());
+                          
+                                              const mobile_no =
+                                                Array.isArray(item.mobile_no) &&
+                                                item.mobile_no.some(mobile =>
+                                                  String(mobile).toLowerCase().includes(value.toLowerCase())
+                                                );
+
+                                                const email =
+                                                Array.isArray(item.email) &&
+                                                item.email.some(emailid =>
+                                                  String(emailid).toLowerCase().includes(value.toLowerCase())
+                                                );
+                          
+                                              
+                          
+                                              return titlematch || firstnamematch || lastnamematch || mobile_no || email;
+                                              
+                                           } );
+                          
+                                            setSuggestionscontact(filtered); // Limit to 5 suggestions
+                                          };
+                          
+                                          const handleSuggestionClickcontact = (item) => {
+                                
+                                          
+                                            setSearchTermcontact(`${item.title} ${item.first_name} ${item.last_name} -${item.mobile_no.join(',')} -${item.email.join(',')}`);
+                                            setSuggestionscontact([]);
+                                            setdata([item])
+                          
+                                            // You can also do something with the selected item (e.g. set selectedDeal)
+                                          };
+                          
+                                       
+
+
+// ================================================lead search box code end=======================================================
 
 
 
@@ -3104,12 +3161,73 @@ const checkForDuplicates = async (contacts) => {
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-      <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%",padding: '8px',
+      {/* <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" 
+      style={{width:"25%",padding: '8px',
         borderRadius: '4px',
         border: isFlashing ? '2px solid #4CAF50' : '1px solid #ccc',
         boxShadow: isFlashing ? '0px 0px 8px rgba(76, 175, 80, 0.6)' : 'none',
-        transition: 'border 0.3s ease, box-shadow 0.3s ease',}} onFocus={handleFocus} onBlur={handleBlur}  onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/>
+        transition: 'border 0.3s ease, box-shadow 0.3s ease',}} 
+        onFocus={handleFocus} onBlur={handleBlur}  
+        onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
       
+      <input
+       style={{width:"25%",padding: '8px',
+        borderRadius: '4px',
+        border: isFlashing ? '2px solid #4CAF50' : '1px solid #ccc',
+        boxShadow: isFlashing ? '0px 0px 8px rgba(76, 175, 80, 0.6)' : 'none',
+        transition: 'border 0.3s ease, box-shadow 0.3s ease',}} 
+        onFocus={handleFocus} onBlur={handleBlur}  
+              
+              id="search"
+              type="text"
+              className="form-control form-control-sm"
+              placeholder="Search for contact via name, mobile no and email"
+              value={searchTermcontact}
+              onChange={(e) => handleSearchChangecontact(e)}
+              // onKeyDown={handleKeyPress2}
+              autoComplete="off"
+            />
+          {suggestionscontact.length > 0 && (
+  <ul
+    className="list-group position-absolute"
+    style={{
+      width: "20%",
+      zIndex: 1000,
+      marginTop: "40px",
+      fontSize: "14px",
+      cursor: "pointer",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+      backgroundColor: "#fff",
+      borderRadius: "4px",
+      maxHeight: "300px",
+      overflowY: "auto",
+    }}
+  >
+    {suggestionscontact.map((item, index) => {
+
+      return (
+              <li
+                key={index}
+                className="suggestion-item px-2 py-1"
+                onClick={() => handleSuggestionClickcontact(item)}
+                style={{
+                  borderBottom: "1px solid #e0e0e0",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
+              >
+                <strong>{item.title} {item.first_name} {item.last_name}</strong><br />
+                <span style={{ color: "#555" }}>
+                  Mobile(s): {item.mobile_no.join(',')} <br />
+                  email(s):{item.email.join(',')}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    
       <Tooltip title="Delete Data.." arrow>

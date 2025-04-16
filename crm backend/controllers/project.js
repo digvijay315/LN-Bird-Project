@@ -212,7 +212,22 @@ unitDetails={
       {
           try {
               const _id=req.params._id;
-              const resp= await addproject.findOne({_id:_id})
+              const resp= await addproject.findOne({_id:_id}).populate({
+                path: 'add_unit.owner_details', // Populate the 'owner_details' field inside 'add_unit'
+                model: 'add_contact' // Specify the model to populate
+            })
+            .populate({
+                path: 'add_unit.associated_contact', // Populate the 'associated_contact' field inside 'add_unit'
+                model: 'add_contact' // Specify the model to populate
+            })
+             .populate({
+              path: 'add_unit.previousowner_details', // Populate 'owner_details' inside 'add_unit'
+              model: 'add_contact' // Specify the model for population
+            })
+            .populate({
+              path: 'developer_name', 
+              model: 'add_developer' // Specify the model to populate
+          })
               if(!resp)
                   {
                      return res.send("project details not available")

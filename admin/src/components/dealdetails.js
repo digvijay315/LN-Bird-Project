@@ -2,7 +2,7 @@ import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -950,8 +950,10 @@ function Dealdetails() {
 
                   React.useEffect(()=>{fetchcdata()},[])
 
+                  const[allprojectforsearch,setallprojectforsearch]=useState([])
                   const[cdata,setcdata]=useState([]);
                   const [flattenedUnits, setFlattenedUnits] = useState([]);
+                  const[allunitsforsearch,setallunitsforsearch]=useState([])
                   // const [filteredData, setFilteredData] = useState([]);
                   const[totalproject,settotalproject]=useState()
                   const[totalupcoming,settotalupcoming]=useState()
@@ -964,6 +966,7 @@ function Dealdetails() {
                     try {
                       const resp=await api.get('viewproject')
                       setcdata(resp.data.project)
+                      setallprojectforsearch(resp.data.project)
                       const countproject=Array.isArray(resp.data.project) ? resp.data.project : [resp.data.project]
                       settotalproject(countproject.length)
                     
@@ -992,6 +995,7 @@ function Dealdetails() {
 
                         // Now update the flattenedUnits state with the flattened array
                         setFlattenedUnits(flattened);
+                        setallunitsforsearch(flattened)
                 
                       // Log the flattened units
                     
@@ -4433,7 +4437,191 @@ useEffect(() => {
 
 // =================================================send details code end=======================================================
 
-                  
+
+//==========================================deal suggestion box for search code start================================================================
+
+React.useEffect(()=>{fetchalldealdata()},[])
+
+
+const[alldealdata,setalldealdata]=useState([])
+const fetchalldealdata=async(event)=>
+    {
+      
+      try {
+        const resp=await api.get('viewdeal')
+        const all=(resp.data.deal)
+        setalldealdata(all)
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+
+const [searchTerm, setSearchTerm] = useState('');
+const [suggestions, setSuggestions] = useState([]);
+
+                const handleSearchChange = (e) => {
+                  const value = e.target.value;
+                  setSearchTerm(value);
+
+                  if (value.trim() === '') {
+                    setSuggestions([]);
+                    return;
+                  }
+
+                  const filtered = alldealdata.filter(item =>
+                    (item.project && item.project.toLowerCase().includes(value.toLowerCase())) ||
+                    (item.block && item.block.toLowerCase().includes(value.toLowerCase())) ||
+                    (item.unit_number && item.unit_number.toLowerCase().includes(value.toLowerCase()))
+                  );
+
+                  setSuggestions(filtered); // Limit to 5 suggestions
+                };
+
+                const handleSuggestionClickdeal = (item) => {
+                  setSearchTerm(`${item.project} - ${item.block} - ${item.unit_number}`);
+                  setSuggestions([]);
+                  setdata([item])
+                  // You can also do something with the selected item (e.g. set selectedDeal)
+                };
+                
+
+
+
+//==============================================deal suggestion box for search code end==================================================
+
+
+//========================================== project suggestion box code start=======================================================
+
+const [searchTermproject, setSearchTermproject] = useState('');
+const [suggestionsproject, setSuggestionsproject] = useState([]);
+
+                const handleSearchChangeproject = (e) => {
+                  const value = e.target.value;
+                  setSearchTermproject(value);
+
+                  if (value.trim() === '') {
+                    setSuggestionsproject([]);
+                    return;
+                  }
+
+                  const filtered = allprojectforsearch.filter(item =>
+                  {
+                    const nameMatch =
+                      item.name && item.name.toLowerCase().includes(value.toLowerCase());
+
+                    const blockMatch =
+                      Array.isArray(item.add_block) &&
+                      item.add_block.some(block =>
+                        String(block.block_name).toLowerCase().includes(value.toLowerCase())
+                      );
+
+                    const unitMatch =
+                      Array.isArray(item.add_unit) &&
+                      item.add_unit.some(unit =>
+                        String(unit.unit_no).toLowerCase().includes(value.toLowerCase())
+                      );
+
+                    return nameMatch || blockMatch || unitMatch;
+                    
+                 } );
+
+                  setSuggestionsproject(filtered); // Limit to 5 suggestions
+                };
+
+                const handleSuggestionClickproject = (item) => {
+                  const blockStr = Array.isArray(item.add_block) ? item.add_block.map(block=>block.block_name).join(", ") : "";
+                  const unitStr = Array.isArray(item.add_unit) ? item.add_unit.map(unit=>unit.unit_no).join(", ") : "";
+                
+                  setSearchTermproject(`${item.name} - ${blockStr} - ${unitStr}`);
+                  setSuggestionsproject([]);
+                  setcdata([item])
+
+                  // You can also do something with the selected item (e.g. set selectedDeal)
+                };
+
+                const wrapperRef = useRef(null);
+
+
+                useEffect(() => {
+                  function handleClickOutside(event) {
+                    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                      setSuggestionsproject([]); // 👈 close suggestions
+                      setSuggestions([])
+                    }
+                  }
+                
+                  document.addEventListener("mousedown", handleClickOutside);
+                  return () => {
+                    document.removeEventListener("mousedown", handleClickOutside);
+                  };
+                }, []);
+                
+
+// ============================================project suggestion box code end======================================================
+  
+
+//========================================= units suggestion box code start=============================================================
+
+const [searchTermunits, setSearchTermunits] = useState('');
+const [suggestionsunit, setSuggestionsunit] = useState([]);
+
+                const handleSearchChangeunit = (e) => {
+                  const value = e.target.value;
+                  setSearchTermunits(value);
+
+                  if (value.trim() === '') {
+                    setSuggestionsunit([]);
+                    return;
+                  }
+
+                  const filtered = allunitsforsearch.filter(item =>
+                  {
+                    const projectmatch =item.project_name && item.project_name.toLowerCase().includes(value.toLowerCase());
+
+                    const blockmatch =item.block && item.block.toLowerCase().includes(value.toLowerCase());
+
+                    const unitmatch =item.unit_no && item.unit_no.toLowerCase().includes(value.toLowerCase());
+
+                    const ownermatch =
+                      Array.isArray(item.owner_details) &&
+                      item.owner_details.some(owner =>
+                        (owner.first_name && owner.first_name.toLowerCase().includes(value.toLowerCase())) ||
+                        (owner.last_name && owner.last_name.toLowerCase().includes(value.toLowerCase())) ||
+                        (owner.mobile_no && String(owner.mobile_no).toLowerCase().includes(value.toLowerCase()))
+                      );
+
+                    const associatematch =
+                      Array.isArray(item.associated_contact) &&
+                      item.associated_contact.some(contact =>
+                        (contact.first_name && contact.first_name.toLowerCase().includes(value.toLowerCase())) ||
+                        (contact.last_name && contact.last_name.toLowerCase().includes(value.toLowerCase())) ||
+                        (contact.mobile_no && String(contact.mobile_no).toLowerCase().includes(value.toLowerCase()))
+                      );
+
+                    return projectmatch || blockmatch || unitmatch || ownermatch || associatematch
+                    
+                 } );
+
+                  setSuggestionsunit(filtered); // Limit to 5 suggestions
+                };
+
+                const handleSuggestionClickunit = (item) => {
+                  const ownerStr = Array.isArray(item.owner_details) ? item.owner_details.map(owner=>`${owner.title || ""} ${owner.first_name || ""} ${owner.last_name || ""}`).join(", ") : "";
+                  const associateStr = Array.isArray(item.associated_contact) ? item.associated_contact.map(contact=>`${contact.title || ""} ${contact.first_name || ""} ${contact.last_name || ""}`).join(", ") : "";
+                
+                  setSearchTermunits(`${item.project_name} -${item.block} -${item.unit_no} - ${ownerStr} - ${associateStr}`);
+                  setSuggestionsunit([]);
+                  setFlattenedUnits([item])
+
+                  // You can also do something with the selected item (e.g. set selectedDeal)
+                };
+
+
+
+// ====================================units suggestion box code end=============================================================
+
     return (
         <div>
             <Header1/>
@@ -4504,7 +4692,36 @@ useEffect(() => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/>
-      <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} />
+      
+    {/* <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} /> */}
+              
+                <input
+                  // ref={wrapperRef}
+              id="dealsearch"
+              type="text"
+              disabled={!ischecked}
+              className="form-control form-control-sm"
+              placeholder="Search for deals via project, block or unit no"
+              style={{ width: "25%" }}
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e)}
+              // onKeyDown={handleKeyPress2}
+              autoComplete="off"
+            />
+            {suggestions.length > 0 && (
+              <ul className="list-group position-absolute" style={{ width: "20%", zIndex: 1000,marginTop:"40px",fontSize:"14px",cursor:"pointer", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",backgroundColor: "#fff", borderRadius: "4px",  maxHeight: "300px", overflowY: "auto"}}>
+                {suggestions.map((item, index) => (
+                  <li
+                    key={index}
+                    className="suggestion-item"
+                    onClick={() => handleSuggestionClickdeal(item)}
+                  >
+                    {item.project} - {item.block} - {item.unit_number}
+                  </li>
+                ))}
+              </ul>
+            )}
+
      
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
@@ -5151,7 +5368,65 @@ useEffect(() => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="projectsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleprojectsearchchange(e)} onKeyDown={handlekeypress3} />
+{/* <input id="projectsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleprojectsearchchange(e)} onKeyDown={handlekeypress3} /> */}
+
+              <input
+              // ref={wrapperRef}
+              id="projectsearch"
+              type="text"
+              className="form-control form-control-sm"
+              placeholder="Search for project via project name, block or unit no"
+              style={{ width: "25%" }}
+              value={searchTermproject}
+              onChange={(e) => handleSearchChangeproject(e)}
+              // onKeyDown={handleKeyPress2}
+              autoComplete="off"
+            />
+          {suggestionsproject.length > 0 && (
+  <ul
+    className="list-group position-absolute"
+    style={{
+      width: "20%",
+      zIndex: 1000,
+      marginTop: "40px",
+      fontSize: "14px",
+      cursor: "pointer",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+      backgroundColor: "#fff",
+      borderRadius: "4px",
+      maxHeight: "300px",
+      overflowY: "auto",
+    }}
+  >
+    {suggestionsproject.map((item, index) => {
+      const blockStr = Array.isArray(item.add_block)
+      ? item.add_block.map(block => block.block_name).join(", ")
+      : "";
+      const unitStr = Array.isArray(item.add_unit)
+       ? item.add_unit.map(unit=>unit.unit_no).join(',') : "";
+
+      return (
+              <li
+                key={index}
+                className="suggestion-item px-2 py-1"
+                onClick={() => handleSuggestionClickproject(item)}
+                style={{
+                  borderBottom: "1px solid #e0e0e0",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
+              >
+                <strong>{item.name}</strong><br />
+                <span style={{ color: "#555" }}>
+                  Block(s): {blockStr} <br />
+                  Unit(s): {unitStr}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
@@ -5392,7 +5667,63 @@ useEffect(() => {
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
-<input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleunitsearchchange(e)} onKeyDown={handlekeypress4}/>
+{/* <input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleunitsearchchange(e)} onKeyDown={handlekeypress4}/> */}
+
+<input
+              // ref={wrapperRef}
+              id="unitsearch"
+              type="text"
+              className="form-control form-control-sm"
+              placeholder="Search for project via project name, block or unit no"
+              style={{ width: "25%" }}
+              value={searchTermunits}
+              onChange={(e) => handleSearchChangeunit(e)}
+              // onKeyDown={handleKeyPress2}
+              autoComplete="off"
+            />
+          {suggestionsunit.length > 0 && (
+  <ul
+    className="list-group position-absolute"
+    style={{
+      width: "20%",
+      zIndex: 1000,
+      marginTop: "40px",
+      fontSize: "14px",
+      cursor: "pointer",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",
+      backgroundColor: "#fff",
+      borderRadius: "4px",
+      maxHeight: "300px",
+      overflowY: "auto",
+    }}
+  >
+    {suggestionsunit.map((item, index) => {
+       const ownerStr = Array.isArray(item.owner_details) ? item.owner_details.map(owner=>`${owner.title || ""} ${owner.first_name || ""} ${owner.last_name || ""} (${owner.mobile_no.join(',') || ""})`).join("<br />") : "";
+       const associateStr = Array.isArray(item.associated_contact) ? item.associated_contact.map(contact=>`${contact.title || ""} ${contact.first_name || ""} ${contact.last_name || ""} (${contact.mobile_no.join("<br />") || ""})`).join(", ") : "";
+
+      return (
+              <li
+                key={index}
+                className="suggestion-item px-2 py-1"
+                onClick={() => handleSuggestionClickunit(item)}
+                style={{
+                  borderBottom: "1px solid #e0e0e0",
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#f0f0f0")}
+                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#fff")}
+              >
+                <strong>{item.project_name}-{item.block}-{item.unit_no}</strong><br />
+                <span style={{ color: "#555" }}>
+                  Owners: <div dangerouslySetInnerHTML={{ __html: ownerStr }} />
+                  <br />
+                  Associated Contact: <div dangerouslySetInnerHTML={{ __html: associateStr }} />
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
