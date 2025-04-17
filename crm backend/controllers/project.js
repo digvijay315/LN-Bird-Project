@@ -523,6 +523,7 @@ unitDetails={
                 try {
                   // Retrieve project_name, block, and unit_no from the URL parameters (params)
                   const { project_name, block, unit_no } = req.params;
+                
 
                   const exitproject=await addproject.findOne({name:project_name})
                   if(!exitproject)
@@ -613,12 +614,11 @@ unitDetails={
               
               
               if (req.files) {
-              
-                
-                const imagefield = req.files.filter(file => file.fieldname.includes(`add_unit[preview]`));
+            
+                const imagefield = req.files.filter(file => file.fieldname.includes(`preview`));
                 const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[image]`));
                
-               
+            
                 
                 for (let file of imagefield) {
                   try {

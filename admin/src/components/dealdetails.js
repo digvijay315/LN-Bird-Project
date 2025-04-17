@@ -30,6 +30,7 @@ import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material"
 import Swal from "sweetalert2";
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
+import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 
 function Dealdetails() {
   const navigate=useNavigate()
@@ -2771,7 +2772,13 @@ const [show9, setshow9] = useState(false);
                   }
                 // console.log(units.owner_details);
                 
-                  
+                const config = {
+                  headers: {
+                    'Content-Type': 'multipart/form-data' // Set the Content-Type here
+                  }
+              }
+      
+              
           const updateinventories=async()=>
           {
             const project=selectedItems3[0].project_name
@@ -2794,7 +2801,7 @@ const [show9, setshow9] = useState(false);
               return; // Stop execution if user cancels
             }
 
-              const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units)
+              const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units,config)
              
               toast.success(`units updated successfully`,{autoClose:"2000"})
                               setTimeout(() => {
@@ -2911,15 +2918,12 @@ const [show9, setshow9] = useState(false);
                                                                             
                                                                             const newpreview = [...units.preview];
                                                                             const files = Array.from(event.target.files);
-                                                                            const previewUrls = files.map(file => URL.createObjectURL(file));
-                                                                            newpreview[index] = {
-                                                                              files: files,
-                                                                              previewUrls: previewUrls
-                                                                            };
+                                                                          
+                                                                            newpreview[index] = {files:files}
                                                                             setunits({
                                                                               ...units,
                                                                               preview: newpreview
-                                                                            });
+                                                                            })
                                                                           };
                                                                           
                                                                           
@@ -4350,18 +4354,146 @@ useEffect(() => {
                                             document.getElementById("sendwhatsapp1").style.width="150px"
                                             document.getElementById("sendwhatsapp1").style.textAlign="center"
                                           }
+                          const[unitdata,setunitdata]=useState({})
+                          const[projectdata,setprojectdata]=useState({})
+                        
+                          useEffect(()=>
+                          {
+                            setunitdata(flattenedUnits?.find((unit)=>
+                              (
+                                unit.project_name==deal1[0].project &&
+                                unit.unit_no==deal1[0].unit_number &&
+                                unit.block==deal1[0].block
+                              )))
+                              setprojectdata(cdata.filter((item)=>
+                              (
+                                item.name==deal1[0].project
+                              )))
+
+                             
+                          },[deal1])
+
+                          const[builtupdetails,setbuiltupdetails]=useState("")
+                          const[picture,setpicture]=useState("")
+                          useEffect(()=>
+                          {
+                            setbuiltupdetails( unitdata?.cluter_details?.map((item, index) => {
+                              const length = unitdata.length?.[index] || '-';
+                              const breadth = unitdata.bredth?.[index] || '-';
+                              return ` • ${item}: ${length}x${breadth} ${unitdata.measurment2[0]}.`;
+                            }).join('\n')|| '• Builtup details not available')
+
+                            const formattedpicture = Array.isArray(unitdata?.descriptions)
+                            ? unitdata.descriptions.map((item) => ` ✔️ ${item}`).join('\n')
+                            : '• no picture';
+
+                            setpicture(formattedpicture)
+                          },[unitdata])
+
+                          const[aminitiesdetails,setaminitiesdetails]=useState("")
+                          const[nearbyaminities,setnearbyaminities]=useState("")
+                          
+                          useEffect(() => {
+                            const formattedAminities = Array.isArray(projectdata?.[0]?.features_aminities)
+                              ? projectdata[0].features_aminities.map((item) => ` ✔️ ${item}`).join('\n')
+                              : '• no aminities';
+                          
+                              const formattedNearby = Array.isArray(projectdata?.[0]?.nearby_aminities)
+                              ? projectdata[0].nearby_aminities
+                                  .map(item => ` ✔️ ${item.name_of_destination} ${item.destination} ${item.distance} ${item.measurment}`)
+                                  .join('\n')
+                              : '• Nearby highlights not available';
+                          
+                              setnearbyaminities(formattedNearby);
+                            setaminitiesdetails(formattedAminities);
+                          }, [projectdata]);
+
+                          useEffect(() => {
+                            if (unitdata?.preview?.length) {
+                              const previewFiles = unitdata.preview.map((url) => ({
+                                type: 'url',
+                                name: url.split('/').pop(),
+                                url,
+                              }));
+                              setAttachments1(previewFiles);
+                            }
+                          }, [unitdata?.preview]);
                           
                           
-                          
-                                   
-                          
+                          const [emails, setEmails] = useState([]);
+
+                          useEffect(() => {
+                         
+                            if (Array.isArray(matchedLeads) && Array.isArray(selectedItems1)) {
+                              const extractedEmails = matchedLeads
+                                .filter(item => selectedItems1.some(selected => selected === item._id))
+                                .flatMap(item => item.email || []);
+                              
+                              setEmails(extractedEmails);
+                            }
+                          }, [selectedItems1, matchedLeads]);
+                    
+console.log(emails);
+
+
+                
+
                                       const templates1 = {
                                         template1: "Hello, \n\nI hope this email finds you well. I wanted to follow up on our previous conversation regarding property. Please let me know if you have any questions.\n\nBest regards,\nDigvijay Kumar",
                                         template2: "Hi there, \n\nI just wanted to remind you about the upcoming event on [date]. It will be held at Noida. Please feel free to reach out if you need any additional information.\n\nSincerely,\nDigvijay Kumar",
-                                        template3: `Dear sir, \n\nWe are excited to inform you that your application has been approved. Please find attached the documents with further details about the next steps.\n\nBest regards,\nDigvijay Kumar`
+                                        template3: `
+                                        Dear sir/madam,
+                                    
+                                        Thank you for showing interest in exploring real estate opportunities with us.
+                                    
+                                        We are pleased to share a premium property that closely matches your preferences. Please find the details below:
+                                    
+                                        🔑🏠${unitdata?.size} ${Array.isArray(unitdata?.category) ? unitdata.category.join(", ") : unitdata?.category || ""} ${Array.isArray(unitdata?.sub_category) ? unitdata.sub_category.join(", ") : unitdata?.sub_category || ""}
+                                        • Location: ${unitdata?.block}, ${unitdata?.project_name}
+                                        • Price: ₹ ${Number(deal1[0]?.expected_price)?.toLocaleString('en-IN')}/- [Negotiable]
+                                          
+                                    
+                                        • Facing: ${unitdata?.facing}
+                                        • Direction: ${unitdata?.direction}
+                                        • Road: ${unitdata?.road}
+                                        • Ownership: ${unitdata?.ownership}
+                                        • Registry Status: {{registry_status}}
+                                        • Possession: ${projectdata[0]?.possession? projectdata[0].possession : "no date available"}
+                                        • Parking: ${Array.isArray(projectdata[0]?.parking_type) ? projectdata[0].parking_type.join(',') : projectdata[0]?.parking_type}
+                                    
+                                        BuiltupDetails:-
+                                       ${builtupdetails}	
+                                    
+                                        🌟 Key Amenities:
+                                         ${aminitiesdetails}
+                                    
+                                        ✨Near By Highlights:
+                                        ${nearbyaminities}
+                                    
+                                        Picture:
+                                        ${picture}         
+
+                                        🗓️ Want to See This Property in Person?
+                                        We would love to arrange a personal site visit for you. Let us know your convenient date and time.
+                                    
+                                        📞 Click here to book your visit: {{booking_link}}
+                                    
+                                        If this property doesn’t fully match your expectations, don’t worry. We have many more listings that might interest you. Just reply with your updated preferences and we’ll tailor options accordingly.
+                                    
+                                        Looking forward to assisting you further.
+                                    
+                                        Warm regards,  
+                                        Suraj Keshwar  
+                                        Bharat Properties – Kurukshetra  
+                                        📞 +91-9991333570  
+                                        📧 bharatproperties570@gmail.com  
+                                        🌐 www.bharatproperties.co
+                                      `
+
+                                        
                                       };
                                       const[message1,setmessage1]=useState("")
-                                      const[subject1,setsubject1]=useState("")
+                                      const[subject1,setsubject1]=useState("•New Property That Matches Your Needs – Ready for Site Visit?")
                                       const [selectedTemplate1, setSelectedTemplate1] = useState('');
                                       const [attachments1, setAttachments1] = useState([]);
                           
@@ -4377,15 +4509,21 @@ useEffect(() => {
                                         {
                                           setmessage1(value)
                                         }
-                          
-                                        const {
-                                          getRootProps: getRootProps1,
-                                          getInputProps: getInputProps1
-                                        } = useDropzone({
+
+
+                                        const { getRootProps: getRootProps1, getInputProps: getInputProps1 } = useDropzone({
                                           onDrop: (acceptedFiles) => {
-                                            setAttachments1(acceptedFiles);
+                                            const localFiles = acceptedFiles.map((file) => ({
+                                              type: 'file',
+                                              name: file.name,
+                                              file,
+                                            }));
+                                        
+                                            setAttachments1((prev) => [...prev, ...localFiles]); // keep preview files already set
                                           },
                                         });
+                                        
+                                        
                                         
                           
                                       const handleTemplateSelect1 = (e) => {
@@ -4400,20 +4538,36 @@ useEffect(() => {
                                         setmessage1(htmlFormattedMessage); 
                                       };
                                       
+
+                                      const [isLoading1, setIsLoading1] = useState(false);
                                       const sendmail1=async(e)=>
                                         {
+                                          setIsLoading1(true)
                                           e.preventDefault();
                                           const formData = new FormData();
                               
                          
                                               formData.append('subject', subject1);
                                               formData.append('message', message1);
-                                              // formData.append('emails', emails);
+                                              formData.append('emails', emails);
                                               
                                               // Append the files to form data
-                                              attachments1.forEach((file) => {
-                                                formData.append('attachments', file);
-                                              });
+                                              for (const item of attachments1) {
+                                                if (item.type === 'file') {
+                                                  // Already a file
+                                                  formData.append('attachments', item.file);
+                                                } else if (item.type === 'url') {
+                                                  try {
+                                                    const response = await fetch(item.url);
+                                                    const blob = await response.blob();
+                                                    const file = new File([blob], item.name, { type: blob.type });
+                                                    formData.append('attachments', file);
+                                                  } catch (error) {
+                                                    console.error('Error fetching image from URL:', item.url, error);
+                                                  }
+                                                }
+                                              }
+
                                           try {
                                             
                                             const resp=await api.post(`contact/sendmail`,formData)
@@ -4421,18 +4575,28 @@ useEffect(() => {
                                             {
                                               toast.success("Mail Sent Successfully",{ autoClose: 2000 })
                                               setTimeout(() => {
-                                                navigate('/leaddetails')
+                                                window.location.reload()
                                               }, 2000);
-                                              setTimeout(() => {
-                                              }, 2000);
+                                             
                                             }
                                            
                                           } catch (error) {
                                             toast.error(error.response.data,{ autoClose: 2000 });
+                                          }finally
+                                          {
+                                            setIsLoading1(false)
                                           }
                                         }
-                          
-                          
+                                        
+            
+        
+      
+          
+    
+     
+      
+      
+                
                                       
 
 // =================================================send details code end=======================================================
@@ -4699,7 +4863,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                   // ref={wrapperRef}
               id="dealsearch"
               type="text"
-              disabled={!ischecked}
+              // disabled={!ischecked}
               className="form-control form-control-sm"
               placeholder="Search for deals via project, block or unit no"
               style={{ width: "25%" }}
@@ -7652,7 +7816,7 @@ stage:selectedLead.stage
                      <th style={{width:"100px"}}>#</th>
                      <th style={{width:"400px",textAlign:"center"}}>Preview</th>
                      <th style={{width:"300px",textAlign:"center"}}>Description</th>
-                     <th style={{width:"300px",textAlign:"center"}}>Category</th>
+                     {/* <th style={{width:"300px",textAlign:"center"}}>Category</th> */}
                      <th style={{width:"150px",textAlign:"center"}}>Action</th>
                        </tr>
                        </thead>
@@ -7716,7 +7880,7 @@ stage:selectedLead.stage
                                  </div>
                                )):[]}
                        </td>
-                       <td>
+                       {/* <td>
                        {Array.isArray(units.category)?
                        units.category.map((name, index) => (
                                  <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
@@ -7733,7 +7897,7 @@ stage:selectedLead.stage
                                        </select>
                                  </div>
                                )):[]}
-                       </td>
+                       </td> */}
                        <td>
                        {Array.isArray(units.action10)?
                        units.action10.map((name, index) => (
@@ -8547,13 +8711,53 @@ stage:selectedLead.stage
        
        </div>
 
+       <>
+    {isLoading1 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>sending...</p>
+        </div>
+      </div>
+    )}
+  </>
+
             </Modal.Body>
             <Modal.Footer>
+            <Button variant="secondary" onClick={sendmail1}>
+                Send
+              </Button>
               <Button variant="secondary" onClick={handleClose12}>
                 Close
               </Button>
             </Modal.Footer>
           </Modal>
+
 
 
 

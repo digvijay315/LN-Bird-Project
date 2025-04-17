@@ -74,7 +74,7 @@ router.get('/viewprojectbyid/:_id',view_project_Byid)
 router.get('/viewprojectbyname/:name',view_projectbyname)
 router.get('/viewprojectbycityname/:city',view_projectbycityname)
 router.get('/viewprojectforinventories/:project_name/:unit_no/:block', view_projectforinventories);
-router.put('/updateprojectforinventories/:project_name/:unit_no/:block', update_projectforinventories);
+router.put('/updateprojectforinventories/:project_name/:unit_no/:block',uploadFields, update_projectforinventories);
 router.delete('/deleteprojectforinventories/:project_name/:unit_no/:block', delete_projectforinventories);
 router.delete('/deleteproject/:_id',remove_project)
 router.put('/updateproject/:_id',upload.any('pic','preview'),update_project)

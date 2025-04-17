@@ -16,7 +16,8 @@ const send_mail = async (req, res) => {
         const { emails, message, subject } = req.body; 
         const files = req.files;
         const cloudinaryAttachments = [];
-
+      
+        
         if (!emails ) {
             return res.status(400).send('No recipients provided.');
         }
@@ -38,6 +39,16 @@ const send_mail = async (req, res) => {
           }
         }
       
+         // Handle already uploaded cloud URLs
+    if (req.body.cloudUrls) {
+        const urls = Array.isArray(req.body.cloudUrls) ? req.body.cloudUrls : JSON.parse(req.body.cloudUrls);
+        urls.forEach(({ filename, url }) => {
+          cloudinaryAttachments.push({
+            filename,
+            path: url,
+          });
+        });
+      }
 
         const transporter = nodemailer.createTransport({
             service: 'gmail',
