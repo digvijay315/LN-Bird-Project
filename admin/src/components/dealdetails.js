@@ -8234,10 +8234,13 @@ stage:selectedLead.stage
                    <div id="divforprice11" className="col-md-5" style={{display:"none"}}></div>
 
                     <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
-                    <option>Select</option>
-                        <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option>
+                    <option>---Select---</option>
+                        <option>Direct Owner Deal</option>
+                        <option>Builder Deal</option>
+                        <option>Investor Deal</option>
+                        <option>Joint Venture Deal</option>
+                        <option>Bank Auction Deal</option>
+                        <option>Institutional Owner Deal</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                     <option>Select</option>
@@ -8417,10 +8420,13 @@ stage:selectedLead.stage
 
                         <div className="col-md-4"><label className="labels">Deal Type</label><select className="form-control form-control-sm" name="deal_type" onChange={(e)=>setdeal({...deal,deal_type:e.target.value})}>
                         <option>{deal.deal_type}</option>
-                        <option>---select---</option>
-                        <option>Hot</option>
-                        <option>Warm</option>
-                        <option>Cold</option>
+                        <option>---Select---</option>
+                        <option>Direct Owner Deal</option>
+                        <option>Builder Deal</option>
+                        <option>Investor Deal</option>
+                        <option>Joint Venture Deal</option>
+                        <option>Bank Auction Deal</option>
+                        <option>Institutional Owner Deal</option>
                         </select></div>
                         <div className="col-md-4"><label className="labels">Transaction Type</label><select className="form-control form-control-sm" name="transaction_type" onChange={(e)=>setdeal({...deal,transaction_type:e.target.value})}>
                         <option>{deal.transaction_type}</option>
