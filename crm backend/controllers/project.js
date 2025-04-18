@@ -616,7 +616,7 @@ unitDetails={
               if (req.files) {
             
                 const imagefield = req.files.filter(file => file.fieldname.includes(`preview`));
-                const imagefield1 = req.files.filter(file => file.fieldname.includes(`add_unit[image]`));
+                const imagefield1 = req.files.filter(file => file.fieldname.includes(`image`));
                
             
                 

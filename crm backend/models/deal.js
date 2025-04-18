@@ -31,6 +31,7 @@ const add_deal=new mongoose.Schema({
     rent_period:{type:String},
     fitout_perioud:{type:String},
     deal_type:{type:String},
+    deal_case:{type:String},
     transaction_type:{type:String},
     source:{type:String},
     white_portion:{type:String},

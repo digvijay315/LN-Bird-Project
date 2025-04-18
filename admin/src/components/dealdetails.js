@@ -1721,7 +1721,7 @@ function Dealdetails() {
                             utype:"",ucategory:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
                             expected_price:"",quote_price:"",security_deposite:"",owner_details:[],associated_contact:[],relation:"",
                           maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
-                          deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
+                          deal_type:"",deal_case:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
                           website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
 
@@ -2751,7 +2751,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
                                   furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
                                   ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
                                   relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
-                                  document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],pic:[''],action12:[]})
+                                  document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],image:[''],action12:[]})
 
 
 const [show9, setshow9] = useState(false);
@@ -3080,8 +3080,8 @@ const [show9, setshow9] = useState(false);
                             document_no:[...units.document_no,''],
                             document_name: [...units.document_name, ''],
                             document_Date: [...units.document_Date, ''],
-                            pic: [...units.pic, ''],
-                            action12: [...units.action12, '']
+                            image: [...units.image, ''],
+                            action12: [...(units.action12 || []), ''] 
                           });
                         }
                       
@@ -3090,7 +3090,7 @@ const [show9, setshow9] = useState(false);
                             const newdocument_no = units.document_no.filter((_, i) => i !== index);
                             const newdocumentname = units.document_name.filter((_, i) => i !== index);
                             const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
-                            const newpic = units.pic.filter((_, i) => i !== index);
+                            const newpic = units.image.filter((_, i) => i !== index);
                             const newaction12=units.action12.filter((_,i) => i !== index);
                             
                             setunits({
@@ -3098,7 +3098,7 @@ const [show9, setshow9] = useState(false);
                               document_no:newdocument_no,
                               document_name: newdocumentname,
                               document_Date: newdocumentdate,
-                              pic: newpic,
+                              image: newpic,
                               action12:newaction12
                             });
                           }
@@ -3135,12 +3135,12 @@ const [show9, setshow9] = useState(false);
                             });
                           };
                           const handlepicchange1 = (index, event) => {
-                            const newpic1 = [...units.pic];
+                            const newpic1 = [...units.image];
                             const files = Array.from(event.target.files);
                             newpic1[index] = {files:files}
                             setunits({
                               ...units,
-                              pic: newpic1
+                              image: newpic1
                             });
                           };
 
@@ -4361,13 +4361,13 @@ useEffect(() => {
                           {
                             setunitdata(flattenedUnits?.find((unit)=>
                               (
-                                unit.project_name==deal1[0].project &&
-                                unit.unit_no==deal1[0].unit_number &&
-                                unit.block==deal1[0].block
+                                unit?.project_name==deal1[0]?.project &&
+                                unit?.unit_no==deal1[0]?.unit_number &&
+                                unit?.block==deal1[0]?.block
                               )))
-                              setprojectdata(cdata.filter((item)=>
+                              setprojectdata(cdata?.filter((item)=>
                               (
-                                item.name==deal1[0].project
+                                item.name==deal1[0]?.project
                               )))
 
                              
@@ -4433,7 +4433,7 @@ useEffect(() => {
                             }
                           }, [selectedItems1, matchedLeads]);
                     
-console.log(emails);
+
 
 
                 
@@ -8000,7 +8000,7 @@ stage:selectedLead.stage
                       units.document_name.map((item,index)=>
                       (
                         <select className="form-control form-control-sm" onChange={(event)=>handledocumentnamechange(index,event)} style={{marginTop:"5px"}}>
-                        <option>Choose</option>
+                        <option>{units.document_name[index]}</option>
                         <option>Aadhar Card</option>
                         <option>Pan Card</option>
                         <option>Voter Id</option>
@@ -8018,7 +8018,7 @@ stage:selectedLead.stage
                       Array.isArray(units.document_no) ?
                       units.document_no.map((item,index)=>
                       (
-                        <input type="text" className="form-control form-control-sm"onChange={(event)=>handledocumentnochange(index,event)} style={{marginTop:"5px"}} />
+                        <input type="text" value={units.document_no[index]} className="form-control form-control-sm"onChange={(event)=>handledocumentnochange(index,event)} style={{marginTop:"5px"}} />
                         
                       )):[]
                     }
@@ -8029,7 +8029,7 @@ stage:selectedLead.stage
                       Array.isArray(units.document_Date) ?
                       units.document_Date.map((item,index)=>
                       (
-                        <input type="date" className="form-control form-control-sm"onChange={(event)=>handledocumentdatechange(index,event)} style={{marginTop:"5px"}} />
+                        <input type="date" value={units.document_Date[index]} className="form-control form-control-sm"onChange={(event)=>handledocumentdatechange(index,event)} style={{marginTop:"5px"}} />
                         
                       )):[]
                     }
@@ -8059,16 +8059,45 @@ stage:selectedLead.stage
                           )}
 
 
-                      <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
+                      {/* <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
                     {
-                      Array.isArray(units.pic) ?
-                      units.pic.map((item,index)=>
+                      Array.isArray(units.image) ?
+                      units.image.map((item,index)=>
                       (
-                        <input type="file" className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
+                        <input type="file" name="image" className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
                         
                       )):[]
                     }
-                    </div>
+                    </div> */}
+
+                    <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
+                       {
+                       Array.isArray(units.image)?
+                       units.image.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                     {name && (
+                                      <img 
+                                        // src={typeof item === 'string' ? item : URL.createObjectURL(item)} 
+                                        src={`${name}`}
+                                        alt="preview" 
+                                        style={{width: "50px", height: "50px", objectFit: "cover", marginBottom: "10px"}}
+                                      />
+                                    )}
+                                   <input 
+                                   name="image"
+                                     type="file"
+                                     className="form-control form-control-sm"
+                                     multiple
+                                     onChange={(event) => handlepicchange1(index, event)}
+                                   />
+                      
+                                     {name.previewUrls && name.previewUrls.map((url, idx) => (
+                                         <img key={idx} src={url} alt={`preview ${index}-${idx}`} style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
+                                       ))}
+                                 </div>
+                               )):[]}
+                       </div>
+
                     <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
                       Array.isArray(units.action12)?
@@ -8080,6 +8109,27 @@ stage:selectedLead.stage
                         )):[]
                     }
                     </div>
+
+                    {/* <div className="col-md-1" style={{ marginTop: "70px" }}>
+  {
+    Array.isArray(units.document_name) &&
+    units.document_name.map((item, index) => (
+      item ? (
+        <div key={index} style={{ marginTop: "10px" }}>
+          <img
+            src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg"
+            alt="delete button"
+            onClick={()=>deleteall12(index)}
+            style={{ height: "40px", cursor: "pointer" }}
+          />
+        </div>
+      ) : (
+        <div key={index} style={{ marginTop: "10px" }}></div>
+      )
+    ))
+  }
+</div> */}
+
                         
                         <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={addFn12}>+</button></div>
                        
@@ -8248,9 +8298,16 @@ stage:selectedLead.stage
                         <option>Collecter Rate</option>
                         <option>Flexiable</option>
                         </select></div>
-                        <div className="col-md-4"></div>
+                        <div className="col-md-4"><label className="labels">Deal Case</label><select className="form-control form-control-sm" name="deal_case" onChange={(e)=>setdeal({...deal,deal_case:e.target.value})}>
+                    <option>---Select---</option>
+                        <option>Registry Case</option>
+                        <option>Transfer Case</option>
+                        <option>GPA Case</option>
+                        <option>SPA Case</option>
+                        <option>Letter of Intent</option>
+                        </select></div>
 
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                     <option>Select</option>
                         <option>99 Acre</option>
                         <option>News Paper</option>
@@ -8437,7 +8494,7 @@ stage:selectedLead.stage
                         </select></div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                         <option>{deal.source}</option>
                          <option>---select---</option>
                          <option>99 Acre</option>

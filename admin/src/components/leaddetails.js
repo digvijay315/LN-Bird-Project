@@ -2574,6 +2574,8 @@ const handleroadChange = (event) => {
         
           return distance;
         }
+
+        const[allunitsdetails,setallunitsdetails]=useState([])
         
         useEffect(() => {
           const updateLeads = async () => {
@@ -2584,7 +2586,7 @@ const handleroadChange = (event) => {
               // 1. Fetch all unit details for all deals in one API call
               const res = await api.post('/getUnitDetails', { deals: dealdata });
               const unitDetails = res.data;
-       
+              setallunitsdetails(res.data)
         
               
               
@@ -3051,20 +3053,126 @@ const handleroadChange = (event) => {
                                             document.getElementById("sendwhatsapp1").style.width="150px"
                                             document.getElementById("sendwhatsapp1").style.textAlign="center"
                                           }
+
+                              const[projectdata,setprojectdata]=useState([])
+                             const fetchcprojectdata=async(event)=>
+                                            {
+                                              
+                                              try {
+                                                const resp=await api.get('viewproject')
+                                                setprojectdata(resp.data.project)
+                                               
+                                              } catch (error) {
+                                                console.log(error);
+                                              }
+                                            
+                                            }
+                                
+                            
                           
+                          const[propertyDetails,setpropertyDetails]=useState("")
+
+                          useEffect(()=>
+                          {
+                            fetchcprojectdata()
+                            const sendmatchingdeals = dealdata.filter((item) =>
+                              selectedItems1.includes(item._id)
+                            );
                           
-                          
+                            
+                            const matcheddetails = sendmatchingdeals.map((property, index) => {
+
+                              const unitInfo = allunitsdetails.find(
+                                (u) =>
+                                  u.unitData?.project_name?.toLowerCase().trim() === property.project?.toLowerCase().trim() &&
+                                  u.unitData?.unit_no?.toString().trim() === property.unit_number?.toString().trim() &&
+                                  u.unitData?.block?.toLowerCase().trim() === property.block?.toLowerCase().trim()
+                              );
+                              
+                              const projectinfo = projectdata.find(
+                                (u) =>
+                                  u.name?.toLowerCase().trim() === property.project?.toLowerCase().trim() 
+                              );
+                              
+                           
+                              const unitData = unitInfo?.unitData;
+          
+                              const propertyIcon = unitData.sub_category.includes("Independent House")
+                              ? "🏠"
+                              : unitData.sub_category.includes("Plot")
+                              ? "🛣️"
+                              : "📍";
+                        
+                            
+                              
+                              return `
+                         <b> ${index + 1}. ${propertyIcon} ${unitData.size} ${unitData.sub_category}</b>
+                          <b>• Location:</b> ${unitData.location}
+                          <b>• Price:</b> ${property.expected_price}
+                          <b>• Facing:</b> ${unitData.facing || "N/A"} | Direction: ${unitData.direction || "N/A"} | Road Width: ${unitData.road || "N/A"}
+                          <b>• Registry:</b> ${property.registry}
+                          <b>• Ownership:</b> ${unitData.ownership}
+                          <b>• Possession:</b> ${projectinfo?.possession}
+                          <b>• Amenities:</b> ${projectinfo?.features_aminities.join(',')}
+                          <b>• Nearby:</b> ${Array.isArray(projectinfo.nearby_aminities)
+                            ? projectinfo.nearby_aminities
+                                .map(item => `${item.destination} ${item.distance} ${item.measurment}`)
+                                .join(", ")
+                            : "no nearbay aminities"}
+                          `;
+                            }).join("\n");
+
+                            setpropertyDetails(matcheddetails)
+                          },[selectedItems1])
+                      
+                    
+                        
                                    
                           
                                       const templates1 = {
                                         template1: "Hello, \n\nI hope this email finds you well. I wanted to follow up on our previous conversation regarding property. Please let me know if you have any questions.\n\nBest regards,\nDigvijay Kumar",
                                         template2: "Hi there, \n\nI just wanted to remind you about the upcoming event on [date]. It will be held at Noida. Please feel free to reach out if you need any additional information.\n\nSincerely,\nDigvijay Kumar",
-                                        template3: `Dear sir, \n\nWe are excited to inform you that your application has been approved. Please find attached the documents with further details about the next steps.\n\nBest regards,\nDigvijay Kumar`
+                                        template3: `Dear ${lead1[0]?.title} ${lead1[0]?.first_name} ${lead1[0]?.last_name},
+
+                                                Thank you for connecting with Bharat Properties – Kurukshetra in your search for the perfect property. We’ve shortlisted a few options that match your requirements based on your preferences. Below are the key details of the best available properties:
+
+                                                🌟 Top Matching Property Options
+
+                                                ${propertyDetails}
+
+                                                🖼️ Images & Virtual Tours:
+                                                You can view pictures and video tours by clicking here: {{listingGalleryLink}}
+
+                                                📅 Ready for a Site Visit?
+                                                Let us know your availability and we’ll schedule a site visit for the properties that interest you most.
+
+                                                📅 Book Your Visit Instantly: {{bookingLink}}
+                                                Or simply reply to this email with your preferences, and our team will provide even more relevant options.
+
+                                                We’re excited to help you find your perfect property!
+
+                                                Warm regards,  
+                                                Suraj Keshwar  
+                                                Bharat Properties – Kurukshetra  
+                                                📞 +91-9991333570  
+                                                📧 bharatproperties570@gmail.com  
+                                                🌐 www.bharatproperties.co`
                                       };
+
+                                   
+
                                       const[message1,setmessage1]=useState("")
                                       const[subject1,setsubject1]=useState("")
                                       const [selectedTemplate1, setSelectedTemplate1] = useState('');
                                       const [attachments1, setAttachments1] = useState([]);
+
+                                      useEffect(() => {
+                                        if (Array.isArray(lead1) && lead1.length > 0) {
+                                          const { title, first_name, last_name } = lead1[0];
+                                          const subjectText = `${title || ""} ${first_name || ""} ${last_name || ""} – We've Found Multiple Properties Matching Your Requirements – Take a Look!`;
+                                          setsubject1(subjectText);
+                                        }
+                                      }, [lead1]);
                           
                                       const modules11 = {
                                           toolbar: {
@@ -3084,7 +3192,12 @@ const handleroadChange = (event) => {
                                           getInputProps: getInputProps1
                                         } = useDropzone({
                                           onDrop: (acceptedFiles) => {
-                                            setAttachments1(acceptedFiles);
+                                            const localFiles = acceptedFiles.map((file) => ({
+                                              type: 'file',
+                                              name: file.name,
+                                              file,
+                                            }));
+                                            setAttachments1((prev) => [...prev, ...localFiles]); // keep preview files already set
                                           },
                                         });
                                         
@@ -3100,16 +3213,31 @@ const handleroadChange = (event) => {
                                         // Set the message state with the formatted message (HTML-friendly)
                                         setmessage1(htmlFormattedMessage); 
                                       };
+
+                                         const [emails1, setEmails1] = useState([]);
                                       
+                                         useEffect(() => {
+                                    
+                                          if (Array.isArray(lead1[0]?.email)) {
+                                            const extractedEmails = lead1[0].email.flatMap(item => item);
+                                            setEmails1(extractedEmails);
+                                          } else {
+                                            setEmails1([]); // Set to empty if not available
+                                          }
+                                        }, [lead1]);
+                                                 
+
+                                      const[isloading2,setisloading2]=useState(false)
                                       const sendmail1=async(e)=>
                                         {
+                                          setisloading2(true)
                                           e.preventDefault();
                                           const formData = new FormData();
                               
                          
                                               formData.append('subject', subject1);
                                               formData.append('message', message1);
-                                              formData.append('emails', emails);
+                                              formData.append('emails', emails1);
                                               
                                               // Append the files to form data
                                               attachments1.forEach((file) => {
@@ -3122,14 +3250,16 @@ const handleroadChange = (event) => {
                                             {
                                               toast.success("Mail Sent Successfully",{ autoClose: 2000 })
                                               setTimeout(() => {
-                                                navigate('/leaddetails')
+                                               window.location.reload()
                                               }, 2000);
-                                              setTimeout(() => {
-                                              }, 2000);
+                                        
                                             }
                                            
                                           } catch (error) {
                                             toast.error(error.response.data,{ autoClose: 2000 });
+                                          }finally
+                                          {
+                                            setisloading2(false)
                                           }
                                         }
                           
@@ -5546,13 +5676,57 @@ const handleroadChange = (event) => {
        
        </div>
 
+
+       <>
+    {isloading2 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(9, 101, 52, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>sending...</p>
+        </div>
+      </div>
+    )}
+  </>
+
+  
+
             </Modal.Body>
             <Modal.Footer>
+            <Button variant="secondary" onClick={sendmail1}>
+                Send
+              </Button>
               <Button variant="secondary" onClick={handleClose12}>
                 Close
               </Button>
             </Modal.Footer>
           </Modal>
+
+   
 
 
 

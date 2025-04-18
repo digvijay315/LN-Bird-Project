@@ -30,7 +30,7 @@ const[deal,setdeal]=useState({project_category:[],project_subcategory:"",locatio
   utype:"",ucategory:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
   expected_price:"",quote_price:"",security_deposite:"",owner_details:[],associated_contact:[],
 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
-deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
+deal_type:"",deal_case:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
 website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
 const[activity]=useState({activity_name:"deal created", call_outcome:"", activity_note:"",lead:"",
@@ -1594,9 +1594,16 @@ const formats = [
                         <option>Collecter Rate</option>
                         <option>Flexiable</option>
                         </select></div>
-                        <div className="col-md-4"></div>
+                        <div className="col-md-4"><label className="labels">Deal Case</label><select className="form-control form-control-sm" name="deal_case" onChange={(e)=>setdeal({...deal,deal_case:e.target.value})}>
+                    <option>---Select---</option>
+                        <option>Registry Case</option>
+                        <option>Transfer Case</option>
+                        <option>GPA Case</option>
+                        <option>SPA Case</option>
+                        <option>Letter of Intent</option>
+                        </select></div>
 
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                     <option>Select</option>
                         <option>99 Acre</option>
                         <option>News Paper</option>
@@ -1777,7 +1784,7 @@ const formats = [
                         </select></div>
                         <div className="col-md-4"></div>
 
-                        <div className="col-md-5"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
+                        <div className="col-md-4"><label className="labels">Source</label><select className="form-control form-control-sm" name="source" onChange={(e)=>setdeal({...deal,source:e.target.value})}>
                     <option>Select</option>
                     <option>99 Acre</option>
                         <option>News Paper</option>
