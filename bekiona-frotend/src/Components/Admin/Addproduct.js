@@ -22,6 +22,13 @@ function Addproduct() {
         product_quantity: "",
         product_image: [],
         product_description: "",
+        product_hsn_code:"",
+        product_lbh_unit:"cm",
+        product_weight_unit:"gm",
+        product_length:"",
+        product_breadth:"",
+        product_height:"",
+        product_weight:"",
         product_benefits: [],
         product_quantity1: 1,
 
@@ -269,6 +276,71 @@ function Addproduct() {
                   
                   onChange={(e)=>setproduct({...product,product_quantity:e.target.value})}
                   placeholder="Enter quantity"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">HSN Code</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  
+                  onChange={(e)=>setproduct({...product,product_hsn_code:e.target.value})}
+                  placeholder="Enter hsn code"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Product Length</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  
+                  onChange={(e)=>setproduct({...product,product_length:e.target.value})}
+                  placeholder="Enter length in cm"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Product Breadth</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  
+                  onChange={(e)=>setproduct({...product,product_breadth:e.target.value})}
+                  placeholder="Enter breadth in cm"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Product Height</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  
+                  onChange={(e)=>setproduct({...product,product_height:e.target.value})}
+                  placeholder="Enter height in cm"
+                  required
+                />
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">Product Weight</label>
+                <input
+                  type="number"
+                  name="quantity"
+                  className="form-control"
+                  
+                  onChange={(e)=>setproduct({...product,product_weight:e.target.value})}
+                  placeholder="Enter weight in gm"
                   required
                 />
               </div>

@@ -11,7 +11,14 @@ const add_product=new mongoose.Schema({
     product_image:{type:Array},
     product_description:{type:String},
     product_benefits:{type:Array},
-    product_quantity1:{type:Number}
+    product_quantity1:{type:Number},
+    product_hsn_code:{type:Number},
+    product_lbh_unit:{type:String},
+    product_weight_unit:{type:String},
+    product_length:{type:Number},
+    product_breadth:{type:Number},
+    product_height:{type:Number},
+    product_weight:{type:Number}
    
     
     },{timestamps:true})

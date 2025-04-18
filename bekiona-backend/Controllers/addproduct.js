@@ -22,6 +22,13 @@ const add_product = async (req, res) => {
             product_description,
             product_benefits,
             product_quantity1,
+            product_hsn_code,
+            product_lbh_unit,
+            product_weight_unit,
+            product_length,
+            product_breadth,
+            product_height,
+            product_weight
            
             
         } = req.body;
@@ -55,7 +62,13 @@ const add_product = async (req, res) => {
             product_description,
             product_benefits,
             product_quantity1,
-            
+            product_hsn_code,
+            product_lbh_unit,
+            product_weight_unit,
+            product_length,
+            product_breadth,
+            product_height,
+            product_weight
             
         });
 
