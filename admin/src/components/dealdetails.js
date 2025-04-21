@@ -4890,11 +4890,11 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="dealdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deletedealSelectedItems}    style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="dealdelete" src="https://cdn-icons-png.freepik.com/512/7078/7078067.png" onClick={deletedealSelectedItems}    style={{height:"25px",width:"25px",cursor:"pointer",display:"none",marginTop:"6px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
-<img id="dealedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow10}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealedit" src="https://static.thenounproject.com/png/1416596-200.png" onClick={handleShow10}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Send Mail.." arrow>
@@ -4908,51 +4908,51 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 </Tooltip>
 
 <Tooltip title="Add to task.." arrow>
-<img id="dealaddtask"  src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={handleShow8}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddtask"  src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={handleShow8}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Create Booking.." arrow>
-<img id="dealcreatebooking"  src="https://www.housecallpro.com/wp-content/uploads/2024/01/schedule-mono-300x300-1.png" onClick={()=>{navigate('/bookingdetails')}}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealcreatebooking"  src="https://www.housecallpro.com/wp-content/uploads/2024/01/schedule-mono-300x300-1.png" onClick={()=>{navigate('/bookingdetails')}}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Owner/Property Owner/Associate Contact/Remove Owner.." arrow>
-<img id="dealaddremoveowner"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg" onClick={handleShow7}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddremoveowner"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKfIbM76o9rUp0HPZ_TV6KrDVVdNY1DFF1Q&s" onClick={handleShow7}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Matched Lead.." arrow>
-<img id="dealmatchedlead"  src="https://www.clipartmax.com/png/middle/474-4745675_martial-arts-lead-management-lead-management-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealmatchedlead"  src="https://static.vecteezy.com/system/resources/thumbnails/045/744/213/small/people-glyph-icon-vector.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Call.." arrow>
-<img id="dealcall"  src="https://static.vecteezy.com/system/resources/previews/016/314/381/non_2x/call-icon-free-png.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealcall"  src="https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Tag.." arrow>
-<img id="dealaddtag"  src="https://png.pngtree.com/png-clipart/20230805/original/pngtree-hospital-tag-icon-add-tag-offer-vector-picture-image_9758849.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddtag"  src="https://cdn-icons-png.flaticon.com/512/118/118061.png"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Remarks/Note.." arrow>
-<img id="dealaddremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow6}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealaddremarks"  src="https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" onClick={handleShow6}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Publish On.." arrow>
-<img id="dealpublishon"  src="https://cdn-icons-png.flaticon.com/512/4661/4661368.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealpublishon"  src="https://thumbs.dreamstime.com/b/ebook-publishing-glyph-icon-ebook-publishing-sign-isolated-symbol-illustration-ebook-publishing-glyph-icon-illustration-326090359.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Update Stage.." arrow>
-<img id="dealupdatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealupdatestage"  src="https://icon-library.com/images/cycle-icon-png/cycle-icon-png-29.jpg" onClick={handleShow5}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Preview.." arrow>
-<img id="dealpreview"  src="https://cdn-icons-png.flaticon.com/512/143/143594.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealpreview"  src="https://icon-library.com/images/preview-icon-png/preview-icon-png-26.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Document.." arrow>
-<img id="dealadddocument"  src="https://icons.iconarchive.com/icons/graphicloads/long-shadow-documents/256/document-add-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealadddocument"  src="https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Upload Picture.." arrow>
-<img id="dealuploadpicture"  src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279796.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="dealuploadpicture"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlz-TKOccaHn9IPHPOBVUJKOxcrSMhc3uhkw&s"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 </div>

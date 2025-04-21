@@ -418,15 +418,9 @@ const renderPageNumbers = () => {
               }
 
               const modules1 = {
-                toolbar: [
-                  [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                  ['bold', 'italic', 'underline'],
-                  ['link'],
-                  // [{ 'align': [] }],
-                  [{ 'color': [] }, { 'background': [] }],
-                  // ['clean']  // Allows the user to clear formatting
-                ],
+                toolbar: {
+                  container: "#custom-toolbar"
+                }
               };
 
             const { getRootProps, getInputProps } = useDropzone({
@@ -1242,7 +1236,7 @@ const handleSort = (key) => {
   setdata(sortedData)
 };
 
-
+// ===============================================filter code start==================================================================
 
 
 const professions = [
@@ -1274,7 +1268,93 @@ const professions = [
     setdata(newFilteredData);
   };
 
+ 
+  const contactfields = [
+    { label: 'First Name', field: 'first_name' },
+    { label: 'Last Name', field: 'last_name' },
+    { label: 'Mobile No.', field: 'mobile_no' },
+    { label: 'Email Id', field: 'email' },
+    { label: 'Tags', field: 'tags' },
+    { label: 'Source', field: 'source' },
+    { label: 'Owner', field: 'owner' },
+    { label: 'City', field: 'city1' },
+    { label: 'State', field: 'state1' },
+    { label: 'Pincode', field: 'pincode1' },
+    { label: 'From Date', field: 'from_date' }, // Added field for from date
+    { label: 'To Date', field: 'to_date' }
+  ];
+  
 
+  const [showDropdown2, setShowDropdown2] = useState(false);
+  const [selectfield, setselectfield] = useState([]);
+
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+
+
+  // const handlefilterCheckboxChange1 = (field) => {
+  //   const updatedSelections = selectfield.includes(field)
+  //     ? selectedProfessions.filter((p) => p !== field)
+  //     : [...selectfield, field];
+  //     setselectfield(updatedSelections);
+    
+  //   // Filter the data based on selected professions
+  //  const newFilteredData = filteredData.filter((item) =>
+  //     updatedSelections.length === 0 || updatedSelections.includes(item.profession_category)
+  //   );
+  //   setdata(newFilteredData);
+  // };
+
+   // Handle checkbox toggle
+   const handlefilterCheckboxChange1 = (field) => {
+    setselectfield(prev => {
+      if (prev.hasOwnProperty(field)) {
+        // Remove the field
+        const { [field]: _, ...rest } = prev;
+        return rest;
+      } else {
+        // Add the field with empty value
+        return { ...prev, [field]: '' };
+      }
+    });
+  };
+
+    // Handle input change for filtering values
+    const handleFieldInputChange = (field, value) => {
+      setselectfield((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    };
+
+    useEffect(() => {
+      const filtered = filteredData.filter(contact => {
+        // Text filters
+        const matchesTextFilters = Object.keys(selectfield).every(field => {
+          const value = selectfield[field]?.toLowerCase();
+          const contactValue = contact[field]?.toString().toLowerCase() || '';
+          return !value || contactValue.includes(value);
+        });
+    
+        // Date filter
+        const contactDate = new Date(contact.createdAt);
+        const isAfterFromDate = !selectfield.from_date || contactDate >= new Date(selectfield.from_date);
+        const isBeforeToDate = !selectfield.to_date || contactDate <= new Date(selectfield.to_date);
+    console.log(contactdata);
+    console.log(isAfterFromDate);
+    console.log(isBeforeToDate);
+    
+        return matchesTextFilters && isAfterFromDate && isBeforeToDate;
+      });
+    
+      setdata(filtered);
+    }, [selectfield, filteredData]);
+    
+    
+  
+
+
+//================================================== filter code end==================================================================
 
 
 
@@ -3099,13 +3179,18 @@ const checkForDuplicates = async (contacts) => {
             Download Data(sample)</li>
             </ul>
             
-
-            <button  style={{ position:"relative",width: '150px',marginLeft: '65%',padding: '8px',backgroundColor: '#4CAF50',color: 'white',border: 'none',
+      <Tooltip title="filter contacts..." arrow>
+            <button  style={{ position:"relative",marginLeft: '75%',width:"50px",padding: '8px',color: 'white',border: 'none',
                              borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center'}}
-                              className="form-control form-control-sm form-control form-control-sm-sm" onClick={() => setShowDropdown(!showDropdown)} >Filter</button>
+                              className="form-control form-control-sm form-control form-control-sm-sm" onClick={() => setShowDropdown(!showDropdown)} >
+                                <img src="https://cdn-icons-png.flaticon.com/512/107/107799.png" style={{height:"25px"}}></img>
+                              </button></Tooltip>
             {showDropdown && (
         <div className="dropdown-container" style={{position: 'absolute',marginTop:"40px",left: '75%',width: '200px',backgroundColor: '#f9f9f9',
                         border: '1px solid #ddd',borderRadius: '4px',padding: '10px',boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',zIndex: 10,}}>
+                                <h3 style={{fontSize:"12px"}}><u>Filter Contacts By...</u></h3><br></br>
+           
+           <div>
             <div
             style={{
               display: 'flex',
@@ -3115,20 +3200,22 @@ const checkForDuplicates = async (contacts) => {
             }}
             onClick={() => setShowDropdown1(!showDropdown1)} // Toggle dropdown visibility
           >
+      
             <h4
               style={{
-                fontSize: '16px',
+                fontSize: '12px',
                 fontWeight: 'bold',
                 color: '#333',
                 marginBottom: '8px',
                 textAlign: 'center',
+                fontFamily:"arial"
               }}
             >
-              <u>Profession</u>
+              <u>Filter By Profession</u>
             </h4>
             <span
               style={{
-                fontSize: '20px',
+                fontSize: '12px',
                 fontWeight: 'bold',
                 transform: showDropdown1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the icon when dropdown is visible
                 transition: 'transform 0.3s ease', // Smooth rotation effect
@@ -3136,6 +3223,45 @@ const checkForDuplicates = async (contacts) => {
             >
               &#9660; {/* Down arrow symbol */}
             </span>
+
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              cursor: 'pointer',
+            }}
+            onClick={() => setShowDropdown2(!showDropdown2)} // Toggle dropdown visibility
+          >
+      
+            <h4
+              style={{
+                fontSize: '12px',
+                fontWeight: 'bold',
+                color: '#333',
+                marginBottom: '8px',
+                textAlign: 'center',
+                fontFamily:"arial"
+              }}
+            >
+              <u>Filter By Fields</u>
+            </h4>
+            <span
+              style={{
+                fontSize: '12px',
+                fontWeight: 'bold',
+                transform: showDropdown2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the icon when dropdown is visible
+                transition: 'transform 0.3s ease', // Smooth rotation effect
+              }}
+            >
+              &#9660; {/* Down arrow symbol */}
+            </span>
+
+          </div>
+
+
           </div>
           {showDropdown1 &&
             professions.map((profession) => (
@@ -3151,8 +3277,52 @@ const checkForDuplicates = async (contacts) => {
                 </label>
               </div>
             ))}
+
+        {showDropdown2 && contactfields.map(({ label, field }) => (
+          <div key={field} style={{ marginBottom: '6px' }}>
+            <label style={{ display: 'flex', flexDirection: 'column' }}>
+              <div>
+                <input
+                  type="checkbox"
+                  checked={field in selectfield}
+                  onChange={() => handlefilterCheckboxChange1(field)}
+                  style={{ marginRight: '8px' }}
+                />
+                {label}
+              </div>
+
+              {field in selectfield && field.includes('date') ? (
+      // Render date input fields for From Date and To Date
+              <input
+                type="date"
+                value={selectfield[field]}
+                onChange={(e) => handleFieldInputChange(field, e.target.value)}
+                style={{ marginTop: '5px', marginLeft: '20px' }}
+              />
+            ) : (
+              // Render text input fields for other fields
+              field in selectfield && (
+                <input
+                  type="text"
+                  placeholder={`Search by ${label}`}
+                  value={selectfield[field]}
+                  onChange={(e) => handleFieldInputChange(field, e.target.value)}
+                  style={{ marginTop: '5px', marginLeft: '20px' }}
+                />
+              )
+            )}
+            </label>
+          </div>
+        ))}
+
         </div>
       )}
+
+        
+        
+     
+
+      
             <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
         
        
@@ -3231,35 +3401,35 @@ const checkForDuplicates = async (contacts) => {
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    
       <Tooltip title="Delete Data.." arrow>
-      <img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+      <img id="delete" src="https://cdn-icons-png.freepik.com/512/7078/7078067.png" onClick={deleteSelectedItems} style={{height:"25px",width:"25px",cursor:"pointer",display:"none",marginTop:"6px"}} alt=""/>
       </Tooltip>
     
       <Tooltip title="Edit Data.." arrow>
-      <img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="edit" src="https://static.thenounproject.com/png/1416596-200.png" onClick={handleShow1}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
 
       <Tooltip title="Add to lead.." arrow>
-      <img id="addtolead" src="https://cdn0.iconfinder.com/data/icons/ie_Bright/512/plus_add_green.png" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="addtolead" src="https://static.vecteezy.com/system/resources/previews/048/294/744/non_2x/black-and-white-dollar-coin-increasing-value-with-plus-sign-vector.jpg" onClick={handleShow5}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
 
       <Tooltip title="Call.." arrow>
-      <img id="call" src="https://static.vecteezy.com/system/resources/thumbnails/025/225/156/small_2x/3d-illustration-icon-of-phone-call-with-circular-or-round-podium-png.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+      <img id="call" src="https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png"   style={{height:"25px",width:"25px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
       </Tooltip>
 
       <Tooltip title="transfer contact.." arrow>
-      <img id="transfercontact" src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="transfercontact" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuMCIGx_Q2PJ8_eWpfakE9WZyNJzn-MApug&s"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>
 
       <Tooltip title="merge contact..." arrow>
-      <img id="mergecontact" onClick={()=>mergeAndSave(selectedItems)} src="https://e7.pngegg.com/pngimages/1005/968/png-clipart-merge-computer-icons-information-software-miscellaneous-text.png"   style={{height:"35px",width:"35px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
+      <img id="mergecontact" onClick={()=>mergeAndSave(selectedItems)} src="https://www.shutterstock.com/image-vector/merge-business-gear-one-icon-260nw-1432583180.jpg"   style={{height:"25px",width:"25px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
       </Tooltip>    
 
       <Tooltip title="add task..." arrow>
-      <img id="addtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={()=>addtotask(selectedItems)}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="addtask" src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={()=>addtotask(selectedItems)}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip> 
 
       <Tooltip title="sequence.." arrow>
-      <img id="sequence" src="https://e7.pngegg.com/pngimages/862/55/png-clipart-computer-icons-sequence-digital-sequence-miscellaneous-blue.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+      <img id="sequence" src="https://static.vecteezy.com/system/resources/previews/052/379/772/non_2x/dependencies-glyph-icon-design-vector.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
       </Tooltip>  
 
       {/* <Tooltip title="Send Mail.." arrow>
@@ -3272,7 +3442,7 @@ const checkForDuplicates = async (contacts) => {
       <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
       </Tooltip> */}
       <Tooltip title="Send Mail,WhatsApp and Message..." arrow>
-      <img id="sendall"  src="https://cdn-icons-png.freepik.com/512/7878/7878341.png" onClick={handleShow3}  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+      <img id="sendall"  src="https://static-00.iconduck.com/assets.00/send-icon-512x466-b67uw2ug.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
       </Tooltip>
       </div>
     
@@ -4189,11 +4359,80 @@ const checkForDuplicates = async (contacts) => {
           <div className="col-md-12" style={{marginTop:"5px"}}>
              <ReactQuill
            modules={modules1}  // Add the toolbar options for formatting
-           style={{ height: '80px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+           style={{ height: '150px', width: '100%',fontSize:"12px",marginTop:"5px"}}
            className="my-quill-editor"
            value={message}   placeholder="Enter Your Message"  onChange={handlemailmessage}/>
            </div>
-          <div className="col-md-4" style={{fontSize:"12px",marginTop:"40px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+
+           <div id="custom-toolbar" className="ql-toolbar ql-snow" style={{ marginTop: "10px" }}>
+         {/* Text formatting */}
+         <span className="ql-formats">
+           <button className="ql-bold" />
+           <button className="ql-italic" />
+           <button className="ql-underline" />
+           <button className="ql-strike" />
+         </span>
+       
+         {/* Font family */}
+         <span className="ql-formats">
+           <select className="ql-font">
+             <option value="sans-serif">Sans Serif</option>
+             <option value="serif">Serif</option>
+             <option value="monospace">Monospace</option>
+           </select>
+         </span>
+       
+         {/* Font size */}
+         <span className="ql-formats">
+           <select className="ql-size">
+             <option value="small" />
+             <option value="normal" selected />
+             <option value="large" />
+             <option value="huge" />
+           </select>
+         </span>
+       
+         {/* Lists and indent */}
+         <span className="ql-formats">
+           <button className="ql-list" value="ordered" />
+           <button className="ql-list" value="bullet" />
+           <button className="ql-indent" value="-1" />
+           <button className="ql-indent" value="+1" />
+         </span>
+       
+         {/* Alignment */}
+         <span className="ql-formats">
+           <button className="ql-align" value="" />
+           <button className="ql-align" value="center" />
+           <button className="ql-align" value="right" />
+           <button className="ql-align" value="justify" />
+         </span>
+       
+         {/* Colors */}
+         <span className="ql-formats">
+           <button className="ql-color" />
+           <button className="ql-background" />
+         </span>
+       
+         {/* Code, blockquote */}
+         <span className="ql-formats">
+           <button className="ql-blockquote" />
+           <button className="ql-code-block" />
+         </span>
+       
+         {/* Media */}
+         <span className="ql-formats">
+           <button className="ql-link" />
+           <button className="ql-image" />
+         </span>
+       
+         {/* Clear formatting */}
+         <span className="ql-formats">
+           <button className="ql-clean" />
+         </span>
+       </div>
+
+          <div className="col-md-4" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
           <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
              <option value="">---Select Template---</option>
              <option value="template1">Template 1</option>
@@ -4202,7 +4441,7 @@ const checkForDuplicates = async (contacts) => {
            </select>
           </div>
    
-          <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"60px", cursor: 'pointer' }}>
+          <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"20px", cursor: 'pointer' }}>
            <input {...getInputProps()} />
            <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
            <ul>

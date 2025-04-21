@@ -3438,47 +3438,47 @@ const handleroadChange = (event) => {
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="delete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteSelectedItems}  style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
+<img id="delete" src="https://cdn-icons-png.freepik.com/512/7078/7078067.png" onClick={deleteSelectedItems}  style={{height:"25px",width:"25px",cursor:"pointer",display:"none",marginTop:"6px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Edit Data.." arrow>
-<img id="edit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow1}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="edit" src="https://static.thenounproject.com/png/1416596-200.png" onClick={handleShow1}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add to task.." arrow>
-<img id="addtask"  src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png" onClick={()=>navigate('/tasksform')}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="addtask"  src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={()=>navigate('/tasksform')}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Transfer Lead.." arrow>
-<img id="transferlead"  src="https://cdn-icons-png.flaticon.com/512/2879/2879440.png" onClick={handleShow5}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="transferlead"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuMCIGx_Q2PJ8_eWpfakE9WZyNJzn-MApug&s" onClick={handleShow5}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add User.." arrow>
-<img id="adduser"  src="https://cdn-icons-png.flaticon.com/512/9187/9187607.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="adduser"  src="https://brandeps.com/icon-download/U/User-add-icon-05.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Remove User.." arrow>
-<img id="removeuser"  src="https://cdn.icon-icons.com/icons2/217/PNG/512/male-user-remove_25351.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="removeuser"  src="https://brandeps.com/icon-download/U/User-delete-icon-02.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Call.." arrow>
-<img id="call"  src="https://static.vecteezy.com/system/resources/previews/016/314/381/non_2x/call-icon-free-png.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="call"  src="https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Tag.." arrow>
-<img id="addtag"  src="https://png.pngtree.com/png-clipart/20230805/original/pngtree-hospital-tag-icon-add-tag-offer-vector-picture-image_9758849.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="addtag"  src="https://cdn-icons-png.flaticon.com/512/118/118061.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Remarks/Note.." arrow>
-<img id="addremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow6}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="addremarks"  src="https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" onClick={handleShow6}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Add Document.." arrow>
-<img id="adddocument"  src="https://cdn-icons-png.flaticon.com/512/9425/9425017.png" onClick={handleShow7}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="adddocument"  src="https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png" onClick={handleShow7}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 <Tooltip title="Update Stage.." arrow>
-<img id="updatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow4}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+<img id="updatestage"  src="https://icon-library.com/images/cycle-icon-png/cycle-icon-png-29.jpg" onClick={handleShow4}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 {/* <Tooltip title="Send Mail.." arrow>
@@ -3491,7 +3491,7 @@ const handleroadChange = (event) => {
 <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip> */}
 <Tooltip title="Send Mail,WhatsApp and Message..." arrow>
-<img id="sendall"  src="https://cdn-icons-png.freepik.com/512/7878/7878341.png" onClick={handleShow3}  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
+<img id="sendall"  src="https://static-00.iconduck.com/assets.00/send-icon-512x466-b67uw2ug.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip>
 </div>
 
@@ -4848,12 +4848,82 @@ const handleroadChange = (event) => {
    
           <div className="col-md-12" style={{marginTop:"5px"}}>
              <ReactQuill
-           modules={modules1}  // Add the toolbar options for formatting
-           style={{ height: '80px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+           modules={modules11}  // Add the toolbar options for formatting
+           style={{ height: '150px', width: '100%',fontSize:"12px",marginTop:"5px"}}
            className="my-quill-editor"
            value={message}   placeholder="Enter Your Message"  onChange={handlemailmessage}/>
            </div>
-          <div className="col-md-4" style={{fontSize:"12px",marginTop:"40px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+
+           <div id="custom-toolbar" className="ql-toolbar ql-snow" style={{ marginTop: "10px" }}>
+         {/* Text formatting */}
+         <span className="ql-formats">
+           <button className="ql-bold" />
+           <button className="ql-italic" />
+           <button className="ql-underline" />
+           <button className="ql-strike" />
+         </span>
+       
+         {/* Font family */}
+         <span className="ql-formats">
+           <select className="ql-font">
+             <option value="sans-serif">Sans Serif</option>
+             <option value="serif">Serif</option>
+             <option value="monospace">Monospace</option>
+           </select>
+         </span>
+       
+         {/* Font size */}
+         <span className="ql-formats">
+           <select className="ql-size">
+             <option value="small" />
+             <option value="normal" selected />
+             <option value="large" />
+             <option value="huge" />
+           </select>
+         </span>
+       
+         {/* Lists and indent */}
+         <span className="ql-formats">
+           <button className="ql-list" value="ordered" />
+           <button className="ql-list" value="bullet" />
+           <button className="ql-indent" value="-1" />
+           <button className="ql-indent" value="+1" />
+         </span>
+       
+         {/* Alignment */}
+         <span className="ql-formats">
+           <button className="ql-align" value="" />
+           <button className="ql-align" value="center" />
+           <button className="ql-align" value="right" />
+           <button className="ql-align" value="justify" />
+         </span>
+       
+         {/* Colors */}
+         <span className="ql-formats">
+           <button className="ql-color" />
+           <button className="ql-background" />
+         </span>
+       
+         {/* Code, blockquote */}
+         <span className="ql-formats">
+           <button className="ql-blockquote" />
+           <button className="ql-code-block" />
+         </span>
+       
+         {/* Media */}
+         <span className="ql-formats">
+           <button className="ql-link" />
+           <button className="ql-image" />
+         </span>
+       
+         {/* Clear formatting */}
+         <span className="ql-formats">
+           <button className="ql-clean" />
+         </span>
+       </div>
+       
+
+          <div className="col-md-4" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
           <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate} onChange={handleTemplateSelect} style={{fontSize:"12px"}}>
              <option value="">---Select Template---</option>
              <option value="template1">Template 1</option>
@@ -4862,7 +4932,7 @@ const handleroadChange = (event) => {
            </select>
           </div>
    
-          <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"60px", cursor: 'pointer' }}>
+          <div className="col-md-4" {...getRootProps()} style={{ border: '1px dashed #ccc',marginTop:"20px", cursor: 'pointer' }}>
            <input {...getInputProps()} />
            <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
            <ul>
