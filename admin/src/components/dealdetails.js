@@ -3085,23 +3085,23 @@ const [show9, setshow9] = useState(false);
                           });
                         }
                       
-                        const deleteall12=(index)=>
-                          {
-                            const newdocument_no = units.document_no.filter((_, i) => i !== index);
-                            const newdocumentname = units.document_name.filter((_, i) => i !== index);
-                            const newdocumentdate = units.document_Date.filter((_, i) => i !== index);
-                            const newpic = units.image.filter((_, i) => i !== index);
-                            const newaction12=units.action12.filter((_,i) => i !== index);
-                            
-                            setunits({
-                              ...units,
-                              document_no:newdocument_no,
-                              document_name: newdocumentname,
-                              document_Date: newdocumentdate,
-                              image: newpic,
-                              action12:newaction12
-                            });
-                          }
+                        const deleteall12 = (index) => {
+                          const newdocument_no = (units.document_no || []).filter((_, i) => i !== index);
+                          const newdocumentname = (units.document_name || []).filter((_, i) => i !== index);
+                          const newdocumentdate = (units.document_Date || []).filter((_, i) => i !== index);
+                          const newpic = (units.image || []).filter((_, i) => i !== index);
+                          const newaction12 = (units.action12 || []).filter((_, i) => i !== index);
+                        
+                          setunits({
+                            ...units,
+                            document_no: newdocument_no,
+                            document_name: newdocumentname,
+                            document_Date: newdocumentdate,
+                            image: newpic,
+                            action12: newaction12
+                          });
+                        };
+                        
                           const handledocumentnochange = (index, event) => {
                             const newdocumentno = [...units.document_no];
                             newdocumentno[index] = event.target.value;
@@ -8035,42 +8035,7 @@ stage:selectedLead.stage
                     }
                     </div>
 
-                    {/* <div className='col-md-2' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Linked Contact</label>
-                    {
-                      Array.isArray(units.linkded_contact) ?
-                      units.linkded_contact.map((item,index)=>
-                      (
-                        <input type="text" className="form-control form-control-sm" value={units.linkded_contact} onChange={(event)=>handlelinkedcontactchange(index,event)} style={{marginTop:"5px"}} />
-                        
-                      )):[]
-                    }
-                    </div> */}
-                        
-
-                        {/* <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={documents.linkded_contact}  placeholder="Type here For Search in Contact" required="true" onChange={(e)=>setdocuments({...documents,linkded_contact:e.target.value})}/></div> */}
-                        {showSuggestions  && filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-list">
-                              {filteredSuggestions.map((suggestion, index) => (
-                                <li key={index} onClick={() => handleSuggestionClick1(suggestion,index)}>
-                                  {suggestion.title} {suggestion.first_name} {suggestion.last_name}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-
-
-                      {/* <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
-                    {
-                      Array.isArray(units.image) ?
-                      units.image.map((item,index)=>
-                      (
-                        <input type="file" name="image" className="form-control form-control-sm"  onChange={(event)=>handlepicchange1(index,event)} style={{marginTop:"5px"}} />
-                        
-                      )):[]
-                    }
-                    </div> */}
-
-                    <div className='col-md-3' id="suggestion-box" style={{ position: 'relative' }}><label className='labels'>Pic</label>
+                    <div className='col-md-2'  style={{ position: 'relative' }}><label className='labels'>Pic</label>
                        {
                        Array.isArray(units.image)?
                        units.image.map((name, index) => (
@@ -8089,6 +8054,7 @@ stage:selectedLead.stage
                                      className="form-control form-control-sm"
                                      multiple
                                      onChange={(event) => handlepicchange1(index, event)}
+                                     style={{width:"90px",fontSize:"10px",paddingTop:"7px"}}
                                    />
                       
                                      {name.previewUrls && name.previewUrls.map((url, idx) => (
@@ -8098,7 +8064,26 @@ stage:selectedLead.stage
                                )):[]}
                        </div>
 
-                    <div className="col-md-1" style={{marginTop:"70px"}}>
+                       <div className="col-md-1" style={{ marginTop: "70px" }}>
+    {
+      Array.isArray(units.document_name) ?
+        units.document_name.map((item, index) => (
+          <div key={index} style={{ marginTop: "10px" }}>
+            {units.document_name[index] && ( // Show delete button only if document name exists
+              <img
+                src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg"
+                alt="delete button"
+                onClick={() => deleteall12(index)} // Call deleteDocument for the selected index
+                style={{ height: "40px", cursor: "pointer" }}
+              />
+            )}
+          </div>
+        )) : null
+    }
+  </div>
+
+
+                    {/* <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
                       Array.isArray(units.action12)?
                        units.action12.map((item,index)=>
@@ -8108,35 +8093,13 @@ stage:selectedLead.stage
                           
                         )):[]
                     }
-                    </div>
+                    </div> */}
 
-                    {/* <div className="col-md-1" style={{ marginTop: "70px" }}>
-  {
-    Array.isArray(units.document_name) &&
-    units.document_name.map((item, index) => (
-      item ? (
-        <div key={index} style={{ marginTop: "10px" }}>
-          <img
-            src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg"
-            alt="delete button"
-            onClick={()=>deleteall12(index)}
-            style={{ height: "40px", cursor: "pointer" }}
-          />
-        </div>
-      ) : (
-        <div key={index} style={{ marginTop: "10px" }}></div>
-      )
-    ))
-  }
-</div> */}
-
-                        
                         <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={addFn12}>+</button></div>
                        
-   
-                  
-                  </div>
-              </div>
+                </div>
+
+            </div>
 
 
 

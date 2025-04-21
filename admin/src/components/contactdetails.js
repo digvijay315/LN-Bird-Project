@@ -1288,23 +1288,6 @@ const professions = [
   const [showDropdown2, setShowDropdown2] = useState(false);
   const [selectfield, setselectfield] = useState([]);
 
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-
-
-  // const handlefilterCheckboxChange1 = (field) => {
-  //   const updatedSelections = selectfield.includes(field)
-  //     ? selectedProfessions.filter((p) => p !== field)
-  //     : [...selectfield, field];
-  //     setselectfield(updatedSelections);
-    
-  //   // Filter the data based on selected professions
-  //  const newFilteredData = filteredData.filter((item) =>
-  //     updatedSelections.length === 0 || updatedSelections.includes(item.profession_category)
-  //   );
-  //   setdata(newFilteredData);
-  // };
-
    // Handle checkbox toggle
    const handlefilterCheckboxChange1 = (field) => {
     setselectfield(prev => {
@@ -1327,28 +1310,32 @@ const professions = [
       }));
     };
 
+
     useEffect(() => {
+      const formatDate = (date) => new Date(date).toISOString().split("T")[0];
+    
       const filtered = filteredData.filter(contact => {
-        // Text filters
         const matchesTextFilters = Object.keys(selectfield).every(field => {
+          if (field === 'from_date' || field === 'to_date') return true;
           const value = selectfield[field]?.toLowerCase();
           const contactValue = contact[field]?.toString().toLowerCase() || '';
           return !value || contactValue.includes(value);
         });
     
-        // Date filter
-        const contactDate = new Date(contact.createdAt);
-        const isAfterFromDate = !selectfield.from_date || contactDate >= new Date(selectfield.from_date);
-        const isBeforeToDate = !selectfield.to_date || contactDate <= new Date(selectfield.to_date);
-    console.log(contactdata);
-    console.log(isAfterFromDate);
-    console.log(isBeforeToDate);
+        const contactDate = formatDate(contact.createdAt);
+        const from = selectfield.from_date;
+        const to = selectfield.to_date;
+    
+        const isAfterFromDate = !from || contactDate >= from;
+        const isBeforeToDate = !to || contactDate <= to;
     
         return matchesTextFilters && isAfterFromDate && isBeforeToDate;
       });
     
       setdata(filtered);
     }, [selectfield, filteredData]);
+    
+    
     
     
   
