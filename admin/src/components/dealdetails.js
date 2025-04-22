@@ -687,16 +687,44 @@ function Dealdetails() {
 
                       const updatedLeads = item.matchedleads.map((lead) => {
                         let matchScore = 0;
+                        let score=0;
+
                         if (lead.city3 === city) matchScore += 5;
+
                         if (lead.area_project.includes(project)) matchScore += 5;
+                        if (
+                          Array.isArray(lead.area_project) &&
+                          lead.area_project.length > 0 &&
+                          !(lead.area_project.length === 1 && lead.area_project[0].trim() === '')
+                        ) {
+                          score += 2;
+                        }
+
                         if (lead.block3.includes(block)) matchScore += 5;
+
                         if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
 
                         if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 5;
+                            const twentyFivePercent = 1.25 * parseFloat(lead.budget_max);
+                            if (price === lead.budget_max || price === lead.budget_min) {
+                              score += 10;
+                            } else if (price >= twentyFivePercent) {
+                              score += 2;
+                            } else if (
+                              price <= twentyFivePercent) {
+                              score += 6;
+                            }
 
                         if (size >= parseFloat(lead.minimum_area) && size <= parseFloat(lead.maximum_area)) matchScore += 5;
 
                         if (lead.unit_type.includes(unittypeofsize)) matchScore += 5;
+                        if (
+                          Array.isArray(lead.unit_type) &&
+                          lead.unit_type.length > 0 &&
+                          !(lead.unit_type.length === 1 && lead.unit_type[0].trim() === '')
+                        ) {
+                          score += 2;
+                        }
 
                         if (
                           Array.isArray(lead.property_type) &&
@@ -708,6 +736,15 @@ function Dealdetails() {
                         ) {
                           matchScore += 10;
                         }
+                        if (
+                          Array.isArray(lead.property_type) &&
+                          lead.property_type.length > 0 &&
+                          !(lead.property_type.length === 1 && lead.property_type[0].trim() === '')
+                        ) {
+                          score += 2;
+                        }
+                        
+
                         
                         if (
                           Array.isArray(lead.sub_type) &&
@@ -719,22 +756,51 @@ function Dealdetails() {
                         ) {
                           matchScore += 10;
                         }
+                        if (
+                          Array.isArray(lead.sub_type) &&
+                          lead.sub_type.length > 0 &&
+                          !(lead.sub_type.length === 1 && lead.sub_type[0].trim() === '')
+                        ) {
+                          score += 2;
+                        }
                         
                         if (unittype === lead.unit_type2) matchScore += 10;
+                        if (lead.unit_type2 && lead.unit_type2 !="") score += 1;
+
                         if (lead.facing.includes(facing)) matchScore += 5;
+                        if (
+                          Array.isArray(lead.facing) &&
+                          lead.facing.length > 0 &&
+                          !(lead.facing.length === 1 && lead.facing[0].trim() === '')
+                        ) {
+                          score += 1;
+                        }
+
                         if (lead.road.includes(road)) matchScore += 5;
+                        if (
+                          Array.isArray(lead.road) &&
+                          lead.road.length > 0 &&
+                          !(lead.road.length === 1 && lead.road[0].trim() === '')
+                        ) {
+                          score += 1;
+                        }
+                        
                         if (lead.direction && lead.direction === direction) matchScore += 10;
+                        if (lead.direction && lead.direction !="") score += 1;
 
                         if (lead.timeline) {
                           switch (lead.timeline) {
                             case "Urgent":
                               matchScore += 10;
+                              score +=10;
                               break;
-                            case "Within 15 Days":
+                            case "Within 15 days":
                               matchScore += 7.5;
+                              score +=7;
                               break;
-                            case "Within 1 Month":
+                            case "More then 1 month":
                               matchScore += 5;
+                              score +=5;
                               break;
                             case "Not Confirmed":
                               matchScore += 2.5;
@@ -744,10 +810,126 @@ function Dealdetails() {
                               break;
                           }
                         }
+
+                        if (lead.funding) {
+                          switch (lead.funding) {
+                            case "Self Funding":
+                              score +=5;
+                              break;
+                              case "Home Loan":
+                              case "Loan Against Property":
+                              case "Personal Loan":
+                              case "Business Loan":
+                              score +=3;
+                              break;
+                            default:
+                              // optional: no points if timeline is unknown or empty
+                              break;
+                          }
+                        }
+
+                        if (lead.transaction_type) {
+                          switch (lead.transaction_type) {
+                            case "Full White":
+                              score +=2;
+                              break;
+                              case "Collecter Rate":
+                              score +=5;
+                              break;
+                              case "Flexiable":
+                              score +=5;
+                              break;
+                              default:
+                              // optional: no points if timeline is unknown or empty
+                              break;
+                          }
+                        }
+
+                        
+                        if (lead.source) {
+                          switch (lead.source) {
+                            case "Old Client":
+                              score +=5;
+                              break;
+                            case "Walk-In":
+                              score +=5;
+                              break;
+                            case "Friends":
+                              score +=5;
+                              break;
+                            case "Relative":
+                              score +=5;
+                              break;
+                            case "Hoarding":
+                              score +=4;
+                              break;
+                            case "Channel Partner":
+                              score +=5;
+                              break;
+                            case "SMS":
+                              score +=2;
+                              break;
+                            case "News Paper":
+                              score +=3;
+                              break;
+                            case "Whatsapp":
+                              score +=3;
+                              break;
+                            case "Website":
+                              score +=4;
+                              break;
+                            case "Cold Calling":
+                              score +=3;
+                              break;
+                            case "Facebook":
+                              score +=1;
+                              break;
+                            case "Instagram":
+                              score +=1;
+                              break;
+                            case "Google":
+                              score +=2;
+                              break;
+                            case "X":
+                              score +=1;
+                              break;
+                            case "Linkedin":
+                              score +=2;
+                              break;
+                            case "99 Acre":
+                              score +=3;
+                              break;
+                            case "Magicbricks":
+                              score +=3;
+                              break;
+                            case "Common Floor":
+                              score +=3;
+                              break;
+                            case "Sulekha":
+                              score +=3;
+                              break;
+                            case "Housing":
+                              score +=3;
+                              break;
+                            case "Square Yard":
+                              score +=3;
+                              break;
+                            case "OLX":
+                              score +=3;
+                              break;
+                            case "Real Estate India":
+                              score +=3;
+                              break;
+                              default:
+                              // optional: no points if timeline is unknown or empty
+                              break;
+                          }
+                        }
                  
 
 
                         let locationMatch = 0;
+                        let locationscore=0
                     if (lead.lattitude && lead.longitude) {
                       const leadLat = parseFloat(lead.lattitude);
                       const leadLng = parseFloat(lead.longitude);
@@ -764,11 +946,18 @@ function Dealdetails() {
                       else if (distance <= 8) locationMatch = 7;
                       else if (distance <= 11) locationMatch = 5;
 
+                    // Second set of scores (locationscore)
+                        if (distance <= 1) locationscore = 10;
+                        else if (distance <= 3) locationscore = 8;
+                        else if (distance <= 6) locationscore = 5;
+                        else if (distance > 6) locationscore = 2;
+
                       matchScore += locationMatch;
-                      // return { ...lead, matchPercentage: matchScore, distance: distance.toFixed(2), locationMatch };
+                      score+=locationscore
                     }
 
-                        return { ...lead, matchPercentage: matchScore };
+
+                        return { ...lead, matchPercentage: matchScore,leadscore:score };
                       });
 
                       setMatchedLeads(updatedLeads);
@@ -5334,14 +5523,14 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 <Box position="relative" display="inline-flex">
   <CircularProgress
     variant="determinate"
-    value={item.matchPercentage}
+    value={item.leadscore}
     size={40}
     thickness={3}
     style={{
       color:
-        item.matchPercentage >= 80
+        item.leadscore >= 80
           ? '#4caf50' // Green
-          : item.matchPercentage >= 50
+          : item.leadscore >= 50
           ? '#ff9800' // Orange
           : '#f44336', // Red
       transition: 'all 3s ease-in-out',
@@ -5362,7 +5551,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
       component="div"
       style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
     >
-      {item.matchPercentage}%
+      {item.leadscore}
     </Typography>
   </Box>
 </Box>

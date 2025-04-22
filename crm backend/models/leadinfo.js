@@ -105,6 +105,7 @@ const lead_info=new mongoose.Schema({
     document_pic:{type:Array},
     matcheddeals:[{ type: mongoose.Schema.Types.ObjectId, ref: 'deal' }],
     matchingdeal:{type:String},
+    score:{type:String},
     lastcommunication:{type:String}},{timestamps:true})
 
 const leadinfo=mongoose.model('leadinfos',lead_info)

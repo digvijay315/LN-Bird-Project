@@ -694,7 +694,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
      const requirment=["Buy","Rent","Lease"];
                         const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
                      
-                        const transaction_type=["Full White","Collecter Rate","50% White","75% White"];
+                        const transaction_type=["Full White","Collecter Rate","Flexiable"];
                         const furnishing=["Furnished","Unfurnished","Semi Furnished"];
                         const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
                         const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
@@ -2610,9 +2610,217 @@ const handleroadChange = (event) => {
                   const road = singlelead.road;
                   const direction = singlelead.direction;
                   const range = singlelead.range;
-        
+
                   const matcheddeals = [];
+
+                  let score=0
+                  if (
+                    Array.isArray(areaproject) &&
+                    areaproject.length > 0 &&
+                    !(areaproject.length === 1 && areaproject[0].trim() === '')
+                  ) {
+                    score += 2;
+                  }
+
+                  if (
+                    Array.isArray(unit_type) &&
+                    unit_type.length > 0 &&
+                    !(unit_type.length === 1 && unit_type[0].trim() === '')
+
+                  ) {
+                    score += 2;
+                  }
+
+                  if (
+                    Array.isArray(propertytype) &&
+                    propertytype.length > 0 &&
+                    !(propertytype.length === 1 && propertytype[0].trim() === '')
+                  ) {
+                    score += 2;
+                  }
+
+                  if (
+                    Array.isArray(subtype) &&
+                    subtype.length > 0 &&
+                    !(subtype.length === 1 && subtype[0].trim() === '')
+                  ) {
+                    score += 2;
+                  }
+
+                  if (singlelead.unit_type2 && singlelead.unit_type2 !="") score += 1;
+
+                  if (
+                    Array.isArray(facing) &&
+                    facing.length > 0 &&
+                    !(facing.length === 1 && facing[0].trim() === '')
+                  ) {
+                    score += 1;
+                  }
+
+                  if (
+                    Array.isArray(road) &&
+                    road.length > 0 &&
+                    !(road.length === 1 && road[0].trim() === '')
+                  ) {
+                    score += 1;
+                  }
         
+                  if (direction && direction !="") score += 1;
+
+                  if (singlelead.timeline) {
+                    switch (singlelead.timeline) {
+                      case "Urgent":
+                        score +=10;
+                        break;
+                      case "Within 15 days":
+                        score +=7;
+                        break;
+                      case "More then 1 month":
+                        score +=5;
+                        break;
+                      case "Not Confirmed":
+                        break;
+                      default:
+                        // optional: no points if timeline is unknown or empty
+                        break;
+                    }
+                  }
+
+                  if (singlelead.funding) {
+                    switch (singlelead.funding) {
+                      case "Self Funding":
+                        score +=5;
+                        break;
+                        case "Home Loan":
+                        case "Loan Against Property":
+                        case "Personal Loan":
+                        case "Business Loan":
+                        score +=3;
+                        break;
+                      default:
+                        // optional: no points if timeline is unknown or empty
+                        break;
+                    }
+                  }
+
+                  if (singlelead.transaction_type) {
+                    switch (singlelead.transaction_type) {
+                      case "Full White":
+                        score +=2;
+                        break;
+                        case "Collecter Rate":
+                        score +=5;
+                        break;
+                        case "Flexiable":
+                        score +=5;
+                        break;
+                        default:
+                        // optional: no points if timeline is unknown or empty
+                        break;
+                    }
+                  }
+
+              
+                    if(singlelead.range<=1 || areaproject.length ==1)
+                    {
+                      score +=10;
+                    }
+                    else if(singlelead.range >1 && singlelead.range<=3  || areaproject.length>1 && areaproject.length<=3)
+                      {
+                        score +=8;
+                      }
+                     else if(singlelead.range>3 && singlelead.range<=6 || areaproject.length>3 &&  areaproject.length<=6)
+                        {
+                          score +=5;
+                        }
+                       else if(singlelead.range>=6 || areaproject.length >=6)
+                          {
+                            score +=2;
+                          }
+                    
+                  
+
+                  if (singlelead.source) {
+                    switch (singlelead.source) {
+                      case "Old Client":
+                        score +=5;
+                        break;
+                      case "Walk-In":
+                        score +=5;
+                        break;
+                      case "Friends":
+                        score +=5;
+                        break;
+                      case "Relative":
+                        score +=5;
+                        break;
+                      case "Hoarding":
+                        score +=4;
+                        break;
+                      case "Channel Partner":
+                        score +=5;
+                        break;
+                      case "SMS":
+                        score +=2;
+                        break;
+                      case "News Paper":
+                        score +=3;
+                        break;
+                      case "Whatsapp":
+                        score +=3;
+                        break;
+                      case "Website":
+                        score +=4;
+                        break;
+                      case "Cold Calling":
+                        score +=3;
+                        break;
+                      case "Facebook":
+                        score +=1;
+                        break;
+                      case "Instagram":
+                        score +=1;
+                        break;
+                      case "Google":
+                        score +=2;
+                        break;
+                      case "X":
+                        score +=1;
+                        break;
+                      case "Linkedin":
+                        score +=2;
+                        break;
+                      case "99 Acre":
+                        score +=3;
+                        break;
+                      case "Magicbricks":
+                        score +=3;
+                        break;
+                      case "Common Floor":
+                        score +=3;
+                        break;
+                      case "Sulekha":
+                        score +=3;
+                        break;
+                      case "Housing":
+                        score +=3;
+                        break;
+                      case "Square Yard":
+                        score +=3;
+                        break;
+                      case "OLX":
+                        score +=3;
+                        break;
+                      case "Real Estate India":
+                        score +=3;
+                        break;
+                        default:
+                        // optional: no points if timeline is unknown or empty
+                        break;
+                    }
+                  }
+
+
                   for (const deal of dealdata) {
                  
                     const unitInfo = unitDetails.find(
@@ -2656,6 +2864,7 @@ const handleroadChange = (event) => {
                       )
                     ) {
                       matcheddeals.push(deal);
+                     
                     }
                   }
                 
@@ -2665,6 +2874,7 @@ const handleroadChange = (event) => {
                     ...singlelead,
                     matcheddeals: matcheddeals.map((lead) => lead._id),
                     matchingdeal: matcheddeals.length,
+                    score:score
                   };
                 })
               );
@@ -3326,6 +3536,9 @@ const handleroadChange = (event) => {
 
 // ================================================lead search box code end=======================================================
 
+const [isHoveringDelete, setIsHoveringDelete] = useState(false);
+const [isHoveringEdit, setIsHoveringEdit] = useState(false);
+
   return ( 
     <div>
       <Header1/>
@@ -3438,12 +3651,50 @@ const handleroadChange = (event) => {
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="delete" src="https://cdn-icons-png.freepik.com/512/7078/7078067.png" onClick={deleteSelectedItems}  style={{height:"25px",width:"25px",cursor:"pointer",display:"none",marginTop:"6px"}} alt=""/>
-</Tooltip>
+      <img
+        id="delete"
+        src={
+          isHoveringDelete
+            ? "https://cdn-icons-png.freepik.com/512/6861/6861362.png" // hover image
+            : "https://cdn-icons-png.freepik.com/512/7078/7078067.png" // default image
+        }
+        onClick={deleteSelectedItems}
+        onMouseEnter={() => setIsHoveringDelete(true)}
+        onMouseLeave={() => setIsHoveringDelete(false)}
+        alt=""
+        style={{
+          display:"none",
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Edit Data.." arrow>
-<img id="edit" src="https://static.thenounproject.com/png/1416596-200.png" onClick={handleShow1}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+
+    <Tooltip title="Edit Data.." arrow>
+      <img
+        id="edit"
+        src={
+          isHoveringEdit
+            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpF7BrBLmrMYynVUzMxsgv8AtIEkFjStD6cFRNYv1to6LupNkPMgkEaEzD5-HIGrjcPj4&usqp=CAU" // hover image
+            : "https://static.thenounproject.com/png/1416596-200.png" // default image
+        }
+        onClick={handleShow1}
+        onMouseEnter={() => setIsHoveringEdit(true)}
+        onMouseLeave={() => setIsHoveringEdit(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
 <Tooltip title="Add to task.." arrow>
 <img id="addtask"  src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={()=>navigate('/tasksform')}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
@@ -3581,6 +3832,45 @@ const handleroadChange = (event) => {
             </StyledTableCell>
 
             <StyledTableCell >
+                <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+              
+              {/* Circular Progress with dynamic color and percentage in center */}
+              <Box position="relative" display="inline-flex">
+                <CircularProgress
+                  variant="determinate"
+                  value={item.score}
+                  size={40}
+                  thickness={3}
+                  style={{
+                    color:
+                      item.score >= 80
+                        ? '#4caf50' // Green
+                        : item.score >= 50
+                        ? '#ff9800' // Orange
+                        : '#f44336', // Red
+                    transition: 'all 3s ease-in-out',
+                  }}
+                />
+                <Box
+                  top={0}
+                  left={0}
+                  bottom={0}
+                  right={0}
+                  position="absolute"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Typography
+                    variant="caption"
+                    component="div"
+                    style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
+                  >
+                    {item.score}
+                  </Typography>
+                </Box>
+              </Box>
+              </Box>
               
             </StyledTableCell>
             <StyledTableCell 
@@ -3610,7 +3900,15 @@ const handleroadChange = (event) => {
                        ₹{item.budget_min} <br></br>  ₹{item.budget_max} 
                        </>
                     )
-                    :col.id === 'requirment' 
+                    
+                    : col.id === 'matchingdeal' 
+                    ?(
+                      <>
+                     <span style={{fontWeight:"bold",color:"green"}}>{item.matchingdeal}</span>
+                       </>
+                    )
+                    
+                    : col.id === 'requirment' 
                     ?(
                       <>
                      
@@ -4150,14 +4448,19 @@ const handleroadChange = (event) => {
                        <div className="col-md-2"></div>
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
                         <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
-                        {/* <div className="col-md-2"><label className="labels">Range</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">Unit</label>
-                        <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range_unit:e.target.value})}>
-                          <option>---select---</option>
-                          <option>K.M</option>
-                        </select>
-                        </div> */}
-                        <div className="col-md-4"></div>
+                        <div className="col-md-4"><label className="labels">Range</label>
+                        <select  className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}>
+                        <option>---select---</option>
+                        <option value="1">Within 1 km.</option>
+                        <option value="3">Within 3 km.</option>
+                        <option value="5">Within 5 km.</option>
+                        <option value="10">Within 10 km.</option>
+                        <option value="15">Within 15 km.</option>
+                        <option value="20">Within 20 km.</option>
+                        <option value="25">Within 25 km.</option>
+                          </select>
+                        </div>
+                        {/* <div className="col-md-4"></div> */}
 
                     <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>

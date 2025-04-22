@@ -2105,13 +2105,24 @@ return (
                        <div className="col-md-2"></div>
                         <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
                         <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">Range</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}/></div>
-                        <div className="col-md-2"><label className="labels">Unit</label>
+                        <div className="col-md-4"><label className="labels">Range</label>
+                        <select  className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}>
+                        <option>---select---</option>
+                        <option value="1">Within 1 km.</option>
+                        <option value="3">Within 3 km.</option>
+                        <option value="5">Within 5 km.</option>
+                        <option value="10">Within 10 km.</option>
+                        <option value="15">Within 15 km.</option>
+                        <option value="20">Within 20 km.</option>
+                        <option value="25">Within 25 km.</option>
+                          </select>
+                        </div>
+                        {/* <div className="col-md-2"><label className="labels">Unit</label>
                         <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range_unit:e.target.value})}>
                           <option>---select---</option>
                           <option>K.M</option>
                         </select>
-                        </div>
+                        </div> */}
                         {/* <div className="col-md-4"></div> */}
 
                     <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
