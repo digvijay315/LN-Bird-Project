@@ -3132,7 +3132,7 @@ const completionPercentage = 20; // Set default value here
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Furnishing</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.furnishing}</p></div>
 
                 <div className='col-md-4' ><label style={{color:"#B85042"}}>Facing</label>
-                    <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing.join(',')}</p>
+                    <p style={{marginTop:"-10px",fontWeight:"normal",wordWrap: "break-word", whiteSpace: "normal"}}>{lead.facing?.join(',')}</p>
                 </div>
                 <div className='col-md-4'><label style={{color:"#B85042"}}>Transaction Type</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.transaction_type}</p></div>
                 <div className='col-md-4' ><label>Timeline</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.timeline}</p></div>
@@ -3142,7 +3142,7 @@ const completionPercentage = 20; // Set default value here
                 </div>
                 
                 
-                <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road.join(',')}</p></div>
+                <div className='col-md-4' ><label style={{color:"#B85042"}}>Road</label><p style={{marginTop:"-10px",fontWeight:"normal"}}>{lead.road?.join(',')}</p></div>
 
                 </div>
 
@@ -3950,7 +3950,7 @@ const completionPercentage = 20; // Set default value here
         <div className='row'>
 
           <div className='col-md-12' style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px"}}>
-        <div className='col-md-12' ><img src={matcheddeal} style={{height:"25px",paddingRight:"10px"}}></img>Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterdeal.length}</span>)
+        <div className='col-md-12' ><img src={matcheddeal} style={{height:"25px",paddingRight:"10px"}}></img>Deal Match (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.matcheddeals?.length || 0}</span>)
         <span 
           onClick={toggleTableVisibility} 
           style={{ 
@@ -4003,7 +4003,7 @@ const completionPercentage = 20; // Set default value here
        <tbody>
         {
          
-        filterdeal.map ((item, index) => (
+        lead.matcheddeals?.map ((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
             {/* <StyledTableCell style={{ fontFamily: "times new roman",fontSize:"12px" }}>
               {index + 1}

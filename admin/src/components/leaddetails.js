@@ -27,6 +27,7 @@ import ReactQuill from 'react-quill';  // Import ReactQuill
 import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
 import Swal from "sweetalert2";
 import { Details } from "@mui/icons-material";
+import Leadsingleview from "./leadsingleview";
 
 
 function Leadfetch() {
@@ -2874,7 +2875,7 @@ const handleroadChange = (event) => {
                     ...singlelead,
                     matcheddeals: matcheddeals.map((lead) => lead._id),
                     matchingdeal: matcheddeals.length,
-                    score:score
+                    score:score,
                   };
                 })
               );
@@ -3538,7 +3539,16 @@ const handleroadChange = (event) => {
 
 const [isHoveringDelete, setIsHoveringDelete] = useState(false);
 const [isHoveringEdit, setIsHoveringEdit] = useState(false);
-
+const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
+const [isHoveringtransferlead, setIsHoveringtransferlead] = useState(false);
+const [isHoveringadduser, setIsHoveringadduser] = useState(false);
+const [isHoveringremoveuser, setIsHoveringremoveuser] = useState(false);
+const [isHoveringcall, setIsHoveringcall] = useState(false);
+const [isHoveringaddtag, setIsHoveringaddtag] = useState(false);
+const [isHoveringaddremarks, setIsHoveringaddremarks] = useState(false);
+const [isHoveringadddocuments, setIsHoveringadddocuments] = useState(false);
+const [isHoveringupdatestage, setIsHoveringupdatestage] = useState(false);
+const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
   return ( 
     <div>
       <Header1/>
@@ -3697,40 +3707,234 @@ const [isHoveringEdit, setIsHoveringEdit] = useState(false);
     </Tooltip>
 
 <Tooltip title="Add to task.." arrow>
-<img id="addtask"  src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={()=>navigate('/tasksform')}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="addtask"
+        src={
+          isHoveringaddtotask
+            ? "https://cdn-icons-png.flaticon.com/512/12692/12692378.png" // hover image
+            : "https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" // default image
+        }
+        onClick={()=>navigate('/tasksform')}
+        onMouseEnter={() => setIsHoveringaddtotask(true)}
+        onMouseLeave={() => setIsHoveringaddtotask(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Transfer Lead.." arrow>
-<img id="transferlead"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuMCIGx_Q2PJ8_eWpfakE9WZyNJzn-MApug&s" onClick={handleShow5}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Transfer Lead.." arrow>
+      <img
+        id="transferlead"
+        src={
+          isHoveringtransferlead
+            ? "https://media.istockphoto.com/id/1200593178/vector/exchange-arrow-transfer-icon-logo-vector-isloated-on-white-background.jpg?s=612x612&w=0&k=20&c=VnkjaZlOvmwMGJQPNO-SVh-OFa6ogpDMLrzP-9q5Omc=" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCuMCIGx_Q2PJ8_eWpfakE9WZyNJzn-MApug&s" // default image
+        }
+        onClick={handleShow5}
+        onMouseEnter={() => setIsHoveringtransferlead(true)}
+        onMouseLeave={() => setIsHoveringtransferlead(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add User.." arrow>
-<img id="adduser"  src="https://brandeps.com/icon-download/U/User-add-icon-05.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Add User.." arrow>
+      <img
+        id="adduser"
+        src={
+          isHoveringadduser
+            ? "https://cdn0.iconfinder.com/data/icons/thin-line-color-2/21/01-512.png" // hover image
+            : "https://brandeps.com/icon-download/U/User-add-icon-05.png" // default image
+        }
+        onClick={handleShow3}
+        onMouseEnter={() => setIsHoveringadduser(true)}
+        onMouseLeave={() => setIsHoveringadduser(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Remove User.." arrow>
-<img id="removeuser"  src="https://brandeps.com/icon-download/U/User-delete-icon-02.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Remove User.." arrow>
+      <img
+        id="removeuser"
+        src={
+          isHoveringremoveuser
+            ? "https://icon-library.com/images/icon-available/icon-available-3.jpg" // hover image
+            : "https://brandeps.com/icon-download/U/User-delete-icon-02.png" // default image
+        }
+        onClick={handleShow3}
+        onMouseEnter={() => setIsHoveringremoveuser(true)}
+        onMouseLeave={() => setIsHoveringremoveuser(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Call.." arrow>
-<img id="call"  src="https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Call.." arrow>
+      <img
+        id="call"
+        src={
+          isHoveringcall
+            ? "https://cdn-icons-png.flaticon.com/512/561/561253.png" // hover image
+            : "https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png" // default image
+        }
+        onClick={handleShow3}
+        onMouseEnter={() => setIsHoveringcall(true)}
+        onMouseLeave={() => setIsHoveringcall(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Tag.." arrow>
-<img id="addtag"  src="https://cdn-icons-png.flaticon.com/512/118/118061.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Add Tag.." arrow>
+      <img
+        id="addtag"
+        src={
+          isHoveringaddtag
+            ? "https://cdn-icons-png.freepik.com/512/11500/11500120.png" // hover image
+            : "https://cdn-icons-png.flaticon.com/512/118/118061.png" // default image
+        }
+        onClick={handleShow3}
+        onMouseEnter={() => setIsHoveringaddtag(true)}
+        onMouseLeave={() => setIsHoveringaddtag(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Remarks/Note.." arrow>
-<img id="addremarks"  src="https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" onClick={handleShow6}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Add Remarks/Note.." arrow>
+      <img
+        id="addremarks"
+        src={
+          isHoveringaddremarks
+            ? "https://cdn-icons-png.flaticon.com/512/1381/1381552.png" // hover image
+            : "https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" // default image
+        }
+        onClick={handleShow6}
+        onMouseEnter={() => setIsHoveringaddremarks(true)}
+        onMouseLeave={() => setIsHoveringaddremarks(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Document.." arrow>
-<img id="adddocument"  src="https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png" onClick={handleShow7}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Add Document.." arrow>
+      <img
+        id="adddocument"
+        src={
+          isHoveringadddocuments
+            ? "https://cdn-icons-png.freepik.com/512/5442/5442207.png" // hover image
+            : "https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png" // default image
+        }
+        onClick={handleShow7}
+        onMouseEnter={() => setIsHoveringadddocuments(true)}
+        onMouseLeave={() => setIsHoveringadddocuments(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Update Stage.." arrow>
-<img id="updatestage"  src="https://icon-library.com/images/cycle-icon-png/cycle-icon-png-29.jpg" onClick={handleShow4}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Update Stage.." arrow>
+      <img
+        id="updatestage"
+        src={
+          isHoveringupdatestage
+            ? "https://cdn-icons-png.flaticon.com/512/12238/12238114.png" // hover image
+            : "https://icon-library.com/images/cycle-icon-png/cycle-icon-png-29.jpg" // default image
+        }
+        onClick={handleShow4}
+        onMouseEnter={() => setIsHoveringupdatestage(true)}
+        onMouseLeave={() => setIsHoveringupdatestage(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+    <Tooltip title="Send Mail,WhatsApp and Message..." arrow>
+      <img
+        id="sendall"
+        src={
+          isHoveringsendmail
+            ? "https://cdn-icons-png.flaticon.com/512/786/786407.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAkAryM3dt6AWqQt1fHHBAtQ-YFVel4wnqEA&s" // default image
+        }
+        onClick={handleShow3}
+        onMouseEnter={() => setIsHoveringsendmail(true)}
+        onMouseLeave={() => setIsHoveringsendmail(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
 {/* <Tooltip title="Send Mail.." arrow>
 <img id="mail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
@@ -3741,9 +3945,7 @@ const [isHoveringEdit, setIsHoveringEdit] = useState(false);
 <Tooltip title="Send Message.." arrow>
 <img id="message"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
 </Tooltip> */}
-<Tooltip title="Send Mail,WhatsApp and Message..." arrow>
-<img id="sendall"  src="https://static-00.iconduck.com/assets.00/send-icon-512x466-b67uw2ug.png" onClick={handleShow3}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"8px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
-</Tooltip>
+
 </div>
 
 <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
@@ -3843,11 +4045,16 @@ const [isHoveringEdit, setIsHoveringEdit] = useState(false);
                   thickness={3}
                   style={{
                     color:
-                      item.score >= 80
-                        ? '#4caf50' // Green
-                        : item.score >= 50
-                        ? '#ff9800' // Orange
-                        : '#f44336', // Red
+                    item.score > 90
+                    ? '#4caf50' // Green
+                    : item.score >= 71
+                    ? '#f44336' // Red
+                    : item.score >= 46
+                    ? '#ff9800' // Orange
+                    : item.score >= 26
+                    ? '#ffeb3b' // Yellow
+                    : '#2196f3', // Blue
+
                     transition: 'all 3s ease-in-out',
                   }}
                 />
@@ -5702,11 +5909,15 @@ const [isHoveringEdit, setIsHoveringEdit] = useState(false);
     thickness={3}
     style={{
       color:
-        item.matchPercentage >= 80
+          item.matchPercentage > 90
           ? '#4caf50' // Green
-          : item.matchPercentage >= 50
+          : item.matchPercentage >= 71
+          ? '#f44336' // Red
+          : item.matchPercentage >= 46
           ? '#ff9800' // Orange
-          : '#f44336', // Red
+          : item.matchPercentage >= 26
+          ? '#ffeb3b' // Yellow
+          : '#2196f3', // Blue
       transition: 'all 3s ease-in-out',
     }}
   />
@@ -5751,11 +5962,15 @@ const [isHoveringEdit, setIsHoveringEdit] = useState(false);
       '& .MuiLinearProgress-bar': {
         borderRadius: 6,
         backgroundColor:
-          item.matchPercentage >= 80
-            ? '#4caf50'
-            : item.matchPercentage >= 50
-            ? '#ff9800'
-            : '#f44336',
+        item.matchPercentage > 90
+        ? '#4caf50' // Green
+        : item.matchPercentage >= 71
+        ? '#f44336' // Red
+        : item.matchPercentage >= 46
+        ? '#ff9800' // Orange
+        : item.matchPercentage >= 26
+        ? '#ffeb3b' // Yellow
+        : '#2196f3', // Blue
         transition: 'all 0.5s ease-in-out',
       },
     }}
@@ -6105,7 +6320,7 @@ const [isHoveringEdit, setIsHoveringEdit] = useState(false);
 
   {/* ===========================================modal for send details end=================================================== */}
 
-
+       
           <ToastContainer/>
    </div>
    

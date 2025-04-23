@@ -5279,6 +5279,10 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                         <li><a className="dropdown-item" href="#">Delete</a></li>
                       </ul>
                     </div>
+                  ) :   col.id === 'matchinglead' ? (
+                    <>
+                    <span style={{fontWeight:"bold",color:"green"}}>{item.matchinglead}</span>
+                    </>
                   ) :  (
                   typeof item[col.id] === 'object' ? JSON.stringify(item[col.id]) : item[col.id]
                 )}
@@ -5528,11 +5532,15 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
     thickness={3}
     style={{
       color:
-        item.leadscore >= 80
-          ? '#4caf50' // Green
-          : item.leadscore >= 50
-          ? '#ff9800' // Orange
-          : '#f44336', // Red
+      item.leadscore > 90
+      ? '#4caf50' // Green
+      : item.score >= 71
+      ? '#f44336' // Red
+      : item.score >= 46
+      ? '#ff9800' // Orange
+      : item.score >= 26
+      ? '#ffeb3b' // Yellow
+      : '#2196f3', // Blue
       transition: 'all 3s ease-in-out',
     }}
   />
@@ -5577,11 +5585,18 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
       '& .MuiLinearProgress-bar': {
         borderRadius: 6,
         backgroundColor:
-          item.matchPercentage >= 80
-            ? '#4caf50'
-            : item.matchPercentage >= 50
-            ? '#ff9800'
-            : '#f44336',
+        
+            item.matchPercentage > 90
+              ? '#4caf50' // Green
+              : item.matchPercentage >= 71
+              ? '#f44336' // Red
+              : item.matchPercentage >= 46
+              ? '#ff9800' // Orange
+              : item.matchPercentage >= 26
+              ? '#ffeb3b' // Yellow
+              : '#2196f3', // Blue
+          fontWeight: 'bold',
+        
         transition: 'all 0.5s ease-in-out',
       },
     }}

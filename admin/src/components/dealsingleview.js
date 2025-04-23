@@ -3910,7 +3910,7 @@ const handleShow13=async()=>
         <div className='row'>
 
         <div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
-  <div className='col-md-12'><img src={matchedlead} style={{height:"25px",paddingRight:"10px"}}></img> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{filterlead.length}</span>)
+  <div className='col-md-12'><img src={matchedlead} style={{height:"25px",paddingRight:"10px"}}></img> Matched Lead (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{lead.matchedleads?.length}</span>)
         <span 
           onClick={toggleTableVisibility}
           style={{ 
@@ -3962,7 +3962,7 @@ const handleShow13=async()=>
       <tbody>
         {
          
-        filterlead.map ((item, index) => (
+         lead.matchedleads.map ((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
          
             <StyledTableCell style={{fontSize:"12px",whiteSpace:"wrap",cursor:"pointer"}} onClick={()=>navigate('/leadsingleview',{state:item})}>

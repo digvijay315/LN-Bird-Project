@@ -21,6 +21,7 @@ const { add_deal, view_deal, view_deal_Bystage, remove_deal, update_deal, view_d
 const upload1 = require('../middlewares/multifile');
 const { add_activity, view_activity, remove_activity, update_activity, view_activitybyid } = require('../controllers/addactivity');
 const { sendmessage, makecall } = require('../controllers/sendsms');
+const {sendwhatsapp,setWhatsAppWebhook, sendWhatsAppTextMessage, rcvmessage} = require('../controllers/sendwhatsapp');
 
 
 
@@ -168,6 +169,10 @@ router.put('/updateactivity/:_id',update_activity)
 router.post('/sendmessage',sendmessage)
 router.post('/makecall',makecall)
 
+router.get('/get-qr-code',sendwhatsapp)
+router.post('/setwebhook',setWhatsAppWebhook)
+router.post('/sendwhatsappmessage',sendWhatsAppTextMessage)
+router.post('/rcvmessage',rcvmessage)
 
 
 module.exports=router;

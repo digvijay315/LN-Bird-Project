@@ -87,6 +87,97 @@ button:hover{
     transform: scale(1.1);
     
 }
+#addtask{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#addtask:hover
+{
+    transform: scale(1.2);
+    
+}
+#transferlead{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#transferlead:hover
+{
+    transform: scale(1.6);
+    
+}
+#adduser{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#adduser:hover
+{
+    transform: scale(1.6);
+    
+}
+#removeuser{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#removeuser:hover
+{
+    transform: scale(1.2);
+    
+}
+#call{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#call:hover
+{
+    transform: scale(1.2);
+    
+}
+#addtag{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#addtag:hover
+{
+    transform: scale(1.4);
+    
+}
+#addremarks{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#addremarks:hover
+{
+    transform: scale(1.2);
+    
+}
+#adddocument{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#adddocument:hover
+{
+    transform: scale(1.2);
+    
+}
+#updatestage{
+    transition: transform .2s;
+    background-color: transparent;
+    
+}
+#updatestage:hover
+{
+    transform: scale(1.2);
+    
+}
+
 #mail{
     transition: transform .2s;
     background-color: transparent;
@@ -244,7 +335,7 @@ button:hover{
 }
 #sendall:hover
 {
-    transform: scale(1.1);
+    transform: scale(1.2);
     
 }
 
