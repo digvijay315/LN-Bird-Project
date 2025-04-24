@@ -3138,9 +3138,9 @@ const checkForDuplicates = async (contacts) => {
 
 
 // ================================================lead search box code end=======================================================
-
-
-
+const [isHoveringDelete, setIsHoveringDelete] = useState(false);
+const [isHoveringEdit, setIsHoveringEdit] = useState(false);
+const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
 
     return ( 
         <div>
@@ -3388,12 +3388,50 @@ const checkForDuplicates = async (contacts) => {
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
    
       <Tooltip title="Delete Data.." arrow>
-      <img id="delete" src="https://cdn-icons-png.freepik.com/512/7078/7078067.png" onClick={deleteSelectedItems} style={{height:"25px",width:"25px",cursor:"pointer",display:"none",marginTop:"6px"}} alt=""/>
-      </Tooltip>
+            <img
+              id="delete"
+              src={
+                isHoveringDelete
+                  ? "https://cdn-icons-png.freepik.com/512/6861/6861362.png" // hover image
+                  : "https://cdn-icons-png.freepik.com/512/7078/7078067.png" // default image
+              }
+              onClick={deleteSelectedItems}
+              onMouseEnter={() => setIsHoveringDelete(true)}
+              onMouseLeave={() => setIsHoveringDelete(false)}
+              alt=""
+              style={{
+                display:"none",
+                height: "25px",
+                width: "25px",
+                cursor: "pointer",
+                marginTop: "6px"
+              }}
+            />
+          </Tooltip>
     
-      <Tooltip title="Edit Data.." arrow>
-      <img id="edit" src="https://static.thenounproject.com/png/1416596-200.png" onClick={handleShow1}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-      </Tooltip>
+    <Tooltip title="Edit Data.." arrow>
+          <img
+            id="edit"
+            src={
+              isHoveringEdit
+                ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpF7BrBLmrMYynVUzMxsgv8AtIEkFjStD6cFRNYv1to6LupNkPMgkEaEzD5-HIGrjcPj4&usqp=CAU" // hover image
+                : "https://static.thenounproject.com/png/1416596-200.png" // default image
+            }
+            onClick={handleShow1}
+            onMouseEnter={() => setIsHoveringEdit(true)}
+            onMouseLeave={() => setIsHoveringEdit(false)}
+            alt="edit"
+            style={{
+              height: "25px",
+              width: "25px",
+              cursor: "pointer",
+              marginTop: "6px",
+              marginLeft: "20px",
+              display: "none"
+            }}
+          />
+        </Tooltip>
+  
 
       <Tooltip title="Add to lead.." arrow>
       <img id="addtolead" src="https://static.vecteezy.com/system/resources/previews/048/294/744/non_2x/black-and-white-dollar-coin-increasing-value-with-plus-sign-vector.jpg" onClick={handleShow5}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
@@ -3411,9 +3449,29 @@ const checkForDuplicates = async (contacts) => {
       <img id="mergecontact" onClick={()=>mergeAndSave(selectedItems)} src="https://www.shutterstock.com/image-vector/merge-business-gear-one-icon-260nw-1432583180.jpg"   style={{height:"25px",width:"25px",display:"none",cursor:"pointer",marginTop:"6px",marginLeft:"20px"}} alt=""/>
       </Tooltip>    
 
-      <Tooltip title="add task..." arrow>
-      <img id="addtask" src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={()=>addtotask(selectedItems)}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-      </Tooltip> 
+<Tooltip title="Add to task.." arrow>
+      <img
+        id="addtask"
+        src={
+          isHoveringaddtotask
+            ? "https://cdn-icons-png.flaticon.com/512/12692/12692378.png" // hover image
+            : "https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" // default image
+        }
+        onClick={()=>addtotask(selectedItems)}
+        onMouseEnter={() => setIsHoveringaddtotask(true)}
+        onMouseLeave={() => setIsHoveringaddtotask(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
 
       <Tooltip title="sequence.." arrow>
       <img id="sequence" src="https://static.vecteezy.com/system/resources/previews/052/379/772/non_2x/dependencies-glyph-icon-design-vector.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>

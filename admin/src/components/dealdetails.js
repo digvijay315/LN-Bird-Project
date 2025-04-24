@@ -4610,6 +4610,7 @@ useEffect(() => {
                           
                           
                           const [emails, setEmails] = useState([]);
+                           const [number, setNumber] = useState([]);
 
                           useEffect(() => {
                          
@@ -4617,15 +4618,16 @@ useEffect(() => {
                               const extractedEmails = matchedLeads
                                 .filter(item => selectedItems1.some(selected => selected === item._id))
                                 .flatMap(item => item.email || []);
+
+                                const extractedmobile = matchedLeads
+                                .filter(item => selectedItems1.some(selected => selected === item._id))
+                                .flatMap(item => item.mobile_no || []);
                               
-                              setEmails(extractedEmails);
+                                setEmails(extractedEmails)
+                                setNumber(extractedmobile);
                             }
                           }, [selectedItems1, matchedLeads]);
                     
-
-
-
-                
 
                                       const templates1 = {
                                         template1: "Hello, \n\nI hope this email finds you well. I wanted to follow up on our previous conversation regarding property. Please let me know if you have any questions.\n\nBest regards,\nDigvijay Kumar",
@@ -4777,7 +4779,57 @@ useEffect(() => {
                                           }
                                         }
                                         
-            
+                                        const modules112 = {
+                                          toolbar: {
+                                            container: "#custom-toolbar1"
+                                          }
+                                        };
+                                        
+                                      
+                                        
+                                                          const handleSendwhatsapp = async () => {
+                                                                              setIsLoading1(true)
+                                                                              try {
+                                                                                for (const singleNumber of number){
+                                                                                const res = await axios.post('http://localhost:5000/sendwhatsappmessage', {
+                                                                                  number:singleNumber,
+                                                                                  message1,
+                                                                                  media_url:attachments1[0].url
+                                                                                });
+                                                                                if(res.status===200)
+                                                                                  {
+                                                                                    Swal.fire({
+                                                                                      icon: 'success',
+                                                                                      title: 'Whats App Sent!',
+                                                                                      text: 'Your message has been sent successfully...',
+                                                                                      confirmButtonColor: '#d33',
+                                                                                      confirmButtonText: 'OK',
+                                                                                    });
+                                                                                    setTimeout(() => {
+                                                                                     window.location.reload()
+                                                                                    }, 2000);
+                                                                              
+                                                                                  }
+                                                                                  console.log(res);
+                                                                                  
+                                                                              }
+                                                                              } catch (err) {
+                                                                               
+                                                                                Swal.fire({
+                                                                                  icon: 'error',
+                                                                                  title: 'Whats App Error!',
+                                                                                  text:   err.response?.data.message || err.message,
+                                                                                  confirmButtonColor: '#d33',
+                                                                                  confirmButtonText: 'OK',
+                                                                                });
+                                                                                console.error('Error:', err.response?.data || err.message);
+                                                                              }
+                                                                              finally
+                                                                              {
+                                                                                setIsLoading1(true)
+                                                                              }
+                                                                            };
+                                                            
         
       
           
@@ -5281,7 +5333,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                     </div>
                   ) :   col.id === 'matchinglead' ? (
                     <>
-                    <span style={{fontWeight:"bold",color:"green"}}>{item.matchinglead}</span>
+                    <span style={{fontWeight:"bold",color:"green",fontSize:"14px"}}>{item.matchinglead}</span>
                     </>
                   ) :  (
                   typeof item[col.id] === 'object' ? JSON.stringify(item[col.id]) : item[col.id]
@@ -8937,6 +8989,110 @@ stage:selectedLead.stage
        
            <div className="row mt-2" id="sendwhatsapp" style={{display:"none"}}>
            <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send WhatsApp</div>
+
+             <div className="col-md-12" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                             <input type="text" style={{border:"none",fontSize:"12px",borderBottom:"1px solid gray"}} required="true" className="form-control form-control-sm" placeholder='subject' value={subject1} onChange={(e)=>setsubject1(e.target.value)}/>
+                        
+                            </div>
+                           
+                     
+                            <div className="col-md-12" style={{marginTop:"10px"}}>
+                               <ReactQuill
+                             modules={modules112}  // Add the toolbar options for formatting
+                             style={{ height: '200px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+                             className="my-quill-editor"
+                             value={message1}   placeholder="Enter Your Message"  onChange={handlemailmessage1}/>
+                             </div>
+                  
+                             <div id="custom-toolbar1" className="ql-toolbar ql-snow" style={{ marginTop: "10px" }}>
+                    {/* Text formatting */}
+                    <span className="ql-formats">
+                      <button className="ql-bold" />
+                      <button className="ql-italic" />
+                      <button className="ql-underline" />
+                      <button className="ql-strike" />
+                    </span>
+                  
+                   {/* Font family */}
+                   <span className="ql-formats">
+                      <select className="ql-font">
+                        <option value="sans-serif">Sans Serif</option>
+                        <option value="serif">Serif</option>
+                        <option value="monospace">Monospace</option>
+                      </select>
+                    </span>
+                  
+                    {/* Font size */}
+                    <span className="ql-formats">
+                      <select className="ql-size">
+                        <option value="small" />
+                        <option value="normal" selected />
+                        <option value="large" />
+                        <option value="huge" />
+                      </select>
+                    </span>
+                  
+                    {/* Lists and indent */}
+                    <span className="ql-formats">
+                      <button className="ql-list" value="ordered" />
+                      <button className="ql-list" value="bullet" />
+                      <button className="ql-indent" value="-1" />
+                      <button className="ql-indent" value="+1" />
+                    </span>
+                  
+                    {/* Alignment */}
+                    <span className="ql-formats">
+                      <button className="ql-align" value="" />
+                      <button className="ql-align" value="center" />
+                      <button className="ql-align" value="right" />
+                      <button className="ql-align" value="justify" />
+                    </span>
+                  
+                    {/* Colors */}
+                    <span className="ql-formats">
+                      <button className="ql-color" />
+                      <button className="ql-background" />
+                    </span>
+                  
+                    {/* Code, blockquote */}
+                    <span className="ql-formats">
+                      <button className="ql-blockquote" />
+                      <button className="ql-code-block" />
+                    </span>
+                  
+                    {/* Media */}
+                    <span className="ql-formats">
+                      <button className="ql-link" />
+                      <button className="ql-image" />
+                    </span>
+                  
+                    {/* Clear formatting */}
+                    <span className="ql-formats">
+                      <button className="ql-clean" />
+                    </span>
+                  
+                  </div>
+                  
+                  
+                            <div className="col-md-4" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+                            <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate1} onChange={handleTemplateSelect1} style={{fontSize:"12px"}}>
+                               <option value="">---Select Template---</option>
+                               <option value="template1">Template 1</option>
+                               <option value="template2">Template 2</option>
+                               <option value="template3">Template 3</option>
+                             </select>
+                            </div>
+                             <div className="col-md-4" {...getRootProps1()} style={{ border: '1px dashed #ccc',marginTop:"35px", cursor: 'pointer' }}>
+                  <input {...getInputProps1()} />
+                  <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
+                  <ul>
+                    {attachments1.length > 0 && attachments1.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div>
+                            
+
            </div>
        
        </div>
@@ -8980,7 +9136,10 @@ stage:selectedLead.stage
             </Modal.Body>
             <Modal.Footer>
             <Button variant="secondary" onClick={sendmail1}>
-                Send
+                Send Mail
+              </Button>
+              <Button variant="secondary" onClick={handleSendwhatsapp}>
+                Send WhatsApp
               </Button>
               <Button variant="secondary" onClick={handleClose12}>
                 Close

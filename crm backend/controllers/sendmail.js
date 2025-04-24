@@ -17,6 +17,7 @@ const send_mail = async (req, res) => {
         const files = req.files;
         const cloudinaryAttachments = [];
       
+     
         
         if (!emails ) {
             return res.status(400).send('No recipients provided.');

@@ -2982,11 +2982,13 @@ const completionPercentage = 20; // Set default value here
             <div className="col-md-3 d-flex justify-content-center align-items-center">
         <div style={{ width: 60, height: 60 }}>
           <CircularProgressbar
-            value={completionPercentage}
-            text={`${completionPercentage}%`}
+            value={lead?.score}
+            text={`${lead?.score}`}
             styles={buildStyles({
-              pathColor: "#B85042",
-              textColor: "#B85042",
+              pathColor:
+              lead?.score > 90
+                ? '#4caf50' : lead?.score >= 71 ? '#f44336' : lead?.score >= 46 ? '#ff9800' : lead?.score >= 26 ? '#ffeb3b' : '#2196f3',
+              textColor:"#000000",
               trailColor: "#f0f0f0",
               strokeLinecap: "round",
               textSize: "18px",

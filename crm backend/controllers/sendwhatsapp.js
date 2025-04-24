@@ -2,7 +2,7 @@
 
 const axios = require('axios');
 
-
+const { htmlToText } = require('html-to-text');
 
 
 
@@ -71,21 +71,40 @@ const setWhatsAppWebhook = async (req,res) => {
 
 
 const sendWhatsAppTextMessage = async (req, res) => {
-  const { number, message } = req.body; // Get data from frontend
+  const { number, message1,media_url } = req.body; // Get data from frontend
 
-  if (!number || !message) {
+  if (!number || !message1) {
     return res.status(400).json({ status: 'error', message: 'Number and message are required' });
   }
+
+const plainTextMessage = htmlToText(message1, {
+  wordwrap: false, // or set to any value you prefer
+});
+
+  // Clean number (just digits)
+  let rawNumber = number.toString().replace(/\D/g, ''); // remove any non-digit characters
+
+  if (rawNumber.length < 10) {
+    return res.status(400).json({ status: 'error', message: 'Invalid number: less than 10 digits' });
+  }
+
+  if (rawNumber.length === 10) {
+    rawNumber = '91' + rawNumber;
+  }
+console.log(media_url);
 
 
   try {
     const payload = {
-      number,
-      type: 'text',
-      message,
+      number:rawNumber,
+      type: 'media',
+      media_url,
+      message:plainTextMessage,
       instance_id: '6807851782359', // replace with your actual instance_id
       access_token: '68076d9808e66'
     };
+
+   
 
     const response = await axios.post('https://wamaster.metalivingrich.in/api/send', payload, {
       headers: {

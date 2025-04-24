@@ -2914,7 +2914,7 @@ const handleroadChange = (event) => {
                     { id: 'score', name: 'Score' },
                     { id: 'unit_number', name: 'Unit' },
                     { id: 'matched_percentange', name: 'Matched %' },
-                    { id: 'project', name: 'Project Name' },
+                    { id: 'project', name: 'Project_Name' },
                     { id: 'block', name: 'Block' },
                     { id: 'category', name: 'Category' },
                     { id: 'size', name: 'Size' },
@@ -3183,9 +3183,30 @@ const handleroadChange = (event) => {
                                                           setIsLoading1(false)
                                                         }
                                                       };
-                                                      
-                                                
-                                                      
+                                
+                              const[showdeals,setshowdeals]=useState([])
+                              const[relateddeals,setrelateddeals]=useState([])
+                              useEffect(() => {
+                                const filtermatcheddeals = matcheddeals.filter((item) => {
+                                 
+                                  return item.project_category.some(category =>
+                                    lead1[0].property_type.includes(category)
+                                  );
+                                });
+                                
+                                const filtermatcheddeals1 = matcheddeals.filter((item) => {
+                                
+                                  return item.project_category.some(category =>
+                                    !lead1[0].property_type.includes(category)
+                                  );
+                                });
+                                setrelateddeals(filtermatcheddeals1)
+                                setshowdeals(filtermatcheddeals);
+                              }, [matcheddeals]);
+                                  
+                             
+                              
+                                           
 
 
 
@@ -3346,9 +3367,7 @@ const handleroadChange = (event) => {
                                         template3: `Dear ${lead1[0]?.title} ${lead1[0]?.first_name} ${lead1[0]?.last_name},
 
                                                 Thank you for connecting with Bharat Properties – Kurukshetra in your search for the perfect property. We’ve shortlisted a few options that match your requirements based on your preferences. Below are the key details of the best available properties:
-
                                                 🌟 Top Matching Property Options
-
                                                 ${propertyDetails}
 
                                                 🖼️ Images & Virtual Tours:
@@ -3390,9 +3409,9 @@ const handleroadChange = (event) => {
                                             container: "#custom-toolbar"
                                           }
                                         };
+
+                                   
                                         
-                  
-                                      
                                       const handlemailmessage1=(value)=>
                                         {
                                           setmessage1(value)
@@ -3426,12 +3445,15 @@ const handleroadChange = (event) => {
                                       };
 
                                          const [emails1, setEmails1] = useState([]);
+                                         const [number, setNumber] = useState([]);
                                       
                                          useEffect(() => {
                                     
                                           if (Array.isArray(lead1[0]?.email)) {
                                             const extractedEmails = lead1[0].email.flatMap(item => item);
+                                            const extractedmobile = lead1[0].mobile_no.flatMap(item => item);
                                             setEmails1(extractedEmails);
+                                            setNumber(extractedmobile);
                                           } else {
                                             setEmails1([]); // Set to empty if not available
                                           }
@@ -3473,6 +3495,55 @@ const handleroadChange = (event) => {
                                             setisloading2(false)
                                           }
                                         }
+
+
+                                        const modules112 = {
+                                          toolbar: {
+                                            container: "#custom-toolbar1"
+                                          }
+                                        };
+                                         const handleSendwhatsapp = async () => {
+                                          setisloading2(true)
+                                            try {
+                                              for (const singleNumber of number){
+                                              const res = await axios.post('http://localhost:5000/sendwhatsappmessage', {
+                                                number:singleNumber,
+                                                message1,
+                                                
+                                              });
+                                              if(res.status===200)
+                                                {
+                                                  Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Whats App Sent!',
+                                                    text: 'Your message has been sent successfully...',
+                                                    confirmButtonColor: '#d33',
+                                                    confirmButtonText: 'OK',
+                                                  });
+                                                  setTimeout(() => {
+                                                   window.location.reload()
+                                                  }, 2000);
+                                            
+                                                }
+                                                console.log(res);
+                                                
+                                            }
+                                            } catch (err) {
+                                             
+                                              Swal.fire({
+                                                icon: 'error',
+                                                title: 'Whats App Error!',
+                                                text:   err.response?.data.message || err.message,
+                                                confirmButtonColor: '#d33',
+                                                confirmButtonText: 'OK',
+                                              });
+                                              console.error('Error:', err.response?.data || err.message);
+                                            }
+                                            finally
+                                            {
+                                              setisloading2(false)
+                                            }
+                                          };
                           
                           
                                     
@@ -4111,7 +4182,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                     : col.id === 'matchingdeal' 
                     ?(
                       <>
-                     <span style={{fontWeight:"bold",color:"green"}}>{item.matchingdeal}</span>
+                     <span style={{fontWeight:"bold",color:"green",fontSize:"14px"}}>{item.matchingdeal}</span>
                        </>
                     )
                     
@@ -4166,15 +4237,15 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       </tbody>
     </Table>
   </TableContainer>
-  <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"20px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+  <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"10px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
-          <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"20px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"20px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>No Followups Lead- <span style={{color:"gray",fontSize:"20px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Returning Lead- <span style={{color:"black",fontSize:"20px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Returning No Followup Lead- <span style={{color:"#D11414",fontSize:"20px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Over Due Task Lead- <span style={{color:"#04A9A9",fontSize:"20px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Unassigned Lead-<span style={{color:"#A90490",fontSize:"20px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>No Followups Lead- <span style={{color:"gray",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Returning Lead- <span style={{color:"black",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Returning No Followup Lead- <span style={{color:"#D11414",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Over Due Task Lead- <span style={{color:"#04A9A9",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Unassigned Lead-<span style={{color:"#A90490",fontSize:"15px"}}>{countall}</span></h6>
           
         </footer>
   </div>
@@ -5873,7 +5944,10 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
     
       <tbody>
         {
-         matcheddeals
+          
+
+        //  matcheddeals
+        showdeals
          .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >
@@ -6042,7 +6116,211 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       </tbody>
     </Table>
   </TableContainer>
+
+      <h5 style={{marginLeft:"40%",marginTop:"20px"}}>Related Deals:</h5>
+
+  <TableContainer component={Paper} style={{marginTop:"20px"}}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell>
+          {dealallColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+              
+            </StyledTableCell>
+          ))}
       
+        </TableRow>
+       
+      </TableHead>
+    
+      <tbody>
+        {
+          
+
+        //  matcheddeals
+        relateddeals
+         .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell >
+              <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              />
+              {index + 1}
+            </StyledTableCell>
+
+            
+            
+            {dealallColumns
+              .filter((col) => col.id !== 'sno' )
+              .map((col) => (
+                <StyledTableCell 
+                key={col.id} 
+                style={{ padding: "10px",fontSize:"12px" }}
+                
+              >
+                
+             {  col.id === 'score' ? (
+              <>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+
+{/* Circular Progress with dynamic color and percentage in center */}
+<Box position="relative" display="inline-flex">
+  <CircularProgress
+    variant="determinate"
+    value={item.matchPercentage}
+    size={40}
+    thickness={3}
+    style={{
+      color:
+          item.matchPercentage > 90
+          ? '#4caf50' // Green
+          : item.matchPercentage >= 71
+          ? '#f44336' // Red
+          : item.matchPercentage >= 46
+          ? '#ff9800' // Orange
+          : item.matchPercentage >= 26
+          ? '#ffeb3b' // Yellow
+          : '#2196f3', // Blue
+      transition: 'all 3s ease-in-out',
+    }}
+  />
+  <Box
+    top={0}
+    left={0}
+    bottom={0}
+    right={0}
+    position="absolute"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Typography
+      variant="caption"
+      component="div"
+      style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
+    >
+      {item.matchPercentage}%
+    </Typography>
+  </Box>
+</Box>
+</Box>
+
+              
+              </>
+            ):  col.id === 'matched_percentange' ? (
+              <>
+          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+{/* Linear Progress with same color logic and center text */}
+<Box width="100%" position="relative">
+  <LinearProgress
+    variant="determinate"
+    value={item.matchPercentage}
+    style={{
+      height: 6,
+      borderRadius: 6,
+      backgroundColor: '#eee',
+      transition: 'all 3s ease-in-out',
+    }}
+    sx={{
+      '& .MuiLinearProgress-bar': {
+        borderRadius: 6,
+        backgroundColor:
+        item.matchPercentage > 90
+        ? '#4caf50' // Green
+        : item.matchPercentage >= 71
+        ? '#f44336' // Red
+        : item.matchPercentage >= 46
+        ? '#ff9800' // Orange
+        : item.matchPercentage >= 26
+        ? '#ffeb3b' // Yellow
+        : '#2196f3', // Blue
+        transition: 'all 0.5s ease-in-out',
+      },
+    }}
+  />
+  <Box
+    position="absolute"
+    top={0}
+    left="50%"
+    transform="translateX(-50%)"
+    height="100%"
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+  >
+    <Typography variant="caption" style={{ color: '#000', fontWeight: 'bold' }}>
+      {item.matchPercentage}%
+    </Typography>
+  </Box>
+</Box>
+
+</Box>
+
+              
+              </>
+            ):col.id === 'category' ? (
+              <>
+                {unitDataMap[item._id].category.join(',') || 'Loading...'}
+              </>
+            ) : col.id === 'size' ? (
+              <>
+                {unitDataMap[item._id].size || 'Loading...'}
+              </>
+            ) : col.id === 'owner' ? (
+              <>
+              {unitDataMap[item._id]?.owner_details?.length > 0 ? (
+                unitDataMap[item._id].owner_details.map((owner, index) => (
+                  <div key={index} style={{whiteSpace:"nowrap"}}>
+                    {`${owner.title || ''} ${owner.first_name || ''} ${owner.last_name || ''}`}
+                    <div>
+                      {owner.mobile_no?.map((mobile, i) => (
+                        <div key={i}>{owner.country_code[i]}{mobile}</div>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                'Loading...'
+              )}
+            </>
+            ) : col.id === 'expected_price' ? (
+              <>
+               ₹{Number(item.expected_price)?.toLocaleString('en-IN')}/-
+              </>
+            ) :  col.id === 'available_from' ? (
+              <>
+               {new Date(item.createdAt).toLocaleDateString()}
+              </>
+            ) :(
+              item[col.id]
+            )}
+                  
+                
+             
+              </StyledTableCell>
+              ))}
+              
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+
   <>
     {isLoading1 && (
       <div style={{
@@ -6260,6 +6538,111 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
        
            <div className="row mt-2" id="sendwhatsapp" style={{display:"none"}}>
            <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send WhatsApp</div>
+
+           <div className="col-md-12" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+                  <input type="text" style={{border:"none",fontSize:"12px",borderBottom:"1px solid gray"}} required="true" className="form-control form-control-sm" placeholder='subject' value={subject1} onChange={(e)=>setsubject1(e.target.value)}/>
+             
+                 </div>
+                
+          
+                 <div className="col-md-12" style={{marginTop:"10px"}}>
+                    <ReactQuill
+                  modules={modules112}  // Add the toolbar options for formatting
+                  style={{ height: '200px', width: '100%',fontSize:"12px",marginTop:"5px"}}
+                  className="my-quill-editor"
+                  value={message1}   placeholder="Enter Your Message"  onChange={handlemailmessage1}/>
+                  </div>
+       
+                  <div id="custom-toolbar1" className="ql-toolbar ql-snow" style={{ marginTop: "10px" }}>
+         {/* Text formatting */}
+         <span className="ql-formats">
+           <button className="ql-bold" />
+           <button className="ql-italic" />
+           <button className="ql-underline" />
+           <button className="ql-strike" />
+         </span>
+       
+        {/* Font family */}
+        <span className="ql-formats">
+           <select className="ql-font">
+             <option value="sans-serif">Sans Serif</option>
+             <option value="serif">Serif</option>
+             <option value="monospace">Monospace</option>
+           </select>
+         </span>
+       
+         {/* Font size */}
+         <span className="ql-formats">
+           <select className="ql-size">
+             <option value="small" />
+             <option value="normal" selected />
+             <option value="large" />
+             <option value="huge" />
+           </select>
+         </span>
+       
+         {/* Lists and indent */}
+         <span className="ql-formats">
+           <button className="ql-list" value="ordered" />
+           <button className="ql-list" value="bullet" />
+           <button className="ql-indent" value="-1" />
+           <button className="ql-indent" value="+1" />
+         </span>
+       
+         {/* Alignment */}
+         <span className="ql-formats">
+           <button className="ql-align" value="" />
+           <button className="ql-align" value="center" />
+           <button className="ql-align" value="right" />
+           <button className="ql-align" value="justify" />
+         </span>
+       
+         {/* Colors */}
+         <span className="ql-formats">
+           <button className="ql-color" />
+           <button className="ql-background" />
+         </span>
+       
+         {/* Code, blockquote */}
+         <span className="ql-formats">
+           <button className="ql-blockquote" />
+           <button className="ql-code-block" />
+         </span>
+       
+         {/* Media */}
+         <span className="ql-formats">
+           <button className="ql-link" />
+           <button className="ql-image" />
+         </span>
+       
+         {/* Clear formatting */}
+         <span className="ql-formats">
+           <button className="ql-clean" />
+         </span>
+       
+       </div>
+       
+       
+                 <div className="col-md-4" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Templates</label>
+                 <select type="text" required="true" className="form-control form-control-sm" value={selectedTemplate1} onChange={handleTemplateSelect1} style={{fontSize:"12px"}}>
+                    <option value="">---Select Template---</option>
+                    <option value="template1">Template 1</option>
+                    <option value="template2">Template 2</option>
+                    <option value="template3">Template 3</option>
+                  </select>
+                 </div>
+                 
+          
+                 {/* <div className="col-md-4" {...getRootProps1()} style={{ border: '1px dashed #ccc',marginTop:"35px", cursor: 'pointer' }}>
+                  <input {...getInputProps1()} />
+                  <p style={{fontSize:"12px"}}>Drag & drop files here, or click to select files</p>
+                  <ul>
+                    {attachments1.length > 0 && attachments1.map((file, index) => (
+                      <li key={index}>{file.name}</li>
+                    ))}
+                  </ul>
+                </div> */}
+              
            </div>
        
        </div>
@@ -6306,7 +6689,10 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             </Modal.Body>
             <Modal.Footer>
             <Button variant="secondary" onClick={sendmail1}>
-                Send
+                Send Mail
+              </Button>
+              <Button variant="secondary" onClick={handleSendwhatsapp}>
+                Send whatsapp
               </Button>
               <Button variant="secondary" onClick={handleClose12}>
                 Close
