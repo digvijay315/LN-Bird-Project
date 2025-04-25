@@ -603,8 +603,8 @@ const handleOwnerChange = (event) => {
                         const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
 
     const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-        email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
-        sub_source:"",refrencer_no:"",intrested_project:"",
+        email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+        sub_source:"",channel_partner:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
         lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
@@ -1805,7 +1805,7 @@ return (
                      <div className="col-md-5">
                         <label className="labels">Referrer Name</label>
                         <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}>
-                          <option>{leadData?.refrencer_name || '---Select---'}</option>
+                          <option>{leadData?.channel_partner || '---Select---'}</option>
                          
                       {
                         contactdata.map((item)=>

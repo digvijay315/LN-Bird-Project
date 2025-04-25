@@ -2983,6 +2983,7 @@ const completionPercentage = 20; // Set default value here
         <div style={{ width: 60, height: 60 }}>
           <CircularProgressbar
             value={lead?.score}
+            stkroeWidth={30}
             text={`${lead?.score}`}
             styles={buildStyles({
               pathColor:

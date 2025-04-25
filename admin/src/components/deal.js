@@ -27,7 +27,7 @@ function Deal() {
   const navigate=useNavigate()
 // ================================select project,units and block from project data start==============================================================
 const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",
-  utype:"",ucategory:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
+  utype:"",ucategory:[],usub_category:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
   expected_price:"",quote_price:"",security_deposite:"",owner_details:[],associated_contact:[],
 maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
 deal_type:"",deal_case:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
@@ -103,6 +103,7 @@ React.useEffect(() => {
     utype: matchedunit.unit_type,
   ulocality:matchedunit.ulocality,
   ucategory:matchedunit.category,
+  usub_category:matchedunit.sub_category,
   ucity:matchedunit.ucity,
   usize:matchedunit.size,
   owner_details: Array.isArray(matchedunit.owner_details) 

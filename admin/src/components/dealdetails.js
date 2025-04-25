@@ -575,8 +575,8 @@ function Dealdetails() {
                     // { id: 'location', name: 'Project Name' },
                     // { id: 'block', name: 'Block' },
                     { id: 'available_for', name: 'For' },
-                    { id: 'project_category', name: 'Category' },
-                    { id: 'project_subcategory', name: 'Sub_Category' },
+                    { id: 'ucategory', name: 'Category' },
+                    { id: 'u_subcategory', name: 'Sub_Category' },
                     { id: 'unit_type', name: 'Unit_Type' },
                     { id: 'location', name: 'Location' },
                     { id: 'facing', name: 'Facing' },
@@ -4731,9 +4731,14 @@ useEffect(() => {
                                       
 
                                       const [isLoading1, setIsLoading1] = useState(false);
+                                      const [currentSendingType, setCurrentSendingType] = useState("");
+                                      const [sentProgress, setSentProgress] = useState(0);
+
+
                                       const sendmail1=async(e)=>
                                         {
                                           setIsLoading1(true)
+                                          setCurrentSendingType("email");
                                           e.preventDefault();
                                           const formData = new FormData();
                               
@@ -4764,7 +4769,13 @@ useEffect(() => {
                                             const resp=await api.post(`contact/sendmail`,formData)
                                             if(resp.status===200)
                                             {
-                                              toast.success("Mail Sent Successfully",{ autoClose: 2000 })
+                                              Swal.fire({
+                                                icon:'success',
+                                                title: 'Mail Sent...',
+                                                text:"All Mail Send Successfully",
+                                                confirmButtonColor: '#d33',
+                                                confirmButtonText: 'OK',
+                                              });
                                               setTimeout(() => {
                                                 window.location.reload()
                                               }, 2000);
@@ -4787,48 +4798,64 @@ useEffect(() => {
                                         
                                       
                                         
-                                                          const handleSendwhatsapp = async () => {
-                                                                              setIsLoading1(true)
-                                                                              try {
-                                                                                for (const singleNumber of number){
-                                                                                const res = await axios.post('http://localhost:5000/sendwhatsappmessage', {
-                                                                                  number:singleNumber,
-                                                                                  message1,
-                                                                                  media_url:attachments1[0].url
-                                                                                });
-                                                                                if(res.status===200)
-                                                                                  {
-                                                                                    Swal.fire({
-                                                                                      icon: 'success',
-                                                                                      title: 'Whats App Sent!',
-                                                                                      text: 'Your message has been sent successfully...',
-                                                                                      confirmButtonColor: '#d33',
-                                                                                      confirmButtonText: 'OK',
-                                                                                    });
-                                                                                    setTimeout(() => {
-                                                                                     window.location.reload()
-                                                                                    }, 2000);
-                                                                              
-                                                                                  }
-                                                                                  console.log(res);
-                                                                                  
-                                                                              }
-                                                                              } catch (err) {
-                                                                               
-                                                                                Swal.fire({
-                                                                                  icon: 'error',
-                                                                                  title: 'Whats App Error!',
-                                                                                  text:   err.response?.data.message || err.message,
-                                                                                  confirmButtonColor: '#d33',
-                                                                                  confirmButtonText: 'OK',
-                                                                                });
-                                                                                console.error('Error:', err.response?.data || err.message);
-                                                                              }
-                                                                              finally
-                                                                              {
-                                                                                setIsLoading1(true)
-                                                                              }
-                                                                            };
+                                        const handleSendwhatsapp = async () => {
+                                          setIsLoading1(true);
+                                          setCurrentSendingType("whatsapp");
+                                          setSentProgress(0);
+                                          let sentCount = 0;
+                                          let errorCount = 0;
+                                        
+                                          try {
+                                            for (let i = 0; i < number.length; i++) {
+                                              const singleNumber = number[i];
+                                              setSentProgress(i + 1); // 👈 update UI progress
+                                        
+                                              try {
+                                                const res = await api.post('sendwhatsappmessage', {
+                                                  number: singleNumber,
+                                                  message1,
+                                                  media_url: attachments1[0]?.url,
+                                                });
+                                        
+                                                if (res.status === 200) {
+                                                  sentCount++;
+                                                } else {
+                                                  errorCount++;
+                                                }
+                                              } catch (err) {
+                                                errorCount++;
+                                                console.error(`Failed for ${singleNumber}:`, err.message);
+                                              }
+                                            }
+                                        
+                                            Swal.fire({
+                                              icon: sentCount > 0 ? 'success' : 'error',
+                                              title: 'WhatsApp Summary',
+                                              html: `
+                                                <b>Total:</b> ${number.length}<br/>
+                                                <b>Sent:</b> ${sentCount}<br/>
+                                                <b>Failed:</b> ${errorCount}
+                                              `,
+                                              confirmButtonColor: '#d33',
+                                              confirmButtonText: 'OK',
+                                            });
+                                            setTimeout(() => {
+                                              window.location.reload()
+                                            }, 2000);
+                                        
+                                          } catch (mainErr) {
+                                            Swal.fire({
+                                              icon: 'error',
+                                              title: 'WhatsApp Error!',
+                                              text: mainErr.response?.data.message || mainErr.message,
+                                              confirmButtonColor: '#d33',
+                                              confirmButtonText: 'OK',
+                                            });
+                                          } finally {
+                                            setIsLoading1(false);
+                                            setSentProgress(0);
+                                          }
+                                        };
                                                             
         
       
@@ -5581,7 +5608,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
     variant="determinate"
     value={item.leadscore}
     size={40}
-    thickness={3}
+    thickness={30}
     style={{
       color:
       item.leadscore > 90
@@ -9127,7 +9154,15 @@ stage:selectedLead.stage
             animation: "spin 1s linear infinite",
             margin: "0 auto 10px",
           }}></div>
-          <p>sending...</p>
+          {/* <p>sending...</p> */}
+          <p style={{ fontWeight: 'bold', marginTop: '10px' }}>
+    {currentSendingType === "whatsapp" && (
+      <>🟢 Sending WhatsApp message {sentProgress} of {number.length}...</>
+    )}
+    {currentSendingType === "email" && (
+      <>✉️ Sending Email  {emails.length}...</>
+    )}
+  </p>
         </div>
       </div>
     )}

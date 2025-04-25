@@ -66,7 +66,7 @@ const add_deal = async (req, res) => {
     try {
 
     const {
-        project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usize, available_for, stage, project, block, unit_number, floors, expected_price,
+        project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usub_category,usize, available_for, stage, project, block, unit_number, floors, expected_price,
         quote_price, security_deposite, maintainence_charge, rent_escltion, rent_period, fitout_perioud, deal_type,deal_case, transaction_type,
         source, white_portion, team, user, visible_to, owner_details, associated_contact, relation, s_no, descriptions,
         category, s_no1, url, website, social_media, send_matchedlead, matchedleads, matchinglead, remarks
@@ -74,7 +74,7 @@ const add_deal = async (req, res) => {
    
 
       const new_add_deal = new adddeal({
-        project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usize, available_for, stage, project, block, unit_number, floors, expected_price,
+        project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usub_category,usize, available_for, stage, project, block, unit_number, floors, expected_price,
         quote_price, security_deposite, maintainence_charge, rent_escltion, rent_period, fitout_perioud, deal_type,deal_case, transaction_type,
         source, white_portion, team, user, visible_to, owner_details, associated_contact, relation, 
         s_no, descriptions, category, s_no1, url, website, social_media, send_matchedlead, matchedleads, matchinglead, remarks,

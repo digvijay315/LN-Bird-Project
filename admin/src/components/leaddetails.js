@@ -93,7 +93,20 @@ useEffect(()=>{fetchdatabystage_opportunitycount()},[])
 
 
 
+const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+  email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+  sub_source:"",channel_partner:"",intrested_project:"",
+  requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+  maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+  lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+  unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
+  profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
+  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+  birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
+ })
 
 
 const[countall,setcountall]=useState('')
@@ -444,7 +457,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
     const allColumns = [
       { id: 'sno', name: '#' },
       { id: 'score', name: 'Score' },
-      { id: 'personaldetails', name: 'Personal Details' },
+      { id: 'personaldetails', name: 'Personal_Details' },
       { id: 'requirment', name: 'Requirment' },
       { id: 'budget', name: 'Budget' },
       { id: 'location', name: 'Location' },
@@ -453,7 +466,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
       { id: 'source', name: 'Source' },
       { id: 'owner', name: 'OwnerShip' },
       { id: 'activity', name: 'Activity' },
-      { id: 'lastcommunication', name: 'Last Activity' },
+      { id: 'lastcommunication', name: 'Last_Activity' },
       { id: 'descriptions', name: 'Remarks' },
       { id: 'createdAt', name: 'Add On' },
 
@@ -677,20 +690,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
 
   //===========================------------------------------ update lead start=====================================---------------------------------
    
-       const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-           email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
-           sub_source:"",refrencer_no:"",intrested_project:"",
-           requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-           maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-           lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
-           unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
-           profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
-           company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
-   
-           father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-           birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-           social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
-          })
+  
 
      const requirment=["Buy","Rent","Lease"];
                         const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
@@ -1081,7 +1081,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
             {
               try {
                 
-                const id=data1._id
+                const id=selectedItems
 
                  // Show confirmation message
                             const result = await Swal.fire({
@@ -1100,12 +1100,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
 
                 const resp=await api.put(`updatelead/${id}`,leadinfo,config)
                 toast.success("lead updated",{ autoClose: 2000 })
-                setTimeout(() => {
-                  navigate('/leaddetails')
-                }, 2000);
-                // setTimeout(() => {
-                //   handleClose1()
-                // }, 2000);
+           
                 setTimeout(() => {
                   window.location.reload()
                 }, 2000);
@@ -3189,14 +3184,14 @@ const handleroadChange = (event) => {
                               useEffect(() => {
                                 const filtermatcheddeals = matcheddeals.filter((item) => {
                                  
-                                  return item.project_category.some(category =>
+                                  return item.ucategory.some(category =>
                                     lead1[0].property_type.includes(category)
                                   );
                                 });
                                 
                                 const filtermatcheddeals1 = matcheddeals.filter((item) => {
                                 
-                                  return item.project_category.some(category =>
+                                  return item.ucategory.every(category =>
                                     !lead1[0].property_type.includes(category)
                                   );
                                 });
@@ -3608,6 +3603,45 @@ const handleroadChange = (event) => {
 
 // ================================================lead search box code end=======================================================
 
+
+// ================================================update button code start=======================================================
+
+
+          
+                                          
+              const [show13, setshow13] = useState(false);
+                                                      
+              const handleClose13 = () => 
+                {
+                  setshow13(false);
+                
+                  
+                }
+              const handleShow13=async()=>
+              {
+                
+                setshow13(true);
+                try {
+                  const resp=await api.get(`viewbyid/${selectedItems}`)
+                  setleaddata(resp.data.lead[0])
+                  setleadinfo(resp.data.lead[0])
+                } catch (error) {
+                  console.log(error);
+                }
+              
+              }
+
+              const[viewcondition,setviewconditon]=useState("")
+
+
+
+
+//===================================================== update button code end=======================================================
+
+
+
+
+//============================================ all action buttons hover effect code start===============================================
 const [isHoveringDelete, setIsHoveringDelete] = useState(false);
 const [isHoveringEdit, setIsHoveringEdit] = useState(false);
 const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
@@ -3620,6 +3654,11 @@ const [isHoveringaddremarks, setIsHoveringaddremarks] = useState(false);
 const [isHoveringadddocuments, setIsHoveringadddocuments] = useState(false);
 const [isHoveringupdatestage, setIsHoveringupdatestage] = useState(false);
 const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
+
+// ====================================all action button hover code end==============================================================
+
+
+
   return ( 
     <div>
       <Header1/>
@@ -3823,15 +3862,15 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       />
     </Tooltip>
 
-    <Tooltip title="Add User.." arrow>
+    <Tooltip title="Update.." arrow>
       <img
         id="adduser"
         src={
           isHoveringadduser
-            ? "https://cdn0.iconfinder.com/data/icons/thin-line-color-2/21/01-512.png" // hover image
-            : "https://brandeps.com/icon-download/U/User-add-icon-05.png" // default image
+            ? "https://cdn-icons-png.flaticon.com/512/6713/6713079.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTFo9g6QLJ-P3k8PTrjfrkWBOZI5ptsWJW4g&s" // default image
         }
-        onClick={handleShow3}
+        onClick={handleShow13}
         onMouseEnter={() => setIsHoveringadduser(true)}
         onMouseLeave={() => setIsHoveringadduser(false)}
         alt="edit"
@@ -4007,6 +4046,8 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       />
     </Tooltip>
 
+    
+
 {/* <Tooltip title="Send Mail.." arrow>
 <img id="mail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png" onClick={handleShow3}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
@@ -4113,7 +4154,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                   variant="determinate"
                   value={item.score}
                   size={40}
-                  thickness={3}
+                  thickness={30}
                   style={{
                     color:
                     item.score > 90
@@ -4409,7 +4450,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                      <div className="col-md-5">
                         <label className="labels">Referrer Name</label>
                         <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}>
-                          <option>{leadinfo?.refrencer_name || '---Select---'}</option>
+                          <option>{leadinfo?.channel_partner || '---Select---'}</option>
                          
                       {
                         contactdata.map((item)=>
@@ -5953,7 +5994,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             <StyledTableCell >
               <input 
                 type="checkbox"
-                checked={selectedItems1.includes(item._id)}
+                checked={selectedItems1.includes(item._id)} stkroeWidth={30}
                 onChange={() => handleRowSelect1(item._id)}
               />
               {index + 1}
@@ -5980,7 +6021,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
     variant="determinate"
     value={item.matchPercentage}
     size={40}
-    thickness={3}
+    thickness={30}
     style={{
       color:
           item.matchPercentage > 90
@@ -6071,7 +6112,8 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
               </>
             ):col.id === 'category' ? (
               <>
-                {unitDataMap[item._id].category.join(',') || 'Loading...'}
+                {/* {unitDataMap[item._id].category.join(',') || 'Loading...'} */}
+                {item.ucategory.join(',') || 'Loading...'}
               </>
             ) : col.id === 'size' ? (
               <>
@@ -6706,6 +6748,142 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
   {/* ===========================================modal for send details end=================================================== */}
 
+
+
+{/*================================================ modal for update data code start================================================ */}
+
+
+<Modal  show={show13} onHide={handleClose13} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Update<br></br>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+       
+       <div className="row">
+
+                <div  className="col-md-4" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px",visibility:"hidden"}}>Templates</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setviewconditon(e.target.value)}>
+                    <option value="">---Select---</option>
+                    <option>Lead Transfer</option>
+                    <option>Lead Source</option>
+                  </select>
+                 </div>
+                 <div className="col-md-8"></div>
+
+                 <div id="leadsource" className="row" style={{marginLeft:"20px",marginTop:"10px",border:"1px solid gray",padding:"10px",display:viewcondition=="Lead Source" ? "flex":"none"}}>
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Campeign Name</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setleadinfo({...leadinfo,campaign:e.target.value})}>
+                 <option value="">{leaddata.campaign}</option>
+                    <option value="">---Select---</option>
+                    <option>Online Campaign</option>
+                        <option>Offline Campaign</option>
+                        <option>Organic Campaign</option>
+                  </select>
+                 </div>
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Source</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setleadinfo({...leadinfo,source:e.target.value})}>
+                 <option value="">{leaddata.source}</option>
+                    <option value="">---Select---</option>
+                    {getSourceOptions().map((source, index) => (
+                      <option key={index} value={source}>
+                        {source}
+                      </option>
+                    ))}
+                  </select>
+                 </div>
+
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Sub Source</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setleadinfo({...leadinfo,sub_source:e.target.value})}>
+                 <option value="">{leaddata.sub_source}</option>
+                    <option value="">---Select---</option>
+                    <option>Call</option>
+                        <option>Sms</option>
+                        <option>Email</option>
+                        <option>Whatsapp</option>
+                  </select>
+                 </div>
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Refrerrer Name</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setleadinfo({...leadinfo,channel_partner:e.target.value})}>
+                 <option value="">{leaddata.channel_partner}</option>
+                    <option value="">---Select---</option>
+                    {
+                        contactdata.map((item)=>
+                        (
+                          <option>{item.title} {item.first_name} {item.last_name}</option>
+                        ))
+                      }
+                  </select>
+                 </div>
+
+                 <div className="col-md-6"><label className="labels">Note</label>
+                  <input type="textarea" className="form-control form-control-sm" style={{height:"100px"}} placeholder={leaddata.descriptions} onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/>       
+                  </div>
+                 </div>
+
+
+                 <div id="leaduser" className="row" style={{marginLeft:"20px",marginTop:"10px",border:"1px solid gray",padding:"10px",display:viewcondition=="Lead Transfer" ? "flex":"none"}}>
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>To Primary User</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}>
+                    <option value="">---Select---</option>
+                    <option>Lead Transfer</option>
+                    <option>Lead Source</option>
+                  </select>
+                 </div>
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Add Secondary User</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}>
+                    <option value="">---Select---</option>
+                    <option>Lead Transfer</option>
+                    <option>Lead Source</option>
+                  </select>
+                 </div>
+                 <div className="col-md-12" style={{fontSize:"12px",marginTop:"20px"}}>
+                  <input name="selecthistory" type="radio"/><span style={{marginLeft:"10px"}}>With History</span>
+                  <input name="selecthistory" type="radio" style={{marginLeft:"40px"}}/><span style={{marginLeft:"10px"}}>Without History</span>
+                  <input name="selecthistory" type="radio" style={{marginLeft:"40px"}}/><span style={{marginLeft:"10px"}}>Without History and New Status</span>
+                 </div>
+
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Lead Stage</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}>
+                    <option value="">---Select---</option>
+                    <option>Lead Transfer</option>
+                    <option>Lead Source</option>
+                  </select>
+                 </div>
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px"}}>Change Source</label>
+                 <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}>
+                    <option value="">---Select---</option>
+                    <option>Lead Transfer</option>
+                    <option>Lead Source</option>
+                  </select>
+                 </div>
+
+                 <div className="col-md-6"><label className="labels">Note</label>
+                  <input type="textarea" className="form-control form-control-sm" style={{height:"100px"}} placeholder={leaddata.descriptions} />       
+                  </div>
+                 </div>
+
+
+
+       </div>
+        
+
+  
+
+            </Modal.Body>
+            <Modal.Footer>
+         
+              <Button variant="secondary" onClick={handleClose13}>
+                Close
+              </Button>
+              <Button variant="secondary" onClick={updatelead}>
+                Update
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+
+{/*============================================= modal for update data code end======================================================== */}
        
           <ToastContainer/>
    </div>
