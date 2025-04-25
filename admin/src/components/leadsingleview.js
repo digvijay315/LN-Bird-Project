@@ -33,6 +33,7 @@ import createbooking from '../icons/createbooking.jpg'
 import matchedlead from '../icons/matchedlead.jpg'
 import transferuser from '../icons/transferuser.jpg'
 import { event } from 'jquery';
+import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
 
 function Leadsingleview() {
 
@@ -2981,9 +2982,10 @@ const completionPercentage = 20; // Set default value here
             <div className='row'>
             <div className="col-md-3 d-flex justify-content-center align-items-center">
         <div style={{ width: 60, height: 60 }}>
-          <CircularProgressbar
+          {/* <CircularProgressbar
             value={lead?.score}
             stkroeWidth={30}
+          
             text={`${lead?.score}`}
             styles={buildStyles({
               pathColor:
@@ -2994,7 +2996,51 @@ const completionPercentage = 20; // Set default value here
               strokeLinecap: "round",
               textSize: "18px",
             })}
-          />
+          /> */}
+            <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+   {/* Circular Progress with dynamic color and percentage in center */}
+              <Box position="relative" display="inline-flex">
+                <CircularProgress
+                  variant="determinate"
+                  value={lead?.score}
+                  size={50}
+                  thickness={30}
+                  style={{
+                    color:
+                    lead.score > 90
+                    ? '#4caf50' // Green
+                    : lead.score >= 71
+                    ? '#f44336' // Red
+                    : lead.score >= 46
+                    ? '#ff9800' // Orange
+                    : lead.score >= 26
+                    ? '#ffeb3b' // Yellow
+                    : '#2196f3', // Blue
+
+                    transition: 'all 3s ease-in-out',
+                  }}
+                />
+                <Box
+                  top={0}
+                  left={0}
+                  bottom={0}
+                  right={0}
+                  position="absolute"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Typography
+                    variant="caption"
+                    component="div"
+                    style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
+                  >
+                    {lead.score}
+                  </Typography>
+                </Box>
+              </Box>
+              </Box>
+          
         </div>
       </div>
       <div className="col-md-5">
