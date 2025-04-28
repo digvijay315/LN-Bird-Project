@@ -3179,25 +3179,65 @@ const handleroadChange = (event) => {
                                                         }
                                                       };
                                 
-                              const[showdeals,setshowdeals]=useState([])
-                              const[relateddeals,setrelateddeals]=useState([])
-                              useEffect(() => {
-                                const filtermatcheddeals = matcheddeals.filter((item) => {
-                                 
-                                  return item.ucategory.some(category =>
-                                    lead1[0].property_type.includes(category)
-                                  );
-                                });
-                                
-                                const filtermatcheddeals1 = matcheddeals.filter((item) => {
-                                
-                                  return item.ucategory.every(category =>
-                                    !lead1[0].property_type.includes(category)
-                                  );
-                                });
-                                setrelateddeals(filtermatcheddeals1)
-                                setshowdeals(filtermatcheddeals);
-                              }, [matcheddeals]);
+                                                      const [showdeals, setshowdeals] = useState([]);
+                                                      const [relateddeals, setrelateddeals] = useState([]);
+                                                      const [relateddeals1, setrelateddeals1] = useState([]);
+                                                      
+                                                      // Define leadCity outside the useEffect
+                                                      const leadCity = lead1[0]?.city3?.trim() ? lead1[0]?.city3.toLowerCase().trim() : lead1[0]?.city2?.toLowerCase().trim() || "";
+                                                      
+                                                      useEffect(() => {
+                                                        const showDealsArray = [];
+                                                        const relatedDealsArray = [];
+                                                        const relatedDealsArray1 = [];
+                                                      
+                                                        for (const deal of matcheddeals) {
+                                                          const unitInfo = allunitsdetails.find(
+                                                            (u) =>
+                                                              u.unitData?.project_name?.toLowerCase().trim() === deal.project?.toLowerCase().trim() &&
+                                                              u.unitData?.unit_no?.toString().trim() === deal.unit_number?.toString().trim() &&
+                                                              u.unitData?.block?.toLowerCase().trim() === deal.block?.toLowerCase().trim()
+                                                          );
+                                                      
+                                                          if (unitInfo) {
+                                                            const unitCategories = unitInfo.unitData.category || [];
+                                                            const unitCity = unitInfo.unitData.ucity?.toLowerCase().trim() || "";
+                                                            const leadPropertyTypes = lead1[0]?.property_type || [];
+                                                      
+                                                            const hasCommonCategory = unitCategories.some(category =>
+                                                              leadPropertyTypes.includes(category)
+                                                            );
+                                                      
+                                                            if (hasCommonCategory) {
+                                                              showDealsArray.push({ deal, unitCity }); // Save unitCity along with deal
+                                                            } else {
+                                                              relatedDealsArray.push(deal);
+                                                            }
+                                                          } else {
+                                                            // If no unitInfo found, push to relatedDealsArray
+                                                            relatedDealsArray.push(deal);
+                                                          }
+                                                        }
+                                                      
+                                                        // Second Step: Check city match inside showDealsArray
+                                                        const finalShowDeals = [];
+                                                        const movedToRelatedDeals1 = [];
+                                                      
+                                                        for (const item of showDealsArray) {
+                                                          if (item.unitCity === leadCity) {
+                                                            finalShowDeals.push(item.deal); // City matched
+                                                          } else {
+                                                            movedToRelatedDeals1.push(item.deal); // City didn't match
+                                                          }
+                                                        }
+                                                      
+                                                        setshowdeals(finalShowDeals);
+                                                        setrelateddeals(relatedDealsArray);
+                                                        setrelateddeals1(movedToRelatedDeals1);
+                                                      
+                                                      }, [matcheddeals, allunitsdetails, lead1, leadCity]); // Add leadCity to the dependency array
+                                                      
+                                                      
                                   
                              
                               
@@ -5956,6 +5996,10 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       <div><button className="form-control form-control-sm">Mark As Intrested</button></div>
       </div>
 
+
+{/* ================================================perfect match deal start====================================================== */}
+
+
       <TableContainer component={Paper} style={{marginTop:"20px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -6159,7 +6203,13 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
     </Table>
   </TableContainer>
 
-      <h5 style={{marginLeft:"40%",marginTop:"20px"}}>Related Deals:</h5>
+{/*===================================================== perfetch match deals end ======================================================*/}
+
+
+
+{/* ================================================other category's related deals start============================================= */}
+
+      <h5 style={{marginLeft:"35%",marginTop:"20px"}}>Others Cagegory's Related Deals:</h5>
 
   <TableContainer component={Paper} style={{marginTop:"20px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -6362,6 +6412,218 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       </tbody>
     </Table>
   </TableContainer>
+
+{/* =================================================other category's related deals end ================================================== */}
+
+
+
+{/* ========================================other citys related deals start======================================================= */}
+
+  <h5 style={{marginLeft:"35%",marginTop:"20px"}}>Others City's Related Deals:</h5>
+
+<TableContainer component={Paper} style={{marginTop:"20px"}}>
+  <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <TableHead>
+      <TableRow>
+        <StyledTableCell style={{backgroundColor:"gray"}}>
+          <input
+            type="checkbox"
+            checked={selectAll1}
+            onChange={handleSelectAll1}
+          />
+        </StyledTableCell>
+        {dealallColumns.map((col) => (
+          <StyledTableCell
+            key={col.id}
+            style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+            onClick={() => handleSort(col.id)}
+          >
+            {col.name}
+            {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            
+          </StyledTableCell>
+        ))}
+    
+      </TableRow>
+     
+    </TableHead>
+  
+    <tbody>
+      {
+      //  matcheddeals
+      relateddeals1
+       .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
+        <StyledTableRow key={index}>
+          <StyledTableCell >
+            <input 
+              type="checkbox"
+              checked={selectedItems1.includes(item._id)}
+              onChange={() => handleRowSelect1(item._id)}
+            />
+            {index + 1}
+          </StyledTableCell>
+
+          
+          
+          {dealallColumns
+            .filter((col) => col.id !== 'sno' )
+            .map((col) => (
+              <StyledTableCell 
+              key={col.id} 
+              style={{ padding: "10px",fontSize:"12px" }}
+              
+            >
+              
+           {  col.id === 'score' ? (
+            <>
+        <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+
+{/* Circular Progress with dynamic color and percentage in center */}
+<Box position="relative" display="inline-flex">
+<CircularProgress
+  variant="determinate"
+  value={item.matchPercentage}
+  size={40}
+  thickness={3}
+  style={{
+    color:
+        item.matchPercentage > 90
+        ? '#4caf50' // Green
+        : item.matchPercentage >= 71
+        ? '#f44336' // Red
+        : item.matchPercentage >= 46
+        ? '#ff9800' // Orange
+        : item.matchPercentage >= 26
+        ? '#ffeb3b' // Yellow
+        : '#2196f3', // Blue
+    transition: 'all 3s ease-in-out',
+  }}
+/>
+<Box
+  top={0}
+  left={0}
+  bottom={0}
+  right={0}
+  position="absolute"
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+>
+  <Typography
+    variant="caption"
+    component="div"
+    style={{ color: '#000', fontWeight: 'bold', fontSize: 14 }}
+  >
+    {item.matchPercentage}%
+  </Typography>
+</Box>
+</Box>
+</Box>
+
+            
+            </>
+          ):  col.id === 'matched_percentange' ? (
+            <>
+        <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+{/* Linear Progress with same color logic and center text */}
+<Box width="100%" position="relative">
+<LinearProgress
+  variant="determinate"
+  value={item.matchPercentage}
+  style={{
+    height: 6,
+    borderRadius: 6,
+    backgroundColor: '#eee',
+    transition: 'all 3s ease-in-out',
+  }}
+  sx={{
+    '& .MuiLinearProgress-bar': {
+      borderRadius: 6,
+      backgroundColor:
+      item.matchPercentage > 90
+      ? '#4caf50' // Green
+      : item.matchPercentage >= 71
+      ? '#f44336' // Red
+      : item.matchPercentage >= 46
+      ? '#ff9800' // Orange
+      : item.matchPercentage >= 26
+      ? '#ffeb3b' // Yellow
+      : '#2196f3', // Blue
+      transition: 'all 0.5s ease-in-out',
+    },
+  }}
+/>
+<Box
+  position="absolute"
+  top={0}
+  left="50%"
+  transform="translateX(-50%)"
+  height="100%"
+  display="flex"
+  alignItems="center"
+  justifyContent="center"
+>
+  <Typography variant="caption" style={{ color: '#000', fontWeight: 'bold' }}>
+    {item.matchPercentage}%
+  </Typography>
+</Box>
+</Box>
+
+</Box>
+
+            
+            </>
+          ):col.id === 'category' ? (
+            <>
+              {unitDataMap[item._id].category.join(',') || 'Loading...'}
+            </>
+          ) : col.id === 'size' ? (
+            <>
+              {unitDataMap[item._id].size || 'Loading...'}
+            </>
+          ) : col.id === 'owner' ? (
+            <>
+            {unitDataMap[item._id]?.owner_details?.length > 0 ? (
+              unitDataMap[item._id].owner_details.map((owner, index) => (
+                <div key={index} style={{whiteSpace:"nowrap"}}>
+                  {`${owner.title || ''} ${owner.first_name || ''} ${owner.last_name || ''}`}
+                  <div>
+                    {owner.mobile_no?.map((mobile, i) => (
+                      <div key={i}>{owner.country_code[i]}{mobile}</div>
+                    ))}
+                  </div>
+                </div>
+              ))
+            ) : (
+              'Loading...'
+            )}
+          </>
+          ) : col.id === 'expected_price' ? (
+            <>
+             ₹{Number(item.expected_price)?.toLocaleString('en-IN')}/-
+            </>
+          ) :  col.id === 'available_from' ? (
+            <>
+             {new Date(item.createdAt).toLocaleDateString()}
+            </>
+          ) :(
+            item[col.id]
+          )}
+                
+              
+           
+            </StyledTableCell>
+            ))}
+            
+        </StyledTableRow>
+      ))}
+    </tbody>
+  </Table>
+</TableContainer>
+
+
+{/* ==================================================other citys related deals end=============================================== */}
+
 
   <>
     {isLoading1 && (

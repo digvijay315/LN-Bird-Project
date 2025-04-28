@@ -5,11 +5,19 @@ import "font-awesome/css/font-awesome.min.css";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import Paper from '@mui/material/Paper';
+import { Paper, Button, Menu, MenuItem ,Select} from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import api from '../api'
-
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import 'bootstrap/dist/css/bootstrap.min.css';    // CSS
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // JS (includes Popper.js)
+import Swal from "sweetalert2";
 
 function Dashboard() {
 
@@ -32,32 +40,7 @@ function Dashboard() {
       const fetchOrders = async () => {
         try {
           const response = await api.get('getAllOrders'); // Adjust the URL
-          console.log(response);
-          
-          const formattedOrders = response.data.map((order, index) => ({
-            id: index + 1, // Add an ID for the DataGrid
-            firstName: order.firstName,
-            lastName: order.lastName,
-            email: order.email,
-            mobileNumber: order.mobileNumber,
-            apartmentNumber: order.apartmentNumber,
-            orderid: order.orderid,
-            area: order.area,
-            landmark: order.landmark,
-            selectstate: order.selectstate,
-            selectcity:order.selectcity,
-            addressType: order.addressType,
-            pincode: order.pincode,
-            productName: order.cartItems
-            .map((item) => `${item.product_name} × ${item.product_quantity1}`)
-            .join(', '),
-            productPrice: order.cartItems.reduce((sum, item) => sum + item.product_price, 0),
-            productQuantity1: order.cartItems.reduce((sum, item) => sum + item.product_quantity1, 0),
-            productQuantity: order.cartItems.reduce((sum, item) => sum + item.product_quantity, 0),
-            totalPrice: order.totalPrice,
-            paymentMode: order.setDefault ? 'Default' : 'Custom', // Example logic
-          }));
-          setOrders(formattedOrders);
+          setOrders(response.data);
         } catch (error) {
           console.error('Failed to fetch orders:', error);
         } finally {
@@ -68,30 +51,158 @@ function Dashboard() {
       fetchOrders();
     }, []);
 
- 
-    
-  
-    const columns = [
-      { field: 'id', headerName: 'ID', width: 70 },
-      { field: 'firstName', headerName: 'First Name', width: 150 },
-      { field: 'lastName', headerName: 'Last Name', width: 130 },
-      { field: 'email', headerName: 'User-Email', width: 190 },
-      { field: 'mobileNumber', headerName: 'Mobile No.', width: 120 },
-      { field: 'apartmentNumber', headerName: 'Apartment Number', width: 160 },
-      { field: 'area', headerName: 'Area', width: 120 },
-      { field: 'landmark', headerName: 'Landmark', width: 120 },
-      { field: 'selectcity', headerName: 'City', width: 120 },
-      { field: 'selectstate', headerName: 'State', width: 120 },
-      { field: 'addressType', headerName: 'Address Type', width: 120 },
-      { field: 'pincode', headerName: 'Pincode', width: 90 },
-      { field: 'productName', headerName: 'Product Name', width: 150 },
-      { field: 'productPrice', headerName: 'Product Price', width: 120 },
-      { field: 'productQuantity', headerName: 'Product Quantity', width: 150 },
-      { field: 'totalPrice', headerName: 'Total Price', width: 120 },
-      { field: 'orderid', headerName: 'Order Id', width: 180 },
-      { field: 'paymentMode', headerName: 'Payment Mode', width: 120 },
-    ];
+    const allColumns = [
+      { id: 'sno', name: '#' },
+      { id: 'id', name: 'Order_Id' },
+      { id: 'personaldetails', name: 'Personal_Details' },
+      { id: 'address', name: 'Address' },
+      { id: 'productName', name: 'Product_Details' },
+      { id: 'totalPrice', name: 'Total_Price' },
+      { id: 'paymentMode', name: 'Payment_Mode' },
+      { id: 'orderdate', name: 'Order_Date' },
+      { id: 'action', name: 'Action' },
+    ]
 
+    const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
+    const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
+    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1,9));
+    const [showColumnList, setShowColumnList] = useState(false);
+
+    const StyledTableCell = styled(TableCell)(({ theme }) => ({
+      [`&.${tableCellClasses.head}`]: {
+        backgroundColor: theme.palette.common.black,
+        color: theme.palette.common.white,
+        lineHeight:"0px"
+      },
+      [`&.${tableCellClasses.body}`]: {
+        fontSize: "10px",
+      },
+    }));
+    
+    const StyledTableRow = styled(TableRow)(({ theme }) => ({
+      '&:nth-of-type(odd)': {
+        backgroundColor: theme.palette.action.hover,
+      },
+      // hide last border
+      '&:last-child td, &:last-child th': {
+        border: 0,
+      },
+    }));
+
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = orders.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(orders.length / itemsPerPage);
+    
+      // Handle items per page change
+      const handleItemsPerPageChange = (e) => {
+        setItemsPerPage(Number(e.target.value));
+        setCurrentPage(1); // Reset to first page whenever items per page changes
+      };
+    
+    // Function to handle page changes
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    
+    // Function to handle "Next" and "Previous" page changes
+    const goToNextPage = () => {
+      if (currentPage < totalPages) {
+        setCurrentPage(currentPage + 1);
+      }
+    };
+    
+    const goToPreviousPage = () => {
+      if (currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
+    
+    const renderPageNumbers = () => {
+      // Define the range of page numbers to display
+      const maxPageNumbersToShow = 5;
+      const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
+      const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
+      
+      return (
+        <div
+          style={{
+            display: 'flex',
+           
+            whiteSpace: 'nowrap',
+            padding: '10px-15px',
+            width: '100%', 
+            position: 'relative'
+          }}
+        >
+          {/* Previous Button */}
+          {currentPage > 1 && (
+            <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+              Prev
+            </button>
+          )}
+    
+          {/* Page Numbers */}
+          {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((number) => (
+            <button
+              key={number}
+              onClick={() => paginate(number)}
+              style={{
+                width: '30px',
+                borderRadius: '5px',
+                marginRight: '5px',
+                flexShrink: 0, // Prevent buttons from shrinking
+                backgroundColor: number === currentPage ? 'lightblue' : 'white',
+              }}
+            >
+              {number}
+            </button>
+          ))}
+    
+          {/* Next Button */}
+          {currentPage < totalPages && (
+            <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+              Next
+            </button>
+          )}
+        </div>
+      );
+    };
+
+
+    const formatDate = (isoString) => {
+      if (!isoString) return "-"; // Fallback for missing date
+      const date = new Date(isoString);
+      const localDate = date.toLocaleDateString();
+      const localTime = date.toLocaleTimeString();
+      return (
+        <>
+          <div>{localDate}</div>
+          <div>{localTime}</div>
+        </>
+      );
+    };
+
+   // ✅ Function for Accepting an Order
+   const acceptOrder = (orderId) => {
+    alert(`✅ Order Accepted: ${orderId}`);
+
+  };
+
+  // ✅ Function for Rejecting an Order
+  const rejectOrder = (orderId) => {
+    console.log(`❌ Order Rejected: ${orderId}`);
+
+  };
+
+  const handleActionChange = (orderId, action) => {
+    if (action === 'accept') {
+      acceptOrder(orderId);
+    } else if (action === 'reject') {
+      rejectOrder(orderId);
+    }
+  };
 
     
   
@@ -225,8 +336,33 @@ function Dashboard() {
     fetchTotalOrders();
   }, []);
   
+  console.log(orders);
   
 
+  const deleteorder=async(id)=>
+  {
+    try {
+
+      const resp=await api.delete(`deleteorder/${id}`)
+      if(resp.status===200)
+      {
+        Swal.fire({
+          icon:"success",
+          title:"order removed",
+          text:"order deleted successfully",
+          confirmButtonText: 'OK',
+        })
+      }
+      setTimeout(() => {
+          window.location.reload()
+      }, 2000);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  
+  }
 
 
   return (
@@ -473,18 +609,125 @@ function Dashboard() {
        {/* table------------------------------------------------------------------------------------------- */}
 
        <h3>All Orders</h3>
-       <Paper sx={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={orders}
-        columns={columns}
-        loading={loading}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        sx={{ border: 0 }}
-      />
-    </Paper>
+       <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",marginBottom:"20px"}}>
+      
+      <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
+      <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    
+    {renderPageNumbers()}
+    </div>
 
+       <div style={{marginLeft:"0px",marginTop:"10px",backgroundColor:"white",top:"100px",position:"sticky",zIndex:10}}>
+      <TableContainer component={Paper} style={{ maxHeight: '700px',overflow: 'auto' }}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead style={{ position: "sticky", top: 0, zIndex: 10 }}>
+        <TableRow >
+          <StyledTableCell style={{backgroundColor:"gray",fontSize:"12px"}}>
+          
+          </StyledTableCell>
+          {visibleColumns.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{ cursor: 'pointer',backgroundColor:"gray" }}
+              // onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {/* {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''} */}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+        currentItems.map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {index + 1}
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+          {item.orderid}
+         </StyledTableCell>
+            <StyledTableCell  style={{ padding: "10px", cursor: "pointer",fontSize:"12px"}}  >
+              <span style={{color:"#0086b3",fontWeight:"bold",fontSize:"12px"}}> {item.firstName} {item.lastName}</span>
+              <br />
+           
+              <span>{item.mobileNumber}</span>
+              <br />
+             
+              <span>{item.email}</span>
+            </StyledTableCell>
+         
+                <StyledTableCell style={{fontSize:"12px"}}>
+                      <>
+                       {item.apartmentNumber} {item.area}<br></br>
+                       landmark:{item.landmark}<br></br>
+                       {item.selectcity} {item.selectstate}<br></br>
+                       {item.pincode}
+                       </>
+                </StyledTableCell>
 
+                <StyledTableCell style={{fontSize:"12px"}}>
+                      <>
+                      {
+                        item.cartItems.map((product)=>
+                        (
+                          <>
+                          {product.product_name}<br></br>
+                          Rs.{product.product_price}<br></br>
+                          </>
+                        ))
+                      }
+                       </>
+                </StyledTableCell>
+
+                <StyledTableCell style={{fontSize:"12px"}}>
+                      <>
+                   {item.totalPrice}
+                       </>
+                </StyledTableCell>
+                <StyledTableCell style={{fontSize:"12px"}}>
+                      <>
+               
+                       </>
+                </StyledTableCell>
+                <StyledTableCell style={{fontSize:"12px"}}>
+                 <>
+                 {formatDate(item.createdAt)}
+                 </>
+                 </StyledTableCell>
+                <StyledTableCell style={{fontSize:"12px"}}>
+                  <>
+                  
+                                  <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Action
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" style={{cursor:"pointer"}}>Accept</a></li>
+                    <li><a class="dropdown-item" style={{cursor:"pointer"}}>Reject</a></li>
+                    <li><a class="dropdown-item" style={{cursor:"pointer"}} onClick={()=>deleteorder(item._id)}>Delete</a></li>
+                  </ul>
+                </div>                
+                 </>
+                 
+                </StyledTableCell>
+          
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+
+  </div>
+
+ 
+  
 
 
 

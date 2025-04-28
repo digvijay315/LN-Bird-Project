@@ -3,10 +3,10 @@ const {add_product,viewproduct, delete_product,edit_product, viewproductbyid, vi
 const upload=require('../Middleware/file');
 const { uploadBanner, getAllBanners, deleteBanner, editBanner, createBanner } = require('../Controllers/addbanner');
 const uploadFields = require('../Middleware/bannerfile');
-const { createOrder, getAllOrders, vieworderbyemail, getTotalOrders } = require('../Controllers/order');
+const { createOrder, getAllOrders, vieworderbyemail, getTotalOrders, deleteorder } = require('../Controllers/order');
 const { signup, login } = require('../Controllers/user');
 const protectRoute=require('../Middleware/routemiddle');
-const {payment,trackOrder} = require('../Controllers/payment');
+const {payment,trackOrder, verifyPayment} = require('../Controllers/payment');
 const { createBlog, getBlogs, deleteBlog, editBlog, viewblogbyid } = require('../Controllers/blog');
 const { registerUser, loginUser, getAllUsers, getUserByEmail, getmail, deleteUserByEmail, getTotalUsers, getTotalUsersByEmail, getTotalUsersByEmailDomain, getTotalUsersByExactEmail, deleteUserById } = require('../Controllers/registation');
 const { addReview, getReviews, getallReviews, getCustomerSatisfaction } = require('../Controllers/review');
@@ -40,9 +40,10 @@ router.post('/banner',upload.any(),createBanner)
 
   router.put("/editBanner/:_id", upload.any(), editBanner);
   
-  router.post('/createOrder', createOrder);
+  router.post('/verifyPayment', verifyPayment);
   router.get('/getAllOrders', getAllOrders);
   router.get('/viewordersbyemail/:email', vieworderbyemail);
+  router.delete('/deleteorder/:_id', deleteorder);
 
   router.post('/signup', signup);
   router.post('/login', login);

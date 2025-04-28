@@ -217,6 +217,13 @@ const navigate=useNavigate()
         setIsTableVisible5(prevState => !prevState);
       };
 
+      const [isTableVisible6, setIsTableVisible6] = useState(false);
+
+      // Function to toggle the visibility of the table
+      const toggleTableVisibility6 = () => {
+        setIsTableVisible6(prevState => !prevState);
+      };
+
       const [alltask,setalltask]=useState([])
 
       const[sitevisitdata,setsitevisitdata]=useState([])
@@ -2372,8 +2379,6 @@ const updatedocumentoflead = async () => {
 try {
   const id = lead._id;  // Assuming selectedItems is the ID of the lead to update
 
- 
-  
   const resp = await api.put(`adddocumentinlead/${id}`, leaddocument, {
     headers: {
       'Content-Type': 'multipart/form-data', // Ensure proper content-type for form-data
@@ -2383,10 +2388,6 @@ try {
 
   toast.success("Document added Successfully...", { autoClose: 2000 });
 
-  // After success, navigate to the lead details page or reload
-  // setTimeout(() => {
-  //   navigate('/leaddetails');
-  // }, 2000);
   setTimeout(() => {
     window.location.reload();  // If necessary, reload the page
   }, 2000);
@@ -2859,7 +2860,6 @@ website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",r
 const [show9, setshow9] = useState(false);
     
                   const handleClose9 = () => setshow9(false);
-                  // const[fetchunit,setfetchunit]=useState([])
                   const handleShow9=async()=>
                   {
                     setshow9(true);
@@ -2869,12 +2869,9 @@ const [show9, setshow9] = useState(false);
 
                     const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
                     setunits(resp.data.project.add_unit[0])
-                    
-                    // const resp1=await api.get(`viewdealbyid/${lead._id}`)
-                    // setdeal(resp1.data.deal)
-                   
+                  
                   }
-                // console.log(units.owner_details);
+     
                 
                   
           const updateinventories=async()=>
@@ -3056,6 +3053,54 @@ const [show9, setshow9] = useState(false);
                   };
 
 // ===============================================change owner details end==============================================================
+
+
+//======================================================== related contacts code start==================================================
+
+                  const[contactdata,setcontactdata]=useState([])
+                     const fetchdata=async(event)=>
+                      {
+                        
+                        try {
+                          const resp=await api.get('viewcontact')
+                          setcontactdata(resp.data.contact)
+                        } catch (error) {
+                          console.log(error);
+                        }
+                      }
+
+                        useEffect(()=>
+                        {
+                            fetchdata()
+
+                        },[])
+
+                        const[relatedcontacts,setrelatedcontacts]=useState([])
+                        useEffect(()=>
+                          {
+                             if(contactdata.length>0)
+                             {
+                              const filteredContacts = contactdata.filter(contact => contact.h_no === lead.unit_no);
+                              setrelatedcontacts(filteredContacts);
+                             }
+  
+                          },[contactdata])
+
+
+                        const addtoassociated=(item)=>
+                        {
+                       
+                    
+                          
+                          handleSuggestionClick(item)
+                         
+
+                          handleShow9()
+                        }
+
+// ============================================related contacts code end================================================================
+
+
 
   return (
     <div style={{overflowX:"hidden"}}>
@@ -4591,6 +4636,80 @@ fontWeight:"lighter"
          </div>
 </div>
       
+
+<div style={{fontWeight:"normal",border:"1px solid gray",borderRadius:"5px",padding:"10px",marginTop:"20px",width:"100%"}}>
+
+<div className='col-md-12'><img src="https://png.pngtree.com/element_our/20190530/ourmid/pngtree-cartoon-electronic-contact-icon-image_1251444.jpg" style={{height:"25px",paddingRight:"10px"}}/>
+ Related Contacts (<span className="no-activity-flash" style={{fontSize:"12px",color:"blue"}}>{relatedcontacts.length}</span>)
+<span 
+  onClick={toggleTableVisibility6} 
+  style={{ 
+    position:"absolute",
+    cursor: "pointer", 
+    right:  "50px", 
+    fontSize: "20px", 
+    display: "inline-block", 
+    transition: "transform 0.3s ease", // Smooth transition for rotation
+    transform: isTableVisible6 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the arrow based on state
+    marginTop: "4px", // Align the arrow properly
+  }}
+>
+▽
+</span>
+<span 
+//  onClick={handleShow8}
+  style={{ 
+    cursor: "pointer", 
+    position:"absolute",
+    right: "15px", 
+    fontSize: "30px", 
+    display: "inline-block", 
+    transition: "transform 0.3s ease", // Smooth transition for rotation
+    marginTop: "-7px", // Align the arrow properly
+fontWeight:"lighter"
+  }}
+>
+  +
+</span>
+</div>
+
+<div style={{backgroundColor:"white",width:"100%",overflow:"auto",marginTop:"10px",position:"sticky",zIndex:10,marginLeft:"0px",height: isTableVisible6 ? "200px" : "0",transition: "height 0.3s ease"}}>
+         
+         <TableContainer component={Paper} style={{ height: '200px' }}>
+     <Table sx={{}} aria-label="customized table">
+ 
+        <tbody>
+         {
+          
+          relatedcontacts?.map ((item, index) => (
+           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
+             <StyledTableCell style={{fontSize:"12px",whiteSpace:"nowrap",cursor:"pointer"}} onClick={()=>navigate('/contactsingleview',{state:item})}>
+              <span style={{fontSize:"16px",color:"#0086b3",fontWeight:"bold"}}>
+              <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCTOqj4skHnCbXKGTKqt5ZRudGOYolS4W8Bg&s' style={{height:"20px",paddingRight:"10px"}}></img>
+                {item.title} {item.first_name} {item.last_name}</span> <span>{item.company_name}</span><br></br>
+                <div style={{paddingLeft:"38px",color:"#0086b3"}}>
+                {item.mobile_no.map((contact, index) => (
+                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginLeft:"2px"}}>
+                          <img src='https://harrogatebusinesscentre.com/wp-content/uploads/156-1568270_blue-phone-icon-png-clipart-png-download-transparent.png' style={{height:"15px"}}></img>{contact}</span>
+                      ))} <span>mobile</span> <br></br><br></br>
+                       {item.email.map((contact, index) => (
+                         <span key={index} style={{fontSize:"12px",border:"1px solid blue",borderRadius:"5px",padding:"5px",marginTop:"20px"}}>
+                          <img src='https://cdn2.iconfinder.com/data/icons/basic-thin-line-color/21/19-512.png' style={{height:"15px",marginTop:"2px"}}></img>{contact}<br></br></span> 
+                      ))}
+                      </div>
+            </StyledTableCell >
+            <StyledTableCell>
+              <Tooltip title="add to associated" arrow>
+              <button className='form-control form-control-sm' onClick={()=>addtoassociated(item)}>+</button>
+              </Tooltip>
+            </StyledTableCell>
+           </StyledTableRow>
+         ))}
+       </tbody> 
+     </Table>
+   </TableContainer>
+         </div>
+</div>
 
 
 

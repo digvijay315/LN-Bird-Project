@@ -45,4 +45,24 @@ const vieworderbyemail= async(req,res)=>
     }
   };
 
-module.exports = { createOrder, getAllOrders,vieworderbyemail,getTotalOrders };
+
+  const deleteorder = async (req, res) => {
+      try {
+        const id  = req.params._id; // Get product ID from URL parameter
+    
+        // Find the product by ID and delete it
+        const deleteorder = await Order.findByIdAndDelete(id);
+        if (!deleteorder) {
+          return res.status(404).send({ message: "Order not found" });
+        }
+    
+        res.status(200).send({
+          message: "Order deleted successfully",
+          order: deleteorder,
+        });
+      } catch (error) {
+        console.error("Error deleting order:", error);
+        res.status(500).send({ message: "Failed to delete order", error });
+      }
+    };
+module.exports = { createOrder, getAllOrders,vieworderbyemail,getTotalOrders,deleteorder };

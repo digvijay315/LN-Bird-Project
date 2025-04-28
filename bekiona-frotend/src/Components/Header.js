@@ -275,84 +275,123 @@ const navigate1 = useNavigate();
 
 
 const handlePayment = async () => {
-    if (!validateForm1()) {
-      Swal.fire({
-        title: 'Validation Error!',
-        text: 'Please fill all required fields correctly.',
-        icon: 'error',
-        confirmButtonText: 'OK',
+  if (!validateForm1()) {
+    Swal.fire({
+      title: 'Validation Error!',
+      text: 'Please fill all required fields correctly.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+    return;
+  }
+
+  try {
+    // Step 1: Create Order on Backend
+    const { data: order } = await api.post('payment', { formData });
+
+    // Step 2: Razorpay Checkout Options
+    const options = {
+      key: 'rzp_test_kh59VKLP3zCcop', // Razorpay key
+      amount: order.amount,
+      currency: order.currency,
+      name: 'Your Company Name',
+      description: 'Test Transaction',
+      order_id: order.razorpayOrderId,
+      handler: function (response) {
+        console.log('Payment Success Response:', response);
+
+        if (response && response.razorpay_payment_id) {
+          Swal.fire({
+            title: 'Payment Successful!',
+            text: 'Thank You for Shopping with Kiona! Keep shopping like this 🛍️😊',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            handleClose4(); // Close modal
+            setcart([]); // Clear cart
+            setFormData({ ...formData, payment_status: 'success' });
+
+            // Step 3: Send payment details to backend for verification
+            verifyPayment(response);
+          });
+
+          console.log(formData, cart);
+        } else {
+          Swal.fire({
+            title: 'Payment Error!',
+            text: 'Payment Response Invalid',
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+          });
+        }
+      },
+      prefill: {
+        name: formData.firstName,
+        email: 'narayanniket2@gmail.com',
+        contact: formData.mobileNumber,
+      },
+      theme: {
+        color: '#3399cc',
+      },
+    };
+
+    // Step 3: Initialize Razorpay Checkout
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+
+  } catch (error) {
+    console.error('Error during payment:', error);
+
+    Swal.fire({
+      title: 'Payment Failed',
+      text: 'Something went wrong. Please try again!',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+
+    setFormData({ ...formData, payment_status: 'failed' });
+  }
+};
+
+// Function to verify payment after success
+const verifyPayment = async (paymentResponse) => {
+  try {
+      const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = paymentResponse;
+
+      const paymentVerificationResponse = await api.post('verifyPayment', {
+          paymentId: razorpay_payment_id,
+          orderId: razorpay_order_id,
+          signature: razorpay_signature,
       });
-      return;
-    }
-  
-    try {
-      // Step 1: Create Order on Backend
-      const { data: order } = await api.post('payment', { formData });
-  
-      // Step 2: Razorpay Checkout Options
-      const options = {
-        key: 'rzp_live_YBXf8NJT3Al7Qc',
-        // key: 'rzp_test_kh59VKLP3zCcop',
-        amount: order.amount,
-        currency: order.currency,
-        name: 'Your Company Name',
-        description: 'Test Transaction',
-        order_id: order.id,
-        handler: function (response) {
-          console.log('Payment Success Response:', response);
-  
-          if (response && response.razorpay_payment_id) {
-            Swal.fire({
-              title: 'Payment Successful!',
-              text: 'Thank You for Shopping with Kiona! Keep shopping like this 🛍️😊',
-            //   text: `Payment ID: ${response.razorpay_payment_id}`,
-              icon: 'success',
-              confirmButtonText: 'OK',
-            }).then(() => {
-                handleClose4(); // 👈 Close the modal here
-                setcart([]);
-                setFormData({ ...formData, payment_status: 'success' });
-                generateInvoice(response, formData, companyDetails);
-                navigate("/");
-            });
-  
-            console.log(formData, cart);
-          } else {
-            Swal.fire({
-              title: 'Payment Error!',
-              text: 'Payment Response Invalid',
-              icon: 'error',
-              confirmButtonText: 'Try Again',
-            });
-          }
-        },
-        prefill: {
-          name: formData.firstName,
-          email: 'narayanniket2@gmail.com',
-          contact: formData.mobileNumber,
-        },
-        theme: {
-          color: '#3399cc',
-        },
-      };
-  
-      // Step 3: Initialize Razorpay Checkout
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-  
-    } catch (error) {
-      console.error('Error during payment:', error);
-  
+
+      if (paymentVerificationResponse.data.message === "Payment successful, order updated!") {
+          Swal.fire({
+            title: 'Order Confirmed!',
+            text: 'Your order is confirmed and payment is successful.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            navigate("/"); // Redirect to home or any other page
+          });
+      } else {
+          Swal.fire({
+            title: 'Payment Failed!',
+            text: 'There was an issue verifying your payment. Please try again.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+      }
+  } catch (error) {
+      console.error('Error verifying payment:', error);
       Swal.fire({
-        title: 'Payment Failed',
-        text: 'Something went wrong. Please try again!',
-        icon: 'error',
-        confirmButtonText: 'OK',
+          title: 'Verification Error!',
+          text: 'There was an issue verifying your payment.',
+          icon: 'error',
+          confirmButtonText: 'OK',
       });
-  
-      setFormData({ ...formData, payment_status: 'failed' });
-    }
-  };
+  }
+};
+
   
 
 
