@@ -58,6 +58,7 @@ setlength(clength)
 setFormData({...formData,cartItems:cart})
 },[cart])
 
+console.log(cart);
 
 
 const [show, setShow] = useState(false);
@@ -273,8 +274,10 @@ console.log("Form Data Submitted:", formData);
 
 const navigate1 = useNavigate();
 
+console.log(formData);
 
 const handlePayment = async () => {
+  setFormData({...formData,cartItems:cart})
   if (!validateForm1()) {
     Swal.fire({
       title: 'Validation Error!',
@@ -294,7 +297,7 @@ const handlePayment = async () => {
       key: 'rzp_test_kh59VKLP3zCcop', // Razorpay key
       amount: order.amount,
       currency: order.currency,
-      name: 'Your Company Name',
+      name: 'Sky Cosmetics',
       description: 'Test Transaction',
       order_id: order.razorpayOrderId,
       handler: function (response) {
@@ -315,7 +318,6 @@ const handlePayment = async () => {
             verifyPayment(response);
           });
 
-          console.log(formData, cart);
         } else {
           Swal.fire({
             title: 'Payment Error!',
@@ -373,6 +375,8 @@ const verifyPayment = async (paymentResponse) => {
           }).then(() => {
             navigate("/"); // Redirect to home or any other page
           });
+
+          // generateInvoice()
       } else {
           Swal.fire({
             title: 'Payment Failed!',

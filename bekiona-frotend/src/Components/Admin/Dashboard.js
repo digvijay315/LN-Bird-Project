@@ -18,7 +18,7 @@ import Table from '@mui/material/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';    // CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // JS (includes Popper.js)
 import Swal from "sweetalert2";
-
+import Modal from 'react-bootstrap/Modal';
 function Dashboard() {
 
   const navigate = useNavigate();
@@ -59,13 +59,14 @@ function Dashboard() {
       { id: 'productName', name: 'Product_Details' },
       { id: 'totalPrice', name: 'Total_Price' },
       { id: 'paymentMode', name: 'Payment_Mode' },
-      { id: 'orderdate', name: 'Order_Date' },
+      { id: 'orderdate', name: 'Order_Details' },
+      { id: 'paymentid', name: 'Payment_Id' },
       { id: 'action', name: 'Action' },
     ]
 
     const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
     const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1,9));
+    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1,10));
     const [showColumnList, setShowColumnList] = useState(false);
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -196,14 +197,7 @@ function Dashboard() {
 
   };
 
-  const handleActionChange = (orderId, action) => {
-    if (action === 'accept') {
-      acceptOrder(orderId);
-    } else if (action === 'reject') {
-      rejectOrder(orderId);
-    }
-  };
-
+ 
     
   
     const toggleSidebar = () => {
@@ -336,7 +330,7 @@ function Dashboard() {
     fetchTotalOrders();
   }, []);
   
-  console.log(orders);
+ 
   
 
   const deleteorder=async(id)=>
@@ -363,6 +357,45 @@ function Dashboard() {
     }
   
   }
+
+  const[shipmentdetails,setshipmentdetails]=useState({package_weight:"",package_lenght:"",package_breadth:"",package_height:""})
+  const createnimbusshipment=async()=>
+  { 
+
+    try {
+      const payload = {
+        ...selectedItem,        // all item fields
+        ...shipmentdetails      // plus the 4 package fields
+      };
+            const resp=await api.post('createnimbusshipment',payload)
+            console.log(resp);
+            
+      if(resp.status===200)
+      {
+        Swal.fire({
+          icon:"success",
+          title:"Shipment Created Successfull",
+          text:`your shipment created successful... now you can track your order \nAWB No: ${resp.data.data.data.awb_number}\nTracking ID: ${resp.data.data.data.shipment_id}`,
+          confirmButtonText: 'OK',
+        })
+      }
+      handleClose()
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
+  const [selectedItem, setSelectedItem] = useState(null); 
+   const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = (item) => 
+      {
+        setShow(true);
+        setSelectedItem(item);
+      }
 
 
   return (
@@ -680,6 +713,7 @@ function Dashboard() {
                           <>
                           {product.product_name}<br></br>
                           Rs.{product.product_price}<br></br>
+                          quantity:{product.product_quantity1}
                           </>
                         ))
                       }
@@ -698,9 +732,17 @@ function Dashboard() {
                 </StyledTableCell>
                 <StyledTableCell style={{fontSize:"12px"}}>
                  <>
-                 {formatDate(item.createdAt)}
+                 {formatDate(item.paymentDate)}
+                 <span style={{color:  item.payment_status === "success"? "green": item.payment_status === "pending"? "blue": "red",fontWeight:"bold"}}>{item.payment_status}</span>
                  </>
                  </StyledTableCell>
+
+                 <StyledTableCell style={{fontSize:"12px"}}>
+                 <>
+                 {item.paymentId}
+                 </>
+                 </StyledTableCell>
+
                 <StyledTableCell style={{fontSize:"12px"}}>
                   <>
                   
@@ -709,7 +751,7 @@ function Dashboard() {
                     Action
                   </button>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" style={{cursor:"pointer"}}>Accept</a></li>
+                    <li><a class="dropdown-item" style={{cursor:"pointer"}} onClick={()=>handleShow(item)}>Accept</a></li>
                     <li><a class="dropdown-item" style={{cursor:"pointer"}}>Reject</a></li>
                     <li><a class="dropdown-item" style={{cursor:"pointer"}} onClick={()=>deleteorder(item._id)}>Delete</a></li>
                   </ul>
@@ -734,6 +776,49 @@ function Dashboard() {
        {/* table end ----------------------------------------------------------------------------------------- */}
 
 
+
+       <Modal  show={show} onHide={handleClose} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Start Tracking<br></br>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+       
+       <div className="row">
+
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Package Weight(in gm.)</label>
+                 <input type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setshipmentdetails({...shipmentdetails,package_weight:e.target.value})}/>
+                 </div>
+               
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Package Length(in cm.)</label>
+                 <input type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setshipmentdetails({...shipmentdetails,package_lenght:e.target.value})}/>
+                 </div>
+
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Package Breadth(in cm.)</label>
+                 <input type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setshipmentdetails({...shipmentdetails,package_breadth:e.target.value})}/>
+                 </div>
+
+                 <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Package Height(in cm.)</label>
+                 <input type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setshipmentdetails({...shipmentdetails,package_height:e.target.value})}/>
+                 </div>
+             
+      </div>
+      
+        
+
+  
+
+            </Modal.Body>
+            <Modal.Footer>
+         
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="secondary"  onClick={createnimbusshipment}>
+                Start Tracking
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
       </div>
     </div>

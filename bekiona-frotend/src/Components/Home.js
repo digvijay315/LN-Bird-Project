@@ -101,7 +101,6 @@ function Home() {
   //   setcartlength(quantity);
   // };
   const handleprouctadd = (product) => {
-    debugger
     console.log('Adding product to cart:', product);
     setcart([...cart, product]);
   };

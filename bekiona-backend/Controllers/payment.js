@@ -1,5 +1,6 @@
 const Razorpay = require('razorpay');
 const Order = require('../Modals/order');
+const addproduct = require('../Modals/product');
 const User = require("../Modals/regitration");
 const axios = require('axios'); // Make sure axios is installed
 const crypto = require('crypto');
@@ -36,17 +37,9 @@ const loginNimbus = async () => {
 };
 
 
-
-// const razorpayInstance = new Razorpay({
-//     key_id: 'rzp_test_kh59VKLP3zCcop', // Your Razorpay test/live key
-//     key_secret: 'YOUR_SECRET_KEY',
-// });
-
-// Endpoint for creating an order (already implemented in your code)
 const payment = async (req, res) => {
     try {
-        console.log("Received Request:", req.body);
-
+      
         if (!req.body || !req.body.formData) {
             return res.status(400).json({ message: "Invalid request: Missing form data" });
         }
@@ -66,11 +59,20 @@ const payment = async (req, res) => {
 
         const razorpayOrder = await razorpayInstance.orders.create(options);
 
-        console.log(razorpayOrder);
-
         if (!razorpayOrder.id) {
             return res.status(500).json({ message: "Failed to create Razorpay order" });
         }
+
+        // Save to DB
+          const newOrder = new Order({
+            ...req.body.formData,
+            orderid: razorpayOrder.id,
+            totalPrice: amount,
+            payment_status: "pending",
+            createdAt: new Date()
+          });
+
+          await newOrder.save();
 
         // Return Razorpay order ID and amount to frontend
         res.status(200).json({
@@ -89,7 +91,7 @@ const payment = async (req, res) => {
 const verifyPayment = async (req, res) => {
     try {
         const { paymentId, orderId, signature } = req.body;
-
+   
         // Validate payment signature from Razorpay
         const generatedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
             .update(orderId + "|" + paymentId)
@@ -120,56 +122,40 @@ const verifyPayment = async (req, res) => {
 
 
 
-const createNimbusShipment = async (orderData, newOrder) => {
-
-  fetchWarehouses()
+const createNimbusShipment = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      area,
-      landmark,
-      apartmentNumber,
-      pincode,
-      selectcity,
-      selectstate,
-      mobileNumber,
-    } = orderData;
+    console.log(req.body);
 
     const token = await loginNimbus(); // Get Nimbus token
 
+     const orderItems = req.body.cartItems.map((item) => {
+      return {
+        name: item.product_name,   
+        qty: item.product_quantity1,            
+        price: item.product_price,        
+        sku: item.product_sku            
+      };
+    });
     const payload = {
-      order_id: newOrder.orderid,
-      payment_method: "prepaid",
-      consignee_name: `${firstName} ${lastName}`,
-      consignee_company_name: "Sanvi Enterprises",
-      consignee_phone: mobileNumber ? String(mobileNumber) : "0000000000",
-      consignee_email: "abc@gmail.com",
-      consignee_gst_number: "24AAACC4175D1Z4",
-      consignee_address: `${area}, ${landmark}, ${apartmentNumber || ""}`,
-      consignee_pincode: pincode,
-      consignee_city: selectcity,
-      consignee_state: selectstate,
-      no_of_invoices: "2",
-      no_of_boxes: "2",
-      courier_id: "110",
-      request_auto_pickup: "yes",
-      invoice: [
-        {
-          invoice_number: "INV-PG/23-24/001208",
-          invoice_date: "20-05-2023",
-          invoice_value: "100",
-          ebn_number: "1234",
-          ebn_expiry_date: "23-05-2023",
-        },
-        {
-          invoice_number: "INV-PG/23-24/001208",
-          invoice_date: "20-05-2023",
-          invoice_value: "100",
-          ebn_number: "1234",
-          ebn_expiry_date: "23-05-2023",
-        },
-      ],
+      order_number: req.body.orderid || "#001",  // default order number
+      // shipping_charges: req.body.shipping_charges || 40,
+      // discount: req.body.discount || 100,
+      // cod_charges: req.body.cod_charges || 30,
+      payment_type: req.body.payment_type || "cod",  // payment type
+      order_amount: req.body.totalPrice || 1000,
+      package_weight: req.body.package_weight || 300,
+      package_length: req.body.package_lenght || 10,
+      package_breadth: req.body.package_breadth || 10,
+      package_height: req.body.package_height || 10,
+      consignee: {
+        name: `${req.body.firstName} ${req.body.lastName}` || "Customer Name",
+        address: `${req.body.area}, ${req.body.landmark}, ${req.body.apartmentNumber}` || "190, ABC Road",
+        address_2: `${req.body.area}, ${req.body.landmark}, ${req.body.apartmentNumber}` || "Near Bus Stand",
+        city: req.body.selectcity|| "Mumbai",
+        state: req.body.selectstate || "Maharastra",
+        pincode: req.body.pincode || "400001",
+        phone: req.body.mobileNumber || "9999999999"
+      },
       pickup: {
         warehouse_name: "BIL",
         name: "BIL",
@@ -180,38 +166,13 @@ const createNimbusShipment = async (orderData, newOrder) => {
         pincode: "110001",
         phone: "9999888877",
       },
-      products: [
-        {
-          product_name: "Class 8 Computer Tech Wizard",
-          product_hsn_code: "4901",
-          product_lbh_unit: "cm",
-          no_of_box: "1",
-          product_tax_per: "0.0000",
-          product_price: "100",
-          product_weight_unit: "gram",
-          product_length: "44",
-          product_breadth: "29",
-          product_height: "21",
-          product_weight: 18000,
-        },
-        {
-          product_name: "Class 8 Computer Tech Wizard",
-          product_hsn_code: "4901",
-          product_lbh_unit: "cm",
-          no_of_box: "1",
-          product_tax_per: "0.0000",
-          product_price: "100",
-          product_weight_unit: "gram",
-          product_length: "44",
-          product_breadth: "29",
-          product_height: "21",
-          product_weight: 18000,
-        },
-      ],
+      order_items: orderItems, 
     };
 
+    console.log("Final Payload to Nimbus:", payload); // Debug
+
     const response = await axios.post(
-      "https://ship.nimbuspost.com/api/shipmentcargo/create",
+      "https://api.nimbuspost.com/v1/shipments",
       payload,
       {
         headers: {
@@ -221,25 +182,22 @@ const createNimbusShipment = async (orderData, newOrder) => {
       }
     );
 
-    console.log("NimbusPost Response:", response.data);
-
-    if (
-      nimbusResponse.data &&
-      nimbusResponse.data.data &&
-      nimbusResponse.data.data.awb_number
-    ) {
-      await Order.findByIdAndUpdate(newOrder._id, {
-        shipment_id: nimbusResponse.data.data.awb_number,
-        tracking_id: nimbusResponse.data.data.shipment_id,
+    console.log(response);
+    
+    if (response.data && response.data.data && response.data.data.awb_number) {
+      await Order.findByIdAndUpdate(req.body._id, {
+        shipment_id: response.data.data.awb_number,
+        tracking_id: response.data.data.shipment_id,
       });
     }
 
-    return response.data;
+    return res.status(200).json({ message: "Shipment created successfully", data: response.data });
   } catch (error) {
     console.error("NimbusPost Shipment Error:", error);
-    throw error; // So the main function knows an error occurred
+    return res.status(500).json({ message: "Failed to create shipment", error: error.message });
   }
 };
+
 
 
 
@@ -268,4 +226,4 @@ const trackOrder = async (req, res) => {
 
 
 
-module.exports = {payment,trackOrder,verifyPayment};
+module.exports = {payment,trackOrder,verifyPayment,createNimbusShipment};

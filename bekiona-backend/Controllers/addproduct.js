@@ -103,7 +103,7 @@ const viewproductbyid= async(req,res)=>
           
       }
   }
-
+  
   const viewproductbycategory= async(req,res)=>
     {
         try {

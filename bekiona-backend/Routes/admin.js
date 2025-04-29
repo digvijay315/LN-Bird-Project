@@ -6,7 +6,7 @@ const uploadFields = require('../Middleware/bannerfile');
 const { createOrder, getAllOrders, vieworderbyemail, getTotalOrders, deleteorder } = require('../Controllers/order');
 const { signup, login } = require('../Controllers/user');
 const protectRoute=require('../Middleware/routemiddle');
-const {payment,trackOrder, verifyPayment} = require('../Controllers/payment');
+const {payment,trackOrder, verifyPayment, createNimbusShipment} = require('../Controllers/payment');
 const { createBlog, getBlogs, deleteBlog, editBlog, viewblogbyid } = require('../Controllers/blog');
 const { registerUser, loginUser, getAllUsers, getUserByEmail, getmail, deleteUserByEmail, getTotalUsers, getTotalUsersByEmail, getTotalUsersByEmailDomain, getTotalUsersByExactEmail, deleteUserById } = require('../Controllers/registation');
 const { addReview, getReviews, getallReviews, getCustomerSatisfaction } = require('../Controllers/review');
@@ -75,7 +75,7 @@ router.get('/totaluser',getTotalUsers)
 router.get('/getcustomersetification',getCustomerSatisfaction)
 router.get('/totalorders', getTotalOrders);
 
-
+router.post('/createnimbusshipment',createNimbusShipment);
 router.post('/track-order/:tracking_id',trackOrder);
  
 
