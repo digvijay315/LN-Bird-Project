@@ -21,6 +21,7 @@ const fetchWarehouses = async () => {
   console.log("Warehouses:", response.data);
 };
 
+
 const loginNimbus = async () => {
   try {
     const response = await axios.post("https://ship.nimbuspost.com/api/users/login", {
@@ -30,6 +31,7 @@ const loginNimbus = async () => {
 
 
     return response.data.data;
+
   } catch (error) {
     console.error("Nimbus Login Failed:", error);
     throw new Error("Unable to login to NimbusPost");
@@ -39,7 +41,7 @@ const loginNimbus = async () => {
 
 const payment = async (req, res) => {
     try {
-      
+  
         if (!req.body || !req.body.formData) {
             return res.status(400).json({ message: "Invalid request: Missing form data" });
         }
@@ -124,8 +126,7 @@ const verifyPayment = async (req, res) => {
 
 const createNimbusShipment = async (req, res) => {
   try {
-    console.log(req.body);
-
+   
     const token = await loginNimbus(); // Get Nimbus token
 
      const orderItems = req.body.cartItems.map((item) => {
@@ -169,7 +170,7 @@ const createNimbusShipment = async (req, res) => {
       order_items: orderItems, 
     };
 
-    console.log("Final Payload to Nimbus:", payload); // Debug
+    // console.log("Final Payload to Nimbus:", payload); // Debug
 
     const response = await axios.post(
       "https://api.nimbuspost.com/v1/shipments",
@@ -204,10 +205,13 @@ const createNimbusShipment = async (req, res) => {
 const trackOrder = async (req, res) => {
     try {
       const { tracking_id } = req.params; // Assuming you send tracking_id in the route
-  
-      const response = await axios.get(`https://ship.nimbuspost.com/api/shipments/${tracking_id}`, {
+
+      const token = await loginNimbus(); 
+   
+      const response = await axios.get(`https://api.nimbuspost.com/v1/shipments/track/${tracking_id}`, {
         headers: {
-          'NP-API-KEY': '0c12b436df7c7b6a35d1c9e0150fe497c04327fa182076'
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         }
       });
   
@@ -223,7 +227,29 @@ const trackOrder = async (req, res) => {
     }
   };
 
+  const downloadlabel = async (req, res) => {
+    try {
+      const {tracking_id} = req.params; 
+      const token = await loginNimbus(); 
+      const response = await axios.post(`https://api.nimbuspost.com/v1/shipments/track/${tracking_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        }
+      });
+
+  
+    //   console.log("Tracking Data:", response.data);
+      res.status(200).json(response.data);
+  
+    } catch (error) {
+      console.error("Error:", error.response?.data || error.message);
+      res.status(500).json({
+        message: "Failed to track order",
+        error: error.response?.data || error.message
+      });
+    }
+  };
 
 
-
-module.exports = {payment,trackOrder,verifyPayment,createNimbusShipment};
+module.exports = {payment,trackOrder,verifyPayment,createNimbusShipment,downloadlabel};

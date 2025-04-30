@@ -35,12 +35,28 @@ function Dashboard() {
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [newOrderCount, setNewOrderCount] = useState(0);
 
     useEffect(() => {
       const fetchOrders = async () => {
         try {
           const response = await api.get('getAllOrders'); // Adjust the URL
           setOrders(response.data);
+
+          const storedCount = parseInt(localStorage.getItem('lastOrderCount')) || 0;
+          const currentCount = response.data.length;
+
+          if (currentCount > storedCount) {
+            setNewOrderCount(currentCount - storedCount);
+          } else {
+            setNewOrderCount(0);
+          }
+    
+          // Update for next login
+          localStorage.setItem('lastOrderCount', currentCount.toString());
+    
+
+
         } catch (error) {
           console.error('Failed to fetch orders:', error);
         } finally {
@@ -61,12 +77,13 @@ function Dashboard() {
       { id: 'paymentMode', name: 'Payment_Mode' },
       { id: 'orderdate', name: 'Order_Details' },
       { id: 'paymentid', name: 'Payment_Id' },
+      { id: 'trackingid', name: 'Tracking_Details' },
       { id: 'action', name: 'Action' },
     ]
 
     const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
     const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
-    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1,10));
+    const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1,11));
     const [showColumnList, setShowColumnList] = useState(false);
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -358,10 +375,11 @@ function Dashboard() {
   
   }
 
+  const [isLoading, setIsLoading] = useState(false);
   const[shipmentdetails,setshipmentdetails]=useState({package_weight:"",package_lenght:"",package_breadth:"",package_height:""})
   const createnimbusshipment=async()=>
   { 
-
+    setIsLoading(true)
     try {
       const payload = {
         ...selectedItem,        // all item fields
@@ -369,9 +387,21 @@ function Dashboard() {
       };
             const resp=await api.post('createnimbusshipment',payload)
             console.log(resp);
-            
+          
       if(resp.status===200)
       {
+
+        const labelUrl = resp.data.data.data.label;
+        console.log(labelUrl);
+        
+      // ✅ Auto-download the label
+      const link = document.createElement('a');
+      link.href = labelUrl;
+      link.download = 'shipment_label.pdf'; // optional custom filename
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
         Swal.fire({
           icon:"success",
           title:"Shipment Created Successfull",
@@ -383,6 +413,9 @@ function Dashboard() {
     } catch (error) {
       console.log(error);
       
+    }finally
+    {
+      setIsLoading(false)
     }
   }
 
@@ -397,6 +430,40 @@ function Dashboard() {
         setSelectedItem(item);
       }
 
+
+// ==============================================download label code start==========================================================
+
+
+
+const handleDownloadLabel = async (awb_no) => {
+  try {
+   
+     const res = await api.post(`downloadlabel/${awb_no}`);
+     console.log(res);
+     
+    const labelUrl = res.data?.data?.label;
+
+    if (labelUrl) {
+      // Step 3: Trigger PDF download
+      const link = document.createElement("a");
+      link.href = labelUrl;
+      link.download = "shipping_label.pdf";
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      alert("Label not found.");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("An error occurred while processing the label download.");
+  }
+};
+
+
+
+// ==========================================download label code end===============================================================
 
   return (
     <div>
@@ -642,6 +709,28 @@ function Dashboard() {
        {/* table------------------------------------------------------------------------------------------- */}
 
        <h3>All Orders</h3>
+       {newOrderCount > 0 && (
+  <>
+    <style>
+    {`
+      @keyframes flash {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+
+      .flash-animation {
+        animation: flash 1s ease-in-out infinite;
+        font-weight: bold;
+      }
+    `}
+    </style>
+    <p className="flash-animation" style={{ color: 'green' }}>
+      You have {newOrderCount} new order(s)!
+    </p>
+  </>
+)}
+
+
        <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",marginBottom:"20px"}}>
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
@@ -676,93 +765,108 @@ function Dashboard() {
         </TableRow>
       </TableHead>
       <tbody>
-        {
-         
-        currentItems.map ((item, index) => (
-          <StyledTableRow key={index}>
-            <StyledTableCell style={{fontSize:"12px"}}>
-              {index + 1}
-            </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-          {item.orderid}
-         </StyledTableCell>
-            <StyledTableCell  style={{ padding: "10px", cursor: "pointer",fontSize:"12px"}}  >
-              <span style={{color:"#0086b3",fontWeight:"bold",fontSize:"12px"}}> {item.firstName} {item.lastName}</span>
-              <br />
-           
-              <span>{item.mobileNumber}</span>
-              <br />
-             
-              <span>{item.email}</span>
-            </StyledTableCell>
-         
-                <StyledTableCell style={{fontSize:"12px"}}>
-                      <>
-                       {item.apartmentNumber} {item.area}<br></br>
-                       landmark:{item.landmark}<br></br>
-                       {item.selectcity} {item.selectstate}<br></br>
-                       {item.pincode}
-                       </>
-                </StyledTableCell>
+  {
+    currentItems
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // Sort newest first
+    .map((item, index, sortedItems) => {
+      const isNew = index < newOrderCount; // First N are "New"
+      return (
+        <StyledTableRow key={index}>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            {index + 1}
+          </StyledTableCell>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+          {isNew ? <strong style={{color:"green"}}>New</strong> : ''}<br></br>
+            {item.orderid}
+          </StyledTableCell>
+          <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontSize: "12px" }}>
+            <span style={{ color: "#0086b3", fontWeight: "bold" }}>{item.firstName} {item.lastName}</span><br />
+            <span>{item.mobileNumber}</span><br />
+            <span>{item.email}</span>
+          </StyledTableCell>
 
-                <StyledTableCell style={{fontSize:"12px"}}>
-                      <>
-                      {
-                        item.cartItems.map((product)=>
-                        (
-                          <>
-                          {product.product_name}<br></br>
-                          Rs.{product.product_price}<br></br>
-                          quantity:{product.product_quantity1}
-                          </>
-                        ))
-                      }
-                       </>
-                </StyledTableCell>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            <>
+              {item.apartmentNumber} {item.area}<br />
+              landmark: {item.landmark}<br />
+              {item.selectcity} {item.selectstate}<br />
+              {item.pincode}
+            </>
+          </StyledTableCell>
 
-                <StyledTableCell style={{fontSize:"12px"}}>
-                      <>
-                   {item.totalPrice}
-                       </>
-                </StyledTableCell>
-                <StyledTableCell style={{fontSize:"12px"}}>
-                      <>
-               
-                       </>
-                </StyledTableCell>
-                <StyledTableCell style={{fontSize:"12px"}}>
-                 <>
-                 {formatDate(item.paymentDate)}
-                 <span style={{color:  item.payment_status === "success"? "green": item.payment_status === "pending"? "blue": "red",fontWeight:"bold"}}>{item.payment_status}</span>
-                 </>
-                 </StyledTableCell>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            <>
+              {
+                item.cartItems.map((product, i) => (
+                  <div key={i}>
+                    {product.product_name}<br />
+                    Rs.{product.product_price}<br />
+                    quantity: {product.product_quantity1}
+                  </div>
+                ))
+              }
+            </>
+          </StyledTableCell>
 
-                 <StyledTableCell style={{fontSize:"12px"}}>
-                 <>
-                 {item.paymentId}
-                 </>
-                 </StyledTableCell>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            {item.totalPrice}
+          </StyledTableCell>
 
-                <StyledTableCell style={{fontSize:"12px"}}>
-                  <>
-                  
-                                  <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Action
-                  </button>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" style={{cursor:"pointer"}} onClick={()=>handleShow(item)}>Accept</a></li>
-                    <li><a class="dropdown-item" style={{cursor:"pointer"}}>Reject</a></li>
-                    <li><a class="dropdown-item" style={{cursor:"pointer"}} onClick={()=>deleteorder(item._id)}>Delete</a></li>
-                  </ul>
-                </div>                
-                 </>
-                 
-                </StyledTableCell>
-          
-          </StyledTableRow>
-        ))}
-      </tbody>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            {/* Add content if needed */}
+          </StyledTableCell>
+
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            <>
+              {formatDate(item.paymentDate)}<br />
+              <span style={{
+                color: item.payment_status === "success" ? "green" :
+                       item.payment_status === "pending" ? "blue" : "red",
+                fontWeight: "bold"
+              }}>
+                {item.payment_status}
+              </span>
+            </>
+          </StyledTableCell>
+
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            {item.paymentId}
+          </StyledTableCell>
+
+          <StyledTableCell style={{ fontSize: "12px" }}>
+          <>
+            {item.tracking_id && item.shipment_id ? (
+              <>
+                <span>Shipment_ID: {item.tracking_id}</span><br />
+                <span>AWB_No.: {item.shipment_id}</span>
+              </>
+            ) : (
+              <span>Tracking not started yet</span>
+            )}
+          </>
+
+          </StyledTableCell>
+
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            <div className="dropdown">
+              <button className="btn btn-secondary dropdown-toggle" type="button" id={`dropdown-${index}`} data-bs-toggle="dropdown" aria-expanded="false">
+                Action
+              </button>
+              <ul className="dropdown-menu" aria-labelledby={`dropdown-${index}`}>
+                <li><span className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => handleShow(item)}>Start Tracking</span></li>
+                <li><span className="dropdown-item" style={{ cursor: "pointer" }} onClick={()=>handleDownloadLabel(item.shipment_id)}>Download Label</span></li>
+                <li><span className="dropdown-item" style={{ cursor: "pointer" }} onClick={() => deleteorder(item._id)}>Delete Order</span></li>
+              </ul>
+            </div>
+          </StyledTableCell>
+
+        </StyledTableRow>
+      );
+    })
+  }
+</tbody>
+
     </Table>
   </TableContainer>
 
@@ -804,6 +908,41 @@ function Dashboard() {
              
       </div>
       
+      <>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(9, 101, 52, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Sending...</p>
+        </div>
+      </div>
+    )}
+  </>
         
 
   

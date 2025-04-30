@@ -274,8 +274,6 @@ console.log("Form Data Submitted:", formData);
 
 const navigate1 = useNavigate();
 
-console.log(formData);
-
 const handlePayment = async () => {
   setFormData({...formData,cartItems:cart})
   if (!validateForm1()) {
@@ -294,7 +292,8 @@ const handlePayment = async () => {
 
     // Step 2: Razorpay Checkout Options
     const options = {
-      key: 'rzp_test_kh59VKLP3zCcop', // Razorpay key
+      // key: 'rzp_test_kh59VKLP3zCcop', 
+      key:'rzp_live_YBXf8NJT3Al7Qc',
       amount: order.amount,
       currency: order.currency,
       name: 'Sky Cosmetics',
@@ -924,6 +923,35 @@ const indianStates = [
   ];
 
 
+  // =========================================track your order start=============================================================
+
+const [show2, setShow2] = useState(false);
+  
+    const handleClose2 = () => 
+      {
+        setShow2(false);
+        settrackingdata(null)
+      }
+    const handleShow2 = (item) => 
+      {
+        setShow2(true);
+      }
+
+      const[trackingid,settrackingid]=useState("")
+      const[trackingdata,settrackingdata]=useState(null)
+      const trackOrder = async () => {
+        try {
+
+          const res = await api.post(`track-order/${trackingid}`);
+          settrackingdata(res.data.data)
+        } catch (error) {
+          console.log(error);
+          
+        }
+      };
+      
+   
+// =================================================track your order end=============================================================
 
 
 return (
@@ -1019,7 +1047,7 @@ boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.2)",
 </NavDropdown>
 
 <Nav.Link as={Link} to="/blog1">Blogs</Nav.Link>
-<Nav.Link as={Link} to="/track-order">Track Your Order</Nav.Link>
+<Nav.Link as={Link} onClick={handleShow2}>Track Your Order</Nav.Link>
 <Nav.Link as={Link} to="/contact">Contact Us</Nav.Link>
 <Nav.Link as={Link} to="/combo">Combo</Nav.Link>
 
@@ -2358,6 +2386,170 @@ Verify Otp
 {/* ======================================verify otp end==================================================== */}
 
 
+  <Modal  show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in"}}>
+            <Modal.Header>
+              <Modal.Title>Start Tracking<br></br>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+       
+       <div className="row">
+
+       <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Enter Your AWB No.</label>
+                 <input type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>settrackingid(e.target.value)}/>
+                 </div>
+                
+
+                 {trackingdata && (
+      <div style={{ marginTop: '20px', fontSize: '13px', lineHeight: '1.8' }}>
+        <h6 style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Shipment Details</h6>
+
+        <div className="row">
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>AWB Number</div>
+  <div>{trackingdata.awb_number}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Courier ID</div>
+  <div>{trackingdata.courier_id}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Courier Name</div>
+  <div>{trackingdata.courier_name}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Order ID</div>
+  <div>{trackingdata.order_id}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Order Number</div>
+  <div>{trackingdata.order_number}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Order Type</div>
+  <div>{trackingdata.order_type}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Payment Type</div>
+  <div>{trackingdata.payment_type}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Status</div>
+  <div style={{ color: "red", fontWeight: "500" }}>{trackingdata.status}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Created</div>
+  <div>{trackingdata.created}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Event Time</div>
+  <div>{trackingdata.event_time}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Expected Delivery</div>
+  <div>{trackingdata.edd || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Delivered Date</div>
+  <div>{trackingdata.delivered_date || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Pickup Date</div>
+  <div>{trackingdata.pickup_date || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Shipped Date</div>
+  <div>{trackingdata.shipped_date || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>RTO AWB</div>
+  <div>{trackingdata.rto_awb || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>RTO Initiate Date</div>
+  <div>{trackingdata.rto_initiate_date || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>RTO Status</div>
+  <div>{trackingdata.rto_status || 'N/A'}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>RTO Warehouse ID</div>
+  <div>{trackingdata.rto_warehouse_id}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Warehouse ID</div>
+  <div>{trackingdata.warehouse_id}</div>
+</div>
+
+<div className="col-md-4 mb-3">
+  <div style={{ fontWeight: "bold" }}>Shipment Info</div>
+  <div>{trackingdata.shipment_info || 'N/A'}</div>
+</div>
+
+</div>
+       
+
+        <h6 className="mt-4" style={{ fontWeight: 'bold', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>Tracking History</h6>
+        {trackingdata.history && trackingdata.history.length > 0 ? (
+          <div>
+            {trackingdata.history.map((item, index) => (
+              <div key={index} style={{
+                backgroundColor: "#f1f3f5",
+                border: "1px solid #ced4da",
+                borderRadius: "8px",
+                padding: "10px",
+                marginBottom: "10px"
+              }}>
+                <div><strong>Status Code:</strong> {item.status_code}</div>
+                <div><strong>Message:</strong> {item.message || 'No message'}</div>
+                <div><strong>Event Time:</strong> {item.event_time}</div>
+                <div><strong>Location:</strong> {item.location || 'N/A'}</div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p>No history available.</p>
+        )}
+      </div>
+    )}
+             
+      </div>
+      
+        
+
+  
+
+            </Modal.Body>
+            <Modal.Footer>
+         
+              <Button variant="secondary" onClick={handleClose2}>
+                Close
+              </Button>
+              <Button variant="secondary" onClick={trackOrder}>
+                Show Details
+              </Button>
+            </Modal.Footer>
+          </Modal>
 
 
 

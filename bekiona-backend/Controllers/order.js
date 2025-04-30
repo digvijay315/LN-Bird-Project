@@ -65,4 +65,6 @@ const vieworderbyemail= async(req,res)=>
         res.status(500).send({ message: "Failed to delete order", error });
       }
     };
+
+    
 module.exports = { createOrder, getAllOrders,vieworderbyemail,getTotalOrders,deleteorder };

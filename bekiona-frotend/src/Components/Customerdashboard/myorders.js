@@ -143,6 +143,17 @@ function Myorders() {
                       >
                         ₹ {cartItem.product_price}
                       </p>
+
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          color: "black",
+                        }}
+                      >
+                        Quantity:{cartItem.product_quantity1}
+                      </p>
+                      
                     </div>
   
                     {/* Delivery Status */}
@@ -164,7 +175,9 @@ function Myorders() {
                             marginRight: "5px",
                           }}
                         ></span>
-                        Delivered on {cartItem.delivery_date}
+                        Tracking Details:<br></br>
+                        AWB No.:{item.shipment_id}<br></br>
+                        Shipment Id:{item.tracking_id}
                       </p>
                       <p
                         style={{
