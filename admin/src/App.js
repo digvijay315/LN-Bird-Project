@@ -51,6 +51,8 @@ import Inventorysingleview from './components/inventorysingleview.js';
 import Sendmail from './components/sendmail.js';
 import Sendwhatsapp from './components/sendwhatsapp.js';
 import WhatsAppLogin from './components/sendwhatsapp.js';
+import Crmsettings from './components/settings.js';
+import Leadscoresettings from './components/leadscoresettings.js';
 
 function App() {
   return (
@@ -96,6 +98,8 @@ function App() {
       <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
       <Route path='/sendmail' element={<Sendmail/>}/>
+      <Route path='/crmsettings' element={<Crmsettings/>}/>
+      <Route path='/leadscoreseetings' element={<Leadscoresettings/>}/>
     </Routes>  
      {/* <WhatsAppLogin/>  */}
    </div>

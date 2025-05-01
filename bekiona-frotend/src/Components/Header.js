@@ -710,41 +710,45 @@ confirmButtonText: "OK",
 
 
 // ===================================login with otp start=======================================================================
+ const [isLoading, setIsLoading] = useState(false);
+      const loginwithotp = async (e) => {
+        setIsLoading(true)
+      e.preventDefault();
 
-const loginwithotp = async (e) => {
-e.preventDefault();
-
-try {
-const response = await api.post("otplogin",{email:loginDetails.email});
+      try {
+      const response = await api.post("otplogin",{email:loginDetails.email});
 
 
-if (response.status === 200) {
-Swal.fire({
-title: "Successful!",
-text: `otp send plz check your email id`,
-icon: "success",
-confirmButtonText: "OK",
-});
+      if (response.status === 200) {
+      Swal.fire({
+      title: "Successful!",
+      text: `otp send plz check your email id`,
+      icon: "success",
+      confirmButtonText: "OK",
+      });
 
-handleClose();
-handleShow8()
-} else {
-Swal.fire({
-title: " Failed",
-text: response.data.message || "Invalid email or password.",
-icon: "error",
-confirmButtonText: "Try Again",
-});
-}
-} catch (error) {
-Swal.fire({
-title: "Error",
-text: error.response?.data?.message || "Server error. Please try again later.",
-icon: "error",
-confirmButtonText: "OK",
-});
-}
-};
+      handleClose();
+      handleShow8()
+      } else {
+      Swal.fire({
+      title: " Failed",
+      text: "plz enter valid email id",
+      icon: "error",
+      confirmButtonText: "Try Again",
+      });
+      }
+      } catch (error) {
+      Swal.fire({
+      title: "Error",
+      text: "plz enter valid email id",
+      icon: "error",
+      confirmButtonText: "OK",
+      });
+      }finally
+      {
+        setIsLoading(false)
+      }
+      };
 
 
 // ================================================login with otp end==============================================================
@@ -1543,6 +1547,44 @@ New User? Signup
 </form>
 </div>
 </div>
+
+<>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(9, 101, 52, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Sending otp...</p>
+        </div>
+      </div>
+    )}
+  </>
+
+
 </Modal.Body>
 <Modal.Footer>
 <Button variant="secondary" onClick={handleClose}>

@@ -95,9 +95,9 @@ function Sidebar1() {
 						</ul>
 					</li>
 					<li class="dropdown">
-						<a  class="dropdown-toggle">
+						<Link to={'/crmsettings'}  class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-settings"></span><span class="mtext">Settings</span>
-						</a>
+						</Link>
 						<ul class="submenu">
 							
 						</ul>

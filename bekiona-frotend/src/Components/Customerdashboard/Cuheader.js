@@ -884,7 +884,7 @@ const [show2, setShow2] = useState(false);
                   </NavDropdown>
 
                          {/* customer account details */}
-                         <NavDropdown title={useremail} id="termsDropdown">
+                         <NavDropdown  title={useremail} id="termsDropdown">
                     <NavDropdown.Item as={Link} to="/myorders">My Orders</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/personalinfo">Personal Info</NavDropdown.Item>
                     <NavDropdown.Item as={Link} to="/manageadds">Manage Address</NavDropdown.Item>
