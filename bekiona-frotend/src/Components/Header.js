@@ -26,6 +26,10 @@ console.log(token);
 
 },[])
 
+const paymentoptions=localStorage.getItem("paymentoptions");
+console.log(paymentoptions);
+
+
 
 
 const {cart,setcart}=useCart()
@@ -45,9 +49,9 @@ pincode: "",
 setDefault: false,
 cartItems: [],
 totalPrice:0,
-payment_status:""
+payment_status:"",
+payment_mode:""
 });
-
 
 
 const[length,setlength]=useState(0)
@@ -152,15 +156,26 @@ handleClose1()
 
 
 
-
+const[indianCities,setIndianCities]=useState([])
 const handleChange = (e) => {
-const { name, value, type, checked } = e.target;
+  const { name, value, type, checked } = e.target;
 
-setFormData((prevData) => {
-const newData = { ...prevData, [name]: type === "checkbox" ? checked : value };
-validateField(name, newData[name]); // ✅ Validate field on change
-return newData;
-});
+  setFormData((prevData) => {
+    let newData = {
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    };
+
+    // If the selected field is state, update cities
+    if (name === "selectstate") {
+      const cities = statesAndCities[value] || [];
+      setIndianCities(cities);
+      newData.selectcity = ""; // Reset city when state changes
+    }
+
+    validateField(name, newData[name]); // ✅ Validate field on change
+    return newData;
+  });
 };
 
 const validateField = (name, value) => {
@@ -224,55 +239,6 @@ console.log("Form Data Submitted:", formData);
 
 
 
-
-// const handleSubmit1 = async (e) => {
-
-// try {
-// const response = await api.post('createOrder', formData);
-// console.log('Response:', formData);
-
-// // Success Alert with "OK" button
-// Swal.fire({
-// title: 'Success!',
-// text: 'Order created successfully!',
-// icon: 'success',
-// confirmButtonText: 'OK',
-// }).then(() => {
-// // Clear form fields and reload the window
-// setFormData({
-// firstName: '',
-// lastName: '',
-// email:'',
-// mobileNumber: '',
-// apartmentNumber: '',
-// apartmentName: '',
-// area: '',
-// landmark: '',
-// addressType: 'Home',
-// setDefault: false,
-// cartItems: [],
-// totalPrice: 0,
-// payment_status:""
-// });
-
-// // Reload the window (optional)
-// window.location.reload();
-// });
-// } catch (error) {
-// console.error('Error creating order:', error);
-
-// // Error Alert
-// Swal.fire({
-// title: 'Error!',
-// text: 'Failed to create order. Please try again.',
-// icon: 'error',
-// confirmButtonText: 'Retry',
-// });
-// }
-// };
-
-
-const navigate1 = useNavigate();
 
 const handlePayment = async () => {
   setFormData({...formData,cartItems:cart})
@@ -395,6 +361,46 @@ const verifyPayment = async (paymentResponse) => {
   }
 };
 
+
+const handlecodpayment = async () => {
+  setFormData({...formData,cartItems:cart})
+  if (!validateForm1()) {
+    Swal.fire({
+      title: 'Validation Error!',
+      text: 'Please fill all required fields correctly.',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+    return;
+  }
+
+  try {
+    // Step 1: Create Order on Backend
+    const resp = await api.post('codpayment', { formData });
+    if(resp.status===200)
+    {
+      Swal.fire({
+        title: 'Order Saved',
+        text: 'Products Order Successfully Complete!',
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+
+    }
+
+  } catch (error) {
+    console.error('Error during payment:', error);
+
+    Swal.fire({
+      title: 'Payment Failed',
+      text: 'Something went wrong. Please try again!',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+
+    setFormData({ ...formData, payment_status: 'failed' });
+  }
+};
   
 
 
@@ -871,60 +877,36 @@ callback();
 };
 
 
-const indianStates = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-    "Andaman and Nicobar Islands",
-    "Chandigarh",
-    "Dadra and Nagar Haveli and Daman and Diu",
-    "Delhi",
-    "Jammu and Kashmir",
-    "Ladakh",
-    "Lakshadweep",
-    "Puducherry",
-  ];
+const statesAndCities = {
+  AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+  ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+  Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+  Bihar: ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+  Delhi: ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+  Goa: ["North Goa", "South Goa"],
+  Gujarat: ["Ahmedabad", "Amreli", "Anand", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udepur", "Dahod", "Dang", "Gir Somnath", "Jamnagar", "Junagadh", "Kachchh", "Kheda", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+  Haryana: ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Narnaul", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+  HimachalPradesh: ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kullu", "Kullu", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+  Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahebganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+  Karnataka: ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikballapur", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+  Kerala: ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kottayam", "Kollam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+  MadhyaPradesh: ["Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhindwara", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Rewa", "Rajgarh", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+  Maharashtra: ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldhana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+  Manipur: ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+  Meghalaya: ["East Garo Hills", "East Khasi Hills", "Jaintia Hills", "Ri Bhoi", "West Garo Hills", "West Khasi Hills"],
+  Mizoram: ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+  Nagaland: ["Dimapur", "Kohima", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+  Odisha: ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Ganjam", "Gajapati", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+  Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Firozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawan Shehar", "Patiala", "Rupnagar", "Sangrur", "SAS Nagar", "Sri Muktsar Sahib"],
+  Rajasthan: ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bhilwara", "Bikaner", "Bundi", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Tonk", "Udaipur"],
+  Sikkim: ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+  TamilNadu: ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kancheepuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivagangai", "Tenkasi", "Thanjavur", "The Nilgiris", "Thoothukudi", "Tiruvallur", "Tirunelveli", "Tirupur", "Vellore", "Viluppuram", "Virudhunagar"],
+  Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
+  Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+  UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar","Noida", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+  WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+};
 
-  const indianCities = [
-    "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Ahmedabad", "Chennai", "Kolkata", 
-    "Pune", "Jaipur", "Surat", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", 
-    "Bhopal", "Visakhapatnam", "Pimpri-Chinchwad", "Patna", "Vadodara", "Ghaziabad", 
-    "Ludhiana", "Agra", "Nashik", "Ranchi", "Meerut", "Faridabad", "Allahabad", 
-    "Amritsar", "Varanasi", "Srinagar", "Aurangabad", "Dhanbad", "Noida", "Howrah", 
-    "Gwalior", "Jabalpur", "Vijayawada", "Jodhpur", "Raipur", "Kota", "Guwahati", 
-    "Chandigarh", "Solapur", "Hubballi-Dharwad", "Tiruchirappalli", "Bareilly", 
-    "Mysore", "Tiruppur", "Gurgaon", "Aligarh", "Jalandhar", "Bhubaneswar", "Salem", 
-    "Warangal", "Moradabad", "Bhiwandi", "Kolhapur", "Bikaner", "Jhansi", "Thiruvananthapuram", 
-    "Guntur", "Dehradun", "Asansol", "Nanded", "Ujjain", "Gaya", "Tirunelveli", "Malegaon", 
-    "Udaipur", "Hosur", "Kurnool", "Belgaum", "Ambattur", "Tirupati", "Nagaur", "Mangalore", 
-    "Erode", "Jamnagar", "Bokaro", "Aizawl", "Mathura", "Kollam", "Panaji", "Shillong", 
-    "Imphal", "Itanagar", "Gangtok", "Port Blair", "Diu", "Silvassa"
-  ];
 
 
   // =========================================track your order start=============================================================
@@ -1812,11 +1794,7 @@ fontSize: "14px",
       *Select State
     </label>
     <select
-      className="form-control"
-      id="state"
-      name="selectstate"
-      value={formData.selectstate}
-      onChange={handleChange}
+      className="form-control" id="state" name="selectstate"  value={formData.selectstate} onChange={handleChange}
       style={{
         borderRadius: "5px",
         padding: "10px",
@@ -1826,11 +1804,11 @@ fontSize: "14px",
       <option value="" disabled>
         Select a state
       </option>
-      {indianStates.map((state, index) => (
-        <option key={index} value={state}>
-          {state}
-        </option>
-      ))}
+      {Object.keys(statesAndCities).map((state, index) => (
+    <option key={index} value={state}>
+      {state}
+    </option>
+  ))}
     </select>
     {validation1.selectstate && <span style={{ color: "red", fontSize: "12px" }}>{validation1.selectstate}</span>}
   </div>
@@ -1973,6 +1951,44 @@ fontSize: "14px",
 />
 </div>
 
+<div className="col-md-6">
+    <label htmlFor="city" className="form-label">
+      *Select payment Type
+    </label>
+    <select
+      className="form-control"
+      id="payment_mode"
+      name="payment_mode"
+      onChange={handleChange}
+      style={{
+        borderRadius: "5px",
+        padding: "10px",
+        fontSize: "14px",
+      }}
+    >
+      {
+    paymentoptions === "Only ONLINE" ? (
+      <>
+      <option>---select---</option>
+      <option value="online">online</option>
+      </>
+    ) : paymentoptions === "Only COD" ? (
+      <>
+      <option>---select---</option>
+      <option value="cod">cod</option>
+      </>
+    ) : (
+      <>
+        <option>---select---</option>
+        <option value="online">online</option>
+        <option value="cod">cod</option>
+      </>
+    )
+  }
+     
+    </select>
+  </div>
+
 <div className="mb-3">
 <div className="form-check">
 <input
@@ -2056,6 +2072,8 @@ Other
 </div>
 </form>
 </div>
+
+
 
 {/* Cart Section */}
 <div
@@ -2152,8 +2170,11 @@ fontWeight: "500"
 <Button variant="secondary" onClick={handleClose4}>
 Close
 </Button>
-<Button variant="primary" onClick={handlePayment}>
+<Button variant="primary" onClick={handlePayment} style={{display:formData.payment_mode==="online"?"flex":"none"}}>
 Go to Payment
+</Button>
+<Button variant="primary" onClick={handlecodpayment} style={{display:formData.payment_mode==="cod"?"flex":"none"}}>
+Order Now
 </Button>
 </Modal.Footer>
 </Modal>

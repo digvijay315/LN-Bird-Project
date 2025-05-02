@@ -40,25 +40,27 @@ function Dashboard() {
     useEffect(() => {
       const fetchOrders = async () => {
         try {
-          const response = await api.get('getAllOrders'); // Adjust the URL
-          setOrders(response.data);
-
-          const storedCount = parseInt(localStorage.getItem('lastOrderCount')) || 0;
-          const currentCount = response.data.length;
-
+          const response = await api.get("getAllOrders");
+  
+          const sorted = [...response.data].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+  
+          setOrders(sorted);
+  
+          const storedCount = parseInt(localStorage.getItem("lastOrderCount")) || 0;
+          const currentCount = sorted.length;
+  
           if (currentCount > storedCount) {
             setNewOrderCount(currentCount - storedCount);
           } else {
             setNewOrderCount(0);
           }
-    
-          // Update for next login
-          localStorage.setItem('lastOrderCount', currentCount.toString());
-    
-
-
+  
+          // Update stored count
+          localStorage.setItem("lastOrderCount", currentCount.toString());
         } catch (error) {
-          console.error('Failed to fetch orders:', error);
+          console.error("Failed to fetch orders:", error);
         } finally {
           setLoading(false);
         }
@@ -112,7 +114,14 @@ function Dashboard() {
     const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = orders.slice(indexOfFirstItem, indexOfLastItem);
+
+    // Add isNew flag to top N orders
+  const markedOrders = orders.map((order, index) => ({
+    ...order,
+    isNew: index < newOrderCount,
+  }));
+
+    const currentItems = markedOrders.slice(indexOfFirstItem, indexOfLastItem);
     const totalPages = Math.ceil(orders.length / itemsPerPage);
     
       // Handle items per page change
@@ -812,20 +821,22 @@ const handleDownloadLabel = async (awb_no) => {
           <StyledTableCell style={{ fontSize: "12px" }}>
             {item.totalPrice}
           </StyledTableCell>
-
+       
           <StyledTableCell style={{ fontSize: "12px" }}>
-            {/* Add content if needed */}
+          <>
+          {item.payment_mode}
+          </>
           </StyledTableCell>
 
           <StyledTableCell style={{ fontSize: "12px" }}>
             <>
-              {formatDate(item.paymentDate)}<br />
+              {formatDate(item.paymentDate?item.paymentDate:item.createdAt)}<br />
               <span style={{
                 color: item.payment_status === "success" ? "green" :
                        item.payment_status === "pending" ? "blue" : "red",
                 fontWeight: "bold"
               }}>
-                {item.payment_status}
+                {item.payment_mode==="cod"?"":item.payment_status}
               </span>
             </>
           </StyledTableCell>

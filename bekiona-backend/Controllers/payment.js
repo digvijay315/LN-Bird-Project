@@ -123,6 +123,36 @@ const verifyPayment = async (req, res) => {
 };
 
 
+const codpayment = async (req, res) => {
+  try {
+    if (!req.body || !req.body.formData) {
+      return res.status(400).json({ message: "Invalid request: Missing form data" });
+    }
+
+    const formData = req.body.formData;
+    const amount = formData.totalPrice || 0;
+
+    // Generate a unique order ID for COD
+    const codOrderId = `COD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    const newOrder = new Order({
+      ...formData,
+      orderid: codOrderId,
+      totalPrice: amount,
+      payment_status: "pending",
+      createdAt: new Date()
+    });
+
+    await newOrder.save();
+
+    res.status(200).json({ message: "COD Order placed successfully", orderid: codOrderId });
+  } catch (error) {
+    console.error("Payment processing error:", error);
+    res.status(500).json({ message: "Payment processing failed", error });
+  }
+};
+
+
 
 const createNimbusShipment = async (req, res) => {
   try {
@@ -183,7 +213,7 @@ const createNimbusShipment = async (req, res) => {
       }
     );
 
-    console.log(response);
+    // console.log(response);
     
     if (response.data && response.data.data && response.data.data.awb_number) {
       await Order.findByIdAndUpdate(req.body._id, {
@@ -252,4 +282,4 @@ const trackOrder = async (req, res) => {
   };
 
 
-module.exports = {payment,trackOrder,verifyPayment,createNimbusShipment,downloadlabel};
+module.exports = {payment,trackOrder,verifyPayment,createNimbusShipment,downloadlabel,codpayment};

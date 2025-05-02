@@ -6,7 +6,7 @@ const uploadFields = require('../Middleware/bannerfile');
 const { createOrder, getAllOrders, vieworderbyemail, getTotalOrders, deleteorder } = require('../Controllers/order');
 const { signup, login } = require('../Controllers/user');
 const protectRoute=require('../Middleware/routemiddle');
-const {payment,trackOrder, verifyPayment, createNimbusShipment, loginNimbus, loginNimbus1, downloadlabel} = require('../Controllers/payment');
+const {payment,trackOrder, verifyPayment, createNimbusShipment, loginNimbus, loginNimbus1, downloadlabel, codpayment} = require('../Controllers/payment');
 const { createBlog, getBlogs, deleteBlog, editBlog, viewblogbyid } = require('../Controllers/blog');
 const { registerUser, loginUser, getAllUsers, getUserByEmail, getmail, deleteUserByEmail, getTotalUsers, getTotalUsersByEmail, getTotalUsersByEmailDomain, getTotalUsersByExactEmail, deleteUserById } = require('../Controllers/registation');
 const { addReview, getReviews, getallReviews, getCustomerSatisfaction } = require('../Controllers/review');
@@ -28,6 +28,7 @@ router.get('/getproductbycategory/:product_category',viewproductbycategory)
 router.delete("/deleteproduct/:_id",delete_product);
 router.put('/edit_product/:_id',upload.any(),edit_product);
 router.post('/payment',payment)
+router.post('/codpayment',codpayment)
 
 
 router.post('/banner',upload.any(),createBanner)

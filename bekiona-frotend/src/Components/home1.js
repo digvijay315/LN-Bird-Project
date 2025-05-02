@@ -815,7 +815,7 @@ Combo Products
             e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
           }}
         >
-          <div style={{ position: "relative", width: "100%" }}>
+          <div style={{ position: "relative", width: "100%"}}>
             <img
               src={product.product_image}
               alt={product.product_name}
@@ -823,12 +823,14 @@ Combo Products
               style={{
                 width: "100%",
                 height: "270px",
-                objectFit: "cover",
+                objectFit: "contain", // shows full image without cropping
                 cursor: "pointer",
+                 transform: "scale(1.4)",
                 transition: "transform 0.3s ease",
                 borderRadius: "10px",
                 imageRendering: "crisp-edges",
                 WebkitImageRendering: "optimize-contrast",
+                backgroundColor: "#f8f8f8", // optional: adds a nice background if image doesn't fill
               }}
               onClick={() => navigate("/vitamincfaceash", { state: product._id })}
             />

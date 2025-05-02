@@ -244,7 +244,7 @@ function Combo() {
                style={{
                  width: "100%",
                  height: "270px",
-                 objectFit: "cover",
+                 objectFit: "contain",
                  cursor: "pointer",
                  transition: "transform 0.3s ease",
                  borderRadius: "10px",

@@ -15,8 +15,12 @@ import {
   FaChevronDown,
   FaInvoiceHunt,
   FaRegEdit, 
+  FaDollarSign 
 } from "react-icons/fa";
 import { useAuth } from '../authguard';
+import Modal from 'react-bootstrap/Modal';
+import { Paper, Button, Menu, MenuItem ,Select} from '@mui/material';
+import Swal from "sweetalert2";
 
 function Sidebar() {
 
@@ -53,6 +57,35 @@ const Logout = () =>{
 }
 
 
+ const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => 
+      {
+        setShow(true)
+      }
+
+      const[paymentoptions,setpaymentoptions]=useState("")
+      const setpayment = () => {
+        if (!paymentoptions || paymentoptions === "---select---") {
+          Swal.fire({
+            icon: "warning",
+            title: "Please select a valid payment option",
+            confirmButtonText: 'OK',
+          });
+          return;
+        }
+    
+        localStorage.setItem('paymentoptions', paymentoptions);
+        Swal.fire({
+          icon: "success",
+          title: "Payment Methods Set",
+          text: "Payment options set successfully",
+          confirmButtonText: 'OK',
+        });
+      };
+
+
 
   return (
 
@@ -61,7 +94,7 @@ const Logout = () =>{
 
 <nav
   className="navbar navbar-expand-lg navbar-light shadow-sm"
-  style={{ background:"white",marginLeft:"19%" }}
+  style={{ background:"white",marginLeft:"19%",marginTop:"10px" }}
 >
   <div className="container-fluid">
     {/* Logo */}
@@ -72,7 +105,7 @@ const Logout = () =>{
       style={{ listStyle: "none", margin: 0, padding: 0 }}
     >
       {/* Notification Bell */}
-      <li
+      {/* <li
         className="nav-item me-3"
         style={{ position: "relative", display: "inline-block" }}
       >
@@ -93,7 +126,7 @@ const Logout = () =>{
             5
           </span>
         </a>
-      </li>
+      </li> */}
       {/* Profile Dropdown */}
       <li className="nav-item dropdown" style={{ display: "inline-block" }}>
         <a
@@ -106,7 +139,7 @@ const Logout = () =>{
           style={{ cursor: "pointer", textDecoration: "none", color: "black" }}
         >
           <img
-            src="https://via.placeholder.com/30"
+            src="https://static.vecteezy.com/system/resources/thumbnails/009/636/683/small_2x/admin-3d-illustration-icon-png.png"
             alt="Profile"
             style={{
               width: 30,
@@ -116,7 +149,7 @@ const Logout = () =>{
               marginRight: 8
             }}
           />
-          <span style={{ fontWeight: 500 }}>John Doe</span>
+          <span style={{ fontWeight: 500 }}>admin</span>
         </a>
         <ul
           className="dropdown-menu dropdown-menu-end"
@@ -220,6 +253,15 @@ whiteSpace: "nowrap",
   >
     <FaThList className="me-2" />
     <span>All Products</span>
+  </Link>
+</li>
+<li className="mb-2">
+  <Link
+    className="text-white text-decoration-none d-flex align-items-center"
+    onClick={handleShow}
+  >
+    <FaDollarSign  className="me-2" />
+    <span>Product Payment Setting</span>
   </Link>
 </li>
               </ul>
@@ -363,6 +405,39 @@ whiteSpace: "nowrap",
       </div>
 
       {/* Main Content */}
+
+         <Modal  show={show} onHide={handleClose} size='lg' style={{transition:"0.5s ease-in"}}>
+                  <Modal.Header>
+                    <Modal.Title>Set Payment Options<br></br>
+                    </Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+             
+             <div className="row">
+      
+                       <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Payment Options</label>
+                       <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}  onChange={(e) => setpaymentoptions(e.target.value)}>
+                        <option>---select---</option>
+                        <option>Only COD</option>
+                        <option>Only ONLINE</option>
+                        <option>Both</option>
+                        </select>
+                       </div>
+                     
+            </div>
+            
+                  </Modal.Body>
+                  <Modal.Footer>
+               
+                    <Button variant="secondary" onClick={handleClose}>
+                      Close
+                    </Button>
+                    <Button variant="secondary" onClick={setpayment}>
+                      Set
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
+      
     
       </div>
     

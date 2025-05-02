@@ -18,6 +18,7 @@ const orderSchema = new mongoose.Schema({
   cartItems: Array,
   totalPrice: Number,
   setDefault: Boolean,
+  payment_mode:String,
   payment_status: { type: String, default: "pending" }, // pending/success/failed
   paymentId: { type: String },      // Razorpay payment ID after success
   paymentDate: { type: Date },      // Payment successful date
