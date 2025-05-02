@@ -149,7 +149,7 @@ const Logout = () =>{
               marginRight: 8
             }}
           />
-          <span style={{ fontWeight: 500 }}>admin</span>
+          <span style={{ fontWeight: 500 }}>skycosmetic</span>
         </a>
         <ul
           className="dropdown-menu dropdown-menu-end"

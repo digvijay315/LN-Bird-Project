@@ -19,6 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';    // CSS
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // JS (includes Popper.js)
 import Swal from "sweetalert2";
 import Modal from 'react-bootstrap/Modal';
+import { parseISO, format, getWeek, getMonth } from "date-fns";
 function Dashboard() {
 
   const navigate = useNavigate();
@@ -36,11 +37,18 @@ function Dashboard() {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newOrderCount, setNewOrderCount] = useState(0);
-
+    const [TotalSales, setTotalSales] = useState([]);
+    const [netprofit, setnetprofit] = useState([]);
     useEffect(() => {
       const fetchOrders = async () => {
         try {
           const response = await api.get("getAllOrders");
+          const total = response.data.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
+          setTotalSales(total);
+
+          const netProfit = total * 0.3;
+          setnetprofit(netProfit);
+
   
           const sorted = [...response.data].sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -223,6 +231,90 @@ function Dashboard() {
 
   };
 
+  const groupSalesData = (range) => {
+    const now = new Date();
+    let grouped = {};
+    let labels = [];
+    let data = [];
+
+    orders.forEach((order) => {
+      const createdAt = new Date(order.createdAt);
+      const amount = order.totalPrice || 0;
+
+      if (range === "Day") {
+        const diffInDays = Math.floor((now - createdAt) / (1000 * 60 * 60 * 24));
+        if (diffInDays <= 6) {
+          const day = `${6 - diffInDays + 1}th`;
+          grouped[day] = (grouped[day] || 0) + amount;
+        }
+      } else if (range === "Week") {
+        const orderWeek = getWeekNumber(createdAt);
+        const currentWeek = getWeekNumber(now);
+        const diff = currentWeek - orderWeek;
+        if (diff >= 0 && diff < 4) {
+          const week = `Week ${4 - diff}`;
+          grouped[week] = (grouped[week] || 0) + amount;
+        }
+      } else if (range === "Month") {
+        const orderMonth = createdAt.getMonth();
+        const currentMonth = now.getMonth();
+        const diff = currentMonth - orderMonth;
+        if (diff >= 0 && diff < 6) {
+          const month = createdAt.toLocaleString("default", { month: "short" });
+          grouped[month] = (grouped[month] || 0) + amount;
+        }
+      }
+    });
+
+    if (range === "Day") {
+      labels = ["1th", "2th", "3th", "4th", "5th", "6th"];
+    } else if (range === "Week") {
+      labels = ["Week 1", "Week 2", "Week 3", "Week 4"];
+    } else {
+      labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+    }
+
+    data = labels.map((label) => grouped[label] || 0);
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: `Product Sales (${range})`,
+          data,
+          fill: true,
+          backgroundColor: "rgba(54, 162, 235, 0.1)",
+          borderColor: "#0d6efd",
+          tension: 0.4,
+        },
+      ],
+    };
+  };
+
+  const getWeekNumber = (date) => {
+    const firstDay = new Date(date.getFullYear(), 0, 1);
+    const pastDays = Math.floor((date - firstDay) / (24 * 60 * 60 * 1000));
+    return Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true },
+    },
+  };
+
+  const chartData = {
+    Day: groupSalesData("Day"),
+    Week: groupSalesData("Week"),
+    Month: groupSalesData("Month"),
+  };
+
+
  
     
   
@@ -230,65 +322,11 @@ function Dashboard() {
       setIsSidebarCollapsed(!isSidebarCollapsed);
     };
   
-    // Data for each time range
-    const chartData = {
-      Day: {
-        labels: ["1st", "2nd", "3rd", "4th", "5th", "6th"],
-        datasets: [
-          {
-            label: "Product Sales (Day)",
-            data: [0, 4500, 3000, 6000, 4000, 6500],
-            fill: true,
-            backgroundColor: "rgba(54, 162, 235, 0.1)",
-            borderColor: "#0d6efd",
-            tension: 0.4,
-          },
-        ],
-      },
-      Week: {
-        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
-        datasets: [
-          {
-            label: "Product Sales (Week)",
-            data: [12000, 14500, 17000, 20000],
-            fill: true,
-            backgroundColor: "rgba(54, 162, 235, 0.1)",
-            borderColor: "#0d6efd",
-            tension: 0.4,
-          },
-        ],
-      },
-      Month: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-        datasets: [
-          {
-            label: "Product Sales (Month)",
-            data: [25000, 22000, 27000, 30000, 35000, 33000],
-            fill: true,
-            backgroundColor: "rgba(54, 162, 235, 0.1)",
-            borderColor: "#0d6efd",
-            tension: 0.4,
-          },
-        ],
-      },
-    };
-  
-    const options = {
-      responsive: true,
-      plugins: {
-        legend: { display: false },
-      },
-      scales: {
-        x: { grid: { display: false } },
-        y: { beginAtZero: true },
-      },
-    };
-  
-    // Handle time range button clicks
     const handleTimeRangeClick = (range) => {
       setChartTimeRange(range);
     };
 
+   
     
     const rows = [
       { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
@@ -498,173 +536,232 @@ const handleDownloadLabel = async (awb_no) => {
           <div className="row g-4">
             {/* Card 1: Products Sold */}
             <div className="col-md-3">
+  <div
+    style={{
+      border: "none",
+      borderRadius: 15,
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      padding: 20,
+      transition: "transform 0.3s ease-in-out",
+      background: "linear-gradient(135deg, #e7f1ff, #ffffff)", // Light blue to white
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+  >
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div>
+        <h2 style={{ color: "#0d6efd", margin: 0 }}>{totalOrders}</h2>
+        <p style={{ margin: 0, color: "#6c757d", fontWeight: "bold" }}>Order Product</p>
+      </div>
+      <i className="fa fa-shopping-cart" style={{ fontSize: 40, color: "#0d6efd" }} />
+    </div>
+    <div
+      style={{
+        width: "100%",
+        height: 8,
+        backgroundColor: "#d0e3ff", // light blue base
+        borderRadius: 10,
+        marginTop: 10,
+      }}
+    >
       <div
         style={{
-          border: "none",
-          borderRadius: 15,
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          padding: 20,
-          transition: "transform 0.3s ease-in-out",
+          width: `${Math.min(progress, 100)}%`, // Ensures it stays within bounds
+          height: "100%",
+          backgroundColor: "#0d6efd", // Bootstrap primary blue
+          borderRadius: 10,
+          transition: "width 0.5s ease-in-out",
         }}
-        onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h2 style={{ color: "#0d6efd", margin: 0 }}>{totalOrders}</h2>
-            <p style={{ margin: 0, color: "#6c757d" }}>Order Product</p>
-          </div>
-          <i className="fa fa-shopping-cart" style={{ fontSize: 40, color: "#0d6efd" }} />
-        </div>
-        <div
-          style={{
-            width: "100%",
-            height: 8,
-            backgroundColor: "#e9ecef",
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-       <div
-            style={{
-              width: `${progress}%`,
-              height: "100%",
-              backgroundColor: "#0d6efd",
-              borderRadius: 10,
-            }}
-          />
-        </div>
-      </div>
+      />
     </div>
+  </div>
+</div>
+
 
             {/* Card 2: Net Profit */}
             <div className="col-md-3">
-              <div
-                style={{
-                  border: "none",
-                  borderRadius: 15,
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                  padding: 20,
-                  transition: "transform 0.3s ease-in-out",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <div>
-                    <h2 style={{ color: "#fd7e14", margin: 0 }}>$748</h2>
-                    <p style={{ margin: 0, color: "#6c757d" }}>Net Profit</p>
-                  </div>
-                  <i className="fa fa-chart-pie" style={{ fontSize: 40, color: "#fd7e14" }} />
-                </div>
-                <div
-                  style={{
-                    width: "100%",
-                    height: 8,
-                    backgroundColor: "#e9ecef",
-                    borderRadius: 10,
-                    marginTop: 10,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "50%",
-                      height: "100%",
-                      backgroundColor: "#fd7e14",
-                      borderRadius: 10,
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Card 3: New Customers */}
-            <div className="col-md-3">
+  <div
+    style={{
+      border: "none",
+      borderRadius: 15,
+      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      padding: 20,
+      transition: "transform 0.3s ease-in-out",
+      background: "linear-gradient(145deg, #f6f7fb, #e9ecef)", // Subtle gradient background
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <div>
+        <h2 style={{ color: "#28a745", margin: 0 }}>₹{netprofit.toLocaleString()}</h2> {/* Green for profit */}
+        <p style={{ margin: 0, color: "#6c757d" }}>Net Profit</p> {/* Light grey text */}
+      </div>
+      <i className="fa fa-piggy-bank" style={{ fontSize: 40, color: "#ffb300" }} /> {/* Golden piggy-bank icon */}
+    </div>
+    <div
+      style={{
+        width: "100%",
+        height: 8,
+        backgroundColor: "#28a745", // Green for progress bar
+        borderRadius: 10,
+        marginTop: 10,
+      }}
+    >
       <div
         style={{
-          border: "none",
-          borderRadius: 15,
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          padding: 20,
-          transition: "transform 0.3s ease-in-out",
+          width: "50%",
+          height: "100%",
+          backgroundColor: "#ffb300", // Golden color for fill
+          borderRadius: 10,
         }}
-        onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h2 style={{ color: "#198754", margin: 0 }}>{totalUsers}</h2>
-            <p style={{ margin: 0, color: "#6c757d" }}>Total Users</p>
-          </div>
-          <i className="fa fa-users" style={{ fontSize: 40, color: "#198754" }} />
-        </div>
-        <div
-          style={{
-            width: "100%",
-            height: 8,
-            backgroundColor: "#e9ecef",
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <div
-            style={{
-              width: `${(totalUsers / 500) * 100}%`, // Adjust width dynamically
-              height: "100%",
-              backgroundColor: "#198754",
-              borderRadius: 10,
-            }}
-          />
-        </div>
-      </div>
+      />
     </div>
+  </div>
+</div>
+
+
+
+<div className="col-md-3">
+  <div
+    style={{
+      border: "none",
+      borderRadius: 15,
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      padding: 20,
+      transition: "transform 0.3s ease-in-out",
+      background: "linear-gradient(135deg, #e0f7fa, #ffffff)", // Light cyan to white gradient
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <div>
+        <h2 style={{ color: "#00796b", margin: 0 }}>₹{TotalSales.toLocaleString()}</h2>
+        <p style={{ margin: 0, color: "#6c757d", fontWeight: "bold" }}>Total Sales</p>
+      </div>
+      <i className="fa fa-chart-line" style={{ fontSize: 40, color: "#00796b" }} />
+    </div>
+    <div
+      style={{
+        width: "100%",
+        height: 8,
+        backgroundColor: "#b2dfdb", // Soft teal base
+        borderRadius: 10,
+        marginTop: 10,
+      }}
+    >
+      <div
+        style={{
+          width: "70%", // You can dynamically set this based on performance
+          height: "100%",
+          backgroundColor: "#00796b", // Stronger teal
+          borderRadius: 10,
+        }}
+      />
+    </div>
+  </div>
+</div>
+
+
+            <div className="col-md-3">
+  <div
+    style={{
+      border: "none",
+      borderRadius: 15,
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      padding: 20,
+      transition: "transform 0.3s ease-in-out",
+      background: "linear-gradient(135deg, #e8f5e9, #ffffff)", // Light green to white
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+  >
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div>
+        <h2 style={{ color: "#198754", margin: 0 }}>{totalUsers}</h2>
+        <p style={{ margin: 0, color: "#6c757d", fontWeight: "bold" }}>Total Users</p>
+      </div>
+      <i className="fa fa-users" style={{ fontSize: 40, color: "#198754" }} />
+    </div>
+    <div
+      style={{
+        width: "100%",
+        height: 8,
+        backgroundColor: "#d1e7dd", // lighter green base
+        borderRadius: 10,
+        marginTop: 10,
+      }}
+    >
+      <div
+        style={{
+          width: `${Math.min((totalUsers / 500) * 100, 100)}%`, // Max 100%
+          height: "100%",
+          backgroundColor: "#198754", // Bootstrap green
+          borderRadius: 10,
+          transition: "width 0.5s ease-in-out",
+        }}
+      />
+    </div>
+  </div>
+</div>
+
 
             {/* Card 4: Customer Satisfaction */}
             <div className="col-md-3">
+  <div
+    style={{
+      border: "none",
+      borderRadius: 15,
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      padding: 20,
+      transition: "transform 0.3s ease-in-out",
+      background: "linear-gradient(135deg, #ffe5e9, #ffffff)", // soft red-pink gradient
+    }}
+    onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+    onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+  >
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div>
+        <h2 style={{ color: "#dc3545", margin: 0 }}>{satisfaction}%</h2>
+        <p style={{ margin: 0, color: "#6c757d", fontWeight: "bold" }}>Customer Satisfaction</p>
+      </div>
+      <i className="fa fa-heart" style={{ fontSize: 40, color: "#dc3545" }} />
+    </div>
+    <div
+      style={{
+        width: "100%",
+        height: 8,
+        backgroundColor: "#f8d7da", // soft red base
+        borderRadius: 10,
+        marginTop: 10,
+      }}
+    >
       <div
         style={{
-          border: "none",
-          borderRadius: 15,
-          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-          padding: 20,
-          transition: "transform 0.3s ease-in-out",
+          width: `${Math.min(satisfaction, 100)}%`,
+          height: "100%",
+          backgroundColor: "#dc3545", // Bootstrap danger red
+          borderRadius: 10,
+          transition: "width 0.5s ease-in-out",
         }}
-        onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-        onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h2 style={{ color: "#dc3545", margin: 0 }}>{satisfaction}%</h2>
-            <p style={{ margin: 0, color: "#6c757d" }}>Customer Satisfaction</p>
-          </div>
-          <i className="fa fa-heart" style={{ fontSize: 40, color: "#dc3545" }} />
-        </div>
-        <div
-          style={{
-            width: "100%",
-            height: 8,
-            backgroundColor: "#e9ecef",
-            borderRadius: 10,
-            marginTop: 10,
-          }}
-        >
-          <div
-            style={{
-              width: `${satisfaction}%`,
-              height: "100%",
-              backgroundColor: "#dc3545",
-              borderRadius: 10,
-            }}
-          />
-        </div>
-      </div>
+      />
     </div>
+  </div>
+</div>
+
 
           {/* Time Range Buttons (Placed Above the Chart) */}
         <div className="d-flex justify-content-start mb-4">
@@ -688,29 +785,42 @@ const handleDownloadLabel = async (awb_no) => {
           </button>
         </div>
 
-        {/* Product Sales Chart */}
-        <div className="row">
-          <div className="col-12">
-            <div
-              style={{
-                backgroundColor: "white",
-                borderRadius: 10,
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                padding: "10px",
-                width:"580px",
-                height:"350px"
-              }}
-            >
-              {/* Chart Component */}
-              <Line
-                data={chartData[chartTimeRange]}
-                options={options}
-                height={350} // Adjusted to make the chart taller
-                width={600}
-              />
-            </div>
-          </div>
-        </div>
+      <div className="row justify-content-center">
+  <div className="col-md-8">
+    <div
+      style={{
+        background: "linear-gradient(to bottom right, #f8f9fa, #ffffff)",
+        border: "2px solid #0d6efd", // Bootstrap Primary Blue
+        borderRadius: 15,
+        boxShadow: "0 4px 12px rgba(13, 110, 253, 0.2)",
+        padding: 20,
+        marginTop: 20,
+        transition: "transform 0.3s ease-in-out",
+      }}
+      onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.02)")}
+      onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+    >
+      <div
+        style={{
+          background: "linear-gradient(to right, #0d6efd, #6610f2)", // Blue to Indigo
+          padding: "8px 16px",
+          borderRadius: 10,
+          marginBottom: 15,
+        }}
+      >
+        <h5 style={{ color: "#fff", margin: 0 }}>📊 Product Sales Overview</h5>
+      </div>
+
+      <Line
+        data={chartData[chartTimeRange]}
+        options={options}
+        height={350}
+        width={580}
+      />
+    </div>
+  </div>
+</div>
+
           </div>
         </div>
 

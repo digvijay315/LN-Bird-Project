@@ -341,7 +341,7 @@ const verifyPayment = async (paymentResponse) => {
             navigate("/"); // Redirect to home or any other page
           });
 
-          // generateInvoice()
+          generateInvoice(paymentVerificationResponse,formData,companyDetails)
       } else {
           Swal.fire({
             title: 'Payment Failed!',
@@ -414,7 +414,7 @@ contact: 'support@kiona.com',
 ];
 
 const generateInvoice = (paymentResponse, formData, companyDetails) => {
-console.log("Order Data:", formData);
+
 
 const doc = new jsPDF();
 const company = companyDetails?.[0] || {}; // Ensure company is defined
