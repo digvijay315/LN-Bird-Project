@@ -340,9 +340,9 @@ function Blog() {
                 >
                   Delete
                 </Button>
-                <Button variant="info"
+                {/* <Button variant="info"
                   onClick={() => editBlog(blog._id)}
-                >Edit</Button>
+                >Edit</Button> */}
               </td>
             </tr>
           ))}
