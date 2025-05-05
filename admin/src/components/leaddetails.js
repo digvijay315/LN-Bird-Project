@@ -3170,8 +3170,13 @@ const handleroadChange = (event) => {
                                                             icon: 'error',
                                                             title: 'Error!',
                                                             text: 'Something went wrong while matching leads. Please try again later.',
-                                                            confirmButtonColor: '#d33',
-                                                            confirmButtonText: 'OK',
+                                                            title: "Are you sure?",
+                                                            text: "You won't be able to revert this!",
+                                                            icon: "warning",
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: "#d33",
+                                                            cancelButtonColor: "#3085d6",
+                                                            confirmButtonText: "Yes, update it!",
                                                           });
                                                         } finally
                                                         {

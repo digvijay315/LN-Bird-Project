@@ -22,6 +22,7 @@ const upload1 = require('../middlewares/multifile');
 const { add_activity, view_activity, remove_activity, update_activity, view_activitybyid } = require('../controllers/addactivity');
 const { sendmessage, makecall } = require('../controllers/sendsms');
 const {sendwhatsapp,setWhatsAppWebhook, sendWhatsAppTextMessage, rcvmessage} = require('../controllers/sendwhatsapp');
+const { add_leadscore, view_leadscore, delete_leadscore } = require('../controllers/leadscore');
 
 
 
@@ -173,6 +174,11 @@ router.get('/get-qr-code',sendwhatsapp)
 router.post('/setwebhook',setWhatsAppWebhook)
 router.post('/sendwhatsappmessage',sendWhatsAppTextMessage)
 router.post('/rcvmessage',rcvmessage)
+
+
+router.post('/addleadscore',add_leadscore)
+router.get('/viewleadscore',view_leadscore)
+router.delete('/deleteleadscore/:_id',delete_leadscore)
 
 
 module.exports=router;

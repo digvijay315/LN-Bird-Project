@@ -14,7 +14,47 @@ import { useLocation } from 'react-router-dom';
 
 function Task_form() {
 
+//============================================ fetch data for call fields start==================================================
 
+ useEffect(()=>{fetchdataforcallfields()},[])
+    const[callreason,setcallreason]=useState([]);
+    const[calldirection,setcalldirection]=useState([]);
+    const[callstatus,setcallstatus]=useState([]);
+    const[callresult,setcallresult]=useState([]);
+    const fetchdataforcallfields=async(event)=>
+      {
+        
+        try {
+          const resp=await api.get('viewleadscore')
+
+          // Extract all reasons and remove duplicates
+              const uniqueReasons = [
+                ...new Set(resp.data.score.map(item => item.reason))
+              ];
+            setcallreason(uniqueReasons)
+
+            const uniquedirection = [
+              ...new Set(resp.data.score.map(item => item.direction))
+            ];
+            setcalldirection(uniquedirection)
+
+            const uniquestatus = [
+              ...new Set(resp.data.score.map(item => item.status))
+            ];
+            setcallstatus(uniquestatus)
+
+            const uniqueresult = [
+              ...new Set(resp.data.score.map(item => item.result))
+            ];
+            setcallresult(uniqueresult)
+        } catch (error) {
+          console.log(error);
+        }
+      
+      }
+
+
+// =======================================fetch data for call fields end==========================================================
 
 
   
@@ -1489,9 +1529,9 @@ const handleTimeChange = (e) => {
                         
                         <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date} on time {calltask.due_time}.</p></div>
                         <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
-                    <option>Select</option>
+                    <option>---Select---</option>
                         {
-                            reason.map(item=>
+                            callreason.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -1582,9 +1622,9 @@ const handleTimeChange = (e) => {
                 <div className="row mt-2">
                     
                     <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
+                    <option>---Select---</option>
                         {
-                            direction.map(item=>
+                            calldirection.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -1593,9 +1633,9 @@ const handleTimeChange = (e) => {
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
+                    <option>---Select---</option>
                         {
-                            status.map(item=>
+                            callstatus.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -1611,9 +1651,9 @@ const handleTimeChange = (e) => {
                 <div className="col-md-4"> </div>
 
                     <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
+                    <option>---Select---</option>
                        {
-                        result.map(item=>
+                        callresult.map(item=>
                             (
                                 <option>{item}</option>
                             )

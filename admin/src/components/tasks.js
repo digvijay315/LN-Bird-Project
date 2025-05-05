@@ -29,6 +29,51 @@ import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 
 function Tasks() {
+
+// ==============================================fetch data for call fields start=================================================
+
+           useEffect(()=>{fetchdataforcallfields()},[])
+              const[callreason,setcallreason]=useState([]);
+              const[calldirection,setcalldirection]=useState([]);
+              const[callstatus,setcallstatus]=useState([]);
+              const[callresult,setcallresult]=useState([]);
+              const fetchdataforcallfields=async(event)=>
+                {
+                  
+                  try {
+                    const resp=await api.get('viewleadscore')
+          
+                    // Extract all reasons and remove duplicates
+                        const uniqueReasons = [
+                          ...new Set(resp.data.score.map(item => item.reason))
+                        ];
+                      setcallreason(uniqueReasons)
+          
+                      const uniquedirection = [
+                        ...new Set(resp.data.score.map(item => item.direction))
+                      ];
+                      setcalldirection(uniquedirection)
+          
+                      const uniquestatus = [
+                        ...new Set(resp.data.score.map(item => item.status))
+                      ];
+                      setcallstatus(uniquestatus)
+          
+                      const uniqueresult = [
+                        ...new Set(resp.data.score.map(item => item.result))
+                      ];
+                      setcallresult(uniqueresult)
+                  } catch (error) {
+                    console.log(error);
+                  }
+                
+                }
+
+
+// ===============================================fetch data for call fields end=====================================================
+
+
+
     const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
         "Angola +244","Anguilla +1264","Antarctica +672","Antigua and Barbuda +1268","Argentina +54","Armenia +374",
         "Aruba +297","Australia +61","Austria +43","Azerbaijan +994","Bahamas +1242","Bahrain +973","Bangladesh +880",
@@ -3159,7 +3204,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.reason}</option>
                     <option>---Select---</option>
                         {
-                            reason.map(item=>
+                            callreason.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -3242,7 +3287,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.direction}</option>
                     <option>---Select---</option>
                         {
-                            direction.map(item=>
+                            calldirection.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -3254,7 +3299,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.status}</option>
                     <option>---Select---</option>
                         {
-                            status.map(item=>
+                            callstatus.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -3273,7 +3318,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.result}</option>
                     <option>---Select---</option>
                        {
-                        result.map(item=>
+                        callresult.map(item=>
                             (
                                 <option>{item}</option>
                             )
@@ -3566,7 +3611,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.reason}</option>
                     <option>---Select---</option>
                         {
-                            reason.map(item=>
+                            callreason.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -3651,7 +3696,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.direction}</option>
                     <option>---Select---</option>
                         {
-                            direction.map(item=>
+                            calldirection.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -3663,7 +3708,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.status}</option>
                     <option>---Select---</option>
                         {
-                            status.map(item=>
+                            callstatus.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -3682,7 +3727,7 @@ sitevisitdata.map((item)=>
                     <option>{calltask.result}</option>
                     <option>---Select---</option>
                        {
-                        result.map(item=>
+                        callresult.map(item=>
                             (
                                 <option>{item}</option>
                             )

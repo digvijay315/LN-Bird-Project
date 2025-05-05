@@ -127,12 +127,12 @@ button:hover{
     transform: scale(1.2);
     
 }
-#call{
+#call1{
     transition: transform .2s;
     background-color: transparent;
     
 }
-#call:hover
+#call1:hover
 {
     transform: scale(1.2);
     

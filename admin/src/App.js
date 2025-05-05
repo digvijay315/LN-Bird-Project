@@ -53,6 +53,7 @@ import Sendwhatsapp from './components/sendwhatsapp.js';
 import WhatsAppLogin from './components/sendwhatsapp.js';
 import Crmsettings from './components/settings.js';
 import Leadscoresettings from './components/leadscoresettings.js';
+import Whatsapplogin from './components/whatsapplogin.js';
 
 function App() {
   return (
@@ -100,6 +101,7 @@ function App() {
       <Route path='/sendmail' element={<Sendmail/>}/>
       <Route path='/crmsettings' element={<Crmsettings/>}/>
       <Route path='/leadscoreseetings' element={<Leadscoresettings/>}/>
+      <Route path='/whatsapplogin' element={<Whatsapplogin/>}/>
     </Routes>  
      {/* <WhatsAppLogin/>  */}
    </div>
