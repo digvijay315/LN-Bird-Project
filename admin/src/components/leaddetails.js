@@ -2552,7 +2552,7 @@ const handleroadChange = (event) => {
             isNaN(lat1) || isNaN(lon1) ||
             isNaN(lat2) || isNaN(lon2)
           ) {
-            console.warn("Invalid coordinates:", { lat1, lon1, lat2, lon2 });
+            // console.warn("Invalid coordinates:", { lat1, lon1, lat2, lon2 });
             return null; // or return 0 or -1 based on your use-case
           }
         
@@ -2570,6 +2570,48 @@ const handleroadChange = (event) => {
         
           return distance;
         }
+
+
+       useEffect(()=>{fetchleadscoredata()},[])
+          const[leadscoredata,setleadscoredata]=useState([]);
+          const fetchleadscoredata=async(event)=>
+            {
+              
+              try {
+                const resp=await api.get('viewleadscore')
+                setleadscoredata(resp.data.score)
+              } catch (error) {
+                console.log(error);
+              }
+            
+            }
+
+            useEffect(()=>{fetchalltaskdata()},[])
+      const[alltaskdata,setalltaskdata]=useState([]);
+      const fetchalltaskdata=async(event)=>
+      {
+        
+        try {
+          const resp=await api.get('viewcalltask')
+          const callincoming=resp.data.call_task
+  
+          const resp1=await api.get('viewmailtask')
+          const mailincoming=resp1.data.mail_task
+
+          const resp2=await api.get('viewmeetingtask')
+          const meetingincoming=resp2.data.meetingtask
+  
+          const resp3=await api.get('viewsitevisit')
+          const sitevisitincoming=resp3.data.sitevisit
+  
+          setalltaskdata([...callincoming,...mailincoming,...meetingincoming,...sitevisitincoming])
+        } catch (error) {
+          console.log(error);
+        }
+      
+      }
+     
+      
 
         const[allunitsdetails,setallunitsdetails]=useState([])
         
@@ -2589,6 +2631,14 @@ const handleroadChange = (event) => {
               // 2. Process all leads
               const updatedleads = await Promise.all(
                 data.map(async (singlelead) => {
+                  const fullname = `${singlelead.title} ${singlelead.first_name} ${singlelead.last_name}`.trim();
+
+                  const leadscoretaskdata = alltaskdata.filter((item) => {
+                    return fullname === item.lead;
+                  });
+                console.log(leadscoretaskdata);
+                
+
                   const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.requirment;
                   const minprice = parseFloat(singlelead.budget_min);
                   const maxprice = parseFloat(singlelead.budget_max);
@@ -2608,8 +2658,40 @@ const handleroadChange = (event) => {
                   const range = singlelead.range;
 
                   const matcheddeals = [];
+                  let score = 0;
 
-                  let score=0
+                  if (leadscoretaskdata.length >= 1) {
+                    console.log(leadscoredata);
+                  
+                    leadscoredata.forEach((item) => {
+                      leadscoretaskdata.forEach((item1) => {
+                        if (item1.activity_type.trim() === "Call") {
+                     
+                          if (
+                            item1.activity_type.trim() === item.available_for.trim() &&
+                            item1.direction.trim() === item.direction.trim() &&
+                            item1.reason.trim() === item.reason.trim() &&
+                            item1.status.trim() === item.status.trim() &&
+                            item1.result.trim() === item.result.trim()
+                          ) {
+                            
+                            
+                            score += parseFloat(item.score);
+                          }
+                        } else if (item1.activity_type.trim() === "Mail") {
+                          if (
+                            item1.activity_type.trim() === item.available_for.trim() &&
+                            item1.direction.trim() === item.email_direction.trim() &&
+                            item1.subject.trim()=== item.email_category.trim() &&
+                            item1.status.trim()=== item.email_status.trim()
+                          ) {
+                            score += parseFloat(item.email_score);
+                          }
+                        }
+                      });
+                    });
+                  }
+                  
                   if (
                     Array.isArray(areaproject) &&
                     areaproject.length > 0 &&
@@ -2894,7 +2976,7 @@ const handleroadChange = (event) => {
           };
         
           updateLeads();
-        }, [data, dealdata]);
+        }, [data, dealdata,alltaskdata]);
         
         
 

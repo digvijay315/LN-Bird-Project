@@ -18,6 +18,9 @@ import { ToastContainer,toast } from "react-toastify";
 function Leadscoresettings() {
 
 
+// =====================================fetch lead score data start=====================================================================
+
+
     useEffect(()=>{fetchdata()},[])
     const[data,setdata]=useState([]);
     const fetchdata=async(event)=>
@@ -32,12 +35,18 @@ function Leadscoresettings() {
       
       }
 
+// ====================================================lead score fetching end=======================================================
+
+
+// =================================pagination and data list view start===========================================================
+
   const allColumns = [
     { id: 'sno', name: '#' },
-    { id: 'reason', name: 'Reason' },
-    { id: 'direction', name: 'Call_Direction' },
-    { id: 'status', name: 'Call_Status' },
-    { id: 'result', name: 'Result' },
+    { id: 'available_for', name: 'Type' },
+    { id: 'reason', name: 'Call Reason/Email Subject' },
+    { id: 'direction', name: 'Direction' },
+    { id: 'status', name: 'Status' },
+    { id: 'result', name: 'Result/Email_Subject' },
     { id: 'score', name: 'Score' },
 
   ];
@@ -157,6 +166,11 @@ function Leadscoresettings() {
         );
       };
 
+//========================================= pagination and data list view end======================================================
+
+
+//======================================= select all and single select code start=================================================
+
 
             const [selectedItems, setSelectedItems] = useState([]); // To track selected rows
             const [selectAll, setSelectAll] = useState(false); // To track the state of the "Select All" checkbox
@@ -185,14 +199,20 @@ function Leadscoresettings() {
         }
       };
 
+// ====================================select all and single select code end=======================================================
+
+
+const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction:"",status:"",result:"",score:"",
+                                            email_category:"",email_direction:"",email_status:"",email_score:"",email_subject:""
+});
+
+//======================================= modal for add lead score for call start==================================================
 
        const [show1, setshow1] = useState(false);
       
        const handleClose1 = () => setshow1(false);
 
        const handleShow1=async()=>setshow1(true);
-
-       const [leadscore, setleadscore] = useState({reason:"",direction:"",status:"",result:"",score:""});
 
        const [reasons, setReasons] = useState(["Site Visit", "Builder Discount/Scheme","Construction Update","Documentation","Inventory Availability","Inventory Rights for Listing","Legal",
                                                 " Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
@@ -220,7 +240,7 @@ function Leadscoresettings() {
         }
       };
 
-      const [directions, setdirections] = useState(["Outgoing Call", " Inccoming Call",]);
+      const [directions, setdirections] = useState(["Outgoing Call", "Incoming Call",]);
           const [showdirectionInput, setShowdirectionInput] = useState(false);
           const [newdirection, setNewdirection] = useState(""); 
 
@@ -341,6 +361,145 @@ function Leadscoresettings() {
                 }
           
 
+//===============================================modal for add lead score for call end============================================
+
+
+//=========================================== modal for add lead score for email start===============================================
+
+    const [emailsubjects_purpose, setemailsubjects_purpose] = useState(["Payment Reminder", "Agreement Reminder"," Follow-Up","Meeting",     " Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+      "Matched Deal Update","Feedback","Document"," Site Visit Scheduling","Reschedule Attempt","Payment Follow-Up","Transactional Email",
+      "Meeting/Call Setup"," Initial Meeting Request"," Follow-Up Reminder"," Reconnect Post-Site Visit"," Urgency / Reminder",
+      "After Site Visit","Document Sharing","Booking Step","Occasion-based"," Greetin"," General Follow-Up","Informational"," Recap Email",
+      "Meeting Follow-Up"
+    ]);
+    const [showInputemailsubjects_purpose, setShowInputemailsubjects_purpose] = useState(false);
+    const [newemailsubjects_purpose, setNewemailsubjects_purpose] = useState(""); 
+
+    const handleSelectChangeemailsubjects_purpose = (e) => {
+    const value = e.target.value;
+    setleadscore({...leadscore,email_category:e.target.value});
+    if (value === "add_new") {
+      setShowInputemailsubjects_purpose(true);
+    } else {
+      setShowInputemailsubjects_purpose(false);
+    }
+    };
+
+    const handleAddemailsubjects_purpose = () => {
+    if (newemailsubjects_purpose.trim() !== "") {
+      setemailsubjects_purpose([...emailsubjects_purpose, newemailsubjects_purpose]);
+    setleadscore({...leadscore,email_category:newemailsubjects_purpose});
+    setNewemailsubjects_purpose("");
+    setShowInputemailsubjects_purpose(false);
+    }
+    };
+
+
+    const [emaildirections, setemaildirections] = useState(["Outgoing", " Inccoming",]);
+    const [showInputemaildirections, setShowInputemaildirections] = useState(false);
+    const [newemaildirections, setNewemaildirections] = useState(""); 
+
+    const handleSelectChangeemaildirections = (e) => {
+    const value = e.target.value;
+    setleadscore({...leadscore,email_direction:e.target.value});
+    if (value === "add_new") {
+      setShowInputemaildirections(true);
+    } else {
+      setShowInputemaildirections(false);
+    }
+    };
+
+    const handleAdddemaildirections = () => {
+    if (newemaildirections.trim() !== "") {
+      setemaildirections([...emaildirections, newemaildirections]);
+    setleadscore({...leadscore,email_direction:newemaildirections});
+    setNewemaildirections("");
+    setShowInputemaildirections(false);
+    }
+    };
+
+
+    const [emailstatus, setemailstatus] = useState(["Read", "Delivered","Undelivered","Bounced","Sent & Replied","Sent, No Response",
+      "Read & Replied","Unread","Replied","Read Only","Replied","Ignored","Clicked","Downloaded"," Opened","No Response"
+    ]);
+    const [showInputemailstatus, setShowInputemailstatus] = useState(false);
+    const [newemailstatus, setNewemailstatus] = useState(""); 
+
+    const handleSelectChangeemailstatus = (e) => {
+    const value = e.target.value;
+    setleadscore({...leadscore,email_status:e.target.value});
+    if (value === "add_new") {
+      setShowInputemailstatus(true);
+    } else {
+      setShowInputemailstatus(false);
+    }
+    };
+
+    const handleAdddemailstatus = () => {
+    if (newemailstatus.trim() !== "") {
+      setemailstatus([...emailstatus, newemailstatus]);
+    setleadscore({...leadscore,email_status:newemailstatus});
+    setNewemailstatus("");
+    setShowInputemailstatus(false);
+    }
+    };
+
+    const [emailsubject, setemailsubject] = useState(["Reminder: Your Payment is Due – Complete the Process", "Pending Payment for Your Property Booking",
+      "Secure Your Deal – Complete Payment Today"," Please Review & Sign the Property Agreement"," Action Needed: Property Agreement Pending",
+      " Reminder: Signature Required for Your Agreement"," Finalize Your Property – Complete the Agreement","Following Up on Your Property Inquiry"
+    ]);
+    const [showInputemailsubject, setShowInputemailsubject] = useState(false);
+    const [newemailsubject, setNewemailsubject] = useState(""); 
+
+    const handleSelectChangeemailsubject = (e) => {
+    const value = e.target.value;
+    setleadscore({...leadscore,email_subject:e.target.value});
+    if (value === "add_new") {
+      setShowInputemailsubject(true);
+    } else {
+      setShowInputemailsubject(false);
+    }
+    };
+
+    const handleAdddemailsubject = () => {
+    if (newemailsubject.trim() !== "") {
+      setemailsubject([...emailsubject, newemailsubject]);
+    setleadscore({...leadscore,email_subject:newemailsubject});
+    setNewemailsubject("");
+    setShowInputemailsubject(false);
+    }
+    };
+
+    const [emailscore, setemailscore] = useState(["1", "2","3","4","5","-1","-2"])
+    const [showInputemailscore, setShowInputemailscore] = useState(false);
+    const [newemailscore, setNewemailscore] = useState(""); 
+
+    const handleSelectChangeemailscore = (e) => {
+    const value = e.target.value;
+    setleadscore({...leadscore,email_score:e.target.value});
+    if (value === "add_new") {
+      setShowInputemailscore(true);
+    } else {
+      setShowInputemailscore(false);
+    }
+    };
+
+    const handleAdddemailscore = () => {
+    if (newemailscore.trim() !== "") {
+      setemailscore([...emailscore, newemailscore]);
+    setleadscore({...leadscore,email_score:newemailscore});
+    setNewemailscore("");
+    setShowInputemailscore(false);
+    }
+    };
+
+
+// ==============================================modal for add lead score for email end==================================================
+
+
+// ============================================delect select items code start====================================================
+
+
                   const deleteSelectedItems = async () => {
                           try {
                             if(selectedItems.length===0)
@@ -400,6 +559,9 @@ function Leadscoresettings() {
                                   
                                   }
                           },[selectedItems])
+
+//================================ delete code for selected items code end=========================================================
+
 
                 const [isHoveringDelete, setIsHoveringDelete] = useState(false);
 
@@ -512,11 +674,19 @@ function Leadscoresettings() {
                     />
                     {index + 1}
                   </StyledTableCell>
+
+                  <StyledTableCell 
+                    style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+                  >
+                  {item.available_for}
+        
+                  </StyledTableCell>
+
                   <StyledTableCell 
                     style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
                   >
                   {item.reason}
-        
+                  {item.email_category}
                
                   </StyledTableCell>
       
@@ -525,6 +695,7 @@ function Leadscoresettings() {
                    
                   >
                     {item.direction}
+                    {item.email_direction}
                   </StyledTableCell>
       
                   <StyledTableCell 
@@ -532,6 +703,7 @@ function Leadscoresettings() {
                    
                   >
                    {item.status}
+                   {item.email_status}
                   </StyledTableCell>
                 
                   <StyledTableCell 
@@ -539,6 +711,7 @@ function Leadscoresettings() {
                    
                   >
                    {item.result}
+                   {item.email_subject}
                   </StyledTableCell>
 
                   <StyledTableCell 
@@ -546,6 +719,7 @@ function Leadscoresettings() {
                    
                   >
                    {item.score}
+                   {item.email_score}
                   </StyledTableCell>
                    
          
@@ -568,6 +742,27 @@ function Leadscoresettings() {
                
                <div className="row">
         
+                        <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Available For</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.available_for}
+                              onChange={(e)=>setleadscore({...leadscore,available_for:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Call</option>
+                              <option>Mail</option>
+                              <option>Meeting</option>
+                              <option>Site Visit</option>
+                            </select>
+                          </div>
+
+{/*==================================================== call entry start======================================================== */}
+
+
+                          <div id='call' className='row' style={{padding:"10px",display:leadscore.available_for == "Call" ? "flex":"none"}}>
                              <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
                             <label className="labels" style={{ fontSize: "12px" }}>Reason</label>
                             <select
@@ -581,6 +776,7 @@ function Leadscoresettings() {
                               {reasons.map((reason, idx) => (
                                 <option key={idx} value={reason}>{reason}</option>
                               ))}
+                              
                               <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
                             </select>
 
@@ -626,7 +822,7 @@ function Leadscoresettings() {
                                 <input
                                   type="text"
                                   className="form-control form-control-sm"
-                                  placeholder="Enter new reason"
+                                  placeholder="Enter new direction"
                                   value={newdirection}
                                   onChange={(e) => setNewdirection(e.target.value)}
                                   style={{ fontSize: "12px" }}
@@ -663,7 +859,7 @@ function Leadscoresettings() {
                                 <input
                                   type="text"
                                   className="form-control form-control-sm"
-                                  placeholder="Enter new reason"
+                                  placeholder="Enter new status"
                                   value={newcallstatus}
                                   onChange={(e) => setNewcallstatus(e.target.value)}
                                   style={{ fontSize: "12px" }}
@@ -700,7 +896,7 @@ function Leadscoresettings() {
                                 <input
                                   type="text"
                                   className="form-control form-control-sm"
-                                  placeholder="Enter new reason"
+                                  placeholder="Enter new result"
                                   value={newcallresult}
                                   onChange={(e) => setNewcallresult(e.target.value)}
                                   style={{ fontSize: "12px" }}
@@ -737,7 +933,7 @@ function Leadscoresettings() {
                                 <input
                                   type="text"
                                   className="form-control form-control-sm"
-                                  placeholder="Enter new reason"
+                                  placeholder="Enter new score"
                                   value={newcallscore}
                                   onChange={(e) => setNewcallscore(e.target.value)}
                                   style={{ fontSize: "12px" }}
@@ -752,7 +948,199 @@ function Leadscoresettings() {
                               </div>
                             )}
                           </div>
-                       
+                          </div>
+
+  {/*==================================================== call entry end========================================================== */}
+
+
+{/*======================================= email entry start ==================================================================*/}
+
+                          <div id='email' className='row' style={{padding:"10px",display:leadscore.available_for == "Mail" ? "flex":"none"}}>
+                             <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Email Category/Purpose</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.emailsubjects_purpose}
+                              onChange={handleSelectChangeemailsubjects_purpose}
+                            >
+                              <option value="">---Select---</option>
+                              {emailsubjects_purpose.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
+                            </select>
+
+                            {showInputemailsubjects_purpose && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new subject/purpose"
+                                  value={newemailsubjects_purpose}
+                                  onChange={(e) => setNewemailsubjects_purpose(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddemailsubjects_purpose}
+                                >
+                                  Add Subject/Purpose
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Email Direction</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.email_direction}
+                              onChange={handleSelectChangeemaildirections}
+                            >
+                              <option value="">---Select---</option>
+                              {emaildirections.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
+                            </select>
+
+                            {showInputemaildirections && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new direction"
+                                  value={newemaildirections}
+                                  onChange={(e) => setNewemaildirections(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAdddemaildirections}
+                                >
+                                  Add Direction
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Email Status</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.email_status}
+                              onChange={handleSelectChangeemailstatus}
+                            >
+                              <option value="">---Select---</option>
+                              {emailstatus.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
+                            </select>
+
+                            {showInputemailstatus && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new status"
+                                  value={newemailstatus}
+                                  onChange={(e) => setNewemailstatus(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAdddemailstatus}
+                                >
+                                  Add Status
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Email Subject</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.email_subject}
+                              onChange={handleSelectChangeemailsubject}
+                            >
+                              <option value="">---Select---</option>
+                              {emailsubject.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
+                            </select>
+
+                            {showInputemailsubject && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new subject"
+                                  value={newemailsubject}
+                                  onChange={(e) => setNewemailsubject(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAdddemailsubject}
+                                >
+                                  Add Subject
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Email Score</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.email_score}
+                              onChange={handleSelectChangeemailscore}
+                            >
+                              <option value="">---Select---</option>
+                              {emailscore.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
+                            </select>
+
+                            {showInputemailscore && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new score"
+                                  value={newemailscore}
+                                  onChange={(e) => setNewemailscore(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAdddemailscore}
+                                >
+                                  Add Score
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                          </div>
         
                </div>
                 

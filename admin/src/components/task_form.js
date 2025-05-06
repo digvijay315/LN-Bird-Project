@@ -21,6 +21,10 @@ function Task_form() {
     const[calldirection,setcalldirection]=useState([]);
     const[callstatus,setcallstatus]=useState([]);
     const[callresult,setcallresult]=useState([]);
+    const[mailsubject,setmailsubject]=useState([]);
+    const[maildirection,setmaildirection]=useState([]);
+    const[mailstatus,setmailstatus]=useState([]);
+
     const fetchdataforcallfields=async(event)=>
       {
         
@@ -47,11 +51,27 @@ function Task_form() {
               ...new Set(resp.data.score.map(item => item.result))
             ];
             setcallresult(uniqueresult)
+
+            const uniquesubject = [
+              ...new Set(resp.data.score.map(item => item.email_category))
+            ].filter(subject => subject && subject.trim() !== "");
+            setmailsubject(uniquesubject)
+
+            const uniquemaildirection = [
+              ...new Set(resp.data.score.map(item => item.email_direction))
+            ].filter(subject => subject && subject.trim() !== "");
+            setmaildirection(uniquemaildirection)
+
+            const uniquemailstatus = [
+              ...new Set(resp.data.score.map(item => item.email_status))
+            ].filter(subject => subject && subject.trim() !== "");
+            setmailstatus(uniquemailstatus)
         } catch (error) {
           console.log(error);
         }
       
       }
+
 
 
 // =======================================fetch data for call fields end==========================================================
@@ -1839,12 +1859,13 @@ const handleTimeChange = (e) => {
                  
 
                     <div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
-                    <option>Select</option>
-                        <option>Payment Reminder</option>
-                        <option>Agreement Reminder</option>
-                        <option>Feedback</option>
-                        <option>Matched inventory update</option>
-                        <option>Document Required for Submision</option>
+                    <option>---Select---</option>
+                       {
+                        mailsubject.map((item)=>
+                        (
+                          <option>{item}</option>
+                        ))
+                       }
                         </select>
                         </div>
 
@@ -1873,7 +1894,7 @@ const handleTimeChange = (e) => {
                     <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                         {
-                            direction.map(item=>
+                            maildirection.map(item=>
                                 (
                                     <option>{item}</option>
                                 )
@@ -1882,11 +1903,14 @@ const handleTimeChange = (e) => {
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
-                       <option>Read</option>
-                       <option>Delivered</option>
-                       <option>Bounced</option>
-                       <option>Undelivered</option>
+                    <option>---Select---</option>
+                    {
+                            mailstatus.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
                         </select>
                         </div>
                     <div className="col-md-4"></div>

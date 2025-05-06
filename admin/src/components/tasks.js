@@ -37,7 +37,11 @@ function Tasks() {
               const[calldirection,setcalldirection]=useState([]);
               const[callstatus,setcallstatus]=useState([]);
               const[callresult,setcallresult]=useState([]);
-              const fetchdataforcallfields=async(event)=>
+              const[mailsubject,setmailsubject]=useState([]);
+              const[maildirection,setmaildirection]=useState([]);
+              const[mailstatus,setmailstatus]=useState([]);
+
+              const fetchdataforcallfields=async()=>
                 {
                   
                   try {
@@ -63,6 +67,23 @@ function Tasks() {
                         ...new Set(resp.data.score.map(item => item.result))
                       ];
                       setcallresult(uniqueresult)
+
+                      const uniquesubject = [
+                        ...new Set(resp.data.score.map(item => item.email_category))
+                      ].filter(subject => subject && subject.trim() !== "");
+                      
+                      setmailsubject(uniquesubject)
+
+                      
+                      const uniquemaildirection = [
+                        ...new Set(resp.data.score.map(item => item.email_direction))
+                      ].filter(subject => subject && subject.trim() !== "");
+                      setmaildirection(uniquemaildirection)
+
+                      const uniquemailstatus = [
+                        ...new Set(resp.data.score.map(item => item.email_status))
+                      ].filter(subject => subject && subject.trim() !== "");
+                      setmailstatus(uniquemailstatus)
                   } catch (error) {
                     console.log(error);
                   }
@@ -3514,11 +3535,12 @@ sitevisitdata.map((item)=>
 <div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
     <option>{mailtask.subject}</option>
     <option>---Select---</option>
-    <option>Payment Reminder</option>
-    <option>Agreement Reminder</option>
-    <option>Feedback</option>
-    <option>Matched inventory update</option>
-    <option>Document Required for Submision</option>
+    {
+      mailsubject.map((item)=>
+      (
+        <option>{item}</option>
+      ))
+    }
     </select>
     </div>
 
@@ -3542,11 +3564,11 @@ sitevisitdata.map((item)=>
 
 <div className="row mt-2">
 
-<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
   <option>{mailtask.direction}</option>
   <option>---Select---</option>
     {
-        direction.map(item=>
+        maildirection.map(item=>
             (
                 <option>{item}</option>
             )
@@ -3554,24 +3576,27 @@ sitevisitdata.map((item)=>
     }
     </select>
     </div>
-    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
     <option>{mailtask.status}</option>
     <option>---Select---</option>
-   <option>Read</option>
-   <option>Delivered</option>
-   <option>Bounced</option>
-   <option>Undelivered</option>
+    {
+        mailstatus.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
     </select>
     </div>
 <div className="col-md-4"></div>
 </div>
 <div className="row mt-3">
-<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" /></div>
+<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
 <div className="col-md-8"> </div>
 
 <div className="col-md-4"></div>
 
-<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}}/></div>
+<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}} onChange={(e)=>setmailtask({...mailtask,feedback:e.target.value})}/></div>
 <div className="col-md-12"><br></br></div>
 <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
  </div>
@@ -3955,11 +3980,11 @@ sitevisitdata.map((item)=>
 
 <div className="row mt-2">
 
-<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
   <option>{mailtask.direction}</option>
   <option>---Select---</option>
     {
-        direction.map(item=>
+        maildirection.map(item=>
             (
                 <option>{item}</option>
             )
@@ -3967,24 +3992,27 @@ sitevisitdata.map((item)=>
     }
     </select>
     </div>
-    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
     <option>{mailtask.status}</option>
     <option>---Select---</option>
-   <option>Read</option>
-   <option>Delivered</option>
-   <option>Bounced</option>
-   <option>Undelivered</option>
+    {
+        mailstatus.map(item=>
+            (
+                <option>{item}</option>
+            )
+        )
+    }
     </select>
     </div>
 <div className="col-md-4"></div>
 </div>
 <div className="row mt-3">
-<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" /></div>
+<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
 <div className="col-md-8"> </div>
 
 <div className="col-md-4"></div>
 
-<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}}/></div>
+<div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}} onChange={(e)=>setmailtask({...mailtask,feedback:e.target.value})}/></div>
 <div className="col-md-12"><br></br></div>
 <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
  </div>

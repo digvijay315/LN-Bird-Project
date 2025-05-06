@@ -6,10 +6,14 @@ const addleadscore = require('../models/leadscore');
 const add_leadscore = async (req, res) => {
     try {
 
-    const {reason,direction,status,result,score} = req.body;
+    const {available_for,reason,direction,status,result,score,
+            email_category,email_direction,email_status,email_score,email_subject
+    } = req.body;
    
 
-      const newadd_leadscore = new addleadscore({reason,direction,status,result,score});
+      const newadd_leadscore = new addleadscore({available_for,reason,direction,status,result,score,
+        email_category,email_direction,email_status,email_score,email_subject
+      });
   
       // Save the deal to the database
       const resp = await newadd_leadscore.save();
@@ -17,7 +21,7 @@ const add_leadscore = async (req, res) => {
   
     } catch (error) {
       console.error('Error adding lead criteria:', error);
-      res.status(500).send({ message: 'Error occurred while adding deal', error: error.message });
+      res.status(500).send({ message: 'Error occurred while adding lead score', error: error.message });
     }
   };
 
