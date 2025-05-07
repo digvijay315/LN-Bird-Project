@@ -5,6 +5,7 @@ const axios = require('axios');
 const { htmlToText } = require('html-to-text');
 
 
+  const accesstoken='681a08ab77ab7'
 
 const sendwhatsapp = async (req, res) => {
   try {
@@ -91,7 +92,7 @@ const plainTextMessage = htmlToText(message1, {
   if (rawNumber.length === 10) {
     rawNumber = '91' + rawNumber;
   }
-console.log(media_url);
+// console.log(media_url);
 
 
   try {
@@ -100,13 +101,14 @@ console.log(media_url);
       type: 'media',
       media_url,
       message:plainTextMessage,
-      instance_id: '6807851782359', // replace with your actual instance_id
-      access_token: '68076d9808e66'
+      instance_id: '681A091F4E7DE', // replace with your actual instance_id
+      access_token: accesstoken
     };
+
 
    
 
-    const response = await axios.post('https://wamaster.metalivingrich.in/api/send', payload, {
+    const response = await axios.post('https://vip.metalivingrich.in/api/send', payload, {
       headers: {
         'Content-Type': 'application/json'
       }

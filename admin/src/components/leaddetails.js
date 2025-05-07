@@ -2636,9 +2636,7 @@ const handleroadChange = (event) => {
                   const leadscoretaskdata = alltaskdata.filter((item) => {
                     return fullname === item.lead;
                   });
-                console.log(leadscoretaskdata);
-                
-
+               
                   const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.requirment;
                   const minprice = parseFloat(singlelead.budget_min);
                   const maxprice = parseFloat(singlelead.budget_max);
@@ -2659,10 +2657,10 @@ const handleroadChange = (event) => {
 
                   const matcheddeals = [];
                   let score = 0;
+                  let leadstage=""
 
-                  if (leadscoretaskdata.length >= 1) {
-                    console.log(leadscoredata);
-                  
+                  if (leadscoretaskdata.length >=1) {
+                   
                     leadscoredata.forEach((item) => {
                       leadscoretaskdata.forEach((item1) => {
                         if (item1.activity_type.trim() === "Call") {
@@ -2673,11 +2671,60 @@ const handleroadChange = (event) => {
                             item1.reason.trim() === item.reason.trim() &&
                             item1.status.trim() === item.status.trim() &&
                             item1.result.trim() === item.result.trim()
-                          ) {
-                            
-                            
-                            score += parseFloat(item.score);
-                          }
+                          ) 
+                          
+                          {
+                            const formMap = {
+                              "Site Visit Completed Form": "SiteVisit",
+                              "Meeting Completed Form": "Meeting",
+                              "Negotiation Form": "Negotiation",
+                              "Site Visit Scheduled Form": "Site Visit scheduled",
+                              "Meeting Scheduled Form": "Meeting scheduled",
+                              "Requirment Form": "Requirement",
+                            };
+                            const requirements = item.stage_requirment || [];
+                            const incompleteForms = [];
+
+                            requirements.forEach((formName) => {
+                              const expectedRequirment = formMap[formName]?.toLowerCase();
+                          
+                              const match = leadscoretaskdata?.find(
+                                (form) =>
+                                  form.activity_type?.toLowerCase() === expectedRequirment &&
+                                  form.complete === "true"
+                              );
+                          
+                              if (!match) {
+                                incompleteForms.push(formName);
+                              }
+                            });
+                        // After collecting the incomplete forms
+                        if (incompleteForms.length > 0) {
+                          Swal.fire({
+                            title: `Incomplete Forms Detected for ${item1.lead}`,
+                            text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, fill the form',
+                            cancelButtonText: 'No, skip',
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              // Open all forms that are incomplete
+                              // incompleteForms.forEach(openForm); // Replace with your form-opening logic
+                              navigate('/tasks')
+                            } else {
+                              // Skip logic, proceed with the score calculation
+                              console.log("Skipping forms:", incompleteForms);
+                              score += parseFloat(item.score);  // Calculate the score if forms are skipped
+                            }
+                          });
+                        } else {
+                          // If no incomplete forms, directly calculate the score
+                          score += parseFloat(item.score);
+                          leadstage=item.leadstage
+                        }
+                        
+                      }
                         } else if (item1.activity_type.trim() === "Mail") {
                           if (
                             item1.activity_type.trim() === item.available_for.trim() &&
@@ -2685,7 +2732,55 @@ const handleroadChange = (event) => {
                             item1.subject.trim()=== item.email_category.trim() &&
                             item1.status.trim()=== item.email_status.trim()
                           ) {
-                            score += parseFloat(item.email_score);
+                            const formMap = {
+                              "Site Visit Completed Form": "SiteVisit",
+                              "Meeting Completed Form": "Meeting",
+                              "Negotiation Form": "Negotiation",
+                              "Site Visit Scheduled Form": "SiteVisit scheduled",
+                              "Meeting Scheduled Form": "Meeting scheduled",
+                              "Requirment Form": "Requirement",
+                            };
+                            const requirements = item.stage_requirment || [];
+                            const incompleteForms = [];
+
+                            requirements.forEach((formName) => {
+                              const expectedRequirment = formMap[formName]?.toLowerCase();
+                          
+                              const match = leadscoretaskdata?.find(
+                                (form) =>
+                                  form.activity_type?.toLowerCase() === expectedRequirment &&
+                                  form.complete === "true"
+                              );
+                          
+                              if (!match) {
+                                incompleteForms.push(formName);
+                              }
+                            });
+                        // After collecting the incomplete forms
+                        if (incompleteForms.length > 0) {
+                          Swal.fire({
+                            title: `Incomplete Forms Detected for ${item1.lead}`,
+                            text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes, fill the form',
+                            cancelButtonText: 'No, skip',
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              // Open all forms that are incomplete
+                              // incompleteForms.forEach(openForm); // Replace with your form-opening logic
+                              navigate('/tasks')
+                            } else {
+                              // Skip logic, proceed with the score calculation
+                              console.log("Skipping forms:", incompleteForms);
+                              score += parseFloat(item.email_score);  // Calculate the score if forms are skipped
+                            }
+                          });
+                        } else {
+                          // If no incomplete forms, directly calculate the score
+                          score += parseFloat(item.email_score);
+                          leadstage=item.leadstage
+                        }
                           }
                         }
                       });
@@ -2953,6 +3048,7 @@ const handleroadChange = (event) => {
                     matcheddeals: matcheddeals.map((lead) => lead._id),
                     matchingdeal: matcheddeals.length,
                     score:score,
+                    stage:leadstage
                   };
                 })
               );
@@ -3642,9 +3738,9 @@ const handleroadChange = (event) => {
                                                     confirmButtonColor: '#d33',
                                                     confirmButtonText: 'OK',
                                                   });
-                                                  setTimeout(() => {
-                                                   window.location.reload()
-                                                  }, 2000);
+                                                  // setTimeout(() => {
+                                                  //  window.location.reload()
+                                                  // }, 2000);
                                             
                                                 }
                                                 console.log(res);

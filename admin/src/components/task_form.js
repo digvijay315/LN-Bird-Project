@@ -21,9 +21,14 @@ function Task_form() {
     const[calldirection,setcalldirection]=useState([]);
     const[callstatus,setcallstatus]=useState([]);
     const[callresult,setcallresult]=useState([]);
+
     const[mailsubject,setmailsubject]=useState([]);
     const[maildirection,setmaildirection]=useState([]);
     const[mailstatus,setmailstatus]=useState([]);
+
+    const[meetingreason,setmeetingreason]=useState([]);
+    const[meetingstatus,setmeetingstatus]=useState([]);
+    const[meetingresult,setmeetingresult]=useState([]);
 
     const fetchdataforcallfields=async(event)=>
       {
@@ -66,6 +71,22 @@ function Task_form() {
               ...new Set(resp.data.score.map(item => item.email_status))
             ].filter(subject => subject && subject.trim() !== "");
             setmailstatus(uniquemailstatus)
+
+            const uniquemeetingreason = [
+              ...new Set(resp.data.score.map(item => item.meeting_reason))
+            ].filter(subject => subject && subject.trim() !== "");
+            setmeetingreason(uniquemeetingreason)
+
+            const uniquemeetingstatus = [
+              ...new Set(resp.data.score.map(item => item.meeting_status))
+            ].filter(subject => subject && subject.trim() !== "");
+            setmeetingstatus(uniquemeetingstatus)
+
+            const uniquemeetingresult = [
+              ...new Set(resp.data.score.map(item => item.meeting_result))
+            ].filter(subject => subject && subject.trim() !== "");
+            setmeetingresult(uniquemeetingresult)
+
         } catch (error) {
           console.log(error);
         }
@@ -2384,11 +2405,15 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                   
 
                     <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
-                    <option>Select</option>
-                        <option>Negotiation</option>
-                        <option>Discuss</option>
-                        <option>Agreement</option>
-                        <option>Token</option>
+                    <option>---Select---</option>
+                    {
+                            meetingreason.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+                     
                         </select>
                         </div>
                     <div className="col-md-8"></div>
@@ -2544,18 +2569,25 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 <div className="row mt-2">
                     
                     <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
-                      <option>Conducted</option>
-                      <option>Cancelled</option>
-                      <option> Postponed</option>
+                    <option>---Select---</option>
+                    {
+                            meetingstatus.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
                         </select>
                         </div>
                         <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
-                      <option>Deal Done</option>
-                      <option>Negotiation Uncomplete</option>
-                      <option>Deal Not Done</option>
-                      <option>Site Visit</option>
+                    <option>---Select---</option>
+                    {
+                            meetingresult.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
                         </select>
                         </div>
                     <div className="col-md-4"></div>

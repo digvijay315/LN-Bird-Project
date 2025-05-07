@@ -7,12 +7,16 @@ const add_leadscore = async (req, res) => {
     try {
 
     const {available_for,reason,direction,status,result,score,
-            email_category,email_direction,email_status,email_score,email_subject
-    } = req.body;
+            email_category,email_direction,email_status,email_score,email_subject,
+            meeting_reason,meeting_status,meeting_result,meeting_score,
+            leadstage,dealstage,stage_requirment
+    } = req.body;   
    
 
       const newadd_leadscore = new addleadscore({available_for,reason,direction,status,result,score,
-        email_category,email_direction,email_status,email_score,email_subject
+        email_category,email_direction,email_status,email_score,email_subject,
+        meeting_reason,meeting_status,meeting_result,meeting_score,
+        leadstage,dealstage,stage_requirment
       });
   
       // Save the deal to the database

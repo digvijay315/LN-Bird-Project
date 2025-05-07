@@ -14,6 +14,7 @@ import api from "../api";
 import Tooltip from '@mui/material/Tooltip';
 import Swal from 'sweetalert2';
 import { ToastContainer,toast } from "react-toastify";
+import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 
 function Leadscoresettings() {
 
@@ -48,6 +49,7 @@ function Leadscoresettings() {
     { id: 'status', name: 'Status' },
     { id: 'result', name: 'Result/Email_Subject' },
     { id: 'score', name: 'Score' },
+    { id: 'stagerequirment', name: 'Stage_changed_Requirment' },
 
   ];
 
@@ -202,8 +204,10 @@ function Leadscoresettings() {
 // ====================================select all and single select code end=======================================================
 
 
-const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction:"",status:"",result:"",score:"",
-                                            email_category:"",email_direction:"",email_status:"",email_score:"",email_subject:""
+const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:"",status:"",result:"",score:"",
+                                            email_category:"",email_direction:"",email_status:"",email_score:"",email_subject:"",
+                                            meeting_reason:"",meeting_status:"",meeting_result:"",meeting_score:"",
+                                            leadstage:"",dealstage:"",stage_requirment:[]
 });
 
 //======================================= modal for add lead score for call start==================================================
@@ -359,6 +363,9 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                   }
                 
                 }
+
+        const stagerequirment=["Site Visit Completed Form","Meeting Completed Form","Negotiation Form","Site Visit Scheduled Form",
+                              " Meeting Scheduled Form","Requirment Form"]
           
 
 //===============================================modal for add lead score for call end============================================
@@ -495,6 +502,118 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
 
 
 // ==============================================modal for add lead score for email end==================================================
+
+
+//=========================================== modal for add lead score for meeting start===============================================
+
+const [meetingreason, setmeetingreason] = useState(["Discuss For Deal", "Requirement","Site Visit","Meeting"," Revival Meeting",
+  "Cold Lead Revival","Owner Meeting","Broker Meeting","Builder Meeting", " Requirement Meeting"," Shortlisting Discuss",
+  "Post-Visit Feedback","Negotiation Meeting","Token/Booking"," Deal Closing","Documentation Required",
+  
+]);
+const [showInputmeetingreason, setShowInputmeetingreason] = useState(false);
+const [newmeetingreason, setNewmeetingreason] = useState(""); 
+
+const handleSelectChangemeetingreason = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,meeting_reason:e.target.value});
+if (value === "add_new") {
+  setShowInputmeetingreason(true);
+} else {
+  setShowInputmeetingreason(false);
+}
+};
+
+const handleAddmeetingreason = () => {
+if (newmeetingreason.trim() !== "") {
+  setmeetingreason([...meetingreason, newmeetingreason]);
+setleadscore({...leadscore,meeting_reason:newmeetingreason});
+setNewmeetingreason("");
+setShowInputmeetingreason(false);
+}
+};
+
+const [meetingstatus, setmeetingstatus] = useState(["Conducted", "Postponed","Cancelled"]);
+const [showInputmeetingstatus, setShowInputmeetingstatus] = useState(false);
+const [newmeetingstatus, setNewmeetingstatus] = useState(""); 
+
+const handleSelectChangemeetingstatus = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,meeting_status:e.target.value});
+if (value === "add_new") {
+  setShowInputmeetingstatus(true);
+} else {
+  setShowInputmeetingstatus(false);
+}
+};
+
+const 
+handleAddmeetingstatus = () => {
+if (newmeetingstatus.trim() !== "") {
+  setmeetingstatus([...meetingstatus, newmeetingstatus]);
+setleadscore({...leadscore,meeting_status:newmeetingstatus});
+setNewmeetingstatus("");
+setShowInputmeetingstatus(false);
+}
+};
+
+const [meetingresult, setmeetingresult] = useState(["Interested", "Just Enquiry","Low Budget","Location Mismatch"," Enquiry For Friend",
+  "Cancelled","Not Interested","Requirement Updated","Price/Details Updated"," Properties Exchanged","New Pricing Shared",
+  " Requirement Captured","Shortlisted Finalized","Liked Property","Wants to Negotiate","Price Discussion","Token Received",
+  "Buyer Backed Out","Registry Done","Docs Clear","Issue Found"
+]);
+const [showInputmeetingresult, setShowInputmeetingresult] = useState(false);
+const [newmeetingresult, setNewmeetingresult] = useState(""); 
+
+const handleSelectChangemeetingresult = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,meeting_result:e.target.value});
+if (value === "add_new") {
+  setShowInputmeetingresult(true);
+} else {
+  setShowInputmeetingresult(false);
+}
+};
+
+const handleAddmeetingresult = () => {
+if (newmeetingresult.trim() !== "") {
+  setmeetingresult([...meetingresult, newmeetingresult]);
+setleadscore({...leadscore,meeting_result:newmeetingresult});
+setNewmeetingresult("");
+setShowInputmeetingresult(false);
+}
+};
+
+const [meetingscore, setmeetingscore] = useState(["1","2","3","4","5","6","7","10","15","0","-1",
+
+]);
+const [showInputmeetingscore, setShowInputmeetingscore] = useState(false);
+const [newmeetingscore, setNewmeetingscore] = useState(""); 
+
+const handleSelectChangemeetingscore = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,meeting_score:e.target.value});
+if (value === "add_new") {
+  setShowInputmeetingscore(true);
+} else {
+  setShowInputmeetingscore(false);
+}
+};
+
+const handleAddmeetingscore = () => {
+if (newmeetingscore.trim() !== "") {
+  setmeetingscore([...meetingscore, newmeetingscore]);
+setleadscore({...leadscore,meeting_score:newmeetingscore});
+setNewmeetingscore("");
+setShowInputmeetingscore(false);
+}
+};
+
+
+
+
+// ==============================================modal for add lead score for meeting end==================================================
+
 
 
 // ============================================delect select items code start====================================================
@@ -687,7 +806,7 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                   >
                   {item.reason}
                   {item.email_category}
-               
+                  {item.meeting_reason}
                   </StyledTableCell>
       
                   <StyledTableCell 
@@ -704,6 +823,7 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                   >
                    {item.status}
                    {item.email_status}
+                   {item.meeting_status}
                   </StyledTableCell>
                 
                   <StyledTableCell 
@@ -712,6 +832,7 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                   >
                    {item.result}
                    {item.email_subject}
+                   {item.meeting_result}
                   </StyledTableCell>
 
                   <StyledTableCell 
@@ -720,6 +841,16 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                   >
                    {item.score}
                    {item.email_score}
+                   {item.meeting_score}
+                  </StyledTableCell>
+
+                  <StyledTableCell 
+                    style={{ padding: "10px",fontSize:"12px" }} 
+                   
+                  >
+                   {item.stage_requirment.join(',')}<br></br>
+                   Lead Stage:{item.leadstage}<br></br>
+                   Deal Stage:{item.dealstage}
                   </StyledTableCell>
                    
          
@@ -948,6 +1079,59 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                               </div>
                             )}
                           </div>
+                          <div className='col-md-6'></div>
+
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Lead Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.leadstage}
+                              onChange={(e)=>setleadscore({...leadscore,leadstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Prospect</option>
+                              <option>Closed</option>
+                              <option>Opportunity</option>
+                            </select>
+                          </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.dealstage}
+                              onChange={(e)=>setleadscore({...leadscore,dealstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Open</option>
+                              <option>Closed</option>
+                              <option>Quote</option>
+                            </select>
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+
                           </div>
 
   {/*==================================================== call entry end========================================================== */}
@@ -1140,7 +1324,270 @@ const [leadscore, setleadscore] = useState({available_for:"",reason:"",direction
                               </div>
                             )}
                           </div>
+                          <div className='col-md-6'></div>
+
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Lead Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.leadstage}
+                              onChange={(e)=>setleadscore({...leadscore,leadstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Prospect</option>
+                              <option>Closed</option>
+                              <option>Opportunity</option>
+                            </select>
                           </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.dealstage}
+                              onChange={(e)=>setleadscore({...leadscore,dealstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Open</option>
+                              <option>Closed</option>
+                              <option>Quote</option>
+                            </select>
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+
+                          </div>
+{/* ==========================================email entry end===================================================================== */}
+
+
+{/* ================================================meeting entry start ===========================================================*/}
+
+<div id='meeting' className='row' style={{padding:"10px",display:leadscore.available_for == "Meeting" ? "flex":"none"}}>
+                             <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Meeting Reason</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.meeting_reason}
+                              onChange={handleSelectChangemeetingreason}
+                            >
+                              <option value="">---Select---</option>
+                              {meetingreason.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Reason</option>
+                            </select>
+
+                            {showInputmeetingreason && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new reason"
+                                  value={newmeetingreason}
+                                  onChange={(e) => setNewmeetingreason(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddmeetingreason}
+                                >
+                                  Add Reason
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Meeting Status</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.meeting_status}
+                              onChange={handleSelectChangemeetingstatus}
+                            >
+                              <option value="">---Select---</option>
+                              {meetingstatus.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Status</option>
+                            </select>
+
+                            {showInputmeetingstatus && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new status"
+                                  value={newmeetingstatus}
+                                  onChange={(e) => setNewmeetingstatus(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddmeetingstatus}
+                                >
+                                  Add Status
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Meeting Result</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.meeting_result}
+                              onChange={handleSelectChangemeetingresult}
+                            >
+                              <option value="">---Select---</option>
+                              {meetingresult.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Result</option>
+                            </select>
+
+                            {showInputmeetingresult && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new result"
+                                  value={newmeetingresult}
+                                  onChange={(e) => setNewmeetingresult(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddmeetingresult}
+                                >
+                                  Add Result
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                        
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Meeting Score</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.meeting_score}
+                              onChange={handleSelectChangemeetingscore}
+                            >
+                              <option value="">---Select---</option>
+                              {meetingscore.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Score</option>
+                            </select>
+
+                            {showInputmeetingscore && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new score"
+                                  value={newmeetingscore}
+                                  onChange={(e) => setNewmeetingscore(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddmeetingscore}
+                                >
+                                  Add Score
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Lead Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.leadstage}
+                              onChange={(e)=>setleadscore({...leadscore,leadstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Prospect</option>
+                              <option>Closed</option>
+                              <option>Opportunity</option>
+                            </select>
+                          </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.dealstage}
+                              onChange={(e)=>setleadscore({...leadscore,dealstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Open</option>
+                              <option>Closed</option>
+                              <option>Quote</option>
+                            </select>
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+
+                          </div>
+
+
+{/*============================================ meeting entry end =================================================================*/}
         
                </div>
                 
