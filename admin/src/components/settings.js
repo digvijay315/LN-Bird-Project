@@ -16,7 +16,7 @@ function Crmsettings() {
       title: 'User Management',
       icon: <FiUser />,
       description: 'Manage users, roles, and access.',
-      onClick: () => alert('/settings/permissions'),
+      onClick: () => navigate('/addusers'),
     },
     {
       title: 'Permissions',

@@ -191,7 +191,7 @@ function Task_form() {
    
     const [sitevisit,setsitevisit]=useState({activity_type:"SiteVisit",title:"",executive:"",project:[],block:[],sitevisit_type:"",
                 inventory:[],lead:"",confirmation:"",remark:"",participants:"",remind_me:"",start_date:"",end_date:"",start_time:"",end_time:"",complete:"",stage:"",title2:"",first_name:"",
-                last_name:"",mobile_no:[],email:[],lead_id:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[],date:"",feedback:""})
+                last_name:"",mobile_no:[],email:[],lead_id:"",stage:"",status:"",intrested_project:[],intrested_block:[],intrested_inventory:[''],result:[''],action1:[],date:"",feedback:""})
     
                 const[activity,setactivity]=useState({activity_name:"", call_outcome:"", activity_note:"",lead:"",
                   direction:"",status:"",date:"",duration:"",intrested_inventory:"",message:"",subject:"",viewcount:0,
@@ -920,12 +920,53 @@ useEffect(() => {
   };
 
 
+  function addFn1() {
+                  
+    setsitevisit({
+      ...sitevisit,
+      intrested_inventory: [...sitevisit.intrested_inventory, ''],
+      result: [...sitevisit.result, ''],
+      action1: [...sitevisit.action1, '']
+
+    });
+  };
+  const deleteall1=(index)=>
+    {
+     
+      const newsitevisitintrestedinventory = sitevisit.intrested_inventory.filter((_, i) => i !== index);
+      const newsitevisitresult = sitevisit.result.filter((_, i) => i !== index);
+      const newsitevisitaction1 = sitevisit.action1.filter((_, i) => i !== index);
+      
+      setsitevisit({
+        ...sitevisit,
+        intrested_inventory: newsitevisitintrestedinventory,
+        result: newsitevisitresult,
+        action1:newsitevisitaction1
+      });
+    }
+    const handlesitevisitinventorychange = (index, event) => {
+      const newsitevisit = [...sitevisit.intrested_inventory];
+      newsitevisit[index] = event.target.value;
+      setsitevisit({
+        ...sitevisit,
+        intrested_inventory: newsitevisit
+      });
+    };
+    const handlesitevisitresultchange = (index, event) => {
+      const newresult = [...sitevisit.result];
+      newresult[index] = event.target.value;
+      setsitevisit({
+        ...sitevisit,
+        result: newresult
+      });
+    };
+    
 
 
 
 
 
-  
+
 
 
 //== ================================this project data is for meeting task=============================================================
@@ -2215,7 +2256,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                             sitevisit.status==="Conducted" &&(
                                 <>
 
-                                <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+                                {/* <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
                                 <Select className="form-control form-control-sm" style={{border:"none"}}
                             multiple
                             value={siteprojects}
@@ -2253,11 +2294,11 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     const uniqueBlockKey = `${block.block}-${block.project}`;
 
                     return (
-                      <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
+                      <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value 
                         <Checkbox 
                           checked={allblock.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
                         />
-                        <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
+                        <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project 
                       </MenuItem>
                     );
                   })
@@ -2291,16 +2332,73 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
       const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
 
       return (
-        <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
-          <Checkbox checked={allunit1.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
-          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
+        <MenuItem key={uniqueKey} value={uniqueKey}> 
+          <Checkbox checked={allunit1.includes(uniqueKey)} /> 
+          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> 
         </MenuItem>
       );
     })}
 </Select>
 
 
-                                    </div>
+                                    </div> */}
+
+          <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+              {Array.isArray(sitevisit.intrested_inventory) ?
+                sitevisit.intrested_inventory.map((item,index)=>
+                (
+                  <select
+                  style={{marginTop:"10px"}}
+                  className="form-control form-control-sm"
+                  // value={sitevisit.intrested_inventory} 
+                  onChange={(event)=>handlesitevisitinventorychange(index,event)}// Handle changes for unit selection
+                  >
+                 <option>---select---</option>
+                 {
+                  sitevisit.inventory.map((item)=>
+                  (
+                    <option>{item}</option>
+                  ))
+                 }
+                  </select>
+
+                )):[]
+              }
+         
+      </div> 
+
+      <div className="col-md-4"><label className="labels">Result</label>
+                                      
+      {
+                               Array.isArray(sitevisit.result)?
+                            sitevisit.result.map((item,index)=>
+                            (
+                                <select
+                                className='form-control form-control-sm'
+                                style={{marginTop:"10px"}}
+                                onChange={(event)=>handlesitevisitresultchange(index,event)}>
+                            
+                         
+                             <option>---Select---</option>
+                            <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
+                            <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
+                            </select>
+                            )):[]
+                            }
+                  </div> 
+
+                  <div className="col-md-1" style={{marginTop:"70px"}}>
+                            {
+                               Array.isArray(sitevisit.action1)?
+                               sitevisit.action1.map((item,index)=>
+                            (
+                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                            )):[]
+                            }
+                            </div>
+
+      <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn1}>+</button></div>
+      <div className="col-md-2"></div>
                                     </>
                             )
                         }

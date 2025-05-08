@@ -29,6 +29,7 @@ status:{type:String},
 intrested_project:{type:Array},
 intrested_block:{type:Array},
 intrested_inventory:{type:Array},
+result:{type:Array},
 date:{type:String},
 feedback:{type:String}
 },{timestamps:true})

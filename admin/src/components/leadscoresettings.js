@@ -207,8 +207,8 @@ function Leadscoresettings() {
 const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:"",status:"",result:"",score:"",
                                             email_category:"",email_direction:"",email_status:"",email_score:"",email_subject:"",
                                             meeting_reason:"",meeting_status:"",meeting_result:"",meeting_score:"",
-                                            leadstage:"",dealstage:"",stage_requirment:[]
-});
+                                            sitevisit_visittype:"",sitevisit_status:"",sitevisit_result:"",sitevisit_score:"",
+                                            leadstage:"",dealstage:"",stage_requirment:[],stage_requirment1:[],timeline:""});
 
 //======================================= modal for add lead score for call start==================================================
 
@@ -366,6 +366,8 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
 
         const stagerequirment=["Site Visit Completed Form","Meeting Completed Form","Negotiation Form","Site Visit Scheduled Form",
                               " Meeting Scheduled Form","Requirment Form"]
+        const stagerequirment1=["Site Visit Completed Form","Meeting Completed Form","Negotiation Form","Site Visit Scheduled Form",
+                                " Meeting Scheduled Form","Requirment Form"]
           
 
 //===============================================modal for add lead score for call end============================================
@@ -615,6 +617,104 @@ setShowInputmeetingscore(false);
 // ==============================================modal for add lead score for meeting end==================================================
 
 
+//=========================================== modal for add lead score for sitevisit start===============================================
+
+const [sitevisit_visittype, setsitevisit_visittype] = useState(["Site Visit", "Revisit","Online Visit","Developer Sample Vist"]);
+const [showInputsitevisit_visittype, setshowInputsitevisit_visittype] = useState(false);
+const [newsitevisit_visittype, setNewsitevisit_visittype] = useState(""); 
+
+const handleSelectChangesitevisit_visittype = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,sitevisit_visittype:e.target.value});
+if (value === "add_new") {
+  setshowInputsitevisit_visittype(true);
+} else {
+  setshowInputsitevisit_visittype(false);
+}
+};
+
+const handleAddsitevisit_visittype = () => {
+if (newsitevisit_visittype.trim() !== "") {
+  setsitevisit_visittype([...sitevisit_visittype, newsitevisit_visittype]);
+setleadscore({...leadscore,sitevisit_visittype:newsitevisit_visittype});
+setNewsitevisit_visittype("");
+setshowInputsitevisit_visittype(false);
+}
+};
+
+const [sitevisit_status, setsitevisit_status] = useState(["Conducted", "Postponed","Did Not Visit","Cancelled","Rescheduled"]);
+const [showInputsitevisit_status, setshowInputsitevisit_status] = useState(false);
+const [newsitevisit_status, setNewsitevisit_status] = useState(""); 
+
+const handleSelectChangesitevisit_status = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,sitevisit_status:e.target.value});
+if (value === "add_new") {
+  setshowInputsitevisit_status(true);
+} else {
+  setshowInputsitevisit_status(false);
+}
+};
+
+const handleAddsitevisit_status = () => {
+if (newsitevisit_status.trim() !== "") {
+  setsitevisit_status([...sitevisit_status, newsitevisit_status]);
+setleadscore({...leadscore,sitevisit_status:newsitevisit_status});
+setNewsitevisit_status("");
+setshowInputsitevisit_status(false);
+}
+};
+
+const [sitevisit_result, setsitevisit_result] = useState(["Interested", "Token Discussion","Shortlisted","Second Visit Required",
+  "Family Discussion","Need More Options","Budget Issue","Postponed","Visit Cancelled","Visit Not Attended","Location Mismatch",
+  "Not Interested"]);
+const [showInputsitevisit_result, setshowInputsitevisit_result] = useState(false);
+const [newsitevisit_result, setNewsitevisit_result] = useState(""); 
+
+const handleSelectChangesitevisit_result = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,sitevisit_result:e.target.value});
+if (value === "add_new") {
+  setshowInputsitevisit_result(true);
+} else {
+  setshowInputsitevisit_result(false);
+}
+};
+
+const handleAddsitevisit_result = () => {
+if (newsitevisit_result.trim() !== "") {
+  setsitevisit_result([...sitevisit_result, newsitevisit_result]);
+setleadscore({...leadscore,sitevisit_result:newsitevisit_result});
+setNewsitevisit_result("");
+setshowInputsitevisit_result(false);
+}
+};
+
+const [sitevisit_score, setsitevisit_score] = useState(["1", "2","3","4","5","6","7","8","10","12","15","-1","-2","-3","-4","-5","-6"]);
+const [showInputsitevisit_score, setshowInputsitevisit_score] = useState(false);
+const [newsitevisit_score, setNewsitevisit_score] = useState(""); 
+
+const handleSelectChangesitevisit_score = (e) => {
+const value = e.target.value;
+setleadscore({...leadscore,sitevisit_score:e.target.value});
+if (value === "add_new") {
+  setshowInputsitevisit_score(true);
+} else {
+  setshowInputsitevisit_score(false);
+}
+};
+
+const handleAddsitevisit_score = () => {
+if (newsitevisit_score.trim() !== "") {
+  setsitevisit_score([...sitevisit_score, newsitevisit_score]);
+setleadscore({...leadscore,sitevisit_score:newsitevisit_score});
+setNewsitevisit_score("");
+setshowInputsitevisit_score(false);
+}
+};
+
+// =======================================modal for lead score sitevisit end=======================================================
+
 
 // ============================================delect select items code start====================================================
 
@@ -807,6 +907,7 @@ setShowInputmeetingscore(false);
                   {item.reason}
                   {item.email_category}
                   {item.meeting_reason}
+                  {item.sitevisit_visittype}
                   </StyledTableCell>
       
                   <StyledTableCell 
@@ -824,6 +925,7 @@ setShowInputmeetingscore(false);
                    {item.status}
                    {item.email_status}
                    {item.meeting_status}
+                   {item.sitevisit_status}
                   </StyledTableCell>
                 
                   <StyledTableCell 
@@ -833,6 +935,7 @@ setShowInputmeetingscore(false);
                    {item.result}
                    {item.email_subject}
                    {item.meeting_result}
+                   {item.sitevisit_result}
                   </StyledTableCell>
 
                   <StyledTableCell 
@@ -842,15 +945,17 @@ setShowInputmeetingscore(false);
                    {item.score}
                    {item.email_score}
                    {item.meeting_score}
+                   {item.sitevisit_score}
                   </StyledTableCell>
 
                   <StyledTableCell 
                     style={{ padding: "10px",fontSize:"12px" }} 
                    
                   >
-                   {item.stage_requirment.join(',')}<br></br>
+                   Lead Requirment:{item.stage_requirment.join(',')}<br></br>
+                   Deal Requirment:{item.stage_requirment1.join(',')}<br></br>
                    Lead Stage:{item.leadstage}<br></br>
-                   Deal Stage:{item.dealstage}
+                   Deal Stage: {item.dealstage} {item.timeline ? `(${item.timeline} days)` : ""}
                   </StyledTableCell>
                    
          
@@ -886,7 +991,7 @@ setShowInputmeetingscore(false);
                               <option>Call</option>
                               <option>Mail</option>
                               <option>Meeting</option>
-                              <option>Site Visit</option>
+                              <option value="Sitevisit">Site Visit</option>
                             </select>
                           </div>
 
@@ -1097,6 +1202,26 @@ setShowInputmeetingscore(false);
                               <option>Opportunity</option>
                             </select>
                           </div>
+                         
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Lead Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+                          <div className='col-md-3'></div>
+                          
                           <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
                             <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
                             <select
@@ -1113,23 +1238,40 @@ setShowInputmeetingscore(false);
                               <option>Quote</option>
                             </select>
                           </div>
-
+                          
                           <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
-                          <label className="labels" style={{ fontSize: "12px" }}>Stage Changed Requirment</label>
+                          <label className="labels" style={{ fontSize: "12px" }}> Deal Stage Changed Requirment</label>
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment}
-                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                              value={leadscore.stage_requirment1}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
-                                {stagerequirment.map((cat) => (
+                                {stagerequirment1.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
                                 </Select>
+                          </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Timeline</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.timeline}
+                              onChange={(e)=>setleadscore({...leadscore,timeline:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option value="10">10 days</option>
+                              <option value="15">15 days</option>
+                              <option value="20">20 days</option>
+                              <option value="25">25 days</option>
+                              <option value="30">30 days</option>
+                            </select>
                           </div>
 
                           </div>
@@ -1342,6 +1484,27 @@ setShowInputmeetingscore(false);
                               <option>Opportunity</option>
                             </select>
                           </div>
+                          
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Lead Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+                          <div className='col-md-3'></div>
+
+                          
                           <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
                             <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
                             <select
@@ -1358,23 +1521,40 @@ setShowInputmeetingscore(false);
                               <option>Quote</option>
                             </select>
                           </div>
-
+                          
                           <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
-                          <label className="labels" style={{ fontSize: "12px" }}>Stage Changed Requirment</label>
+                          <label className="labels" style={{ fontSize: "12px" }}> Deal Stage Changed Requirment</label>
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment}
-                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                              value={leadscore.stage_requirment1}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
-                                {stagerequirment.map((cat) => (
+                                {stagerequirment1.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
                                 </Select>
+                          </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Timeline</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.timeline}
+                              onChange={(e)=>setleadscore({...leadscore,timeline:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option value="10">10 days</option>
+                              <option value="15">15 days</option>
+                              <option value="20">20 days</option>
+                              <option value="25">25 days</option>
+                              <option value="30">30 days</option>
+                            </select>
                           </div>
 
                           </div>
@@ -1549,6 +1729,28 @@ setShowInputmeetingscore(false);
                               <option>Opportunity</option>
                             </select>
                           </div>
+                       
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Lead Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+                          <div className='col-md-3'></div>
+
+                          
                           <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
                             <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
                             <select
@@ -1565,9 +1767,221 @@ setShowInputmeetingscore(false);
                               <option>Quote</option>
                             </select>
                           </div>
+                          
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}> Deal Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment1}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment1.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Timeline</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.timeline}
+                              onChange={(e)=>setleadscore({...leadscore,timeline:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option value="10">10 days</option>
+                              <option value="15">15 days</option>
+                              <option value="20">20 days</option>
+                              <option value="25">25 days</option>
+                              <option value="30">30 days</option>
+                            </select>
+                          </div>
+
+                          </div>
+
+                          
+
+
+{/*============================================ meeting entry end =================================================================*/}
+        
+{/*======================================= site visit entry start ================================================================*/}
+
+<div id='sitevisit' className='row' style={{padding:"10px",display:leadscore.available_for == "Sitevisit" ? "flex":"none"}}>
+                             <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Visit Type</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.sitevisit_visittype}
+                              onChange={handleSelectChangesitevisit_visittype}
+                            >
+                              <option value="">---Select---</option>
+                              {sitevisit_visittype.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New</option>
+                            </select>
+
+                            {showInputsitevisit_visittype && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new visit type"
+                                  value={newsitevisit_visittype}
+                                  onChange={(e) => setNewsitevisit_visittype(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddsitevisit_visittype}
+                                >
+                                  Add Visit Type
+                                </button>
+                              </div>
+                            )}
+                          </div>
 
                           <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
-                          <label className="labels" style={{ fontSize: "12px" }}>Stage Changed Requirment</label>
+                            <label className="labels" style={{ fontSize: "12px" }}>Site Visit Status</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.sitevisit_status}
+                              onChange={handleSelectChangesitevisit_status}
+                            >
+                              <option value="">---Select---</option>
+                              {sitevisit_status.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Status</option>
+                            </select>
+
+                            {showInputsitevisit_status && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new status"
+                                  value={newsitevisit_status}
+                                  onChange={(e) => setNewsitevisit_status(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddsitevisit_status}
+                                >
+                                  Add Status
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Site Visit Result</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.sitevisit_result}
+                              onChange={handleSelectChangesitevisit_result}
+                            >
+                              <option value="">---Select---</option>
+                              {sitevisit_result.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Result</option>
+                            </select>
+
+                            {showInputsitevisit_result && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new result"
+                                  value={newsitevisit_result}
+                                  onChange={(e) => setNewsitevisit_result(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddsitevisit_result}
+                                >
+                                  Add Result
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                        
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Site Visit Score</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.sitevisit_score}
+                              onChange={handleSelectChangesitevisit_score}
+                            >
+                              <option value="">---Select---</option>
+                              {sitevisit_score.map((reason, idx) => (
+                                <option key={idx} value={reason}>{reason}</option>
+                              ))}
+                              <option value="add_new" style={{color:"blue"}}>+ Add New Score</option>
+                            </select>
+
+                            {showInputsitevisit_score && (
+                              <div style={{ marginTop: "10px" }}>
+                                <input
+                                  type="text"
+                                  className="form-control form-control-sm"
+                                  placeholder="Enter new score"
+                                  value={newsitevisit_score}
+                                  onChange={(e) => setNewsitevisit_score(e.target.value)}
+                                  style={{ fontSize: "12px" }}
+                                />
+                                <button
+                                  type="button"
+                                  className="btn btn-sm btn-primary mt-2"
+                                  onClick={handleAddsitevisit_score}
+                                >
+                                  Add Score
+                                </button>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Lead Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.leadstage}
+                              onChange={(e)=>setleadscore({...leadscore,leadstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Prospect</option>
+                              <option>Closed</option>
+                              <option>Opportunity</option>
+                            </select>
+                          </div>
+                       
+
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}>Lead Stage Changed Requirment</label>
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
@@ -1583,12 +1997,66 @@ setShowInputmeetingscore(false);
                                     ))}
                                 </Select>
                           </div>
+                          <div className='col-md-3'></div>
+
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Deal Stage</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.dealstage}
+                              onChange={(e)=>setleadscore({...leadscore,dealstage:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option>Negotiation</option>
+                              <option>Open</option>
+                              <option>Closed</option>
+                              <option>Quote</option>
+                            </select>
+                          </div>
+                          
+                          <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
+                          <label className="labels" style={{ fontSize: "12px" }}> Deal Stage Changed Requirment</label>
+                               <Select
+                                className="form-control form-control-sm" style={{border:"none"}}
+                                multiple
+                              value={leadscore.stage_requirment1}
+                              onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
+                                 renderValue={(selected) => selected.join(", ")}
+                                 >
+                                {stagerequirment1.map((cat) => (
+                                 <MenuItem key={cat} value={cat}>
+                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
+                                      <ListItemText primary={cat} />
+                                      </MenuItem>
+                                    ))}
+                                </Select>
+                          </div>
+                          <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+                            <label className="labels" style={{ fontSize: "12px" }}>Timeline</label>
+                            <select
+                              required
+                              className="form-control form-control-sm"
+                              style={{ fontSize: "12px" }}
+                              value={leadscore.timeline}
+                              onChange={(e)=>setleadscore({...leadscore,timeline:e.target.value})}
+                            >
+                              <option value="">---Select---</option>
+                              <option value="10">10 days</option>
+                              <option value="15">15 days</option>
+                              <option value="20">20 days</option>
+                              <option value="25">25 days</option>
+                              <option value="30">30 days</option>
+                            </select>
+                          </div>
 
                           </div>
 
 
-{/*============================================ meeting entry end =================================================================*/}
-        
+{/*========================================= site visit entry end================================================================ */}
+
+
                </div>
                 
         

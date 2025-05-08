@@ -54,6 +54,7 @@ import WhatsAppLogin from './components/sendwhatsapp.js';
 import Crmsettings from './components/settings.js';
 import Leadscoresettings from './components/leadscoresettings.js';
 import Whatsapplogin from './components/whatsapplogin.js';
+import Users from './components/users.js';
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
       <Route path='/crmsettings' element={<Crmsettings/>}/>
       <Route path='/leadscoreseetings' element={<Leadscoresettings/>}/>
       <Route path='/whatsapplogin' element={<Whatsapplogin/>}/>
+      <Route path='/addusers' element={<Users/>}/>
     </Routes>  
      {/* <WhatsAppLogin/>  */}
    </div>

@@ -19,9 +19,16 @@ const add_leadscore=new mongoose.Schema({
     meeting_result:{type:String},
     meeting_score:{type:String},
 
+    sitevisit_visittype:{type:String},
+    sitevisit_status:{type:String},
+    sitevisit_result:{type:String},
+    sitevisit_score:{type:String},
+
     leadstage:{type:String},
     dealstage:{type:String},
-    stage_requirment:{type:Array}
+    stage_requirment:{type:Array},
+    stage_requirment1:{type:Array},
+    timeline:{type:String}
     },{timestamps:true})
 
 const addleadscore=mongoose.model('add_leadscore',add_leadscore)
