@@ -30,6 +30,10 @@ function Task_form() {
     const[meetingstatus,setmeetingstatus]=useState([]);
     const[meetingresult,setmeetingresult]=useState([]);
 
+    const[sitevisit_visittype,setsitevisit_visittype]=useState([]);
+    const[sitevisit_status,setsitevisit_status]=useState([]);
+    const[sitevisit_result,setsitevisit_result]=useState([]);
+
     const fetchdataforcallfields=async(event)=>
       {
         
@@ -86,6 +90,21 @@ function Task_form() {
               ...new Set(resp.data.score.map(item => item.meeting_result))
             ].filter(subject => subject && subject.trim() !== "");
             setmeetingresult(uniquemeetingresult)
+
+            const uniquesitevisit_visittype = [
+              ...new Set(resp.data.score.map(item => item.sitevisit_visittype))
+            ].filter(subject => subject && subject.trim() !== "");
+            setsitevisit_visittype(uniquesitevisit_visittype)
+
+            const uniquesitevisit_status = [
+              ...new Set(resp.data.score.map(item => item.sitevisit_status))
+            ].filter(subject => subject && subject.trim() !== "");
+            setsitevisit_status(uniquesitevisit_status)
+
+            const uniquesitevisit_result = [
+              ...new Set(resp.data.score.map(item => item.sitevisit_result))
+            ].filter(subject => subject && subject.trim() !== "");
+            setsitevisit_result(uniquesitevisit_result)
 
         } catch (error) {
           console.log(error);
@@ -2014,9 +2033,9 @@ const handleTimeChange = (e) => {
                         </div>
 
                         <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
-                    <option>Select </option>
+                    <option>---Select---</option>
                        {
-                        visittype.map(item=>
+                        sitevisit_visittype.map(item=>
                             (
                                 <option>{item}</option>
                             )
@@ -2245,10 +2264,13 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 <div className="row mt-2">
                     
                     <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
-                    <option>Select</option>
-                       <option>Conducted</option>
-                       <option>Did Not Visit</option>
-                       <option>Not Intersted</option>
+                    <option>---Select---</option>
+                     {
+                      sitevisit_status.map((item)=>
+                      (
+                      <option>{item}</option>
+                      ))
+                     }
                         </select>
                         </div>
                         <div className="col-md-8"></div>
@@ -2380,8 +2402,12 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                             
                          
                              <option>---Select---</option>
-                            <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
-                            <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
+                             {
+                                sitevisit_result.map((item)=>
+                                (
+                                <option>{item}</option>
+                                ))
+                              }
                             </select>
                             )):[]
                             }

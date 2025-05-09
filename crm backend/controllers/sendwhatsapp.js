@@ -5,30 +5,30 @@ const axios = require('axios');
 const { htmlToText } = require('html-to-text');
 
 
-  const accesstoken='681a08ab77ab7'
-
+  const accesstoken='681dad5418c1e'
+  let instanceId=""
 const sendwhatsapp = async (req, res) => {
   try {
     // Step 1: Get the instance_id by calling the create_instance API
-    // const createInstanceResponse = await axios.get('https://wamaster.metalivingrich.in/api/create_instance', {
-    //   params: {
-    //     access_token: '68076d9808e66'
-    //   },
-    //   headers: {
-    //     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    //     'Referer': 'https://wamaster.metalivingrich.in/'
-    //   }
-    // });
+    const createInstanceResponse = await axios.get('https://wamaster.metalivingrich.in/api/create_instance', {
+      params: {
+        access_token: accesstoken
+      },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'Referer': 'https://wamaster.metalivingrich.in/'
+      }
+    });
 
 
     // Extract instance_id from the response (adjust according to actual response structure)
-    // const instanceId = createInstanceResponse.data.instance_id;
+     instanceId = createInstanceResponse.data.instance_id;
 
     // Step 2: Use the instance_id to get the QR code
     const qrCodeResponse = await axios.get('https://wamaster.metalivingrich.in/api/get_qrcode', {
       params: {
-        instance_id: 6807851782359,
-        access_token: '68076d9808e66'
+        instance_id:instanceId,
+        access_token: accesstoken
       },
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -72,7 +72,7 @@ const setWhatsAppWebhook = async (req,res) => {
 
 
 const sendWhatsAppTextMessage = async (req, res) => {
-  const { number, message1,media_url } = req.body; // Get data from frontend
+  const { number, message1,media_url,instanceId } = req.body; // Get data from frontend
 
   if (!number || !message1) {
     return res.status(400).json({ status: 'error', message: 'Number and message are required' });
@@ -92,8 +92,6 @@ const plainTextMessage = htmlToText(message1, {
   if (rawNumber.length === 10) {
     rawNumber = '91' + rawNumber;
   }
-// console.log(media_url);
-
 
   try {
     const payload = {
@@ -101,14 +99,11 @@ const plainTextMessage = htmlToText(message1, {
       type: 'media',
       media_url,
       message:plainTextMessage,
-      instance_id: '681A091F4E7DE', // replace with your actual instance_id
+      instance_id: instanceId,
       access_token: accesstoken
     };
-
-
-   
-
-    const response = await axios.post('https://vip.metalivingrich.in/api/send', payload, {
+    
+    const response = await axios.post('https://wamaster.metalivingrich.in/api/send', payload, {
       headers: {
         'Content-Type': 'application/json'
       }

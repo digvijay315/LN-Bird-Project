@@ -2687,17 +2687,29 @@ const handleroadChange = (event) => {
 
                             requirements.forEach((formName) => {
                               const expectedRequirment = formMap[formName]?.toLowerCase();
-                          
+
+                              if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
                               const match = leadscoretaskdata?.find(
                                 (form) =>
                                   form.activity_type?.toLowerCase() === expectedRequirment &&
                                   form.complete === "true"
                               );
-                          
+                       
                               if (!match) {
                                 incompleteForms.push(formName);
                               }
+                            }
+                           
+                           else if (expectedRequirment === "requirement") {
+                              const match1 = singlelead.requirment?.trim() !== "";
+                              console.log(match1);
+                              if (!match1) {
+                                incompleteForms.push(formName);
+                              }
+                            }
+                            
                             });
+                          
                         // After collecting the incomplete forms
                         if (incompleteForms.length > 0) {
                           Swal.fire({
@@ -2709,9 +2721,13 @@ const handleroadChange = (event) => {
                             cancelButtonText: 'No, skip',
                           }).then((result) => {
                             if (result.isConfirmed) {
-                              // Open all forms that are incomplete
-                              // incompleteForms.forEach(openForm); // Replace with your form-opening logic
-                              navigate('/tasks')
+                               const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
+
+                              if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                                navigate('/tasks');
+                              } else if (lowerForms.includes('requirement')) {
+                                navigate('/leaddetails');
+                              }
                             } else {
                               // Skip logic, proceed with the score calculation
                               console.log("Skipping forms:", incompleteForms);
@@ -2725,64 +2741,247 @@ const handleroadChange = (event) => {
                         }
                         
                       }
-                        } else if (item1.activity_type.trim() === "Mail") {
-                          if (
-                            item1.activity_type.trim() === item.available_for.trim() &&
-                            item1.direction.trim() === item.email_direction.trim() &&
-                            item1.subject.trim()=== item.email_category.trim() &&
-                            item1.status.trim()=== item.email_status.trim()
-                          ) {
-                            const formMap = {
-                              "Site Visit Completed Form": "SiteVisit",
-                              "Meeting Completed Form": "Meeting",
-                              "Negotiation Form": "Negotiation",
-                              "Site Visit Scheduled Form": "SiteVisit scheduled",
-                              "Meeting Scheduled Form": "Meeting scheduled",
-                              "Requirment Form": "Requirement",
-                            };
-                            const requirements = item.stage_requirment || [];
-                            const incompleteForms = [];
+                    }
 
-                            requirements.forEach((formName) => {
-                              const expectedRequirment = formMap[formName]?.toLowerCase();
-                          
-                              const match = leadscoretaskdata?.find(
-                                (form) =>
-                                  form.activity_type?.toLowerCase() === expectedRequirment &&
-                                  form.complete === "true"
-                              );
-                          
-                              if (!match) {
-                                incompleteForms.push(formName);
-                              }
-                            });
-                        // After collecting the incomplete forms
-                        if (incompleteForms.length > 0) {
-                          Swal.fire({
-                            title: `Incomplete Forms Detected for ${item1.lead}`,
-                            text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Yes, fill the form',
-                            cancelButtonText: 'No, skip',
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              // Open all forms that are incomplete
-                              // incompleteForms.forEach(openForm); // Replace with your form-opening logic
-                              navigate('/tasks')
-                            } else {
-                              // Skip logic, proceed with the score calculation
-                              console.log("Skipping forms:", incompleteForms);
-                              score += parseFloat(item.email_score);  // Calculate the score if forms are skipped
-                            }
-                          });
-                        } else {
-                          // If no incomplete forms, directly calculate the score
-                          score += parseFloat(item.email_score);
-                          leadstage=item.leadstage
-                        }
+                   else if (item1.activity_type.trim() === "Mail") {
+                     
+                      if (
+                        item1.activity_type.trim() === item.available_for.trim() &&
+                        item1.direction.trim() === item.email_direction.trim() &&
+                        item1.subject.trim()=== item.email_category.trim() &&
+                        item1.status.trim()=== item.email_status.trim()
+                      ) 
+                      
+                      {
+                        const formMap = {
+                          "Site Visit Completed Form": "SiteVisit",
+                          "Meeting Completed Form": "Meeting",
+                          "Negotiation Form": "Negotiation",
+                          "Site Visit Scheduled Form": "Site Visit scheduled",
+                          "Meeting Scheduled Form": "Meeting scheduled",
+                          "Requirment Form": "Requirement",
+                        };
+                        const requirements = item.stage_requirment || [];
+                        const incompleteForms = [];
+
+                        requirements.forEach((formName) => {
+                          const expectedRequirment = formMap[formName]?.toLowerCase();
+
+                          if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
+                          const match = leadscoretaskdata?.find(
+                            (form) =>
+                              form.activity_type?.toLowerCase() === expectedRequirment &&
+                              form.complete === "true"
+                          );
+                   
+                          if (!match) {
+                            incompleteForms.push(formName);
                           }
                         }
+                       
+                       else if (expectedRequirment === "requirement") {
+                          const match1 = singlelead.requirment?.trim() !== "";
+                          console.log(match1);
+                          if (!match1) {
+                            incompleteForms.push(formName);
+                          }
+                        }
+                        
+                        });
+                      
+                    // After collecting the incomplete forms
+                    if (incompleteForms.length > 0) {
+                      Swal.fire({
+                        title: `Incomplete Forms Detected for ${item1.lead}`,
+                        text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, fill the form',
+                        cancelButtonText: 'No, skip',
+                      }).then((result) => {
+                        if (result.isConfirmed) {
+                           const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
+
+                          if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                            navigate('/tasks');
+                          } else if (lowerForms.includes('requirement')) {
+                            navigate('/leaddetails');
+                          }
+                        } else {
+                          // Skip logic, proceed with the score calculation
+                          console.log("Skipping forms:", incompleteForms);
+                          score += parseFloat(item.email_score);  // Calculate the score if forms are skipped
+                        }
+                      });
+                    } else {
+                      // If no incomplete forms, directly calculate the score
+                      score += parseFloat(item.email_score);
+                      leadstage=item.leadstage
+                    }
+                    
+                  }
+                }
+
+                else if (item1.activity_type.trim() === "Meeting") {
+                     
+                  if (
+                    item1.activity_type.trim() === item.available_for.trim() &&
+                    item1.reason.trim() === item.meeting_reason.trim() &&
+                    item1.status.trim() === item.meeting_status.trim() &&
+                    item1.meeting_result.trim() === item.meeting_result.trim() 
+                  ) 
+                  
+                  {
+                    const formMap = {
+                      "Site Visit Completed Form": "SiteVisit",
+                      "Meeting Completed Form": "Meeting",
+                      "Negotiation Form": "Negotiation",
+                      "Site Visit Scheduled Form": "Site Visit scheduled",
+                      "Meeting Scheduled Form": "Meeting scheduled",
+                      "Requirment Form": "Requirement",
+                    };
+                    const requirements = item.stage_requirment || [];
+                    const incompleteForms = [];
+
+                    requirements.forEach((formName) => {
+                      const expectedRequirment = formMap[formName]?.toLowerCase();
+
+                      if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
+                      const match = leadscoretaskdata?.find(
+                        (form) =>
+                          form.activity_type?.toLowerCase() === expectedRequirment &&
+                          form.complete === "true"
+                      );
+               
+                      if (!match) {
+                        incompleteForms.push(formName);
+                      }
+                    }
+                   
+                   else if (expectedRequirment === "requirement") {
+                      const match1 = singlelead.requirment?.trim() !== "";
+                      console.log(match1);
+                      if (!match1) {
+                        incompleteForms.push(formName);
+                      }
+                    }
+                    
+                    });
+                  
+                // After collecting the incomplete forms
+                if (incompleteForms.length > 0) {
+                  Swal.fire({
+                    title: `Incomplete Forms Detected for ${item1.lead}`,
+                    text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, fill the form',
+                    cancelButtonText: 'No, skip',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                       const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
+
+                      if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                        navigate('/tasks');
+                      } else if (lowerForms.includes('requirement')) {
+                        navigate('/leaddetails');
+                      }
+                    } else {
+                      // Skip logic, proceed with the score calculation
+                      console.log("Skipping forms:", incompleteForms);
+                      score += parseFloat(item.meeting_score);  // Calculate the score if forms are skipped
+                    }
+                  });
+                } else {
+                  // If no incomplete forms, directly calculate the score
+                  score += parseFloat(item.meeting_score);
+                  leadstage=item.leadstage
+                }
+                
+              }
+            }
+
+            
+            else if (item1.activity_type.trim() === "SiteVisit") {
+                     
+              if (
+                item1.activity_type.trim() === item.available_for.trim() &&
+                item1.sitevisit_type.trim() === item.sitevisit_visittype.trim() &&
+                item1.status.trim() === item.sitevisit_status.trim() &&
+                item1.result.includes(item.sitevisit_result.trim())
+              ) 
+              
+              {
+                const formMap = {
+                  "Site Visit Completed Form": "SiteVisit",
+                  "Meeting Completed Form": "Meeting",
+                  "Negotiation Form": "Negotiation",
+                  "Site Visit Scheduled Form": "Site Visit scheduled",
+                  "Meeting Scheduled Form": "Meeting scheduled",
+                  "Requirment Form": "Requirement",
+                };
+                const requirements = item.stage_requirment || [];
+                const incompleteForms = [];
+
+                requirements.forEach((formName) => {
+                  const expectedRequirment = formMap[formName]?.toLowerCase();
+
+                  if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
+                  const match = leadscoretaskdata?.find(
+                    (form) =>
+                      form.activity_type?.toLowerCase() === expectedRequirment &&
+                      form.complete === "true"
+                  );
+           
+                  if (!match) {
+                    incompleteForms.push(formName);
+                  }
+                }
+               
+               else if (expectedRequirment === "requirement") {
+                  const match1 = singlelead.requirment?.trim() !== "";
+                  console.log(match1);
+                  if (!match1) {
+                    incompleteForms.push(formName);
+                  }
+                }
+                
+                });
+              
+            // After collecting the incomplete forms
+            if (incompleteForms.length > 0) {
+              Swal.fire({
+                title: `Incomplete Forms Detected for ${item1.lead}`,
+                text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, fill the form',
+                cancelButtonText: 'No, skip',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                   const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
+
+                  if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                    navigate('/tasks');
+                  } else if (lowerForms.includes('requirement')) {
+                    navigate('/leaddetails');
+                  }
+                } else {
+                  // Skip logic, proceed with the score calculation
+                  console.log("Skipping forms:", incompleteForms);
+                  score += parseFloat(item.sitevisit_score);  // Calculate the score if forms are skipped
+                }
+              });
+            } else {
+              // If no incomplete forms, directly calculate the score
+              score += parseFloat(item.sitevisit_score);
+              leadstage=item.leadstage
+            }
+            
+          }
+        }
+
+
                       });
                     });
                   }
@@ -3720,14 +3919,20 @@ const handleroadChange = (event) => {
                                             container: "#custom-toolbar1"
                                           }
                                         };
+
+                                        const[instanceId,setinstanceId]=useState("")
+                                        const firstuser=localStorage.getItem('user1')
+                                        const seconduser=localStorage.getItem('user2')
+                                        console.log(instanceId);
+                                        
                                          const handleSendwhatsapp = async () => {
                                           setisloading2(true)
                                             try {
                                               for (const singleNumber of number){
-                                              const res = await axios.post('http://localhost:5000/sendwhatsappmessage', {
+                                              const res = await api.post('sendwhatsappmessage', {
                                                 number:singleNumber,
                                                 message1,
-                                                
+                                                instanceId
                                               });
                                               if(res.status===200)
                                                 {
@@ -7025,6 +7230,17 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
        
            <div className="row mt-2" id="sendwhatsapp" style={{display:"none"}}>
            <div className="col-md-12" style={{color:"green",textAlign:"center",fontWeight:"bolder"}}> Send WhatsApp</div>
+
+           <div className="col-md-4"><label className="labels">Choose Whatsapp Number</label>
+           <select className="form-control form-control-sm" onChange={(e)=>setinstanceId(e.target.value)}>
+           <option>---select---</option>
+            <option value={firstuser}>9991333570(Bharat Properties)</option>
+            <option value={seconduser}>7047752734</option>
+           </select>
+           </div>
+           
+          
+           <div className="col-md-8"></div>
 
            <div className="col-md-12" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
                   <input type="text" style={{border:"none",fontSize:"12px",borderBottom:"1px solid gray"}} required="true" className="form-control form-control-sm" placeholder='subject' value={subject1} onChange={(e)=>setsubject1(e.target.value)}/>

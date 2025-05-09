@@ -46,6 +46,10 @@ function Tasks() {
               const[meetingstatus,setmeetingstatus]=useState([]);
               const[meetingresult,setmeetingresult]=useState([]);
 
+              const[sitevisit_visittype,setsitevisit_visittype]=useState([]);
+              const[sitevisit_status,setsitevisit_status]=useState([]);
+              const[sitevisit_result,setsitevisit_result]=useState([]);
+
               const fetchdataforcallfields=async()=>
                 {
                   
@@ -2701,7 +2705,7 @@ const [show10, setshow10] = useState(false);
 <option>{sitevisit.sitevisit_type} </option>
 <option>---select---</option>
    {
-    visittype.map(item=>
+    sitevisit_visittype.map(item=>
         (
             <option>{item}</option>
         )
@@ -2841,10 +2845,14 @@ renderValue={(selected) => selected.join(', ')}
 <div className="row mt-2">
 
 <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
-<option>Select</option>
-   <option>Conducted</option>
-   <option>Did Not Visit</option>
-   <option>Not Intersted</option>
+<option>---Select---</option>
+                    {
+                        sitevisit_status.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
     </select>
     </div>
     <div className="col-md-8"></div>
@@ -2977,8 +2985,13 @@ return (
                             
                             <option>{sitevisit.result[index]}</option>
                              <option>---Select---</option>
-                            <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
-                            <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
+                             {
+                               sitevisit_result.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                           )
+                           }
                             </select>
                             )):[]
                             }
@@ -4195,7 +4208,7 @@ sitevisitdata.map((item)=>
 <option>{sitevisit.sitevisit_type} </option>
 <option>---select---</option>
    {
-    visittype.map(item=>
+    sitevisit_visittype.map(item=>
         (
             <option>{item}</option>
         )
@@ -4335,10 +4348,14 @@ renderValue={(selected) => selected.join(', ')}
 <div className="row mt-2">
 
 <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
-<option>Select</option>
-   <option>Conducted</option>
-   <option>Did Not Visit</option>
-   <option>Not Intersted</option>
+<option>---Select---</option>
+                      {
+                        sitevisit_status.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
     </select>
     </div>
     <div className="col-md-8"></div>
@@ -4471,8 +4488,13 @@ return (
                             
                             <option>{sitevisit.result[index]}</option>
                              <option>---Select---</option>
-                            <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
-                            <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>
+                             {
+                            sitevisit_result.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
                             </select>
                             )):[]
                             }
