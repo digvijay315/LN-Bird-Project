@@ -991,7 +991,7 @@ setshowInputsitevisit_score(false);
                               <option>Call</option>
                               <option>Mail</option>
                               <option>Meeting</option>
-                              <option value="Sitevisit">Site Visit</option>
+                              <option value="SiteVisit">Site Visit</option>
                             </select>
                           </div>
 

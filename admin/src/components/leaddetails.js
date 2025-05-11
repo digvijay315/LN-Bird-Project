@@ -2845,7 +2845,8 @@ const handleroadChange = (event) => {
 
                     requirements.forEach((formName) => {
                       const expectedRequirment = formMap[formName]?.toLowerCase();
-
+                     
+                      
                       if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
                       const match = leadscoretaskdata?.find(
                         (form) =>
@@ -2903,6 +2904,7 @@ const handleroadChange = (event) => {
 
             
             else if (item1.activity_type.trim() === "SiteVisit") {
+                
                      
               if (
                 item1.activity_type.trim() === item.available_for.trim() &&
@@ -2912,6 +2914,7 @@ const handleroadChange = (event) => {
               ) 
               
               {
+                     console.log("match");
                 const formMap = {
                   "Site Visit Completed Form": "SiteVisit",
                   "Meeting Completed Form": "Meeting",
@@ -2922,10 +2925,10 @@ const handleroadChange = (event) => {
                 };
                 const requirements = item.stage_requirment || [];
                 const incompleteForms = [];
-
+console.log(requirements);
                 requirements.forEach((formName) => {
                   const expectedRequirment = formMap[formName]?.toLowerCase();
-
+ console.log(expectedRequirment);
                   if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
                   const match = leadscoretaskdata?.find(
                     (form) =>
