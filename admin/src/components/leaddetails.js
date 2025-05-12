@@ -2673,30 +2673,79 @@ const handleroadChange = (event) => {
                             item1.result.trim() === item.result.trim()
                           ) 
                           
+        
                           {
                             const formMap = {
-                              "Site Visit Completed Form": "SiteVisit",
-                              "Meeting Completed Form": "Meeting",
+                              "Call Scheduled Form":"Call scheduled",
+                              "Mail Scheduled Form":"Mail scheduled",
+                              "Meeting Scheduled Form":"Meeting scheduled",
+                              "Site Visit Scheduled Form":"Sitevisit scheduled",
+                              "Call Completed Form":"Call",
+                              "Mail Completed Form":"Mail",
+                              "Meeting Completed Form":"Meeting",
+                              "Site Visit Completed Form":"SiteVisit",
                               "Negotiation Form": "Negotiation",
-                              "Site Visit Scheduled Form": "Site Visit scheduled",
-                              "Meeting Scheduled Form": "Meeting scheduled",
                               "Requirment Form": "Requirement",
                             };
                             const requirements = item.stage_requirment || [];
                             const incompleteForms = [];
+                            const usedFormDates = new Set();
 
                             requirements.forEach((formName) => {
                               const expectedRequirment = formMap[formName]?.toLowerCase();
 
-                              if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
-                              const match = leadscoretaskdata?.find(
-                                (form) =>
-                                  form.activity_type?.toLowerCase() === expectedRequirment &&
-                                  form.complete === "true"
-                              );
+                              if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                             const match = leadscoretaskdata?.find((form) => {
+                            
+                                  const formDate = new Date(form.date);
+                                  const itemDate = new Date(item1.date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                 
+                                  return (
+                                    form.activity_type?.toLowerCase() === expectedRequirment &&
+                                    form.complete === "true" &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
                        
-                              if (!match) {
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                                 console.log(usedFormDates);
+                              
+                              } else {
                                 incompleteForms.push(formName);
+                                 // ❌ No match found for this requirement
+                              }
+                            }
+                          
+                               if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                        
+                            
+                                const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.due_date ? form.due_date : form.start_date );
+                                  const itemDate = new Date(item1.due_date ? item1.due_date : item1.start_date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                     
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    (form.activity_type?.toLowerCase() === expectedRequirment.split(" ")[0].toLowerCase()) &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
                               }
                             }
                            
@@ -2723,7 +2772,9 @@ const handleroadChange = (event) => {
                             if (result.isConfirmed) {
                                const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
 
-                              if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                               if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
+                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
+                    || lowerForms.includes('sitevisit scheduled')) {
                                 navigate('/tasks');
                               } else if (lowerForms.includes('requirement')) {
                                 navigate('/leaddetails');
@@ -2753,31 +2804,74 @@ const handleroadChange = (event) => {
                       ) 
                       
                       {
-                        const formMap = {
-                          "Site Visit Completed Form": "SiteVisit",
-                          "Meeting Completed Form": "Meeting",
-                          "Negotiation Form": "Negotiation",
-                          "Site Visit Scheduled Form": "Site Visit scheduled",
-                          "Meeting Scheduled Form": "Meeting scheduled",
-                          "Requirment Form": "Requirement",
-                        };
+                       const formMap = {
+                              "Call Scheduled Form":"Call scheduled",
+                              "Mail Scheduled Form":"Mail scheduled",
+                              "Meeting Scheduled Form":"Meeting scheduled",
+                              "Site Visit Scheduled Form":"Sitevisit scheduled",
+                              "Call Completed Form":"Call",
+                              "Mail Completed Form":"Mail",
+                              "Meeting Completed Form":"Meeting",
+                              "Site Visit Completed Form":"SiteVisit",
+                              "Negotiation Form": "Negotiation",
+                              "Requirment Form": "Requirement",
+                            };
                         const requirements = item.stage_requirment || [];
                         const incompleteForms = [];
+                        const usedFormDates = new Set();
 
                         requirements.forEach((formName) => {
                           const expectedRequirment = formMap[formName]?.toLowerCase();
 
-                          if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
-                          const match = leadscoretaskdata?.find(
-                            (form) =>
-                              form.activity_type?.toLowerCase() === expectedRequirment &&
-                              form.complete === "true"
-                          );
-                   
-                          if (!match) {
-                            incompleteForms.push(formName);
-                          }
-                        }
+                            if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                             const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.date);
+                                  const itemDate = new Date(item1.date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    form.activity_type?.toLowerCase() === expectedRequirment &&
+                                    form.complete === "true" &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
+                          
+                               if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                        
+                            
+                                const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.due_date ? form.due_date : form.start_date );
+                                  const itemDate = new Date(item1.due_date ? item1.due_date : item1.start_date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                          console.log(form.activity_type);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    (form.activity_type?.toLowerCase() === expectedRequirment.split(" ")[0].toLowerCase()) &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
                        
                        else if (expectedRequirment === "requirement") {
                           const match1 = singlelead.requirment?.trim() !== "";
@@ -2802,7 +2896,9 @@ const handleroadChange = (event) => {
                         if (result.isConfirmed) {
                            const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
 
-                          if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                          if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
+                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
+                    || lowerForms.includes('sitevisit scheduled')) {
                             navigate('/tasks');
                           } else if (lowerForms.includes('requirement')) {
                             navigate('/leaddetails');
@@ -2833,31 +2929,74 @@ const handleroadChange = (event) => {
                   
                   {
                     const formMap = {
-                      "Site Visit Completed Form": "SiteVisit",
-                      "Meeting Completed Form": "Meeting",
-                      "Negotiation Form": "Negotiation",
-                      "Site Visit Scheduled Form": "Site Visit scheduled",
-                      "Meeting Scheduled Form": "Meeting scheduled",
-                      "Requirment Form": "Requirement",
-                    };
+                              "Call Scheduled Form":"Call scheduled",
+                              "Mail Scheduled Form":"Mail scheduled",
+                              "Meeting Scheduled Form":"Meeting scheduled",
+                              "Site Visit Scheduled Form":"Sitevisit scheduled",
+                              "Call Completed Form":"Call",
+                              "Mail Completed Form":"Mail",
+                              "Meeting Completed Form":"Meeting",
+                              "Site Visit Completed Form":"SiteVisit",
+                              "Negotiation Form": "Negotiation",
+                              "Requirment Form": "Requirement",
+                            };
                     const requirements = item.stage_requirment || [];
                     const incompleteForms = [];
+                    const usedFormDates = new Set();
 
                     requirements.forEach((formName) => {
                       const expectedRequirment = formMap[formName]?.toLowerCase();
                      
                       
-                      if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
-                      const match = leadscoretaskdata?.find(
-                        (form) =>
-                          form.activity_type?.toLowerCase() === expectedRequirment &&
-                          form.complete === "true"
-                      );
-               
-                      if (!match) {
-                        incompleteForms.push(formName);
-                      }
-                    }
+                        if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                             const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.date);
+                                  const itemDate = new Date(item1.date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    form.activity_type?.toLowerCase() === expectedRequirment &&
+                                    form.complete === "true" &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
+                          
+                               if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                        
+                            
+                                const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.due_date ? form.due_date : form.start_date );
+                                  const itemDate = new Date(item1.due_date ? item1.due_date : item1.start_date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                          console.log(form.activity_type);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    (form.activity_type?.toLowerCase() === expectedRequirment.split(" ")[0].toLowerCase()) &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
                    
                    else if (expectedRequirment === "requirement") {
                       const match1 = singlelead.requirment?.trim() !== "";
@@ -2882,7 +3021,9 @@ const handleroadChange = (event) => {
                     if (result.isConfirmed) {
                        const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
 
-                      if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                       if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
+                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
+                    || lowerForms.includes('sitevisit scheduled')) {
                         navigate('/tasks');
                       } else if (lowerForms.includes('requirement')) {
                         navigate('/leaddetails');
@@ -2914,32 +3055,75 @@ const handleroadChange = (event) => {
               ) 
               
               {
-                     console.log("match");
-                const formMap = {
-                  "Site Visit Completed Form": "SiteVisit",
-                  "Meeting Completed Form": "Meeting",
-                  "Negotiation Form": "Negotiation",
-                  "Site Visit Scheduled Form": "Site Visit scheduled",
-                  "Meeting Scheduled Form": "Meeting scheduled",
-                  "Requirment Form": "Requirement",
-                };
+                
+                    const formMap = {
+                              "Call Scheduled Form":"Call scheduled",
+                              "Mail Scheduled Form":"Mail scheduled",
+                              "Meeting Scheduled Form":"Meeting scheduled",
+                              "Site Visit Scheduled Form":"Sitevisit scheduled",
+                              "Call Completed Form":"Call",
+                              "Mail Completed Form":"Mail",
+                              "Meeting Completed Form":"Meeting",
+                              "Site Visit Completed Form":"SiteVisit",
+                              "Negotiation Form": "Negotiation",
+                              "Requirment Form": "Requirement",
+                            };
                 const requirements = item.stage_requirment || [];
                 const incompleteForms = [];
-console.log(requirements);
+                  const usedFormDates = new Set();
+
                 requirements.forEach((formName) => {
                   const expectedRequirment = formMap[formName]?.toLowerCase();
- console.log(expectedRequirment);
-                  if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting") {
-                  const match = leadscoretaskdata?.find(
-                    (form) =>
-                      form.activity_type?.toLowerCase() === expectedRequirment &&
-                      form.complete === "true"
-                  );
-           
-                  if (!match) {
-                    incompleteForms.push(formName);
-                  }
-                }
+
+                  if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                             const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.date);
+                                  const itemDate = new Date(item1.date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    form.activity_type?.toLowerCase() === expectedRequirment &&
+                                    form.complete === "true" &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
+                          
+                               if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                        
+                            
+                                const match = leadscoretaskdata?.find((form) => {
+                                  const formDate = new Date(form.due_date ? form.due_date : form.start_date );
+                                  const itemDate = new Date(item1.due_date ? item1.due_date : item1.start_date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                          console.log(form.activity_type);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    (form.activity_type?.toLowerCase() === expectedRequirment.split(" ")[0].toLowerCase()) &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
                
                else if (expectedRequirment === "requirement") {
                   const match1 = singlelead.requirment?.trim() !== "";
@@ -2964,7 +3148,9 @@ console.log(requirements);
                 if (result.isConfirmed) {
                    const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
 
-                  if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting')) {
+                  if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
+                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
+                    || lowerForms.includes('sitevisit scheduled')) {
                     navigate('/tasks');
                   } else if (lowerForms.includes('requirement')) {
                     navigate('/leaddetails');

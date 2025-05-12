@@ -219,8 +219,8 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
        const handleShow1=async()=>setshow1(true);
 
        const [reasons, setReasons] = useState(["Site Visit", "Builder Discount/Scheme","Construction Update","Documentation","Inventory Availability","Inventory Rights for Listing","Legal",
-                                                " Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
-                                                "Requirement"," Review/Feedback","Tax Discussion"
+                                                "Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+                                                "Requirement","Review/Feedback","Tax Discussion"
        ]);
        const [showInput, setShowInput] = useState(false);
        const [newReason, setNewReason] = useState(""); 
@@ -267,8 +267,8 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
           }
           };
 
-          const [callstatus, setcallstatus] = useState(["Answered", "Cut Call","Not Picked","Busy","Missed","Not Reachable"," Switch Off",
-                                                        " Number Invalid","Waiting"]);
+          const [callstatus, setcallstatus] = useState(["Answered", "Cut Call","Not Picked","Busy","Missed","Not Reachable","Switch Off",
+                                                        "Number Invalid","Waiting"]);
           const [showcallstatusInput, setShowcallstatusInput] = useState(false);
           const [newcallstatus, setNewcallstatus] = useState(""); 
 
@@ -291,8 +291,8 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
           }
           };
 
-          const [callresult, setcallresult] = useState([" Token Terms Accepted – Booking Discussion", "Budget Shared – Awaiting Options",
-            " Interested – Wants More Options"," Budget Approved – Awaiting Shortlist","Final Deal Discussion Pending","Possession Status Confirmed",
+          const [callresult, setcallresult] = useState(["Token Terms Accepted – Booking Discussion", "Budget Shared – Awaiting Options",
+            "Interested – Wants More Options","Budget Approved – Awaiting Shortlist","Final Deal Discussion Pending","Possession Status Confirmed",
           "Wants Legal/Document Review","Need More Inventory Options"]);
             const [showcallresultInput, setShowcallresultInput] = useState(false);
             const [newcallresult, setNewcallresult] = useState(""); 
@@ -364,10 +364,13 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
                 
                 }
 
-        const stagerequirment=["Site Visit Completed Form","Meeting Completed Form","Negotiation Form","Site Visit Scheduled Form",
-                              " Meeting Scheduled Form","Requirment Form"]
-        const stagerequirment1=["Site Visit Completed Form","Meeting Completed Form","Negotiation Form","Site Visit Scheduled Form",
-                                " Meeting Scheduled Form","Requirment Form"]
+        const stagerequirment=["Call Scheduled Form","Mail Scheduled Form","Meeting Scheduled Form","Site Visit Scheduled Form",
+          "Call Completed Form","Mail Completed Form","Meeting Completed Form","Site Visit Completed Form","Negotiation Form",
+          "Requirment Form"]
+
+        const stagerequirment1=["Call Scheduled Form","Mail Scheduled Form","Meeting Scheduled Form","Site Visit Scheduled Form",
+          "Call Completed Form","Mail Completed Form","Meeting Completed Form","Site Visit Completed Form","Negotiation Form",
+          ,"Requirment Form"]
           
 
 //===============================================modal for add lead score for call end============================================
@@ -375,10 +378,11 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
 
 //=========================================== modal for add lead score for email start===============================================
 
-    const [emailsubjects_purpose, setemailsubjects_purpose] = useState(["Payment Reminder", "Agreement Reminder"," Follow-Up","Meeting",     " Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
-      "Matched Deal Update","Feedback","Document"," Site Visit Scheduling","Reschedule Attempt","Payment Follow-Up","Transactional Email",
-      "Meeting/Call Setup"," Initial Meeting Request"," Follow-Up Reminder"," Reconnect Post-Site Visit"," Urgency / Reminder",
-      "After Site Visit","Document Sharing","Booking Step","Occasion-based"," Greetin"," General Follow-Up","Informational"," Recap Email",
+    const [emailsubjects_purpose, setemailsubjects_purpose] = useState(["Payment Reminder", "Agreement Reminder","Follow-Up",
+      "Meeting","Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+      "Matched Deal Update","Feedback","Document","Site Visit Scheduling","Reschedule Attempt","Payment Follow-Up","Transactional Email",
+      "Meeting/Call Setup","Initial Meeting Request","Follow-Up Reminder","Reconnect Post-Site Visit","Urgency / Reminder",
+      "After Site Visit","Document Sharing","Booking Step","Occasion-based","Greeting","General Follow-Up","Informational","Recap Email",
       "Meeting Follow-Up"
     ]);
     const [showInputemailsubjects_purpose, setShowInputemailsubjects_purpose] = useState(false);
@@ -404,7 +408,7 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
     };
 
 
-    const [emaildirections, setemaildirections] = useState(["Outgoing", " Inccoming",]);
+    const [emaildirections, setemaildirections] = useState(["Outgoing", "Inccoming",]);
     const [showInputemaildirections, setShowInputemaildirections] = useState(false);
     const [newemaildirections, setNewemaildirections] = useState(""); 
 
@@ -428,8 +432,8 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
     };
 
 
-    const [emailstatus, setemailstatus] = useState(["Read", "Delivered","Undelivered","Bounced","Sent & Replied","Sent, No Response",
-      "Read & Replied","Unread","Replied","Read Only","Replied","Ignored","Clicked","Downloaded"," Opened","No Response"
+    const [emailstatus, setemailstatus] = useState(["Read", "Delivered","Undelivered","Bounced","Sent & Replied","Sent", "No Response",
+      "Read & Replied","Unread","Replied","Read Only","Replied","Ignored","Clicked","Downloaded","Opened","No Response"
     ]);
     const [showInputemailstatus, setShowInputemailstatus] = useState(false);
     const [newemailstatus, setNewemailstatus] = useState(""); 
@@ -454,8 +458,8 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
     };
 
     const [emailsubject, setemailsubject] = useState(["Reminder: Your Payment is Due – Complete the Process", "Pending Payment for Your Property Booking",
-      "Secure Your Deal – Complete Payment Today"," Please Review & Sign the Property Agreement"," Action Needed: Property Agreement Pending",
-      " Reminder: Signature Required for Your Agreement"," Finalize Your Property – Complete the Agreement","Following Up on Your Property Inquiry"
+      "Secure Your Deal – Complete Payment Today","Please Review & Sign the Property Agreement","Action Needed: Property Agreement Pending",
+      "Reminder: Signature Required for Your Agreement","Finalize Your Property – Complete the Agreement","Following Up on Your Property Inquiry"
     ]);
     const [showInputemailsubject, setShowInputemailsubject] = useState(false);
     const [newemailsubject, setNewemailsubject] = useState(""); 
@@ -508,10 +512,9 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
 
 //=========================================== modal for add lead score for meeting start===============================================
 
-const [meetingreason, setmeetingreason] = useState(["Discuss For Deal", "Requirement","Site Visit","Meeting"," Revival Meeting",
-  "Cold Lead Revival","Owner Meeting","Broker Meeting","Builder Meeting", " Requirement Meeting"," Shortlisting Discuss",
-  "Post-Visit Feedback","Negotiation Meeting","Token/Booking"," Deal Closing","Documentation Required",
-  
+const [meetingreason, setmeetingreason] = useState(["Discuss For Deal", "Requirement","Site Visit","Meeting","Revival Meeting",
+  "Cold Lead Revival","Owner Meeting","Broker Meeting","Builder Meeting", "Requirement Meeting","Shortlisting Discuss",
+  "Post-Visit Feedback","Negotiation Meeting","Token/Booking","Deal Closing","Documentation Required",
 ]);
 const [showInputmeetingreason, setShowInputmeetingreason] = useState(false);
 const [newmeetingreason, setNewmeetingreason] = useState(""); 
@@ -559,9 +562,9 @@ setShowInputmeetingstatus(false);
 }
 };
 
-const [meetingresult, setmeetingresult] = useState(["Interested", "Just Enquiry","Low Budget","Location Mismatch"," Enquiry For Friend",
-  "Cancelled","Not Interested","Requirement Updated","Price/Details Updated"," Properties Exchanged","New Pricing Shared",
-  " Requirement Captured","Shortlisted Finalized","Liked Property","Wants to Negotiate","Price Discussion","Token Received",
+const [meetingresult, setmeetingresult] = useState(["Interested", "Just Enquiry","Low Budget","Location Mismatch","Enquiry For Friend",
+  "Cancelled","Not Interested","Requirement Updated","Price/Details Updated","Properties Exchanged","New Pricing Shared",
+  "Requirement Captured","Shortlisted Finalized","Liked Property","Wants to Negotiate","Price Discussion","Token Received",
   "Buyer Backed Out","Registry Done","Docs Clear","Issue Found"
 ]);
 const [showInputmeetingresult, setShowInputmeetingresult] = useState(false);
@@ -1812,7 +1815,7 @@ setshowInputsitevisit_score(false);
         
 {/*======================================= site visit entry start ================================================================*/}
 
-<div id='sitevisit' className='row' style={{padding:"10px",display:leadscore.available_for == "Sitevisit" ? "flex":"none"}}>
+<div id='sitevisit' className='row' style={{padding:"10px",display:leadscore.available_for == "SiteVisit" ? "flex":"none"}}>
                              <div className="col-md-6" style={{ fontSize: "12px", marginTop: "10px" }}>
                             <label className="labels" style={{ fontSize: "12px" }}>Visit Type</label>
                             <select

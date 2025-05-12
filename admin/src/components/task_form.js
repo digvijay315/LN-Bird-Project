@@ -16,6 +16,42 @@ function Task_form() {
 
 //============================================ fetch data for call fields start==================================================
 
+
+      const callreasons = ["Site Visit", "Builder Discount/Scheme","Construction Update","Documentation","Inventory Availability","Inventory Rights for Listing","Legal",
+                          "Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+                          "Requirement","Review/Feedback","Tax Discussion"];
+        
+      const calldirections = ["Outgoing Call", "Incoming Call",];
+      const callstatus1 = ["Answered", "Cut Call","Not Picked","Busy","Missed","Not Reachable"," Switch Off",
+                          "Number Invalid","Waiting"];
+      const callresult1 = ["Token Terms Accepted – Booking Discussion", "Budget Shared – Awaiting Options",
+                            "Interested – Wants More Options"," Budget Approved – Awaiting Shortlist","Final Deal Discussion Pending","Possession Status Confirmed",
+                            "Wants Legal/Document Review","Need More Inventory Options"];
+      const emailsubjects_purpose = ["Payment Reminder", "Agreement Reminder","Follow-Up","Meeting","Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+            "Matched Deal Update","Feedback","Document","Site Visit Scheduling","Reschedule Attempt","Payment Follow-Up","Transactional Email",
+            "Meeting/Call Setup"," Initial Meeting Request"," Follow-Up Reminder"," Reconnect Post-Site Visit"," Urgency / Reminder",
+            "After Site Visit","Document Sharing","Booking Step","Occasion-based","Greeting","General Follow-Up","Informational","Recap Email",
+            "Meeting Follow-Up"]
+      const emaildirections=["Outgoing", "Inccoming"]
+      const emailstatus = ["Read", "Delivered","Undelivered","Bounced","Sent & Replied","Sent","No Response",
+            "Read & Replied","Unread","Replied","Read Only","Replied","Ignored","Clicked","Downloaded","Opened","No Response"]
+      const meetingreason1 = ["Discuss For Deal", "Requirement","Site Visit","Meeting","Revival Meeting",
+        "Cold Lead Revival","Owner Meeting","Broker Meeting","Builder Meeting", "Requirement Meeting","Shortlisting Discuss",
+        "Post-Visit Feedback","Negotiation Meeting","Token/Booking","Deal Closing","Documentation Required"]
+      const meetingstatus1 = ["Conducted", "Postponed","Cancelled"];
+      const meetingresult1 = ["Interested", "Just Enquiry","Low Budget","Location Mismatch","Enquiry For Friend",
+        "Cancelled","Not Interested","Requirement Updated","Price/Details Updated","Properties Exchanged","New Pricing Shared",
+        "Requirement Captured","Shortlisted Finalized","Liked Property","Wants to Negotiate","Price Discussion","Token Received",
+        "Buyer Backed Out","Registry Done","Docs Clear","Issue Found"]
+      const sitevisit_visittype1 =["Site Visit", "Revisit","Online Visit","Developer Sample Vist"];
+      const sitevisit_status1 = ["Conducted", "Postponed","Did Not Visit","Cancelled","Rescheduled"];
+      const sitevisit_result1 = ["Interested", "Token Discussion","Shortlisted","Second Visit Required",
+        "Family Discussion","Need More Options","Budget Issue","Postponed","Visit Cancelled","Visit Not Attended","Location Mismatch",
+        "Not Interested"]
+          
+        
+
+
  useEffect(()=>{fetchdataforcallfields()},[])
     const[callreason,setcallreason]=useState([]);
     const[calldirection,setcalldirection]=useState([]);
@@ -40,72 +76,58 @@ function Task_form() {
         try {
           const resp=await api.get('viewleadscore')
 
-          // Extract all reasons and remove duplicates
-              const uniqueReasons = [
-                ...new Set(resp.data.score.map(item => item.reason))
-              ];
-            setcallreason(uniqueReasons)
+          const newReasons = resp.data.score.map(item => item.reason);
+          const combinedReasons = Array.from(new Set([...callreasons, ...newReasons]));
+          setcallreason(combinedReasons)
 
-            const uniquedirection = [
-              ...new Set(resp.data.score.map(item => item.direction))
-            ];
-            setcalldirection(uniquedirection)
+          const newdirection = resp.data.score.map(item => item.direction);
+          const combineddirections = Array.from(new Set([...calldirections, ...newdirection]));
+          setcalldirection(combineddirections)
 
-            const uniquestatus = [
-              ...new Set(resp.data.score.map(item => item.status))
-            ];
-            setcallstatus(uniquestatus)
+          const newstatus = resp.data.score.map(item => item.status);
+          const combinedstatus = Array.from(new Set([...callstatus1, ...newstatus]));
+          setcallstatus(combinedstatus)
 
-            const uniqueresult = [
-              ...new Set(resp.data.score.map(item => item.result))
-            ];
-            setcallresult(uniqueresult)
+          const newresult = resp.data.score.map(item => item.result);
+          const combinedresult = Array.from(new Set([...callresult1, ...newresult]));
+          setcallresult(combinedresult)
 
-            const uniquesubject = [
-              ...new Set(resp.data.score.map(item => item.email_category))
-            ].filter(subject => subject && subject.trim() !== "");
-            setmailsubject(uniquesubject)
+          const newsubject = resp.data.score.map(item => item.email_category);
+          const combinedcategory = Array.from(new Set([...emailsubjects_purpose, ...newsubject]));
+          setmailsubject(combinedcategory)
 
-            const uniquemaildirection = [
-              ...new Set(resp.data.score.map(item => item.email_direction))
-            ].filter(subject => subject && subject.trim() !== "");
-            setmaildirection(uniquemaildirection)
+          const newemaildirection = resp.data.score.map(item => item.email_direction);
+          const combinedemaildirection = Array.from(new Set([...emaildirections, ...newemaildirection]));
+          setmaildirection(combinedemaildirection)
 
-            const uniquemailstatus = [
-              ...new Set(resp.data.score.map(item => item.email_status))
-            ].filter(subject => subject && subject.trim() !== "");
-            setmailstatus(uniquemailstatus)
+          const newemailstatus = resp.data.score.map(item => item.email_status);
+          const combinedemailstatus = Array.from(new Set([...emailstatus, ...newemailstatus]));
+          setmailstatus(combinedemailstatus)
+          
+          const newemeetingreason = resp.data.score.map(item => item.meeting_reason);
+          const combinedmeetingreason = Array.from(new Set([...meetingreason1, ...newemeetingreason]));
+          setmeetingreason(combinedmeetingreason)
+          
+          const newemeetingstatus = resp.data.score.map(item => item.meeting_status);
+          const combinedmeetingstatus = Array.from(new Set([...meetingstatus1, ...newemeetingstatus]));
+          setmeetingstatus(combinedmeetingstatus)
+           
+          const newemeetingresult = resp.data.score.map(item => item.meeting_result);
+          const combinedmeetingresult = Array.from(new Set([...meetingresult1, ...newemeetingresult]));
+          setmeetingresult(combinedmeetingresult)
 
-            const uniquemeetingreason = [
-              ...new Set(resp.data.score.map(item => item.meeting_reason))
-            ].filter(subject => subject && subject.trim() !== "");
-            setmeetingreason(uniquemeetingreason)
+          const newsitevisitvisittype = resp.data.score.map(item => item.sitevisit_visittype);
+          const combinedsitevisitvisittype = Array.from(new Set([...sitevisit_visittype1, ...newsitevisitvisittype]));
+          setsitevisit_visittype(combinedsitevisitvisittype)
 
-            const uniquemeetingstatus = [
-              ...new Set(resp.data.score.map(item => item.meeting_status))
-            ].filter(subject => subject && subject.trim() !== "");
-            setmeetingstatus(uniquemeetingstatus)
+          const newsitevisitstatus = resp.data.score.map(item => item.sitevisit_status);
+          const combinedsitevisitstatus = Array.from(new Set([...sitevisit_status1, ...newsitevisitstatus]));
+          setsitevisit_status(combinedsitevisitstatus)
 
-            const uniquemeetingresult = [
-              ...new Set(resp.data.score.map(item => item.meeting_result))
-            ].filter(subject => subject && subject.trim() !== "");
-            setmeetingresult(uniquemeetingresult)
-
-            const uniquesitevisit_visittype = [
-              ...new Set(resp.data.score.map(item => item.sitevisit_visittype))
-            ].filter(subject => subject && subject.trim() !== "");
-            setsitevisit_visittype(uniquesitevisit_visittype)
-
-            const uniquesitevisit_status = [
-              ...new Set(resp.data.score.map(item => item.sitevisit_status))
-            ].filter(subject => subject && subject.trim() !== "");
-            setsitevisit_status(uniquesitevisit_status)
-
-            const uniquesitevisit_result = [
-              ...new Set(resp.data.score.map(item => item.sitevisit_result))
-            ].filter(subject => subject && subject.trim() !== "");
-            setsitevisit_result(uniquesitevisit_result)
-
+          const newsitevisitresult = resp.data.score.map(item => item.sitevisit_result);
+          const combinedsitevisitresult = Array.from(new Set([...sitevisit_result1, ...newsitevisitresult]));
+          setsitevisit_result(combinedsitevisitresult)
+         
         } catch (error) {
           console.log(error);
         }
@@ -183,11 +205,9 @@ function Task_form() {
             
             }
 
-            console.log(sitevisitdata);
-            
-
+          
     const activitys=["Call","Email","Meeting","Site Visit"]
-    const reason=["Meeting","Site Visit","Discuss","For Requirment","other"]
+                                          
     const direction=["Incoming","Outgoing"]
     const visittype=["Site Visit","Home Visit","Online"]
     const status=["Answered","Missed","Not Pic","Busy","Cut Call","Number Not Reachable","Switch Off","Incoming","Not Available","Number Invalid"]
@@ -1628,7 +1648,7 @@ const handleTimeChange = (e) => {
 
                         <div className="row" id="call" style={{display:"none"}}>
                         
-                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date} on time {calltask.due_time}.</p></div>
+                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date}.</p></div>
                         <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
                     <option>---Select---</option>
                         {
@@ -1700,9 +1720,9 @@ const handleTimeChange = (e) => {
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm"  onChange={handleDateChange}/></div>
-                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={handleDateChange}/></div>
+                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div> */}
+                    <div className="col-md-8"></div>
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
@@ -1722,7 +1742,7 @@ const handleTimeChange = (e) => {
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,direction:e.target.value})}>
                     <option>---Select---</option>
                         {
                             calldirection.map(item=>
@@ -1733,7 +1753,7 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,status:e.target.value})}>
                     <option>---Select---</option>
                         {
                             callstatus.map(item=>
@@ -1746,12 +1766,13 @@ const handleTimeChange = (e) => {
                         </div>
                     <div className="col-md-4"></div>
                 
+                
                
-                <div className="col-md-4"><label className="labels">Date</label><input type="date" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1}/></div>
-                <div className="col-md-4"><label className="labels">Duration</label><input type="time" className="form-control form-control-sm" /></div>
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask({...calltask,date:e.target.value})}/></div>
+                <div className="col-md-4"><label className="labels">Duration</label><input type="time" className="form-control form-control-sm" onChange={(e)=>setcalltask({...calltask,duration:e.target.value})}/></div>
                 <div className="col-md-4"> </div>
 
-                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,result:e.target.value})}>
                     <option>---Select---</option>
                        {
                         callresult.map(item=>
@@ -1762,14 +1783,19 @@ const handleTimeChange = (e) => {
                        }
                        </select>
                         </div>
-                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" >
-                    <option>Select</option>
-                        <option>Mr.</option>
+                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,intrested_inventory:e.target.value})}>
+                        <option>---select---</option>
+                        {
+                          sitevisitdata.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
                         </select>
                         </div>
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setcalltask({...calltask,feedback:e.target.value})}/></div>
                     <div className="col-md-12"><br></br></div>
                     <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
                      
@@ -1795,7 +1821,7 @@ const handleTimeChange = (e) => {
 
                     <div className="row" id="email" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} @ {mailtask.due_date} on time {mailtask.due_time} of {mailtask.inventory.join(',')} </p></div> 
+                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} @ {mailtask.due_date}  of {mailtask.inventory.join(',')} </p></div> 
 
                     <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
                     <option>Select </option>
@@ -1953,9 +1979,9 @@ const handleTimeChange = (e) => {
                     <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
                         <div className="col-md-2"></div>
                  
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangemail}/></div>
-                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemail}/></div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={handleDateChangemail}/></div>
+                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemail}/></div> */}
+                    <div className="col-md-8"></div>
                     
                   
                     <div className="col-md-6"><label className="labels">Completed?</label>
@@ -1972,7 +1998,7 @@ const handleTimeChange = (e) => {
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
                     <option>Select</option>
                         {
                             maildirection.map(item=>
@@ -1983,7 +2009,7 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
                     <option>---Select---</option>
                     {
                             mailstatus.map(item=>
@@ -1997,12 +2023,12 @@ const handleTimeChange = (e) => {
                     <div className="col-md-4"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" /></div>
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
                 <div className="col-md-8"> </div>
 
                     <div className="col-md-4"></div>
 
-                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setmailtask({...mailtask,feedback:e.target.value})}/></div>
                     <div className="col-md-12"><br></br></div>
                     <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
                      </div>
@@ -2022,7 +2048,7 @@ const handleTimeChange = (e) => {
                   
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')} @ {sitevisit.start_date} on time {sitevisit.start_time} {sitevisit.participants ? ` also associate with ${sitevisit.participants}` : ""}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')} @ {sitevisit.start_date}  {sitevisit.participants ? ` also associate with ${sitevisit.participants}` : ""}</p></div>
 
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
@@ -2230,21 +2256,19 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         </div>
                         <div className="col-md-6"></div>
 
-                        <div className="col-md-6"><label className="labels">Remind Me?</label> 
+                        {/* <div className="col-md-6"><label className="labels">Remind Me?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
                         <span class="slider round"></span>
                         </label>
-                    </div>
-                    <div className="col-md-6"></div>
+                    </div> */}
+                    {/* <div className="col-md-6"></div> */}
 
                    
                             
-                            <div className="col-md-3"><label className="labels">Select Start Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite}/></div>
-                            {/* <div className="col-md-3"><label className="labels">Select End Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangesite1}/></div> */}
-                            <div className="col-md-3"><label className="labels">Start Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangesite}/></div>
-                            <div className="col-md-3"><label className="labels">End Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangesite1}/></div>
-                            <div className="col-md-3"></div>
+                          <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local"  className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+                          <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local"  className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+                            <div className="col-md-4"></div>
              
                   
                     <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
@@ -2432,10 +2456,10 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     
               
                 
-                <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+               <div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
                 <div className="col-md-8"></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,feedback:e.target.value})}/></div>
                  
                    
                     </div>
@@ -2458,7 +2482,8 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 
                     <div className="row" id="meeting" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory.join(',')} at {meetingtask.location_type} @ {meetingtask.due_date} on time {meetingtask.due_time}</p></div>
+                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory.join(',')} at {meetingtask.location_type} @ {meetingtask.due_date}.
+                      </p></div>
                         
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
@@ -2667,9 +2692,9 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" className="form-control form-control-sm" onChange={handleDateChangemeeting}/></div>
-                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemeeting}/></div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={handleDateChangemeeting}/></div>
+                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemeeting}/></div> */}
+                    <div className="col-md-8"></div>
                     
                   
                     <div className="col-md-6"><label className="labels">Completed?</label> 
@@ -2692,7 +2717,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true"  onChange={(e)=>setmeetingtask({...meetingtask,status:e.target.value})}>
                     <option>---Select---</option>
                     {
                             meetingstatus.map(item=>
@@ -2703,7 +2728,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true"  onChange={(e)=>setmeetingtask({...meetingtask,meeting_result:e.target.value})}>
                     <option>---Select---</option>
                     {
                             meetingresult.map(item=>
@@ -2717,9 +2742,9 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     <div className="col-md-4"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" /></div>
+                <div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setmeetingtask({...meetingtask,date:e.target.value})}/></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}  onChange={(e)=>setmeetingtask({...meetingtask,feedback:e.target.value})}/></div>
                      </div>
                    
                         </div>
@@ -2730,7 +2755,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         </div> 
                        
 
-                    <Modal show={show1} onHide={handleClose1} size='lg'>
+                    {/* <Modal show={show1} onHide={handleClose1} size='lg'>
             <Modal.Header>
               <Modal.Title></Modal.Title>
             </Modal.Header>
@@ -2800,7 +2825,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     {/* <div className="row mt-4"  style={{marginLeft:"70%"}}>
                     <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
                     <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
-                    </div> */}
+                    </div> 
                     </div>
                     
         </div>
@@ -2820,7 +2845,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 Close
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
                   
                     </div>
                     </div>

@@ -50,64 +50,97 @@ function Tasks() {
               const[sitevisit_status,setsitevisit_status]=useState([]);
               const[sitevisit_result,setsitevisit_result]=useState([]);
 
+
+                const callreasons = ["Site Visit", "Builder Discount/Scheme","Construction Update","Documentation","Inventory Availability","Inventory Rights for Listing","Legal",
+                          "Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+                          "Requirement","Review/Feedback","Tax Discussion"];
+        
+      const calldirections = ["Outgoing Call", "Incoming Call",];
+      const callstatus1 = ["Answered", "Cut Call","Not Picked","Busy","Missed","Not Reachable"," Switch Off",
+                          "Number Invalid","Waiting"];
+      const callresult1 = ["Token Terms Accepted – Booking Discussion", "Budget Shared – Awaiting Options",
+                            "Interested – Wants More Options"," Budget Approved – Awaiting Shortlist","Final Deal Discussion Pending","Possession Status Confirmed",
+                            "Wants Legal/Document Review","Need More Inventory Options"];
+      const emailsubjects_purpose = ["Payment Reminder", "Agreement Reminder","Follow-Up","Meeting","Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+            "Matched Deal Update","Feedback","Document","Site Visit Scheduling","Reschedule Attempt","Payment Follow-Up","Transactional Email",
+            "Meeting/Call Setup"," Initial Meeting Request"," Follow-Up Reminder"," Reconnect Post-Site Visit"," Urgency / Reminder",
+            "After Site Visit","Document Sharing","Booking Step","Occasion-based","Greeting","General Follow-Up","Informational","Recap Email",
+            "Meeting Follow-Up"]
+      const emaildirections=["Outgoing", "Inccoming"]
+      const emailstatus = ["Read", "Delivered","Undelivered","Bounced","Sent & Replied","Sent","No Response",
+            "Read & Replied","Unread","Replied","Read Only","Replied","Ignored","Clicked","Downloaded","Opened","No Response"]
+      const meetingreason1 = ["Discuss For Deal", "Requirement","Site Visit","Meeting","Revival Meeting",
+        "Cold Lead Revival","Owner Meeting","Broker Meeting","Builder Meeting", "Requirement Meeting","Shortlisting Discuss",
+        "Post-Visit Feedback","Negotiation Meeting","Token/Booking","Deal Closing","Documentation Required"]
+      const meetingstatus1 = ["Conducted", "Postponed","Cancelled"];
+      const meetingresult1 = ["Interested", "Just Enquiry","Low Budget","Location Mismatch","Enquiry For Friend",
+        "Cancelled","Not Interested","Requirement Updated","Price/Details Updated","Properties Exchanged","New Pricing Shared",
+        "Requirement Captured","Shortlisted Finalized","Liked Property","Wants to Negotiate","Price Discussion","Token Received",
+        "Buyer Backed Out","Registry Done","Docs Clear","Issue Found"]
+      const sitevisit_visittype1 =["Site Visit", "Revisit","Online Visit","Developer Sample Vist"];
+      const sitevisit_status1 = ["Conducted", "Postponed","Did Not Visit","Cancelled","Rescheduled"];
+      const sitevisit_result1 = ["Interested", "Token Discussion","Shortlisted","Second Visit Required",
+        "Family Discussion","Need More Options","Budget Issue","Postponed","Visit Cancelled","Visit Not Attended","Location Mismatch",
+        "Not Interested"]
+        
               const fetchdataforcallfields=async()=>
                 {
                   
                   try {
                     const resp=await api.get('viewleadscore')
           
-                    // Extract all reasons and remove duplicates
-                        const uniqueReasons = [
-                          ...new Set(resp.data.score.map(item => item.reason))
-                        ];
-                      setcallreason(uniqueReasons)
-          
-                      const uniquedirection = [
-                        ...new Set(resp.data.score.map(item => item.direction))
-                      ];
-                      setcalldirection(uniquedirection)
-          
-                      const uniquestatus = [
-                        ...new Set(resp.data.score.map(item => item.status))
-                      ];
-                      setcallstatus(uniquestatus)
-          
-                      const uniqueresult = [
-                        ...new Set(resp.data.score.map(item => item.result))
-                      ];
-                      setcallresult(uniqueresult)
+                    const newReasons = resp.data.score.map(item => item.reason);
+                    const combinedReasons = Array.from(new Set([...callreasons, ...newReasons]));
+                    setcallreason(combinedReasons)
 
-                      const uniquesubject = [
-                        ...new Set(resp.data.score.map(item => item.email_category))
-                      ].filter(subject => subject && subject.trim() !== "");
-                      
-                      setmailsubject(uniquesubject)
+                    const newdirection = resp.data.score.map(item => item.direction);
+                    const combineddirections = Array.from(new Set([...calldirections, ...newdirection]));
+                    setcalldirection(combineddirections)
 
-                      
-                      const uniquemaildirection = [
-                        ...new Set(resp.data.score.map(item => item.email_direction))
-                      ].filter(subject => subject && subject.trim() !== "");
-                      setmaildirection(uniquemaildirection)
+                    const newstatus = resp.data.score.map(item => item.status);
+                    const combinedstatus = Array.from(new Set([...callstatus1, ...newstatus]));
+                    setcallstatus(combinedstatus)
 
-                      const uniquemailstatus = [
-                        ...new Set(resp.data.score.map(item => item.email_status))
-                      ].filter(subject => subject && subject.trim() !== "");
-                      setmailstatus(uniquemailstatus)
+                    const newresult = resp.data.score.map(item => item.result);
+                    const combinedresult = Array.from(new Set([...callresult1, ...newresult]));
+                    setcallresult(combinedresult)
 
-                      const uniquemeetingreason = [
-                        ...new Set(resp.data.score.map(item => item.meeting_reason))
-                      ].filter(subject => subject && subject.trim() !== "");
-                      setmeetingreason(uniquemeetingreason)
-          
-                      const uniquemeetingstatus = [
-                        ...new Set(resp.data.score.map(item => item.meeting_status))
-                      ].filter(subject => subject && subject.trim() !== "");
-                      setmeetingstatus(uniquemeetingstatus)
-          
-                      const uniquemeetingresult = [
-                        ...new Set(resp.data.score.map(item => item.meeting_result))
-                      ].filter(subject => subject && subject.trim() !== "");
-                      setmeetingresult(uniquemeetingresult)
+                    const newsubject = resp.data.score.map(item => item.email_category);
+                    const combinedcategory = Array.from(new Set([...emailsubjects_purpose, ...newsubject]));
+                    setmailsubject(combinedcategory)
+
+                    const newemaildirection = resp.data.score.map(item => item.email_direction);
+                    const combinedemaildirection = Array.from(new Set([...emaildirections, ...newemaildirection]));
+                    setmaildirection(combinedemaildirection)
+
+                    const newemailstatus = resp.data.score.map(item => item.email_status);
+                    const combinedemailstatus = Array.from(new Set([...emailstatus, ...newemailstatus]));
+                    setmailstatus(combinedemailstatus)
+                    
+                    const newemeetingreason = resp.data.score.map(item => item.meeting_reason);
+                    const combinedmeetingreason = Array.from(new Set([...meetingreason1, ...newemeetingreason]));
+                    setmeetingreason(combinedmeetingreason)
+                    
+                    const newemeetingstatus = resp.data.score.map(item => item.meeting_status);
+                    const combinedmeetingstatus = Array.from(new Set([...meetingstatus1, ...newemeetingstatus]));
+                    setmeetingstatus(combinedmeetingstatus)
+                    
+                    const newemeetingresult = resp.data.score.map(item => item.meeting_result);
+                    const combinedmeetingresult = Array.from(new Set([...meetingresult1, ...newemeetingresult]));
+                    setmeetingresult(combinedmeetingresult)
+
+                    const newsitevisitvisittype = resp.data.score.map(item => item.sitevisit_visittype);
+                    const combinedsitevisitvisittype = Array.from(new Set([...sitevisit_visittype1, ...newsitevisitvisittype]));
+                    setsitevisit_visittype(combinedsitevisitvisittype)
+
+                    const newsitevisitstatus = resp.data.score.map(item => item.sitevisit_status);
+                    const combinedsitevisitstatus = Array.from(new Set([...sitevisit_status1, ...newsitevisitstatus]));
+                    setsitevisit_status(combinedsitevisitstatus)
+
+                    const newsitevisitresult = resp.data.score.map(item => item.sitevisit_result);
+                    const combinedsitevisitresult = Array.from(new Set([...sitevisit_result1, ...newsitevisitresult]));
+                    setsitevisit_result(combinedsitevisitresult)
+
                   } catch (error) {
                     console.log(error);
                   }
@@ -345,7 +378,7 @@ const [currentPage2, setCurrentPage2] = useState(1);
 const [itemsPerPage2, setItemsPerPage2] = useState(8); // User-defined items per page
 const indexOfLastItem2 = currentPage2 * itemsPerPage2;
 const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
-const currentItems2 = sitedata.slice(indexOfFirstItem2, indexOfLastItem2);
+const currentItems2 = [...sitedata].reverse().slice(indexOfFirstItem2, indexOfLastItem2);
 const totalPages2 = Math.ceil(sitedata.length / itemsPerPage2);
 
 
@@ -429,7 +462,7 @@ const renderPageNumbers2 = () => {
 const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+const currentItems = [...data].reverse().slice(indexOfFirstItem, indexOfLastItem);
 const totalPages = Math.ceil(data.length / itemsPerPage);
 
 
@@ -515,7 +548,7 @@ const [currentPage1, setCurrentPage1] = useState(1);
 const [itemsPerPage1, setItemsPerPage1] = useState(8); // User-defined items per page
 const indexOfLastItem1 = currentPage1 * itemsPerPage1;
 const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
-const currentItems1 = meetingdata.slice(indexOfFirstItem1, indexOfLastItem1);
+const currentItems1 = [...meetingdata].reverse().slice(indexOfFirstItem1, indexOfLastItem1);
 const totalPages1 = Math.ceil(meetingdata.length / itemsPerPage1);
 
 
@@ -2811,22 +2844,18 @@ renderValue={(selected) => selected.join(', ')}
     </div>
     <div className="col-md-6"></div>
 
-    <div className="col-md-6"><label className="labels">Remind Me?</label> 
+    {/* <div className="col-md-6"><label className="labels">Remind Me?</label> 
 <label class="switch">
 <input type="checkbox" checked={sitevisit.remind_me} onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
     <span class="slider round"></span>
     </label>
-</div>
+</div> */}
 
-{
-    sitevisit.remind_me && (
-        <>
-        <div className="col-md-4"></div>
-        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" value={sitevisit.start_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
-        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" value={sitevisit.end_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
-        </>
-    )
-}
+     
+        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local"  value={sitevisit.start_date ? sitevisit.start_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local"  value={sitevisit.start_date ? sitevisit.start_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+       <div className="col-md-4"></div>
+
 
 <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
 <label class="switch">
@@ -2845,7 +2874,8 @@ renderValue={(selected) => selected.join(', ')}
 <div className="row mt-2">
 
 <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
-<option>---Select---</option>
+              <option>{sitevisit.status}</option>
+              <option>---Select---</option>
                     {
                         sitevisit_status.map(item=>
                             (
@@ -3016,7 +3046,7 @@ return (
 
 
 
-<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" value={sitevisit.date ? sitevisit.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
 <div className="col-md-8"></div>
 
 <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
@@ -3264,7 +3294,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={meetingtask.remark} style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
 <div className="col-md-2"></div>
 
-<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={meetingtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={meetingtask.due_date ? meetingtask.due_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
 <div className="col-md-8"></div>
 
 
@@ -3328,7 +3358,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-1"></div>
 </div>
 <div className="row mt-3">
-<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" value={meetingtask.date} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
+<div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local"  className="form-control form-control-sm" value={meetingtask.date ? meetingtask.date.slice(0, 16) : ""} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
 
 <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={meetingtask.feedback} style={{height:"100px"}} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
  </div>
@@ -3426,7 +3456,7 @@ sitevisitdata.map((item)=>
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={calltask.due_date} className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local"  value={calltask.due_date ? calltask.due_date.slice(0, 16) : ""} className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
@@ -3473,7 +3503,7 @@ sitevisitdata.map((item)=>
                     <div className="col-md-4"></div>
                 
                
-                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" value={calltask.date} className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1"  value={calltask.date ? calltask.date.slice(0, 16) : ""}  className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
                 <div className="col-md-4"><label className="labels">Duration</label><input type="time" value={calltask.duration} className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...calltask,duration:e.target.value}))}/></div>
                 <div className="col-md-4"> </div>
 
@@ -3689,7 +3719,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={mailtask.remarks} onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
     <div className="col-md-2"></div>
 
-<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={mailtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local"  value={mailtask.due_date ? mailtask.due_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
 
 
 <div className="col-md-6"><label className="labels">Completed?</label> 
@@ -3733,7 +3763,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-4"></div>
 </div>
 <div className="row mt-3">
-<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" value={mailtask.date ? mailtask.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
 <div className="col-md-8"> </div>
 
 <div className="col-md-4"></div>
@@ -3837,9 +3867,10 @@ sitevisitdata.map((item)=>
                   
                     <div className="col-md-2"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="date" value={calltask.due_date} className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={calltask.due_date ? calltask.due_date.slice(0, 16) : ""} className="form-control form-control-sm"  onChange={(e)=>setcalltask({...calltask,due_date:e.target.value})}/></div>
+                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div> */}
+                    <div className="col-md-8"></div>
+
                     <div className="col-md-6"><label className="labels">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
@@ -3886,7 +3917,7 @@ sitevisitdata.map((item)=>
                     <div className="col-md-4"></div>
                 
                
-                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" value={calltask.date} className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
+                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" value={calltask.date ? calltask.date.slice(0, 16) : ""} className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
                 <div className="col-md-4"><label className="labels">Duration</label><input type="time" value={calltask.duration} className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...calltask,duration:e.target.value}))}/></div>
                 <div className="col-md-4"> </div>
 
@@ -4105,7 +4136,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={mailtask.remarks} onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
     <div className="col-md-2"></div>
 
-<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={mailtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={mailtask.due_date ? mailtask.due_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,due_date:e.target.value})}/></div>
 
 
 <div className="col-md-6"><label className="labels">Completed?</label> 
@@ -4149,7 +4180,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-4"></div>
 </div>
 <div className="row mt-3">
-<div className="col-md-4"><label className="labels">Date</label><input type="date" value={mailtask.date} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" value={mailtask.date ? mailtask.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
 <div className="col-md-8"> </div>
 
 <div className="col-md-4"></div>
@@ -4314,22 +4345,18 @@ renderValue={(selected) => selected.join(', ')}
     </div>
     <div className="col-md-6"></div>
 
-    <div className="col-md-6"><label className="labels">Remind Me?</label> 
+    {/* <div className="col-md-6"><label className="labels">Remind Me?</label> 
 <label class="switch">
 <input type="checkbox" checked={sitevisit.remind_me} onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
     <span class="slider round"></span>
     </label>
-</div>
+</div> */}
 
-{
-    sitevisit.remind_me && (
-        <>
-        <div className="col-md-4"></div>
-        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" value={sitevisit.start_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
-        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" value={sitevisit.end_date} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
-        </>
-    )
-}
+
+       
+        <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local" value={sitevisit.start_date ? sitevisit.start_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+        <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local" value={sitevisit.end_date ? sitevisit.end_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+      <div className="col-md-4"></div>
 
 <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
 <label class="switch">
@@ -4347,8 +4374,10 @@ renderValue={(selected) => selected.join(', ')}
 
 <div className="row mt-2">
 
-<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
-<option>---Select---</option>
+<div className="col-md-4"><label className="labels">Select Status</label>
+<select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+        <option>{sitevisit.status}</option>
+        <option>---Select---</option>
                       {
                         sitevisit_status.map(item=>
                             (
@@ -4520,7 +4549,7 @@ return (
 
 
 
-<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" value={sitevisit.date ? sitevisit.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
 <div className="col-md-8"></div>
 
 <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
@@ -4773,7 +4802,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' value={meetingtask.remark} style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
 <div className="col-md-2"></div>
 
-<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={meetingtask.due_date} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
+<div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" value={meetingtask.due_date ? meetingtask.due_date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,due_date:e.target.value})}/></div>
 <div className="col-md-8"></div>
 
 
@@ -4837,7 +4866,7 @@ sitevisitdata.map((item)=>
 <div className="col-md-1"></div>
 </div>
 <div className="row mt-3">
-<div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" value={meetingtask.date} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
+<div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" className="form-control form-control-sm" value={meetingtask.date ? meetingtask.date.slice(0, 16) : ""} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
 
 <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={meetingtask.feedback} style={{height:"100px"}} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
  </div>
