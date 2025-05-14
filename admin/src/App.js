@@ -9,35 +9,35 @@ import Login from './components/login';
 
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Mail_task_form from './components/mail_task_form';
-import Mail_task_complete_form from './components/mail_task_complete_form';
+// import Mail_task_complete_form from './components/mail_task_complete_form';
 import Meeting_task_form from './components/meeting_task_form';
-import Meeting_task_complete_form from './components/meeting_task_complete_form';
+// import Meeting_task_complete_form from './components/meeting_task_complete_form';
 import Site_visit from './components/site_visit_form';
-import Site_visit_complete_form from './components/site_visit_complete_form';
-import Sale_lease from './components/sale_lease';
+// import Site_visit_complete_form from './components/site_visit_complete_form';
+// import Sale_lease from './components/sale_lease';
 import Booking_details from './components/booking_details';
 import Payment_details from './components/Payment_details';
 // import Addinventory from './components/addinventory';
 import Leadfetch from './components/leaddetails';
 import Fetchcontact from './components/contactdetails';
 import InventoryDetails from './components/inventorydetails';
-import TableComponent from './components/demo';
-import CallButton from './components/demo';
-import Notification from './components/demo';
-import SuggestionBox from './components/demo';
+// import TableComponent from './components/demo';
+// import CallButton from './components/demo';
+// import Notification from './components/demo';
+// import SuggestionBox from './components/demo';
 import Adddcompany from './components/addcompany.js';
 import Projectform from './components/projectform';
 import Deal from './components/deal';
 import '../src/App.css';
-import BankSelector from './components/demo1';
+// import BankSelector from './components/demo1';
 import Tasks from './components/tasks.js';
 import Task_form from './components/task_form.js';
 import Paymentdetails from './components/paymentdetails.js';
 import Bookingdetails from './components/bookingdetails.js';
 import Marketing from './components/marketing.js';
 import Dealdetails from './components/dealdetails.js';
-import FlipViewComponent from './components/demo';
-import AddContactForm from './components/demo';
+// import FlipViewComponent from './components/demo';
+// import AddContactForm from './components/demo';
 import Sortaddcontact from './components/sortaddcontact.js';
 import EditProjectform from './components/editproject.js';
 import Leadsingleview from './components/leadsingleview.js';
@@ -49,12 +49,13 @@ import Dealsingleview from './components/dealsingleview.js';
 import Projectsingleview from './components/projectsingleview.js';
 import Inventorysingleview from './components/inventorysingleview.js';
 import Sendmail from './components/sendmail.js';
-import Sendwhatsapp from './components/sendwhatsapp.js';
-import WhatsAppLogin from './components/sendwhatsapp.js';
+// import Sendwhatsapp from './components/sendwhatsapp.js';
+// import WhatsAppLogin from './components/sendwhatsapp.js';
 import Crmsettings from './components/settings.js';
 import Leadscoresettings from './components/leadscoresettings.js';
 import Whatsapplogin from './components/whatsapplogin.js';
 import Users from './components/users.js';
+import Templets from './components/templets.js';
 
 function App() {
   return (
@@ -104,6 +105,7 @@ function App() {
       <Route path='/leadscoreseetings' element={<Leadscoresettings/>}/>
       <Route path='/whatsapplogin' element={<Whatsapplogin/>}/>
       <Route path='/addusers' element={<Users/>}/>
+      <Route path='/createtemplets' element={<Templets/>}/>
     </Routes>  
      {/* <WhatsAppLogin/>  */}
    </div>

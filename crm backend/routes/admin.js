@@ -23,6 +23,7 @@ const { add_activity, view_activity, remove_activity, update_activity, view_acti
 const { sendmessage, makecall } = require('../controllers/sendsms');
 const {sendwhatsapp,setWhatsAppWebhook, sendWhatsAppTextMessage, rcvmessage} = require('../controllers/sendwhatsapp');
 const { add_leadscore, view_leadscore, delete_leadscore } = require('../controllers/leadscore');
+const { add_templete, view_templete } = require('../controllers/addtemplets');
 
 
 
@@ -180,5 +181,7 @@ router.post('/addleadscore',add_leadscore)
 router.get('/viewleadscore',view_leadscore)
 router.delete('/deleteleadscore/:_id',delete_leadscore)
 
+router.post('/addtemplete',add_templete)
+router.get('/viewtemplets',view_templete)
 
 module.exports=router;

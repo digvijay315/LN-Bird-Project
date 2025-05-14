@@ -43,10 +43,10 @@ function Crmsettings() {
       onClick: () => alert('/settings/notifications'),
     },
     {
-      title: 'Email Templates',
+      title: 'Create Templates',
       icon: <FiMail />,
       description: 'Customize automated emails.',
-      onClick: () => alert('Open email template editor'),
+      onClick: () => navigate('/createtemplets'),
     },
     {
         title: 'Lead Score',

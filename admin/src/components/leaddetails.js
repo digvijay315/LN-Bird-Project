@@ -4048,6 +4048,16 @@ const handleroadChange = (event) => {
                                         
                                         // Set the message state with the formatted message (HTML-friendly)
                                         setmessage1(htmlFormattedMessage); 
+
+                                        const selectedId = e.target.value;
+                                        setSelectedTemplate1(selectedId);
+
+                                        const selected = templets.find((t) => t._id === selectedId);
+                                        if (selected) {
+                                          const replacedContent = replaceVariables(selected.templateContent || '');
+                                           const htmlFormattedMessage = replacedContent.replace(/\n/g, '<br>');
+                                         setmessage1(htmlFormattedMessage); 
+                                        }
                                       };
 
                                          const [emails1, setEmails1] = useState([]);
@@ -4256,6 +4266,34 @@ const handleroadChange = (event) => {
 //===================================================== update button code end=======================================================
 
 
+//============================== fetch templets code start=======================================================================
+
+                useEffect(()=>{fetchtempletsdata()},[])
+                      const[templets,settemplets]=useState([]);
+                      const fetchtempletsdata=async()=>
+                        {
+                          
+                          try {
+                            const resp=await api.get('viewtemplets')
+                            settemplets(resp.data.templetes)
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        
+                        }
+                     // Replace variables in the template with actual data
+  const replaceVariables = (template) => {
+    return template
+      .replace('{{title}}', lead1[0].title)
+      .replace('{{first_name}}', lead1[0].first_name)
+      .replace('{{last_name}}', lead1[0].last_name)
+      .replace('{{propertyDetails}}', propertyDetails)
+      .replace('{{listingGalleryLink}}', 'http://example.com/gallery')
+      .replace('{{bookingLink}}', 'http://example.com/book');
+  };
+                        
+
+// =======================================fetch templets code end=================================================================
 
 
 //============================================ all action buttons hover effect code start===============================================
@@ -7521,6 +7559,12 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                     <option value="template1">Template 1</option>
                     <option value="template2">Template 2</option>
                     <option value="template3">Template 3</option>
+                    {
+                      templets.map((item)=>
+                      (
+                        <option value={item._id}>{item.templateName}</option>
+                      ))
+                    }
                   </select>
                  </div>
                  
@@ -7610,7 +7654,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             </Modal.Header>
             <Modal.Body>
        
-       <div className="row">
+           <div className="row">
 
                 <div  className="col-md-4" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"12px",visibility:"hidden"}}>Templates</label>
                  <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}} onChange={(e)=>setviewconditon(e.target.value)}>
