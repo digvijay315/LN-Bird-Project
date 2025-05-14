@@ -10,6 +10,7 @@ import api from "../api";
 import { Inventory, Try } from "@mui/icons-material";
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 function Task_form() {
@@ -281,29 +282,48 @@ function Task_form() {
 // ================================all post methods start=============================================================================
 
        
-            const calltaskdetails=async()=>
-            {
-            const title1 = document.getElementById("title").innerText;
-            // Update state
-            const updatedCallTask = { ...calltask, title: title1 };
-            const updatedCallTask1 = { ...activity, task_title: title1 };
-            
-            try {
-            const resp=await api.post('calltask',updatedCallTask)
-            const resp1=await api.post('addactivity',updatedCallTask1)
-            if(resp.status===200)
-            {
-            toast.success(resp.data.message)
+            const calltaskdetails = async () => {
+        const title1 = document.getElementById("title").innerText;
+
+    // Update state
+    const updatedCallTask = { ...calltask, title: title1 };
+    const updatedCallTask1 = { ...activity, task_title: title1 };
+
+    try {
+        // Save the task first
+        const resp = await api.post('calltask', updatedCallTask);
+
+        if (resp.status === 200) {
+             Swal.fire({
+                        title: "Task Created",
+                        text: "Task created successfully!",
+                        icon: "success",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                    })
+
+            // If task is saved successfully, save the activity
+            const resp1 = await api.post('addactivity', updatedCallTask1);
+
+            // Reload after both operations succeed
             setTimeout(() => {
-            window.location.reload();
+                window.location.reload();
             }, 2000); // 2000 milliseconds = 2 seconds
-
-            }
-        } catch (error) {
-
-            toast.error(error.message)
+        } else {
+            toast.error("failed to create task");
         }
-    }
+      } catch (error) 
+        {
+            Swal.fire({
+                        title: "Incomplete Task",
+                        text:error.response.data.message,
+                        icon: "error",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                    })
+        }
+    };
+
 
    
 
@@ -318,18 +338,37 @@ function Task_form() {
                 const updatedMailTask1 = { ...activity, task_title: title1 };
                 try {
                     const resp=await api.post('mailtask',updatedMailTask)
-                    const resp1=await api.post('addactivity',updatedMailTask1)
-                    if(resp.status===200)
-                    {
-                        toast.success(resp.data.message)
-                        setTimeout(() => {
-                            window.location.reload();
-                          }, 2000); // 2000 milliseconds = 2 seconds
-                        
-                    }
+                  
+
+                       if (resp.status === 200) {
+                       Swal.fire({
+                        title: "Task Created",
+                        text: "Task created successfully!",
+                        icon: "success",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        })
+
+              // If task is saved successfully, save the activity
+              const resp1=await api.post('addactivity',updatedMailTask1)
+
+              // Reload after both operations succeed
+               setTimeout(() => {
+                  window.location.reload();
+                  }, 2000); // 2000 milliseconds = 2 seconds
+              } else {
+                  toast.error("failed to create task");
+              }
+                  
                 } catch (error) {
                     
-                    toast.error(error.message)
+                      Swal.fire({
+                        title: "Incomplete Task",
+                        text:error.response.data.message,
+                        icon: "error",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                    })
                 }
             }
 
@@ -344,7 +383,7 @@ function Task_form() {
                     const updatedMailTask2 = { ...activity, task_title: title1 };
                     try {
                         const resp=await api.post('meetingtask',updatemeetingtask)
-                        const resp1=await api.post('addactivity',updatedMailTask2)
+                      
 
                         const data1 = { newstage: updatestagemeeting1 };
 
@@ -373,17 +412,20 @@ function Task_form() {
         isValidCombination = false;
       }
     }
-
-    
-    
-
                         if(leadidmeeting)
                           {
                            const resp1 = await api.put(`updatelead/${leadidmeeting}`,data );
                           }
                         if(resp.status===200)
                         {
-                            toast.success(resp.data.message)
+                            const resp1=await api.post('addactivity',updatedMailTask2)
+                           Swal.fire({
+                            title: "Task Created",
+                            text: "Task created successfully!",
+                            icon: "success",
+                            confirmButtonColor: '#d33',
+                            confirmButtonText: 'OK',
+                            })
                             setTimeout(() => {
                                 window.location.reload();
                               }, 2000); // 2000 milliseconds = 2 seconds
@@ -391,7 +433,13 @@ function Task_form() {
                         }
                     } catch (error) {
                         
-                        toast.error(error.message)
+                            Swal.fire({
+                        title: "Incomplete Task",
+                        text:error.response.data.message,
+                        icon: "error",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                    })
                     }
                 }
         
@@ -409,12 +457,19 @@ function Task_form() {
                   try {
                     // First API request to post sitevisit details
                     const resp = await api.post('sitevisit', updatedsiteTask);
-                    const resp1=await api.post('addactivity',updatedsiteTask1)
+                 
                 
                    
                 
                     if (resp.status === 200) {
-                      toast.success(resp.data.message);
+                      const resp1=await api.post('addactivity',updatedsiteTask1)
+                      Swal.fire({
+                        title: "Task Created",
+                        text: "Task created successfully!",
+                        icon: "success",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                        })
                 
                       // Reload the page after a brief delay
                       setTimeout(() => {
@@ -423,7 +478,13 @@ function Task_form() {
                     }
                   } catch (error) {
                     // Catch any errors from the main API requests (sitevisit and lead updates)
-                    toast.error("Please select Project Block and Unit sequencely or Missing Lead...");
+                       Swal.fire({
+                        title: "Incomplete Task",
+                        text:error.response.data.message,
+                        icon: "error",
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'OK',
+                    })
                   }
                 };
                 

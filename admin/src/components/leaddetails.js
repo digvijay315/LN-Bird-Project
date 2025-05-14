@@ -26,7 +26,7 @@ import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
 import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
 import Swal from "sweetalert2";
-import { Details } from "@mui/icons-material";
+import { Details, Try } from "@mui/icons-material";
 import Leadsingleview from "./leadsingleview";
 
 
@@ -2761,31 +2761,10 @@ const handleroadChange = (event) => {
                           
                         // After collecting the incomplete forms
                         if (incompleteForms.length > 0) {
-                          Swal.fire({
-                            title: `Incomplete Forms Detected for ${item1.lead}`,
-                            text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'Yes, fill the form',
-                            cancelButtonText: 'No, skip',
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                               const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
-
-                               if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
-                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
-                    || lowerForms.includes('sitevisit scheduled')) {
-                                navigate('/tasks');
-                              } else if (lowerForms.includes('requirement')) {
-                                navigate('/leaddetails');
-                              }
-                            } else {
-                              // Skip logic, proceed with the score calculation
-                              console.log("Skipping forms:", incompleteForms);
-                              score += parseFloat(item.score);  // Calculate the score if forms are skipped
-                            }
-                          });
-                        } else {
+                        console.log(`Incomplete Forms Detected for ${item1.lead} ${incompleteForms.join(', ')}`)
+                 
+                        } 
+                        else {
                           // If no incomplete forms, directly calculate the score
                           score += parseFloat(item.score);
                           leadstage=item.leadstage
@@ -2884,32 +2863,11 @@ const handleroadChange = (event) => {
                         });
                       
                     // After collecting the incomplete forms
-                    if (incompleteForms.length > 0) {
-                      Swal.fire({
-                        title: `Incomplete Forms Detected for ${item1.lead}`,
-                        text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, fill the form',
-                        cancelButtonText: 'No, skip',
-                      }).then((result) => {
-                        if (result.isConfirmed) {
-                           const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
-
-                          if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
-                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
-                    || lowerForms.includes('sitevisit scheduled')) {
-                            navigate('/tasks');
-                          } else if (lowerForms.includes('requirement')) {
-                            navigate('/leaddetails');
-                          }
-                        } else {
-                          // Skip logic, proceed with the score calculation
-                          console.log("Skipping forms:", incompleteForms);
-                          score += parseFloat(item.email_score);  // Calculate the score if forms are skipped
-                        }
-                      });
-                    } else {
+                     
+                        if (incompleteForms.length > 0) {
+                        console.log(`Incomplete Forms Detected for ${item1.lead} ${incompleteForms.join(', ')}`)
+                 
+                        }  else {
                       // If no incomplete forms, directly calculate the score
                       score += parseFloat(item.email_score);
                       leadstage=item.leadstage
@@ -3007,38 +2965,16 @@ const handleroadChange = (event) => {
                     }
                     
                     });
-                  
-                // After collecting the incomplete forms
-                if (incompleteForms.length > 0) {
-                  Swal.fire({
-                    title: `Incomplete Forms Detected for ${item1.lead}`,
-                    text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, fill the form',
-                    cancelButtonText: 'No, skip',
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                       const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
-
-                       if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
-                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
-                    || lowerForms.includes('sitevisit scheduled')) {
-                        navigate('/tasks');
-                      } else if (lowerForms.includes('requirement')) {
-                        navigate('/leaddetails');
+                 // After collecting the incomplete forms
+                        if (incompleteForms.length > 0) {
+                        console.log(`Incomplete Forms Detected for ${item1.lead} ${incompleteForms.join(', ')}`)
+                 
+                        } 
+                         else {
+                        // If no incomplete forms, directly calculate the score
+                        score += parseFloat(item.meeting_score);
+                        leadstage=item.leadstage
                       }
-                    } else {
-                      // Skip logic, proceed with the score calculation
-                      console.log("Skipping forms:", incompleteForms);
-                      score += parseFloat(item.meeting_score);  // Calculate the score if forms are skipped
-                    }
-                  });
-                } else {
-                  // If no incomplete forms, directly calculate the score
-                  score += parseFloat(item.meeting_score);
-                  leadstage=item.leadstage
-                }
                 
               }
             }
@@ -3127,7 +3063,7 @@ const handleroadChange = (event) => {
                
                else if (expectedRequirment === "requirement") {
                   const match1 = singlelead.requirment?.trim() !== "";
-                  console.log(match1);
+                 
                   if (!match1) {
                     incompleteForms.push(formName);
                   }
@@ -3135,37 +3071,16 @@ const handleroadChange = (event) => {
                 
                 });
               
-            // After collecting the incomplete forms
-            if (incompleteForms.length > 0) {
-              Swal.fire({
-                title: `Incomplete Forms Detected for ${item1.lead}`,
-                text: `You have incomplete forms: ${incompleteForms.join(', ')}. Would you like to fill them?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, fill the form',
-                cancelButtonText: 'No, skip',
-              }).then((result) => {
-                if (result.isConfirmed) {
-                   const lowerForms = incompleteForms.map(f => formMap[f]?.toLowerCase());
-
-                  if (lowerForms.includes('sitevisit') || lowerForms.includes('meeting') || lowerForms.includes('mail') || lowerForms.includes('call')
-                      || lowerForms.includes('call scheduled') || lowerForms.includes('mail scheduled') || lowerForms.includes('meeting scheduled')
-                    || lowerForms.includes('sitevisit scheduled')) {
-                    navigate('/tasks');
-                  } else if (lowerForms.includes('requirement')) {
-                    navigate('/leaddetails');
+                   // After collecting the incomplete forms
+                        if (incompleteForms.length > 0) {
+                        console.log(`Incomplete Forms Detected for ${item1.lead} ${incompleteForms.join(', ')}`)
+                 
+                        }  else 
+                        {
+                    // If no incomplete forms, directly calculate the score
+                    score += parseFloat(item.sitevisit_score);
+                    leadstage=item.leadstage
                   }
-                } else {
-                  // Skip logic, proceed with the score calculation
-                  console.log("Skipping forms:", incompleteForms);
-                  score += parseFloat(item.sitevisit_score);  // Calculate the score if forms are skipped
-                }
-              });
-            } else {
-              // If no incomplete forms, directly calculate the score
-              score += parseFloat(item.sitevisit_score);
-              leadstage=item.leadstage
-            }
             
           }
         }
@@ -4119,11 +4034,26 @@ const handleroadChange = (event) => {
                                           }
                                         };
 
-                                        const[instanceId,setinstanceId]=useState("")
-                                        const firstuser=localStorage.getItem('user1')
-                                        const seconduser=localStorage.getItem('user2')
-                                        console.log(instanceId);
+                                        useEffect(()=>
+                                        {
+                                          getinstanceid()
+                                        },[])
+                                        const[firstuser,setfirstuser]=useState("")
+                                        const[seconduser,setseconduser]=useState("")
+                                    const getinstanceid=async()=>
+                                    {
+                                      try {
+                                         const resp=await api.get('viewinstanceid')
+                                          setfirstuser(resp?.data.instanceid[0].user1)
+                                          setseconduser(resp?.data.instanceid[0].user2)
                                         
+                                      } catch (error) {
+                                        console.log(error);
+                                        
+                                      }
+                                    }
+                                
+                                        const[instanceId,setinstanceId]=useState("")
                                          const handleSendwhatsapp = async () => {
                                           setisloading2(true)
                                             try {

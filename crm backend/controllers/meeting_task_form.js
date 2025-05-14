@@ -7,6 +7,14 @@ const meeting_task_form=async(req,res)=>
                 status,meeting_result,date,feedback,due_date,due_time,
                 title2,first_name,last_name,mobile_no,email,stage}=req.body;
 
+                
+                                   const match=await meetingtask_form.find({lead:req.body.lead})
+                    
+                                   for (let task of match) {
+                                        if (task.complete !== "true") {
+                                            return res.status(400).send({ message: `There is an incomplete call task of ${task.lead}. Please complete it first.` });
+                                        }
+                                    }
 
                 const newmeetingtaskform=new meetingtask_form({activity_type,title,executive,lead,location_type,location_address,
                                     reason,project,block,inventory,remark,complete,status,meeting_result,date,feedback,due_date,due_time,title2,first_name,last_name,mobile_no,email,stage})

@@ -24,6 +24,7 @@ const { sendmessage, makecall } = require('../controllers/sendsms');
 const {sendwhatsapp,setWhatsAppWebhook, sendWhatsAppTextMessage, rcvmessage} = require('../controllers/sendwhatsapp');
 const { add_leadscore, view_leadscore, delete_leadscore } = require('../controllers/leadscore');
 const { add_templete, view_templete } = require('../controllers/addtemplets');
+const { add_instanceid, view_instanceid } = require('../controllers/whatsappinstanceid');
 
 
 
@@ -183,5 +184,8 @@ router.delete('/deleteleadscore/:_id',delete_leadscore)
 
 router.post('/addtemplete',add_templete)
 router.get('/viewtemplets',view_templete)
+
+router.post('/addinstanceid',add_instanceid)
+router.get('/viewinstanceid',view_instanceid)
 
 module.exports=router;

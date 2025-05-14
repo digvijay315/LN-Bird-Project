@@ -6,6 +6,14 @@ const call_task_form=async(req,res)=>
             const{activity_type,title,reason,lead,executive,remarks,complete,due_date,due_time,title2,first_name,last_name,mobile_no,email,stage,
                 lead_id,direction,status,date,duration,result,intrested_inventory,feedback}=req.body;
 
+                
+                const match=await calltask_form.find({lead:req.body.lead})
+
+               for (let task of match) {
+                    if (task.complete !== "true") {
+                        return res.status(400).send({ message: `There is an incomplete call task of ${task.lead}. Please complete it first.` });
+                    }
+                }
                 const newcalltaskform=new calltask_form({activity_type,title,reason,lead,executive,remarks,complete,due_date,due_time,
                     title2,first_name,last_name,mobile_no,email,stage,lead_id,direction,status,date,duration,result,intrested_inventory,feedback
                 })

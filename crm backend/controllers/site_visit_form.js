@@ -7,6 +7,13 @@ const site_visit_form=async(req,res)=>
                 remind_me,start_date,end_date,start_time,end_time,complete, title2,first_name,last_name,mobile_no,email,stage,lead_id,status,intrested_inventory,result,
                 intrested_project,intrested_block,date,feedback}=req.body;
 
+                     const match=await sitevisit_form.find({lead:req.body.lead})
+                                    
+                                                   for (let task of match) {
+                                                        if (task.complete !== "true") {
+                                                            return res.status(400).send({ message: `There is an incomplete call task of ${task.lead}. Please complete it first.` });
+                                                        }
+                                                    }
                 const newsitevisitform=new sitevisit_form({activity_type,title,executive,project,sitevisit_type,inventory,block,lead,confirmation,remark,participants,
                     remind_me,start_date,end_date,start_time,end_time,complete, title2,first_name,last_name,mobile_no,email,stage,lead_id,status,intrested_inventory,result,
                     intrested_project,intrested_block,date,feedback})

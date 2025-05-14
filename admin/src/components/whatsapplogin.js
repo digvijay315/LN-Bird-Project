@@ -29,13 +29,18 @@ function Whatsapplogin() {
     }
   }
 
-  const[user1,setuser1]=useState("681EB1362E54B")
-  const[user2,setuser2]=useState("681DD9350102B")
+  const[user1,setuser1]=useState("")
+  const[user2,setuser2]=useState("")
 
-  const setinstanceid=()=>
+  const setinstanceid=async()=>
   {
-    localStorage.setItem('user1',user1)
-    localStorage.setItem('user2',user2)
+    try {
+      setuser1("")
+      setuser2("")
+      const resp=await api.post('addinstanceid',{user1,user2})
+      if(resp.status===200)
+      {
+        
        {
           Swal.fire({
           title: "New Instance Id",
@@ -46,6 +51,12 @@ function Whatsapplogin() {
         })
        }
 
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
   }
 
 
