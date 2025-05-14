@@ -30,7 +30,6 @@ app.get('/',(req,res)=>
 app.use('/',require('./Routes/admin'));
 
 
-app.listen(process.env.PORT,()=>
-{
-    console.log(`server is running on port:${process.env.PORT}`);
-})
+app.listen(process.env.PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port: ${process.env.PORT}`);
+});
