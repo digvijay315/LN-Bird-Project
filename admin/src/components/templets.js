@@ -14,10 +14,11 @@ import api from "../api";
 import Tooltip from '@mui/material/Tooltip';
 import Swal from 'sweetalert2';
 import { ToastContainer,toast } from "react-toastify";
-import ReactQuill from 'react-quill';
+import ReactQuill,{ Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+// import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module-react';
-import Quill from 'quill';
+
 
 
 function Templets() {
