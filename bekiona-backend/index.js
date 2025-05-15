@@ -25,7 +25,7 @@ app.use(cors({
 connect();
 app.get('/',(req,res)=>
 {
-    res.send("welcome")
+    res.send("welcome home")
 })
 app.use('/',require('./Routes/admin'));
 

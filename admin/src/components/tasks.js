@@ -246,9 +246,16 @@ function Tasks() {
       }
     
     }
+
+    const[alltask,setalltask]=useState([])
     
+    useEffect(()=>
+    {
+      setalltask([...data,...sitedata,...meetingdata])
+
+    },[sitedata,meetingdata,data])
     
-    
+   
   /*-------------------------------------------------------------------fetching all contact data end---------------------------------------------------------------------------- */                                                     
 
   /*-------------------------------------------------------------------delete  contact data start---------------------------------------------------------------------------- */                                                     
@@ -2246,6 +2253,108 @@ const [show10, setshow10] = useState(false);
 
 //================================================== meeting task edit end===============================================================
 
+const[displaytask,setdisplaytask]=useState("")//this is for show follow up ,sitevisit,meeting,today and all task while on click
+
+// ===================================all task for Today start===================================================================
+
+const today = new Date().toISOString().split("T")[0];
+
+ const [currentPagetoday, setCurrentPagetoday] = useState(1);
+const [itemsPerPagetoday, setItemsPerPagetoday] = useState(8); // User-defined items per page
+const indexOfLastItemtoday = currentPagetoday * itemsPerPagetoday;
+const indexOfFirstItemtoday = indexOfLastItemtoday - itemsPerPagetoday;
+const currentItemstoday = [...alltask].reverse().slice(indexOfFirstItemtoday, indexOfLastItemtoday);
+const totalPagestoday = Math.ceil(alltask.length / itemsPerPagetoday);
+
+
+  // Handle items per page change
+  const handleItemsPerPageChangetoday = (e) => {
+    setItemsPerPagetoday(Number(e.target.value));
+    setCurrentPagetoday(1); // Reset to first page whenever items per page changes
+  };
+
+// Function to handle page changes
+const paginatetoday = (pageNumber) => setCurrentPagetoday(pageNumber);
+
+// Function to handle "Next" and "Previous" page changes
+const goToNextPagetoday = () => {
+  if (currentPagetoday < totalPagestoday) {
+    setCurrentPagetoday(currentPagetoday + 1);
+  }
+};
+
+const goToPreviousPagetoday = () => {
+  if (currentPagetoday > 1) {
+    setCurrentPagetoday(currentPagetoday - 1);
+  }
+};
+
+const renderPageNumberstoday = () => {
+  // Define the range of page numbers to display
+  const maxPageNumbersToShow = 5;
+  const startPage = Math.max(1, currentPagetoday - Math.floor(maxPageNumbersToShow / 2));
+  const endPage = Math.min(totalPagestoday, startPage + maxPageNumbersToShow - 1);
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+       
+        whiteSpace: 'nowrap',
+        padding: '10px-15px',
+        width: '100%', 
+        position: 'relative'
+      }}
+    >
+      {/* Previous Button */}
+      {currentPagetoday > 1 && (
+        <button onClick={goToPreviousPagetoday} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Prev
+        </button>
+      )}
+
+      {/* Page Numbers */}
+      {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((number) => (
+        <button
+          key={number}
+          onClick={() => paginatetoday(number)}
+          style={{
+            width: '30px',
+            borderRadius: '5px',
+            marginRight: '5px',
+            flexShrink: 0, // Prevent buttons from shrinking
+            backgroundColor: number === currentPagetoday ? 'lightblue' : 'white',
+          }}
+        >
+          {number}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      {currentPagetoday < totalPagestoday && (
+        <button onClick={goToNextPagetoday} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+          Next
+        </button>
+      )}
+    </div>
+  );
+};
+
+          const alltaskcolumns = [
+        { id: 'sno', name: '#' },
+        { id: 'activity_type', name: 'Activity_Type' },
+        { id: 'details', name: 'Details' },
+        { id: 'scheduled_date', name: 'Scheduled_Date' },
+        { id: 'scheduled_by', name: 'Scheduled By' },
+        { id: 'agenda', name: 'Agenda' },
+        { id: 'source', name: 'Source' },
+        { id: 'remark', name: 'Remarks' },
+      ];
+      const [visibleColumnstoday, setVisibleColumnstoday] = useState(alltaskcolumns.slice(0));
+
+     
+
+// ===============================all task for Today end============================================================================
 
 
     return ( 
@@ -2265,9 +2374,9 @@ const [show10, setshow10] = useState(false);
             <li  onClick={exportToExcel} >Export Data</li>
               
             </ul>
-            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px",textAlign:"center"}} onClick={followup}>Follow Up </label>
-            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={Sitevisit}>Site Visit </label>
-            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={meeting}>Meeting </label>
+            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px",textAlign:"center"}} onClick={()=>setdisplaytask("followup")}>Follow Up </label>
+            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={()=>setdisplaytask("sitevisit")}>Site Visit </label>
+            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={()=>setdisplaytask("meeting")}>Meeting </label>
 
             <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"40%"}}>Play Task</button>
             <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"120px",marginLeft:"1%"}}><img src="https://cdn-icons-png.flaticon.com/512/566/566737.png" style={{height:"20px"}}/>Filter</button>
@@ -2278,12 +2387,12 @@ const [show10, setshow10] = useState(false);
       </div>
       <div style={{marginTop:"10px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px",gap:"50px",fontFamily:"times-new-roman",fontWeight:"bold"}}>
         
-        <div style={{cursor:"pointer"}}>Today</div>
-        <div style={{cursor:"pointer"}}>Upcoming</div>
-        <div style={{cursor:"pointer"}}>Overdue</div>
-        <div style={{cursor:"pointer"}}>No Due Date</div>
-        <div style={{cursor:"pointer"}}>Completed</div>
-        <div style={{cursor:"pointer"}}>All</div>
+        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("today")}>Today</div>
+        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("upcoming")}>Upcoming</div>
+        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("overdue")}>Overdue</div>
+        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("noduedate")}>No Due Date</div>
+        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("complete")}>Completed</div>
+        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("all")}>All</div>
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       {/* <input type="checkbox" onChange={handleischeckedchange}/>
@@ -2353,7 +2462,7 @@ const [show10, setshow10] = useState(false);
 
     
     
-      <div id="sitevisitpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"80%",position:"absolute",display:"none"}}>
+      <div id="sitevisitpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:displaytask==="sitevisit"?"flex":"none"}}>
    
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
@@ -2367,7 +2476,7 @@ const [show10, setshow10] = useState(false);
     {renderPageNumbers2()}
     </div>
 
-    <div id="followuppagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:"none"}}>
+    <div id="followuppagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:displaytask==="followup"?"flex":"none"}}>
    
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
@@ -2381,7 +2490,7 @@ const [show10, setshow10] = useState(false);
     {renderPageNumbers()}
     </div>
 
-    <div id="meetingpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:"none"}}>
+    <div id="meetingpagination" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:displaytask==="meeting"?"flex":"none"}}>
    
       
    <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
@@ -2394,6 +2503,20 @@ const [show10, setshow10] = useState(false);
  
  {renderPageNumbers1()}
  </div>
+
+  <div id="alltasktoday" style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute",display:displaytask==="today"||"upcoming"||"overdue"||"noduedate"||"complete"||"all"?"flex":"none"}}>
+   
+      
+   <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
+   <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChangetoday} style={{fontSize:"16px",height:"30px"}}>
+     <option value="5">5</option>
+     <option value="10">10</option>
+     <option value="20">20</option>
+     <option value="50">50</option>
+   </select>
+ 
+ {renderPageNumberstoday()}
+ </div>
         
 
 
@@ -2404,7 +2527,7 @@ const [show10, setshow10] = useState(false);
      {/*================================= this list view is for followup =========================================================*/}
 
 
-          <div id="followup" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
+          <div id="followup" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="followup"?"block":"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -2447,10 +2570,10 @@ const [show10, setshow10] = useState(false);
             >
                {item.title2} {item.first_name} {item.last_name}
               <br />
-              <SvgIcon component={PhoneIphoneIcon} />
+              <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}}/>
               <span>{item.mobile_no}</span>
               <br />
-              <SvgIcon component={EmailIcon} />
+              <SvgIcon component={EmailIcon} style={{fontSize:"12px"}} />
               <span>{item.email}</span>
             </StyledTableCell>
 
@@ -2496,7 +2619,7 @@ const [show10, setshow10] = useState(false);
 {/* =========================================list view of site visit============================================================== */}
 
 
-      <div id="sitevisit" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
+      <div id="sitevisit" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="sitevisit"?"block":"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -2539,11 +2662,11 @@ const [show10, setshow10] = useState(false);
             >
               {item.title2} {item.first_name} {item.last_name}
               <br />
-              <SvgIcon component={PhoneIphoneIcon} />
+              <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}}/>
               <span>{item.mobile_no}</span>
               <br />
 
-              <SvgIcon component={EmailIcon} />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
               <span>{item.email}</span>
             </StyledTableCell>
            
@@ -2601,7 +2724,7 @@ const [show10, setshow10] = useState(false);
 {/*======================================= meeting list view start================================================================= */}
 
 
-      <div id="meeting" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:"none"}}>
+      <div id="meeting" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="meeting"?"block":"none"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -2638,16 +2761,22 @@ const [show10, setshow10] = useState(false);
               />
               {index + 1}
             </StyledTableCell>
+                 <StyledTableCell 
+                 
+                 style={{ padding: "10px" ,fontSize:"12px"}}
+               >
+                 {item.activity_type}
+               </StyledTableCell>
             <StyledTableCell 
               style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
               onClick={() => handleShow2(item)}
             >
               {item.title2} {item.first_name} {item.last_name}
               <br />
-              <SvgIcon component={PhoneIphoneIcon} />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
               <span>{item.mobile_no}</span>
               <br />
-              <SvgIcon component={EmailIcon} />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
               <span>{item.email}</span>
             </StyledTableCell>
            
@@ -2664,12 +2793,7 @@ const [show10, setshow10] = useState(false);
                 >
                   {item.title}
                 </StyledTableCell>
-                <StyledTableCell 
-                 
-                 style={{ padding: "10px" ,fontSize:"12px"}}
-               >
-                 {item.activity_type}
-               </StyledTableCell>
+           
                <StyledTableCell 
                  
                  style={{ padding: "10px" ,fontSize:"12px"}}
@@ -2709,6 +2833,560 @@ const [show10, setshow10] = useState(false);
        
     {/*============================================= meeting task list view end====================================================== */}
 
+
+{/* ===========================================today list view start============================================================== */}
+
+        
+          <div id="today" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="today"?"block":"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          {/* <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell> */}
+          {visibleColumnstoday.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+       currentItemstoday
+        .filter(item => {
+          const dateString = item.due_date || item.start_date;
+          if (!dateString) return false;
+
+          const dateOnly = dateString.split("T")[0];
+          return dateOnly === today && item.complete!=="true";
+        }).map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell>
+              {/* <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              /> */}
+              {index + 1}
+            </StyledTableCell>
+         
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.activity_type}
+            </StyledTableCell>
+
+               <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title2} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.email}</span>
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.due_date} {item.start_date}
+              </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+            {item.executive}
+            </StyledTableCell>
+              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.title}
+              </StyledTableCell>
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+              
+              </StyledTableCell> 
+             <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.remark}
+              </StyledTableCell>
+      
+            
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+
+{/* ==================================================today list view end ===========================================================*/}
+
+{/*======================================== upcoming list view start============================================================== */}
+
+         <div id="upcoming" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="upcoming"?"block":"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          {/* <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell> */}
+          {visibleColumnstoday.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+       currentItemstoday
+        .filter(item => {
+          const dateString = item.due_date || item.start_date;
+          if (!dateString) return false;
+
+          const dateOnly = dateString.split("T")[0];
+          return dateOnly>today && item.complete!=="true";
+        }).map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell>
+              {/* <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              /> */}
+              {index + 1}
+            </StyledTableCell>
+         
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.activity_type}
+            </StyledTableCell>
+
+               <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title2} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.email}</span>
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.due_date} {item.start_date}
+              </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+            {item.executive}
+            </StyledTableCell>
+              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.title}
+              </StyledTableCell>
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+              
+              </StyledTableCell> 
+             <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.remark}
+              </StyledTableCell>
+      
+            
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+
+{/*=========================================== upcoming list view end ===========================================================*/}
+
+{/*======================================== overdue list view start============================================================== */}
+
+         <div id="overdue" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="overdue"?"block":"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          {/* <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell> */}
+          {visibleColumnstoday.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+       currentItemstoday
+        .filter(item => {
+          const dateString = item.due_date || item.start_date;
+          if (!dateString) return false;
+
+          const dateOnly = dateString.split("T")[0];
+          return dateOnly<today && item.complete!=="true";
+        }).map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell>
+              {/* <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              /> */}
+              {index + 1}
+            </StyledTableCell>
+         
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.activity_type}
+            </StyledTableCell>
+
+               <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title2} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.email}</span>
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.due_date} {item.start_date}
+              </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+            {item.executive}
+            </StyledTableCell>
+              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.title}
+              </StyledTableCell>
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+              
+              </StyledTableCell> 
+             <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.remark}
+              </StyledTableCell>
+      
+            
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+
+{/*=========================================== overdue list view end ===========================================================*/}
+
+{/*======================================== noduedate list view start============================================================== */}
+
+         <div id="noduedate" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="noduedate"?"block":"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          {/* <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell> */}
+          {visibleColumnstoday.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+       currentItemstoday
+        .filter(item => {
+          const dateString = item.due_date || item.start_date;
+          return !dateString && item.complete!=="true"
+        }).map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell>
+              {/* <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              /> */}
+              {index + 1}
+            </StyledTableCell>
+         
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.activity_type}
+            </StyledTableCell>
+
+               <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title2} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.email}</span>
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.due_date} {item.start_date}
+              </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+            {item.executive}
+            </StyledTableCell>
+              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.title}
+              </StyledTableCell>
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+              
+              </StyledTableCell> 
+             <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.remark}
+              </StyledTableCell>
+      
+            
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+
+{/*=========================================== noduedate list view end ===========================================================*/}
+
+{/*======================================== complete list view start============================================================== */}
+
+         <div id="complete" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display:displaytask==="complete"?"block":"none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          {/* <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell> */}
+          {visibleColumnstoday.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+       currentItemstoday
+        .filter(item => {
+          const dateString = item.complete==="true"
+          return dateString
+        }).map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell>
+              {/* <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              /> */}
+              {index + 1}
+            </StyledTableCell>
+         
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.activity_type}
+            </StyledTableCell>
+
+               <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title2} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.email}</span>
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.due_date} {item.start_date}
+              </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+            {item.executive}
+            </StyledTableCell>
+              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.title}
+              </StyledTableCell>
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+              
+              </StyledTableCell> 
+             <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.remark}
+              </StyledTableCell>
+      
+            
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+
+{/*=========================================== complete list view end ===========================================================*/}
+
+
+{/*======================================== complete list view start============================================================== */}
+
+         <div id="all" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display: displaytask === "all" || !displaytask ? "block" : "none"}}>
+          <TableContainer component={Paper}>
+    <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableHead>
+        <TableRow>
+          {/* <StyledTableCell style={{backgroundColor:"gray"}}>
+            <input
+              type="checkbox"
+              checked={selectAll1}
+              onChange={handleSelectAll1}
+            />
+          </StyledTableCell> */}
+          {visibleColumnstoday.map((col) => (
+            <StyledTableCell
+              key={col.id}
+              style={{   cursor: 'pointer' ,backgroundColor:"gray"}}
+              onClick={() => handleSort(col.id)}
+            >
+              {col.name}
+              {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+            </StyledTableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <tbody>
+        {
+         
+       currentItemstoday
+        .map ((item, index) => (
+          <StyledTableRow key={index}>
+            <StyledTableCell>
+              {/* <input 
+                type="checkbox"
+                checked={selectedItems1.includes(item._id)}
+                onChange={() => handleRowSelect1(item._id)}
+              /> */}
+              {index + 1}
+            </StyledTableCell>
+         
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.activity_type}
+            </StyledTableCell>
+
+               <StyledTableCell 
+              style={{ padding: "10px", cursor: "pointer",fontSize:"12px" }} 
+              onClick={() => handleShow2(item)}
+            >
+              {item.title2} {item.first_name} {item.last_name}
+              <br />
+              <SvgIcon component={PhoneIphoneIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.mobile_no}</span>
+              <br />
+              <SvgIcon component={EmailIcon}  style={{fontSize:"12px"}}/>
+              <span>{item.email}</span>
+            </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+              {item.due_date} {item.start_date}
+              </StyledTableCell>
+            <StyledTableCell style={{fontSize:"12px"}}>
+            {item.executive}
+            </StyledTableCell>
+              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.title}
+              </StyledTableCell>
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+              
+              </StyledTableCell> 
+             <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
+                  {item.remark}
+              </StyledTableCell>
+      
+            
+          </StyledTableRow>
+        ))}
+      </tbody>
+    </Table>
+  </TableContainer>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+          <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
+          {/* <h5 style={{lineHeight:"50px"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5> */}
+        </footer>
+      </div>
+
+
+{/*=========================================== all list view end ===========================================================*/}
 
    
   {/* =================================sitevisit complete task model=========================================================== */}
@@ -4892,6 +5570,7 @@ sitevisitdata.map((item)=>
 
 
 {/*===================================================== edit meeting task end ===================================================*/}
+
 
 
           <ToastContainer/>

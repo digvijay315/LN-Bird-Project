@@ -2614,6 +2614,9 @@ const handleroadChange = (event) => {
       
 
         const[allunitsdetails,setallunitsdetails]=useState([])
+        const [taskforactivity, settaskforactivity] = useState([]);
+        console.log(taskforactivity);
+        
         
         useEffect(() => {
           const updateLeads = async () => {
@@ -2636,7 +2639,7 @@ const handleroadChange = (event) => {
                   const leadscoretaskdata = alltaskdata.filter((item) => {
                     return fullname === item.lead;
                   });
-               
+             
                   const availableFor = singlelead.requirment === 'Buy' ? 'Sale' : singlelead.requirment;
                   const minprice = parseFloat(singlelead.budget_min);
                   const maxprice = parseFloat(singlelead.budget_max);
@@ -4054,6 +4057,8 @@ const handleroadChange = (event) => {
                                     }
                                 
                                         const[instanceId,setinstanceId]=useState("")
+                                        console.log(instanceId);
+                                        
                                          const handleSendwhatsapp = async () => {
                                           setisloading2(true)
                                             try {
@@ -4842,7 +4847,57 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                         {item.lead_type}
                       </span>
                     </>
-                    ):  col.id === "owner" ? (
+                    ) : col.id === "activity" ? (
+                  <>
+                    {(() => {
+                      const fullname = `${item.title} ${item.first_name} ${item.last_name}`;
+
+                      const filteredTasks = alltaskdata.filter(
+                        (task) => task.lead === fullname && task.complete !== "true"
+                      );
+
+                      const callTasks = filteredTasks.filter(
+                        (task) => task.activity_type.toLowerCase() === "call"
+                      );
+                      const mailTasks = filteredTasks.filter(
+                        (task) => task.activity_type.toLowerCase() === "mail"
+                      );
+                       const meetingTasks = filteredTasks.filter(
+                        (task) => task.activity_type.toLowerCase() === "meeting"
+                      );
+                      const sitevisitTasks = filteredTasks.filter(
+                        (task) => task.activity_type.toLowerCase() === "sitevisit"
+                      );
+
+                      return (
+                        <>
+                          {callTasks.length > 0 && (
+                            <span style={{color:"red",fontWeight:"bold"}}>
+                              📞{callTasks.length}
+                            </span>
+                          )}
+                         <br></br>
+                          {mailTasks.length > 0 && (
+                            <span style={{color:"blue",fontWeight:"bold"}}>
+                              📧{mailTasks.length}
+                            </span>
+                          )}<br></br>
+                             {mailTasks.length > 0 && (
+                            <span style={{color:"green",fontWeight:"bold"}}>
+                               📅{meetingTasks.length}
+                            </span>
+                          )}<br></br>
+                             {sitevisitTasks.length > 0 && (
+                            <span style={{color:"gray",fontWeight:"bold"}}>
+                               📍{sitevisitTasks.length}
+                            </span>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </>
+                ) 
+         :  col.id === "owner" ? (
                       <>
                         {item.owner.map((owner, index) => (
                           <span key={index}>
