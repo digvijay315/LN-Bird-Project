@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 // internal
 import Menus from "./menus";
-import logo from "@assets/img/logo/logo-black.svg";
+import logo from "@assets/img/logo/PP_New-Logo 1.svg";
 import { Cart, Heart, Search, User } from "@svg/index";
 import useSticky from "@hooks/use-sticky";
 import CartSidebar from "@components/common/sidebar/cart-sidebar";
@@ -34,9 +34,9 @@ const Header = ({ style_2 = false }) => {
               <div className="mega-menu-wrapper p-relative">
                 <div className="row align-items-center">
                   <div className="col-xxl-1 col-xl-2 col-lg-4 col-md-4 col-sm-5 col-8">
-                    <div className="logo">
+                    <div className="logo" style={{marginLeft:"-220px"}}>
                       <Link href="/">
-                        <Image src={logo} alt="logo" />
+                        <Image src={logo} alt="logo" style={{height:"40px"}}/>
                       </Link>
                     </div>
                   </div>
