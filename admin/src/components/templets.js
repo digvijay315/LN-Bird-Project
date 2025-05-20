@@ -289,7 +289,6 @@ Quill.register('modules/imageResize', ImageResize);
     const interval = setInterval(() => {
       const quill = quillRef.current?.getEditor();
       if (quill) {
-        console.log('✅ Quill editor is ready');
         clearInterval(interval);
 
         const handleTextChange = () => {
@@ -306,7 +305,6 @@ Quill.register('modules/imageResize', ImageResize);
             setCursorCoords({ top: bounds.top + 40, left: bounds.left });
             setShowSuggestions(true);
             setSelectionIndex(cursorPosition);
-            console.log('Triggering variable popup');
           } else {
             setShowSuggestions(false);
           }

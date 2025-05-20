@@ -1965,7 +1965,11 @@ const [show5, setshow5] = useState(false);
                               requirements.forEach((formName) => {
                               const expectedRequirment = formMap[formName]?.toLowerCase();
 
+                              console.log(expectedRequirment);
+                              
                               if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                                console.log("hello");
+                                
                              const match = alltask?.find((form) => {
                             
                                   const formDate = new Date(form.date);
@@ -1993,6 +1997,7 @@ const [show5, setshow5] = useState(false);
                             }
                           
                                if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                       
                         
                             
                                 const match = alltask?.find((form) => {

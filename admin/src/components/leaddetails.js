@@ -7333,40 +7333,26 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
 
 <>
-    {isLoading && (
+  {isLoading && (
+    <div style={{
+      position: "fixed",
+      top: 53,
+      left: 0,
+      width: "100%",
+      height: "4px",
+      backgroundColor: "#ccc",
+      zIndex: 1100,
+    }}>
       <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
         height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
-        <div style={{
-          background: "rgba(0, 0, 0, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
-        }}>
-          <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>Uploading data...</p>
-        </div>
-      </div>
-    )}
-  </>
+        width: "100%",
+        backgroundColor: "#1976d2",
+        animation: "progressBar 2s linear infinite",
+      }} />
+    </div>
+  )}
+</>
+
 
 
   {/* ===========================================modal for send details start========================================================= */}
