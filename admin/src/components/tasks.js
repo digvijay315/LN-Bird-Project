@@ -26,6 +26,7 @@ import api from "../api";
 import'../css/addcontact.css';
 import Tooltip from '@mui/material/Tooltip';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import Swal from "sweetalert2";
 
 
 function Tasks() {
@@ -254,6 +255,18 @@ function Tasks() {
       setalltask([...data,...sitedata,...meetingdata])
 
     },[sitedata,meetingdata,data])
+
+             useEffect(()=>{fetchleadscoredata()},[])
+              const[leadscoredata,setleadscoredata]=useState([]);
+              const fetchleadscoredata=async(event)=>
+                {
+                  try {
+                    const resp=await api.get('viewleadscore')
+                    setleadscoredata(resp.data.score)
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
     
    
   /*-------------------------------------------------------------------fetching all contact data end---------------------------------------------------------------------------- */                                                     
@@ -1436,10 +1449,7 @@ useEffect(()=>
 const sitevisitdetails = async () => {
   const title1 = document.getElementById("sitevisittitle").innerText;
 const id=selectedItems[0]
-console.log(id);
 
-  
-  // Update site visit task
   const updatedsiteTask = { ...sitevisit, title: title1 };
 
   try {
@@ -1486,9 +1496,7 @@ console.log(id);
       if (resp.status === 200) {
         toast.success("Task Completed", { autoClose: 2000 });
 
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+          checkrequirmentforms(updatedsiteTask)
       }
     } else {
       toast.error("Some project/block/unit combinations were invalid. Please check your data.");
@@ -1819,9 +1827,7 @@ useEffect(()=>
           if (resp.status === 200) {
             toast.success("Task Completed", { autoClose: 2000 });
     
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+              checkrequirmentforms(updatemeetingtask)
           }
         } else {
           toast.error("Some project/block/unit combinations were invalid. Please check your data.");
@@ -1903,8 +1909,156 @@ const [show5, setshow5] = useState(false);
                         document.getElementById("date1").style.color="black"
                     }
 
-                    console.log(selectedItems1);
 
+                    const checkrequirmentforms=(taskdata)=>
+                    {
+                      const matchleadscore=leadscoredata.filter((item)=>item.available_for===taskdata.activity_type)
+                      matchleadscore.map((item)=>
+                      {
+                         if (
+                          (
+                          taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                          taskdata?.direction?.trim() === item?.direction?.trim() &&
+                          taskdata?.reason?.trim() === item?.reason?.trim() &&
+                          taskdata?.status?.trim() === item?.status?.trim() &&
+                          taskdata?.result?.trim() === item?.result?.trim()
+                        ) ||
+                        (
+                          taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                          taskdata?.direction?.trim() === item?.email_direction?.trim() &&
+                          taskdata?.subject?.trim() === item?.email_category?.trim() &&
+                          taskdata?.status?.trim() === item?.email_status?.trim()
+                        ) ||
+                        (
+                          taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                          taskdata?.reason?.trim() === item?.meeting_reason?.trim() &&
+                          taskdata?.status?.trim() === item?.meeting_status?.trim() &&
+                          taskdata?.meeting_result?.trim() === item?.meeting_result?.trim()
+                        ) ||
+                        (
+                          taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                          taskdata?.sitevisit_type?.trim() === item?.sitevisit_visittype?.trim() &&
+                          taskdata?.status?.trim() === item?.sitevisit_status?.trim() &&
+                          (taskdata?.result || "").includes(item?.sitevisit_result?.trim())
+                        )
+                    )
+                          
+                     
+                          
+                          {
+                             const formMap = {
+                              "Call Scheduled Form":"Call scheduled",
+                              "Mail Scheduled Form":"Mail scheduled",
+                              "Meeting Scheduled Form":"Meeting scheduled",
+                              "Site Visit Scheduled Form":"Sitevisit scheduled",
+                              "Call Completed Form":"Call",
+                              "Mail Completed Form":"Mail",
+                              "Meeting Completed Form":"Meeting",
+                              "Site Visit Completed Form":"SiteVisit",
+                              "Negotiation Form": "Negotiation",
+                              "Requirment Form": "Requirement",
+                            };
+                             const requirements = item.stage_requirment || [];
+                            const incompleteForms = [];
+                            const usedFormDates = new Set();
+
+                              requirements.forEach((formName) => {
+                              const expectedRequirment = formMap[formName]?.toLowerCase();
+
+                              if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                             const match = alltask?.find((form) => {
+                            
+                                  const formDate = new Date(form.date);
+                                  const itemDate = new Date(taskdata.date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                 
+                                  return (
+                                    form.activity_type?.toLowerCase() === expectedRequirment &&
+                                    form.complete === "true" &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName);
+                                 // ❌ No match found for this requirement
+                              }
+                            }
+                          
+                               if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                        
+                            
+                                const match = alltask?.find((form) => {
+                                  const formDate = new Date(form.due_date ? form.due_date : form.start_date );
+                                  const itemDate = new Date(taskdata.due_date ? taskdata.due_date : taskdata.start_date);
+                                  // Zero the time part
+                                      itemDate.setHours(0, 0, 0, 0);
+                                      formDate.setHours(0, 0, 0, 0);
+                                     
+                                  const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                  return (
+                                    (form.activity_type?.toLowerCase() === expectedRequirment.split(" ")[0].toLowerCase()) &&
+                                    itemDate <= formDate &&
+                                    !usedFormDates.has(formKey)
+                                  );
+                                });
+                       
+                              if (match) {
+                                const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                usedFormDates.add(formKey); // ✅ Mark as used
+                              } else {
+                                incompleteForms.push(formName); // ❌ No match found for this requirement
+                              }
+                            }
+                           
+                           else if (expectedRequirment === "requirement") {
+                            const matchedLead = leaddata.find(
+                              (item) => `${item.title} ${item.first_name} ${item.last_name}` === taskdata.lead
+                            );
+
+                            const match1 = matchedLead?.requirement?.trim() !== "";
+
+                              if (!match1) {
+                                incompleteForms.push(formName);
+                              }
+                            }
+                            });
+
+                             if (incompleteForms.length > 0) 
+                              {
+                              Swal.fire({
+                                icon: 'warning',
+                                title: '⚠️ Incomplete Forms Detected!',
+                                html: `
+                                  <div style="color: #333; font-size: 16px;">
+                                    <p><strong style="color: #007BFF;">${taskdata.lead}</strong> is missing the following forms:</p>
+                                    <ul style="text-align: left; padding-left: 20px; color: #D9534F; font-weight: bold;">
+                                      ${incompleteForms.map(form => `<li>📌 ${form}</li>`).join('')}
+                                    </ul>
+                                    <p style="margin-top: 10px; color: #5A5A5A;">
+                                      Please <span style="color: #28a745; font-weight: bold;">complete</span> these forms to move to 
+                                      <strong style="color: #17a2b8;">${item.leadstage}</strong> stage.
+                                    </p>
+                                  </div>
+                                `,
+                                background: '#fefefe',
+                                confirmButtonColor: '#28a745',
+                                confirmButtonText: 'OK, Got it!'
+                              });
+
+
+                              } 
+
+                          }
+                      })
+                    }
                     const calltaskdetails=async()=>
                       {
                        
@@ -1918,10 +2072,7 @@ const [show5, setshow5] = useState(false);
                       if(resp.status===200)
                       {
                       toast.success(resp.data.message)
-                      setTimeout(() => {
-                      window.location.reload();
-                      }, 2000); // 2000 milliseconds = 2 seconds
-          
+                      checkrequirmentforms(updatedCallTask)
                       }
                   } catch (error) {
           
@@ -2066,9 +2217,7 @@ const mailtaskdetails=async()=>
           if(resp.status===200)
           {
               toast.success(resp.data.message)
-              setTimeout(() => {
-                  window.location.reload();
-                }, 2000); // 2000 milliseconds = 2 seconds
+             checkrequirmentforms(updatedMailTask)
               
           }
       } catch (error) {
@@ -2374,9 +2523,9 @@ const renderPageNumberstoday = () => {
             <li  onClick={exportToExcel} >Export Data</li>
               
             </ul>
-            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px",textAlign:"center"}} onClick={()=>setdisplaytask("followup")}>Follow Up </label>
-            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={()=>setdisplaytask("sitevisit")}>Site Visit </label>
-            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center"}} onClick={()=>setdisplaytask("meeting")}>Meeting </label>
+            <label className="labels" id="followup1" style={{marginLeft:"30px",cursor:"pointer",width:"120px",textAlign:"center",backgroundColor:displaytask==="followup"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("followup")}>Follow Up </label>
+            <label className="labels" id="sitevisit1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center",backgroundColor:displaytask==="sitevisit"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("sitevisit")}>Site Visit </label>
+            <label className="labels" id="meeting1" style={{marginLeft:"30px",cursor:"pointer",width:"100px",textAlign:"center",backgroundColor:displaytask==="meeting"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("meeting")}>Meeting </label>
 
             <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"40%"}}>Play Task</button>
             <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"120px",marginLeft:"1%"}}><img src="https://cdn-icons-png.flaticon.com/512/566/566737.png" style={{height:"20px"}}/>Filter</button>
@@ -2387,12 +2536,12 @@ const renderPageNumberstoday = () => {
       </div>
       <div style={{marginTop:"10px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px",gap:"50px",fontFamily:"times-new-roman",fontWeight:"bold"}}>
         
-        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("today")}>Today</div>
-        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("upcoming")}>Upcoming</div>
-        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("overdue")}>Overdue</div>
-        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("noduedate")}>No Due Date</div>
-        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("complete")}>Completed</div>
-        <div style={{cursor:"pointer"}} onClick={()=>setdisplaytask("all")}>All</div>
+        <div style={{width:"80px",textAlign:"center",cursor:"pointer",backgroundColor:displaytask==="today"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("today")}>Today</div>
+        <div style={{width:"100px",textAlign:"center",cursor:"pointer",backgroundColor:displaytask==="upcoming"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("upcoming")}>Upcoming</div>
+        <div style={{width:"100px",textAlign:"center",cursor:"pointer",backgroundColor:displaytask==="overdue"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("overdue")}>Overdue</div>
+        <div style={{width:"120px",textAlign:"center",cursor:"pointer",backgroundColor:displaytask==="noduedate"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("noduedate")}>No Due Date</div>
+        <div style={{width:"100px",textAlign:"center",cursor:"pointer",backgroundColor:displaytask==="complete"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("complete")}>Completed</div>
+        <div style={{width:"50px",textAlign:"center",cursor:"pointer",backgroundColor:displaytask==="all"?"green":"",borderRadius:"20px"}} onClick={()=>setdisplaytask("all")}>All</div>
       </div>
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       {/* <input type="checkbox" onChange={handleischeckedchange}/>
@@ -2596,9 +2745,32 @@ const renderPageNumberstoday = () => {
             <StyledTableCell style={{fontSize:"12px"}}>
              {item.stage}
             </StyledTableCell>
-            <StyledTableCell style={{fontSize:"12px"}}>
-            {item.status}
-            </StyledTableCell>
+          <StyledTableCell style={{ fontSize: "12px" }}>
+            {(() => {
+              const today = new Date();
+              const dueDate = new Date(item.due_date);
+
+              // Normalize both dates to remove time
+              today.setHours(0, 0, 0, 0);
+              dueDate.setHours(0, 0, 0, 0);
+
+              if (item.complete === "true") 
+                {
+                  return <span style={{ color: "green",fontWeight:"bold"}}>complete</span>;
+                }
+              if (dueDate.getTime() === today.getTime()) return "today";
+              if (dueDate > today)
+                {
+                   return <span style={{ color: "orange",fontWeight:"bold"}}>pending</span>;
+                } 
+              if (dueDate < today)
+                {
+                      return <span style={{ color: "red",fontWeight:"bold"}}>overdue</span>;
+                } 
+           
+            })()}
+          </StyledTableCell>
+
       
             
           </StyledTableRow>
@@ -2695,14 +2867,36 @@ const renderPageNumberstoday = () => {
                 <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}  >
                  
                 </StyledTableCell>
-                <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
-                 {item.remark}
+                 <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
+                    {item.feedback === "" ? item.remark : item.feedback}
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
                 {item.stage}
                 </StyledTableCell>
                 <StyledTableCell style={{ padding: "10px",fontSize:"12px"}}  >
-                
+                   {(() => {
+              const today = new Date();
+              const dueDate = new Date(item.start_date);
+
+              // Normalize both dates to remove time
+              today.setHours(0, 0, 0, 0);
+              dueDate.setHours(0, 0, 0, 0);
+
+              if (item.complete === "true") 
+                {
+                  return <span style={{ color: "green",fontWeight:"bold"}}>complete</span>;
+                }
+              if (dueDate.getTime() === today.getTime()) return "today";
+              if (dueDate > today)
+                {
+                   return <span style={{ color: "orange",fontWeight:"bold"}}>pending</span>;
+                } 
+              if (dueDate < today)
+                {
+                      return <span style={{ color: "red",fontWeight:"bold"}}>overdue</span>;
+                } 
+           
+            })()}
                 </StyledTableCell>
              
             
@@ -2816,6 +3010,29 @@ const renderPageNumberstoday = () => {
                  
                  style={{ padding: "10px" ,fontSize:"12px"}}
                >
+                   {(() => {
+              const today = new Date();
+              const dueDate = new Date(item.due_date);
+
+              // Normalize both dates to remove time
+              today.setHours(0, 0, 0, 0);
+              dueDate.setHours(0, 0, 0, 0);
+
+              if (item.complete === "true") 
+                {
+                  return <span style={{ color: "green",fontWeight:"bold"}}>complete</span>;
+                }
+              if (dueDate.getTime() === today.getTime()) return "today";
+              if (dueDate > today)
+                {
+                   return <span style={{ color: "orange",fontWeight:"bold"}}>pending</span>;
+                } 
+              if (dueDate < today)
+                {
+                      return <span style={{ color: "red",fontWeight:"bold"}}>overdue</span>;
+                } 
+           
+            })()}
                
                </StyledTableCell>
          
@@ -2911,7 +3128,7 @@ const renderPageNumberstoday = () => {
               
               </StyledTableCell> 
              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
-                  {item.remark}
+                 {item.feedback === "" ? (item.remark || item.remarks) : item.feedback}
               </StyledTableCell>
       
             
@@ -3005,7 +3222,7 @@ const renderPageNumberstoday = () => {
               
               </StyledTableCell> 
              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
-                  {item.remark}
+                  {item.feedback === "" ? (item.remark || item.remarks) : item.feedback}
               </StyledTableCell>
       
             
@@ -3099,7 +3316,7 @@ const renderPageNumberstoday = () => {
               
               </StyledTableCell> 
              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
-                  {item.remark}
+                {item.feedback === "" ? (item.remark || item.remarks) : item.feedback}
               </StyledTableCell>
       
             
@@ -3190,7 +3407,7 @@ const renderPageNumberstoday = () => {
               
               </StyledTableCell> 
              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
-                  {item.remark}
+                  {item.feedback === "" ? (item.remark || item.remarks) : item.feedback}
               </StyledTableCell>
       
             
@@ -3281,7 +3498,7 @@ const renderPageNumberstoday = () => {
               
               </StyledTableCell> 
              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
-                  {item.remark}
+               {item.feedback === "" ? (item.remark || item.remarks) : item.feedback}
               </StyledTableCell>
       
             
@@ -3300,7 +3517,7 @@ const renderPageNumberstoday = () => {
 {/*=========================================== complete list view end ===========================================================*/}
 
 
-{/*======================================== complete list view start============================================================== */}
+{/*======================================== all list view start============================================================== */}
 
          <div id="all" style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white",display: displaytask === "all" || !displaytask ? "block" : "none"}}>
           <TableContainer component={Paper}>
@@ -3370,7 +3587,7 @@ const renderPageNumberstoday = () => {
               
               </StyledTableCell> 
              <StyledTableCell style={{ padding: "10px",fontSize:"12px" }}>
-                  {item.remark}
+                {item.feedback === "" ? (item.remark || item.remarks) : item.feedback}
               </StyledTableCell>
       
             
@@ -5230,7 +5447,7 @@ return (
 <div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" value={sitevisit.date ? sitevisit.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
 <div className="col-md-8"></div>
 
-<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,feedback:e.target.value})}/></div>
 
 
 </div>

@@ -335,6 +335,26 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
     };
  
 // ======================----------------------delete code end-------------------------------=================================================
+
+//=========================================== fetch all activity start===============================================================
+
+  const[allactivity,setallactivity]=useState([])
+    const viewallactivity=async()=>
+    {
+      try {
+        const resp=await api.get('viewactivity')
+        setallactivity(resp.data.activity)
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+
+useEffect(()=>
+{
+  viewallactivity()
+},[])
+// =============================================fetch all activity end=============================================================
     
   /*-------------------pagination code---------------------------pagination code------------------------------------pagination code*/
  
@@ -4882,7 +4902,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                               📧{mailTasks.length}
                             </span>
                           )}<br></br>
-                             {mailTasks.length > 0 && (
+                             {meetingTasks.length > 0 && (
                             <span style={{color:"green",fontWeight:"bold"}}>
                                📅{meetingTasks.length}
                             </span>
@@ -4907,7 +4927,46 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                         ))}
                       </>
                     ) : col.id === "lastcommunication" ? (
-                      item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" // Format last communication
+                      // item[col.id] ? formatRelativeDate(item[col.id]) : "No communication yet" 
+                     (
+                      ()=>
+                      {
+                          const leadKey = `${item.title} ${item.first_name} ${item.last_name}`; // Create the combined key
+
+                          const relatedActivities = allactivity
+                            ?.filter((activity) => activity.lead === leadKey)
+                            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Get latest first
+                             const latestActivity = relatedActivities?.[0];
+
+                              if (!latestActivity) return <span>No communication yet</span>;
+
+                                 const activityDate = new Date(latestActivity.createdAt);
+                                  const today = new Date();
+                               // Remove time part for accurate date-only comparison
+                                activityDate.setHours(0, 0, 0, 0);
+                                today.setHours(0, 0, 0, 0);
+
+                                
+                          const diffInMs = today - activityDate;
+                          const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+                              let displayDate = "";
+                              if (diffInDays === 0) {
+                                displayDate = "today";
+                              } else if (diffInDays === 1) {
+                                displayDate = "1 day before";
+                              } else {
+                                displayDate = `${diffInDays} days before`;
+                              }
+
+                                return (
+                                      <div>
+                                        <strong style={{color:"gray"}}>{latestActivity.activity_name}</strong> — {displayDate}
+                                      </div>
+                                    );
+
+                      }
+                     ) ()
                     ) :col.id === "createdAt" ? (
                       formatDate(item[col.id]) // Format createdAt date
                     ):  item[col.id]}

@@ -269,13 +269,71 @@ Quill.register('modules/imageResize', ImageResize);
   ];
 
     const quillRef = useRef(null); // Create a ref for the ReactQuill component
-    const handleAddVariable = (variable) => {
-    if (quillRef.current) {
-      const quill = quillRef.current.getEditor(); // Access Quill editor instance
-      const cursorPosition = quill.getSelection()?.index || 0; // Get current cursor position
-      quill.insertText(cursorPosition, ` ${variable} `); // Insert variable at the cursor position
-      quill.setSelection(cursorPosition + variable.length + 2); // Move cursor after the inserted variable (space included)
+  //   const handleAddVariable = (variable) => {
+  //   if (quillRef.current) {
+  //     const quill = quillRef.current.getEditor(); // Access Quill editor instance
+  //     const cursorPosition = quill.getSelection()?.index || 0; // Get current cursor position
+  //     quill.insertText(cursorPosition, ` ${variable} `); // Insert variable at the cursor position
+  //     quill.setSelection(cursorPosition + variable.length + 2); // Move cursor after the inserted variable (space included)
+  //     setTemplateContent(quill.root.innerHTML);
+  //   }
+  // };
+
+   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [cursorCoords, setCursorCoords] = useState({ top: 0, left: 0 });
+  const [selectionIndex, setSelectionIndex] = useState(null);
+
+  // Handle text change to detect '{{'
+  // ✅ Wait until editor is mounted
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const quill = quillRef.current?.getEditor();
+      if (quill) {
+        console.log('✅ Quill editor is ready');
+        clearInterval(interval);
+
+        const handleTextChange = () => {
+          const selection = quill.getSelection();
+          if (!selection || selection.index === null) return;
+
+          const cursorPosition = selection.index;
+          const textBefore = quill.getText(Math.max(0, cursorPosition - 2), 2);
+
+          console.log('Typed:', textBefore);
+
+          if (textBefore === '{{') {
+            const bounds = quill.getBounds(cursorPosition);
+            setCursorCoords({ top: bounds.top + 40, left: bounds.left });
+            setShowSuggestions(true);
+            setSelectionIndex(cursorPosition);
+            console.log('Triggering variable popup');
+          } else {
+            setShowSuggestions(false);
+          }
+        };
+
+        quill.on('text-change', handleTextChange);
+
+        // Cleanup on unmount
+        return () => {
+          quill.off('text-change', handleTextChange);
+        };
+      }
+    }, 100); // Check every 100ms
+
+    return () => clearInterval(interval);
+  }, []);
+
+
+  // Handle selecting a variable
+  const handleVariableSelect = (variable) => {
+    const quill = quillRef.current.getEditor();
+    if (selectionIndex !== null) {
+      quill.deleteText(selectionIndex - 2, 2); // remove {{
+      quill.insertText(selectionIndex - 2, variable + ' ');
+      quill.setSelection(selectionIndex - 2 + variable.length + 1);
       setTemplateContent(quill.root.innerHTML);
+      setShowSuggestions(false);
     }
   };
 
@@ -542,10 +600,43 @@ Quill.register('modules/imageResize', ImageResize);
                                                     placeholder="Write your content here..."
                                                     style={{ height: '200px', marginBottom: '20px' }}
                                                 />
+
+                                                 {showSuggestions && (
+                                                          <div
+                                                            style={{
+                                                              position: 'absolute',
+                                                              top: cursorCoords.top,
+                                                              left: cursorCoords.left,
+                                                              backgroundColor: '#fff',
+                                                              border: '1px solid #ccc',
+                                                              borderRadius: '4px',
+                                                              zIndex: 1000,
+                                                              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                                                            }}
+                                                          >
+                                                            {variableList.map((variable) => (
+                                                              <div
+                                                                key={variable}
+                                                                onMouseDown={(e) => e.preventDefault()}
+                                                                onClick={() => handleVariableSelect(variable)}
+                                                                style={{
+                                                                  padding: '5px 10px',
+                                                                  cursor: 'pointer',
+                                                                  borderBottom: '1px solid #eee',
+                                                                }}
+                                                              >
+                                                                {variable}
+                                                              </div>
+                                                            ))}
+                                                          </div>
+                                                        )}
+
                                                 </div>
                                             </div>
 
-                                            <div className="row mb-3">
+                                             
+
+                                           {/* <div className="row mb-3">
                                             <div className="col-12">
                                             <label className="labels">Insert Variables</label>
                                             <div className="btn-group">
@@ -553,14 +644,15 @@ Quill.register('modules/imageResize', ImageResize);
                                                 <button
                                                     key={variable}
                                                     className="btn btn-sm btn-outline-primary"
-                                                    onClick={() => handleAddVariable(variable)}
+                                                    // onClick={() => handleAddVariable(variable)}
                                                 >
                                                     {variable}
                                                 </button>
                                                 ))}
                                             </div>
                                             </div>
-                                        </div>
+                                        </div> */}
+
                                         </div>
 
                                         </div>

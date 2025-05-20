@@ -11,6 +11,9 @@ import { Inventory, Try } from "@mui/icons-material";
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+
 
 
 function Task_form() {
@@ -1721,52 +1724,40 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
-              
-               
-                <div className="col-md-4"><label className="labels">Select Lead</label>
-                <select
-                className="form-control form-control-sm"
-                required
-                onChange={(e) => {
-                const selectedLead = data.find(item => item._id === e.target.value);
-                if (selectedLead) {
-                    const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
-                    setcalltask(prevState => ({
-                    ...prevState,
-                    lead: fullName,
-                    title2: selectedLead.title,
-                    first_name: selectedLead.first_name,
-                    last_name: selectedLead.last_name,
-                    mobile_no:selectedLead.mobile_no,
-                    email:selectedLead.email,
-                    stage:selectedLead.stage
-                    }));
-                    setactivity({...activity,activity_name:"create call task",lead:fullName})
-                }
-                }}
-  >
+                        <div className="col-md-4"></div>
+                    <div className="col-md-4"> <label className="labels">Select Lead</label>
+                    <Autocomplete
+                    options={data}
+                    getOptionLabel={(option) =>
+                      `${option.title} ${option.first_name} ${option.last_name}`
+                    }
+                    renderInput={(params) => (
+                      <TextField {...params} size="small" placeholder="---select---" />
+                    )}
+                    openOnFocus
+                    onChange={(event, selectedLead) => {
+                      if (selectedLead) {
+                        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                        setcalltask((prevState) => ({
+                          ...prevState,
+                          lead: fullName,
+                          title2: selectedLead.title,
+                          first_name: selectedLead.first_name,
+                          last_name: selectedLead.last_name,
+                          mobile_no: selectedLead.mobile_no,
+                          email: selectedLead.email,
+                          stage: selectedLead.stage,
+                        }));
+                        setactivity({
+                          ...activity,
+                          activity_name: 'create call task',
+                          lead: fullName,
+                        });
+                      }
+                    }}
+                  />
+                  </div>
 
-                  <option>---select---</option>
-
-                        {lead?._id && (
-                              <option value={lead._id}>
-                                  {id.title} {id.first_name} {id.last_name}
-                              </option>
-                          )}
-
-                    
-                        {
-                          !lead && (
-                            data.map((item)=>
-                            (
-                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
-                                
-                            ))
-                          )
-                        }
-                        </select>
-                        </div>
                         <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
                     <option>Select</option>
                         <option>Rajesh</option>
@@ -1894,46 +1885,37 @@ const handleTimeChange = (e) => {
                     <div className="col-md-8"></div>
                 
                 
-                <div className="col-md-4"><label className="labels">Select Lead</label>     <select
-    className="form-control form-control-sm"
-    required
-    onChange={(e) => {
-      const selectedLead = data.find(item => item._id === e.target.value);
-      if (selectedLead) {
-        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
-        setmailtask(prevState => ({
-          ...prevState,
-          lead: fullName,
-          title2: selectedLead.title,
-          first_name: selectedLead.first_name,
-          last_name: selectedLead.last_name,
-          mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email,
-          stage:selectedLead.stage
-        }));
-        setactivity({...activity,activity_name:"create mail task",lead:fullName})
-      }
-    }}
-  >
-                     <option>---select---</option>
+                    <div className="col-md-4">
+                <label className="labels">Select Lead</label>
+                <Autocomplete
+                  options={data}
+                  getOptionLabel={(option) => `${option.title} ${option.first_name} ${option.last_name}`}
+                  renderInput={(params) => (
+                    <TextField {...params} label="---select---" variant="outlined" size="small" />
+                  )}
+                  onChange={(event, selectedLead) => {
+                    if (selectedLead) {
+                      const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                      setmailtask(prevState => ({
+                        ...prevState,
+                        lead: fullName,
+                        title2: selectedLead.title,
+                        first_name: selectedLead.first_name,
+                        last_name: selectedLead.last_name,
+                        mobile_no: selectedLead.mobile_no,
+                        email: selectedLead.email,
+                        stage: selectedLead.stage
+                      }));
+                      setactivity({
+                        ...activity,
+                        activity_name: "create mail task",
+                        lead: fullName
+                      });
+                    }
+                  }}
+                />
+              </div>
 
-                      {lead?._id && (
-                            <option value={lead._id}>
-                                {id.title} {id.first_name} {id.last_name}
-                            </option>
-                        )}
-                        {
-                          !lead && (
-                            data.map((item)=>
-                            (
-                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
-                                
-                            ))
-                          )
-                            
-                        }
-                        </select>
-                        </div>
                         <div className="col-md-8"></div>
 
                         <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
