@@ -19,7 +19,6 @@ import 'react-quill/dist/quill.snow.css';
 // import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module-react';
 import 'react-quill/dist/quill.snow.css';
-import 'quill-emoji/dist/quill-emoji.css';
 import EmojiPicker from 'emoji-picker-react'; // popular emoji picker
 
 
