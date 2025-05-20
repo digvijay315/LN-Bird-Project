@@ -18,6 +18,10 @@ import ReactQuill,{ Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 // import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module-react';
+import 'react-quill/dist/quill.snow.css';
+import 'quill-emoji/dist/quill-emoji.css';
+import EmojiPicker from 'emoji-picker-react'; // popular emoji picker
+
 
 
 
@@ -245,6 +249,9 @@ function Templets() {
 
       
 Quill.register('modules/imageResize', ImageResize);
+
+
+
       const modules = {
     toolbar: [
       [{ 'header': '1'}, { 'header': '2' }, { font: [] }],
@@ -252,11 +259,13 @@ Quill.register('modules/imageResize', ImageResize);
       ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [{ 'list': 'ordered'}, { 'list': 'bullet'}],
       ['link', 'image', 'video'],
+      ['emoji'], 
       ['clean']
     ],
     imageResize: {
     parchment: Quill.import('parchment'), // Required for some builds
   }
+  
   };
 
    const variableList = [
@@ -269,6 +278,39 @@ Quill.register('modules/imageResize', ImageResize);
   ];
 
     const quillRef = useRef(null); // Create a ref for the ReactQuill component
+      const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+      const onEmojiClick = (emojiData) => {
+    const emoji = emojiData.emoji;
+    const editor = quillRef.current.getEditor();
+    const range = editor.getSelection();
+
+    if (range) {
+      editor.insertText(range.index, emoji);
+      editor.setSelection(range.index + emoji.length);
+    } else {
+      // If no selection, append emoji at end
+      editor.insertText(editor.getLength(), emoji);
+    }
+
+    setShowEmojiPicker(false);
+  };
+
+  const pickerRef = useRef(null);
+    // Close emoji picker on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        pickerRef.current &&
+        !pickerRef.current.contains(event.target) &&
+        !event.target.closest('.ql-emoji')
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   //   const handleAddVariable = (variable) => {
   //   if (quillRef.current) {
   //     const quill = quillRef.current.getEditor(); // Access Quill editor instance
@@ -588,8 +630,22 @@ Quill.register('modules/imageResize', ImageResize);
                                            
 
                                                <div className="row mb-3">
+
                                                 <div className="col-12">
-                                                <label className="labels">Templates Content</label>
+                                                <label className="labels">Templates Content
+                                                 <Tooltip title="all emoji here" arrow> <button onClick={() => setShowEmojiPicker(!showEmojiPicker)} style={{marginLeft:"20px",border:"none",backgroundColor:"transparent"}}>
+                                              {showEmojiPicker ? '😎' : '😊'}
+                                              </button>
+                                              </Tooltip>
+                                            <div style={{ position: 'relative' }}>
+
+                                              {showEmojiPicker && (
+                                                <div ref={pickerRef} style={{ position: 'absolute', zIndex: 1000 }}>
+                                                  <EmojiPicker onEmojiClick={onEmojiClick} />
+                                                </div>
+                                              )}
+                                              </div>
+                                                </label>
                                                 <ReactQuill
                                                  ref={quillRef}
                                                     value={templateContent}

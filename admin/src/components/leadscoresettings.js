@@ -364,6 +364,31 @@ const [leadscore,setleadscore] = useState({available_for:"",reason:"",direction:
                 
                 }
 
+                   const updateleadscore=async(event)=>
+                {
+                  
+                  try {
+                    const resp=await api.put(`updateleadscore/${selectedItems}`,leadscore)
+                    if(resp.status===200)
+                    {
+                      Swal.fire({
+                              title: "Lead Score",
+                              text: "lead score criteria update successfully",
+                              icon: "success",
+                              confirmButtonColor: '#d33',
+                              confirmButtonText: 'OK',
+                      })
+                    }
+                    handleClose1()
+                    setTimeout(() => {
+                      window.location.reload()
+                    }, 2000);
+                  } catch (error) {
+                    console.log(error);
+                  }
+                
+                }
+
         const stagerequirment=["Call Scheduled Form","Mail Scheduled Form","Meeting Scheduled Form","Site Visit Scheduled Form",
           "Call Completed Form","Mail Completed Form","Meeting Completed Form","Site Visit Completed Form","Negotiation Form",
           "Requirment Form"]
@@ -767,17 +792,20 @@ setshowInputsitevisit_score(false);
                             if(selectedItems.length===0)
                               {
                                 document.getElementById("delete").style.display="none"
+                                document.getElementById("edit").style.display="none"
                              
                               }
                             if(selectedItems.length===1)
                               {
                                 document.getElementById("delete").style.display="inline-block"
+                                document.getElementById("edit").style.display="inline-block"
                                
                               }
                             
                                 if(selectedItems.length>1)
                                   {
                                     document.getElementById("delete").style.display="inline-block"
+                                    document.getElementById("edit").style.display="none"
                                   
                                   }
                           },[selectedItems])
@@ -785,7 +813,34 @@ setshowInputsitevisit_score(false);
 //================================ delete code for selected items code end=========================================================
 
 
+// ===========================================edit code for selected items start====================================================
+
+const handleedit = async () => {
+  handleShow1();
+  try {
+    const resp = await api.get('viewleadscore');
+    
+    // find the item whose _id matches selectedItems[0]
+    const filteredleadscore = resp.data.score.find(
+      (item) => item._id === selectedItems[0]
+    );
+
+    if (filteredleadscore) {
+      setleadscore(filteredleadscore);
+    } else {
+      console.warn("No matching lead score found.");
+    }
+
+  } catch (error) {
+    console.log("Error fetching lead score:", error);
+  }
+};
+
+//=============================================== edit code for selected items end===================================================
+
+
                 const [isHoveringDelete, setIsHoveringDelete] = useState(false);
+                const [isHoveringEdit, setIsHoveringEdit] = useState(false);
 
   return (
     <div>
@@ -854,6 +909,29 @@ setshowInputsitevisit_score(false);
                     marginTop: "6px"
                   }}
                 />
+              </Tooltip>
+
+                <Tooltip title="Edit Data.." arrow>
+              <img
+        id="edit"
+        src={
+          isHoveringEdit
+            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpF7BrBLmrMYynVUzMxsgv8AtIEkFjStD6cFRNYv1to6LupNkPMgkEaEzD5-HIGrjcPj4&usqp=CAU" // hover image
+            : "https://static.thenounproject.com/png/1416596-200.png" // default image
+        }
+        onClick={handleedit}
+        onMouseEnter={() => setIsHoveringEdit(true)}
+        onMouseLeave={() => setIsHoveringEdit(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
               </Tooltip>
            </div>
 
@@ -990,7 +1068,7 @@ setshowInputsitevisit_score(false);
                               value={leadscore.available_for}
                               onChange={(e)=>setleadscore({...leadscore,available_for:e.target.value})}
                             >
-                              <option value="">---Select---</option>
+                              <option value="">{leadscore.available_for?leadscore.available_for:"---Select---"}</option>
                               <option>Call</option>
                               <option>Mail</option>
                               <option>Meeting</option>
@@ -1011,7 +1089,7 @@ setshowInputsitevisit_score(false);
                               value={leadscore.reason}
                               onChange={handleSelectChange}
                             >
-                              <option value="">---Select---</option>
+                              <option value="">{leadscore.reason? leadscore.reason:"---Select---"}</option>
                               {reasons.map((reason, idx) => (
                                 <option key={idx} value={reason}>{reason}</option>
                               ))}
@@ -1211,13 +1289,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment}
+                              value={leadscore.stage_requirment || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -1247,13 +1325,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment1}
+                              value={leadscore.stage_requirment1 || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment1.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment1?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -1493,13 +1571,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment}
+                              value={leadscore.stage_requirment || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -1530,13 +1608,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment1}
+                              value={leadscore.stage_requirment1 || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment1.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment1?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -1739,13 +1817,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment}
+                              value={leadscore.stage_requirment || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -1776,13 +1854,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment1}
+                              value={leadscore.stage_requirment1 || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment1.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment1?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -1988,13 +2066,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment}
+                              value={leadscore.stage_requirment || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -2024,13 +2102,13 @@ setshowInputsitevisit_score(false);
                                <Select
                                 className="form-control form-control-sm" style={{border:"none"}}
                                 multiple
-                              value={leadscore.stage_requirment1}
+                              value={leadscore.stage_requirment1 || []}
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment1:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
                                 {stagerequirment1.map((cat) => (
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment1.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment1?.includes(cat)} />
                                       <ListItemText primary={cat} />
                                       </MenuItem>
                                     ))}
@@ -2071,8 +2149,11 @@ setshowInputsitevisit_score(false);
                       <Button variant="secondary" onClick={handleClose1}>
                         Close
                       </Button>
-                      <Button variant="secondary" onClick={addleadscore}>
+                      <Button variant="secondary" onClick={addleadscore} style={{display:selectedItems.length===0?"block":"none"}}>
                         Save
+                      </Button>
+                        <Button variant="secondary" onClick={updateleadscore} style={{display:selectedItems.length===1?"block":"none"}}>
+                        Update
                       </Button>
                     </Modal.Footer>
                   </Modal>

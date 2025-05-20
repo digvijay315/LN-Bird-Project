@@ -7331,27 +7331,37 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
 {/* ===================================modal for showing matching deals end =======================================================*/}
 
-
 <>
   {isLoading && (
     <div style={{
       position: "fixed",
-      top: 53,
+      top: 53, // adjust this if your navbar height differs
       left: 0,
-      width: "100%",
       height: "4px",
-      backgroundColor: "#ccc",
+      width: "100%",
       zIndex: 1100,
+      pointerEvents: "none"
     }}>
       <div style={{
+        marginLeft: "55px", // adjust based on sidebar width
+        width: "calc(100% - 55px)", // rest of the screen
         height: "100%",
-        width: "100%",
-        backgroundColor: "#1976d2",
-        animation: "progressBar 2s linear infinite",
-      }} />
+        backgroundColor: "#ccc",
+        overflow: "hidden",
+        position: "relative"
+      }}>
+        <div style={{
+          height: "100%",
+          width: "100%", // the width of the animated part
+          backgroundColor: "#1976d2",
+          position: "absolute",
+          animation: "progressBarMove 1.5s linear infinite"
+        }} />
+      </div>
     </div>
   )}
 </>
+
 
 
 

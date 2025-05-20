@@ -54,13 +54,13 @@ const send_mail = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'digvijaykumar.315@gmail.com',
-                pass: 'cuay fuho ucki htpk'
+                user: 'bharatproperties570@gmail.com',
+                pass: 'thpf pvbb pwfn idvf'
             }
         });
 
         const mailOptions = {
-            from: 'digvijaykumar.315@gmail.com',
+            from: 'bharatproperties570@gmail.com',
             subject: subject,
             html: message,
             attachments: cloudinaryAttachments,

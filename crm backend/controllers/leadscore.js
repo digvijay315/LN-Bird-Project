@@ -45,7 +45,6 @@ const add_leadscore = async (req, res) => {
         const delete_leadscore=async(req,res)=>
             {
                 try {
-                  
                     const id=req.params._id
                     const resp=await addleadscore.findByIdAndDelete({_id:id}) 
                     res.status(200).send({message:"lead score criteria delete successfully",score:resp})
@@ -53,9 +52,34 @@ const add_leadscore = async (req, res) => {
                     console.log(error)
                 }
             }
+
+        const updateleadscore = async (req, res) => {
+          try {
+            const id = req.params._id;
+
+            const updatedLeadScore = await addleadscore.findByIdAndUpdate(
+              id,                
+              req.body,
+              { new: true }       
+            );
+
+            if (!updatedLeadScore) {
+              return res.status(404).send({ message: "Lead score not found" });
+            }
+
+            res.status(200).send({
+              message: "Data updated successfully",
+              leadscore: updatedLeadScore,
+            });
+          } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "Server error", error: error.message });
+          }
+        };
+
                               
                  
 
 
     
-    module.exports={add_leadscore,view_leadscore,delete_leadscore};
+    module.exports={add_leadscore,view_leadscore,delete_leadscore,updateleadscore};
