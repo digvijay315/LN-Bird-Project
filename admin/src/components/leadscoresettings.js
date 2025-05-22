@@ -1293,12 +1293,18 @@ const handleedit = async () => {
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
-                                {stagerequirment.map((cat) => (
+                                {stagerequirment.map((cat) => {
+                                  const isCallMode = leadscore.available_for === "Call";
+                                  const isDisabled =
+                                    isCallMode &&
+                                    (cat === "Call Scheduled Form" || cat === "Call Completed Form");
+                                  return(
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
+                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} disabled={isDisabled} style={{color:isDisabled?"red":"black"}}/>
                                       <ListItemText primary={cat} />
                                       </MenuItem>
-                                    ))}
+                                      );
+                                    })}
                                 </Select>
                           </div>
                           <div className='col-md-3'></div>
@@ -1575,12 +1581,18 @@ const handleedit = async () => {
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
-                                {stagerequirment.map((cat) => (
+                                {stagerequirment.map((cat) => {
+                                   const isCallMode = leadscore.available_for === "Mail";
+                                  const isDisabled =
+                                    isCallMode &&
+                                    (cat === "Mail Scheduled Form" || cat === "Mail Completed Form");
+                                  return(
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
+                                      <Checkbox checked={leadscore.stage_requirment?.includes(cat)} disabled={isDisabled} style={{color:isDisabled?"red":"black"}}/>
                                       <ListItemText primary={cat} />
                                       </MenuItem>
-                                    ))}
+                                 );
+                                })}
                                 </Select>
                           </div>
                           <div className='col-md-3'></div>
@@ -1821,12 +1833,18 @@ const handleedit = async () => {
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
-                                {stagerequirment.map((cat) => (
+                                {stagerequirment.map((cat) => {
+                                   const isCallMode = leadscore.available_for === "Meeting";
+                                  const isDisabled =
+                                    isCallMode &&
+                                    (cat === "Meeting Scheduled Form" || cat === "Meeting Completed Form");
+                                  return(
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
+                                  <Checkbox checked={leadscore.stage_requirment?.includes(cat)} disabled={isDisabled} style={{color:isDisabled?"red":"black"}}/>
                                       <ListItemText primary={cat} />
                                       </MenuItem>
-                                    ))}
+                                  )
+                                  })}
                                 </Select>
                           </div>
                           <div className='col-md-3'></div>
@@ -2070,12 +2088,18 @@ const handleedit = async () => {
                               onChange={(e)=>setleadscore({...leadscore,stage_requirment:e.target.value})}
                                  renderValue={(selected) => selected.join(", ")}
                                  >
-                                {stagerequirment.map((cat) => (
+                                {stagerequirment.map((cat) => {
+                                   const isCallMode = leadscore.available_for === "SiteVisit";
+                                  const isDisabled =
+                                    isCallMode &&
+                                    (cat === "Site Visit Scheduled Form" || cat === "Site Visit Completed Form");
+                                  return(
                                  <MenuItem key={cat} value={cat}>
-                                    <Checkbox checked={leadscore.stage_requirment?.includes(cat)} />
+                                   <Checkbox checked={leadscore.stage_requirment?.includes(cat)} disabled={isDisabled} style={{color:isDisabled?"red":"black"}}/>
                                       <ListItemText primary={cat} />
                                       </MenuItem>
-                                    ))}
+                                  )
+                                    })}
                                 </Select>
                           </div>
                           <div className='col-md-3'></div>

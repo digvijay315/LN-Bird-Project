@@ -28,6 +28,7 @@ import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material"
 import Swal from "sweetalert2";
 import { Details, Try } from "@mui/icons-material";
 import Leadsingleview from "./leadsingleview";
+import * as XLSX from 'xlsx';
 
 
 function Leadfetch() {
@@ -4250,6 +4251,243 @@ const handleroadChange = (event) => {
 
 // =======================================fetch templets code end=================================================================
 
+// =======================================================code for import data start==================================================
+
+  const [show8, setshow8] = useState(false);
+  const handleClose8 = () => setshow8(false);
+  const handleShow8=async()=>
+  {
+    setshow8(true);
+  
+  }
+
+  const databaseFields = [
+  "title", "first_name", "last_name", "country_code", "mobile_no", "mobile_type",
+  "email", "email_type", "tags", "descriptions", "source", "team", "owner", "visible_to",
+  "profession_category", "profession_subcategory", "designation", "company_name",
+  "company_phone", "company_email", "area", "location", "city", "pincode", "state", "country",
+  "industry", "company_social_media", "company_url", "father_husband_name", "h_no", "area1",
+  "location1", "city1", "pincode1", "state1", "country1", "gender", "maritial_status",
+  "birth_date", "anniversary_date", "education", "degree", "school_college", "loan",
+  "bank", "amount", "social_media", "url", "income", "amount1", "document_no",
+  "document_name", "document_pic"
+];
+
+  const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
+  const [mappedFields, setMappedFields] = useState({}); // Store user-selected mapping
+  const [selectedFile, setSelectedFile] = useState(null); // Store uploaded file
+  
+  const [duplicateEntries, setDuplicateEntries] = useState([]);
+  const [pendingContacts, setPendingContacts] = useState([]);
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    setSelectedFile(file); // Store file for later use
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const arrayBuffer = e.target.result;
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+        const data = XLSX.utils.sheet_to_json(sheet,{ header: 1 });
+  
+      if (data.length > 0) {
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`)
+        setExcelHeaders(headers);
+      } else {
+        toast.error("No data found in the Excel file.");
+      }
+    };
+  
+    reader.readAsArrayBuffer(file);
+  };
+
+  // 🔹 Step 2: Process & Map Data Based on User Selection
+  const handleProcessFile = () => {
+    try {
+      
+   
+    setIsLoading(true);
+    if (!selectedFile) {
+      toast.error("No file selected. Please upload a file first.");
+      return;
+    }
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const arrayBuffer = e.target.result;
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet);
+  
+      if (data.length > 0) {
+        const mappedContacts = data.map((row) => {
+          let newcontact = {};
+  
+          Object.keys(row).forEach((key) => {
+            let mappedKey = mappedFields[key] || key; // Use mapped key or original key
+            let value = row[key];
+  
+            // Automatically detect and convert CSV-style values to arrays
+            if (typeof value === "string" && value.includes(",")) {
+              newcontact[mappedKey] = value.split(",").map((v) => v.trim());
+            } else {
+              newcontact[mappedKey] = value;
+            }
+          });
+  
+          return newcontact;
+        });
+  
+        // setcontact(updatecontact); // Update state with processed data
+        checkForDuplicates(mappedContacts); // Call duplicate check after mapping
+      } else {
+        toast.error("No data found in the Excel file.");
+      }
+    };
+  
+    reader.readAsArrayBuffer(selectedFile);
+  } catch (error) {
+      console.log(error);
+      
+  }finally {
+    setIsLoading(false); // Hide loader after API call
+  }
+  };
+  
+  
+  const[allcontacts,setallcontacts]=useState([])
+  const checkForDuplicates = async (contacts) => {
+    try {
+      setIsLoading(true);
+      // Fetch existing contacts from the database
+      const response = await api.get("viewcontact");
+  
+      // Extract all mobile numbers from existing contacts into a Set
+      const existingMobileNos = new Set();
+      response.data.contact.forEach((existing) => {
+        if (Array.isArray(existing.mobile_no)) {
+          existing.mobile_no.forEach((num) => existingMobileNos.add(String(num).trim()));
+        } else if (typeof existing.mobile_no === "string") {
+          existingMobileNos.add(existing.mobile_no.trim());
+        }
+      });
+  
+      let newContacts = [];
+      let duplicates = [];
+  
+      contacts.forEach((contact) => {
+        let contactNumber = contact.mobile_no?.toString().trim(); // Convert to string
+  
+        if (existingMobileNos.has(contactNumber)) {
+          duplicates.push(contact);
+        } else {
+          newContacts.push(contact);
+        }
+      });
+  
+      // Update state to display new contacts and duplicates
+      setDuplicateEntries(duplicates);
+      setPendingContacts(newContacts);
+  
+      // ✅ No popup: Data is now shown with "Add" & "Update" buttons in UI
+      setallcontacts([...newContacts, ...duplicates]); // Store processed data
+    } catch (error) {
+      console.error("Error checking for duplicates:", error);
+    }finally {
+      setIsLoading(false); // Hide loader after API call
+    }
+  };
+  
+  
+  
+  
+  // console.log(pendingContacts);
+  // console.log(duplicateEntries);
+  // console.log(contact);
+  
+  
+  
+    const addcontact=async(e)=>
+      {
+        
+          try {
+  
+             // Show confirmation message
+             const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "Are you sure want to import data?",
+              icon: "question",
+              showCancelButton: true,
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
+              confirmButtonText: "Yes, import it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+              const resp= await api.post('addbulkcontact',pendingContacts,config)
+              
+          if(resp.status===200)
+              {
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Import',
+                  text: 'Contacts Imported successfully!',
+                });
+             
+              }
+              
+        
+          } catch (error) {
+              toast.error(error.response.data.message,{ autoClose: 3000 })
+          }
+      }
+  
+      const updatecontactforbulkupload = async (e) => {
+        try {
+          // Show confirmation message
+          const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "Are you sure you want to update the data?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, update it!",
+          });
+      
+          if (!result.isConfirmed) {
+            return; // Stop execution if user cancels
+          }
+      
+          // Loop through each duplicate contact and send a request one by one
+          const updatePromises = duplicateEntries.map((contact1) =>
+            api.put("updatecontactforbulkupload", contact1, config)
+          );
+      
+          // Wait for all update requests to complete
+          await Promise.all(updatePromises);
+      
+          // Show success message
+          Swal.fire({
+            icon: "success",
+            title: "Update",
+            text: "Contacts updated successfully!",
+          });
+      
+        } catch (error) {
+          toast.error(error.response?.data?.message || "An error occurred", { autoClose: 3000 });
+        }
+      };
+
+
+
+//====================================================== code for import data end===================================================
 
 //============================================ all action buttons hover effect code start===============================================
 const [isHoveringDelete, setIsHoveringDelete] = useState(false);
@@ -4275,15 +4513,23 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       <Sidebar1/>
       <div style={{marginTop:"60px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={()=>window.location.reload()}>Leads</h3>
-        <Tooltip title="Export Data.." arrow>
+        
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
-            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
-        </button></Tooltip>
-            <ul class="dropdown-menu" id="exporttoexcel"> 
+            <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px",width:"30px"}} alt=""/>
+        </button>
+            <ul class="dropdown-menu" id="exporttoexcel" style={{textAlign:"left",padding:"0px",boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",fontFamily:"arial",fontSize:"14px",lineHeight:"30px"}}> 
             
-            <li  onClick={exportToExcel} >Export Data</li>
-              
+            <li  onClick={exportToExcel}  ><img src="https://static.thenounproject.com/png/1960252-200.png" style={{height:"20px",marginTop:"5px"}}></img>
+            Export Data
+            </li>
+            <li  onClick={handleShow8}><img src="https://www.svgrepo.com/show/447311/database-import.svg" style={{height:"20px",marginTop:"5px"}}></img>
+            Import Data</li>
+            <li><img src="https://static.thenounproject.com/png/2406231-200.png"  style={{height:"20px",marginTop:"5px"}}></img>
+            Download Data(sample)</li>
+
             </ul>
+              
+         
      
             <Tooltip title="Filter here.." arrow>
              <div   style={{marginLeft:"80%",border:"none",cursor:"pointer"}}><img src="https://static.thenounproject.com/png/4800805-200.png" style={{height:"35px"}}></img></div>
@@ -7819,6 +8065,98 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
 {/*============================================= modal for update data code end======================================================== */}
        
+
+  {/*============================================= import data modal start========================================================= */}
+ <Modal show={show8} onHide={handleClose8} size='lg'>
+                                <Modal.Header>
+                                  <Modal.Title>Import Lead Data</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                    
+                                <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+                              <h3 className="text-2xl font-bold text-center mb-4 text-gray-800">
+                                📂 Upload & Map Your Excel Data
+                              </h3>
+
+                              {/* File Upload Input */}
+                              <div className="flex flex-col items-center space-y-4">
+                                <input
+                                  type="file"
+                                  onChange={handleFileChange}
+                                  accept=".xlsx, .xls"
+                                  className="block w-full text-sm text-gray-500
+                                    file:mr-4 file:py-2 file:px-4
+                                    file:rounded-lg file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-blue-600 file:text-white
+                                    hover:file:bg-blue-700 cursor-pointer"
+                                />
+
+                                   {/* Mapping UI */}
+      {excelHeaders.length > 0 && (
+       <div className="mt-4">
+       <h5 className="text-lg font-semibold mb-3 text-gray-700">🗺️ Map Your Excel Columns</h5>
+   
+       <div className="row">
+         {excelHeaders.map((header, index) => (
+           <div key={index} className="col-md-4 mb-3 ">
+             <div className="p-2 border rounded shadow-sm bg-light zoom-card">
+               <label className="form-label fw-semibold">{header} ➝</label>
+               <select
+                 className="form-control form-control-sm"
+                 onChange={(e) =>
+                   setMappedFields((prev) => ({
+                     ...prev,
+                     [header]: e.target.value,
+                   }))
+                 }
+               >
+                 <option value="">Select a field</option>
+                 {databaseFields.map((dbField, idx) => (
+                   <option key={idx} value={dbField}>
+                     {dbField}
+                   </option>
+                 ))}
+               </select>
+                {/* ✅ Suggestion Text */}
+                {/* {headerSuggestions[header] && (
+                 <small  style={{color:"blue"}}>{headerSuggestions[header]}</small>
+               )} */}
+             </div>
+           </div>
+         ))}
+       </div>
+   
+       <button
+         style={{ backgroundColor: "gray", width: "200px" }}
+         onClick={handleProcessFile}
+         className="mt-3 btn btn-success fw-semibold"
+       >
+         ✅ Process File
+       </button>
+     </div>
+   )}
+
+
+
+                              </div>
+                              </div>
+
+                    
+                                </Modal.Body>
+                                <Modal.Footer>
+                                {/* <Button variant="secondary" onClick={addcontact}>
+                                    Add Contact
+                                  </Button> */}
+                                  <Button variant="secondary" onClick={handleClose8}>
+                                    Close
+                                  </Button>
+                                </Modal.Footer>
+                              </Modal>
+
+
+
+  {/* ================================================import data modal end =========================================================*/}
           <ToastContainer/>
    </div>
    

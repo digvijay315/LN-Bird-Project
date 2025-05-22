@@ -1,9 +1,6 @@
 const mongoose=require('mongoose')
 
 const lead_info=new mongoose.Schema({
-
-
-
     title:{type:String},
     first_name:{type:String},
     last_name:{type:String},
