@@ -16,13 +16,13 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // Increase l
 app.use(express.json())
 // app.use('/images', express.static('images'));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use(cors())
+// app.use(cors())
 // app.use(cors({ origin: 'https://ln-bird-project-px3u.vercel.app/' }));
-// app.use(cors({
-//     origin: 'https://ln-bird-project-px3u.vercel.app', // Vercel frontend domain
-//     methods: ['GET', 'POST', 'PUT', 'DELETE'], // List of allowed methods
-//     allowedHeaders: ['Content-Type', 'Authorization'], // List of allowed headers
-//   }));
+app.use(cors({
+    origin: ['https://ln-bird-project-px3u.vercel.app', 'https://bharatproperties.co','http://localhost:3000'], // Allow both domains
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 connect();
 app.get('/',(req,res)=>
 {
