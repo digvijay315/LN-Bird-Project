@@ -130,8 +130,7 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
   useEffect(()=>{fetchdata()},[])
   useEffect(()=>{fetchdatabystage_incomingcount()},[])
  
-
-
+  
 
   //------------------------===================================== search code start==============================---------------------------
 
@@ -355,6 +354,20 @@ useEffect(()=>
 {
   viewallactivity()
 },[])
+
+  const[untouchedlead,setuntouchedlead]=useState("")
+  useEffect(()=>
+  {
+   const activityLeads = new Set(allactivity.map(activity => activity.lead));
+   // Filter leads that are not in activityLeads
+    const filteredData = data.filter(item => {
+      const fullLead = `${item.title} ${item.first_name} ${item.last_name}`;
+      return !activityLeads.has(fullLead);
+    });
+    setuntouchedlead(filteredData.length);
+
+  },[data])
+
 // =============================================fetch all activity end=============================================================
     
   /*-------------------pagination code---------------------------pagination code------------------------------------pagination code*/
@@ -4089,12 +4102,28 @@ const handleroadChange = (event) => {
                                                 message1,
                                                 instanceId
                                               });
-                                              if(res.status===200)
+
+                                                if(res.status===200 && res.data.data.status==="success")
                                                 {
                                                   Swal.fire({
                                                     icon: 'success',
                                                     title: 'Whats App Sent!',
                                                     text: 'Your message has been sent successfully...',
+                                                    confirmButtonColor: '#d33',
+                                                    confirmButtonText: 'OK',
+                                                  });
+                                                  // setTimeout(() => {
+                                                  //  window.location.reload()
+                                                  // }, 2000);
+                                            
+                                                }
+
+                                              if(res.status===200 && res.data.data.status==="error")
+                                                {
+                                                  Swal.fire({
+                                                    icon: 'error',
+                                                    title: 'Whats App Sent!',
+                                                    text: 'Your message not sent plz login form dashboard and check instance id...',
                                                     confirmButtonColor: '#d33',
                                                     confirmButtonText: 'OK',
                                                   });
@@ -4405,9 +4434,10 @@ const handleroadChange = (event) => {
     }
   };
   
-  
+    const[isloading3,setisloading3]=useState(false)
     const addcontact=async(e)=>
       {
+        setisloading3(true)
         
           try {
   
@@ -4440,6 +4470,9 @@ const handleroadChange = (event) => {
         
           } catch (error) {
               toast.error(error.response.data.message,{ autoClose: 3000 })
+          }
+          finally{
+            setisloading3(false)
           }
       }
   
@@ -4919,6 +4952,8 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
       </select>
     
     {renderPageNumbers()}
@@ -5221,7 +5256,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
   <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"10px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
           <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"15px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"15px"}}>{untouchedlead}</span></h6>
           <h6 style={{lineHeight:"50px"}}>No Followups Lead- <span style={{color:"gray",fontSize:"15px"}}>{countall}</span></h6>
           <h6 style={{lineHeight:"50px"}}>Returning Lead- <span style={{color:"black",fontSize:"15px"}}>{countall}</span></h6>
           <h6 style={{lineHeight:"50px"}}>Returning No Followup Lead- <span style={{color:"#D11414",fontSize:"15px"}}>{countall}</span></h6>
@@ -8213,6 +8248,41 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                     </div>
                   )}
                 </>
+                    <>
+    {isloading3 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(9, 101, 52, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>importing leads...</p>
+        </div>
+      </div>
+    )}
+  </>
                     
                                 </Modal.Body>
                                 <Modal.Footer>
@@ -8229,6 +8299,8 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
   {/* ================================================import data modal end =========================================================*/}
           <ToastContainer/>
+
+           
    </div>
    
     

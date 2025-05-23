@@ -59,8 +59,19 @@ function Whatsapplogin() {
     }
   }
 
-
-
+  const[showinstance,setshowinstance]=useState(false)
+  const[instancedetails,setinstancedetails]=useState([])
+  const getinstanceid=async()=>
+  {
+    setshowinstance(true)
+    try {
+      const resp=await api.get('viewinstanceid')
+      setinstancedetails(resp.data.instanceid)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   const [showInstanceId, setShowInstanceId] = useState(false);
   return (
     <div>
@@ -86,7 +97,10 @@ function Whatsapplogin() {
        <label className="labels" style={{ fontSize: "12px",visibility:"hidden" }}>Select Your Mobile No.</label>
        <button className="form-control form-control-sm" onClick={getqrcode}>Get Qr Code</button>
      </div>
-     <div className='col-md-5'></div>
+         <div className="col-md-3" style={{ fontSize: "12px", marginTop: "10px" }}>
+      <label className="labels" style={{ fontSize: "12px",visibility:"hidden" }}>Select Your Mobile No.</label>
+      <button className="form-control form-control-sm" onClick={getinstanceid}>View Instance Id</button>
+      </div>
 
      <div className="col-md-4" style={{ fontSize: "12px", marginTop: "10px" }}>
        <label className="labels" style={{ fontSize: "12px",visibility:"hidden" }}>Add New Instance Id</label>
@@ -118,6 +132,17 @@ function Whatsapplogin() {
         <div className='col-md-2' style={{marginTop:"60px"}}><button className='form-control form-control-sm' onClick={setinstanceid}>save</button></div>
         </>
       )}
+      {
+        showinstance && (
+          instancedetails.map((item)=>
+          (
+            <div style={{marginTop:"20px"}}>
+            <p>user1(Bharat Properties) : <span style={{color:"blue"}}>{item.user1}</span></p>
+            <p>user2() : <span style={{color:"blue"}}>{item.user2}</span></p>
+            </div>
+          ))
+        )
+      }
 
 
         {qrcode && (
