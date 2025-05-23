@@ -46,3 +46,13 @@ StyledTableCell
   font-size: 16px;
   font-family: 'Times New Roman', Times, serif;
 }
+
+@keyframes progressBarMove {
+  0% {
+    left: -20%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
