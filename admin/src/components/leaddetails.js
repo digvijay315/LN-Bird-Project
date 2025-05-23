@@ -4262,15 +4262,18 @@ const handleroadChange = (event) => {
   }
 
   const databaseFields = [
-  "title", "first_name", "last_name", "country_code", "mobile_no", "mobile_type",
-  "email", "email_type", "tags", "descriptions", "source", "team", "owner", "visible_to",
-  "profession_category", "profession_subcategory", "designation", "company_name",
-  "company_phone", "company_email", "area", "location", "city", "pincode", "state", "country",
-  "industry", "company_social_media", "company_url", "father_husband_name", "h_no", "area1",
-  "location1", "city1", "pincode1", "state1", "country1", "gender", "maritial_status",
-  "birth_date", "anniversary_date", "education", "degree", "school_college", "loan",
-  "bank", "amount", "social_media", "url", "income", "amount1", "document_no",
-  "document_name", "document_pic"
+                "title","first_name","last_name","country_code","mobile_no","mobile_type","email","email_type","tags","descriptions",
+                "stage","lead_type","owner","team","visible_to","campegin","source","sub_source","refrencer_no","channel_partner",
+                "intrested_project","requirment","property_type","purpose,nri","sub_type","unit_type","budget_min","budget_max",
+                "minimum_area","maximum_area","area_metric","search_location","street_address","range","range_unit","city2",
+                "area2","block","pincode2","country2","state2","lattitude","longitude","country3","state3","city3","area_project",
+                "block3","specific_unit","specific_unitdetails","funding","timeline","facing","road","direction","unit_type2",
+                "transaction_type","furnishing","profession_category","profession_subcategory","designation","company_name",
+                "country_code1","company_phone","company_email","area","location","city","pincode","state","country","industry",
+                "company_social_media","company_url","father_husband_name","h_no","area1","location1","city1","pincode1","state1",
+                "country1","gender","maritial_status","birth_date","anniversary_date","education","degree","school_college","loan",
+                "bank","amount","social_media","url","income","amount1","document_no","document_name","document_pic",
+                "lastcommunication","matcheddeals","matchingdeal,score"
 ];
 
   const [excelHeaders, setExcelHeaders] = useState([]); // Store Excel headers
@@ -4364,11 +4367,11 @@ const handleroadChange = (event) => {
     try {
       setIsLoading(true);
       // Fetch existing contacts from the database
-      const response = await api.get("viewcontact");
+      const response = await api.get("leadinfo");
   
       // Extract all mobile numbers from existing contacts into a Set
       const existingMobileNos = new Set();
-      response.data.contact.forEach((existing) => {
+      response.data.lead.forEach((existing) => {
         if (Array.isArray(existing.mobile_no)) {
           existing.mobile_no.forEach((num) => existingMobileNos.add(String(num).trim()));
         } else if (typeof existing.mobile_no === "string") {
@@ -4403,14 +4406,6 @@ const handleroadChange = (event) => {
   };
   
   
-  
-  
-  // console.log(pendingContacts);
-  // console.log(duplicateEntries);
-  // console.log(contact);
-  
-  
-  
     const addcontact=async(e)=>
       {
         
@@ -4430,14 +4425,14 @@ const handleroadChange = (event) => {
             if (!result.isConfirmed) {
               return; // Stop execution if user cancels
             }
-              const resp= await api.post('addbulkcontact',pendingContacts,config)
+              const resp= await api.post('bulkleadinfo',pendingContacts,config)
               
           if(resp.status===200)
               {
                 Swal.fire({
                   icon: 'success',
                   title: 'Import',
-                  text: 'Contacts Imported successfully!',
+                  text: 'Leads Imported successfully!',
                 });
              
               }
@@ -4467,7 +4462,7 @@ const handleroadChange = (event) => {
       
           // Loop through each duplicate contact and send a request one by one
           const updatePromises = duplicateEntries.map((contact1) =>
-            api.put("updatecontactforbulkupload", contact1, config)
+            api.put("updateleadforbulkupload", contact1, config)
           );
       
           // Wait for all update requests to complete
@@ -4477,7 +4472,7 @@ const handleroadChange = (event) => {
           Swal.fire({
             icon: "success",
             title: "Update",
-            text: "Contacts updated successfully!",
+            text: "Leads updated successfully!",
           });
       
         } catch (error) {
@@ -8137,11 +8132,88 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
      </div>
    )}
 
+            {/* Show Processed Data */}
+              {allcontacts.length > 0 && (
+          <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+            <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
+            
+            <div className="mb-4">
+              <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>New Leads</h4>
+              <pre className="text-sm text-gray-600 overflow-x-auto" >
+              {JSON.stringify(
+              pendingContacts.map(({ title, first_name, last_name, mobile_no }) => ({
+                title,
+                first_name,
+                last_name,
+                mobile_no,
+              })),
+              null,
+              2
+            )}
+              </pre>
+              <button className="form-control form-control-sm" onClick={addcontact} style={{width:"150px"}}>
+                ➕ Add Leads
+              </button>
+            </div>
 
+            <div>
+              <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>Duplicate Leads</h4>
+              <pre className="text-sm text-gray-600 overflow-x-auto">
+              {JSON.stringify(
+              duplicateEntries.map(({ title, first_name, last_name, mobile_no }) => ({
+                title,
+                first_name,
+                last_name,
+                mobile_no,
+              })),
+              null,
+              2
+            )}
+              </pre>
+              <button className="form-control form-control-sm" style={{width:"200px"}} onClick={updatecontactforbulkupload}>
+                🔄 Update Leads
+              </button>
+            </div>
+          </div>
+        )}
 
                               </div>
                               </div>
-
+                  <>
+                  {isLoading && (
+                    <div style={{
+                      position: "fixed",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      background: "rgba(0, 0, 0, 0.6)",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 1000,
+                    }}>
+                      <div style={{
+                        background: "rgba(0, 0, 0, 0.8)",
+                        padding: "20px 40px",
+                        borderRadius: "10px",
+                        textAlign: "center",
+                        color: "white",
+                      }}>
+                        <div style={{
+                          width: "50px",
+                          height: "50px",
+                          border: "5px solid white",
+                          borderTop: "5px solid transparent",
+                          borderRadius: "50%",
+                          animation: "spin 1s linear infinite",
+                          margin: "0 auto 10px",
+                        }}></div>
+                        <p>Uploading data...</p>
+                      </div>
+                    </div>
+                  )}
+                </>
                     
                                 </Modal.Body>
                                 <Modal.Footer>
