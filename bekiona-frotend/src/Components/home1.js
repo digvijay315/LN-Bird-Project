@@ -287,6 +287,15 @@ const[product1,setproduct1]=useState([])
   };
 
 
+   // Group products into slides (e.g. 4 per slide)
+  const chunkSize = 1;
+  const slides = [];
+  for (let i = 0; i < singleProduct.length; i += chunkSize) {
+    slides.push(singleProduct.slice(i, i + chunkSize));
+  }
+
+
+
   return (
     <div>
         <Header/>
@@ -752,178 +761,90 @@ Combo Products
 
 {/* single products-------------------------------------------------------------------------- */}
 
-<div className="grocery" style={{ background: "linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)", width: "100%" }}>
-      <h1 className="grocery-heading text-center" style={{ marginBottom: "20px", color: "#333" }}>
+   <div
+      className="py-4"
+      style={{
+        background: "linear-gradient(to right, #FFF9B1, #FFB6C1, #FFF9B1)",
+      }}
+    >
+      <h1 className="text-center mb-4" style={{ color: "#333" }}>
         Incredible Products
       </h1>
-      <div className="empty-div"></div>
-      <div className="container">
-      <Swiper
-  modules={[Navigation, Pagination, Autoplay]}
-  spaceBetween={10}
-  slidesPerView={1} // Show one slide in mobile view
-  slidesPerGroup={1} // Slide one by one
-  breakpoints={{
-    480: { slidesPerView: 1, slidesPerGroup: 1 }, // Mobile
-    768: { slidesPerView: 2, slidesPerGroup: 2 }, // Tablet
-    1024: { slidesPerView: 3, slidesPerGroup: 3 }, // Desktop
-    1280: { slidesPerView: 4, slidesPerGroup: 4 }, // Large screens
-  }}
-  navigation={true}
-  pagination={{ clickable: true }}
-  autoplay={{ delay: 2500, disableOnInteraction: false }}
-  style={{ width: "100%", padding: "20px" }}
->
 
-  {singleProduct.map((product) => (
-    <SwiperSlide key={product.id}>
-      <div
-        className="col-12 col-sm-6 col-md-4 col-lg-3"
-        style={{
-          height: "550px",
-          width: "300px",
-          background: "transparent",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div
-          className="grocery-card"
-          style={{
-            width: "100%",
-            maxWidth: "300px",
-            backgroundColor: "#fff",
-            padding: "15px",
-            border: "1px solid #ddd",
-            borderRadius: "10px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            transition: "transform 0.3s ease, box-shadow 0.3s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "scale(1.05)";
-            e.currentTarget.style.boxShadow = "0 6px 10px rgba(0, 0, 0, 0.2)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "scale(1)";
-            e.currentTarget.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
-          }}
-        >
-          <div style={{ position: "relative", width: "100%"}}>
-            <img
-              src={product.product_image}
-              alt={product.product_name}
-              className="grocery-card-image img-fluid"
-              style={{
-                width: "100%",
-                height: "270px",
-                objectFit: "contain", // shows full image without cropping
-                cursor: "pointer",
-                 transform: "scale(1.4)",
-                transition: "transform 0.3s ease",
-                borderRadius: "10px",
-                imageRendering: "crisp-edges",
-                WebkitImageRendering: "optimize-contrast",
-                backgroundColor: "#f8f8f8", // optional: adds a nice background if image doesn't fill
-              }}
-              onClick={() => navigate("/vitamincfaceash", { state: product._id })}
-            />
-          </div>
-          <span
-            className="grocery-card-name"
-            style={{
-              fontSize: "1rem",
-              height: "3rem",
-              fontWeight: "bold",
-              color: "#333",
-              marginTop: "10px",
-              display: "-webkit-box",
-              WebkitBoxOrient: "vertical",
-              WebkitLineClamp: 2,
-              overflow: "hidden",
-              maxWidth: "90%",
-              fontFamily: "'ITC Modern No 216', serif",
-            }}
-          >
-            {product.product_name}
-          </span>
-          <p className="grocery-card-price" style={{ fontSize: "1rem", color: "#666", marginTop: "5px" }}>
-            ₹{product.product_price}
-          </p>
-          <button
-            onClick={() => handleprouctadd(product)}
-            className="add-to-cart-btn"
-            style={{
-              backgroundColor: cart.some(item => item._id === product._id) 
-              ? "green"  // Change this to your desired color when item is in cart
-              : "rgb(51, 51, 51)",
-              color: "white",
-              border: "none",
-              padding: "12px 30px",
-              borderRadius: "5px",
-              fontSize: "0.9rem",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              marginTop: "10px",
-              width: "80%",
-              fontWeight: "bold",
-            }}
-          >
-            Add to Cart
-          </button>
-          {/* <button
-            // onClick={() => handleprouctadd(product)}
-            className="add-to-cart-btn"
-            style={{
-              backgroundColor: cart.some(item => item._id === product._id) 
-              ? "green"  // Change this to your desired color when item is in cart
-              : "rgb(51, 51, 51)",
-              backgroundColor:"rgb(51, 51, 51)",
-              color: "white",
-              border: "none",
-              padding: "12px 30px",
-              borderRadius: "5px",
-              fontSize: "0.9rem",
-              cursor: "pointer",
-              transition: "all 0.3s ease",
-              marginTop: "10px",
-              width: "80%",
-              fontWeight: "bold",
-            }}
-          >
-            Buy Now
-          </button> */}
+      <div id="productCarousel" className="carousel slide" data-bs-ride="carousel">
+        
+        <div className="carousel-inner">
+          {singleProduct.map((product, index) => (
+            <div className={`carousel-item ${index === 0 ? "active" : ""}`} key={product.id}>
+              <div className="container d-flex justify-content-center">
+                <div className="card shadow-sm text-center border-0" style={{ width: "100%", maxWidth: "320px" }}>
+                  <div
+                    className="image-container"
+                    style={{
+                      width: "100%",
+                      height: "270px",
+                      overflow: "hidden",
+                      borderRadius: "10px 10px 0 0",
+                      backgroundColor: "#f8f8f8",
+                    }}
+                  >
+                    <img
+                      src={product.product_image}
+                      alt={product.product_name}
+                      className="img-fluid"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        display: "block",
+                        margin: "0 auto",
+                        padding: "10px",
+                      }}
+                      onClick={() => navigate("/vitamincfaceash", { state: product._id })}
+                    />
+                  </div>
+
+                  <div className="card-body">
+                    <h6 className="card-title text-truncate">{product.product_name}</h6>
+                    <p className="card-text text-muted mb-2">₹{product.product_price}</p>
+                    <button
+                      className="btn btn-dark w-100"
+                      style={{
+                        backgroundColor: cart.some(item => item._id === product._id)
+                          ? "green"
+                          : "rgb(51, 51, 51)",
+                        fontWeight: "bold",
+                      }}
+                      onClick={() => handleprouctadd(product)}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    </SwiperSlide>
-  ))}
-</Swiper>
 
-{/* Custom CSS for smaller next/prev buttons */}
-<style>
-  {`
-  .swiper-button-next,
-  .swiper-button-prev {
-    font-size: 14px !important; /* Decrease size */
-    width: 30px !important;
-    height: 30px !important;
-    background: rgba(0, 0, 0, 0.5) !important;
-    border-radius: 50%;
-  }
-  .swiper-button-next::after,
-  .swiper-button-prev::after {
-    font-size: 14px !important; /* Arrow size */
-    color: white !important;
-  }
-  `}
-</style>
-
+        {/* Controls */}
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="prev"
+        >
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target="#productCarousel"
+          data-bs-slide="next"
+        >
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
       </div>
     </div>
 
