@@ -2,6 +2,9 @@ import React, { useEffect, useState,useRef } from 'react';
 
 export default function PptSlides({ pptUrl }) {
   const [slides, setSlides] = useState([]);
+  
+  const containerRef = useRef(null);
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
 useEffect(() => {
   if (!pptUrl) return;
@@ -29,8 +32,6 @@ useEffect(() => {
 
   if (!slides.length) return <p>Loading slides...</p>;
 
-  const containerRef = useRef(null);
-  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
