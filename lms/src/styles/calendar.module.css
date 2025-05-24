@@ -1,0 +1,37 @@
+/* Media queries for smaller screens */
+@media (max-width: 640px) {
+  .calendar-container {
+    padding: 1px;
+  }
+
+  .calendar-header {
+    display: flex;
+  }
+
+  .day-labels {
+    font-size: 0.75rem; /* Tailwind's text-xs */
+  }
+
+  .calendar-grid {
+    gap: 1px;
+  }
+
+  .today-button {
+    font-size: 0.875rem; /* Tailwind's text-sm */
+  }
+}
+
+/* Media queries for larger screens */
+@media (min-width: 768px) {
+  .calendar-container {
+    max-width: 960px;
+  }
+
+  .calendar-header {
+    flex-direction: row;
+  }
+
+  .day-labels {
+    font-size: 0.875rem; /* Tailwind's text-sm */
+  }
+}

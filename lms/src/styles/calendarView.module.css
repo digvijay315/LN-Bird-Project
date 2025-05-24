@@ -1,0 +1,30 @@
+/* Media queries for smaller screens */
+@media (max-width: 810px) {
+  .calendar-view {
+    height: auto;
+  }
+
+  .view-inner {
+    flex-direction: column;
+  }
+  .schedule {
+    width: 100%;
+    height: auto;
+    margin-left: 10px;
+  }
+
+  .schedule-header {
+    font-size: 1rem; /* Tailwind's text-base */
+  }
+}
+
+@media (min-width: 768px) {
+  .calendar-view {
+    gap: 1rem;
+  }
+
+  .schedule {
+    width: 24rem;
+    height: 24rem;
+  }
+}
