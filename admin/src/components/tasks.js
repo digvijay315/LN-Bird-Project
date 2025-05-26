@@ -1290,15 +1290,7 @@ const handleallunitschange = (event) => {
         };
     });
 
-    // Now check if status is "Conducted" and update the stage
-    if (newStatus === "Conducted") {
-        setupdatestage("Opportunity");
-        setupdatestage1("Quote");
-    }
-    else if (newStatus === "Did Not Visit" || "Not Intersted>") {
-        setupdatestage("Prospect");
-        setupdatestage1("Open");
-    }
+  
 };
 
 const [siteprojects, setsiteprojects] = useState([]);
@@ -1453,40 +1445,37 @@ const id=selectedItems[0]
   const updatedsiteTask = { ...sitevisit, title: title1 };
 
   try {
-    const data1 = { newstage: updatestage1 };
-    const stage = { stage:updatestage };
+    // const data1 = { newstage: updatestage1 };
+    // const stage = { stage:updatestage };
 
-    if(id)
-      {
-       const resp1 = await api.put(`updatelead/${sitevisit.lead_id}`,stage );
-      }
-      
-      
-
-    // Loop through each selected project-block-unit combination
+    // if(id)
+    //   {
+    //    const resp1 = await api.put(`updatelead/${sitevisit.lead_id}`,stage );
+    //   }
+    
     let isValidCombination = true;
-    for (let i = 0; i < allunit1.length; i++) {
-      const selectedCombination = allunit1[i];
-      const [unit_number, block, project] = selectedCombination.split('-');
+    // for (let i = 0; i < allunit1.length; i++) {
+    //   const selectedCombination = allunit1[i];
+    //   const [unit_number, block, project] = selectedCombination.split('-');
 
-      // Check if the unit_number, block, and project exist
-      if (unit_number && block && project) {
-        console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
+     
+    //   if (unit_number && block && project) {
+    //     console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
 
-        try {
-          // Call API for each valid combination
-          const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
-        } catch (error) {
-          // Handle API errors for the individual combination
-          toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
-          isValidCombination = false; // Set to false if the combination fails
-        }
-      } else {
-        // If any part is missing, skip the combination
-        toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
-        isValidCombination = false;
-      }
-    }
+    //     try {
+    //       // Call API for each valid combination
+    //       const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
+    //     } catch (error) {
+    //       // Handle API errors for the individual combination
+    //       toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
+    //       isValidCombination = false; // Set to false if the combination fails
+    //     }
+    //   } else {
+    //     // If any part is missing, skip the combination
+    //     toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
+    //     isValidCombination = false;
+    //   }
+    // }
 
     // Post site visit data if the combination is valid
     if (isValidCombination) {
@@ -4378,7 +4367,8 @@ sitevisitdata.map((item)=>
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,direction:e.target.value}))} >
+                    <div className="col-md-4"><label className="labels">Direction</label>
+                    <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,direction:e.target.value}))} >
                     <option>{calltask.direction}</option>
                     <option>---Select---</option>
                         {
@@ -4390,7 +4380,8 @@ sitevisitdata.map((item)=>
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,status:e.target.value}))}>
+                        <div className="col-md-4"><label className="labels">Status</label>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,status:e.target.value}))}>
                     <option>{calltask.status}</option>
                     <option>---Select---</option>
                         {
@@ -4409,7 +4400,8 @@ sitevisitdata.map((item)=>
                 <div className="col-md-4"><label className="labels">Duration</label><input type="time" value={calltask.duration} className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...calltask,duration:e.target.value}))}/></div>
                 <div className="col-md-4"> </div>
 
-                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,result:e.target.value}))}>
+                    <div className="col-md-4"><label className="labels">Result</label>
+                    <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,result:e.target.value}))}>
                     <option>{calltask.result}</option>
                     <option>---Select---</option>
                        {
@@ -4421,7 +4413,8 @@ sitevisitdata.map((item)=>
                        }
                        </select>
                         </div>
-                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,intrested_inventory:e.target.value}))}>
+                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label>
+                        <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,intrested_inventory:e.target.value}))}>
                     <option>{calltask.intrested_inventory}</option>
                     <option>---Select---</option>
                         {
@@ -4638,7 +4631,8 @@ sitevisitdata.map((item)=>
 
 <div className="row mt-2">
 
-<div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
+<div className="col-md-4"><label className="labels">Direction</label>
+<select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
   <option>{mailtask.direction}</option>
   <option>---Select---</option>
     {
@@ -4650,7 +4644,8 @@ sitevisitdata.map((item)=>
     }
     </select>
     </div>
-    <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
+    <div className="col-md-4"><label className="labels">Status</label>
+    <select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
     <option>{mailtask.status}</option>
     <option>---Select---</option>
     {
@@ -5728,7 +5723,8 @@ sitevisitdata.map((item)=>
 
 <div className="row mt-2">
 
-<div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
+<div className="col-md-4"><label className="labels">Select Status</label>
+<select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
 <option>{meetingtask.status}</option>
                     <option>---Select---</option>
                     {

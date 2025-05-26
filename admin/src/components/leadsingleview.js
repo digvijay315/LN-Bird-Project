@@ -1,4 +1,5 @@
 import React, { act, useEffect,useRef } from 'react'
+import axios from "axios";
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -42,6 +43,127 @@ const navigate=useNavigate()
 
     const location=useLocation()
     const lead=location.state || {}
+
+// =============================================fetch all data from lead score start==================================================
+
+     useEffect(()=>{fetchdataforcallfields()},[])
+                  const[callreason,setcallreason]=useState([]);
+                  const[calldirection,setcalldirection]=useState([]);
+                  const[callstatus,setcallstatus]=useState([]);
+                  const[callresult,setcallresult]=useState([]);
+    
+                  const[mailsubject,setmailsubject]=useState([]);
+                  const[maildirection,setmaildirection]=useState([]);
+                  const[mailstatus,setmailstatus]=useState([]);
+    
+                  const[meetingreason,setmeetingreason]=useState([]);
+                  const[meetingstatus,setmeetingstatus]=useState([]);
+                  const[meetingresult,setmeetingresult]=useState([]);
+    
+                  const[sitevisit_visittype,setsitevisit_visittype]=useState([]);
+                  const[sitevisit_status,setsitevisit_status]=useState([]);
+                  const[sitevisit_result,setsitevisit_result]=useState([]);
+    
+    
+                    const callreasons = ["Site Visit", "Builder Discount/Scheme","Construction Update","Documentation","Inventory Availability","Inventory Rights for Listing","Legal",
+                              "Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+                              "Requirement","Review/Feedback","Tax Discussion"];
+            
+          const calldirections = ["Outgoing Call", "Incoming Call",];
+          const callstatus1 = ["Answered", "Cut Call","Not Picked","Busy","Missed","Not Reachable"," Switch Off",
+                              "Number Invalid","Waiting"];
+          const callresult1 = ["Token Terms Accepted – Booking Discussion", "Budget Shared – Awaiting Options",
+                                "Interested – Wants More Options"," Budget Approved – Awaiting Shortlist","Final Deal Discussion Pending","Possession Status Confirmed",
+                                "Wants Legal/Document Review","Need More Inventory Options"];
+          const emailsubjects_purpose = ["Payment Reminder", "Agreement Reminder","Follow-Up","Meeting","Loan Discussion","Meeting","Negotiation Discussion","Other","Registry Preparation & Timeline",
+                "Matched Deal Update","Feedback","Document","Site Visit Scheduling","Reschedule Attempt","Payment Follow-Up","Transactional Email",
+                "Meeting/Call Setup"," Initial Meeting Request"," Follow-Up Reminder"," Reconnect Post-Site Visit"," Urgency / Reminder",
+                "After Site Visit","Document Sharing","Booking Step","Occasion-based","Greeting","General Follow-Up","Informational","Recap Email",
+                "Meeting Follow-Up"]
+          const emaildirections=["Outgoing", "Inccoming"]
+          const emailstatus = ["Read", "Delivered","Undelivered","Bounced","Sent & Replied","Sent","No Response",
+                "Read & Replied","Unread","Replied","Read Only","Replied","Ignored","Clicked","Downloaded","Opened","No Response"]
+          const meetingreason1 = ["Discuss For Deal", "Requirement","Site Visit","Meeting","Revival Meeting",
+            "Cold Lead Revival","Owner Meeting","Broker Meeting","Builder Meeting", "Requirement Meeting","Shortlisting Discuss",
+            "Post-Visit Feedback","Negotiation Meeting","Token/Booking","Deal Closing","Documentation Required"]
+          const meetingstatus1 = ["Conducted", "Postponed","Cancelled"];
+          const meetingresult1 = ["Interested", "Just Enquiry","Low Budget","Location Mismatch","Enquiry For Friend",
+            "Cancelled","Not Interested","Requirement Updated","Price/Details Updated","Properties Exchanged","New Pricing Shared",
+            "Requirement Captured","Shortlisted Finalized","Liked Property","Wants to Negotiate","Price Discussion","Token Received",
+            "Buyer Backed Out","Registry Done","Docs Clear","Issue Found"]
+          const sitevisit_visittype1 =["Site Visit", "Revisit","Online Visit","Developer Sample Vist"];
+          const sitevisit_status1 = ["Conducted", "Postponed","Did Not Visit","Cancelled","Rescheduled"];
+          const sitevisit_result1 = ["Interested", "Token Discussion","Shortlisted","Second Visit Required",
+            "Family Discussion","Need More Options","Budget Issue","Postponed","Visit Cancelled","Visit Not Attended","Location Mismatch",
+            "Not Interested"]
+            
+                  const fetchdataforcallfields=async()=>
+                    {
+                      
+                      try {
+                        const resp=await api.get('viewleadscore')
+              
+                        const newReasons = resp.data.score.map(item => item.reason);
+                        const combinedReasons = Array.from(new Set([...callreasons, ...newReasons]));
+                        setcallreason(combinedReasons)
+    
+                        const newdirection = resp.data.score.map(item => item.direction);
+                        const combineddirections = Array.from(new Set([...calldirections, ...newdirection]));
+                        setcalldirection(combineddirections)
+    
+                        const newstatus = resp.data.score.map(item => item.status);
+                        const combinedstatus = Array.from(new Set([...callstatus1, ...newstatus]));
+                        setcallstatus(combinedstatus)
+    
+                        const newresult = resp.data.score.map(item => item.result);
+                        const combinedresult = Array.from(new Set([...callresult1, ...newresult]));
+                        setcallresult(combinedresult)
+    
+                        const newsubject = resp.data.score.map(item => item.email_category);
+                        const combinedcategory = Array.from(new Set([...emailsubjects_purpose, ...newsubject]));
+                        setmailsubject(combinedcategory)
+    
+                        const newemaildirection = resp.data.score.map(item => item.email_direction);
+                        const combinedemaildirection = Array.from(new Set([...emaildirections, ...newemaildirection]));
+                        setmaildirection(combinedemaildirection)
+    
+                        const newemailstatus = resp.data.score.map(item => item.email_status);
+                        const combinedemailstatus = Array.from(new Set([...emailstatus, ...newemailstatus]));
+                        setmailstatus(combinedemailstatus)
+                        
+                        const newemeetingreason = resp.data.score.map(item => item.meeting_reason);
+                        const combinedmeetingreason = Array.from(new Set([...meetingreason1, ...newemeetingreason]));
+                        setmeetingreason(combinedmeetingreason)
+                        
+                        const newemeetingstatus = resp.data.score.map(item => item.meeting_status);
+                        const combinedmeetingstatus = Array.from(new Set([...meetingstatus1, ...newemeetingstatus]));
+                        setmeetingstatus(combinedmeetingstatus)
+                        
+                        const newemeetingresult = resp.data.score.map(item => item.meeting_result);
+                        const combinedmeetingresult = Array.from(new Set([...meetingresult1, ...newemeetingresult]));
+                        setmeetingresult(combinedmeetingresult)
+    
+                        const newsitevisitvisittype = resp.data.score.map(item => item.sitevisit_visittype);
+                        const combinedsitevisitvisittype = Array.from(new Set([...sitevisit_visittype1, ...newsitevisitvisittype]));
+                        setsitevisit_visittype(combinedsitevisitvisittype)
+    
+                        const newsitevisitstatus = resp.data.score.map(item => item.sitevisit_status);
+                        const combinedsitevisitstatus = Array.from(new Set([...sitevisit_status1, ...newsitevisitstatus]));
+                        setsitevisit_status(combinedsitevisitstatus)
+    
+                        const newsitevisitresult = resp.data.score.map(item => item.sitevisit_result);
+                        const combinedsitevisitresult = Array.from(new Set([...sitevisit_result1, ...newsitevisitresult]));
+                        setsitevisit_result(combinedsitevisitresult)
+    
+                      } catch (error) {
+                        console.log(error);
+                      }
+                    
+                    }
+
+
+    //=============================================== fetch all data from leadscore end====================================================
+
 
     const[documents,setdouments]=useState([])
 
@@ -1083,10 +1205,8 @@ const [isSmall, setIsSmall] = useState(false);
     if(resp.status===200)
     {
     toast.success("task completed success")
-    setTimeout(() => {
-    window.location.reload();
-    }, 2000); // 2000 milliseconds = 2 seconds
-
+    checkrequirmentforms(updatedCallTask)
+ 
     }
 } catch (error) {
 
@@ -1107,9 +1227,7 @@ const mailtaskdetails=async()=>
           if(resp.status===200)
           {
               toast.success(resp.data.message)
-              setTimeout(() => {
-                  window.location.reload();
-                }, 2000); // 2000 milliseconds = 2 seconds
+            checkrequirmentforms(updatedMailTask)
               
           }
       } catch (error) {
@@ -1119,66 +1237,21 @@ const mailtaskdetails=async()=>
     }
 
 
-        const[leadupdatestage,setleadupdatestage]=useState("")
-        const[dealupdatestage,setdealupdatestage]=useState("")
-    useEffect(()=>
-    {
-      if(meetingtask.meeting_result==="Deal Done")
-      {
-        setleadupdatestage("Booked")
-        setdealupdatestage("Booking")
-      }
-    
-    },[meetingtask.meeting_result])
+       
 
     const meetingdetails = async () => {
     
       const updatemeetingtask = { ...meetingtask, complete:"true" };
     
       try {
-        const data1 = { newstage: dealupdatestage };
-        const stage = { stage:leadupdatestage };
-    
-        
-     
-        // Loop through each selected project-block-unit combination
         let isValidCombination = true;
-        for (let i = 0; i < meetingtask.inventory.length; i++) {
-          const selectedCombination = meetingtask.inventory[i];
-          const [unit_number, block, project] = selectedCombination.split('-');
-    
-          // Check if the unit_number, block, and project exist
-          if (unit_number && block && project) {
-            console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
-    
-            try {
-              // Call API for each valid combination
-              const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
-            } catch (error) {
-              // Handle API errors for the individual combination
-              toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
-              isValidCombination = false; // Set to false if the combination fails
-            }
-          } else {
-            // If any part is missing, skip the combination
-            toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
-            isValidCombination = false;
-          }
-        }
-    
-        // Post site visit data if the combination is valid
         if (isValidCombination) {
           const resp = await api.put(`updatemeetingtask/${taskid}`, updatemeetingtask);
-    
-          const resp1 = await api.put(`updateleadbystagebyemail/${meetingtask.email[0]}`,stage );
           const resp2=await api.post('addactivity',activity)
           // If successful, show a success toast and reload
           if (resp.status === 200) {
             toast.success("Task Completed", { autoClose: 2000 });
-    
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+            checkrequirmentforms(updatemeetingtask)
           }
         } else {
           toast.error("Some project/block/unit combinations were invalid. Please check your data.");
@@ -1326,75 +1399,64 @@ setactivity({...activity, edit_field: "block",edit_value:selectblock})
     };
     
   
-    const [alldealunits, setalldealunits] = useState([]);
-  
-  useEffect(() => {
-    const dealblocks = dealdata.filter((item) =>
-      sitevisit.intrested_project.some((project) => project === item.project) &&
-      sitevisit.intrested_block.some((block) => block === item.block) // Add the condition for interested blocks
-    );
-    setalldealunits(dealblocks);
-  }, [sitevisit.intrested_project, sitevisit.intrested_block]); 
 
 
+
+  function addFn1() {
+                  
+  setsitevisit((prevsite)=>({
+    ...prevsite,
+    intrested_inventory: [...sitevisit.intrested_inventory, ''],
+    result: [...sitevisit.result, ''],
+    action1: Array.isArray(prevsite.action1) ? [...prevsite.action1, ''] : ['']
+  }));
+};
+const deleteall1=(index)=>
+  {
+   
+    const newsitevisitintrestedinventory = sitevisit.intrested_inventory.filter((_, i) => i !== index);
+    const newsitevisitresult = sitevisit.result.filter((_, i) => i !== index);
+    const newsitevisitaction1 = sitevisit.action1.filter((_, i) => i !== index);
+    
+    setsitevisit({
+      ...sitevisit,
+      intrested_inventory: newsitevisitintrestedinventory,
+      result: newsitevisitresult,
+      action1:newsitevisitaction1
+    });
+  }
+  const handlesitevisitinventorychange = (index, event) => {
+    const newsitevisit = [...sitevisit.intrested_inventory];
+    newsitevisit[index] = event.target.value;
+    setsitevisit({
+      ...sitevisit,
+      intrested_inventory: newsitevisit
+    });
+  };
+  const handlesitevisitresultchange = (index, event) => {
+    const newresult = [...sitevisit.result];
+    newresult[index] = event.target.value;
+    setsitevisit({
+      ...sitevisit,
+      result: newresult
+    });
+  };
 
   const sitevisitdetails = async () => {
     
- 
-  
-    
-    // Update site visit task
     const updatedsiteTask = { ...sitevisit, complete:"true" };
   
     try {
-      const data1 = { newstage: updatestage1 };
-      const stage = { stage:updatestage };
-  
    
-        
-        
-        
-        
-  
-      // Loop through each selected project-block-unit combination
-      let isValidCombination = true;
-      for (let i = 0; i < allunit1.length; i++) {
-        const selectedCombination = allunit1[i];
-        const [unit_number, block, project] = selectedCombination.split('-');
-  
-        // Check if the unit_number, block, and project exist
-        if (unit_number && block && project) {
-          console.log(`Calling API: updatedealstage/${project}/${block}/${unit_number}`);
-  
-          try {
-            // Call API for each valid combination
-            const resp2 = await api.put(`updatedealstage/${project}/${block}/${unit_number}`, data1);
-          } catch (error) {
-            // Handle API errors for the individual combination
-            toast.error(`API request failed for ${project} - ${block} - ${unit_number}`);
-            isValidCombination = false; // Set to false if the combination fails
-          }
-        } else {
-          // If any part is missing, skip the combination
-          toast.warn(`Skipping API call for invalid combination: ${selectedCombination}`);
-          isValidCombination = false;
-        }
-      }
-  
-      // Post site visit data if the combination is valid
-      if (isValidCombination) {
         const resp = await api.put(`updatesitevisittask/${taskid}`, updatedsiteTask);
-        const resp1 = await api.put(`updatelead/${sitevisit.lead_id}`,stage );
         const resp2=await api.post('addactivity',activity)
-        // If successful, show a success toast and reload
+  
         if (resp.status === 200) {
           toast.success("Task Completed", { autoClose: 2000 });
+           checkrequirmentforms(updatedsiteTask)
   
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
         }
-      } else {
+       else {
         toast.error("Some project/block/unit combinations were invalid. Please check your data.");
       }
   
@@ -1406,25 +1468,218 @@ setactivity({...activity, edit_field: "block",edit_value:selectblock})
 
 // ====================================site visit complete code end============================================================
 
+// =============================================check requirment form start for change score and stage==================================
+
+useEffect(()=>{fetchleadscoredata()},[])
+              const[leadscoredata,setleadscoredata]=useState([]);
+              const fetchleadscoredata=async(event)=>
+                {
+                  try {
+                    const resp=await api.get('viewleadscore')
+                    setleadscoredata(resp.data.score)
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
+
+    
+        const[leaddata,setleaddata]=useState([]);
+        const fetchleaddata=async()=>
+        {
+          
+          try {
+            const resp=await api.get('leadinfo')
+            setleaddata(resp.data.lead)
+          } catch (error) {
+            console.log(error);
+          }
+        
+        }
+
+        useEffect(()=>
+        {
+          fetchcdata()
+
+        },[])
+
+   const checkrequirmentforms=(taskdata)=>
+                      {
+                        const matchleadscore=leadscoredata.filter((item)=>item.available_for===taskdata.activity_type)
+                        matchleadscore.map((item)=>
+                        {
+                           if (
+                            (
+                            taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                            taskdata?.direction?.trim() === item?.direction?.trim() &&
+                            taskdata?.reason?.trim() === item?.reason?.trim() &&
+                            taskdata?.status?.trim() === item?.status?.trim() &&
+                            taskdata?.result?.trim() === item?.result?.trim()
+                          ) ||
+                          (
+                            taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                            taskdata?.direction?.trim() === item?.email_direction?.trim() &&
+                            taskdata?.subject?.trim() === item?.email_category?.trim() &&
+                            taskdata?.status?.trim() === item?.email_status?.trim()
+                          ) ||
+                          (
+                            taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                            taskdata?.reason?.trim() === item?.meeting_reason?.trim() &&
+                            taskdata?.status?.trim() === item?.meeting_status?.trim() &&
+                            taskdata?.meeting_result?.trim() === item?.meeting_result?.trim()
+                          ) ||
+                          (
+                            taskdata?.activity_type?.trim() === item?.available_for?.trim() &&
+                            taskdata?.sitevisit_type?.trim() === item?.sitevisit_visittype?.trim() &&
+                            taskdata?.status?.trim() === item?.sitevisit_status?.trim() &&
+                            (taskdata?.result || "").includes(item?.sitevisit_result?.trim())
+                          )
+                      )
+                            
+                       
+                            
+                            {
+                               const formMap = {
+                                "Call Scheduled Form":"Call scheduled",
+                                "Mail Scheduled Form":"Mail scheduled",
+                                "Meeting Scheduled Form":"Meeting scheduled",
+                                "Site Visit Scheduled Form":"Sitevisit scheduled",
+                                "Call Completed Form":"Call",
+                                "Mail Completed Form":"Mail",
+                                "Meeting Completed Form":"Meeting",
+                                "Site Visit Completed Form":"SiteVisit",
+                                "Negotiation Form": "Negotiation",
+                                "Requirment Form": "Requirement",
+                              };
+                               const requirements = item.stage_requirment || [];
+                              const incompleteForms = [];
+                              const usedFormDates = new Set();
+  
+                                requirements.forEach((formName) => {
+                                const expectedRequirment = formMap[formName]?.toLowerCase();
+  
+                                console.log(expectedRequirment);
+                                
+                                if (expectedRequirment === "sitevisit" || expectedRequirment === "meeting" || expectedRequirment === "call" || expectedRequirment === "mail") {
+                                  console.log("hello");
+                                  
+                               const match = alltask?.find((form) => {
+                              
+                                    const formDate = new Date(form.date);
+                                    const itemDate = new Date(taskdata.date);
+                                    // Zero the time part
+                                        itemDate.setHours(0, 0, 0, 0);
+                                        formDate.setHours(0, 0, 0, 0);
+                                    const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                   
+                                    return (
+                                      form.activity_type?.toLowerCase() === expectedRequirment &&
+                                      form.complete === "true" &&
+                                      itemDate <= formDate &&
+                                      !usedFormDates.has(formKey)
+  
+                                      
+                                    );
+                                  });
+                         
+                                if (match) {
+                                  const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                  usedFormDates.add(formKey); // ✅ Mark as used
+                                } else {
+                                  incompleteForms.push(formName);
+                                   // ❌ No match found for this requirement
+                                }
+                              }
+                            
+                                 if (expectedRequirment === "call scheduled" || expectedRequirment === "mail scheduled" || expectedRequirment === "meeting scheduled" || expectedRequirment === "sitevisit scheduled") {
+                         
+                          
+                              
+                                  const match = alltask?.find((form) => {
+                                    const formDate = new Date(form.due_date ? form.due_date : form.start_date );
+                                    const itemDate = new Date(taskdata.due_date ? taskdata.due_date : taskdata.start_date);
+                                    // Zero the time part
+                                        itemDate.setHours(0, 0, 0, 0);
+                                        formDate.setHours(0, 0, 0, 0);
+                                       
+                                    const formKey = `${form.activity_type?.toLowerCase()}_${form.date}`;
+                                    return (
+                                      (form.activity_type?.toLowerCase() === expectedRequirment.split(" ")[0].toLowerCase()) &&
+                                      itemDate <= formDate &&
+                                      !usedFormDates.has(formKey)
+                                    );
+                                  });
+                         
+                                if (match) {
+                                  const formKey = `${match.activity_type?.toLowerCase()}_${match.date}`;
+                                  usedFormDates.add(formKey); // ✅ Mark as used
+                                } else {
+                                  incompleteForms.push(formName); // ❌ No match found for this requirement
+                                }
+                              }
+                             
+                             else if (expectedRequirment === "requirement") {
+                              const matchedLead = leaddata.find(
+                                (item) => `${item.title} ${item.first_name} ${item.last_name}` === taskdata.lead
+                              );
+  
+                              const match1 = matchedLead?.requirement?.trim() !== "";
+  
+                                if (!match1) {
+                                  incompleteForms.push(formName);
+                                }
+                              }
+                              });
+  
+                               if (incompleteForms.length > 0) 
+                                {
+                                Swal.fire({
+                                  icon: 'warning',
+                                  title: '⚠️ Incomplete Forms Detected!',
+                                  html: `
+                                    <div style="color: #333; font-size: 16px;">
+                                      <p><strong style="color: #007BFF;">${taskdata.lead}</strong> is missing the following forms:</p>
+                                      <ul style="text-align: left; padding-left: 20px; color: #D9534F; font-weight: bold;">
+                                        ${incompleteForms.map(form => `<li>📌 ${form}</li>`).join('')}
+                                      </ul>
+                                      <p style="margin-top: 10px; color: #5A5A5A;">
+                                        Please <span style="color: #28a745; font-weight: bold;">complete</span> these forms to move to 
+                                        <strong style="color: #17a2b8;">${item.leadstage}</strong> stage.
+                                      </p>
+                                    </div>
+                                  `,
+                                  background: '#fefefe',
+                                  confirmButtonColor: '#28a745',
+                                  confirmButtonText: 'OK, Got it!'
+                                });
+  
+  
+                                } 
+  
+                            }
+                        })
+                      }
+
+// =========================================check requirment form end for change score and stage====================================
 
 
 // ==========================================edit lead start=========================================================
 
 
-const [leadinfo,setleadinfo]=useState({title:"",first_name:"",last_name:"",country_code:"",mobile_no:"",mobile_type:"",
-  email:"",email_type:"",tags:"",descriptions:"",stage:"",lead_type:"",owner:"",team:"",visible_to:"",campegin:"",source:"",
-  sub_source:"",refrencer_no:"",intrested_project:"",
-  requirment:"",property_type:"",purpose:"",nri:"",sub_type:"",unit_type:"",budget_min:"",budget_max:"",minimum_area:"",
-  maximum_area:"",area_metric:"",search_location:"",street_address:"",city2:"",area2:"",block:"",pincode2:"",country2:"",state2:"",
-  lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:"",road:"",transaction_type:"",
-  furnishing:"",
-  profession_category:"",profession_subcategory:"",designation:"",company_name:"",country_code1:"",company_phone:"",
-  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[],company_url:[],action3:[],
+const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+  email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+  sub_source:"",channel_partner:"",intrested_project:"",
+  requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+  maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+  lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+  unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
+  profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
   father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-  birth_date:"",anniversary_date:"",education:[],degree:[],school_college:[],action4:[],loan:[],bank:[],amount:[],action5:[],
-  social_media:[],url:[],action6:[],income:[],amount1:[],action7:[],document_no:[],document_name:[],document_pic:[],action8:[]
+  birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
  })
+
  const requirment=["Buy","Rent","Lease"];
                     const property_type=["Residential","Commercial","Agricultural","Industrial","Institutional"];
                  
@@ -2934,7 +3189,136 @@ const deletesingledocument=async(item)=>
 
 // ================================================delete document end==========================================================
 
-const completionPercentage = 20; // Set default value here
+
+
+// ==============================================search loaction from google start========================================================
+                                                
+                                                    
+                       
+                                              const inputRef = useRef(null);
+                                              const apiKey = 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc';
+                                            
+                                              useEffect(() => {
+                                                const scriptExists = document.querySelector('#google-maps-script');
+                                                if (!scriptExists) {
+                                                  const script = document.createElement('script');
+                                                  script.id = 'google-maps-script';
+                                                  script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+                                                  script.async = true;
+                                                  script.defer = true;
+                                                  script.onload = initializeAutocomplete;
+                                                  document.body.appendChild(script);
+                                                } else {
+                                                  initializeAutocomplete();
+                                                }
+                                              }, []);
+                                            
+                                              const initializeAutocomplete = () => {
+                                                if (!inputRef.current || !window.google) return;
+                                            
+                                                const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+                                                  types: ['geocode']
+                                                });
+                                            
+                                                autocomplete.addListener('place_changed', () => {
+                                                  const place = autocomplete.getPlace();
+                                                  if (!place.geometry) return;
+                                            
+                                                  const lat = place.geometry.location.lat();
+                                                  const lng = place.geometry.location.lng();
+                                            
+                                                  const components = place.address_components;
+                                                  let address = '', city = '', zip = '', state = '', country = '';
+                                            
+                                                  components.forEach(component => {
+                                                    const types = component.types;
+                                                    if (types.includes('route') || types.includes('sublocality')) {
+                                                      address += component.long_name + ' ';
+                                                    }
+                                                    if (types.includes('locality')) {
+                                                      city = component.long_name;
+                                                    }
+                                                    if (types.includes('postal_code')) {
+                                                      zip = component.long_name;
+                                                    }
+                                                    if (types.includes('administrative_area_level_1')) {
+                                                      state = component.long_name;
+                                                    }
+                                                    if (types.includes('country')) {
+                                                      country = component.long_name;
+                                                    }
+                                                  });
+                                            
+                                                  setleadinfo(prev => ({
+                                                    ...prev,
+                                                    search_location: place.formatted_address,
+                                                    street_address: address.trim(),
+                                                    city2: city,
+                                                    pincode2: zip,
+                                                    state2: state,
+                                                    country2: country,
+                                                    lattitude: lat,
+                                                    longitude: lng
+                                                  }));
+                                                });
+                                              };
+                                            
+                                              const getlocation = async (e) => {
+                                                e.preventDefault();
+                                                try {
+                                                  const res = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                                    params: {
+                                                      address: leadinfo.search_location,
+                                                      key: apiKey
+                                                    }
+                                                  });
+                                            
+                                                  if (res.data.results.length > 0) {
+                                                    const result = res.data.results[0];
+                                                    const lat = result.geometry.location.lat;
+                                                    const lng = result.geometry.location.lng;
+                                            
+                                                    const components = result.address_components;
+                                                    let address = '', city = '', zip = '', state = '', country = '';
+                                            
+                                                    components.forEach(component => {
+                                                      const types = component.types;
+                                                      if (types.includes('route') || types.includes('sublocality')) {
+                                                        address += component.long_name + ' ';
+                                                      }
+                                                      if (types.includes('locality')) {
+                                                        city = component.long_name;
+                                                      }
+                                                      if (types.includes('postal_code')) {
+                                                        zip = component.long_name;
+                                                      }
+                                                      if (types.includes('administrative_area_level_1')) {
+                                                        state = component.long_name;
+                                                      }
+                                                      if (types.includes('country')) {
+                                                        country = component.long_name;
+                                                      }
+                                                    });
+                                            
+                                                    setleadinfo(prev => ({
+                                                      ...prev,
+                                                      street_address: address.trim(),
+                                                      city2: city,
+                                                      pincode2: zip,
+                                                      state2: state,
+                                                      country2: country,
+                                                      lattitude: lat,
+                                                      longitude: lng
+                                                    }));
+                                                  }
+                                                } catch (err) {
+                                                  console.error('Geocode error:', err);
+                                                }
+                                              };
+                      
+                                                
+                                                
+//================================================ search location from google end=====================================================
 
   return (
     <div style={{overflowX:"hidden"}}>
@@ -4616,46 +5000,50 @@ fontWeight:"lighter"
             <Modal.Body>
             <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,direction:e.target.value}))} >
-                    
+                    <div className="col-md-4"><label className="labels">Direction</label>
+                      <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,direction:e.target.value}))} >
+                    <option>{calltask.direction}</option>
                     <option>---Select---</option>
-                        
-                          <option>Incoming</option>
-                          <option>Outgoing</option>
-                        
+                        {
+                            calldirection.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,status:e.target.value}))}>
-                   
+                        <div className="col-md-4"><label className="labels">Status</label>
+                     <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,status:e.target.value}))}>
+                    <option>{calltask.status}</option>
                     <option>---Select---</option>
-                    <option>Answered</option>
-                    <option>Missed</option>
-                    <option>Not Pic</option>
-                    <option>Busy</option>
-                    <option>Cut Call</option>
-                    <option>Number Not Reachable</option>
-                    <option>Switch Off</option>
-                    <option>Incoming</option>
-                    <option>Not Available</option>
-                    <option>Number Invalid</option>
+                        {
+                            callstatus.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
                         </select>
                         </div>
                     <div className="col-md-4"></div>
                 
                
-                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1"  className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...prevState,date:e.target.value}))}/></div>
+                 <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1"  value={calltask.date ? calltask.date.slice(0, 16) : ""}  className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask((prevState)=>({...calltask,date:e.target.value}))}/></div>
                 <div className="col-md-4"><label className="labels">Duration</label><input type="time"  className="form-control form-control-sm" onChange={(e)=>setcalltask((prevState)=>({...prevState,duration:e.target.value}))}/></div>
                 <div className="col-md-4"> </div>
 
-                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,result:e.target.value}))}>
-                   
+                    <div className="col-md-4"><label className="labels">Result</label>
+                   <select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...calltask,result:e.target.value}))}>
+                    <option>{calltask.result}</option>
                     <option>---Select---</option>
-                    <option>Interested</option>
-                    <option>Not Interested</option>
-                    <option>Postponed</option>
-                    <option>Low Budget</option>
-                    <option>Location Mismatch</option>
-                       
+                       {
+                        callresult.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
                        </select>
                         </div>
                         <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask((prevState)=>({...prevState,intrested_inventory:e.target.value}))}>
@@ -4703,30 +5091,41 @@ fontWeight:"lighter"
             <Modal.Body>
             <div className="row mt-2">
                     
-            <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+            <div className="col-md-4"><label className="labels">Direction</label>
+          <select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
+            <option>{mailtask.direction}</option>
             <option>---Select---</option>
-                        
-                        <option>Incoming</option>
-                        <option>Outgoing</option>
-                        </select>
+              {
+                  maildirection.map(item=>
+                      (
+                          <option>{item}</option>
+                      )
+                  )
+              }
+              </select>
              </div>
 
-             <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
-                    <option>---select---</option>
-                       <option>Read</option>
-                       <option>Delivered</option>
-                       <option>Bounced</option>
-                       <option>Undelivered</option>
-                        </select>
+             <div className="col-md-4"><label className="labels">Status</label>
+             <select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
+              <option>{mailtask.status}</option>
+              <option>---Select---</option>
+              {
+                  mailstatus.map(item=>
+                      (
+                          <option>{item}</option>
+                      )
+                  )
+              }
+              </select>
                </div>
                <div className="col-md-4"></div>
 
-                  <div className="col-md-4"><label className="labels">Date</label><input type="date" className="form-control form-control-sm" /></div>
+                 <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" value={mailtask.date ? mailtask.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
                 <div className="col-md-8"> </div>
 
                    <div className="col-md-4"></div>
 
-                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                   <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' value={mailtask.feedback}  style={{height:"100px"}} onChange={(e)=>setmailtask({...mailtask,feedback:e.target.value})}/></div>
                     <div className="col-md-12"><br></br></div>
                     <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div>      
                   
@@ -4758,39 +5157,47 @@ fontWeight:"lighter"
             <Modal.Body>
             <div className="row mt-2">
                     
-            <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
-
-              <option>---Select---</option>
-                <option>Conducted</option>
-                <option>Cancelled</option>
-                <option> Postponed</option>
-                  </select>
+            <div className="col-md-4"><label className="labels">Select Status</label>
+         <select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,status:e.target.value}))} >
+        <option>{meetingtask.status}</option>
+                            <option>---Select---</option>
+                            {
+                                    meetingstatus.map(item=>
+                                        (
+                                            <option>{item}</option>
+                                        )
+                                    )
+                                }
+            </select>
           </div>
 
-          {
+       {
       meetingtask.status==="Conducted" && 
-            (
-              <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,meeting_result:e.target.value}))}>
-              <option>{meetingtask.meeting_result}</option>
-              <option>---Select---</option>
-                <option>Deal Done</option>
-                <option>Negotiation Uncomplete</option>
-                <option>Deal Not Done</option>
-                <option>Site Visit</option>
-                  </select>
-                  </div>
-            )
-          
-            }
+      (
+        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask((prevState)=>({...prevState,meeting_result:e.target.value}))}>
+        <option>{meetingtask.meeting_result}</option>
+                        <option>---Select---</option>
+                        {
+                            meetingresult.map(item=>
+                                (
+                                    <option>{item}</option>
+                                )
+                            )
+                        }
+            </select>
+            </div>
+      )
+     
+    }
+    {
+      meetingtask.meeting_result==="Deal Done" && (
+      <div className="col-md-3"><label className="labels" style={{visibility:"none"}}>.</label><button style={{backgroundColor:"greenyellow"}} className="form-control form-control-sm"  onClick={() => window.open('/bookingdetails', '_blank')}> Create Booking</button></div>
+      )
+    }
 
-              {
-                meetingtask.meeting_result==="Deal Done" && (
-                <div className="col-md-3"><label className="labels" style={{visibility:"none"}}>.</label><button style={{backgroundColor:"greenyellow"}} className="form-control form-control-sm"  onClick={() => window.open('/bookingdetails', '_blank')}> Create Booking</button></div>
-                )
-              }
               <div className="col-md-1"></div>
 
-              <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" value={meetingtask.date} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
+              <div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" className="form-control form-control-sm" value={meetingtask.date ? meetingtask.date.slice(0, 16) : ""} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,date:e.target.value}))} /></div>
 
               <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask((prevState)=>({...prevState,feedback:e.target.value}))}/></div>
 
@@ -4823,120 +5230,104 @@ fontWeight:"lighter"
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-          <div className="row mt-2">
-          
-          <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
-          <option>Select</option>
-             <option>Conducted</option>
-             <option>Did Not Visit</option>
-             <option>Not Intersted</option>
-              </select>
-              </div>
-              <div className="col-md-8"></div>
-              {
-                  sitevisit.status==="Conducted" &&(
-                      <>
-          
-                      <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
-                      <Select className="form-control form-control-sm" style={{border:"none"}}
-                  multiple
-                  value={siteprojects}
-                  onChange={handlesiteprojectchange}
-                  renderValue={(selected) => selected.join(', ')}
-              >
-                  {sitevisit.project.map((name) => (
-                      <MenuItem key={name} value={name}>
-                          <Checkbox checked={siteprojects.indexOf(name) > -1} />
-                          <ListItemText primary={name} />
-                      </MenuItem>
-                  ))}
-              </Select>
-                      </div>
-          
-                      <div className="col-md-4">
-          <label className="labels">Select Interested Block</label>
-          <Select
-          className="form-control form-control-sm"
-          style={{ border: "none" }}
-          multiple
-          value={allblock}  // Value contains the full block.block-project combinations
-          onChange={handleallblockchange}  // Handle the change when blocks are selected/deselected
-          renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')}  // Display only block.block in the selected value
-          >
-          {alldealblocks
-          .filter((value, index, self) =>
-          // Ensure unique combinations of block.block and block.project
-          index === self.findIndex((t) => (
-            t.block === value.block && t.project === value.project
-          ))
-          )
-          .map((block) => {
-          // Create a unique identifier by combining block.block and block.project
-          const uniqueBlockKey = `${block.block}-${block.project}`;
-          
-          return (
-            <MenuItem key={uniqueBlockKey} value={uniqueBlockKey}> {/* Use block.block-project for value */}
-              <Checkbox 
-                checked={allblock.includes(uniqueBlockKey)}  // Check if the full block.block-project combination is selected
-              />
-              <ListItemText primary={`${block.block} - ${block.project}`} /> {/* Display block and project */}
-            </MenuItem>
-          );
-          })
-          }
-          </Select>
-          </div>
-          
-          
-          
-                      <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
-                   
-                      <Select
-          className="form-control form-control-sm"
-          style={{ border: "none" }}
-          multiple
-          value={allunit1} // Holds selected units
-          onChange={handleallunitschange1} // Handle changes for unit selection
-          renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} // Display only the unit_number part
-          >
-          {alldealunits
-          .filter((value, index, self) =>
-          // Ensure unique combinations of project, block, and unit
-          index === self.findIndex((t) => (
-          t.project === value.project &&
-          t.block === value.block &&
-          t.unit_number === value.unit_number // Ensure uniqueness by comparing unit_number
-          ))
-          )
-          .map((unit) => {
-          // Create a unique key for project-block-unit combination
-          const uniqueKey = `${unit.unit_number}-${unit.block}-${unit.project}`;
-          
-          return (
-          <MenuItem key={uniqueKey} value={uniqueKey}> {/* Use project-block-unit combination for value */}
-          <Checkbox checked={allunit1.includes(uniqueKey)} /> {/* Check if the full combination is selected */}
-          <ListItemText primary={`${unit.unit_number} - ${unit.block} - ${unit.project}`} /> {/* Display project, block, and unit */}
-          </MenuItem>
-          );
-          })}
-          </Select>
-          
-          
-                          </div>
-                          </>
-                  )
+        <div className="row mt-2">
+
+<div className="col-md-4"><label className="labels">Select Status</label>
+<select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+              <option>{sitevisit.status}</option>
+              <option>---Select---</option>
+                    {
+                        sitevisit_status.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                        )
+                       }
+    </select>
+    </div>
+    <div className="col-md-8"></div>
+    {
+        sitevisit.status==="Conducted" &&(
+            <>
+
+        
+
+<div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+              {Array.isArray(sitevisit.intrested_inventory) ?
+                sitevisit.intrested_inventory.map((item,index)=>
+                (
+                  <select
+                  style={{marginTop:"10px"}}
+                  className="form-control form-control-sm"
+                  // value={sitevisit.intrested_inventory} 
+                  onChange={(event)=>handlesitevisitinventorychange(index,event)}// Handle changes for unit selection
+                  >
+                    <option>{sitevisit.intrested_inventory[index]}</option>
+                 <option>---select---</option>
+                 {
+                  sitevisit.inventory.map((item)=>
+                  (
+                    <option>{item}</option>
+                  ))
+                 }
+                  </select>
+
+                )):[]
               }
-           
-          
-          
-          
-          <div className="col-md-4"><label className="labels">Select Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
-          <div className="col-md-8"></div>
-          
-          <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
-          
-          
-          </div>
+         
+      </div> 
+
+      <div className="col-md-4"><label className="labels">Result</label>
+                                      
+      {
+                               Array.isArray(sitevisit.result)?
+                            sitevisit.result.map((item,index)=>
+                            (
+                                <select
+                                className='form-control form-control-sm'
+                                style={{marginTop:"10px"}}
+                                onChange={(event)=>handlesitevisitresultchange(index,event)}>
+                            
+                            <option>{sitevisit.result[index]}</option>
+                             <option>---Select---</option>
+                             {
+                               sitevisit_result.map(item=>
+                            (
+                                <option>{item}</option>
+                            )
+                           )
+                           }
+                            </select>
+                            )):[]
+                            }
+                  </div> 
+
+                  <div className="col-md-1" style={{marginTop:"70px"}}>
+                            {
+                               Array.isArray(sitevisit.action1)?
+                               sitevisit.action1.map((item,index)=>
+                            (
+                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                            )):[]
+                            }
+                            </div>
+
+      <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn1}>+</button></div>
+      <div className="col-md-2"></div>
+                </>
+        )
+    }
+ 
+
+
+
+<div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" value={sitevisit.date ? sitevisit.date.slice(0, 16) : ""} className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+<div className="col-md-8"></div>
+
+<div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+
+
+</div>
 
             </Modal.Body>
             <Modal.Footer style={{marginTop:"20px"}}>
@@ -5290,124 +5681,143 @@ fontWeight:"lighter"
                         </select></div> 
                         <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
                        
-                        <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                        <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
-                             <div  id='selectlocation' onClick={selectlocation} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"150px",textAlign:"center",transition:"0.5s ease-out"}}>Select Location </div>
-                             <div  id='searchlocation' onClick={searchlocation} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Search Loacation</div>
-                             
-                         </div>
-
-                           <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
-                        <div className="col-md-5"><label className="labels">Country</label>
-                        <select  className="form-control form-control-sm"  onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, country2: updatedTags});setactivity({...activity, edit_field: "country",edit_value:updatedTags});}}>
-                        <option>{leadinfo.country2}</option>
-                    {asianCountries.map((country, index) => (
-                      <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
-                        {country}
-                      </option>
-                    ))}
-                          </select>
-                        </div>
-                       
-                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, state2: updatedTags});setactivity({...activity, edit_field: "state",edit_value:updatedTags});}}>
-                        <option value="">{leadinfo.state2}</option>
-                      {states.map((state) => (
-                        <option key={state} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                          </select>
-                        </div>
-                        <div className="col-md-2"></div>
-
-                        <div className="col-md-5"><label className="labels">City</label>
-                 
-                             <select
-                    className="form-control form-control-sm"
-                    value={leadinfo.city2}
-                    onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, city2: updatedTags});setactivity({...activity, edit_field: "city",edit_value:updatedTags});}}
-                    disabled={!leadinfo.state2 || cities.length === 0} // Disable if no state or invalid state
-                  >
-                    <option value="">--Select City--</option>
-                    {cities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                        </div>
-                        <div className="col-md-5">
-                      <label className="labels">Area/Project</label>
-                      <Select
-                        className="form-control form-control-sm"
-                        multiple
-                        value={leadinfo.area2}
-                        onChange={handleprojectchange}
-                        style={{ border: 'none' }}
-                        renderValue={(selected) => selected.join(', ')}
-                        label="Area/Project"
-                      >
-                        {/* "Select All" MenuItem */}
-                        <MenuItem value="select-all">
-                          <Checkbox checked={leadinfo.area2.length === allproject.length} />
-                          <ListItemText primary="--- Select All ---" />
-                        </MenuItem>
-
-                        {/* Individual Project MenuItems */}
-                        {allproject.map((project) => (
-                          <MenuItem key={project} value={project}>
-                            <Checkbox checked={leadinfo.area2.indexOf(project) > -1} />
-                            <ListItemText primary={project} />
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </div>
-                    <div className="col-md-5">
-                        <label className="labels">Block</label>
-                        <Select
-                          className="form-control form-control-sm"
-                          multiple
-                          value={leadinfo.block}
-                          onChange={handleallblockchange}
-                          style={{ border: "none" }}
-                          renderValue={(selected) => selected.join(', ')}
-                          label="Block"
-                        >
-                          {/* "Select All" MenuItem */}
-                          <MenuItem value="select-all">
-                            <Checkbox checked={leadinfo.block.length === allblocks.length} />
-                            <ListItemText primary="--- Select All ---" />
-                          </MenuItem>
-
-                          {/* Individual Block MenuItems */}
-                          {allblocks.map((project) => (
-                            <MenuItem key={project.block_name} value={project.block_name}>
-                              <Checkbox checked={leadinfo.block.indexOf(project.block_name) > -1} />
-                              <ListItemText primary={project.block_name} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </div>
-                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" value={leadinfo.specific_unit} className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, specific_unit: updatedTags});setactivity({...activity, edit_field: "specific unit",edit_value:updatedTags});}}/></div>
-                    </div>
-
-                       <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
-                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, search_location: updatedTags});setactivity({...activity, edit_field: "location",edit_value:updatedTags});}}/></div>
-                        <div className="col-md-4"></div>
-                        <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, street_address: updatedTags});setactivity({...activity, edit_field: "street address",edit_value:updatedTags});}}/></div>
-                        <div className="col-md-4"></div>
-                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, city2: updatedTags});setactivity({...activity, edit_field: "city",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, area2: updatedTags});setactivity({...activity, edit_field: "area",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, block: updatedTags});setactivity({...activity, edit_field: "block",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, pincode2: updatedTags});setactivity({...activity, edit_field: "pincode",edit_value:updatedTags});}}/></div>
+                          <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                                            <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
+                                                 <div  id='selectlocation' onClick={selectlocation} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"150px",textAlign:"center",transition:"0.5s ease-out"}}>Select Location </div>
+                                                 <div  id='searchlocation' onClick={searchlocation} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Search Loacation</div>
+                                                 
+                                             </div>
                     
-                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, country2: updatedTags});setactivity({...activity, edit_field: "country",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, state2: updatedTags});setactivity({...activity, edit_field: "state",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, lattitude: updatedTags});setactivity({...activity, edit_field: "lattitude",edit_value:updatedTags});}}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e) => {const updatedTags = e.target.value;setleadinfo({...leadinfo, longitude: updatedTags});setactivity({...activity, edit_field: "langitude",edit_value:updatedTags});}}/></div>
-                    {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
-                    </div>
-                    </div>
+                                                      <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
+                                                                      <div className="col-md-5"><label className="labels">Country</label>
+                                                                      <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country3:e.target.value})}>
+                                                                      <option>India</option>
+                                                                  {asianCountries.map((country, index) => (
+                                                                    <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
+                                                                      {country}
+                                                                    </option>
+                                                                  ))}
+                                                                        </select>
+                                                                      </div>
+                                                                     
+                                                                      <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
+                                                                      <option value="">--Select State--</option>
+                                                                    {states.map((state) => (
+                                                                      <option key={state} value={state}>
+                                                                        {state}
+                                                                      </option>
+                                                                    ))}
+                                                                        </select>
+                                                                      </div>
+                                                                      <div className="col-md-2"></div>
+                                              
+                                                                      <div className="col-md-5"><label className="labels">City</label>
+                                                                      {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
+                                                                        <option>---select country---</option>
+                                                                        <option>India</option>
+                                                                        </select> */}
+                                                                           <select
+                                                                  className="form-control form-control-sm"
+                                                                  value={leadinfo.city3}
+                                                                  onChange={(e)=>setleadinfo({...leadinfo,city3:e.target.value})}
+                                                                  disabled={!leadinfo.state3 || cities.length === 0} // Disable if no state or invalid state
+                                                                >
+                                                                  <option value="">--Select City--</option>
+                                                                  {cities.map((city) => (
+                                                                    <option key={city} value={city}>
+                                                                      {city}
+                                                                    </option>
+                                                                  ))}
+                                                                </select>
+                                                                      </div>
+                                                                      <div className="col-md-5">
+                                                                    <label className="labels">Area/Project</label>
+                                                                    <Select
+                                                                      className="form-control form-control-sm"
+                                                                      multiple
+                                                                      value={leadinfo.area_project}
+                                                                      onChange={handleprojectchange}
+                                                                      style={{ border: 'none' }}
+                                                                      renderValue={(selected) => selected.join(', ')}
+                                                                      label="Area/Project"
+                                                                    >
+                                                                      {/* "Select All" MenuItem */}
+                                                                      <MenuItem value="select-all">
+                                                                        <Checkbox checked={leadinfo.area_project.length === allproject.length} />
+                                                                        <ListItemText primary="--- Select All ---" />
+                                                                      </MenuItem>
+                                              
+                                                                      {/* Individual Project MenuItems */}
+                                                                      {allproject.map((project) => (
+                                                                        <MenuItem key={project} value={project}>
+                                                                          <Checkbox checked={leadinfo.area_project.indexOf(project) > -1} />
+                                                                          <ListItemText primary={project} />
+                                                                        </MenuItem>
+                                                                      ))}
+                                                                    </Select>
+                                                                  </div>
+                                                                      <div className="col-md-5">
+                                                                      <label className="labels">Block</label>
+                                                                      <Select
+                                                                        className="form-control form-control-sm"
+                                                                        multiple
+                                                                        value={leadinfo.block3}
+                                                                        onChange={handleallblockchange}
+                                                                        style={{ border: "none" }}
+                                                                        renderValue={(selected) => selected.join(', ')}
+                                                                        label="Block"
+                                                                      >
+                                                                        {/* "Select All" MenuItem */}
+                                                                        <MenuItem value="select-all">
+                                                                          <Checkbox checked={leadinfo.block3.length === allblocks.length} />
+                                                                          <ListItemText primary="--- Select All ---" />
+                                                                        </MenuItem>
+                                              
+                                                                        {/* Individual Block MenuItems */}
+                                                                        {[...new Map(allblocks.map(item => [item.block_name, item])).values()].map((project) => (
+                                                                          <MenuItem key={project.block_name} value={project.block_name}>
+                                                                            <Checkbox checked={leadinfo.block3.indexOf(project.block_name) > -1} />
+                                                                            <ListItemText primary={project.block_name} />
+                                                                          </MenuItem>
+                                                                        ))}
+                                                                      </Select>
+                                                                    </div>
+                                                               
+                                                                      <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                                                                  </div>
+                    
+                                        <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
+                                            <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                                           <div className="col-md-2"></div>
+                                            <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
+                                            <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                                            <div className="col-md-4"><label className="labels">Range</label>
+                                            <select  className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}>
+                                            <option>---select---</option>
+                                            <option value="1">Within 1 km.</option>
+                                            <option value="3">Within 3 km.</option>
+                                            <option value="5">Within 5 km.</option>
+                                            <option value="10">Within 10 km.</option>
+                                            <option value="15">Within 15 km.</option>
+                                            <option value="20">Within 20 km.</option>
+                                            <option value="25">Within 25 km.</option>
+                                              </select>
+                                            </div>
+                                            {/* <div className="col-md-4"></div> */}
+                    
+                                        <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                                        
+                                        <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                                        {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
+                                        </div>
+                                        
+                                        </div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
@@ -5653,7 +6063,7 @@ fontWeight:"lighter"
                                         <select className="form-control form-control-sm"
                                             onChange={(event) => handleeducationChange(index, event)}
                                         >
-                                            <option>{data1.education[index]}</option>
+                                            <option>{leadinfo?.education[index]}</option>
                                             <option>choose</option>
                                             <option>Kindergaren</option><option>School</option><option>Primery Education</option><option> Secondary Education</option><option>Master</option><option>Commerce</option>
                                             <option>Vocational Education</option>
@@ -5672,7 +6082,7 @@ fontWeight:"lighter"
                                             className="form-control form-control-sm"
                                             onChange={(event) => handledegreeChange(index, event)}
                                         >
-                                          <option>{data1.degree[index]}</option>
+                                          <option>{leadinfo.degree[index]}</option>
                                             <option>choose</option>
                                             <optgroup label='Bachelor’s '>
                                                 <option>Bachelor of Arts (BA) </option><option>Bachelor of Science (BS or BSc) </option><option>Bachelor of Fine Arts (BFA)</option><option> Bachelor of Education (BEd) </option>
@@ -5709,7 +6119,7 @@ fontWeight:"lighter"
                                         <input
                                             type="text"
                                             className="form-control form-control-sm"
-                                            defaultValuevalue={data1.school_college[index]}
+                                            value={leadinfo.school_college[index]}
                                             onChange={(event) => handleschool_collegeChange(index, event)}
                                         />
                                         
@@ -5738,7 +6148,7 @@ fontWeight:"lighter"
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleloanchange(index,event)}
                                 >
-                                <option>{data1.loan[index]}</option><option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
+                                <option>{leadinfo.loan[index]}</option><option>Select</option><option>Home Loan </option><option>Auto Loan</option><option>Personal Loan </option>
                                 <option>Education Loan</option> <option>Agriculture Loan </option> <option>Credit Card Loan</option>
                                 </select>
                             )):[]
@@ -5754,7 +6164,7 @@ fontWeight:"lighter"
                                 className="form-control form-control-sm"
                                 onChange={(event)=>handlebankchange(index,event)}
                                 >
-                                  <option>{data1.bank[index]}</option>
+                                  <option>{leadinfo.bank[index]}</option>
                                 <option>Select</option>
                                     <option>State Bank of India (SBI) </option><option>Punjab National Bank (PNB)</option><option>Bank of Baroda</option><option>Canara Bank</option>
                                     <option>Union Bank of India</option><option>Bank of India (BOI)</option><option>Indian Bank </option><option>Central Bank of India</option>
@@ -5784,9 +6194,9 @@ fontWeight:"lighter"
                             (
                                 <input type="text" 
                                 style={{marginTop:"10px"}}
-                                defaultValue={data1.amount[index]}
+                                value={leadinfo.amount[index]}
                                 className="form-control form-control-sm"
-                                onCanPlay={(event)=>handleamountchange(index,event)} />
+                                onChange={(event)=>handleamountchange(index,event)} />
                             )):[]
                             }
                             </div>
@@ -5811,7 +6221,7 @@ fontWeight:"lighter"
                                 className='form-control form-control-sm'
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handlesocial_mediachange(index,event)}>
-                                <option>{data1.social_media[index]}</option>
+                                <option>{leadinfo.social_media[index]}</option>
                                 <option>select</option>
                                 <option>Facebook</option><option>Twitter</option><option>Instagram</option><option>Linkdin</option><option>Google</option>
                                 </select>
@@ -5825,7 +6235,7 @@ fontWeight:"lighter"
                             leadinfo.url.map((item,index)=>
                             (
                                 <input type="text" className="form-control form-control-sm" style={{marginTop:"10px"}} 
-                                defaultValue={data1.url[index]}
+                                defaultValue={leadinfo.url[index]}
                                 onChange={(event)=>handleurlChange(index,event)}/>
                             )):[]
                             }
@@ -5850,7 +6260,7 @@ fontWeight:"lighter"
                                 className='form-control form-control-sm'
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handleincomechange(index,event)}>
-                            <option>{data1.income[index]}</option>
+                            <option>{leadinfo.income[index]}</option>
                             <option>select</option>
                             <option>Personal Income</option><option>Business Income</option>
                             </select>
@@ -5864,7 +6274,7 @@ fontWeight:"lighter"
                             (
                                 <input type="text" 
                                 style={{marginTop:"10px"}}
-                                defaultValue={data1.amount1[index]}
+                                defaultValue={leadinfo.amount1[index]}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleamount1change(index,event)}
                                 />
@@ -5890,7 +6300,7 @@ fontWeight:"lighter"
                                 <input type="text" 
                                 style={{marginTop:"10px"}}
                                 className="form-control form-control-sm" 
-                                defaultValue={data1.document_no[index]}
+                                defaultValue={leadinfo.document_no[index]}
                                 onChange={(event)=>handledocumentnochange(index,event)}
                                 />
                             )):[]
@@ -5905,7 +6315,7 @@ fontWeight:"lighter"
                                 className='form-control form-control-sm'
                                 style={{marginTop:"10px"}}
                                 onChange={(event)=>handledocumentnamechange(index,event)}>
-                            <option>{data1.document_name[index]}</option>
+                            <option>{leadinfo.document_name[index]}</option>
                             <option>select</option>
                             <option>Adhar Card </option><option>Pan Card </option><option>Driviing Licence</option><option>Voter Card</option>
                             <option>Ration Card</option><option>Family Id </option><option>Passoport</option><option>Employee Id Card</option>

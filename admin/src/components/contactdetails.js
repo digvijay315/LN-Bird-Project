@@ -2,7 +2,7 @@ import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 
 import { ToastContainer,toast } from "react-toastify";
 import Button from 'react-bootstrap/Button';
@@ -2195,21 +2195,21 @@ useEffect(()=>
 
 
 
+                 const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
+                      email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+                      sub_source:"",channel_partner:"",intrested_project:"",
+                      requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+                      maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+                      lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
+                      unit_type2:"",white_portion:"",furnishing:"",
+                      profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+                      company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+              
+                      father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+                      birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+                      social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],
+                      matcheddeals:[],matchingdeal:"",})
 
-                const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-                  email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campegin:"",source:"",
-                  sub_source:"",refrencer_no:"",intrested_project:"",
-                  requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-                  maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-                  lattitude:"",longitude:"",specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],transaction_type:"",
-                  white_portion:"",furnishing:"",matched_deal:[],
-                  profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
-                  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
-          
-                  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-                  birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-                  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
-                 })
 
                  const requirment=["Buy","Rent","Lease"];
                  const transaction_type=["Full White","Collecter Rate","Flexiable"];
@@ -2217,42 +2217,42 @@ useEffect(()=>
                  const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
                  const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
 
-                 const options = {
-                  property_type: ["RESIDENTIAL", "COMMERCIAL","AGRICULTURE","INDUSTRIAL","INSTITUTIONAL"],
-                  sub_type: {
-                    RESIDENTIAL: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
-                    COMMERCIAL: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
-                    AGRICULTURE: ["LAND", "FARM HOUSE"],
-                    INDUSTRIAL: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
-                    INSTITUTIONAL: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
-                  },
-                  unit_type: {
-                    PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
-                    "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
-                    "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
-                    "BUILDER FLOOR": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
-                    SHOP:["BOOTH","KIOSAK",],
-                    SHOWROOM:["SCO","SCF","DSS"],
-                    "OFFICE SPACE":["LOCABLE OFFICE","VIRTUAL OFFICE"],
-                    "RETAIL STORE":["HYPER MARKET","DEPARTMETAL STORE"],
-                    SOHO:["SOHO"],
-                    "EXCUTIVE ROOM":["ROOM"],
-                    LAND:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
-                    "FARM HOUSE":["FARM"],
-                    PLOTS:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
-                    WAREHOUSE:["WRHSE"],
-                    "COLD STORAGE":["CLDSTRG"],
-                    "RICE SELLER":["RCSLR"],
-                    "BUILDING":["BLDG"],
-                    FACTORY:["FCTRY"],
-                    SCHOOL:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
-                    HOTEL:["HOTEL","GUEST HOUSE","HOMESTAYS"],
-                    UNIVERSITIES:["DEEMED","PRIVATE"],
-                    HOSPITAL:["NURSING HOME","CLINIC"],
-                    COLLEGE:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
-                  },
-                };
-                
+                                const options = {
+                                                property_type: ["Residential", "Commercial","Agricultural","Industrial","Institutional"],
+                                                sub_type: {
+                                                  Residential: ["PLOT", "INDEPENDENT HOUSE","FLAT/APARTMENT","BUILDER FLOOR"],
+                                                  Commercial: ["SHOP", "SHOWROOM","OFFICE SPACE","RETAIL STORE","SOHO","EXCUTIVE ROOM","MULTIPLEX","VIRTUAL SPACE","PLOT"],
+                                                  Agricultural: ["LAND", "FARM HOUSE"],
+                                                  Industrial: ["PLOTS", "WAREHOUSE","COLD STORAGE","RICE SELLER","BUILDING","FACTORY"],
+                                                  Institutional: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
+                                                },
+                                                unit_type: {
+                                                  PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+                                                  "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+                                                  "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+                                                  "BUILDER FLOOR": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+                                                  SHOP:["BOOTH","KIOSAK",],
+                                                  SHOWROOM:["SCO","SCF","DSS"],
+                                                  "OFFICE SPACE":["LOCABLE OFFICE","VIRTUAL OFFICE"],
+                                                  "RETAIL STORE":["HYPER MARKET","DEPARTMETAL STORE"],
+                                                  SOHO:["SOHO"],
+                                                  "EXCUTIVE ROOM":["ROOM"],
+                                                  LAND:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
+                                                  "FARM HOUSE":["FARM"],
+                                                  PLOTS:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
+                                                  WAREHOUSE:["WRHSE"],
+                                                  "COLD STORAGE":["CLDSTRG"],
+                                                  "RICE SELLER":["RCSLR"],
+                                                  "BUILDING":["BLDG"],
+                                                  FACTORY:["FCTRY"],
+                                                  SCHOOL:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
+                                                  HOTEL:["HOTEL","GUEST HOUSE","HOMESTAYS"],
+                                                  UNIVERSITIES:["DEEMED","PRIVATE"],
+                                                  HOSPITAL:["NURSING HOME","CLINIC"],
+                                                  COLLEGE:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
+                                                },
+                                              };
+
                 const handleCategoryChange = (event) => {
                   const selectedCategories = event.target.value;
                 
@@ -2418,12 +2418,19 @@ useEffect(()=>
                       Telangana: ["Adilabad", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar", "Jogulamba", "Kamareddy", "Karimnagar", "Khammam", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nalgonda", "Nagarkurnool", "Nirmal", "Nizamabad", "Peddapalli", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Warangal", "Khammam", "Kothagudem"],
                       Tripura: ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
                       UttarPradesh: ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddh Nagar", "Ghaziabad", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur", "Kasganj", "Kaushambi", "Kushinagar", "Lakhimpur Kheri", "Lucknow", "Mathura", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar","Noida", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shrawasti", "Siddharth Nagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
-                      WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"]
+                      WestBengal: ["Alipurduar", "Bankura", "Birbhum", "Burdwan", "Cooch Behar", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "North Dinajpur", "Paschim Medinipur", "Purba Medinipur", "Purulia", "South 24 Parganas", "South Dinajpur", "Uttar Dinajpur"],
+                      "Andaman And Nicobar Islands": ["Port Blair", "Car Nicobar", "Mayabunder", "Diglipur", "Rangat"],
+                      Chandigarh: ["Chandigarh"],
+                      "Dadra and Nagar Haveli and Daman and Diu": ["Daman", "Diu", "Silvassa"],
+                      "Jammu and Kashmir": ["Srinagar", "Jammu", "Anantnag", "Baramulla", "Doda", "Gulmarg", "Kathua", "Poonch", "Rajouri", "Udhampur"],
+                      Ladakh: ["Leh", "Kargil"],
+                      Lakshadweep: ["Kavaratti", "Andrott", "Kalapeni", "Minicoy", "Agatti", "Kadmat", "Chetlat"],
+                      Puducherry: ["Puducherry", "Karaikal","Mahe","Yanam"],
                     };
 
 
                     const states = Object.keys(statesAndCities);
-                    const cities = statesAndCities[leadinfo.state2] || [];
+                    const cities = statesAndCities[leadinfo.state3] || [];
 
                     const facing=["East","West","South","North","North East","South East","North West","South West"];
 const [facings, setfacings] = useState([]);
@@ -2509,6 +2516,56 @@ const handlematcheddealChange = (event) => {
   }
 };
 
+const direction=["East","West","North","South","North East","South East","South West","North West"];      
+ 
+const [directions, setdirections] = useState([]);
+
+const handledirectionChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  if (value.includes('select-all')) {
+
+    if (directions.length === direction.length) {
+      setdirections([]);
+      setleadinfo({ ...leadinfo, direction: [] }); 
+    } else {
+      setdirections(direction);
+      setleadinfo({ ...leadinfo, direction: direction });
+    }
+  } else {
+    const selecteddirections = typeof value === 'string' ? value.split(',') : value;
+    setdirections(selecteddirections); 
+    setleadinfo({ ...leadinfo, direction: selecteddirections }); 
+  }
+};
+
+const propertyunittype=["Two Side Open","Three Side Open","Ordinary","Corner"];      
+
+const [propertyunitstypes, setpropertyunitstypes] = useState([]);
+
+const handlepropertyunitstypesChange = (event) => {
+  const {
+    target: { value },
+  } = event;
+
+  if (value.includes('select-all')) {
+
+    if (propertyunitstypes.length === propertyunittype.length) {
+      setpropertyunitstypes([]);
+      setleadinfo({ ...leadinfo, unit_type2: [] }); 
+    } else {
+      setpropertyunitstypes(propertyunittype);
+      setleadinfo({ ...leadinfo, unit_type2: propertyunittype });
+    }
+  } else {
+    const selectedpropertyunittype = typeof value === 'string' ? value.split(',') : value;
+    setpropertyunitstypes(selectedpropertyunittype); 
+    setleadinfo({ ...leadinfo, unit_type2: selectedpropertyunittype }); 
+  }
+};
+
 
 const [progress, setProgress] = useState(leadinfo.white_portion || 0); // Initialize with deal.whiteportion
 
@@ -2577,12 +2634,8 @@ const handleMouseUp = () => {
                 {
                   
                   try {
-                    const city=leadinfo.city2
-                    console.log(city);
-                    
+                    const city=leadinfo.city3
                     const resp=await api.get(`viewprojectbycityname/${city}`)
-                    console.log(resp);
-                    
                     setdata11(resp.data.project)
                   } catch (error) {
                     console.log(error);
@@ -2590,9 +2643,7 @@ const handleMouseUp = () => {
                 }
                 useEffect(() => {
                   fetchdatabyprojectcityname()
-                   
-                  
-                }, [leadinfo.city2]);
+                }, [leadinfo.city3]);
 
                 const allproject =[]
                 data11.map((item)=>
@@ -2634,34 +2685,68 @@ const handleMouseUp = () => {
                    
                   }
                 }, [units]);
-                const handleprojectchange = (event) => {
-                                     
-                                      
-                  const selectproject = event.target.value
-                
-              
-                  setleadinfo((prev) => {
-                    const updateproject = { ...prev, area2: selectproject };
-                     fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
-                    return updateproject; // Return the updated state
-                  });
-                };
-              
+
+
+                 const handleprojectchange = (event) => {
+                                        const selectproject = event.target.value;
+                                    
+                                        // If the "Select All" option is selected
+                                        if (selectproject.includes('select-all')) {
+                                          // If all projects are already selected, deselect all
+                                          if (leadinfo?.area_project?.length === allproject?.length) {
+                                            setleadinfo((prev) => {
+                                              const updateproject = { ...prev, area_project: [] }; // Deselect all
+                                              return updateproject;
+                                            });
+                                          } else {
+                                            // Select all projects
+                                            setleadinfo((prev) => {
+                                              const updateproject = { ...prev, area_project: allproject }; // Select all
+                                              fetchdatabyprojectname(allproject); // Fetch data with the selected projects
+                                              return updateproject;
+                                            });
+                                          }
+                                        } else {
+                                          // Handle individual project selection/deselection
+                                          setleadinfo((prev) => {
+                                            const updateproject = { ...prev, area_project: selectproject };
+                                            fetchdatabyprojectname(selectproject); // Fetch data with the updated project names
+                                            return updateproject;
+                                          });
+                                        }
+                                      };
               
          
               
               
-                const handleallblockchange = (event) => {
-                   
-                  
-                    const selectblocks = event.target.value
-                  
-                     
-                    setleadinfo((prev) => {
-                      const updateblock = { ...prev, block: selectblocks };
-                      return updateblock; // Return the updated state
-                    });
-                  };
+                   const handleallblockchange = (event) => {
+                                        const selectblocks = event.target.value;
+                                    
+                                        // If the "Select All" option is selected
+                                        if (selectblocks.includes("select-all")) {
+                                          // If all blocks are selected, deselect all
+                                          if (leadinfo?.block3?.length === allblocks?.length) {
+                                            setleadinfo((prev) => {
+                                              const updateblock = { ...prev, block3: [] }; // Deselect all
+                                              return updateblock;
+                                            });
+                                          } else {
+                                            // Select all blocks
+                                            const allBlockNames = allblocks.map(project => project.block_name);
+                                            setleadinfo((prev) => {
+                                              const updateblock = { ...prev, block3: allBlockNames }; // Select all
+                                              return updateblock;
+                                            });
+                                          }
+                                        } else {
+                                          // Handle individual block selection or deselection
+                                          setleadinfo((prev) => {
+                                            const updateblock = { ...prev, block3: selectblocks };
+                                            return updateblock;
+                                          });
+                                        }
+                                      }
+
 
 
                   const selectlocation=()=>
@@ -3134,7 +3219,134 @@ const checkForDuplicates = async (contacts) => {
                                             // You can also do something with the selected item (e.g. set selectedDeal)
                                           };
                           
-                                       
+  
+                                          
+// =============================================add to lead search location via google start================================================
+
+      
+                                                       const inputRef = useRef(null);
+                                                       const apiKey = 'AIzaSyACfBzaJSVH8eur7U9JxdjI1bAeTLXsUJc';
+                                                     
+                            useEffect(() => {
+                                                    const scriptExists = document.querySelector('#google-maps-script');
+                                                    if (!scriptExists) {
+                                                      const script = document.createElement('script');
+                                                      script.id = 'google-maps-script';
+                                                      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+                                                      script.async = true;
+                                                      script.defer = true;
+                                                      script.onload = initializeAutocomplete;
+                                                      document.body.appendChild(script);
+                                                    } else {
+                                                      initializeAutocomplete();
+                                                    }
+                                                  }, []);
+                                                
+                                                  const initializeAutocomplete = () => {
+                                                    if (!inputRef.current || !window.google) return;
+                                                
+                                                    const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+                                                      types: ['geocode']
+                                                    });
+                                                
+                                                    autocomplete.addListener('place_changed', () => {
+                                                      const place = autocomplete.getPlace();
+                                                      if (!place.geometry) return;
+                                                
+                                                      const lat = place.geometry.location.lat();
+                                                      const lng = place.geometry.location.lng();
+                                                
+                                                      const components = place.address_components;
+                                                      let address = '', city = '', zip = '', state = '', country = '';
+                                                
+                                                      components.forEach(component => {
+                                                        const types = component.types;
+                                                        if (types.includes('route') || types.includes('sublocality')) {
+                                                          address += component.long_name + ' ';
+                                                        }
+                                                        if (types.includes('locality')) {
+                                                          city = component.long_name;
+                                                        }
+                                                        if (types.includes('postal_code')) {
+                                                          zip = component.long_name;
+                                                        }
+                                                        if (types.includes('administrative_area_level_1')) {
+                                                          state = component.long_name;
+                                                        }
+                                                        if (types.includes('country')) {
+                                                          country = component.long_name;
+                                                        }
+                                                      });
+                                                
+                                                      setleadinfo(prev => ({
+                                                        ...prev,
+                                                        search_location: place.formatted_address,
+                                                        street_address: address.trim(),
+                                                        city2: city,
+                                                        pincode2: zip,
+                                                        state2: state,
+                                                        country2: country,
+                                                        lattitude: lat,
+                                                        longitude: lng
+                                                      }));
+                                                    });
+                                                  };
+                                
+                                  const getlocation = async () => {
+                                 
+                                    try {
+                                      const res = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+                                        params: {
+                                          address: leadinfo.search_location,
+                                          key: apiKey
+                                        }
+                                      });
+                                
+                                      if (res.data.results.length > 0) {
+                                        const result = res.data.results[0];
+                                        const lat = result.geometry.location.lat;
+                                        const lng = result.geometry.location.lng;
+                                
+                                        const components = result.address_components;
+                                        let address = '', city = '', zip = '', state = '', country = '';
+                                
+                                        components.forEach(component => {
+                                          const types = component.types;
+                                          if (types.includes('route') || types.includes('sublocality')) {
+                                            address += component.long_name + ' ';
+                                          }
+                                          if (types.includes('locality')) {
+                                            city = component.long_name;
+                                          }
+                                          if (types.includes('postal_code')) {
+                                            zip = component.long_name;
+                                          }
+                                          if (types.includes('administrative_area_level_1')) {
+                                            state = component.long_name;
+                                          }
+                                          if (types.includes('country')) {
+                                            country = component.long_name;
+                                          }
+                                        });
+                                
+                                        setleadinfo(prev => ({
+                                          ...prev,
+                                          street_address: address.trim(),
+                                          city2: city,
+                                          pincode2: zip,
+                                          state2: state,
+                                          country2: country,
+                                          lattitude: lat,
+                                          longitude: lng
+                                        }));
+                                      }
+                                    } catch (err) {
+                                      console.error('Geocode error:', err);
+                                    }
+                                  };
+
+
+// ======================================================add to lead search location via google end==============================================
 
 
 // ================================================lead search box code end=======================================================
@@ -5353,6 +5565,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
             </Modal.Footer>
           </Modal>
 
+{/*================================================= add to lead start ================================================================*/}
 
           <Modal show={show5} onHide={handleClose5} size='lg' style={{transition:"0.5s ease-in"}}>
             <Modal.Header>
@@ -5519,122 +5732,151 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                         <option>Sq Feet</option>
                         <option>Kanal</option>
                         </select></div> 
-                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
-                       
-                        <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
-                        <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
-                             <div  id='selectlocation' onClick={selectlocation} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"150px",textAlign:"center",transition:"0.5s ease-out"}}>Select Location </div>
-                             <div  id='searchlocation' onClick={searchlocation} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Search Loacation</div>
-                             
-                         </div>
-
-                           <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
-                        <div className="col-md-5"><label className="labels">Country</label>
-                        <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}>
-                        <option>India</option>
-                    {asianCountries.map((country, index) => (
-                      <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
-                        {country}
-                      </option>
-                    ))}
-                          </select>
-                        </div>
-                       
-                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}>
-                        <option value="">--Select State--</option>
-                      {states.map((state) => (
-                        <option key={state} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                          </select>
-                        </div>
-                        <div className="col-md-2"></div>
-
-                        <div className="col-md-5"><label className="labels">City</label>
-                        {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
-                          <option>---select country---</option>
-                          <option>India</option>
-                          </select> */}
-                             <select
-                    className="form-control form-control-sm"
-                    value={leadinfo.city2}
-                    onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}
-                    disabled={!leadinfo.state2 || cities.length === 0} // Disable if no state or invalid state
-                  >
-                    <option value="">--Select City--</option>
-                    {cities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                        </div>
-                        <div className="col-md-5"><label className="labels">Area/Project</label>
-                        <Select
-                        className="form-control form-control-sm"
-                      multiple
-                      value={leadinfo.area2 || []}
-                      onChange={handleprojectchange}
-                      style={{border:"none"}}
-                      renderValue={(selected) => selected.join(', ')}
-                      label="Area/Project"
-                      
-                    >
-                      <MenuItem disabled value="">
-                        <em>---choose---</em>
-                      </MenuItem>
-                      {allproject.map((project) => (
-                        <MenuItem key={project} value={project}>
-                          <Checkbox checked={(leadinfo.area2 || []).indexOf(project) > -1} />
-                          <ListItemText primary={project} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                        </div>
-                        <div className="col-md-5"><label className="labels">Block</label>
-                        <Select
-                        className="form-control form-control-sm"
-                      multiple
-                      value={leadinfo.block || []}
-                      onChange={handleallblockchange}
-                      style={{border:"none"}}
-                      renderValue={(selected) => selected.join(', ')}
-                      label="Block"
-                      
-                    >
-                      <MenuItem disabled value="">
-                        <em>---choose---</em>
-                      </MenuItem>
-                      {allblocks.map((project) => (
-                        <MenuItem key={project} value={project.block_name}>
-                          <Checkbox checked={(leadinfo.block || []).indexOf(project.block_name) > -1} />
-                          <ListItemText primary={project.block_name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    </div>
-                 
-                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
-                    </div>
-
-                       <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
-                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
-                        <div className="col-md-4"></div>
-                        <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
-                        <div className="col-md-4"></div>
-                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                          <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
+                                           
+                                            <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
+                                            <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
+                                                 <div  id='selectlocation' onClick={selectlocation} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"150px",textAlign:"center",transition:"0.5s ease-out"}}>Select Location </div>
+                                                 <div  id='searchlocation' onClick={searchlocation} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Search Loacation</div>
+                                                 
+                                             </div>
                     
-                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
-                    {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
-                    </div>
-                    </div>
+                                               <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
+                                            <div className="col-md-5"><label className="labels">Country</label>
+                                            <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country3:e.target.value})}>
+                                            <option>India</option>
+                                        {asianCountries.map((country, index) => (
+                                          <option key={index} value={country.toLowerCase().replace(/\s+/g, '-')}>
+                                            {country}
+                                          </option>
+                                        ))}
+                                              </select>
+                                            </div>
+                                           
+                                            <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
+                                            <option value="">--Select State--</option>
+                                          {states.map((state) => (
+                                            <option key={state} value={state}>
+                                              {state}
+                                            </option>
+                                          ))}
+                                              </select>
+                                            </div>
+                                            <div className="col-md-2"></div>
+                    
+                                            <div className="col-md-5"><label className="labels">City</label>
+                                            {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
+                                              <option>---select country---</option>
+                                              <option>India</option>
+                                              </select> */}
+                                                 <select
+                                        className="form-control form-control-sm"
+                                        value={leadinfo.city3}
+                                        onChange={(e)=>setleadinfo({...leadinfo,city3:e.target.value})}
+                                        disabled={!leadinfo.state3 || cities.length === 0} // Disable if no state or invalid state
+                                      >
+                                        <option value="">--Select City--</option>
+                                        {cities.map((city) => (
+                                          <option key={city} value={city}>
+                                            {city}
+                                          </option>
+                                        ))}
+                                      </select>
+                                            </div>
+
+                                              <div className="col-md-5">
+                                          <label className="labels">Area/Project</label>
+                                          <Select
+                                            className="form-control form-control-sm"
+                                            multiple
+                                            value={leadinfo?.area_project? leadinfo.area_project:[]}
+                                            onChange={handleprojectchange}
+                                            style={{ border: 'none' }}
+                                            renderValue={(selected) => selected.join(', ')}
+                                            label="Area/Project"
+                                          >
+                                           "Select All" MenuItem 
+                                            <MenuItem value="select-all">
+                                              <Checkbox checked={leadinfo?.area_project?.length === allproject?.length} />
+                                              <ListItemText primary="--- Select All ---" />
+                                            </MenuItem>
+                    
+                                           
+                                            {allproject.map((project) => (
+                                              <MenuItem key={project} value={project}>
+                                                <Checkbox checked={leadinfo?.area_project?.indexOf(project) > -1} />
+                                                <ListItemText primary={project} />
+                                              </MenuItem>
+                                            ))}
+                                          </Select>
+                                        </div>
+                                            <div className="col-md-5">
+                                            <label className="labels">Block</label>
+                                            <Select
+                                              className="form-control form-control-sm"
+                                              multiple
+                                              value={leadinfo?.block3? leadinfo.block3:[]}
+                                              onChange={handleallblockchange}
+                                              style={{ border: "none" }}
+                                              renderValue={(selected) => selected.join(', ')}
+                                              label="Block"
+                                            >
+                                          
+                                              <MenuItem value="select-all">
+                                                <Checkbox checked={leadinfo?.block3?.length === allblocks?.length} />
+                                                <ListItemText primary="--- Select All ---" />
+                                              </MenuItem>
+                    
+                                            
+                                              {[...new Map(allblocks.map(item => [item.block_name, item])).values()].map((project) => (
+                                                <MenuItem key={project.block_name} value={project.block_name}>
+                                                  <Checkbox checked={leadinfo?.block3?.indexOf(project.block_name) > -1} />
+                                                  <ListItemText primary={project.block_name} />
+                                                </MenuItem>
+                                              ))}
+                                            </Select>
+                                          </div>
+                                     
+                                            <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                                        </div>
+                    
+                                           <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
+                                            <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                                           <div className="col-md-2"></div>
+                                            <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
+                                            <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                                            <div className="col-md-4"><label className="labels">Range</label>
+                                            <select  className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}>
+                                            <option>---select---</option>
+                                            <option value="1">Within 1 km.</option>
+                                            <option value="3">Within 3 km.</option>
+                                            <option value="5">Within 5 km.</option>
+                                            <option value="10">Within 10 km.</option>
+                                            <option value="15">Within 15 km.</option>
+                                            <option value="20">Within 20 km.</option>
+                                            <option value="25">Within 25 km.</option>
+                                              </select>
+                                            </div>
+                                            {/* <div className="col-md-2"><label className="labels">Unit</label>
+                                            <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range_unit:e.target.value})}>
+                                              <option>---select---</option>
+                                              <option>K.M</option>
+                                            </select>
+                                            </div> */}
+                                            {/* <div className="col-md-4"></div> */}
+                    
+                                        <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                                        
+                                        <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                                        <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                                        {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
+                                        </div>
+                                        </div>
                     
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
@@ -5687,6 +5929,33 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                     ))}
                 </Select>
                     </div>
+
+                        <div className="col-md-4"><label className="labels">Direction</label>
+                                          <Select className="form-control form-control-sm" style={{border:"none"}}
+                                        multiple
+                                        value={directions}
+                                        onChange={handledirectionChange}
+                                        renderValue={(selected) => selected.join(', ')}
+                                    >
+                                       {/* <MenuItem disabled value="---select---">
+                                        {leadData?.road || '---select---'}
+                                    </MenuItem> */}
+                                    <MenuItem value="select-all">
+                                        <Checkbox checked={directions.length === direction.length} />
+                                        <ListItemText
+                                          primary={'---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                                        />
+                                      </MenuItem>
+                                        {direction.map((name) => (
+                                            <MenuItem key={name} value={name}>
+                                                <Checkbox checked={directions.indexOf(name) > -1} />
+                                                <ListItemText primary={name} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                       
+                                        </div>
+
                     <div className="col-md-4"><label className="labels">Funding</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
                     <option>Select</option>
@@ -5728,7 +5997,30 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                        }
                         </select>
                     </div>     
-                    <div className="col-md-4"></div>
+                     <div className="col-md-4"><label className="labels">Property Unit Type</label>
+                                     <Select className="form-control form-control-sm" style={{border:"none"}}
+                                       multiple
+                                       value={propertyunitstypes}
+                                       onChange={handlepropertyunitstypesChange}
+                                       renderValue={(selected) => selected.join(', ')}
+                                   >
+                                      {/* <MenuItem disabled value="---select---">
+                                       {leadData?.road || '---select---'}
+                                   </MenuItem> */}
+                                   <MenuItem value="select-all">
+                                       <Checkbox checked={propertyunitstypes.length === propertyunittype.length} />
+                                       <ListItemText
+                                         primary={ '---select all---'} // Display leadData.matched_deal or fallback to '---select---'
+                                       />
+                                     </MenuItem>
+                                       {propertyunittype.map((name) => (
+                                           <MenuItem key={name} value={name}>
+                                               <Checkbox checked={propertyunitstypes.indexOf(name) > -1} />
+                                               <ListItemText primary={name} />
+                                           </MenuItem>
+                                       ))}
+                                   </Select>
+                                       </div>
 
                     <div className="col-md-4"><label className="labels">Transaction Type</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
@@ -5794,6 +6086,9 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
               </Button>
             </Modal.Footer>
           </Modal>
+
+{/*=================================================== add to lead end ============================================================*/}
+
 
 
 {/* =============================================import file modal start ============================================================*/}
