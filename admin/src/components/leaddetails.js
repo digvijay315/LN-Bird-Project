@@ -298,7 +298,9 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
 
 
 //===========================------------------------------ delete code start-----------------------========================================
-    const deleteSelectedItems = async () => {
+   
+    const [isLoading4, setIsLoading4] = useState(false);
+const deleteSelectedItems = async () => {
       try {
         if(selectedItems.length===0)
         {
@@ -320,17 +322,20 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
                     if (!result.isConfirmed) {
                       return; // Stop execution if user cancels
                     }
-
-        const resp = selectedItems.map(async (itemId) => {
-          await api.delete(`removelead/${itemId}`);
-        });
-        
+                    setIsLoading4(true)
+                  await Promise.all(
+                selectedItems.map((itemId) => api.delete(`removelead/${itemId}`))
+              );
         toast.success('Selected items deleted successfully',{autoClose:"2000"})
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } catch (error) {
         console.log(error);
+      }
+      finally
+      {
+        setIsLoading4(false)
       }
     };
  
@@ -3681,10 +3686,11 @@ const handlepropertyunitstypesChange = (event) => {
                                                           matchScore += 10;
                                                         }
 
-                                                        if (unittype == item.unit_type2) matchScore += 10;
+                                                      
+                                                        if (item.unit_type2.includes(unittype)) matchScore += 10;
                                                         if (item.facing.includes(facing)) matchScore += 5;
                                                         if (item.road.includes(road)) matchScore += 5;
-                                                        if (item.direction && item.direction == direction) matchScore += 10;
+                                                        if (item.direction.includes(direction)) matchScore += 10;
                                                                 
                                                         if (item.timeline) {
                                                           switch (item.timeline) {
@@ -3761,16 +3767,16 @@ const handlepropertyunitstypesChange = (event) => {
                                 
                                                       const [showdeals, setshowdeals] = useState([]);
                                                       const [relateddeals, setrelateddeals] = useState([]);
-                                                      const [relateddeals1, setrelateddeals1] = useState([]);
+                                                  
                                                       
                                                       // Define leadCity outside the useEffect
                                                       const leadCity = lead1[0]?.city3?.trim() ? lead1[0]?.city3.toLowerCase().trim() : lead1[0]?.city2?.toLowerCase().trim() || "";
-                                                      
+                                                      const leadPropertyTypes = lead1[0]?.property_type || [];
+
                                                       useEffect(() => {
                                                         const showDealsArray = [];
                                                         const relatedDealsArray = [];
-                                                        const relatedDealsArray1 = [];
-                                                      
+
                                                         for (const deal of matcheddeals) {
                                                           const unitInfo = allunitsdetails.find(
                                                             (u) =>
@@ -3778,47 +3784,75 @@ const handlepropertyunitstypesChange = (event) => {
                                                               u.unitData?.unit_no?.toString().trim() === deal.unit_number?.toString().trim() &&
                                                               u.unitData?.block?.toLowerCase().trim() === deal.block?.toLowerCase().trim()
                                                           );
-                                                      
+
                                                           if (unitInfo) {
                                                             const unitCategories = unitInfo.unitData.category || [];
                                                             const unitCity = unitInfo.unitData.ucity?.toLowerCase().trim() || "";
-                                                            const leadPropertyTypes = lead1[0]?.property_type || [];
-                                                      
+
                                                             const hasCommonCategory = unitCategories.some(category =>
                                                               leadPropertyTypes.includes(category)
                                                             );
-                                                      
-                                                            if (hasCommonCategory) {
-                                                              showDealsArray.push({ deal, unitCity }); // Save unitCity along with deal
-                                                            } else {
-                                                              relatedDealsArray.push(deal);
+
+                                                            const isSameCity = unitCity === leadCity;
+
+                                                            if (isSameCity) {
+                                                              if (hasCommonCategory) {
+                                                                // ✅ Both category and city match
+                                                                showDealsArray.push(deal);
+                                                              } else {
+                                                                // ✅ Only city matches, category is different
+                                                                relatedDealsArray.push(deal);
+                                                              }
                                                             }
-                                                          } else {
-                                                            // If no unitInfo found, push to relatedDealsArray
-                                                            relatedDealsArray.push(deal);
+                                                            // ❌ Else: No match, discard the deal
                                                           }
                                                         }
-                                                      
-                                                        // Second Step: Check city match inside showDealsArray
-                                                        const finalShowDeals = [];
-                                                        const movedToRelatedDeals1 = [];
-                                                      
-                                                        for (const item of showDealsArray) {
-                                                          if (item.unitCity === leadCity) {
-                                                            finalShowDeals.push(item.deal); // City matched
-                                                          } else {
-                                                            movedToRelatedDeals1.push(item.deal); // City didn't match
-                                                          }
-                                                        }
-                                                      
-                                                        setshowdeals(finalShowDeals);
+
+                                                        setshowdeals(showDealsArray);
                                                         setrelateddeals(relatedDealsArray);
-                                                        setrelateddeals1(movedToRelatedDeals1);
-                                                      
-                                                      }, [matcheddeals, allunitsdetails, lead1, leadCity]); // Add leadCity to the dependency array
-                                                      
-                                                      
-                                  
+                                                      }, [matcheddeals, allunitsdetails, lead1, leadCity]);
+
+                                     const calculateShowAndRelatedDeals = (item) => {
+                                      const leadCity = item?.city3?.trim()
+                                        ? item.city3.toLowerCase().trim()
+                                        : item.city2?.toLowerCase().trim() || "";
+
+                                      const leadPropertyTypes = item.property_type || [];
+                                      let showCount = 0;
+                                      let relatedCount = 0;
+
+                                      for (const deal of item.matcheddeals) {
+                                        const unitInfo = allunitsdetails.find(
+                                          (u) =>
+                                            u.unitData?.project_name?.toLowerCase().trim() === deal.project?.toLowerCase().trim() &&
+                                            u.unitData?.unit_no?.toString().trim() === deal.unit_number?.toString().trim() &&
+                                            u.unitData?.block?.toLowerCase().trim() === deal.block?.toLowerCase().trim()
+                                        );
+
+                                        if (unitInfo) {
+                                          const unitCategories = unitInfo.unitData.category || [];
+                                          const unitCity = unitInfo.unitData.ucity?.toLowerCase().trim() || "";
+
+                                          const hasCommonCategory = unitCategories.some(category =>
+                                            leadPropertyTypes.includes(category)
+                                          );
+
+                                          const isSameCity = unitCity === leadCity;
+
+                                          if (isSameCity) {
+                                            if (hasCommonCategory) {
+                                              showCount++;
+                                            } else {
+                                              relatedCount++;
+                                            }
+                                          }
+                                        }
+                                      }
+
+                                      return { showCount, relatedCount };
+                                    };
+
+
                              
                               
                                            
@@ -5163,14 +5197,16 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                        </>
                     )
                     
-                    : col.id === 'matchingdeal' 
-                    ?(
-                      <>
-                     <span style={{fontWeight:"bold",color:"green",fontSize:"14px"}}>{item.matchingdeal}</span>
-                       </>
-                    )
-                    
-                    : col.id === 'requirment' 
+                    : col.id === 'matchingdeal' ? (
+                  (() => {
+                    const { showCount } = calculateShowAndRelatedDeals(item);
+                    return (
+                      <span style={{ fontWeight: "bold", color: "green", fontSize: "14px" }}>
+                        {showCount}
+                      </span>
+                    );
+                  })()
+                ) : col.id === 'requirment' 
                     ?(
                       <>
                      
@@ -7229,7 +7265,10 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
 {/* ================================================other category's related deals start============================================= */}
 
-      <h5 style={{marginLeft:"35%",marginTop:"20px"}}>Others Cagegory's Related Deals:</h5>
+{
+  relateddeals.length>0 && (
+<>
+     <h5 style={{marginLeft:"35%",marginTop:"20px"}}>Others Category's Related Deals:</h5>
 
   <TableContainer component={Paper} style={{marginTop:"20px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -7432,6 +7471,11 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       </tbody>
     </Table>
   </TableContainer>
+  </>
+
+  )
+}
+     
 
 {/* =================================================other category's related deals end ================================================== */}
 
@@ -7439,7 +7483,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
 {/* ========================================other citys related deals start======================================================= */}
 
-  <h5 style={{marginLeft:"35%",marginTop:"20px"}}>Others City's Related Deals:</h5>
+  {/* <h5 style={{marginLeft:"35%",marginTop:"20px"}}>Others City's Related Deals:</h5>
 
 <TableContainer component={Paper} style={{marginTop:"20px"}}>
   <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -7498,7 +7542,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             <>
         <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
 
-{/* Circular Progress with dynamic color and percentage in center */}
+
 <Box position="relative" display="inline-flex">
 <CircularProgress
   variant="determinate"
@@ -7545,7 +7589,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
           ):  col.id === 'matched_percentange' ? (
             <>
         <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-{/* Linear Progress with same color logic and center text */}
+
 <Box width="100%" position="relative">
 <LinearProgress
   variant="determinate"
@@ -7639,7 +7683,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       ))}
     </tbody>
   </Table>
-</TableContainer>
+</TableContainer> */}
 
 
 {/* ==================================================other citys related deals end=============================================== */}
@@ -8384,7 +8428,41 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
   {/* ================================================import data modal end =========================================================*/}
           <ToastContainer/>
-
+  <>
+    {isLoading4 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(187, 16, 19, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>deleting leads...</p>
+        </div>
+      </div>
+    )}
+  </>
            
    </div>
    
