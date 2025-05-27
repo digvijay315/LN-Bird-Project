@@ -2391,7 +2391,7 @@ useEffect(()=>
                       "Timor-Leste", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
                       "Vietnam", "Yemen"
                     ];
-                    const statesAndCities = {
+                       const statesAndCities = {
                       AndhraPradesh: ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
                       ArunachalPradesh: ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
                       Assam: ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Dima Hasao", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
@@ -2428,9 +2428,8 @@ useEffect(()=>
                       Puducherry: ["Puducherry", "Karaikal","Mahe","Yanam"],
                     };
 
-
-                    const states = Object.keys(statesAndCities);
-                    const cities = statesAndCities[leadinfo.state3] || [];
+  const states = Object.keys(statesAndCities);
+  const cities = statesAndCities[contact.state1] || [];
 
                     const facing=["East","West","South","North","North East","South East","North West","South West"];
 const [facings, setfacings] = useState([]);
@@ -4148,10 +4147,42 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                     <div className="col-md-9"><label className="labels">Area</label><input type="text" defaultValue={data1.area1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,area1:e.target.value}))}/></div>
 
                     <div className="col-md-4"><label className="labels">Location</label><input type="text" defaultValue={data1.location1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,location1:e.target.value}))}/></div>
-                    <div className="col-md-4"><label className="labels">City</label><input type="text" defaultValue={data1.city1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,city1:e.target.value}))}/></div>
+                    <div className="col-md-4"><label className="labels">City</label>
+                    {/* <input type="text" defaultValue={data1.city1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,city1:e.target.value}))}/> */}
+                         <select
+                    className="form-control form-control-sm"
+                    onChange={(e) => setcontact({ ...contact, city1: e.target.value })}
+                  >
+                    <option>{data1.city1}</option>
+                    <option value="">--Select City--</option>
+                    {cities.map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                  </select>
+                    </div>
                     <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" defaultValue={data1.pincode1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,pincode1:e.target.value}))}/></div>
 
-                    <div className="col-md-6"><label className="labels">State</label><input type="text" defaultValue={data1.state1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,state1:e.target.value}))}/></div>
+                    <div className="col-md-6"><label className="labels">State</label>
+                    {/* <input type="text" defaultValue={data1.state1} className="form-control form-control-sm" onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,state1:e.target.value}))}/> */}
+                    <select
+                      className="form-control form-control-sm"
+                      onChange={(e) => {
+                        const state = e.target.value;
+                        setcontact({ ...contact, state1: state, city1: "" }); // Clear city when state changes
+                      }}>
+                        <option>{data1.state1}</option>
+                        <option value="">--Select State--</option>
+                      {states.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                  
+
+                    </div>
                     <div className="col-md-6"><label className="labels">Country</label><input type="text" defaultValue={data1.country1} className="form-control form-control-sm"  onChange={(e)=>setcontact((prevProfile)=>({...prevProfile,country1:e.target.value}))}/></div>
 
                     <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>

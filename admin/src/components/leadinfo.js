@@ -650,6 +650,7 @@ const handleOwnerChange = (event) => {
                     };
                
 
+
                         const requirment=["Buy","Rent","Lease"];
                   
                         const transaction_type=["Full White","Collecter Rate","Flexiable"];
@@ -657,8 +658,8 @@ const handleOwnerChange = (event) => {
                         const funding=["Home Loan","Self Funding","Loan Against Property","Personal Loan","Business Loan"]
                         const timeline=["Urgent","More then 1 month","Not Confirmed","Within 15 days"]
 
-    const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-        email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+    const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action11:[],
+        email:[''],email_type:[''],action22:[],tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
         sub_source:"",channel_partner:"",intrested_project:"",
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
@@ -780,7 +781,99 @@ const handleOwnerChange = (event) => {
                
   
   //===================-------------------all array addFn3,delete and handle change event--------------------==========================
+       function addFn11() {
+        
+            setleadinfo({
+              ...leadinfo,
+              country_code: [...leadinfo.country_code, ''],
+              mobile_no: [...leadinfo.mobile_no, ''],
+              mobile_type: [...leadinfo.mobile_type, ''],
+              action11: [...leadinfo.action11, '']
+            });
+          };
+
+          const deleteall11=(index)=>
+            {
+             
+              const newcountry_code = leadinfo.country_code.filter((_, i) => i !== index);
+              const newmobile_no = leadinfo.mobile_no.filter((_, i) => i !== index);
+              const newmobile_type = leadinfo.mobile_type.filter((_, i) => i !== index);
+              const newaction11 = leadinfo.action11.filter((_, i) => i !== index);
+              
+              setleadinfo({
+                ...leadinfo,
+                country_code: newcountry_code,
+                mobile_no: newmobile_no,
+                mobile_type: newmobile_type,
+                action11: newaction11
+              });
+            }
+            const handlecountry_codechange1 = (index, event) => {
+              const newcountry_code = [...leadinfo.country_code];
+              newcountry_code[index] = event.target.value;
+              setleadinfo({
+                ...leadinfo,
+                country_code: newcountry_code
+              });
+            };
+            const handlemobile_nochange1 = (index, event) => {
+              const newmobile_no = [...leadinfo.mobile_no];
+              newmobile_no[index] = event.target.value;
+              setleadinfo({
+                ...leadinfo,
+                mobile_no: newmobile_no
+              });
+            };
+            const handlemobile_typechange1 = (index, event) => {
+              const newmobile_type = [...leadinfo.mobile_type];
+              newmobile_type[index] = event.target.value;
+              setleadinfo({
+                ...leadinfo,
+                mobile_type: newmobile_type
+              });
+            };
+
+            function addFn22() {
+        
+              setleadinfo({
+                ...leadinfo,
+                email: [...leadinfo.email, ''],
+                email_type: [...leadinfo.email_type, ''],
+                action22: [...leadinfo.action22, '']
+              });
+            };
   
+            const deleteall22=(index)=>
+              {
+               
+                const newemail = leadinfo.email.filter((_, i) => i !== index);
+                const newemail_type = leadinfo.email_type.filter((_, i) => i !== index);
+                const newaction22 = leadinfo.action22.filter((_, i) => i !== index);
+                
+                setleadinfo({
+                  ...leadinfo,
+                  email: newemail,
+                  email_type: newemail_type,
+                  action22: newaction22
+                });
+              }
+              const handleemailchange1 = (index, event) => {
+                const newemail = [...leadinfo.email];
+                newemail[index] = event.target.value;
+                setleadinfo({
+                  ...leadinfo,
+                  email: newemail
+                });
+              };
+              const handleemail_typechange1 = (index, event) => {
+                const newemail_type = [...leadinfo.email_type];
+                newemail_type[index] = event.target.value;
+                setleadinfo({
+                  ...leadinfo,
+                  email_type: newemail_type
+                });
+              };
+
                   function addFn3() {
      
                         setleadinfo({
@@ -1731,32 +1824,101 @@ return (
                     <div className="col-md-4"><label className="labels">Surname</label><input type="text" defaultValue={leadData?.last_name || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
                 </div>
                 <div className="row mt-3" id="leadinfobasic2">
-                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country_code:e.target.value})}>
-                    <option value="">{leadData?.country_code[0] || '+91 India'}</option>
-                   {
-                   
-                    countrycode.map(item=>
-                    (
-                        <option>{item}</option>
-                    )
-                    )
-                   }
-                    </select></div>
-                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadData?.mobile_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_type:e.target.value})}>
-                    <option>{leadData?.mobile_type || '---select---'}</option>
-                        <option>Personal</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
-                        </select></div>
-                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadData?.email[0] || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email_type:e.target.value})}>
-                    <option>{leadData?.email_type || '---select---'}</option>
-                        <option>Personal</option>
-                        <option>Office</option>
-                        <option>Business</option>
-                        </select></div>
+                       <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      leadinfo.country_code.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
+                        <option value={item} >India +91</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       leadinfo.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange1(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       leadinfo.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange1(index,event)}>
+                                  
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       leadinfo.action11.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn11}>+</button></div>
+
+                   <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        leadinfo.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange1(index,event)}/>
+                        ))
+                    }
+                    </div>
+                    
+                    <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       leadinfo.email_type.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange1(index,event)}>
+                                
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                  
+                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                       leadinfo.action22.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        ))
+                    }
+                    </div>
+                     <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
+
                      <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadData?.tags || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadData?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
                     

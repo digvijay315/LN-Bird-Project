@@ -272,6 +272,16 @@ Quill.register('modules/imageResize', ImageResize);
     '{{first_name}}',
     '{{last_name}}',
     '{{propertyDetails}}',
+    '{{icon}}',
+    '{{location}}',
+    '{{price}}',
+    '{{propertyDetails}}',
+    '{{facing}}',
+    '{{registry}}',
+    '{{ownership}}',
+    '{{possession}}',
+    '{{amenities}}',
+    '{{nearby}}',
     '{{listingGalleryLink}}',
     '{{bookingLink}}',
   ];
@@ -650,8 +660,11 @@ Quill.register('modules/imageResize', ImageResize);
                                                     value={templateContent}
                                                     onChange={setTemplateContent}
                                                     modules={modules}
-                                                    placeholder="Write your content here..."
+                                                    placeholder="Write your content here must use <!--START:deal--> and <!--END:deal-->
+                                                    inside this use deal variables"
+                                                    
                                                     style={{ height: '200px', marginBottom: '20px' }}
+                                                    
                                                 />
 
                                                  {showSuggestions && (

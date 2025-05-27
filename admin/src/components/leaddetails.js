@@ -94,20 +94,20 @@ useEffect(()=>{fetchdatabystage_opportunitycount()},[])
 
 
 
-const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-  email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
-  sub_source:"",channel_partner:"",intrested_project:"",
-  requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-  maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-  lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
-  unit_type2:"",white_portion:"",furnishing:"",matched_deal:[],
-  profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
-  company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
+  const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action11:[],
+        email:[''],email_type:[''],action22:[],tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+        sub_source:"",channel_partner:"",intrested_project:"",
+        requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+        maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+        lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:[],transaction_type:"",
+        unit_type2:"",white_portion:"",furnishing:"",
+        profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+        company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
-  father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-  birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-  social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[]
- })
+        father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+        birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+        social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],
+        matcheddeals:[],matchingdeal:"",})
 
 
 const[countall,setcountall]=useState('')
@@ -771,6 +771,98 @@ useEffect(()=>
                         }
                         
                     
+              function addFn11() {
+        
+            setleadinfo({
+              ...leadinfo,
+              country_code: [...leadinfo.country_code, ''],
+              mobile_no: [...leadinfo.mobile_no, ''],
+              mobile_type: [...leadinfo.mobile_type, ''],
+              action11: Array.isArray(leadinfo.action11) ? [...leadinfo.action11, ''] : ['']
+            });
+          };
+
+          const deleteall11=(index)=>
+            {
+             
+              const newcountry_code = leadinfo.country_code.filter((_, i) => i !== index);
+              const newmobile_no = leadinfo.mobile_no.filter((_, i) => i !== index);
+              const newmobile_type = leadinfo.mobile_type.filter((_, i) => i !== index);
+              const newaction11 = leadinfo.action11.filter((_, i) => i !== index);
+              
+              setleadinfo({
+                ...leadinfo,
+                country_code: newcountry_code,
+                mobile_no: newmobile_no,
+                mobile_type: newmobile_type,
+                action11: newaction11
+              });
+            }
+            const handlecountry_codechange1 = (index, event) => {
+              const newcountry_code = [...leadinfo.country_code];
+              newcountry_code[index] = event.target.value;
+              setleadinfo({
+                ...leadinfo,
+                country_code: newcountry_code
+              });
+            };
+            const handlemobile_nochange1 = (index, event) => {
+              const newmobile_no = [...leadinfo.mobile_no];
+              newmobile_no[index] = event.target.value;
+              setleadinfo({
+                ...leadinfo,
+                mobile_no: newmobile_no
+              });
+            };
+            const handlemobile_typechange1 = (index, event) => {
+              const newmobile_type = [...leadinfo.mobile_type];
+              newmobile_type[index] = event.target.value;
+              setleadinfo({
+                ...leadinfo,
+                mobile_type: newmobile_type
+              });
+            };
+
+            function addFn22() {
+        
+              setleadinfo({
+                ...leadinfo,
+                email: [...leadinfo.email, ''],
+                email_type: [...leadinfo.email_type, ''],
+                action22: Array.isArray(leadinfo.action22) ? [...leadinfo.action22, ''] : ['']
+              });
+            };
+  
+            const deleteall22=(index)=>
+              {
+               
+                const newemail = leadinfo.email.filter((_, i) => i !== index);
+                const newemail_type = leadinfo.email_type.filter((_, i) => i !== index);
+                const newaction22 = leadinfo.action22.filter((_, i) => i !== index);
+                
+                setleadinfo({
+                  ...leadinfo,
+                  email: newemail,
+                  email_type: newemail_type,
+                  action22: newaction22
+                });
+              }
+              const handleemailchange1 = (index, event) => {
+                const newemail = [...leadinfo.email];
+                newemail[index] = event.target.value;
+                setleadinfo({
+                  ...leadinfo,
+                  email: newemail
+                });
+              };
+              const handleemail_typechange1 = (index, event) => {
+                const newemail_type = [...leadinfo.email_type];
+                newemail_type[index] = event.target.value;
+                setleadinfo({
+                  ...leadinfo,
+                  email_type: newemail_type
+                });
+              };
                         
                         
      function addFn3() {
@@ -3952,60 +4044,81 @@ const handlepropertyunitstypesChange = (event) => {
                             
                           
                           const[propertyDetails,setpropertyDetails]=useState("")
+                          const [propertyDetailsList, setPropertyDetailsList] = useState([]);
 
-                          useEffect(()=>
-                          {
-                            fetchcprojectdata()
-                            const sendmatchingdeals = dealdata.filter((item) =>
-                              selectedItems1.includes(item._id)
-                            );
-                          
-                            
-                            const matcheddetails = sendmatchingdeals.map((property, index) => {
 
-                              const unitInfo = allunitsdetails.find(
-                                (u) =>
-                                  u.unitData?.project_name?.toLowerCase().trim() === property.project?.toLowerCase().trim() &&
-                                  u.unitData?.unit_no?.toString().trim() === property.unit_number?.toString().trim() &&
-                                  u.unitData?.block?.toLowerCase().trim() === property.block?.toLowerCase().trim()
-                              );
-                              
-                              const projectinfo = projectdata.find(
-                                (u) =>
-                                  u.name?.toLowerCase().trim() === property.project?.toLowerCase().trim() 
-                              );
-                              
-                           
-                              const unitData = unitInfo?.unitData;
-          
-                              const propertyIcon = unitData.sub_category.includes("Independent House")
-                              ? "🏠"
-                              : unitData.sub_category.includes("Plot")
-                              ? "🛣️"
-                              : "📍";
-                        
-                            
-                              
-                              return `
-                         <b> ${index + 1}. ${propertyIcon} ${unitData.size} ${unitData.sub_category}</b>
-                          <b>• Location:</b> ${unitData.location}
-                          <b>• Price:</b> ${property.expected_price}
-                          <b>• Facing:</b> ${unitData.facing || "N/A"} | Direction: ${unitData.direction || "N/A"} | Road Width: ${unitData.road || "N/A"}
-                          <b>• Registry:</b> ${property.registry}
-                          <b>• Ownership:</b> ${unitData.ownership}
-                          <b>• Possession:</b> ${projectinfo?.possession}
-                          <b>• Amenities:</b> ${projectinfo?.features_aminities.join(',')}
-                          <b>• Nearby:</b> ${Array.isArray(projectinfo.nearby_aminities)
+                      useEffect(() => {
+                      fetchcprojectdata();
+
+                      const sendmatchingdeals = dealdata.filter((item) =>
+                        selectedItems1.includes(item._id)
+                      );
+
+                      const detailsList = [];
+
+                      const matcheddetails = sendmatchingdeals.map((property, index) => {
+                        const unitInfo = allunitsdetails.find(
+                          (u) =>
+                            u.unitData?.project_name?.toLowerCase().trim() === property.project?.toLowerCase().trim() &&
+                            u.unitData?.unit_no?.toString().trim() === property.unit_number?.toString().trim() &&
+                            u.unitData?.block?.toLowerCase().trim() === property.block?.toLowerCase().trim()
+                        );
+
+                        const projectinfo = projectdata.find(
+                          (u) => u.name?.toLowerCase().trim() === property.project?.toLowerCase().trim()
+                        );
+
+                        const unitData = unitInfo?.unitData;
+
+                        const propertyIcon = unitData?.sub_category.includes("Independent House")
+                          ? "🏠"
+                          : unitData?.sub_category.includes("Plot")
+                          ? "🛣️"
+                          : "📍";
+
+                        const formattedDetails = `
+                    <b>${index + 1}. ${propertyIcon} ${unitData?.size || "N/A"} ${unitData?.sub_category || "N/A"}</b>
+                    <b>• Location:</b> ${unitData?.location || "N/A"}
+                    <b>• Price:</b> ${property.expected_price || "N/A"}
+                    <b>• Facing:</b> ${unitData?.facing || "N/A"} | Direction: ${unitData?.direction || "N/A"} | Road Width: ${unitData?.road || "N/A"}
+                    <b>• Registry:</b> ${property.registry || "N/A"}
+                    <b>• Ownership:</b> ${unitData?.ownership || "N/A"}
+                    <b>• Possession:</b> ${projectinfo?.possession || "N/A"}
+                    <b>• Amenities:</b> ${projectinfo?.features_aminities?.join(', ') || "N/A"}
+                    <b>• Nearby:</b> ${
+                          Array.isArray(projectinfo?.nearby_aminities)
                             ? projectinfo.nearby_aminities
                                 .map(item => `${item.destination} ${item.distance} ${item.measurment}`)
                                 .join(", ")
-                            : "no nearbay aminities"}
-                          `;
-                            }).join("\n");
+                            : "No nearby amenities"
+                        }
+                        `;
 
-                            setpropertyDetails(matcheddetails)
-                          },[selectedItems1])
-                      
+                        // Push structured data to the list
+                        detailsList.push({
+                          index: index + 1,
+                          icon: propertyIcon,
+                          size: unitData?.size,
+                          sub_category: unitData?.sub_category,
+                          location: unitData?.location,
+                          price: property.expected_price,
+                          facing: unitData?.facing,
+                          direction: unitData?.direction,
+                          road: unitData?.road,
+                          registry: property.registry,
+                          ownership: unitData?.ownership,
+                          possession: projectinfo?.possession,
+                          amenities: projectinfo?.features_aminities || [],
+                          nearby: projectinfo?.nearby_aminities || [],
+                        });
+
+                        return formattedDetails;
+                      }).join("\n");
+
+                      setpropertyDetails(matcheddetails);
+                      setPropertyDetailsList(detailsList); // <-- new state to hold structured data
+                    }, [selectedItems1]);
+
                     
                         
                                    
@@ -4081,27 +4194,79 @@ const handlepropertyunitstypesChange = (event) => {
                                         });
                                         
                           
-                                      const handleTemplateSelect1 = (e) => {
-                                        const templateKey = e.target.value; // Get selected template key
-                                        setSelectedTemplate1(templateKey); // Set the selected template
-                                        const selectedTemplateContent = templates1[templateKey] || ''; // Get the template content
+                                      // const handleTemplateSelect1 = (e) => {
+                                      //   const templateKey = e.target.value; // Get selected template key
+                                      //   setSelectedTemplate1(templateKey); // Set the selected template
+                                      //   const selectedTemplateContent = templates1[templateKey] || ''; // Get the template content
                                     
-                                        // Convert '\n' to '<br>' for HTML email formatting
-                                        const htmlFormattedMessage = selectedTemplateContent.replace(/\n/g, '<br>');
+                                      //   // Convert '\n' to '<br>' for HTML email formatting
+                                      //   const htmlFormattedMessage = selectedTemplateContent.replace(/\n/g, '<br>');
                                         
-                                        // Set the message state with the formatted message (HTML-friendly)
-                                        setmessage1(htmlFormattedMessage); 
+                                      //   // Set the message state with the formatted message (HTML-friendly)
+                                      //   setmessage1(htmlFormattedMessage); 
 
-                                        const selectedId = e.target.value;
-                                        setSelectedTemplate1(selectedId);
+                                      //   const selectedId = e.target.value;
+                                      //   setSelectedTemplate1(selectedId);
 
-                                        const selected = templets.find((t) => t._id === selectedId);
-                                        if (selected) {
-                                          const replacedContent = replaceVariables(selected.templateContent || '');
-                                           const htmlFormattedMessage = replacedContent.replace(/\n/g, '<br>');
-                                         setmessage1(htmlFormattedMessage); 
-                                        }
-                                      };
+                                      //   const selected = templets.find((t) => t._id === selectedId);
+                                      //   if (selected) {
+                                      //     const replacedContent = replaceVariables(selected.templateContent || '');
+                                      //      const htmlFormattedMessage = replacedContent.replace(/\n/g, '<br>');
+                                      //    setmessage1(htmlFormattedMessage); 
+                                      //   }
+                                      // };
+
+const handleTemplateSelect1 = (e) => {
+  const selectedId = e.target.value;
+  setSelectedTemplate1(selectedId);
+
+  const selected = templets.find((t) => t._id === selectedId);
+  if (!selected) return;
+
+  const lead = lead1[0]; // Assuming only one lead
+  const template = selected.templateContent || '';
+
+const startTag = '&lt;!--START:deal--&gt;';
+const endTag = '&lt;!--END:deal--&gt;';
+
+
+  const start = template.indexOf(startTag);
+  const end = template.indexOf(endTag);
+
+  // DEBUG: Check if tags and deal data are found
+  console.log("Start index:", start, "End index:", end);
+  console.log("Property count:", propertyDetailsList.length);
+
+  if (start === -1 || end === -1) {
+    // Fallback: if tags not found, treat whole template as static
+    const replaced = replaceVariables(template, lead, propertyDetailsList[0]);
+    setmessage1(replaced.replace(/\n/g, '<br>'));
+    return;
+  }
+
+  // Extract parts of the template
+  const beforeDeal = template.substring(0, start);
+  const dealBlock = template.substring(start + startTag.length, end).trim();
+  const afterDeal = template.substring(end + endTag.length);
+
+  // Replace lead variables in the static parts
+  const leadHeader = replaceVariables(beforeDeal, lead, {});
+  const leadFooter = replaceVariables(afterDeal, lead, {});
+
+  // Repeat deal block for each property
+  const dealsHtml = propertyDetailsList.map((deal,index) =>
+    `<strong>${index + 1}.</strong> `+ replaceVariables(dealBlock, lead, deal)
+  ).join('<br></br>');
+
+  // Combine everything
+  const finalMessage = `${leadHeader}<br>${dealsHtml}<br>${leadFooter}`;
+  setmessage1(finalMessage);
+};
+
+
+
+
+
 
                                          const [emails1, setEmails1] = useState([]);
                                          const [number, setNumber] = useState([]);
@@ -4118,6 +4283,51 @@ const handlepropertyunitstypesChange = (event) => {
                                           }
                                         }, [lead1]);
                                                  
+
+                                        //============================== fetch templets code start=======================================================================
+
+                useEffect(()=>{fetchtempletsdata()},[])
+                      const[templets,settemplets]=useState([]);
+                      const fetchtempletsdata=async()=>
+                        {
+                          
+                          try {
+                            const resp=await api.get('viewtemplets')
+                            settemplets(resp.data.templetes)
+                          } catch (error) {
+                            console.log(error);
+                          }
+                        
+                        }
+                     // Replace variables in the template with actual data
+const replaceVariables = (template, lead, property) => {
+  return template
+    .replace(/{{title}}/g, lead?.title || '')
+    .replace(/{{first_name}}/g, lead?.first_name || '')
+    .replace(/{{last_name}}/g, lead?.last_name || '')
+    .replace(/{{icon}}/g, property?.icon || '')
+   .replace(/{{location}}/g, property?.location ? `${property.location}` : 'not available')
+.replace(/{{price}}/g, property?.price ? `<strong>Price:</strong> ${property.price}` : 'not available')
+.replace(/{{facing}}/g, property?.facing ? `<strong>Facing:</strong> ${property.facing}` : 'not available')
+.replace(/{{registry}}/g, property?.registry ? `<strong>Registry:</strong> ${property.registry}` : 'not available')
+.replace(/{{ownership}}/g, property?.ownership ? `<strong>Ownership:</strong> ${property.ownership}` : 'not available')
+.replace(/{{possession}}/g, property?.possession ? `<strong>Possession:</strong> ${property.possession}` : 'not available')
+.replace(/{{amenities}}/g, Array.isArray(property?.amenities) && property.amenities.length > 0
+    ? `<strong>Amenities:</strong> ${property.amenities.join(', ')}`
+    : 'not available')
+.replace(/{{nearby}}/g, Array.isArray(property?.nearby) && property.nearby.length > 0
+    ? `<strong>Nearby:</strong> ${property.nearby.map(item =>
+        `${item.destination} ${item.distance} ${item.measurment}`
+      ).join(', ')}`
+    : 'not available')
+
+    .replace(/{{listingGalleryLink}}/g, 'http://example.com/gallery')
+    .replace(/{{bookingLink}}/g, 'http://example.com/book');
+};
+                        
+
+
+// =======================================fetch templets code end=================================================================
 
                                       const[isloading2,setisloading2]=useState(false)
                                       const sendmail1=async(e)=>
@@ -4342,34 +4552,7 @@ const handlepropertyunitstypesChange = (event) => {
 //===================================================== update button code end=======================================================
 
 
-//============================== fetch templets code start=======================================================================
 
-                useEffect(()=>{fetchtempletsdata()},[])
-                      const[templets,settemplets]=useState([]);
-                      const fetchtempletsdata=async()=>
-                        {
-                          
-                          try {
-                            const resp=await api.get('viewtemplets')
-                            settemplets(resp.data.templetes)
-                          } catch (error) {
-                            console.log(error);
-                          }
-                        
-                        }
-                     // Replace variables in the template with actual data
-  const replaceVariables = (template) => {
-    return template
-      .replace('{{title}}', lead1[0].title)
-      .replace('{{first_name}}', lead1[0].first_name)
-      .replace('{{last_name}}', lead1[0].last_name)
-      .replace('{{propertyDetails}}', propertyDetails)
-      .replace('{{listingGalleryLink}}', 'http://example.com/gallery')
-      .replace('{{bookingLink}}', 'http://example.com/book');
-  };
-                        
-
-// =======================================fetch templets code end=================================================================
 
 // =======================================================code for import data start==================================================
 
@@ -5392,31 +5575,106 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                     <div className="col-md-4"><label className="labels">Surname</label><input type="text" defaultValue={leadinfo?.last_name || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
                 </div>
                 <div className="row mt-3" id="leadinfobasic2">
-                    <div className="col-md-4"><label className="labels">Country</label><select required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country_code:e.target.value})}>
-                    <option value="">{leadinfo?.country_code[0] || '+91 India'}</option>
-                   {
-                   
-                    countrycode.map(item=>
-                    (
-                        <option>{item}</option>
-                    )
-                    )
-                   }
-                    </select></div>
-                    <div className="col-md-5"><label className="labels">Mobile Number</label><input type="text"  required="true"defaultValue={leadinfo?.mobile_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_no:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,mobile_type:e.target.value})}>
-                    <option>{leadinfo?.mobile_type || '---Personal---'}</option>
-                        <option>Home</option>
-                        <option>Office</option>
-                        <option>Mobile</option>
-                        </select></div>
-                    <div className="col-md-9"><label className="labels">Email-Address</label><input type="text" defaultValue={leadinfo?.email[0] || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Type</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,email_type:e.target.value})}>
-                    <option>{leadinfo?.email_type || '---Personal---'}</option>
-                        <option>Personal</option>
-                        <option>Office</option>
-                        <option>Business</option>
-                        </select></div>
+                     <div className="col-md-4" > <label className="labels">Country</label>
+                    {
+                      leadinfo.country_code.map((item,index)=>
+                      (
+                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
+                        <option>{leadinfo.country_code[index]}</option>
+                          <option>---select---</option>
+                        {
+                          countrycode.map((item)=>
+                          (
+                            <option>{item}</option>
+                          ))
+                        }
+                        </select> 
+                      ))
+                    }
+                    </div>
+                     <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    {
+                       leadinfo.mobile_no.map((item,index)=>
+                        (
+                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          value={leadinfo.mobile_no[index]}
+                          className="form-control form-control-sm" 
+                          placeholder="enter phone number" 
+                          onChange={(event)=>handlemobile_nochange1(index,event)}/>
+                          
+                        ))
+                    }
+                    </div>
+                      <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       leadinfo.mobile_type.map((item,index)=>
+                        (
+                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         onChange={(event)=>handlemobile_typechange1(index,event)}>
+                                  <option>{leadinfo.mobile_type[index]}</option>
+                                  <option>---select---</option>
+                                  <option>Personal</option>
+                                  <option>Official</option>
+                                  <option>Home</option>
+                                  <option>Phone</option>
+                        </select>
+                          
+                        ))
+                    }
+                    </div>
+                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(leadinfo.action11)?
+                       leadinfo.action11.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        )):[]
+                    }
+                    </div>
+                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn11}>+</button></div>
+
+                       <div className="col-md-8"><label className="labels">Email-Address</label>
+                    {
+                        leadinfo.email.map((item,index)=>
+                        (
+                          <input type="text" style={{marginTop:"10px"}}
+                          value={leadinfo.email[index]}
+                          className="form-control form-control-sm" 
+                          placeholder="enter email-id"
+                          onChange={(event)=>handleemailchange1(index,event)}/>
+                        ))
+                    }
+                    </div>
+                      <div className="col-md-2"><label className="labels">Type</label>
+                    {
+                       leadinfo.email_type.map((item,index)=>
+                        (
+                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          onChange={(event)=>handleemail_typechange1(index,event)}>
+                                <option>{leadinfo.email_type[index]}</option>
+                                <option>---select</option>
+                                <option>Personal</option>
+                                <option>Official</option>
+                                <option>Business</option>
+                        </select>
+                        ))
+                    }
+                   </div>
+                                  <div className="col-md-1" style={{marginTop:"90px"}}>
+                    {
+                      Array.isArray(leadinfo.action22)?
+                       leadinfo.action22.map((item,index)=>
+                        (
+                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                  
+                          
+                        )):[]
+                    }
+                    </div>
+                     <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
+
                      <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadinfo?.tags || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
                     <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadinfo?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
                     
