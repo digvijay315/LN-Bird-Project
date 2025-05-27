@@ -100,7 +100,7 @@ useEffect(()=>{fetchdatabystage_opportunitycount()},[])
         requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
         maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
         lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:[],transaction_type:"",
-        unit_type2:"",white_portion:"",furnishing:"",
+        unit_type2:[],white_portion:"",furnishing:"",
         profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
         company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
