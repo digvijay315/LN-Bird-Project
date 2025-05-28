@@ -18,8 +18,6 @@ cloudinary.config({
 const createProject = async (req, res) => {
     try {
 
-
- 
       const {
         name, developer_name, joint_venture, secondary_developer, rera_number, descriptions,
         category, sub_category, land_area, measurment1, total_block, total_floor, total_units,
@@ -28,6 +26,11 @@ const createProject = async (req, res) => {
         street,locality,city,zip,state,country, add_block,add_size,add_unit,basic_aminities,
         features_aminities,nearby_aminities,price_list,Payment_plan} = req.body;
 
+        if(!developer_name)
+        {
+          res.status(400).send({message:"Developer name is required"})
+          return
+        }
          const imagefiles = [];
     
                 if (req.files) {

@@ -2194,21 +2194,20 @@ useEffect(()=>
                 };
 
 
+  const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action11:[],
+        email:[''],email_type:[''],action22:[],tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
+        sub_source:"",channel_partner:"",intrested_project:"",
+        requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
+        maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
+        lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:[],transaction_type:"",
+        unit_type2:"",white_portion:"",furnishing:"",
+        profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
+        company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
 
-                 const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:"+91 India",mobile_no:"",mobile_type:"Personal",
-                      email:"",email_type:"Personal",tags:"",descriptions:"",stage:"",lead_type:"",owner:[],team:"",visible_to:"",campaign:"",source:"",
-                      sub_source:"",channel_partner:"",intrested_project:"",
-                      requirment:"",property_type:[],purpose:"",nri:"",sub_type:[],unit_type:[],budget_min:"",budget_max:"",minimum_area:"",
-                      maximum_area:"",area_metric:"Sq Yard",search_location:"",street_address:"",range:"",range_unit:"",city2:"",area2:[],block:[],pincode2:"",country2:"",state2:"",
-                      lattitude:"",longitude:"",country3:"",state3:"",city3:"",area_project:[],block3:[],specific_unit:"",specific_unitdetails:"",funding:"",timeline:"",facing:[],road:[],direction:"",transaction_type:"",
-                      unit_type2:"",white_portion:"",furnishing:"",
-                      profession_category:[],profession_subcategory:[],designation:"",company_name:"",country_code1:"",company_phone:"",
-                      company_email:"",area:"",location:"",city:"",pincode:"",state:"",country:"",industry:"",company_social_media:[''],company_url:[''],action3:[],
-              
-                      father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
-                      birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
-                      social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],
-                      matcheddeals:[],matchingdeal:"",})
+        father_husband_name:"",h_no:"",area1:"",location1:"",city1:"",pincode1:"",state1:"",country1:"",gender:"",maritial_status:"",
+        birth_date:"",anniversary_date:"",education:[''],degree:[''],school_college:[''],action4:[],loan:[''],bank:[''],amount:[''],action5:[],
+        social_media:[''],url:[''],action6:[],income:[''],amount1:[''],action7:[],document_no:[''],document_name:[''],document_pic:[''],action8:[],
+        matcheddeals:[],matchingdeal:"",})
 
 
                  const requirment=["Buy","Rent","Lease"];
@@ -2618,9 +2617,7 @@ const handleMouseUp = () => {
                     const resp1 = await api.get(`viewcontactbyid/${selectedItems}`);
                     // Assuming resp1.data.contact.mobile_no is an array, we take the first element
                       const contact = resp1.data.contact;
-                      const updatedContact = { ...contact, mobile_no: contact.mobile_no[0] };  // Set only the first mobile number
-                      
-                      setleadinfo(updatedContact);  // Set the lead info with the updated mobile_no
+                      setleadinfo(contact);  // Set the lead info with the updated mobile_no
                   
                   } catch (error) {
                     console.error("Error fetching lead data:", error);

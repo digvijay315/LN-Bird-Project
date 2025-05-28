@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Swal from "sweetalert2";
 
 function Leadinfo() {
 
@@ -688,16 +689,50 @@ const handleOwnerChange = (event) => {
             try {
                 const resp=await api.post('leadinfo',leadinfo,config)
                 const resp1= await api.post('addcontact',leadinfo,config)
-                if(resp.status===200)
-                {
-                    toast.success(resp.data.message)
-                    setTimeout(() => {
-                        navigate('/leaddetails')
-                    }, 2000);
-                }
+                 if(resp.status===200)
+                  {
+                    Swal.fire({
+                    title: '🎉 Lead created successfully...!',
+                    html: `
+                    <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
+                    alt="Thumbs up" 
+                    width="80" 
+                    style="margin-bottom: 0px;"/>`,
+                    width: '400px', // makes it small
+                    padding: '1.2em',
+                    showConfirmButton: true,
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        navigate('/leaddetails');
+                        }
+                    })
+                  }
+              
             } catch (error) {
-                
-                toast.error(error)
+              console.log(error);
+              
+                  Swal.fire({
+                  title: 'Oops creating deal failed!',
+                  html: `
+                  <img src="https://i.pinimg.com/originals/53/3f/f7/533ff77ef582abbfa00ccf9080137304.gif"
+                  alt="Sad face" 
+                  width="80" 
+                  style="margin-bottom: 0px;" />
+                  <p style="font-size: 14px; margin: 0;">
+                  ${error.response?.data?.message || 'Something went wrong. Please try again.'}
+                  </p>
+                  `,
+                  width: '300px', // makes it small
+                  padding: '1.2em',
+                  showConfirmButton: true,
+                  confirmButtonText: 'Okay',
+                  confirmButtonColor: '#d33',
+                  background: '#fff',
+                  customClass: {
+                  popup: 'small-swal',
+                  }
+                });
+               
             }
         }
 

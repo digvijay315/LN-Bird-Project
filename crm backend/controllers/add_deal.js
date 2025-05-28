@@ -72,6 +72,12 @@ const add_deal = async (req, res) => {
         category, s_no1, url, website, social_media, send_matchedlead, matchedleads, matchinglead, remarks
       } = req.body;
    
+      const existingdeal=await adddeal.findOne({project:project,block:block,unit_number:unit_number})
+      if(existingdeal)
+      {
+        res.status(400).send({message:"Deal already exist..."})
+        return
+      }
 
       const new_add_deal = new adddeal({
         project_category, project_subcategory, location,ulocality,ucity,utype,ucategory,usub_category,usize, available_for, stage, project, block, unit_number, floors, expected_price,

@@ -324,12 +324,24 @@ const deleteSelectedItems = async () => {
                     }
                     setIsLoading4(true)
                   await Promise.all(
-                selectedItems.map((itemId) => api.delete(`removelead/${itemId}`))
-              );
-        toast.success('Selected items deleted successfully',{autoClose:"2000"})
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+                              selectedItems.map((itemId) => api.delete(`removelead/${itemId}`))
+                            );
+                             Swal.fire({
+                                        title: '🎉 Selected items deleted successfully...!',
+                                        html: `
+                                        <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
+                                        alt="Thumbs up" 
+                                        width="80" 
+                                        style="margin-bottom: 0px;"/>`,
+                                        width: '400px', // makes it small
+                                        padding: '1.2em',
+                                        showConfirmButton: true,
+                                      }).then((result) => {
+                                      if (result.isConfirmed) {
+                                          window.location.reload();
+                                        }
+                                      })
+     
       } catch (error) {
         console.log(error);
       }
@@ -1411,13 +1423,16 @@ useEffect(()=>
                   const resp=await api.post(`contact/sendmail`,formData)
                   if(resp.status===200)
                   {
-                    toast.success("Mail Sent Successfully",{ autoClose: 2000 })
-                    setTimeout(() => {
-                      navigate('/leaddetails')
-                    }, 2000);
-                    setTimeout(() => {
-                      setshow3(false)
-                    }, 2000);
+                                Swal.fire({
+                                  title: '🎉 Success!',
+                                  text: `Mail Sent Successfully!`,
+                                  icon: 'success',
+                                  showConfirmButton: true,
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                  navigate('/leaddetails');
+                                  }
+                                })
                   }
                  
                 } catch (error) {
@@ -4726,6 +4741,7 @@ const replaceVariables = (template, lead, property) => {
               return; // Stop execution if user cancels
             }
               const resp= await api.post('bulkleadinfo',pendingContacts,config)
+              const resp1= await api.post('addbulkcontact',pendingContacts,config)
               
           if(resp.status===200)
               {
@@ -4765,7 +4781,10 @@ const replaceVariables = (template, lead, property) => {
       
           // Loop through each duplicate contact and send a request one by one
           const updatePromises = duplicateEntries.map((contact1) =>
-            api.put("updateleadforbulkupload", contact1, config)
+          {
+                api.put("updateleadforbulkupload", contact1, config)
+                api.put("updatecontactforbulkupload", contact1, config)
+          }
           );
       
           // Wait for all update requests to complete
@@ -5354,11 +5373,32 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             >
               <span style={{color:"#0086b3",fontWeight:"bold",fontSize:"13px"}}>{item.title} {item.first_name} {item.last_name}</span>
               <br />
-              <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}} />
-              <span>{item.mobile_no}</span>
-              <br />
-              <SvgIcon component={EmailIcon} style={{fontSize:"12px"}}/>
-              <span>{item.email}</span>
+              {
+                Array.isArray(item.mobile_no)?
+                item.mobile_no.map((item)=>
+                (
+                  <>
+                      <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}} />
+                      <span>{item}</span><br></br>
+                  </>
+                )): <>
+                <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}} /> <span>{item.mobile_no}</span>
+                </>     
+              }
+  {
+                Array.isArray(item.email)?
+                item.email.map((item)=>
+                (
+                  <>
+                      <SvgIcon component={EmailIcon} style={{fontSize:"12px"}}/>
+                      <span>{item}</span><br></br>
+                  </>
+                )): <>
+                    <SvgIcon component={EmailIcon} style={{fontSize:"12px"}}/><span>{item.email}</span>
+                </>
+                     
+              }
+         
             </StyledTableCell>
             {visibleColumns
               .filter((col) => col.id !== 'personaldetails' && col.id !== 'sno' && col.id !== 'score')

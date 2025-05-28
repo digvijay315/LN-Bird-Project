@@ -29,6 +29,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import Tooltip from '@mui/material/Tooltip';
 import Swal from 'sweetalert2';
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
 
 
@@ -89,197 +90,30 @@ function Projectform() {
           // e.preventDefault();
         
           try {
-
-            // // Create a new FormData object
-            // const formdata = new FormData();
-
-            // // First loop through and append all fields except 'pic', 'add_unit', 'add_size', and 'add_block'
-            // Object.keys(project).forEach(key => {
-            //   // Skip 'pic', 'add_unit', 'add_size', and 'add_block'
-            //   if (key === "pic" || key === "add_unit" || key === "add_size" || key === "add_block") {
-            //     return;
-            //   }
-            
-            //   // If it's an array of simple values (e.g., project_category), append each item
-            //   if (Array.isArray(project[key])) {
-            //     project[key].forEach((item, index) => {
-            //       formdata.append(`${key}[${index}]`, item);
-            //     });
-            //   } else {
-            //     // If it's a single value, append it directly
-            //     formdata.append(key, project[key]);
-            //   }
-            // });
-            
-            // // Handle the 'pic' field separately (assuming it's an array of files)
-            // if (project.pic && project.pic.length > 0) {
-            //   // Loop through each item in the 'pic' array
-            //   project.pic.forEach((previewData, previewIndex) => {
-            //     // Check if 'files' exists within the current item (previewData) and is an array
-            //     if (previewData.files && previewData.files.length > 0) {
-            //       // Loop through each file in 'files' and append it to formData
-            //       previewData.files.forEach((file, fileIndex) => {
-            //         formdata.append(`pic[${previewIndex}].files[${fileIndex}]`, file);
-            //       });
-            //     }
-            //   });
-            // }
-            
-            
-            // // Handle the 'add_unit' field separately (assuming it's an array of units with a 'preview' field)
-            // if (project.add_unit && project.add_unit.length > 0) {
-            //   project.add_unit.forEach((document, index) => {
-            //     formdata.append(`add_unit[${index}].block_name`, document.project_name);
-            //     formdata.append(`add_unit[${index}].unit_no`, document.unit_no);
-            //     formdata.append(`add_unit[${index}].unit_type`, document.unit_type);
-            //     formdata.append(`add_unit[${index}].category`, document.category);
-            //     formdata.append(`add_unit[${index}].block`, document.block);
-            //     formdata.append(`add_unit[${index}].size`, document.size);
-            //     formdata.append(`add_unit[${index}].direction`, document.direction);
-            //     formdata.append(`add_unit[${index}].facing`, document.facing);
-            //     formdata.append(`add_unit[${index}].road`, document.road);
-            //     formdata.append(`add_unit[${index}].ownership`, document.ownership);
-            //     formdata.append(`add_unit[${index}].stage`, document.stage);
-            //     formdata.append(`add_unit[${index}].floor`, document.floor);
-            //     formdata.append(`add_unit[${index}].cluter_details`, document.cluter_details);
-            //     formdata.append(`add_unit[${index}].length`, document.length);
-            //     formdata.append(`add_unit[${index}].bredth`, document.bredth);
-            //     formdata.append(`add_unit[${index}].total_area`, document.total_area);
-            //     formdata.append(`add_unit[${index}].measurment2`, document.measurment2);
-            //     formdata.append(`add_unit[${index}].ocupation_date`, document.ocupation_date);
-            //     formdata.append(`add_unit[${index}].age_of_construction`, document.age_of_construction);
-            //     formdata.append(`add_unit[${index}].furnishing_details`, document.furnishing_details);
-            //     formdata.append(`add_unit[${index}].furnished_item`, document.furnished_item);
-            //     formdata.append(`add_unit[${index}].location`, document.location);
-            //     formdata.append(`add_unit[${index}].lattitude`, document.lattitude);
-            //     formdata.append(`add_unit[${index}].langitude`, document.langitude);
-            //     formdata.append(`add_unit[${index}].uaddress`, document.uaddress);
-            //     formdata.append(`add_unit[${index}].ustreet`, document.ustreet);
-            //     formdata.append(`add_unit[${index}].ulocality`, document.ulocality);
-            //     formdata.append(`add_unit[${index}].ucity`, document.ucity);
-            //     formdata.append(`add_unit[${index}].uzip`, document.uzip);
-            //     formdata.append(`add_unit[${index}].ustate`, document.ustate);
-            //     formdata.append(`add_unit[${index}].ucountry`, document.ucountry);
-            //     formdata.append(`add_unit[${index}].owner_details`, document.owner_details);
-            //     formdata.append(`add_unit[${index}].associated_contact`, document.associated_contact);
-            //     formdata.append(`add_unit[${index}].relation`, document.relation);
-            //     formdata.append(`add_unit[${index}].s_no`, document.s_no);
-            //     formdata.append(`add_unit[${index}].descriptions`, document.descriptions);
-            //     formdata.append(`add_unit[${index}].category`, document.category);
-            //     formdata.append(`add_unit[${index}].s_no1`, document.s_no1);
-            //     formdata.append(`add_unit[${index}].url`, document.url);
-            //     formdata.append(`add_unit[${index}].document_name`, document.document_name);
-            //     formdata.append(`add_unit[${index}].document_no`, document.document_no);
-            //     formdata.append(`add_unit[${index}].document_Date`, document.document_Date);
-            //     formdata.append(`add_unit[${index}].linkded_contact`, document.linkded_contact);
-
-            //     // if (units.preview && units.preview[index] && units.preview[index].files) {
-            //     //   units.preview[index].files.forEach((file, picIndex) => {
-            //     //     formdata.append(`add_unit[${index}].preview[${picIndex}]`, file);
-            //     //   });
-            //     // }
-            //     if (document.preview && Array.isArray(document.preview)) {
-            //       document.preview.forEach((previewItem, picIndex) => {
-            //         if (Array.isArray(previewItem.files)) {
-            //           previewItem.files.forEach((file, fileIndex) => {
-            //             console.log(`Appending file for unit ${index}, preview[${picIndex}].files[${fileIndex}]`);
-            //             formdata.append(`add_unit[${index}].preview[${picIndex}].files[${fileIndex}]`, file);
-            //           });
-            //         }
-            //       });
-            //     }
-
-            //     if (document.image && Array.isArray(document.image)) {
-            //       document.image.forEach((previewItem, picIndex) => {
-            //         if (Array.isArray(previewItem.files)) {
-            //           previewItem.files.forEach((file, fileIndex) => {
-            //             console.log(`Appending file for unit ${index}, preview[${picIndex}].files[${fileIndex}]`);
-            //             formdata.append(`add_unit[${index}].image[${picIndex}].files[${fileIndex}]`, file);
-            //           });
-            //         }
-            //       });
-            //     }
-                
-                
-
-
-                
-            //     // if (units.documentpic && units.documentpic[index] && units.documentpic[index].files) {
-            //     //   units.documentpic[index].files.forEach((file, picIndex) => {
-            //     //     formdata.append(`add_unit[${index}].documentpic[${picIndex}]`, file);
-            //     //   });
-            //     // }
-                
-                
-            //   });
-            // }
-          
-          
-            
-            
-           
-            
-            // // Handle the 'add_block' field separately (assuming it's an array of blocks)
-            // if (project.add_block && project.add_block.length > 0) {
-            //   project.add_block.forEach((document, index) => {
-            //     formdata.append(`add_block[${index}].block_name`, document.block_name);
-            //     formdata.append(`add_block[${index}].category`, document.category);
-            //     formdata.append(`add_block[${index}].sub_category`, document.sub_category);
-            //     formdata.append(`add_block[${index}].land_area`, document.land_area);
-            //     formdata.append(`add_block[${index}].measurment`, document.measurment);
-            //     formdata.append(`add_block[${index}].total_blocks`, document.total_blocks);
-            //     formdata.append(`add_block[${index}].total_floors`, document.total_floors);
-            //     formdata.append(`add_block[${index}].total_units`, document.total_units);
-            //     formdata.append(`add_block[${index}].status`, document.status);
-            //     formdata.append(`add_block[${index}].launched_on`, document.launched_on);
-            //     formdata.append(`add_block[${index}].expected_competion`, document.expected_competion);
-            //     formdata.append(`add_block[${index}].possession`, document.possession);
-            //     formdata.append(`add_block[${index}].parking_type`, document.parking_type);
-            //     formdata.append(`add_block[${index}].rera_no`, document.rera_no);
-            
-            //   });
-            // }
-
-            // if (project.add_size && project.add_size.length > 0) {
-            //   project.add_size.forEach((document, index) => {
-            //     formdata.append(`add_size[${index}].size_name`, document.size_name);
-            //     formdata.append(`add_size[${index}].block1`, document.block1);
-            //     formdata.append(`add_size[${index}].category`, document.category);
-            //     formdata.append(`add_size[${index}].sub_category`, document.sub_category);
-            //     formdata.append(`add_size[${index}].unit_type`, document.unit_type);
-            //     formdata.append(`add_size[${index}].total_sealable_area`, document.total_sealable_area);
-            //     formdata.append(`add_size[${index}].sq_feet1`, document.sq_feet1);
-            //     formdata.append(`add_size[${index}].covered_area`, document.covered_area);
-            //     formdata.append(`add_size[${index}].sq_feet2`, document.sq_feet2);
-            //     formdata.append(`add_size[${index}].carpet_area`, document.carpet_area);
-            //     formdata.append(`add_size[${index}].sq_feet3`, document.sq_feet3);
-            //     formdata.append(`add_size[${index}].loading`, document.loading);
-            //     formdata.append(`add_size[${index}].percentage`, document.percentage);
-            //     formdata.append(`add_size[${index}].length`, document.length);
-            //     formdata.append(`add_size[${index}].yard1`, document.yard1);
-            //     formdata.append(`add_size[${index}].bredth`, document.bredth);
-            //     formdata.append(`add_size[${index}].yard2`, document.yard2);
-            //     formdata.append(`add_size[${index}].total_area`, document.total_area);
-            //     formdata.append(`add_size[${index}].yard3`, document.yard3);
-            
-            //   });
-            // }
-            
- 
-         
             const resp = await api.post('project', project,config);
-        
             // Handle the response
             if (resp.status === 200) {
-              toast.success("Project Saved", { autoClose: 2000 });
-              setTimeout(() => {
-                navigate('/project');
-              }, 2000);
-            }
+              Swal.fire({
+              title: '🎉 Success!',
+              text: `Project "${project.name}" was added successfully!`,
+              icon: 'success',
+              showConfirmButton: true,
+            }).then((result) => {
+            if (result.isConfirmed) {
+              navigate('/dealdetails');
+              }
+            })
+          }
+
         
           } catch (error) {
             // Handle error
-            toast.error(error, { autoClose: 2000 });
+          Swal.fire({
+            title: '❌ Error',
+            text: error.response?.data?.message || 'Something went wrong!',
+            icon: 'error',
+            showConfirmButton: true,
+          });
             console.log(error);
         
           }
@@ -287,99 +121,7 @@ function Projectform() {
         
 
 
-    // const addproject=async(e)=>
-    // {
-      
-    //     e.preventDefault();
-    //     try {
-
-    //       const formData = new FormData();
-    
-         
-    
-    // // Loop through the project state to append each property to FormData
-    // for (let key in project) {
-    //   if (project.hasOwnProperty(key)) {
-    //     // Check if the property is an array and handle accordingly
-    //     if (Array.isArray(project[key])) {
-    //       if (key === 'pic') {
-    //         // Handle 'pic' directly as an array of files
-    //         project[key].forEach((file) => {
-    //           formData.append(key, file);  // Append each file in the 'pic' array
-    //         });
-    //       } else if (key === 'add_unit') {
-    //         // Handle add_unit array separately
-    //         project[key].forEach((unit, unitIndex) => {
-    //           for (let unitKey in unit) {
-    //             if (unit.hasOwnProperty(unitKey)) {
-    //               if (unitKey === 'preview' && Array.isArray(unit[unitKey])) {
-    //                 // If the unit has a preview field and it's an array of files
-    //                 unit[unitKey].forEach((file) => {
-    //                   // Append each preview file individually
-    //                   formData.append(`add_unit[${unitIndex}].${unitKey}`, file);
-    //                 });
-    //               } else {
-    //                 // For other fields inside add_unit (e.g., unit_name, size, etc.)
-    //                 formData.append(`add_unit[${unitIndex}].${unitKey}`, unit[unitKey]);
-    //               }
-    //             }
-    //           }
-    //         });
-    //       } else if (key === 'add_block') {
-    //         // Handle add_block array separately
-    //         project[key].forEach((block, blockIndex) => {
-    //           for (let blockKey in block) {
-    //             if (block.hasOwnProperty(blockKey)) {
-    //               formData.append(`add_block[${blockIndex}].${blockKey}`, block[blockKey]);
-    //             }
-    //           }
-    //         });
-    //       } else if (key === 'add_size') {
-    //         // Handle add_size array separately
-    //         project[key].forEach((size, sizeIndex) => {
-    //           for (let sizeKey in size) {
-    //             if (size.hasOwnProperty(sizeKey)) {
-    //               formData.append(`add_size[${sizeIndex}].${sizeKey}`, size[sizeKey]);
-    //             }
-    //           }
-    //         });
-    //       } else if (key === 'price_list' || key === 'Payment_plan') {
-    //         // Handle other arrays of objects like price_list or Payment_plan
-    //         project[key].forEach((item, index) => {
-    //           for (let subKey in item) {
-    //             if (item.hasOwnProperty(subKey)) {
-    //               formData.append(`${key}[${index}].${subKey}`, item[subKey]);
-    //             }
-    //           }
-    //         });
-    //       } else {
-    //         // Handle non-file arrays (e.g., category, sub_category, etc.), stringify them
-    //         formData.append(key, JSON.stringify(project[key]));
-    //       }
-    //     } else {
-    //       // For regular properties (strings or other non-array types), append directly
-    //       formData.append(key, project[key]);
-    //     }
-    //   }
-    // }
-
-
-    //         const resp= await api.post('project',formData,config)
-    //     if(resp.status===201)
-    //         {
-    //             toast.success("Project Saved",{ autoClose: 2000 })
-    //             setTimeout(() => {
-    //               navigate('/project')
-    //             }, 2000);
-    //         }
-            
-      
-    //     } catch (error) {
-    //         toast.error(error.response.data.message,{ autoClose: 2000 })
-    //         console.log(error.response.data.message);
-            
-    //     }
-    // }
+  
 
     const time=new Date()
     

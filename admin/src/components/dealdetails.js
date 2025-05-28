@@ -114,13 +114,25 @@ function Dealdetails() {
             const resp = selectedItems2.map(async (itemId) => {
               await api.delete(`deleteproject/${itemId}`);
             });
-            
-            toast.success('Selected items deleted successfully',{autoClose:"2000"})
-            setTimeout(() => {
+            Swal.fire({
+            title: '🎉 Success!',
+            text: `Selected items deleted successfully!`,
+            icon: 'success',
+            showConfirmButton: true,
+          }).then((result) => {
+            if (result.isConfirmed) {
               window.location.reload();
-            }, 2000);
+            }
+          });
+
           } catch (error) {
-            console.log(error);
+            Swal.fire({
+            title: 'Error ❌',
+            text: error.response?.data?.message || 'Something went wrong!',
+            icon: 'error',
+            timer: 2000,
+            showConfirmButton: true,
+          });
           }
         };
 

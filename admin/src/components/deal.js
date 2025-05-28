@@ -21,7 +21,7 @@ import { SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import Swal from 'sweetalert2';
 
 function Deal() {
   const navigate=useNavigate()
@@ -599,14 +599,46 @@ const handleallunitschange = (event) => {
                     const resp= await api.post('adddeal',deal)
                             if(resp.status===200)
                                 {
-                                  toast.success(resp.data.message,{ autoClose: 2000 })
-                                  setTimeout(() => {
-                                    navigate('/dealdetails')
-                                  }, 2000);
-                                  
+                                          Swal.fire({
+                                                title: '🎉 Success!',
+                                                text:"Deal created successfully...",
+                                                html: `
+                                        <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
+                                        alt="Thumbs up" 
+                                              width="80" 
+                                              style="margin-bottom: 0px;"/>`,
+                                        width: '300px', // makes it small
+                                        padding: '1.2em',
+                                                showConfirmButton: true,
+                                              }).then((result) => {
+                                              if (result.isConfirmed) {
+                                                navigate('/dealdetails');
+                                                }
+                                              })
                                  }
                         } catch (error) {
-                                // toast.error(error.response.data.message,{ autoClose: 2000 })
+                              Swal.fire({
+                              title: 'Oops creating deal failed!',
+                              html: `
+                                <img src="https://i.pinimg.com/originals/53/3f/f7/533ff77ef582abbfa00ccf9080137304.gif"
+                                    alt="Sad face" 
+                                    width="80" 
+                                    style="margin-bottom: 0px;" />
+                                <p style="font-size: 14px; margin: 0;">
+                                  ${error.response?.data?.message || 'Something went wrong. Please try again.'}
+                                </p>
+                              `,
+                              width: '300px', // makes it small
+                              padding: '1.2em',
+                              showConfirmButton: true,
+                              confirmButtonText: 'Okay',
+                              confirmButtonColor: '#d33',
+                              background: '#fff',
+                              customClass: {
+                                popup: 'small-swal',
+                              }
+                            });
+
                                 console.log(error);
                                 
                         }
