@@ -764,8 +764,9 @@ function Dealdetails() {
                           score += 2;
                         }
                         
-                        if (unittype === lead.unit_type2) matchScore += 10;
-                        if (lead.unit_type2 && lead.unit_type2 !="") score += 1;
+                        // if (unittype === lead.unit_type2) matchScore += 10;
+                         if (lead.unit_type2.includes(unittype)) matchScore += 10;
+                        if (lead.unit_type2 && lead.unit_type2.length !=0) score += 1;
 
                         if (lead.facing.includes(facing)) matchScore += 5;
                         if (
@@ -785,8 +786,9 @@ function Dealdetails() {
                           score += 1;
                         }
                         
-                        if (lead.direction && lead.direction === direction) matchScore += 10;
-                        if (lead.direction && lead.direction !="") score += 1;
+                        if (lead.direction.includes(direction)) matchScore += 10;
+                        // if (lead.direction && lead.direction === direction) matchScore += 10;
+                        if (lead.direction && lead.direction.length !=0) score += 1;
 
                         if (lead.timeline) {
                           switch (lead.timeline) {
