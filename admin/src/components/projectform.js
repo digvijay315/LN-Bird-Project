@@ -6046,7 +6046,7 @@ const generateExcelFileunit = () => {
                     <ToastContainer/>
                 </div>
                 <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
-                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
                     <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Project</button></div>
                     <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addproject}>Save</button></div>
                     </div>

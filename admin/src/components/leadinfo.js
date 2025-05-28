@@ -2993,7 +2993,7 @@ return (
                     <div className="row mt-4">
                     <div className="col-md-4"><button className="form-control" >Shedule Follow-up</button></div>
                     <div className="col-md-2"><button className="form-control" onClick={leadinfodetails}>Save</button></div>
-                    <div className="col-md-2"><button className="form-control">Cancel</button></div>
+                    <div className="col-md-2"><button className="form-control" onClick={()=>navigate(-1)}>Cancel</button></div>
                     <div className="col-md-4"><button className="form-control">Save & View Lead</button></div>
                     </div>
                     </div>

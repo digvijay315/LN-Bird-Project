@@ -13,10 +13,13 @@ import { useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import { useNavigate } from 'react-router-dom';
 
 
 
 function Task_form() {
+  
+   const navigate = useNavigate();
 
 //============================================ fetch data for call fields start==================================================
 
@@ -1862,7 +1865,7 @@ const handleTimeChange = (e) => {
                     
                     <div className="row">
                     <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={calltaskdetails}>Submit</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
                     </div>
                     </div>
                     </div>
@@ -2079,7 +2082,7 @@ const handleTimeChange = (e) => {
                     </div>
                   
                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={mailtaskdetails}>Submit</button></div>
-                   <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                   <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
                     </div>
 
 {/* ==========================================================mail task end================================================================= */}
@@ -2511,7 +2514,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
 
                     <div className="col-md-2"></div>
                     <div className="col-md-2" style={{marginLeft:"50%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={sitevisitdetails}>Submit</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
                    
                     
                     {/* <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
@@ -2793,7 +2796,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         </div>
                         
                     <div className="col-md-2"  style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={meetingtaskdetails}>Submit</button></div>
-                    <div className="col-md-2"  style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-2"  style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
                    
                         </div> 
                        

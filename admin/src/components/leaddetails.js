@@ -4418,33 +4418,48 @@ const replaceVariables = (template, lead, property) => {
                                                 if(res.status===200 && res.data.data.status==="success")
                                                 {
                                                   Swal.fire({
-                                                    icon: 'success',
-                                                    title: 'Whats App Sent!',
-                                                    text: 'Your message has been sent successfully...',
+                                                      html: `
+                                                        <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
+                                                        alt="Thumbs up" 
+                                                              width="80" 
+                                                              style="margin-bottom: 0px;"/>
+                                                                <p style="font-size: 14px; margin: 0;">
+                                                            Your message sent successfully...
+                                                          </p>`,
                                                     confirmButtonColor: '#d33',
                                                     confirmButtonText: 'OK',
                                                   });
-                                                  // setTimeout(() => {
-                                                  //  window.location.reload()
-                                                  // }, 2000);
+                                             
                                             
                                                 }
 
                                               if(res.status===200 && res.data.data.status==="error")
                                                 {
                                                   Swal.fire({
-                                                    icon: 'error',
-                                                    title: 'Whats App Sent!',
-                                                    text: 'Your message not sent plz login form dashboard and check instance id...',
-                                                    confirmButtonColor: '#d33',
-                                                    confirmButtonText: 'OK',
+                                                      
+                                                        html: `
+                                                          <img src="https://i.pinimg.com/originals/53/3f/f7/533ff77ef582abbfa00ccf9080137304.gif"
+                                                              alt="Sad face" 
+                                                              width="80" 
+                                                              style="margin-bottom: 0px;" />
+                                                          <p style="font-size: 14px; margin: 0;">
+                                                            Your message not sent plz login form dashboard and check instance id...
+                                                          </p>
+                                                        `,
+                                                        padding: '1.2em',
+                                                        showConfirmButton: true,
+                                                        confirmButtonText: 'Okay',
+                                                        confirmButtonColor: '#d33',
+                                                        background: '#fff',
+                                                        customClass: {
+                                                          popup: 'small-swal',
+                                                        }
+                                                
                                                   });
-                                                  // setTimeout(() => {
-                                                  //  window.location.reload()
-                                                  // }, 2000);
+                                           
                                             
                                                 }
-                                                console.log(res);
+                                            
                                                 
                                             }
                                             } catch (err) {

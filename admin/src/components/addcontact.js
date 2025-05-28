@@ -1103,7 +1103,7 @@ const handleOwnerChange = (event) => {
                                 </select>
                     </div>
                     <div className='col-md-5'></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
                     <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
                     <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
                     
@@ -1347,7 +1347,15 @@ const handleOwnerChange = (event) => {
                     </div>
                     <div className="col-md-12"><hr></hr></div>
                    
-                   <div className="col-md-2" id="projectbtn" onClick={next1}  style={{marginLeft:"82%"}}><button className="form-control form-control-sm">Next</button></div>
+                   <div className="col-md-2" id="projectbtn" onClick={next1}  style={{marginLeft:"82%"}}>
+                   <button
+                    className="btn btn-primary btn-sm form-control"
+                    onClick={next1}
+                    style={{ fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}
+                  >
+                    Next
+                  </button>
+                    </div>
  
                     </div>
               </div>    
@@ -1714,11 +1722,42 @@ const handleOwnerChange = (event) => {
                     </div>
                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
                  <div className='col-md-12'><hr></hr></div> 
-                     <div className="col-md-2" style={{marginTop:"20px"}}   onClick={prev2}><button className="form-control form-control-sm" >Prev</button></div>
-                    <div className="col-md-3"></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
+                     <div className="col-md-2" style={{marginTop:"20px"}}   onClick={prev2}>
+                     <button
+                    className="btn btn-outline-primary btn-sm form-control"
+                    style={{ fontWeight: '600', borderRadius: '8px', cursor: 'pointer', userSelect: 'none' }}
+                  >
+                    Prev
+                  </button>
+                      </div>
+                    <div className="col-md-6"></div>
+                    <div className="col-md-2" style={{marginTop:"20px"}}>
+                      <button
+    className="btn btn-outline-danger btn-sm form-control"
+    onClick={() => navigate(-1)}
+    style={{ fontWeight: '600', borderRadius: '8px', transition: 'all 0.3s ease' }}
+    onMouseEnter={e => {
+      e.currentTarget.style.backgroundColor = '#dc3545';
+      e.currentTarget.style.color = 'white';
+      e.currentTarget.style.borderColor = '#dc3545';
+    }}
+    onMouseLeave={e => {
+      e.currentTarget.style.backgroundColor = 'transparent';
+      e.currentTarget.style.color = '#dc3545';
+      e.currentTarget.style.borderColor = '#dc3545';
+    }}
+  >
+    Cancel
+  </button>
+                      </div>
+                    {/* <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div> */}
+                    <div className="col-md-2" style={{marginTop:"20px"}}>
+                      <button   className="btn btn-primary btn-sm form-control" onClick={addcontact} 
+                        style={{ fontWeight: '600', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', transition: 'all 0.3s ease' }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0d6efd'}>Save
+                        </button>
+                  </div>
                    
                 </div>
                
