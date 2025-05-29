@@ -323,10 +323,10 @@ const deleteSelectedItems = async () => {
                       return; // Stop execution if user cancels
                     }
                     setIsLoading4(true)
-                  await Promise.all(
+                       await Promise.all(
                               selectedItems.map((itemId) => api.delete(`removelead/${itemId}`))
                             );
-                             Swal.fire({
+                                  Swal.fire({
                                         title: '🎉 Selected items deleted successfully...!',
                                         html: `
                                         <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
@@ -4735,47 +4735,81 @@ const replaceVariables = (template, lead, property) => {
   };
   
     const[isloading3,setisloading3]=useState(false)
-    const addcontact=async(e)=>
-      {
-        setisloading3(true)
-        
-          try {
-  
-             // Show confirmation message
-             const result = await Swal.fire({
-              title: "Are you sure?",
-              text: "Are you sure want to import data?",
-              icon: "question",
-              showCancelButton: true,
-              confirmButtonColor: "#3085d6",
-              cancelButtonColor: "#d33",
-              confirmButtonText: "Yes, import it!",
-            });
-        
-            if (!result.isConfirmed) {
-              return; // Stop execution if user cancels
-            }
-              const resp= await api.post('bulkleadinfo',pendingContacts,config)
-              const resp1= await api.post('addbulkcontact',pendingContacts,config)
-              
-          if(resp.status===200)
-              {
-                Swal.fire({
-                  icon: 'success',
-                  title: 'Import',
-                  text: 'Leads Imported successfully!',
-                });
-             
-              }
-              
-        
-          } catch (error) {
-              toast.error(error.response.data.message,{ autoClose: 3000 })
-          }
-          finally{
-            setisloading3(false)
-          }
+    const addcontact = async (e) => {
+  setisloading3(true);
+
+  try {
+    // Show confirmation message with total count
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      html: `You are about to import <b>${pendingContacts.length}</b> leads.`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, import it!",
+    });
+
+    if (!result.isConfirmed) {
+      setisloading3(false);
+      return;
+    }
+
+    const total = pendingContacts.length;
+    let successCount = 0;
+    let failCount = 0;
+    const batchSize = 200;
+    
+
+    for (let i = 0; i < total; i += batchSize) {
+      const batch = pendingContacts.slice(i, i + batchSize);
+
+      try {
+        const [resp1, resp2] = await Promise.all([
+          api.post('bulkleadinfo', batch, config),
+          api.post('addbulkcontact', batch, config)
+        ]);
+
+        if (resp1.status === 200 && resp2.status === 200) {
+          successCount += batch.length;
+          toast.success(`Imported ${successCount}/${total} leads`, { autoClose: 2000 });
+        } else {
+          failCount += batch.length;
+          toast.error(`Batch ${i + 1}-${i + batch.length} failed`, { autoClose: 2000 });
+        }
+
+      } catch (batchError) {
+        failCount += batch.length;
+        toast.error(`Error importing batch ${i + 1}-${i + batch.length}`, { autoClose: 3000 });
       }
+    }
+
+    // Final result
+    if (successCount === total) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Import Complete',
+        html: `All <b>${successCount}</b> leads imported successfully.`,
+      });
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Partial Import Complete',
+        html: `<b>${successCount}</b> contacts imported successfully.<br><b>${failCount}</b> failed.`,
+      });
+    }
+
+  } catch (error) {
+     Swal.fire({
+          icon: 'error',
+          title: 'Import Failed',
+          text: error?.response?.data?.message || "Something went wrong.",
+        });
+  } finally {
+    setisloading3(false);
+  }
+};
+
   
       const updatecontactforbulkupload = async (e) => {
         try {
@@ -4793,24 +4827,49 @@ const replaceVariables = (template, lead, property) => {
           if (!result.isConfirmed) {
             return; // Stop execution if user cancels
           }
+
+           const total = duplicateEntries.length;
+            let successCount = 0;
+            let failCount = 0;
+            const batchSize = 50;
+
+            for (let i = 0; i < total; i += batchSize) {
+      const batch = duplicateEntries.slice(i, i + batchSize);
+
+      try {
+        const [resp1, resp2] = await Promise.all([
+          api.put('updateleadforbulkupload', batch, config),
+          api.put('updatecontactforbulkupload', batch, config)
+        ]);
+
+        if (resp1.status === 200 && resp2.status === 200) {
+          successCount += batch.length;
+          toast.success(`Updated ${successCount}/${total} leads`, { autoClose: 2000 });
+        } else {
+          failCount += batch.length;
+          toast.error(`Batch ${i + 1}-${i + batch.length} failed`, { autoClose: 2000 });
+        }
+
+      } catch (batchError) {
+        failCount += batch.length;
+        toast.error(`Error updating batch ${i + 1}-${i + batch.length}`, { autoClose: 3000 });
+      }
+    }
       
-          // Loop through each duplicate contact and send a request one by one
-          const updatePromises = duplicateEntries.map((contact1) =>
-          {
-                api.put("updateleadforbulkupload", contact1, config)
-                api.put("updatecontactforbulkupload", contact1, config)
-          }
-          );
-      
-          // Wait for all update requests to complete
-          await Promise.all(updatePromises);
-      
-          // Show success message
-          Swal.fire({
-            icon: "success",
-            title: "Update",
-            text: "Leads updated successfully!",
-          });
+         // Final result
+    if (successCount === total) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Update Complete',
+        html: `All <b>${successCount}</b> leads updated successfully.`,
+      });
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Partial Update Complete',
+        html: `<b>${successCount}</b> leads updated successfully.<br><b>${failCount}</b> failed.`,
+      });
+    }
       
         } catch (error) {
           toast.error(error.response?.data?.message || "An error occurred", { autoClose: 3000 });
@@ -8613,11 +8672,12 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
               <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>New Leads</h4>
               <pre className="text-sm text-gray-600 overflow-x-auto" >
               {JSON.stringify(
-              pendingContacts.map(({ title, first_name, last_name, mobile_no }) => ({
+              pendingContacts.map(({ title, first_name, last_name, mobile_no,email }) => ({
                 title,
                 first_name,
                 last_name,
                 mobile_no,
+                email
               })),
               null,
               2
@@ -8632,11 +8692,12 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
               <h4 className="font-semibold text-gray-800" style={{fontFamily:"arial"}}>Duplicate Leads</h4>
               <pre className="text-sm text-gray-600 overflow-x-auto">
               {JSON.stringify(
-              duplicateEntries.map(({ title, first_name, last_name, mobile_no }) => ({
+              duplicateEntries.map(({ title, first_name, last_name, mobile_no,email }) => ({
                 title,
                 first_name,
                 last_name,
                 mobile_no,
+                email
               })),
               null,
               2

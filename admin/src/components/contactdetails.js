@@ -138,6 +138,8 @@ function Fetchcontact() {
     //       }
     //     }
 
+        const [isLoading4, setIsLoading4] = useState(false);
+
         const deleteSelectedItems = async () => {
           try {
             if(selectedItems.length===0)
@@ -161,20 +163,32 @@ function Fetchcontact() {
               return; // Stop execution if user cancels
             }
 
-            const resp = selectedItems.map(async (itemId) => {
-              await api.delete(`deletecontact/${itemId}`);
-            });
+             setIsLoading4(true)
+             await Promise.all(
+                selectedItems.map((itemId) => api.delete(`deletecontact/${itemId}`))
+              );
+                    Swal.fire({
+                          title: '🎉 Selected items deleted successfully...!',
+                          html: `
+                          <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
+                          alt="Thumbs up" 
+                          width="80" 
+                          style="margin-bottom: 0px;"/>`,
+                          width: '400px', // makes it small
+                          padding: '1.2em',
+                          showConfirmButton: true,
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                          }
+                        })
             
-              Swal.fire({
-                          icon: 'success',
-                          title: 'Contact Deleted',
-                          text: 'Selected items deleted successfully!',
-                        });
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
+            
           } catch (error) {
             console.log(error);
+          }finally
+          {
+              setIsLoading4(false)
           }
         };
      
@@ -3084,42 +3098,82 @@ const checkForDuplicates = async (contacts) => {
 
 
 
-  const addcontact=async(e)=>
-    {
-      
-        try {
+  
+const[isloading3,setisloading3]=useState(false)
+ const addcontact = async (e) => {
+  setisloading3(true);
 
-           // Show confirmation message
-           const result = await Swal.fire({
-            title: "Are you sure?",
-            text: "Are you sure want to import data?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Yes, import it!",
-          });
-      
-          if (!result.isConfirmed) {
-            return; // Stop execution if user cancels
-          }
-            const resp= await api.post('addbulkcontact',pendingContacts,config)
-            
-        if(resp.status===200)
-            {
-              Swal.fire({
-                icon: 'success',
-                title: 'Import',
-                text: 'Contacts Imported successfully!',
-              });
-           
-            }
-            
-      
-        } catch (error) {
-            toast.error(error.response.data.message,{ autoClose: 3000 })
-        }
+  try {
+    // Confirmation prompt
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      html: `You are about to import <b>${pendingContacts.length}</b> leads.`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, import it!",
+    });
+
+    if (!result.isConfirmed) {
+      setisloading3(false);
+      return;
     }
+
+    const total = pendingContacts.length;
+    let successCount = 0;
+    let failCount = 0;
+    const batchSize = 200;
+
+
+    for (let i = 0; i < total; i += batchSize) {
+      const batch = pendingContacts.slice(i, i + batchSize);
+
+      try {
+        const resp1 = await api.post('addbulkcontact', batch, config);
+
+        if (resp1.status === 200) {
+          successCount += batch.length;
+          toast.success(`Imported ${successCount}/${total} contacts`, { autoClose: 2000 });
+        } else {
+          failCount += batch.length;
+           toast.error(`Batch ${i + 1}-${i + batch.length} failed`, { autoClose: 2000 });
+        }
+      } catch (batchError) {
+        failCount += batch.length;
+        toast.error(`Error importing batch ${i + 1}-${i + batch.length}`, { autoClose: 3000 });
+      }
+
+    }
+
+
+    // Final result popup
+    if (successCount === total) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Import Complete',
+        html: `All <b>${successCount}</b> Contacts imported successfully.`,
+      });
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title:  'Partial Import Complete',
+        html: `<b>${successCount}</b> imported successfully.<br><b>${failCount}</b> failed.`,
+      });
+    }
+
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Import Failed',
+      text: error?.response?.data?.message || "Something went wrong.",
+    });
+  } finally {
+    setisloading3(false);
+  }
+};
+
+
 
     const updatecontactforbulkupload = async (e) => {
       try {
@@ -3137,24 +3191,52 @@ const checkForDuplicates = async (contacts) => {
         if (!result.isConfirmed) {
           return; // Stop execution if user cancels
         }
+
+         const total = duplicateEntries.length;
+          let successCount = 0;
+          let failCount = 0;
+          const batchSize = 50;
+
+           for (let i = 0; i < total; i += batchSize) {
+      const batch = pendingContacts.slice(i, i + batchSize);
+
+      try {
+        const resp1 = await api.put('updatecontactforbulkupload', batch, config);
+
+        if (resp1.status === 200) {
+          successCount += batch.length;
+          toast.success(`Updated ${successCount}/${total} contacts`, { autoClose: 2000 });
+        } else {
+          failCount += batch.length;
+           toast.error(`Batch ${i + 1}-${i + batch.length} failed`, { autoClose: 2000 });
+        }
+      } catch (batchError) {
+        failCount += batch.length;
+        toast.error(`Error updating batch ${i + 1}-${i + batch.length}`, { autoClose: 3000 });
+      }
+
+    }
     
-        // Loop through each duplicate contact and send a request one by one
-        const updatePromises = duplicateEntries.map((contact1) =>
-          api.put("updatecontactforbulkupload", contact1, config)
-        );
-    
-        // Wait for all update requests to complete
-        await Promise.all(updatePromises);
-    
-        // Show success message
-        Swal.fire({
-          icon: "success",
-          title: "Update",
-          text: "Contacts updated successfully!",
-        });
-    
+       if (successCount === total) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Update Complete',
+            html: `All <b>${successCount}</b> Contacts updated successfully.`,
+          });
+        } else {
+          Swal.fire({
+            icon: 'warning',
+            title:  'Partial Update Complete',
+            html: `<b>${successCount}</b> update successfully.<br><b>${failCount}</b> failed.`,
+          });
+        }
+        
       } catch (error) {
-        toast.error(error.response?.data?.message || "An error occurred", { autoClose: 3000 });
+       Swal.fire({
+      icon: 'error',
+      title: 'Import Failed',
+      text: error?.response?.data?.message || "Something went wrong.",
+        });
       }
     };
     
@@ -3708,6 +3790,8 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
       </select>
     
     {renderPageNumbers()}
@@ -6284,6 +6368,41 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
       </div>
     )}
   </>
+   <>
+    {isloading3 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(9, 101, 52, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>importing leads...</p>
+        </div>
+      </div>
+    )}
+  </>
                     
                                 </Modal.Body>
                                 <Modal.Footer>
@@ -6305,6 +6424,43 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
 {/*=================================== loader end======================================================================= */}
 
           <ToastContainer/>
+
+           <>
+    {isLoading4 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(187, 16, 19, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>deleting contacts...</p>
+        </div>
+      </div>
+    )}
+  </>
+
         </div>
      );
 }

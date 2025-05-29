@@ -33,8 +33,9 @@ app.get('/',(req,res)=>
 app.use('/',require('./routes/admin'));
 
 
-app.listen(process.env.PORT,()=>
+const server=app.listen(process.env.PORT,()=>
 {
     console.log(`server is running on port:${process.env.PORT}`);
 })
+server.setTimeout(5 * 60 * 1000); // 300000 ms = 5 minutes
 
