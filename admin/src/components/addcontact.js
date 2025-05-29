@@ -792,7 +792,11 @@ function Addcontact() {
                         const handledocumentpicchange = (index, event) => {
                           const newdocumentpic = [...contact.document_pic];
                           const files = Array.from(event.target.files);
-                          newdocumentpic[index] = files
+                         newdocumentpic[index] = files.map(file => ({
+                          file,
+                          preview: URL.createObjectURL(file)
+                        }));
+
                           setcontact({
                             ...contact,
                             document_pic: newdocumentpic
@@ -944,8 +948,8 @@ const handleOwnerChange = (event) => {
                 <div id='sortform' style={{display: isChecked ? "flex" : "none"}}>
                <div className="row" id='basicdetails11' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
-                <div className='col-md-12'><hr></hr></div>
-                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                <div className='col-md-12 mb-3 custom-input'><hr></hr></div>
+                    <div className="col-md-2 mb-3 custom-input"><label className="form-label">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                               
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -957,10 +961,10 @@ const handleOwnerChange = (event) => {
                               <option>Maj.</option>
                         </select>
                         </div>
-                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
-                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                    <div className="col-md-5 mb-3 custom-input"><label className="form-label">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5 mb-3 custom-input"><label className="form-label">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
                
-                    <div className="col-md-4" > <label className="labels">Country</label>
+                    <div className="col-md-4 mb-3 custom-input" > <label className="form-label">Country</label>
                     {
                       contact.country_code.map((item,index)=>
                       (
@@ -976,7 +980,7 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Mobile Number</label>
                     {
                        contact.mobile_no.map((item,index)=>
                         (
@@ -988,7 +992,7 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-3 custom-input"><label className="form-label">Type</label>
                     {
                        contact.mobile_type.map((item,index)=>
                         (
@@ -1014,9 +1018,9 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                  <div className="col-md-1"><label className="form-label" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
                     
-                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                  <div className="col-md-8 mb-3 custom-input"><label className="form-label">Email-Address</label>
                     {
                         contact.email.map((item,index)=>
                         (
@@ -1028,7 +1032,7 @@ const handleOwnerChange = (event) => {
                     }
                     </div>
                     
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-3 custom-input"><label className="form-label">Type</label>
                     {
                        contact.email_type.map((item,index)=>
                         (
@@ -1053,10 +1057,10 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
-                  <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                  <div className="col-md-1"><label className="form-label" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-12 mb-3 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
                                     <option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
                                     <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
                                     <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
@@ -1064,7 +1068,7 @@ const handleOwnerChange = (event) => {
                                     <option>Old Client</option><option>Google</option><option>Whatsapp</option>
                              </select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                        <div className="col-md-6 mb-3 custom-input"><label className="form-label">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
                               <option>Select</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -1072,7 +1076,7 @@ const handleOwnerChange = (event) => {
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Owner</label>
                     {/* <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
                     <option>Select</option>
                               <option>Suraj</option> 
@@ -1081,7 +1085,7 @@ const handleOwnerChange = (event) => {
                               <option>Maanav Sharma</option>
                               <option>Sukram</option>
                         </select> */}
-    <Select className="form-control form-control-sm" style={{border:"none"}}
+    <Select className="form-control form-control-sm"
                     multiple
                     value={owners}
                     onChange={handleOwnerChange}
@@ -1095,17 +1099,17 @@ const handleOwnerChange = (event) => {
                     ))}
                 </Select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                        <div className="col-md-6 mb-3 custom-input"><label className="form-label">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className='col-md-5'></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
+                    <div className='col-md-5 mb-3 custom-input'></div>
+                    <div className="col-md-2 mb-3 custom-input" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
+                    <div className="col-md-3 mb-3 custom-input" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div>
+                    <div className="col-md-2 mb-3 custom-input" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addcontact}>Save</button></div>
                     
                 </div>
               
@@ -1131,7 +1135,7 @@ const handleOwnerChange = (event) => {
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
                 <div className=" col-md-12 d-flex justify-content-between align-items-center experience"><span>Basic Details</span></div>
                 <div className='col-md-12'><hr></hr></div>
-                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                    <div className="col-md-2 mb-3 custom-input"><label className="form-label">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                              
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -1143,11 +1147,11 @@ const handleOwnerChange = (event) => {
                               <option>Maj.</option>
                         </select>
                         </div>
-                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
-                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                   <div className="col-md-5 mb-3 custom-input mb-3 custom-input mb-3 custom-input"><label className="form-label">Name</label><input type="text" required className="form-control form-control-sm" placeholder="First name" onChange={(e) =>setcontact({ ...contact, first_name: e.target.value })}/></div>
+                    <div className="col-md-5 mb-3 custom-input mb-3 custom-input"><label className="form-label">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
                 </div>
                 <div className="row mt-3" id='basicdetails2'>
-                <div className="col-md-4" > <label className="labels">Country</label>
+                <div className="col-md-4 mb-3 custom-input" > <label className="form-label">Country</label>
                     {
                       contact.country_code.map((item,index)=>
                       (
@@ -1163,7 +1167,7 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Mobile Number</label>
                     {
                        contact.mobile_no.map((item,index)=>
                         (
@@ -1175,7 +1179,7 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-3 custom-input"><label className="form-label">Type</label>
                     {
                        contact.mobile_type.map((item,index)=>
                         (
@@ -1201,9 +1205,9 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                  <div className="col-md-1"><label className="form-label" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
                     
-                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                  <div className="col-md-8 mb-3 custom-input"><label className="form-label">Email-Address</label>
                     {
                         contact.email.map((item,index)=>
                         (
@@ -1215,7 +1219,7 @@ const handleOwnerChange = (event) => {
                     }
                     </div>
                     
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-3 custom-input mb-3 custom-input"><label className="form-label">Type</label>
                     {
                        contact.email_type.map((item,index)=>
                         (
@@ -1240,18 +1244,18 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-1"><label className="form-label" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
                     
-                    <div className="col-md-12"><label className="labels">Tags</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,tags:e.target.value})}/></div>
+                    <div className="col-md-12 mb-3 custom-input"><label className="form-label">Tags</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,tags:e.target.value})}/></div>
                     
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea className='form-control form-control-sm' onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
-                    <div className="col-md-2"></div>
+                    <div className="col-md-10 mb-3 custom-input"><label className="form-label">Descriptions</label><textarea className='form-control form-control-sm' style={{borderRadius:"8px"}} onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
+                    <div className="col-md-2 mb-3 custom-input"></div>
 
                    
            
-                    <div className="col-md-12" style={{marginTop:"10px"}}><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Profession Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-12 mb-3 custom-input" style={{marginTop:"10px"}}><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Profession Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                
-                    <div className="col-md-5"><label className="labels">Profession Category</label>
+                    <div className="col-md-5 mb-3 custom-input"><label className="form-label">Profession Category</label>
                     <select className="form-control form-control-sm" onChange={handleProfessionCategoryChange}>
                                   <option>---Select profession category---</option>    
                                
@@ -1262,7 +1266,7 @@ const handleOwnerChange = (event) => {
                               ))}
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label>
+                    <div className="col-md-7 mb-3 custom-input"><label className="form-label">Profession Sub-Category</label>
                     <select className="form-control form-control-sm" onChange={handleProfessionSubcategoryChange}>
                                 <option>---Select profession sub-category---</option>
                                 {availableSubcategories.map((subcategory) => (
@@ -1272,7 +1276,7 @@ const handleOwnerChange = (event) => {
                               ))}
                         </select>
                     </div>
-                    <div className="col-md-5"><label className="labels">Designation</label>
+                    <div className="col-md-5 mb-3 custom-input"><label className="form-label">Designation</label>
                     <select className="form-control form-control-sm" onChange={handleDesignationChange}>
                     <option>---Select designation---</option>
                     {availableDesignations.map((designation) => (
@@ -1282,7 +1286,7 @@ const handleOwnerChange = (event) => {
                         ))}
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Company/Organisation/Department Name</label>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Company/Organisation/Department Name</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,company_name:e.target.value})}>
                     <option>---Select company---</option>
                       {
@@ -1293,20 +1297,20 @@ const handleOwnerChange = (event) => {
                       }
                         </select>
                     </div>
-                    <div className="col-md-1"><label className="labels">Add</label><button className="form-control form-control-sm" onClick={()=>{navigate('/addcompany')}}>+</button></div>
+                    <div className="col-md-1"><label className="form-label">Add</label><button className="form-control form-control-sm" onClick={()=>{navigate('/addcompany')}}>+</button></div>
              
               {/* <div className="row mt-4">
-                    <div className="col-md-2"   onClick={prev1}><button className="form-control form-control-sm" >Prev</button></div>
-                    <div className="col-md-2" onClick={next2}  style={{marginLeft:"65%"}}><button className="form-control form-control-sm" >Next</button></div>
+                    <div className="col-md-2 mb-3 custom-input"   onClick={prev1}><button className="form-control form-control-sm" >Prev</button></div>
+                    <div className="col-md-2 mb-3 custom-input" onClick={next2}  style={{marginLeft:"65%"}}><button className="form-control form-control-sm" >Next</button></div>
                 </div> */}
             
          
 
 
 
-                    <div className="col-md-12" style={{marginTop:"10px"}}><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-12" style={{marginTop:"10px"}}><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
                                     <option>---Select source---</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
                                     <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
                                     <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
@@ -1314,7 +1318,7 @@ const handleOwnerChange = (event) => {
                                     <option>Old Client</option><option>Google</option><option>Whatsapp</option>
                              </select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                        <div className="col-md-6 mb-3 custom-input"><label className="form-label">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
                               <option>---Select team---</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -1322,8 +1326,8 @@ const handleOwnerChange = (event) => {
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label>
-                    <Select className="form-control form-control-sm" style={{border:"none"}}
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Owner</label>
+                    <Select className="form-control form-control-sm" style={{borderRadius:"8px"}}
                     multiple
                     value={owners}
                     onChange={handleOwnerChange}
@@ -1338,7 +1342,7 @@ const handleOwnerChange = (event) => {
                     ))}
                 </Select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                        <div className="col-md-6 mb-3 custom-input"><label className="form-label">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
                                 <option>---Select---</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -1347,7 +1351,7 @@ const handleOwnerChange = (event) => {
                     </div>
                     <div className="col-md-12"><hr></hr></div>
                    
-                   <div className="col-md-2" id="projectbtn" onClick={next1}  style={{marginLeft:"82%"}}>
+                   <div className="col-md-2 mb-3 custom-input" id="projectbtn" onClick={next1}  style={{marginLeft:"82%"}}>
                    <button
                     className="btn btn-primary btn-sm form-control"
                     onClick={next1}
@@ -1374,19 +1378,19 @@ const handleOwnerChange = (event) => {
                 <div className="d-flex justify-content-between align-items-center experience"><span>Personal Details</span></div><hr></hr>
                 <div className="row " >
 
-                <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                <div className="col-md-12"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Address Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                    <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setcontact({...contact,father_husband_name:e.target.value})}/></div>
+                    <div className="col-md-12 mb-3 custom-input"><label className="form-label">Father/Husband name</label><input type="text" className="form-control form-control-sm"onChange={(e)=>setcontact({...contact,father_husband_name:e.target.value})}/></div>
 
-                    <div className="col-md-3"><label className="labels">H.No</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,h_no:e.target.value})}/></div>
-                    <div className="col-md-9"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area1:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">H.No</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,h_no:e.target.value})}/></div>
+                    <div className="col-md-9 mb-3 custom-input"><label className="form-label">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,area1:e.target.value})}/></div>
 
-                    <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location1:e.target.value})}/></div>
-                    {/* <div className="col-md-4"><label className="labels">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city1:e.target.value})}/></div> */}
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Location</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,location1:e.target.value})}/></div>
+                    {/* <div className="col-md-4 mb-3 custom-input"><label className="form-label">City</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,city1:e.target.value})}/></div> */}
 
 
-                    <div className="col-md-4">
-                  <label className="labels">City</label>
+                    <div className="col-md-4 mb-3 custom-input">
+                  <label className="form-label">City</label>
                   <select
                     className="form-control form-control-sm"
                     value={contact.city1}
@@ -1401,11 +1405,11 @@ const handleOwnerChange = (event) => {
                     ))}
                   </select>
                 </div>
-                    <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode1:e.target.value})}/></div>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Pin Code</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,pincode1:e.target.value})}/></div>
 
-                    {/* <div className="col-md-6"><label className="labels">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state1:e.target.value,city1: "" })}/></div> */}
-                    <div className="col-md-6">
-                    <label className="labels">State</label>
+                    {/* <div className="col-md-6 mb-3 custom-input"><label className="form-label">State</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,state1:e.target.value,city1: "" })}/></div> */}
+                    <div className="col-md-6 mb-3 custom-input">
+                    <label className="form-label">State</label>
                     <select
                       className="form-control form-control-sm"
                       value={contact.state1}
@@ -1423,7 +1427,7 @@ const handleOwnerChange = (event) => {
                   
                   </div>
 
-                    <div className="col-md-6"><label className="labels">Country</label>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Country</label>
                     <select className="form-control form-control-sm"  onChange={(e)=>setcontact({...contact,country1:e.target.value})}>
                       <option>India</option>
                     {asianCountries.map((country, index) => (
@@ -1434,16 +1438,16 @@ const handleOwnerChange = (event) => {
                     </select>
                     </div>
 
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-12"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                    <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
+                    <div className="col-md-5 mb-3 custom-input"><label className="form-label">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,gender:e.target.value})}>
                                 <option>---Select gender---</option>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Others</option>
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,maritial_status:e.target.value})}>
+                    <div className="col-md-7 mb-3 custom-input"><label className="form-label">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,maritial_status:e.target.value})}>
                             <option>---Select your status---</option>
                             <option>Married</option>
                             <option>Unmarried</option>
@@ -1451,10 +1455,10 @@ const handleOwnerChange = (event) => {
                         </select>
                     </div>
 
-                    <div className="col-md-5"><label className="labels">Birth Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,birth_date:e.target.value})}/></div>
-                    <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,anniversary_date:e.target.value})}/></div>
+                    <div className="col-md-5 mb-3 custom-input"><label className="form-label">Birth Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,birth_date:e.target.value})}/></div>
+                    <div className="col-md-7 mb-3 custom-input"><label className="form-label">Anniversary Date</label><input type="date" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,anniversary_date:e.target.value})}/></div>
 
-                    <div className="col-md-3"> <label className="labels">Education</label>
+                    <div className="col-md-3 mb-3 custom-input"> <label className="form-label">Education</label>
                         
                              {contact.education.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
@@ -1469,7 +1473,7 @@ const handleOwnerChange = (event) => {
                                 </div>
                               ))}
                         </div>
-                    <div className="col-md-3"><label className="labels">Degree</label>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Degree</label>
                     {contact.degree.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <select
@@ -1503,7 +1507,7 @@ const handleOwnerChange = (event) => {
                                 </div>
                               ))}
                     </div>
-                    <div className="col-md-4"><label className="labels">School/College/University</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">School/College/University</label>
                     {contact.school_college.map((name, index) => (
                                 <div key={index} style={{marginTop:"10px"}}>
                                   <input
@@ -1524,9 +1528,9 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                     <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn4}>+</button></div>
+                     <div className="col-md-1" ><label className="form-label">add</label><button className="form-control form-control-sm" onClick={addFn4}>+</button></div>
                 
-                    <div className="col-md-4"><label className="labels">Loan</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Loan</label>
                     {
                       contact.loan.map((item,index)=>
                       (
@@ -1541,7 +1545,7 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-3"><label className="labels">Bank</label>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Bank</label>
                     {
                       contact.bank.map((item,index)=>
                       (
@@ -1572,7 +1576,7 @@ const handleOwnerChange = (event) => {
                    
                     }
                     </div>
-                    <div className="col-md-3"><label className="labels">Amount</label>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Amount</label>
                     {
                       contact.amount.map((item,index)=>
                       (
@@ -1591,10 +1595,10 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
+                    <div className="col-md-1" ><label className="form-label">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
 
                     
-                    <div className="col-md-4"><label className="labels">Social Media</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Social Media</label>
                     {
                       contact.social_media.map((item,index)=>
                       (
@@ -1610,7 +1614,7 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-6"><label className="labels">Url</label>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Url</label>
                     {
                       contact.url.map((item,index)=>
                       (
@@ -1627,9 +1631,9 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
+                    <div className="col-md-1" ><label className="form-label">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
 
-                    <div className="col-md-4"><label className="labels">Income</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Income</label>
                     {
                       contact.income.map((item,index)=>
                       (
@@ -1644,7 +1648,7 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-6"><label className="labels">Amount</label>
+                    <div className="col-md-6 mb-3 custom-input"><label className="form-label">Amount</label>
                     {
                       contact.amount1.map((item,index)=>
                       (
@@ -1664,9 +1668,9 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn7}>+</button></div>
+                    <div className="col-md-1" ><label className="form-label">add</label><button className="form-control form-control-sm" onClick={addFn7}>+</button></div>
                    
-                    <div className="col-md-3"><label className="labels">Document No.</label>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Document No.</label>
                     {
                       contact.document_no.map((item,index)=>
                       (
@@ -1678,7 +1682,7 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-3"><label className="labels">Document Name</label>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Document Name</label>
                     {
                       contact.document_name.map((item,index)=>
                       (
@@ -1699,16 +1703,42 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-4"><label className="labels">Document Picture</label>
+                    <div className="col-md-4 mb-3 custom-input"><label className="form-label">Document Picture</label>
                     {
-                      contact.document_pic.map((item,index)=>
-                      (
+                      contact.document_pic.map((item,index)=>(
+                           <div key={index} className="custom-file-wrapper mt-2">
+                      
                         <input type="file" 
-                        style={{marginTop:"10px"}}
+                        id={`doc-upload-${index}`}
+                        style={{marginTop:"10px",display:"none"}}
                         className="form-control form-control-sm" 
                         multiple
                         onChange={(event)=>handledocumentpicchange(index,event)}
                         />
+                           <label htmlFor={`doc-upload-${index}`} className="upload-label">
+                        <i className="bi bi-image-fill me-2" style={{fontSize: "1.4rem",cursor:"pointer"}}></i> Upload Image
+                      </label>
+                        {/* Show image previews */}
+                    <div className="d-flex flex-wrap gap-2 mt-2">
+                      {(item || []).map((obj, i) => (
+                        <div key={i} style={{ position: "relative" }}>
+                          <img
+                            src={obj.preview}
+                            alt="Preview"
+                            style={{
+                              width: "80px",
+                              height: "80px",
+                              objectFit: "cover",
+                              borderRadius: "6px",
+                              border: "1px solid #ccc",
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                    
+                    </div>
+                        
                       ))
                     }
                     </div>
@@ -1720,9 +1750,9 @@ const handleOwnerChange = (event) => {
                       ))
                     }
                     </div>
-                    <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
+                    <div className="col-md-1" ><label className="form-label">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
                  <div className='col-md-12'><hr></hr></div> 
-                     <div className="col-md-2" style={{marginTop:"20px"}}   onClick={prev2}>
+                     <div className="col-md-2 mb-3 custom-input" style={{marginTop:"20px"}}   onClick={prev2}>
                      <button
                     className="btn btn-outline-primary btn-sm form-control"
                     style={{ fontWeight: '600', borderRadius: '8px', cursor: 'pointer', userSelect: 'none' }}
@@ -1730,8 +1760,8 @@ const handleOwnerChange = (event) => {
                     Prev
                   </button>
                       </div>
-                    <div className="col-md-6"></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}>
+                    <div className="col-md-6 mb-3 custom-input"></div>
+                    <div className="col-md-2 mb-3 custom-input" style={{marginTop:"20px"}}>
                       <button
     className="btn btn-outline-danger btn-sm form-control"
     onClick={() => navigate(-1)}
@@ -1751,7 +1781,7 @@ const handleOwnerChange = (event) => {
   </button>
                       </div>
                     {/* <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div> */}
-                    <div className="col-md-2" style={{marginTop:"20px"}}>
+                    <div className="col-md-2 mb-3 custom-input" style={{marginTop:"20px"}}>
                       <button   className="btn btn-primary btn-sm form-control" onClick={addcontact} 
                         style={{ fontWeight: '600', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', transition: 'all 0.3s ease' }}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
