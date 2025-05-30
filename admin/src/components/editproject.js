@@ -2948,7 +2948,7 @@ const checkForDuplicates = async (contacts) => {
             Swal.fire({
               title: "Error",
               icon: "error",
-              text: "Something went wrong while adding contacts.",
+              text: "Something went wrong while adding contacts. plz check your excel file avoid coma(,) if fields are non array and if values are empthy then blabk it ",
             });
           }
     

@@ -2255,7 +2255,7 @@ return (
                          </div>
 
                            <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
-                        <div className="col-md-5"><label className="labels">Country</label>
+                        <div className="col-md-5"><label className="labels">Country(country3)</label>
                         <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country3:e.target.value})}>
                         <option>India</option>
                     {asianCountries.map((country, index) => (
@@ -2266,7 +2266,7 @@ return (
                           </select>
                         </div>
                        
-                        <div className="col-md-5"><label className="labels">State</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
+                        <div className="col-md-5"><label className="labels">State(state3)</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
                         <option value="">--Select State--</option>
                       {states.map((state) => (
                         <option key={state} value={state}>
@@ -2277,7 +2277,7 @@ return (
                         </div>
                         <div className="col-md-2"></div>
 
-                        <div className="col-md-5"><label className="labels">City</label>
+                        <div className="col-md-5"><label className="labels">City(city3)</label>
                         {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
                           <option>---select country---</option>
                           <option>India</option>
@@ -2323,7 +2323,7 @@ return (
                       </Select>
                     </div>
                         <div className="col-md-5">
-                        <label className="labels">Block</label>
+                        <label className="labels">Block(block3)</label>
                         <Select
                           className="form-control form-control-sm"
                           multiple
@@ -2377,13 +2377,13 @@ return (
                         </div> */}
                         {/* <div className="col-md-4"></div> */}
 
-                    <div className="col-md-3"><label className="labels">City</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Area</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Block</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">City(city2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Area(area2)</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Block(block)</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Pin Code(pincode2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
                     
-                    <div className="col-md-3"><label className="labels">Country</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">State</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">Country(country2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                    <div className="col-md-3"><label className="labels">State(state2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
                     <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
                     {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
@@ -2643,14 +2643,14 @@ return (
                      <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" defaultValue={leadData?.father_husband_name || ''} className="form-control form-control-sm"/></div>
 
                             <div className="col-md-3"><label className="labels">H.No</label><input type="text" defaultValue={leadData?.h_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
-                            <div className="col-md-9"><label className="labels">Area</label><input type="text" defaultValue={leadData?.area1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
+                            <div className="col-md-9"><label className="labels">Area(area1)</label><input type="text" defaultValue={leadData?.area1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
 
-                            <div className="col-md-4"><label className="labels">Location</label><input type="text" defaultValue={leadData?.location1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">City</label><input type="text" defaultValue={leadData?.city1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">Pin Code</label><input type="text" defaultValue={leadData?.pincode1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">Location(location1)</label><input type="text" defaultValue={leadData?.location1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">City(city1)</label><input type="text" defaultValue={leadData?.city1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}/></div>
+                            <div className="col-md-4"><label className="labels">Pin Code(pincode1)</label><input type="text" defaultValue={leadData?.pincode1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
 
-                            <div className="col-md-6"><label className="labels">State</label><input type="text" defaultValue={leadData?.state1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
-                            <div className="col-md-6"><label className="labels">Country</label><input type="text" defaultValue={leadData?.country1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
+                            <div className="col-md-6"><label className="labels">State(state1)</label><input type="text" defaultValue={leadData?.state1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
+                            <div className="col-md-6"><label className="labels">Country(country1)</label><input type="text" defaultValue={leadData?.country1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
 
                             <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
