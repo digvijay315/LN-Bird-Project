@@ -5641,13 +5641,13 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
   </TableContainer>
   <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"10px",bottom:"0",backgroundColor:"#f8f9fa"}}>
           <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
-          <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"15px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"15px"}}>{untouchedlead}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>No Followups Lead- <span style={{color:"gray",fontSize:"15px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Returning Lead- <span style={{color:"black",fontSize:"15px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Returning No Followup Lead- <span style={{color:"#D11414",fontSize:"15px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Over Due Task Lead- <span style={{color:"#04A9A9",fontSize:"15px"}}>{countall}</span></h6>
-          <h6 style={{lineHeight:"50px"}}>Unassigned Lead-<span style={{color:"#A90490",fontSize:"15px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"12px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"12px"}}>{untouchedlead}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>No Followups Lead- <span style={{color:"gray",fontSize:"12px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Returning Lead- <span style={{color:"black",fontSize:"12px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Returning No Followup Lead- <span style={{color:"#D11414",fontSize:"12px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Over Due Task Lead- <span style={{color:"#04A9A9",fontSize:"12px"}}>{countall}</span></h6>
+          <h6 style={{lineHeight:"50px"}}>Unassigned Lead-<span style={{color:"#A90490",fontSize:"12px"}}>{countall}</span></h6>
           
         </footer>
   </div>

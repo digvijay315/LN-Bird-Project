@@ -1147,15 +1147,15 @@ const handleOwnerChange = (event) => {
                               <option>Maj.</option>
                         </select>
                         </div>
-                   <div className="col-md-5 mb-3 custom-input mb-3 custom-input mb-3 custom-input"><label className="form-label">Name</label><input type="text" required className="form-control form-control-sm" placeholder="First name" onChange={(e) =>setcontact({ ...contact, first_name: e.target.value })}/></div>
-                    <div className="col-md-5 mb-3 custom-input mb-3 custom-input"><label className="form-label">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                   <div className="col-md-5 mb-3 custom-input "><label className="form-label">Name</label><input type="text" required className="form-control form-control-sm" placeholder="First name" onChange={(e) =>setcontact({ ...contact, first_name: e.target.value })}/></div>
+                    <div className="col-md-5 mb-3 custom-input "><label className="form-label">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
                 </div>
-                <div className="row mt-3" id='basicdetails2'>
+                <div className="row mt-0" id='basicdetails2'>
                 <div className="col-md-4 mb-3 custom-input" > <label className="form-label">Country</label>
                     {
                       contact.country_code.map((item,index)=>
                       (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
+                        <select style={{marginBottom:"2px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange(index,event)}>
                         <option value={item} >India +91</option>
                         {
                           countrycode.map((item)=>
@@ -1171,7 +1171,7 @@ const handleOwnerChange = (event) => {
                     {
                        contact.mobile_no.map((item,index)=>
                         (
-                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          <input type="text" required="true" style={{marginBottom:"2px"}} 
                           className="form-control form-control-sm" 
                           placeholder="enter phone number" 
                           onChange={(event)=>handlemobile_nochange(index,event)}/>
@@ -1183,7 +1183,7 @@ const handleOwnerChange = (event) => {
                     {
                        contact.mobile_type.map((item,index)=>
                         (
-                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         <select className="form-control form-control-sm" style={{marginBottom:"2px"}} 
                          onChange={(event)=>handlemobile_typechange(index,event)}>
                                  
                                   <option>Personal</option>
@@ -1195,11 +1195,15 @@ const handleOwnerChange = (event) => {
                         ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
                        contact.action1.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                          <div style={{marginTop:"10px"}}>
+                            {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall1(index)} style={{height:"40px",cursor:"pointer"}}/> */}
+                            <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall1(index)}>delete</span>
+
+                            </div>
                                   
                           
                         ))
@@ -1211,7 +1215,7 @@ const handleOwnerChange = (event) => {
                     {
                         contact.email.map((item,index)=>
                         (
-                          <input type="text" style={{marginTop:"10px"}}
+                          <input type="text" style={{marginBottom:"2px"}}
                           className="form-control form-control-sm" 
                           placeholder="enter email-id"
                           onChange={(event)=>handleemailchange(index,event)}/>
@@ -1223,7 +1227,7 @@ const handleOwnerChange = (event) => {
                     {
                        contact.email_type.map((item,index)=>
                         (
-                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          <select className="form-control form-control-sm" style={{marginBottom:"2px"}} 
                           onChange={(event)=>handleemail_typechange(index,event)}>
                                
                                 <option>Personal</option>
@@ -1234,11 +1238,11 @@ const handleOwnerChange = (event) => {
                     }
                    </div>
                   
-                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                   <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
                        contact.action2.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall2(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                          <div style={{marginTop:"10px"}}><span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall2(index)}>delete</span></div>
                                   
                           
                         ))
@@ -1248,7 +1252,7 @@ const handleOwnerChange = (event) => {
                     
                     <div className="col-md-12 mb-3 custom-input"><label className="form-label">Tags</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,tags:e.target.value})}/></div>
                     
-                    <div className="col-md-10 mb-3 custom-input"><label className="form-label">Descriptions</label><textarea className='form-control form-control-sm' style={{borderRadius:"8px"}} onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
+                    <div className="col-md-10 mb-3 custom-input"><label className="form-label">Descriptions</label><textarea className='form-control form-control-sm' style={{borderRadius:"8px",height:"100px"}} onChange={(e)=>setcontact({...contact,descriptions:e.target.value})}/></div>
                     <div className="col-md-2 mb-3 custom-input"></div>
 
                    
@@ -1327,7 +1331,7 @@ const handleOwnerChange = (event) => {
                         </select>
                     </div>
                     <div className="col-md-6 mb-3 custom-input"><label className="form-label">Owner</label>
-                    <Select className="form-control form-control-sm" style={{borderRadius:"8px"}}
+                    <Select className="form-control form-control-sm" style={{borderRadius:"8px",border:"none"}}
                     multiple
                     value={owners}
                     onChange={handleOwnerChange}
@@ -1355,7 +1359,7 @@ const handleOwnerChange = (event) => {
                    <button
                     className="btn btn-primary btn-sm form-control"
                     onClick={next1}
-                    style={{ fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}
+                    style={{ fontWeight: '600', borderRadius: '8px', cursor: 'pointer',backgroundColor:"lightblue" }}
                   >
                     Next
                   </button>
@@ -1783,7 +1787,7 @@ const handleOwnerChange = (event) => {
                     {/* <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Contact</button></div> */}
                     <div className="col-md-2 mb-3 custom-input" style={{marginTop:"20px"}}>
                       <button   className="btn btn-primary btn-sm form-control" onClick={addcontact} 
-                        style={{ fontWeight: '600', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', transition: 'all 0.3s ease' }}
+                        style={{ fontWeight: '600', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', transition: 'all 0.3s ease',backgroundColor:"lightblue" }}
                         onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
                         onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0d6efd'}>Save
                         </button>

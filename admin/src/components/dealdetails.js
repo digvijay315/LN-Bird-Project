@@ -1868,6 +1868,7 @@ function Dealdetails() {
                                           document.getElementById("unitpreview").style.display="none"
                                           document.getElementById("unitadddocument").style.display="none"
                                           document.getElementById("unituploadpicture").style.display="none"
+                                          document.getElementById("unitcustomerfeedback").style.display="none"
                                         document.getElementById("unitsearch").style.display="flex"
                                        
                                     }
@@ -1891,6 +1892,7 @@ function Dealdetails() {
                                             document.getElementById("unitpreview").style.display="inline-block"
                                             document.getElementById("unitadddocument").style.display="inline-block"
                                             document.getElementById("unituploadpicture").style.display="inline-block"
+                                            document.getElementById("unitcustomerfeedback").style.display="inline-block"
                                           document.getElementById("unitsearch").style.display="none"
                                          
                                       }
@@ -1914,6 +1916,7 @@ function Dealdetails() {
                                               document.getElementById("unitpreview").style.display="none"
                                               document.getElementById("unitadddocument").style.display="none"
                                               document.getElementById("unituploadpicture").style.display="none"
+                                              document.getElementById("unitcustomerfeedback").style.display="none"
                                             document.getElementById("unitsearch").style.display="none"
                                            
                                         }
@@ -5068,6 +5071,32 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 
 // ====================================units suggestion box code end=============================================================
 
+
+//============================================== feedback form start================================================================
+
+                const [show, setShow] = useState(false);
+                const [isClosing, setIsClosing] = useState(false);
+                const toastRef = useRef(null);
+
+                    const toggleToast = () => {
+
+                      setShow(true);
+                      document.getElementById('unitlistview').style.filter = 'blur(5px)';
+                    };
+
+
+              const handleCancel = () => {
+                 document.getElementById('unitlistview').style.filter = 'none';
+                setIsClosing(true); // trigger slide-out
+                setTimeout(() => {
+                  setShow(false);     // hide the toast completely
+                  setIsClosing(false); // reset for next open
+                }, 500); // duration should match animation time
+              };
+
+
+
+// ============================================feedback form end=====================================================================
     return (
         <div>
             <Header1/>
@@ -6241,6 +6270,10 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 
 <Tooltip title="Upload Picture.." arrow>
 <img id="unituploadpicture"  src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279796.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
+</Tooltip>
+
+<Tooltip title="Customer Feedback.." arrow>
+<img id="unitcustomerfeedback"  src="https://png.pngitem.com/pimgs/s/69-690659_expert-customer-feedback-icon-png-transparent-png.png" onClick={toggleToast }   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>
 
 </div>
@@ -9197,6 +9230,61 @@ stage:selectedLead.stage
           </Modal>
 
 
+{/* =============================================feedback form with toast start================================================== */}
+
+ <div
+  ref={toastRef}
+  className={`feedback-toast ${show ? (isClosing ? 'hide' : 'show') : ''}`}
+  style={{ zIndex: 9999 }}
+>
+  <div className="toast show">
+    <div className="toast-header">
+      <strong className="me-auto">Customer Feedback</strong>
+    </div>
+    <div className="toast-body">
+      <div className="mb-2">
+        <label className="form-label">Owner Name</label>
+        <select className="form-control form-control-sm">
+          <option>---select owner---</option>
+          <option>Ram Kumar</option>
+          <option>Suresh Gupta</option>
+          <option>Pawan Verma</option>
+        </select>
+      </div>
+      <div className="mb-2">
+        <label className="form-label">Unit No.</label>
+        <input type="text" className="form-control form-control-sm"/>
+      </div>
+      <div className="mb-2">
+        <label className="form-label">Owner Response on Sale</label>
+        <select className="form-control form-control-sm">
+          <option>---select owner---</option>
+          <option>Ram Kumar</option>
+          <option>Suresh Gupta</option>
+          <option>Pawan Verma</option>
+        </select>
+      </div>
+       <div className="mb-2">
+        <label className="form-label">Stage</label>
+        <select className="form-control form-control-sm">
+          <option>---select stage---</option>
+          <option>Open</option>
+          <option>Close</option>
+        </select>
+      </div>
+        <div className="mb-2">
+        <label className="form-label">Remarks/Notes</label>
+        <textarea  className="form-control form-control-sm" style={{height:"100px"}}></textarea>
+      </div>
+    
+      <button className="btn btn-danger w-30" onClick={handleCancel}>Cancel</button>
+      <button className="btn btn-success w-60" style={{ marginLeft: "10%" }}>Save Feedback</button>
+    </div>
+  </div>
+</div>
+
+
+{/* =======================================feedback form with toast end===================================================== */}
 
 
 
