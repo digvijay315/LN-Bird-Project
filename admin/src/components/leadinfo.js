@@ -2650,7 +2650,8 @@ return (
                             <div className="col-md-4"><label className="labels">Pin Code(pincode1)</label><input type="text" defaultValue={leadData?.pincode1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
 
                             <div className="col-md-6"><label className="labels">State(state1)</label><input type="text" defaultValue={leadData?.state1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
-                            <div className="col-md-6"><label className="labels">Country(country1)</label><input type="text" defaultValue={leadData?.country1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
+                            <div className="col-md-6"><label className="labels">Country(country1)
+                              </label><input type="text" defaultValue={leadData?.country1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
 
                             <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 

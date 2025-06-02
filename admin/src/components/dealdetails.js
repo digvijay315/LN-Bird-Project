@@ -1518,11 +1518,11 @@ function Dealdetails() {
                     }
                   };
                   const handleSelectAll3 = () => {
-                
+              
                     setSelectAll3(!selectAll3);
                     if (!selectAll3) {
                       // Add all current page item IDs to selectedItems
-                      setSelectedItems3(currentItems3.map((item) => item._id));
+                      setSelectedItems3(currentItems3.map((item) => item));
                     } else {
                       // Deselect all
                        setSelectedItems3([]);
@@ -1720,13 +1720,12 @@ function Dealdetails() {
                             {
                               document.getElementById("dealdelete").style.display="none"
                               document.getElementById("dealedit").style.display="none"
-                              document.getElementById("dealmail").style.display="none"
-                               document.getElementById("dealwhatsapp").style.display="none"
-                                  document.getElementById("dealmessage").style.display="none"
+                              document.getElementById("sendall").style.display="none"
+                          
                                   document.getElementById("dealaddtask").style.display="none"
                                   document.getElementById("dealcreatebooking").style.display="none"
-                                  document.getElementById("dealaddremoveowner").style.display="none"
-                                  document.getElementById("dealmatchedlead").style.display="none"
+                                
+                                
                                   document.getElementById("dealcall").style.display="none"
                                   document.getElementById("dealaddtag").style.display="none"
                                   document.getElementById("dealaddremarks").style.display="none"
@@ -1736,19 +1735,16 @@ function Dealdetails() {
                                   document.getElementById("dealadddocument").style.display="none"
                                   document.getElementById("dealuploadpicture").style.display="none"
                                 document.getElementById("dealsearch").style.display="flex"
-                                document.getElementById("dealtoggelsearch").style.display="flex"
+                                // document.getElementById("dealtoggelsearch").style.display="flex"
                             }
                             if(selectedItems.length===1)
                             {
                               document.getElementById("dealdelete").style.display="inline-block"
                               document.getElementById("dealedit").style.display="inline-block"
-                            document.getElementById("dealmail").style.display="inline-block"
-                             document.getElementById("dealwhatsapp").style.display="inline-block"
-                                document.getElementById("dealmessage").style.display="inline-block"
+                             document.getElementById("sendall").style.display="inline-block"
                                 document.getElementById("dealaddtask").style.display="inline-block"
                                 document.getElementById("dealcreatebooking").style.display="inline-block"
-                                document.getElementById("dealaddremoveowner").style.display="inline-block"
-                                document.getElementById("dealmatchedlead").style.display="inline-block"
+                           
                                 document.getElementById("dealcall").style.display="inline-block"
                                 document.getElementById("dealaddtag").style.display="inline-block"
                                 document.getElementById("dealaddremarks").style.display="inline-block"
@@ -1758,20 +1754,17 @@ function Dealdetails() {
                                 document.getElementById("dealadddocument").style.display="inline-block"
                                 document.getElementById("dealuploadpicture").style.display="inline-block"
                             document.getElementById("dealsearch").style.display="none"
-                              document.getElementById("dealtoggelsearch").style.display="none"
+                              // document.getElementById("dealtoggelsearch").style.display="none"
                             }
       
                             if(selectedItems.length>1)
                             {
                               document.getElementById("dealdelete").style.display="inline-block"
                               document.getElementById("dealedit").style.display="none"
-                            document.getElementById("dealmail").style.display="inline-block"
-                             document.getElementById("dealwhatsapp").style.display="inline-block"
-                                document.getElementById("dealmessage").style.display="inline-block"
+                              document.getElementById("sendall").style.display="inline-block"
                                 document.getElementById("dealaddtask").style.display="none"
                                 document.getElementById("dealcreatebooking").style.display="none"
-                                document.getElementById("dealaddremoveowner").style.display="none"
-                                document.getElementById("dealmatchedlead").style.display="none"
+                            
                                 document.getElementById("dealcall").style.display="none"
                                 document.getElementById("dealaddtag").style.display="none"
                                 document.getElementById("dealaddremarks").style.display="none"
@@ -1781,18 +1774,17 @@ function Dealdetails() {
                                 document.getElementById("dealadddocument").style.display="none"
                                 document.getElementById("dealuploadpicture").style.display="none"
                                 document.getElementById("dealsearch").style.display="none"
-                              document.getElementById("dealtoggelsearch").style.display="none"
+                              // document.getElementById("dealtoggelsearch").style.display="none"
                             }
       
                             if(selectedItems2.length===0)
                               {
                                 document.getElementById("projectdelete").style.display="none"
                                 document.getElementById("projectedit").style.display="none"
-                                document.getElementById("projectmail").style.display="none"
-                                 document.getElementById("projectwhatsapp").style.display="none"
-                                    document.getElementById("projectmessage").style.display="none"
+                           
+                                    document.getElementById("projectsendall").style.display="none"
                 
-                                    document.getElementById("projectaddremoveuser").style.display="none"
+                                    document.getElementById("projectupdate").style.display="none"
                                     document.getElementById("projectmatchedlead").style.display="none"
                               
                                     document.getElementById("projectaddtag").style.display="none"
@@ -1809,11 +1801,10 @@ function Dealdetails() {
                               {
                                 document.getElementById("projectdelete").style.display="inline-block"
                                 document.getElementById("projectedit").style.display="inline-block"
-                                document.getElementById("projectmail").style.display="inline-block"
-                                 document.getElementById("projectwhatsapp").style.display="inline-block"
-                                    document.getElementById("projectmessage").style.display="inline-block"
+                                document.getElementById("projectsendall").style.display="inline-block"
+                          
                 
-                                    document.getElementById("projectaddremoveuser").style.display="inline-block"
+                                    document.getElementById("projectupdate").style.display="inline-block"
                                     document.getElementById("projectmatchedlead").style.display="inline-block"
                               
                                     document.getElementById("projectaddtag").style.display="inline-block"
@@ -1832,11 +1823,10 @@ function Dealdetails() {
                                   {
                                     document.getElementById("projectdelete").style.display="inline-block"
                                     document.getElementById("projectedit").style.display="none"
-                                    document.getElementById("projectmail").style.display="inline-block"
-                                     document.getElementById("projectwhatsapp").style.display="inline-block"
-                                        document.getElementById("projectmessage").style.display="inline-block"
+                                    document.getElementById("projectsendall").style.display="inline-block"
+                        
                     
-                                        document.getElementById("projectaddremoveuser").style.display="none"
+                                        document.getElementById("projectupdate").style.display="none"
                                         document.getElementById("projectmatchedlead").style.display="none"
                                   
                                         document.getElementById("projectaddtag").style.display="none"
@@ -1852,9 +1842,8 @@ function Dealdetails() {
                                     {
                                       document.getElementById("unitdelete").style.display="none"
                                       document.getElementById("unitedit").style.display="none"
-                                      document.getElementById("unitmail").style.display="none"
-                                       document.getElementById("unitwhatsapp").style.display="none"
-                                          document.getElementById("unitmessage").style.display="none"
+                                      document.getElementById("unitsendall").style.display="none"
+                                   
                                            document.getElementById("unitcreatedeal").style.display="none"
                                             // document.getElementById("unitaddunit").style.display="none"
                                          
@@ -1876,9 +1865,8 @@ function Dealdetails() {
                                       {
                                         document.getElementById("unitdelete").style.display="inline-block"
                                         document.getElementById("unitedit").style.display="inline-block"
-                                        document.getElementById("unitmail").style.display="inline-block"
-                                         document.getElementById("unitwhatsapp").style.display="inline-block"
-                                            document.getElementById("unitmessage").style.display="inline-block"
+                                        document.getElementById("unitsendall").style.display="inline-block"
+                                     
                                              document.getElementById("unitcreatedeal").style.display="inline-block"
                                               // document.getElementById("unitaddunit").style.display="inline-block"
                                            
@@ -1900,9 +1888,8 @@ function Dealdetails() {
                                         {
                                           document.getElementById("unitdelete").style.display="inline-block"
                                           document.getElementById("unitedit").style.display="none"
-                                          document.getElementById("unitmail").style.display="inline-block"
-                                           document.getElementById("unitwhatsapp").style.display="inline-block"
-                                              document.getElementById("unitmessage").style.display="inline-block"
+                                          document.getElementById("unitsendall").style.display="inline-block"
+                                        
                                                document.getElementById("unitcreatedeal").style.display="none"
                                                 // document.getElementById("unitaddunit").style.display="none"
                                              
@@ -5094,10 +5081,65 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                 }, 500); // duration should match animation time
               };
 
+            const[feedbackform,setfeedbackform]=useState({owner:"",unit_no:"",owner_response:"",discussed_reason:"",other_discussed_reason:"",
+                                                          next_call_date4:"",no_reason:"",other_no_reason:"",stage:"",remarks:""})
+          const reasonsList = [
+            "Had bad experience with previous agent",
+            "Will sell after completion of construction",
+            "Will sell after registry",
+            "Don’t want to involve brokers / privacy concern",
+            "Already dealing with another broker",
+            "Waiting for better market price",
+            "Price expectations not matching",
+            "Other"
+          ];
+
+const noreasonsList = [
+  "Family not agreed yet / Internal family issue",
+  "Property is under dispute / Legal issue",
+  "Still under use (self-living / family living)",
+  "Currently rented out / tenant issue",
+  "Emotional attachment with property",
+  "Recently bought, not planning to sell yet",
+  "Joint ownership, others not willing",
+  "Will sell only if urgent need arises",
+  "Planning to construct house",
+  "Can’t decide right now / need more time",
+  "Not interested in selling at all",
+  "Other"
+];
+
+console.log(selectedItems3);
 
 
 // ============================================feedback form end=====================================================================
-    return (
+   
+
+//=============================================== deal action buttons toggle start=============================================================
+
+              const [isHoveringDelete, setIsHoveringDelete] = useState(false);
+              const [isHoveringEdit, setIsHoveringEdit] = useState(false);
+              const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
+              const [isHoveringuploadpicture, setIsHoveringuploadpicture] = useState(false);
+              const [isHoveringupdate, setIsHoveringupdate] = useState(false);
+              const [isHoveringpublishon, setIsHoveringpublishon] = useState(false);
+              const [isHoveringcall, setIsHoveringcall] = useState(false);
+              const [isHoveringaddtag, setIsHoveringaddtag] = useState(false);
+              const [isHoveringaddremarks, setIsHoveringaddremarks] = useState(false);
+              const [isHoveringadddocuments, setIsHoveringadddocuments] = useState(false);
+              const [isHoveringpreview, setIsHoveringpreview] = useState(false);
+              const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
+              const [isHoveringcreatebooking, setIsHoveringcreatebooking] = useState(false);
+              const [isHoveringprojectmatchedlead, setIsHoveringprojectmatchedlead] = useState(false);
+              const [isHoveringprojectupdate, setIsHoveringprojectupdate] = useState(false);
+              const [isHoveringunitadduser, setIsHoveringunitadduser] = useState(false);
+              const [isHoveringunitcreatedeal, setIsHoveringunitcreatedeal] = useState(false);
+              const [isHoveringunitupdate, setIsHoveringunitupdate] = useState(false);
+              const [isHoveringunitcustomerfeedback, setIsHoveringunitcustomerfeedback] = useState(false);
+
+// =============================================================deal action button toggle end==================================================
+
+return (
         <div>
             <Header1/>
             <Sidebar1/>
@@ -5166,7 +5208,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
       </div>
 
       <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
-      <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/>
+      {/* <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/> */}
       
     {/* <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} /> */}
               
@@ -5201,70 +5243,306 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="dealdelete" src="https://cdn-icons-png.freepik.com/512/7078/7078067.png" onClick={deletedealSelectedItems}    style={{height:"25px",width:"25px",cursor:"pointer",display:"none",marginTop:"6px"}} alt=""/>
-</Tooltip>
+      <img
+        id="dealdelete"
+        src={
+          isHoveringDelete
+            ? "https://cdn-icons-png.freepik.com/512/6861/6861362.png" // hover image
+            : "https://cdn-icons-png.freepik.com/512/7078/7078067.png" // default image
+        }
+       onClick={deletedealSelectedItems}
+        onMouseEnter={() => setIsHoveringDelete(true)}
+        onMouseLeave={() => setIsHoveringDelete(false)}
+        alt=""
+        style={{
+          display:"none",
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Edit Data.." arrow>
-<img id="dealedit" src="https://static.thenounproject.com/png/1416596-200.png" onClick={handleShow10}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
 
-<Tooltip title="Send Mail.." arrow>
-<img id="dealmail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Send WhatsApp.." arrow>
-<img id="dealwhatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
-</Tooltip>
-<Tooltip title="Send Message.." arrow>
-<img id="dealmessage"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
-</Tooltip>
+    <Tooltip title="Edit Data.." arrow>
+      <img
+        id="dealedit"
+        src={
+          isHoveringEdit
+            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpF7BrBLmrMYynVUzMxsgv8AtIEkFjStD6cFRNYv1to6LupNkPMgkEaEzD5-HIGrjcPj4&usqp=CAU" // hover image
+            : "https://static.thenounproject.com/png/1416596-200.png" // default image
+        }
+        onClick={handleShow10}
+        onMouseEnter={() => setIsHoveringEdit(true)}
+        onMouseLeave={() => setIsHoveringEdit(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+
+    <Tooltip title="Send Mail,WhatsApp and Message..." arrow>
+      <img
+        id="sendall"
+        src={
+          isHoveringsendmail
+            ? "https://cdn-icons-png.flaticon.com/512/786/786407.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAkAryM3dt6AWqQt1fHHBAtQ-YFVel4wnqEA&s" // default image
+        }
+        // onClick={handleShow3}
+        onMouseEnter={() => setIsHoveringsendmail(true)}
+        onMouseLeave={() => setIsHoveringsendmail(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
 <Tooltip title="Add to task.." arrow>
-<img id="dealaddtask"  src="https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" onClick={handleShow8}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="dealaddtask"
+        src={
+          isHoveringaddtotask
+            ? "https://cdn-icons-png.flaticon.com/512/12692/12692378.png" // hover image
+            : "https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" // default image
+        }
+       onClick={handleShow8}
+        onMouseEnter={() => setIsHoveringaddtotask(true)}
+        onMouseLeave={() => setIsHoveringaddtotask(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
 
 <Tooltip title="Create Booking.." arrow>
-<img id="dealcreatebooking"  src="https://www.housecallpro.com/wp-content/uploads/2024/01/schedule-mono-300x300-1.png" onClick={()=>{navigate('/bookingdetails')}}  style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="dealcreatebooking"
+        src={
+          isHoveringcreatebooking
+            ? "https://cdn-icons-png.freepik.com/512/489/489379.png" // hover image
+            : "https://www.housecallpro.com/wp-content/uploads/2024/01/schedule-mono-300x300-1.png" // default image
+        }
+        onClick={()=>{navigate('/bookingdetails')}}
+        onMouseEnter={() => setIsHoveringcreatebooking(true)}
+        onMouseLeave={() => setIsHoveringcreatebooking(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Owner/Property Owner/Associate Contact/Remove Owner.." arrow>
-<img id="dealaddremoveowner"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfKfIbM76o9rUp0HPZ_TV6KrDVVdNY1DFF1Q&s" onClick={handleShow7}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+  <Tooltip title="Call.." arrow>
+      <img
+        id="dealcall"
+        src={
+          isHoveringcall
+            ? "https://cdn-icons-png.flaticon.com/512/561/561253.png" // hover image
+            : "https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png" // default image
+        }
+        onMouseEnter={() => setIsHoveringcall(true)}
+        onMouseLeave={() => setIsHoveringcall(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Matched Lead.." arrow>
-<img id="dealmatchedlead"  src="https://static.vecteezy.com/system/resources/thumbnails/045/744/213/small/people-glyph-icon-vector.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Add Tag.." arrow>
+      <img
+        id="dealaddtag"
+        src={
+          isHoveringaddtag
+            ? "https://cdn-icons-png.freepik.com/512/11500/11500120.png" // hover image
+            : "https://cdn-icons-png.flaticon.com/512/118/118061.png" // default image
+        }
+        onMouseEnter={() => setIsHoveringaddtag(true)}
+        onMouseLeave={() => setIsHoveringaddtag(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Call.." arrow>
-<img id="dealcall"  src="https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Add Remarks/Note.." arrow>
+      <img
+        id="dealaddremarks"
+        src={
+          isHoveringaddremarks
+            ? "https://cdn-icons-png.flaticon.com/512/1381/1381552.png" // hover image
+            : "https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" // default image
+        }
+       onClick={handleShow6}
+        onMouseEnter={() => setIsHoveringaddremarks(true)}
+        onMouseLeave={() => setIsHoveringaddremarks(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Tag.." arrow>
-<img id="dealaddtag"  src="https://cdn-icons-png.flaticon.com/512/118/118061.png"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
 
-<Tooltip title="Add Remarks/Note.." arrow>
-<img id="dealaddremarks"  src="https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" onClick={handleShow6}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Publish On.." arrow>
+      <img
+        id="dealpublishon"
+        src={
+          isHoveringpublishon
+            ? "https://cdn-icons-png.freepik.com/512/3559/3559259.png" // hover image
+            : "https://thumbs.dreamstime.com/b/ebook-publishing-glyph-icon-ebook-publishing-sign-isolated-symbol-illustration-ebook-publishing-glyph-icon-illustration-326090359.jpg" // default image
+        }
+       onClick={handleShow5} 
+        onMouseEnter={() => setIsHoveringpublishon(true)}
+        onMouseLeave={() => setIsHoveringpublishon(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Publish On.." arrow>
-<img id="dealpublishon"  src="https://thumbs.dreamstime.com/b/ebook-publishing-glyph-icon-ebook-publishing-sign-isolated-symbol-illustration-ebook-publishing-glyph-icon-illustration-326090359.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+  <Tooltip title="Update.." arrow>
+      <img
+        id="dealupdatestage"
+        src={
+          isHoveringupdate
+            ? "https://cdn-icons-png.flaticon.com/512/6713/6713079.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTFo9g6QLJ-P3k8PTrjfrkWBOZI5ptsWJW4g&s" // default image
+        }
+       onClick={handleShow5} 
+        onMouseEnter={() => setIsHoveringupdate(true)}
+        onMouseLeave={() => setIsHoveringupdate(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Update Stage.." arrow>
-<img id="dealupdatestage"  src="https://icon-library.com/images/cycle-icon-png/cycle-icon-png-29.jpg" onClick={handleShow5}   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
 
-<Tooltip title="Preview.." arrow>
-<img id="dealpreview"  src="https://icon-library.com/images/preview-icon-png/preview-icon-png-26.jpg"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+  <Tooltip title="Preview.." arrow>
+      <img
+        id="dealpreview"
+        src={
+          isHoveringpreview
+            ? "https://cdn-icons-png.flaticon.com/512/143/143594.png" // hover image
+            : "https://icon-library.com/images/preview-icon-png/preview-icon-png-26.jpg" // default image
+        }
+       onClick={handleShow5} 
+        onMouseEnter={() => setIsHoveringpreview(true)}
+        onMouseLeave={() => setIsHoveringpreview(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Document.." arrow>
-<img id="dealadddocument"  src="https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+   <Tooltip title="Add Document.." arrow>
+      <img
+        id="dealadddocument"
+        src={
+          isHoveringadddocuments
+            ? "https://cdn-icons-png.freepik.com/512/5442/5442207.png" // hover image
+            : "https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringadddocuments(true)}
+        onMouseLeave={() => setIsHoveringadddocuments(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Upload Picture.." arrow>
-<img id="dealuploadpicture"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlz-TKOccaHn9IPHPOBVUJKOxcrSMhc3uhkw&s"   style={{height:"25px",width:"25px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+
+<Tooltip title="Upload Image.." arrow>
+      <img
+        id="dealuploadpicture"
+        src={
+          isHoveringuploadpicture
+            ? "https://www.pngall.com/wp-content/uploads/15/Open-File-PNG-Clipart.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlz-TKOccaHn9IPHPOBVUJKOxcrSMhc3uhkw&s" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringuploadpicture(true)}
+        onMouseLeave={() => setIsHoveringuploadpicture(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
 </div>
     
@@ -5920,45 +6198,234 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
+
 <Tooltip title="Delete Data.." arrow>
-<img id="projectdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteprojectSelectedItems} style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
-</Tooltip>
+      <img
+        id="projectdelete"
+        src={
+          isHoveringDelete
+            ? "https://cdn-icons-png.freepik.com/512/6861/6861362.png" // hover image
+            : "https://cdn-icons-png.freepik.com/512/7078/7078067.png" // default image
+        }
+       onClick={deleteprojectSelectedItems}
+        onMouseEnter={() => setIsHoveringDelete(true)}
+        onMouseLeave={() => setIsHoveringDelete(false)}
+        alt=""
+        style={{
+          display:"none",
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Edit Data.." arrow>
-<img id="projectedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png"  onClick={() => navigate('/editproject', { state: { id: selectedItems2 } })}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
 
-<Tooltip title="Send Mail.." arrow>
-<img id="projectmail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Send WhatsApp.." arrow>
-<img id="projectwhatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
-</Tooltip>
-<Tooltip title="Send Message.." arrow>
-<img id="projectmessage"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
-</Tooltip>
-<Tooltip title="Preview.." arrow>
-<img id="projectpreview"  src="https://cdn-icons-png.flaticon.com/512/143/143594.png" onClick={()=>navigate('projectpreview',{state:selectedItems2})}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Add/Remove User.." arrow>
-<img id="projectaddremoveuser"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Edit Data.." arrow>
+      <img
+        id="projectedit"
+        src={
+          isHoveringEdit
+            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpF7BrBLmrMYynVUzMxsgv8AtIEkFjStD6cFRNYv1to6LupNkPMgkEaEzD5-HIGrjcPj4&usqp=CAU" // hover image
+            : "https://static.thenounproject.com/png/1416596-200.png" // default image
+        }
+        onClick={() => navigate('/editproject', { state: { id: selectedItems2 } })}
+        onMouseEnter={() => setIsHoveringEdit(true)}
+        onMouseLeave={() => setIsHoveringEdit(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+<Tooltip title="Send Mail,WhatsApp and Message..." arrow>
+      <img
+        id="projectsendall"
+        src={
+          isHoveringsendmail
+            ? "https://cdn-icons-png.flaticon.com/512/786/786407.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAkAryM3dt6AWqQt1fHHBAtQ-YFVel4wnqEA&s" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringsendmail(true)}
+        onMouseLeave={() => setIsHoveringsendmail(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+  <Tooltip title="Preview.." arrow>
+      <img
+        id="projectpreview"
+        src={
+          isHoveringpreview
+            ? "https://cdn-icons-png.flaticon.com/512/143/143594.png" // hover image
+            : "https://icon-library.com/images/preview-icon-png/preview-icon-png-26.jpg" // default image
+        }
+        onClick={()=>navigate('projectpreview',{state:selectedItems2})} 
+        onMouseEnter={() => setIsHoveringpreview(true)}
+        onMouseLeave={() => setIsHoveringpreview(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+ <Tooltip title="Update.." arrow>
+      <img
+        id="projectupdate"
+        src={
+          isHoveringprojectupdate
+            ? "https://cdn-icons-png.flaticon.com/512/6713/6713079.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTFo9g6QLJ-P3k8PTrjfrkWBOZI5ptsWJW4g&s" // default image
+        }
+        onMouseEnter={() => setIsHoveringprojectupdate(true)}
+        onMouseLeave={() => setIsHoveringprojectupdate(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
 <Tooltip title="Matched Lead.." arrow>
-<img id="projectmatchedlead"  src="https://www.clipartmax.com/png/middle/474-4745675_martial-arts-lead-management-lead-management-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Add Tag.." arrow>
-<img id="projectaddtag"  src="https://png.pngtree.com/png-clipart/20230805/original/pngtree-hospital-tag-icon-add-tag-offer-vector-picture-image_9758849.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Publish On.." arrow>
-<img id="projectpublishon"  src="https://cdn-icons-png.flaticon.com/512/4661/4661368.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Add Document.." arrow>
-<img id="projectadddocument"  src="https://icons.iconarchive.com/icons/graphicloads/long-shadow-documents/256/document-add-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="projectmatchedlead"
+        src={
+          isHoveringprojectmatchedlead
+            ? "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/512w/external-lead-social-media-agency-flaticons-lineal-color-flat-icons-3.png" // hover image
+            : "https://cdn.iconscout.com/icon/premium/png-256-thumb/lead-management-986101.png" // default image
+        }
+       
+        onMouseEnter={() => setIsHoveringprojectmatchedlead(true)}
+        onMouseLeave={() => setIsHoveringprojectmatchedlead(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Upload Picture.." arrow>
-<img id="projectuploadpicture"  src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279796.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Add Tag.." arrow>
+      <img
+        id="projectaddtag"
+        src={
+          isHoveringaddtag
+            ? "https://cdn-icons-png.freepik.com/512/11500/11500120.png" // hover image
+            : "https://cdn-icons-png.flaticon.com/512/118/118061.png" // default image
+        }
+        onMouseEnter={() => setIsHoveringaddtag(true)}
+        onMouseLeave={() => setIsHoveringaddtag(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+<Tooltip title="Publish On.." arrow>
+      <img
+        id="projectpublishon"
+        src={
+          isHoveringpublishon
+            ? "https://cdn-icons-png.freepik.com/512/3559/3559259.png" // hover image
+            : "https://thumbs.dreamstime.com/b/ebook-publishing-glyph-icon-ebook-publishing-sign-isolated-symbol-illustration-ebook-publishing-glyph-icon-illustration-326090359.jpg" // default image
+        }
+       onClick={handleShow5} 
+        onMouseEnter={() => setIsHoveringpublishon(true)}
+        onMouseLeave={() => setIsHoveringpublishon(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+   <Tooltip title="Add Document.." arrow>
+      <img
+        id="projectadddocument"
+        src={
+          isHoveringadddocuments
+            ? "https://cdn-icons-png.freepik.com/512/5442/5442207.png" // hover image
+            : "https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringadddocuments(true)}
+        onMouseLeave={() => setIsHoveringadddocuments(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+
+<Tooltip title="Upload Image.." arrow>
+      <img
+        id="projectuploadpicture"
+        src={
+          isHoveringuploadpicture
+            ? "https://www.pngall.com/wp-content/uploads/15/Open-File-PNG-Clipart.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlz-TKOccaHn9IPHPOBVUJKOxcrSMhc3uhkw&s" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringuploadpicture(true)}
+        onMouseLeave={() => setIsHoveringuploadpicture(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
 </div>
 
@@ -6218,63 +6685,330 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
 <Tooltip title="Delete Data.." arrow>
-<img id="unitdelete" src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" onClick={deleteinventories}  style={{height:"50px",width:"50px",cursor:"pointer",display:"none",marginTop:"-2px"}} alt=""/>
-</Tooltip>
+      <img
+        id="unitdelete"
+        src={
+          isHoveringDelete
+            ? "https://cdn-icons-png.freepik.com/512/6861/6861362.png" // hover image
+            : "https://cdn-icons-png.freepik.com/512/7078/7078067.png" // default image
+        }
+        onClick={deleteinventories}
+        onMouseEnter={() => setIsHoveringDelete(true)}
+        onMouseLeave={() => setIsHoveringDelete(false)}
+        alt=""
+        style={{
+          display:"none",
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Edit Data.." arrow>
-<img id="unitedit" src="https://www.freeiconspng.com/thumbs/edit-icon-png/edit-icon-orange-pencil-0.png" onClick={handleShow9}  style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="add task..." arrow>
+  <Tooltip title="Edit Data.." arrow>
+      <img
+        id="unitedit"
+        src={
+          isHoveringEdit
+            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpF7BrBLmrMYynVUzMxsgv8AtIEkFjStD6cFRNYv1to6LupNkPMgkEaEzD5-HIGrjcPj4&usqp=CAU" // hover image
+            : "https://static.thenounproject.com/png/1416596-200.png" // default image
+        }
+        onClick={handleShow9}
+        onMouseEnter={() => setIsHoveringEdit(true)}
+        onMouseLeave={() => setIsHoveringEdit(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+{/* <Tooltip title="add task..." arrow>
 <img id="unitaddtask" src="https://cdn-icons-png.flaticon.com/512/12692/12692378.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip> 
+</Tooltip>  */}
 {/* <Tooltip title="add unit..." arrow>
 <img id="unitaddunit" src="https://png.pngtree.com/png-vector/20190505/ourmid/pngtree-vector-add-icon-png-image_1023418.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
 </Tooltip>  */}
+
 <Tooltip title="create deal..." arrow>
-<img id="unitcreatedeal" src="https://static.vecteezy.com/system/resources/previews/049/672/081/non_2x/two-people-shaking-hands-in-a-circle-free-png.png" onClick={()=>navigate('/deal')}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip> 
+      <img
+        id="unitcreatedeal"
+        src={
+          isHoveringunitcreatedeal
+            ? "https://static.vecteezy.com/system/resources/previews/049/672/081/non_2x/two-people-shaking-hands-in-a-circle-free-png.png" // hover image
+            : "https://cdn-icons-png.flaticon.com/512/2622/2622718.png" // default image
+        }
+        onClick={()=>navigate('/deal')}
+        onMouseEnter={() => setIsHoveringunitcreatedeal(true)}
+        onMouseLeave={() => setIsHoveringunitcreatedeal(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+
 <Tooltip title="Add Property Owner/ Owner/Associate Contact/Remove Owner.." arrow>
-<img id="unitaddremoveowner"  src="https://thumbs.dreamstime.com/b/add-remove-user-icon-vector-flat-outline-web-design-isolated-white-background-color-272194204.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="unitaddremoveowner"
+        src={
+          isHoveringunitadduser
+            ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4zfekzYjrE20ZK13_QCNaD79Ckw0ALRGgGA&s" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3Ip10smoBiUPAxllgXOutryiGqQIj8CzJPQ&s" // default image
+        }
+        onClick={()=>navigate('/deal')}
+        onMouseEnter={() => setIsHoveringunitadduser(true)}
+        onMouseLeave={() => setIsHoveringunitadduser(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
 <Tooltip title="Matched Lead.." arrow>
-<img id="unitmatchedlead"  src="https://www.clipartmax.com/png/middle/474-4745675_martial-arts-lead-management-lead-management-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="unitmatchedlead"
+        src={
+          isHoveringprojectmatchedlead
+            ? "https://img.icons8.com/external-flaticons-lineal-color-flat-icons/512w/external-lead-social-media-agency-flaticons-lineal-color-flat-icons-3.png" // hover image
+            : "https://cdn.iconscout.com/icon/premium/png-256-thumb/lead-management-986101.png" // default image
+        }
+       
+        onMouseEnter={() => setIsHoveringprojectmatchedlead(true)}
+        onMouseLeave={() => setIsHoveringprojectmatchedlead(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
 <Tooltip title="Call.." arrow>
-<img id="unitcall"  src="https://static.vecteezy.com/system/resources/previews/016/314/381/non_2x/call-icon-free-png.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Send Mail.." arrow>
-<img id="unitmail"  src="  https://w7.pngwing.com/pngs/7/83/png-transparent-email-computer-icons-internet-graphy-email-miscellaneous-blue-button-icon-thumbnail.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Send WhatsApp.." arrow>
-<img id="unitwhatsapp"  src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/WhatsApp_icon.png/479px-WhatsApp_icon.png"  style={{height:"50px",width:"50px",cursor:"pointer",marginTop:"-2px",display:"none",marginLeft:"20px",objectFit:"contain"}}m alt=""/>
-</Tooltip>
-<Tooltip title="Send Message.." arrow>
-<img id="unitmessage"  src="https://w7.pngwing.com/pngs/198/585/png-transparent-chatbox-icon-computer-icons-message-sms-icon-message-miscellaneous-grass-online-chat-thumbnail.png"  style={{height:"40px",width:"40px",cursor:"pointer",marginTop:"3px",display:"none",marginLeft:"20px",objectFit:"contain"}} alt=""/>
-</Tooltip>
-<Tooltip title="Add Remarks/Note.." arrow>
-<img id="unitaddremarks"  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgbdAgrzt5tx31PHUYAp2LXUqr-D2QOwT_sQ&s" onClick={handleShow6}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Add Tag.." arrow>
-<img id="unitaddtag"  src="https://png.pngtree.com/png-clipart/20230805/original/pngtree-hospital-tag-icon-add-tag-offer-vector-picture-image_9758849.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Update Stage/status.." arrow>
-<img id="unitupdatestage"  src="https://thumbs.dreamstime.com/b/two-arrows-d-icon-update-symbol-two-arrows-d-icon-update-symbol-d-recycle-icon-refresh-icon-isolated-white-background-342646057.jpg" onClick={handleShow5}   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
-<Tooltip title="Preview.." arrow>
-<img id="unitpreview"  src="https://cdn-icons-png.flaticon.com/512/143/143594.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="unitcall"
+        src={
+          isHoveringcall
+            ? "https://cdn-icons-png.flaticon.com/512/561/561253.png" // hover image
+            : "https://icons.veryicon.com/png/o/miscellaneous/mime-icon/call-14.png" // default image
+        }
+        onMouseEnter={() => setIsHoveringcall(true)}
+        onMouseLeave={() => setIsHoveringcall(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+ <Tooltip title="Send Mail,WhatsApp and Message..." arrow>
+      <img
+        id="unitsendall"
+        src={
+          isHoveringsendmail
+            ? "https://cdn-icons-png.flaticon.com/512/786/786407.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAkAryM3dt6AWqQt1fHHBAtQ-YFVel4wnqEA&s" // default image
+        }
+        onMouseEnter={() => setIsHoveringsendmail(true)}
+        onMouseLeave={() => setIsHoveringsendmail(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Add Document.." arrow>
-<img id="unitadddocument"  src="https://icons.iconarchive.com/icons/graphicloads/long-shadow-documents/256/document-add-icon.png"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Add Remarks/Note.." arrow>
+      <img
+        id="unitaddremarks"
+        src={
+          isHoveringaddremarks
+            ? "https://cdn-icons-png.flaticon.com/512/1381/1381552.png" // hover image
+            : "https://static-00.iconduck.com/assets.00/comment-add-icon-2048x2048-5tgm7wfd.png" // default image
+        }
+        onClick={handleShow6}
+        onMouseEnter={() => setIsHoveringaddremarks(true)}
+        onMouseLeave={() => setIsHoveringaddremarks(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
-<Tooltip title="Upload Picture.." arrow>
-<img id="unituploadpicture"  src="https://png.pngtree.com/png-clipart/20200225/original/pngtree-image-upload-icon-photo-upload-icon-png-image_5279796.jpg"   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+ <Tooltip title="Add Tag.." arrow>
+      <img
+        id="unitaddtag"
+        src={
+          isHoveringaddtag
+            ? "https://cdn-icons-png.freepik.com/512/11500/11500120.png" // hover image
+            : "https://cdn-icons-png.flaticon.com/512/118/118061.png" // default image
+        }
+      
+        onMouseEnter={() => setIsHoveringaddtag(true)}
+        onMouseLeave={() => setIsHoveringaddtag(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+<Tooltip title="Update.." arrow>
+      <img
+        id="unitupdatestage"
+        src={
+          isHoveringunitupdate
+            ? "https://cdn-icons-png.flaticon.com/512/6713/6713079.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTFo9g6QLJ-P3k8PTrjfrkWBOZI5ptsWJW4g&s" // default image
+        }
+        onClick={handleShow5}
+        onMouseEnter={() => setIsHoveringunitupdate(true)}
+        onMouseLeave={() => setIsHoveringunitupdate(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+  <Tooltip title="Preview.." arrow>
+      <img
+        id="unitpreview"
+        src={
+          isHoveringpreview
+            ? "https://cdn-icons-png.flaticon.com/512/143/143594.png" // hover image
+            : "https://icon-library.com/images/preview-icon-png/preview-icon-png-26.jpg" // default image
+        }
+        onClick={()=>navigate('projectpreview',{state:selectedItems2})} 
+        onMouseEnter={() => setIsHoveringpreview(true)}
+        onMouseLeave={() => setIsHoveringpreview(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+ <Tooltip title="Add Document.." arrow>
+      <img
+        id="unitadddocument"
+        src={
+          isHoveringadddocuments
+            ? "https://cdn-icons-png.freepik.com/512/5442/5442207.png" // hover image
+            : "https://www.pngkey.com/png/detail/268-2688000_add-document-icon-add-file-icon-png.png" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringadddocuments(true)}
+        onMouseLeave={() => setIsHoveringadddocuments(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
+<Tooltip title="Upload Image.." arrow>
+      <img
+        id="unituploadpicture"
+        src={
+          isHoveringuploadpicture
+            ? "https://www.pngall.com/wp-content/uploads/15/Open-File-PNG-Clipart.png" // hover image
+            : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlz-TKOccaHn9IPHPOBVUJKOxcrSMhc3uhkw&s" // default image
+        }
+    
+        onMouseEnter={() => setIsHoveringuploadpicture(true)}
+        onMouseLeave={() => setIsHoveringuploadpicture(false)}
+        alt="edit"
+        style={{
+          height: "25px",
+          width: "25px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
+
 
 <Tooltip title="Customer Feedback.." arrow>
-<img id="unitcustomerfeedback"  src="https://png.pngitem.com/pimgs/s/69-690659_expert-customer-feedback-icon-png-transparent-png.png" onClick={toggleToast }   style={{height:"35px",width:"35px",cursor:"pointer",marginTop:"6px",display:"none",marginLeft:"20px"}} alt=""/>
-</Tooltip>
+      <img
+        id="unitcustomerfeedback"
+        src={
+          isHoveringunitcustomerfeedback
+            ? "https://cdn-icons-png.freepik.com/512/12534/12534997.png" // hover image
+            : "https://png.pngitem.com/pimgs/s/69-690659_expert-customer-feedback-icon-png-transparent-png.png" // default image
+        }
+         onClick={toggleToast}
+        onMouseEnter={() => setIsHoveringunitcustomerfeedback(true)}
+        onMouseLeave={() => setIsHoveringunitcustomerfeedback(false)}
+        alt="edit"
+        style={{
+          height: "28px",
+          width: "30px",
+          cursor: "pointer",
+          marginTop: "6px",
+          marginLeft: "20px",
+          display: "none"
+        }}
+      />
+    </Tooltip>
 
 </div>
 
@@ -6538,7 +7272,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
           </Modal>
 
 
-          <Modal show={show7} onHide={handleClose7} size='xl'>
+          {/* <Modal show={show7} onHide={handleClose7} size='xl'>
             <Modal.Header>
               <Modal.Title>Update Property Owner</Modal.Title>
             </Modal.Header>
@@ -6674,7 +7408,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                 Close
               </Button>
             </Modal.Footer>
-          </Modal>
+          </Modal> */}
 
           <Modal show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
             <Modal.Header>
@@ -9242,34 +9976,400 @@ stage:selectedLead.stage
       <strong className="me-auto">Customer Feedback</strong>
     </div>
     <div className="toast-body">
-      <div className="mb-2">
-        <label className="form-label">Owner Name</label>
-        <select className="form-control form-control-sm">
-          <option>---select owner---</option>
-          <option>Ram Kumar</option>
-          <option>Suresh Gupta</option>
-          <option>Pawan Verma</option>
-        </select>
-      </div>
+          <div className="mb-2">
+          <label className="form-label">Owner Name</label>
+          <div className="d-flex align-items-center">
+            <select className="form-control form-control-sm me-2" style={{ marginRight: '10px' }}>
+              <option>---select owner---</option>
+             {
+              contactdata.map((item)=>
+              {
+                return <option>{item.title} {item.first_name} {item.last_name}</option>
+              })
+             }
+            </select>
+            <button className="btn btn-sm btn-primary"  onClick={() => window.open('/addcontact', '_blank')}>+</button>
+          </div>
+        </div>
+
       <div className="mb-2">
         <label className="form-label">Unit No.</label>
-        <input type="text" className="form-control form-control-sm"/>
+        <input type="text" className="form-control form-control-sm" value={selectedItems3?.[0]?.unit_no || ""}/>
       </div>
       <div className="mb-2">
         <label className="form-label">Owner Response on Sale</label>
-        <select className="form-control form-control-sm">
-          <option>---select owner---</option>
-          <option>Ram Kumar</option>
-          <option>Suresh Gupta</option>
-          <option>Pawan Verma</option>
+        <select className="form-control form-control-sm" onChange={(e)=>setfeedbackform({...feedbackform,owner_response:e.target.value})}>
+          <option>---select response---</option>
+          <option>Yes</option>
+          <option>Yes -Sell this property but buy another</option>
+          <option>Sold</option>
+          <option>No -But discussed about price</option>
+          <option>No -But wants to buy another property</option>
+          <option>Thinking may/be in future</option>
+          <option>No</option>
+          <option>Sold -But Interested to Buy Another Property</option>
+          <option>Sold -But Interested to sell Another Property</option>
         </select>
       </div>
+      {
+        feedbackform.owner_response==="Yes" && 
+        (
+            <div className="mb-2">
+              <button
+              onClick={() => window.open('/deal', '_blank')}
+              className="btn btn-sm"
+              style={{
+                background: "linear-gradient(135deg, #28a745, #218838)",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "14px",
+                padding: "6px 16px",
+                borderRadius: "6px",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                border: "none",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+                e.target.style.transform = "scale(1.03)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+                e.target.style.transform = "scale(1)";
+              }}
+            >
+              <i className="bi bi-handshake-fill me-2"></i> Create Deal
+            </button>
+           
+          </div>
+        )
+      }
+
+      {
+        feedbackform.owner_response==="Yes -Sell this property but buy another" && 
+        (
+            <div className="mb-2">
+              <button
+                 onClick={() => window.open('/deal', '_blank')}
+    className="btn btn-sm"
+    style={{
+      background: "linear-gradient(135deg, #28a745, #218838)",
+      color: "white",
+      fontWeight: "600",
+      fontSize: "14px",
+      padding: "6px 16px",
+      borderRadius: "6px",
+      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+      border: "none",
+      transition: "all 0.3s ease",
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+      e.target.style.transform = "scale(1.03)";
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+      e.target.style.transform = "scale(1)";
+    }}
+  >
+    <i className="bi bi-handshake-fill me-2"></i> Create Deal
+  </button>
+    <button
+      className="btn btn-sm"
+      style={{
+        marginLeft: "10%",
+        background: "linear-gradient(135deg, #28a745, #218838)",
+        color: "white",
+        fontWeight: "600",
+        fontSize: "14px",
+        padding: "6px 16px",
+        borderRadius: "6px",
+        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+        border: "none",
+        transition: "all 0.3s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+        e.target.style.transform = "scale(1.03)";
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+        e.target.style.transform = "scale(1)";
+      }}
+    >
+      <i className="bi bi-handshake-fill me-2"></i> Lead Requirment
+    </button>
+          
+          </div>
+        )
+
+      }
+
+      {
+        feedbackform.owner_response==="Sold" && 
+        (
+            <div className="mb-2">
+               <button
+              className="btn btn-sm"
+              style={{
+                marginLeft: "10%",
+                background: "linear-gradient(135deg, #28a745, #218838)",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "14px",
+                padding: "6px 16px",
+                borderRadius: "6px",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                border: "none",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+                e.target.style.transform = "scale(1.03)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+                e.target.style.transform = "scale(1)";
+              }}
+            >
+              <i className="bi bi-handshake-fill me-2"></i> Add New owner
+            </button>
+        
+          </div>
+        )
+
+      }
+
+  {
+  feedbackform.owner_response === "No -But discussed about price" && (
+    <div className="mb-2">
+      <label className="form-label">Reason</label>
+      <div>
+        {[
+          "Had bad experience with previous agent",
+          "Will sell after completion of construction",
+          "Will sell after registry",
+          "Don’t want to involve brokers / privacy concern",
+          "Already dealing with another broker",
+          "Waiting for better market price",
+          "Price expectations not matching",
+          "Other",
+        ].map((reason, index) => (
+          <div className="form-check" key={index}>
+            <input
+              className="form-check-input"
+              type="radio"
+              name="ownerReason"
+              value={reason}
+              id={`reason-${index}`}
+              checked={
+                feedbackform.discussed_reason === reason ||
+                (reason === "Other" &&
+                  typeof feedbackform.discussed_reason === "string" &&
+                  !reasonsList.includes(feedbackform.discussed_reason))
+              }
+              onChange={(e) =>
+                setfeedbackform({
+                  ...feedbackform,
+                  discussed_reason: e.target.value,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor={`reason-${index}`}>
+              {reason}
+            </label>
+
+            {reason === "Other" && feedbackform.discussed_reason === "Other" && (
+                <input
+                  type="text"
+                  className="form-control form-control-sm mt-2"
+                  placeholder="Please specify"
+                  onChange={(e)=>setfeedbackform({...feedbackform,other_discussed_reason:e.target.value})}
+                
+                />
+              )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+   {
+        feedbackform.owner_response==="No -But wants to buy another property" && 
+        (
+            <div className="mb-2">
+               <button
+              className="btn btn-sm"
+              style={{
+                background: "linear-gradient(135deg, #28a745, #218838)",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "14px",
+                padding: "6px 16px",
+                borderRadius: "6px",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                border: "none",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+                e.target.style.transform = "scale(1.03)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+                e.target.style.transform = "scale(1)";
+              }}
+            >
+              <i className="bi bi-handshake-fill me-2"></i> Lead Requirment
+            </button>
+          </div>
+        )
+
+      }
+        {
+        feedbackform.owner_response==="Thinking may/be in future" && 
+        (
+            <div className="mb-2">
+            <label className="form-label">Schedule Next Call Date</label>
+           <input type="datetime-local" className="form-control form-control-sm" />
+            </div>
+        )
+
+      }
+      {
+  feedbackform.owner_response === "No" && (
+    <div className="mb-2">
+      <label className="form-label">Reason</label>
+      <div>
+        {[
+           "Family not agreed yet / Internal family issue",
+            "Property is under dispute / Legal issue",
+            "Still under use (self-living / family living)",
+            "Currently rented out / tenant issue",
+            "Emotional attachment with property",
+            "Recently bought, not planning to sell yet",
+            "Joint ownership, others not willing",
+            "Will sell only if urgent need arises",
+            "Planning to construct house",
+            "Can’t decide right now / need more time",
+            "Not interested in selling at all",
+            "Other"
+        ].map((reason, index) => (
+          <div className="form-check" key={index}>
+            <input
+              className="form-check-input"
+              type="radio"
+              name="noReason"
+              value={reason}
+              id={`reason-${index}`}
+              checked={
+                feedbackform.no_reason === reason ||
+                (reason === "Other" &&
+                  typeof feedbackform.no_reason === "string" &&
+                  !noreasonsList.includes(feedbackform.no_reason))
+              }
+              onChange={(e) =>
+                setfeedbackform({
+                  ...feedbackform,
+                  no_reason: e.target.value,
+                })
+              }
+            />
+            <label className="form-check-label" htmlFor={`reason-${index}`}>
+              {reason}
+            </label>
+
+            {reason === "Other" && feedbackform.no_reason === "Other" && (
+                <input
+                  type="text"
+                  className="form-control form-control-sm mt-2"
+                  placeholder="Please specify"
+                  onChange={(e)=>setfeedbackform({...feedbackform,other_no_reason:e.target.value})}
+                
+                />
+              )}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+  {
+        feedbackform.owner_response==="Sold -But Interested to Buy Another Property" && 
+        (
+            <div className="mb-2">
+                <button
+                   onClick={() => window.open('/leadinfo', '_blank')}
+              className="btn btn-sm"
+              style={{
+                background: "linear-gradient(135deg, #28a745, #218838)",
+                color: "white",
+                fontWeight: "600",
+                fontSize: "14px",
+                padding: "6px 16px",
+                borderRadius: "6px",
+                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+                border: "none",
+                transition: "all 0.3s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+                e.target.style.transform = "scale(1.03)";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+                e.target.style.transform = "scale(1)";
+              }}
+            >
+              <i className="bi bi-handshake-fill me-2"></i> Add Lead
+            </button>
+            </div>
+        )
+
+      }
+        {
+        feedbackform.owner_response==="Sold -But Interested to sell Another Property" && 
+        (
+    <div className="mb-2">
+  <button
+      onClick={() => window.open('/deal', '_blank')}
+    className="btn btn-sm"
+    style={{
+      background: "linear-gradient(135deg, #28a745, #218838)",
+      color: "white",
+      fontWeight: "600",
+      fontSize: "14px",
+      padding: "6px 16px",
+      borderRadius: "6px",
+      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
+      border: "none",
+      transition: "all 0.3s ease",
+    }}
+    onMouseEnter={(e) => {
+      e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+      e.target.style.transform = "scale(1.03)";
+    }}
+    onMouseLeave={(e) => {
+      e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
+      e.target.style.transform = "scale(1)";
+    }}
+  >
+    <i className="bi bi-handshake-fill me-2"></i> Create Deal
+  </button>
+    </div>
+
+        )
+
+      }
+
        <div className="mb-2">
         <label className="form-label">Stage</label>
         <select className="form-control form-control-sm">
           <option>---select stage---</option>
           <option>Open</option>
           <option>Close</option>
+          <option>Active</option>
+          <option>Inactive</option>
         </select>
       </div>
         <div className="mb-2">
