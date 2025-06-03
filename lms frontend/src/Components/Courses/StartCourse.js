@@ -148,8 +148,9 @@ function StartCourse() {
                    <div className='main-course-content'>
                       <div className='course-info-div'>
                         <div className='upper-content'>
-                            <img src ={`${course.image_file}`} />
+                            <img src ={`${course.thumbnail_upload[0]}`} />
                             <div className='aboutCourse-div'>
+                                <h3>{course.course_duration} Hrs</h3>
                                 <button onClick={handleStartClick} >START</button>
                                 <h5>{course.course_title_main}</h5>
                                 <p>{course.description}</p>
@@ -189,7 +190,7 @@ function StartCourse() {
                             </div>
                       </div>
   
-                      <div className='enroll-div'>
+                      {/* <div className='enroll-div'>
                         <h5>Your Session</h5>
 
                         <div className='extra-info'>
@@ -203,7 +204,7 @@ function StartCourse() {
                             <button>Enroll</button>
                         </div>
 
-                      </div>
+                      </div> */}
                    </div>
                 </div>
             </section>

@@ -29,12 +29,19 @@ import Swal from "sweetalert2";
 import { Details, Try } from "@mui/icons-material";
 import Leadsingleview from "./leadsingleview";
 import * as XLSX from 'xlsx';
+import Lottie from "lottie-react";
 
 
 function Leadfetch() {
 
        const [isLoading, setIsLoading] = useState(false);
        const [isLoading1, setIsLoading1] = useState(false);
+         const [animationData, setAnimationData] = useState(null);
+         useEffect(() => {
+           fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+             .then((res) => res.json())
+             .then((data) => setAnimationData(data));
+         }, []);
 
 
   const countrycode=["Afghanistan +93","Aland Islands +358","Albania +355","Algeria +213","American Samoa +1684","Andorra +376",
@@ -1698,7 +1705,7 @@ const handleShow7=async()=>
   };
   
    
-  const matchdeal=["What'sApp","Message","Mail"];
+const matchdeal=["What'sApp","Message","Mail"];
 
 const [matchdeals, setmatcheddeals] = useState([]);
 
@@ -8058,41 +8065,46 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 {/* ==================================================other citys related deals end=============================================== */}
 
 
-  <>
-    {isLoading1 && (
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
-        <div style={{
-          background: "rgba(9, 101, 52, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
-        }}>
-          <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>Uploading matched data...</p>
-        </div>
-      </div>
-    )}
-  </>
+ <>
+       {isLoading1 && (
+         <div style={{
+           position: "fixed",
+           top: 0,
+           left: 0,
+           width: "100vw",
+           height: "100vh",
+           // background: "rgba(255, 255, 255, 0.1)",
+           backdropFilter: "blur(10px)",
+           WebkitBackdropFilter: "blur(10px)",
+           display: "flex",
+           justifyContent: "center",
+           alignItems: "center",
+           zIndex: 9999,
+         }}>
+           <div style={{
+             // backgroundColor: "rgba(0,0,0,0.75)",
+             padding: "40px 60px",
+             borderRadius: "20px",
+             // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+             display: "flex",
+             flexDirection: "column",
+             alignItems: "center",
+             color: "#fff",
+             textAlign: "center",
+           }}>
+             <Lottie
+               animationData={animationData}
+               loop
+               autoplay
+               style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+             />
+             <div style={{ fontSize: "18px", fontWeight: 500 }}>
+               Uploading Matched Data...
+             </div>
+           </div>
+         </div>
+       )}
+     </>
             </Modal.Body>
             <Modal.Footer>
               <Button variant="secondary" onClick={handleClose11}>
@@ -8397,41 +8409,46 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
        </div>
 
 
-       <>
-    {isloading2 && (
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
-        <div style={{
-          background: "rgba(9, 101, 52, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
-        }}>
-          <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>sending...</p>
-        </div>
-      </div>
-    )}
-  </>
+    <>
+       {isloading2 && (
+         <div style={{
+           position: "fixed",
+           top: 0,
+           left: 0,
+           width: "100vw",
+           height: "100vh",
+           // background: "rgba(255, 255, 255, 0.1)",
+           backdropFilter: "blur(10px)",
+           WebkitBackdropFilter: "blur(10px)",
+           display: "flex",
+           justifyContent: "center",
+           alignItems: "center",
+           zIndex: 9999,
+         }}>
+           <div style={{
+             // backgroundColor: "rgba(0,0,0,0.75)",
+             padding: "40px 60px",
+             borderRadius: "20px",
+             // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+             display: "flex",
+             flexDirection: "column",
+             alignItems: "center",
+             color: "#fff",
+             textAlign: "center",
+           }}>
+             <Lottie
+               animationData={animationData}
+               loop
+               autoplay
+               style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+             />
+             <div style={{ fontSize: "18px", fontWeight: 500 }}>
+               Sending...
+             </div>
+           </div>
+         </div>
+       )}
+     </>
 
   
 
@@ -8713,76 +8730,86 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
 
                               </div>
                               </div>
-                  <>
-                  {isLoading && (
-                    <div style={{
-                      position: "fixed",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      background: "rgba(0, 0, 0, 0.6)",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 1000,
-                    }}>
-                      <div style={{
-                        background: "rgba(0, 0, 0, 0.8)",
-                        padding: "20px 40px",
-                        borderRadius: "10px",
-                        textAlign: "center",
-                        color: "white",
-                      }}>
-                        <div style={{
-                          width: "50px",
-                          height: "50px",
-                          border: "5px solid white",
-                          borderTop: "5px solid transparent",
-                          borderRadius: "50%",
-                          animation: "spin 1s linear infinite",
-                          margin: "0 auto 10px",
-                        }}></div>
-                        <p>Uploading data...</p>
-                      </div>
-                    </div>
-                  )}
-                </>
-                    <>
-    {isloading3 && (
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
-        <div style={{
-          background: "rgba(9, 101, 52, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
-        }}>
-          <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>importing leads...</p>
-        </div>
-      </div>
-    )}
-  </>
+               <>
+       {isLoading && (
+         <div style={{
+           position: "fixed",
+           top: 0,
+           left: 0,
+           width: "100vw",
+           height: "100vh",
+           // background: "rgba(255, 255, 255, 0.1)",
+           backdropFilter: "blur(10px)",
+           WebkitBackdropFilter: "blur(10px)",
+           display: "flex",
+           justifyContent: "center",
+           alignItems: "center",
+           zIndex: 9999,
+         }}>
+           <div style={{
+             // backgroundColor: "rgba(0,0,0,0.75)",
+             padding: "40px 60px",
+             borderRadius: "20px",
+             // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+             display: "flex",
+             flexDirection: "column",
+             alignItems: "center",
+             color: "#fff",
+             textAlign: "center",
+           }}>
+             <Lottie
+               animationData={animationData}
+               loop
+               autoplay
+               style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+             />
+             <div style={{ fontSize: "18px", fontWeight: 500 }}>
+               Uploading Data...
+             </div>
+           </div>
+         </div>
+       )}
+     </>
+   <>
+       {isloading3 && (
+         <div style={{
+           position: "fixed",
+           top: 0,
+           left: 0,
+           width: "100vw",
+           height: "100vh",
+           // background: "rgba(255, 255, 255, 0.1)",
+           backdropFilter: "blur(10px)",
+           WebkitBackdropFilter: "blur(10px)",
+           display: "flex",
+           justifyContent: "center",
+           alignItems: "center",
+           zIndex: 9999,
+         }}>
+           <div style={{
+             // backgroundColor: "rgba(0,0,0,0.75)",
+             padding: "40px 60px",
+             borderRadius: "20px",
+             // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+             display: "flex",
+             flexDirection: "column",
+             alignItems: "center",
+             color: "#fff",
+             textAlign: "center",
+           }}>
+             <Lottie
+               animationData={animationData}
+               loop
+               autoplay
+               style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+             />
+             <div style={{ fontSize: "18px", fontWeight: 500 }}>
+               Importing Leads...
+             </div>
+           </div>
+         </div>
+       )}
+     </>
                     
                                 </Modal.Body>
                                 <Modal.Footer>
@@ -8800,40 +8827,45 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
   {/* ================================================import data modal end =========================================================*/}
           <ToastContainer/>
   <>
-    {isLoading4 && (
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
-        <div style={{
-          background: "rgba(187, 16, 19, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
-        }}>
-          <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>deleting leads...</p>
-        </div>
-      </div>
-    )}
-  </>
+       {isLoading4 && (
+         <div style={{
+           position: "fixed",
+           top: 0,
+           left: 0,
+           width: "100vw",
+           height: "100vh",
+           // background: "rgba(255, 255, 255, 0.1)",
+           backdropFilter: "blur(10px)",
+           WebkitBackdropFilter: "blur(10px)",
+           display: "flex",
+           justifyContent: "center",
+           alignItems: "center",
+           zIndex: 9999,
+         }}>
+           <div style={{
+             // backgroundColor: "rgba(0,0,0,0.75)",
+             padding: "40px 60px",
+             borderRadius: "20px",
+             // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+             display: "flex",
+             flexDirection: "column",
+             alignItems: "center",
+             color: "#fff",
+             textAlign: "center",
+           }}>
+             <Lottie
+               animationData={animationData}
+               loop
+               autoplay
+               style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+             />
+             <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Deleting Leads...
+             </div>
+           </div>
+         </div>
+       )}
+     </>
            
    </div>
    

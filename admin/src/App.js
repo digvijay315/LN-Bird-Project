@@ -56,6 +56,7 @@ import Leadscoresettings from './components/leadscoresettings.js';
 import Whatsapplogin from './components/whatsapplogin.js';
 import Users from './components/users.js';
 import Templets from './components/templets.js';
+import Leadrequirmentform from './components/leadrequirmentform.js';
 
 function App() {
   return (
@@ -73,7 +74,6 @@ function App() {
       <Route path='/mailtaskform' element={<Mail_task_form/>}></Route>
       <Route path='/meetingtaskform' element={<Meeting_task_form/>}></Route>
       <Route path='/sitevisitform' element={<Site_visit/>}></Route>
-       {/* <Route path='/addinventory' element={<Addinventory/>}></Route>  */}
       <Route path='/paymentdetails' element={<Payment_details/>}></Route>
       <Route path='/bookingdetails' element={<Booking_details/>}></Route>
       <Route path='/leaddetails' element={<Leadfetch/>}></Route>
@@ -106,8 +106,9 @@ function App() {
       <Route path='/whatsapplogin' element={<Whatsapplogin/>}/>
       <Route path='/addusers' element={<Users/>}/>
       <Route path='/createtemplets' element={<Templets/>}/>
+       <Route path='/leadrequirment' element={<Leadrequirmentform/>}/>
     </Routes>  
-     {/* <WhatsAppLogin/>  */}
+  {/* <Leadrequirmentform/> */}
    </div>
    </BrowserRouter>
   );

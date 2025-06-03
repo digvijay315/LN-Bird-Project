@@ -1,767 +1,3 @@
-
-// import Sidebar from "./Sidebar";
-// import Header from "./Header";
-// import { toast } from "react-toastify";
-// import TextField from '@mui/material/TextField';
-// import * as React from 'react';
-// import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
-// import DesignServicesIcon from '@mui/icons-material/DesignServices';
-// import { styled } from '@mui/material/styles';
-// import Button from '@mui/material/Button';
-// import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-// import AddCircleIcon from '@mui/icons-material/AddCircle';
-// import UploadIcon from '@mui/icons-material/Upload';
-// import axios from "axios";
-// import { base_url } from "./Utils/base_url";
-// import { useState, useEffect } from "react";
-// import Swal from 'sweetalert2';
-// import SellIcon from '@mui/icons-material/Sell';
-// import PPTPreview from "./PPTPreview";
-
-
-// const VisuallyHiddenInput = styled('input')({
-//   clip: 'rect(0 0 0 0)',
-//   clipPath: 'inset(50%)',
-//   height: 1,
-//   overflow: 'hidden',
-//   position: 'absolute',
-//   bottom: 0,
-//   left: 0,
-//   whiteSpace: 'nowrap',
-//   width: 1,
-// });
-
-// function CreateNewCourse() {
-
-//   const [course, setCourse] = useState({
-//     course_title_main: "",
-//     add_main_category: "",
-//     add_sub_category: "",
-//     add_tag: "",
-//     creation_date: "",
-//     description: "",
-//     course_price: "",
-//     course_code: "",
-//     sections: [],
-//     thumbnail_upload: [],
-//     file_upload: [],
-//     video_upload: [],
-//     image_file: [],
-//     pdf_file: [],
-//     word_file: [],
-//   });
-
-//   // State for new section and chapter
-// const [newSection, setNewSection] = useState({
-//   section_title: "",
-//   add_Content: [],
-// });
-
-
-// const [pdfPreviews, setPdfPreviews] = useState([]);
-// const [wordPreviews, setWordPreviews] = useState([]);
-// const [imagePreviews, setImagePreviews] = useState([]);
-// const [pptFiles, setPPTFiles] = useState([]);
-
-// const [thumbnail, setThumbnail] = useState([]);
-// const [fileUpload, setFileUpload] = useState([]);
-
-// const handlePdfFile = (event) => {
-//   const files = Array.from(event.target.files);
-//   setCourse((prevState) => ({
-//       ...prevState,
-//       pdf_file: files,
-//   }));
-//   const previews = files.map((file) => URL.createObjectURL(file));
-//   setPdfPreviews(previews);
-// };
-
-// const handleFileUpload = (event) => {
-//   const files = Array.from(event.target.files);
-//   setCourse((prevState) => ({
-//       ...prevState,
-//       file_upload: files
-//   }));
-//   const previews = files.map((file) => URL.createObjectURL(file));
-//   setFileUpload(previews)
-// };
-
-// const handleWordFile = (event) => {
-//   const files = Array.from(event.target.files);
-//   setCourse((prevState) => ({
-//       ...prevState,
-//       word_file: files,
-//   }));
-//   const previews = files.map((file) => file.name); // Only show file names for Word files
-//   setWordPreviews(previews);
-// };
-
-// const handledocumentpicchange = (event) => {
-//   const files = Array.from(event.target.files);
-//   setCourse((prevState) => ({
-//       ...prevState,
-//       image_file: files,
-//   }));
-//   const previews = files.map((file) => URL.createObjectURL(file));
-//   setImagePreviews(previews);
-// };
-
-// const handledthumbnailUpload = (event) => {
-//   const files = Array.from(event.target.files);
-//   setCourse((prevState) => ({
-//       ...prevState,
-//       thumbnail_upload: files,
-//   }));
-//   const previews = files.map((file) => URL.createObjectURL(file));
-//   setThumbnail(previews);
-// };
-
-// const [videoPreviews, setVideoPreviews] = useState([]); 
-// // Handle video file upload
-// const handleVideo = (event) => {
-//   const files = Array.from(event.target.files);
-//   setChapter({ ...chapter, video_file: files });
-//   setVideoPreviews(files.map((file) => URL.createObjectURL(file)));
-// };
-
-// const handlePPTFile = (event) => {
-//   const files = Array.from(event.target.files);
-//   setChapter({ ...chapter, ppt_file: files });
-//   setPPTFiles(files.map((file) => URL.createObjectURL(file)));  // Store the actual files for preview
-// };
-
-// useEffect(() => {
-//   return () => {
-//     pdfPreviews.forEach((url) => URL.revokeObjectURL(url));
-//     imagePreviews.forEach((url) => URL.revokeObjectURL(url));
-//     videoPreviews.forEach((url) => URL.revokeObjectURL(url));
-
-//     thumbnail.forEach((url) => URL.revokeObjectURL(url));
-//     fileUpload.forEach((url) => URL.revokeObjectURL(url));
-//   };
-// }, [pdfPreviews, imagePreviews, videoPreviews, thumbnail, fileUpload]);
-
-
-// const [chapterMain, setchapterMain] = useState([]);
-// const [chapter, setChapter] = useState({
-//   chapter_title: "",
-//   chapter_description: "",
-//   youtube_link: "",
-//   video_file: [],
-//   ppt_file: [],
-// });
-
-// // Adding Chapter to Section
-// const addChapter = () => {
-//   if (chapter.chapter_title && chapter.chapter_description) {
-//     const updatedContent = [...newSection.add_Content, chapter];
-
-//     setNewSection({ ...newSection, add_Content: updatedContent });
-
-//     setChapter({
-//       chapter_title: "",
-//       chapter_description: "",
-//       youtube_link: "",
-//       video_file: [],
-//       ppt_file: [],
-//     });
-
-//     setVideoPreviews([]);
-//     toast.success("Chapter added successfully!");
-//   } else {
-//     Swal.fire("Error", "Please fill out all fields for the chapter.", "error");
-//   }
-// };
-
-// // Adding Section to Course
-// const addSection = () => {
-//   if (newSection.section_title && newSection.add_Content.length > 0) {
-//     const updatedSections = [...course.sections, newSection];
-//     setCourse({ ...course, sections: updatedSections });
-
-//     setNewSection({ section_title: "", add_Content: [] });
-//     toast.success("Section added successfully!");
-//   } else {
-//     Swal.fire("Error", "Please fill section title and add chapters.", "error");
-//   }
-// };
-
-
-// const handleSubmit = async (e) => {
-//   try {
-//     const formData = new FormData();
-//     formData.append("course_title_main", course.course_title_main);
-//     formData.append("add_main_category", course.add_main_category);
-//     formData.append("add_sub_category", course.add_sub_category);
-//     formData.append("add_tag", course.add_tag);
-//     formData.append("creation_date", course.creation_date);
-//     formData.append("description", course.description);
-//     formData.append("course_price", course.course_price);
-//     formData.append("course_code", course.course_code);
-
-//     // Append sections and their chapters
-//     course.sections.forEach((section, secIndex) => {
-//       formData.append(`sections[${secIndex}].section_title`, section.section_title);
-//       section.add_Content.forEach((chapter, chapIndex) => {
-//         formData.append(`sections[${secIndex}].add_Content[${chapIndex}].chapter_title`, chapter.chapter_title);
-//         formData.append(`sections[${secIndex}].add_Content[${chapIndex}].chapter_description`, chapter.chapter_description);
-//         formData.append(`sections[${secIndex}].add_Content[${chapIndex}].youtube_link`, chapter.youtube_link);
-        
-//         chapter.video_file.forEach((file) => {
-//           formData.append(`sections[${secIndex}].add_Content[${chapIndex}].video_file`, file);
-//         });
-//         chapter.ppt_file.forEach((file) => {
-//           formData.append(`sections[${secIndex}].add_Content[${chapIndex}].ppt_file`, file);
-//         });
-//       });
-//     });
-
-//     // Append files
-//     ["thumbnail_upload","file_upload","image_file", "pdf_file", "word_file"].forEach((field) => {
-//       course[field].forEach((file) => formData.append(field, file));
-//     });
-
-//     const response = await axios.post(`${base_url}/add_course_details`, formData, {
-//       headers: { "Content-Type": "multipart/form-data" },
-//     });
-
-//     Swal.fire("Success", "Course created successfully!", "success");
-//     setPdfPreviews([]);
-//     setImagePreviews([]);
-//     setWordPreviews([]);
-//     setVideoPreviews([]);
-//     setCourse({
-//       course_title_main: "",
-//       add_main_category: "",
-//       add_sub_category: "",
-//       add_tag: "",
-//       creation_date: "",
-//       description: "",
-//       course_price: "",
-//       course_code: "",
-//       sections: [],
-//       thumbnail_upload: [],
-//       file_upload: [],
-//       video_upload: [],
-//       image_file: [],
-//       pdf_file: [],
-//       word_file: [],
-//     });
-
-//     console.log([...formData]);
-    
-
-//   } catch (error) {
-//     toast.error("Error saving course details");
-//   }
-// };
-
-
-                                                
-// const deletechapter = (index) => {
-//   const updatedChapters = newSection.add_Content.filter((_, i) => i !== index);
-
-//   setNewSection({ ...newSection, add_Content: updatedChapters });
-//   setchapterMain(updatedChapters); // If chapterMain is required for another reason
-//   toast.success('Chapter deleted successfully!', { autoClose: 1000 });
-// };
-
-
-
-//   function addLessons() {
-//     document.getElementById("add-lesson-div").style.display = "block"
-//   }
-
-//   function BasicContainer() {
-//     document.getElementById("customize-course").style.display = "block";
-//     document.getElementById("add-new-category").style.display = "none"
-//     document.getElementById("add-document-category").style.display = "none";
-//     document.getElementById("finish_div").style.display = "none";
-//   }
-
-//   function MediaContainer() {
-//     document.getElementById("customize-course").style.display = "none";
-//     document.getElementById("add-new-category").style.display = "block"
-//     document.getElementById("add-document-category").style.display = "none";
-//     document.getElementById("finish_div").style.display = "none";
-//   }
-
-//   function DocumentContainer() {
-//     document.getElementById("customize-course").style.display = "none";
-//     document.getElementById("add-new-category").style.display = "none"
-//     document.getElementById("add-document-category").style.display = "block";
-//     document.getElementById("finish_div").style.display = "none";
-//   }
-
-//   function FinishContainer() {
-//     document.getElementById("customize-course").style.display = "none";
-//     document.getElementById("add-new-category").style.display = "none"
-//     document.getElementById("add-document-category").style.display = "none";
-//     document.getElementById("finish_div").style.display = "block";
-//   }
-
-//   return (
-//     <div>
-      
-//     <div>
-//       <Sidebar />
-
-//       <section className="main-content-section">
-//         <Header />
-
-//         <div
-//           className="header-div header-two"
-//           style={{ padding: "2rem", height: "8rem" }}
-//         >
-//           <div className="create-options-course">
-//             <div
-//               className="basic-option"
-//               style={{ backgroundColor: "#7A1CAC", color: "white" }}
-//               onClick={BasicContainer}
-//             >
-//               <h6>Basic</h6>
-//             </div>
-            
-//               <div className="media-option" id="media-option-id" onClick={MediaContainer}>
-//                 <h6>
-//                   Media <br />
-//                   (.mp4, .mp3)
-//                 </h6>
-//               </div>
-           
-            
-//               <div className="document-option addStyle" id="document-option-id" onClick={DocumentContainer}>
-//                 <h6>
-//                    <br />
-//                   (.pdf, .word, .jpg)
-//                 </h6>
-//               </div>
-            
-//             <div className="finish-div" id="finish-div" onClick={FinishContainer}>
-//               <h6>Finish</h6>     
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="customize-course" id="customize-course">
-//           <div className="course-info-section">
-//             <div className="addcourse-div">
-//                 <h5> <span><DashboardCustomizeIcon/></span> Customize your course</h5>
-//                 <div className="inputs-items">
-//                   <div className="info-div-items">
-//                     <TextField
-//                       required
-//                       id="course_title_main"
-//                       name="course_title_main"
-//                       label="Course title"
-//                       defaultValue=""
-//                       className="input"
-//                       onChange={(e) => setCourse({...course, course_title_main: e.target.value})}
-//                     />
-//                   </div>
-//                   <div className="info-div-items">
-//                   <TextField
-//                       required
-//                       id="add_main_category"
-//                       name="add_main_category"
-//                       label="Add main category"
-//                       defaultValue=""
-//                       className="input"
-//                       onChange={(e) => setCourse({...course, add_main_category: e.target.value})}
-//                     />
-//                   </div>
-//                   <div className="info-div-items">
-//                   <TextField
-//                       required
-//                       id="add_sub_category"
-//                       name="add_sub_category"
-//                       label="Add sub category"
-//                       defaultValue=""
-//                       className="input"
-//                       onChange={(e) => setCourse({...course, add_sub_category: e.target.value})}
-//                     />
-//                     </div>
-//                     <div className="info-div-items">
-//                       <TextField
-//                         required
-//                         id="add_tag"
-//                         name="add_tag"
-//                         label="Add Tag"
-//                         defaultValue=""
-//                         className="input"
-//                         onChange={(e) => setCourse({...course, add_tag: e.target.value})}
-//                       />
-//                     </div>
-//                     <div className="info-div-items">
-//                     <input
-//                       type="date"
-//                         required
-//                         id="creation_date"
-//                         name="creation_date"
-//                         defaultValue=""
-//                         className="input"
-//                         onChange={(e) => setCourse({...course, creation_date: e.target.value})}
-//                       />
-//                     </div>
-//                      <div className="info-div-items">
-//                      <TextField
-//                         id="description"
-//                         name="description"
-//                         label="Description"
-//                         multiline
-//                         rows={4}
-//                         defaultValue=""
-//                         className="input"
-//                         onChange={(e) => setCourse({...course, description: e.target.value})}
-//                       />
-//                      </div> 
-//                 </div>
-//             </div>
-
-//             <div className="addcourse-div">
-//               <div className="add-price-div" style={{marginBottom:"1rem"}}>
-//                 <h6> <span><SellIcon/></span> Add price</h6>
-//                 <div className="inputs-items">
-//                   <div className="info-div-items">
-//                       <TextField
-//                           required
-//                           id="course_price"
-//                           name="course_price"
-//                           label="Course price"
-//                           defaultValue=""
-//                           className="input"
-//                           onChange={(e) => setCourse({...course, course_price: e.target.value})}
-//                         />
-//                     </div>
-//                   </div>
-//               </div>
-
-//               <div className="add-section-div">
-//                 <h6> <span><DesignServicesIcon/></span> Add Section</h6>
-//                 <div className="inputs-items">
-//                   <div className="info-div-items">
-//                     <TextField
-//                       required
-//                       id="course_code"
-//                       name="course_code"
-//                       label="Course code"
-//                       defaultValue=""
-//                       className="input"
-//                       onChange={(e) => setCourse({...course, course_code: e.target.value})}
-//                     />
-//                   </div>
-//                   <div className="info-div-items">
-//                   <TextField
-//                       required
-//                       id="section_title"
-//                       name="section_title"
-//                       label="Course Section title"
-//                       value={newSection.section_title}
-//                       defaultValue=""
-//                       className="input"
-//                       onChange={(e) => setNewSection({ ...newSection, section_title: e.target.value })}
-//                     />
-//                   </div>
-//                   <div className="info-div-items">
-//                     <button onClick={addLessons}>Add Chapters</button>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>            
-//           </div>
-
-//           <div className="add-lessons" id="add-lesson-div">
-//             <h5> <span><AddCircleIcon /></span> Add Chapters</h5>
-//             <div className="lessons-section">
-//             <div className="create-lessons">
-//               <div className="info-div-items upload-video">
-//                 <div
-//                   style={{
-//                     display: "flex",
-//                     flexDirection: "column",
-//                     justifyContent: "center",
-//                     alignItems: "center",
-//                   }}
-//                 >
-//                   <CloudUploadIcon />
-//                   <Button
-//                     component="label"
-//                     variant="contained"
-//                     className="upload-video-btn"
-//                   >
-//                     Choose files or drag and drop
-//                     <VisuallyHiddenInput
-//                       type="file"
-//                       name="video_file"
-//                       accept="video/*" // Accept only video files
-//                       multiple // Allow multiple file uploads
-//                       onChange={handleVideo}
-//                       id="video_file"
-//                       style={{ display: "none" }}
-//                     />
-//                   </Button>
-//                   <p>Video (512GB)</p>
-//                 </div>
-//                   {videoPreviews.length > 0 && (
-//                     <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-//                     {videoPreviews.map((preview, index) => (
-//                       <video key={index} src={preview} controls className="video-preview" style={{width:"200px", height:"100px"}}>
-//                         Your browser does not support the video tag.
-//                       </video>
-//                     ))}
-//                   </div>
-//                   )}
-//               </div>
-//               <div className="info-div-items" style={{border:"1px solid rgba(0,0,0,0.2)", padding:"1rem"}}>
-//                 <p style={{fontSize:"12px", fontWeight:"600"}}>Upload PPT</p>
-//                 <input 
-//                   type="file" 
-//                   name="ppt_file" 
-//                   accept=".ppt,.pptx" 
-//                   onChange={handlePPTFile} 
-//                   multiple 
-//                 />
-//                 <PPTPreview files={pptFiles} />
-//               </div>
-//             </div>
-
-//     <div className="create-lessons">
-//       <div className="info-div-items">
-//         <TextField
-//           required
-//           id="chapter_title"
-//           name="chapter_title"
-//           label="Section Chapter title"
-//           className="input"
-//           value={chapter.chapter_title} // Bind value to chapter state
-//           onChange={(e) =>
-//             setChapter({ ...chapter, chapter_title: e.target.value })
-//           }
-//         />
-//       </div>
-//       <div className="info-div-items">
-//         <TextField
-//           required
-//           id="chapter_description"
-//           name="chapter_description"
-//           label="Chapter description"
-//           className="input"
-//           multiline
-//           rows={4}
-//           value={chapter.chapter_description} // Bind value to chapter state
-//           onChange={(e) =>
-//             setChapter({ ...chapter, chapter_description: e.target.value })
-//           }
-//         />
-//       </div>
-//       <div className="info-div-items">
-//         <TextField
-//           id="youtube_link"
-//           label="Youtube Video Link"
-//           name="youtube_link"
-//           className="input"
-//           value={chapter.youtube_link}
-//           onChange={(e) =>
-//             setChapter({ ...chapter, youtube_link: e.target.value })
-//           }
-//         />  
-//       </div>
-//     </div>
-//   </div>
-//   <div style={{display:"flex"}}>
-//           <div className="upload-btn-div" style={{marginTop:"1.5rem", marginRight:"1.5rem"}}>
-//             <button onClick={addChapter}> Upload Chapter</button>
-//           </div>
-//           <div className="upload-btn-div" style={{marginTop:"1.5rem"}}>
-//             <button onClick={addSection}>Add Section</button>
-//           </div>
-//   </div>
-//           <div className="added-chapter">
-//           <h6>Course Chapters</h6>
-//           {newSection.add_Content && newSection.add_Content.length > 0 ? (
-//             newSection.add_Content.map((chap, index) => (
-//               <div key={index} className="chapter-item">
-//                 <p style={{marginBottom:"0px"}}>
-//                   <strong>{chap.chapter_title}</strong>: {chap.chapter_description}
-//                 </p>
-//                 {/* <button >Delete Chapter</button> */}
-//                 <i onClick={() => deletechapter(index)} class="fa-regular fa-trash-can"></i>
-//               </div>
-//             ))
-//           ) : (
-//             <p>No chapters added yet.</p>
-//           )}
-//         </div>
-
-
-//           </div>
-
-//           <div className='content-div' style={{marginTop: "2rem"}}>
-//               <button id='next btn' style={{height: "3rem"}} onClick={MediaContainer}>Next </button>
-//           </div>
-            
-//         </div>
-
-
-//         <div className='add-new-category' id="add-new-category">
-//                     <div className='adding-course-div' style={{width: "100%"}}> 
-//                     <h5 style={{marginBottom: "1.5rem"}}>Add media files</h5>
-//                     <div className='upload-options' style={{display: "flex", justifyContent: "space-between"}}>
-//                         <div style={{width: "30%"}}>
-//                             <p style={{fontSize: "12px", fontWeight: "600"}}>Thumbnail</p>
-//                             <div className="upload-div" style={{marginTop: "1rem"}}>
-//                                 <input type="file" id='thumbnail_upload' name="thumbnail_upload" onChange={handledthumbnailUpload} accept="image/*" />
-//                                 {thumbnail.map((preview, index) => (
-//                                   <img
-//                                     key={index}
-//                                     src={preview}
-//                                     alt={`img-preview-${index}`}
-//                                     style={{ width: "100%", height: "auto", marginTop: "10px" }}
-//                                   />
-//                                 ))}
-//                                 {/* <p><label htmlFor="file-upload"><i class="fa-solid fa-arrow-up-from-bracket"></i></label></p> */}
-//                             </div>
-//                         </div>
-//                         <div style={{width: "30%"}}>
-//                             <p style={{fontSize: "12px", fontWeight: "600"}}>Main course file</p>
-//                             <div className="upload-div" style={{marginTop: "1rem"}}>
-//                                 <input type="file" name='file_upload' onChange={handleFileUpload} accept="application/pdf" />
-//                                 {fileUpload.map((preview, index) => (
-//                                   <iframe
-//                                     key={index}
-//                                     src={preview}
-//                                     title={`pdf-preview-${index}`}
-//                                     style={{ width: "100%", height: "150px", marginTop: "10px" }}
-//                                   ></iframe>
-//                                 ))}
-//                                 {/* <p><label htmlFor="file-upload"><i class="fa-solid fa-arrow-up-from-bracket"></i></label></p> */}
-//                             </div>
-//                         </div>
-//                         <div style={{width: "30%"}}>
-//                             <p style={{fontSize: "12px", fontWeight: "600"}}>Upload video</p>
-//                             <div className="upload-div" style={{marginTop: "1rem"}}>
-//                                 <input type="file" id='video_upload' name='video_upload' />
-//                                 {/* <p><label htmlFor="file-upload"><i class="fa-solid fa-arrow-up-from-bracket"></i></label></p> */}
-//                             </div>
-//                         </div>
-//                     </div>
-                       
-//                     <div className='content-div' style={{ marginTop: "1rem"}}>
-//                         <button id='previous-btn' onClick={BasicContainer}> Previous </button>
-//                         <button id='next btn' style={{height: "3rem"}} onClick={DocumentContainer}>Next </button>
-//                     </div>
-//                     </div>
-
-//         </div>
-
-//     <div className="add-new-category" id="add-document-category">
-//       <div className="adding-course-div" style={{ width: "100%" }}>
-//         <h5 style={{ marginBottom: "1.5rem" }}>Add Document Files</h5>
-//         <div
-//           className="upload-options"
-//           style={{ display: "flex", justifyContent: "space-between" }}
-//         >
-//           {/* PDF Upload */}
-//           <div style={{ width: "30%" }}>
-//             <p style={{ fontSize: "12px", fontWeight: "600" }}>PDF File</p>
-//             <div className="upload-div" style={{ marginTop: "1rem" }}>
-//               <input
-//                 type="file"
-//                 name="pdf_file"
-//                 onChange={handlePdfFile}
-//                 accept="application/pdf"
-//               />
-//               {pdfPreviews.map((preview, index) => (
-//                 <iframe
-//                   key={index}
-//                   src={preview}
-//                   title={`pdf-preview-${index}`}
-//                   style={{ width: "100%", height: "150px", marginTop: "10px" }}
-//                 ></iframe>
-//               ))}
-//             </div>
-//           </div>
-
-//           {/* Word Upload */}
-//           <div style={{ width: "30%" }}>
-//             <p style={{ fontSize: "12px", fontWeight: "600" }}>Word File</p>
-//             <div className="upload-div" style={{ marginTop: "1rem" }}>
-//               <input
-//                 type="file"
-//                 name="word_file"
-//                 onChange={handleWordFile}
-//                 accept=".doc,.docx"
-//               />
-//               {wordPreviews.map((preview, index) => (
-//                 <p
-//                   key={index}
-//                   style={{
-//                     fontSize: "12px",
-//                     marginTop: "10px",
-//                     overflowWrap: "break-word",
-//                   }}
-//                 >
-//                   {preview}
-//                 </p>
-//               ))}
-//             </div>
-//           </div>
-
-//           {/* Image Upload */}
-//           <div style={{ width: "30%" }}>
-//             <p style={{ fontSize: "12px", fontWeight: "600" }}>JPG File</p>
-//             <div className="upload-div" style={{ marginTop: "1rem" }}>
-//               <input
-//                 type="file"
-//                 name="image_file"
-//                 onChange={handledocumentpicchange}
-//                 accept="image/*"
-//               />
-//               {imagePreviews.map((preview, index) => (
-//                 <img
-//                   key={index}
-//                   src={preview}
-//                   alt={`img-preview-${index}`}
-//                   style={{ width: "100%", height: "auto", marginTop: "10px" }}
-//                 />
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-
-//         <div className="content-div" style={{ marginTop: "4rem" }}>
-//           <button id="previous-btn" onClick={MediaContainer}>
-//             Previous
-//           </button>
-//           <button id="next btn" style={{ height: "3rem" }} onClick={FinishContainer}>
-//             Next
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-
-//         <div className="add-new-category" id="finish_div">
-//           <div className='adding-course-div' style={{width: "100%"}}> 
-//             <button onClick={handleSubmit}> <UploadIcon/> Upload Course</button>
-
-//             <div className='content-div' style={{marginTop: "2rem"}}>
-//               <button id='previous-btn' onClick={DocumentContainer}> Previous </button>
-//             </div>
-//           </div>
-//         </div>
-//       </section>
-//       {/* <ToastContainer/> */}
-//     </div>
-//     </div>
-//   );
-// }
-
-// export default CreateNewCourse;
-
-
-
-
-
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import { toast } from "react-toastify";
@@ -781,6 +17,8 @@ import { useState, useEffect } from "react";
 import Swal from 'sweetalert2';
 import SellIcon from '@mui/icons-material/Sell';
 import PPTPreview from "./PPTPreview";
+import Lottie from "lottie-react";
+
 
 
 const VisuallyHiddenInput = styled('input')({
@@ -795,16 +33,22 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
+
+
 function CreateNewCourse() {
+
+  const[isloading,setisloading]=useState(false)
+
   const [course, setCourse] = useState({
     course_title_main: "",
+    course_code: "",
+    course_duration:"",
     add_main_category: "",
     add_sub_category: "",
     add_tag: "",
     creation_date: "",
     description: "",
     course_price: "",
-    course_code: "",
     sections: [],
     thumbnail_upload: [],
     file_upload: [],
@@ -1012,15 +256,18 @@ function CreateNewCourse() {
     }
     
     try {
+      setisloading(true)
       const formData = new FormData();
       formData.append("course_title_main", course.course_title_main);
+      formData.append("course_code", course.course_code);
+      formData.append("course_duration", course.course_duration);
       formData.append("add_main_category", course.add_main_category);
       formData.append("add_sub_category", course.add_sub_category);
       formData.append("add_tag", course.add_tag);
       formData.append("creation_date", course.creation_date);
       formData.append("description", course.description);
       formData.append("course_price", course.course_price);
-      formData.append("course_code", course.course_code);
+    
   
       // Append sections and their chapters
       course.sections.forEach((section, secIndex) => {
@@ -1087,6 +334,9 @@ function CreateNewCourse() {
     } catch (error) {
       toast.error("Error saving course details");
       console.error(error);
+    }finally
+    {
+      setisloading(false)
     }
   };
 
@@ -1121,6 +371,30 @@ function CreateNewCourse() {
     document.getElementById("add-document-category").style.display = "none";
     document.getElementById("finish_div").style.display = "block";
   }
+
+
+    const [animationData, setAnimationData] = useState(null);
+
+  useEffect(() => {
+    fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
+
+
+    const handleDurationInput = (e) => {
+    let input = e.target.value.replace(/\D/g, "").slice(0, 6); // Only digits, max 6
+
+    let formatted = "";
+    for (let i = 0; i < input.length; i++) {
+      formatted += input[i];
+      if (i === 1 || i === 3) {
+        formatted += ":";
+      }
+    }
+
+    setCourse({ ...course, course_duration: formatted });
+  };
 
   return (
     <div>
@@ -1282,7 +556,7 @@ cursor: pointer;
             <div className="addcourse-div" style={{ backgroundColor: "#fff", padding: "20px", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}>
                 <h5 style={{ color: "#2E073F", marginBottom: "20px" }}> 
                   <span style={{ marginRight: "10px", color: "#7A1CAC" }}><DashboardCustomizeIcon/></span> 
-                  Customize your course
+                  Create your course
                 </h5>
                 <div className="inputs-items">
                   <div className="info-div-items">
@@ -1297,6 +571,36 @@ cursor: pointer;
                       sx={{ '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#7A1CAC' } } }}
                     />
                   </div>
+                   <div className="info-div-items">
+                    <TextField
+                      required
+                      id="course_code"
+                      name="course_code"
+                      label="Course code"
+                      value={course.course_code}
+                      className="input"
+                      onChange={(e) => setCourse({...course, course_code: e.target.value})}
+                      sx={{ '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#7A1CAC' } } }}
+                    />
+                  </div>
+                <div className="info-div-items">
+                <TextField
+                  required
+                  id="course_duration"
+                  name="course_duration"
+                  label="Course Duration"
+                  value={course.course_duration}
+                  className="input"
+                  onChange={handleDurationInput}
+                  placeholder="hh:mm:ss"
+                  inputProps={{ maxLength: 8 }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": { borderColor: "#7A1CAC" },
+                    },
+                  }}
+                />
+              </div>
                   <div className="info-div-items">
                     <TextField
                       required
@@ -1390,18 +694,7 @@ cursor: pointer;
                   Add Section
                 </h6>
                 <div className="inputs-items">
-                  <div className="info-div-items">
-                    <TextField
-                      required
-                      id="course_code"
-                      name="course_code"
-                      label="Course code"
-                      value={course.course_code}
-                      className="input"
-                      onChange={(e) => setCourse({...course, course_code: e.target.value})}
-                      sx={{ '& .MuiOutlinedInput-root': { '&.Mui-focused fieldset': { borderColor: '#7A1CAC' } } }}
-                    />
-                  </div>
+                 
                   <div className="info-div-items">
                     <TextField
                       required
@@ -1811,7 +1104,7 @@ cursor: pointer;
                   ))}
                 </div>
               </div>
-              <div style={{ 
+              {/* <div style={{ 
                 width: "30%", 
                 padding: "20px", 
                 borderRadius: "8px", 
@@ -1834,7 +1127,7 @@ cursor: pointer;
                     Select video files for the main course
                   </p>
                 </div>
-              </div>
+              </div> */}
             </div>
                  
             <div className='content-div' style={{ marginTop: "2rem", display: "flex", gap: "15px" }}>
@@ -2202,6 +1495,48 @@ cursor: pointer;
           </div>
         </div>
       </section>
+
+   <>
+      {isloading && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          // background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
+        }}>
+          <div style={{
+            // backgroundColor: "rgba(0,0,0,0.75)",
+            padding: "40px 60px",
+            borderRadius: "20px",
+            // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#fff",
+            textAlign: "center",
+          }}>
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+            />
+            <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Creating Course...
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+
     </div>
   );
 }

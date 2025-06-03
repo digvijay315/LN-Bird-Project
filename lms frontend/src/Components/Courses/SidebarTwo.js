@@ -4,6 +4,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import { NavLink } from 'react-router-dom';
 import DescriptionIcon from '@mui/icons-material/Description';
+import logo from '../Images/logo1.png'
 
 
 function SidebarTwo() {
@@ -41,7 +42,6 @@ function SidebarTwo() {
         height: 100%;
         }
         .title-div{
-        margin: 1rem;
         border-bottom: 2px solid #7A1CAC;
         }
         .title-div h4{
@@ -66,7 +66,7 @@ function SidebarTwo() {
     <div className='sidebarTwo-content'>
         <div className='dash-Menu'>
             <div className='title-div'>
-                <h4> <span>ONE</span> ENOVA</h4>
+                <img src={logo} style={{height:"150px",width:"200px",marginTop:"-40px"}}></img>
             </div>
             <div className='dash-options'>
                 <HomeIcon/>

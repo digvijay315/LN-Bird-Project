@@ -177,7 +177,7 @@ console.log(course);
               component="img"
               alt={item.title}
               height="140"
-              image={item.image_file}
+              image={item.thumbnail_upload[0]}
             />
             <CardContent>
               <Typography variant="h6" component="div">

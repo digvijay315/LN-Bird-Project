@@ -31,8 +31,19 @@ import Swal from "sweetalert2";
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
 import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
+import Lottie from "lottie-react";
 
 function Dealdetails() {
+
+  const [animationData, setAnimationData] = useState(null);
+  useEffect(() => {
+    fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
+
+
+
   const navigate=useNavigate()
     React.useEffect(()=>{fetchdata()},[])
 
@@ -5082,16 +5093,45 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
               };
 
             const[feedbackform,setfeedbackform]=useState({owner:"",unit_no:"",owner_response:"",discussed_reason:"",other_discussed_reason:"",
-                                                          next_call_date:"",no_reason:"",other_no_reason:"",stage:"",remarks:""})
+                                                          seller_price:"",my_price:"",next_call_date:"",no_reason:"",other_no_reason:"",stage:"",remarks:""})
           
+        const[ownerlist,setownerlist]=useState([])
           useEffect(() => {
           if (selectedItems3?.[0]?.unit_no) {
             setfeedbackform(prev => ({
               ...prev,
               unit_no: selectedItems3[0].unit_no,
             }));
+            const alllist=[...selectedItems3[0].owner_details,...selectedItems3[0].associated_contact]
+            setownerlist(alllist)
           }
         }, [selectedItems3]);
+        console.log(ownerlist);
+        
+
+          useEffect(() => {
+          if (feedbackform.owner_response==="Yes" || feedbackform.owner_response==="Yes -Sell this property but buy another") {
+            setfeedbackform(prev => ({
+              ...prev,
+              stage: "Open",
+            }));
+          }
+          if (feedbackform.owner_response==="Sold" || feedbackform.owner_response==="No -But discussed about price"
+            || feedbackform.owner_response==="No -But wants to buy another property" || feedbackform.owner_response==="Thinking may/be in future"
+            || feedbackform.owner==="Sold -But Interested to sell Another Property" || feedbackform.owner_response==="Sold -But Interested to Buy Another Property")
+             {
+            setfeedbackform(prev => ({
+              ...prev,
+              stage: "Active",
+            }));
+          }
+            if (feedbackform.owner_response==="No") {
+            setfeedbackform(prev => ({
+              ...prev,
+              stage: "Inactive(may vary by reason)",
+            }));
+          }
+        }, [feedbackform.owner_response]);
 
 
           const reasonsList = [
@@ -6100,41 +6140,46 @@ return (
     </Table>
   </TableContainer>
 
-  <>
-    {isLoading && (
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
+ <>
+      {isLoading && (
         <div style={{
-          background: "rgba(0, 0, 0, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          // background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
         }}>
           <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>Uploading data...</p>
+            // backgroundColor: "rgba(0,0,0,0.75)",
+            padding: "40px 60px",
+            borderRadius: "20px",
+            // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#fff",
+            textAlign: "center",
+          }}>
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+            />
+            <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Uploading Data...
+            </div>
+          </div>
         </div>
-      </div>
-    )}
-  </>
+      )}
+    </>
                     
       
             </Modal.Body>
@@ -9669,41 +9714,48 @@ stage:selectedLead.stage
           </Modal>
 
 
-          <>
-    {isLoading && (
-      <div style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(0, 0, 0, 0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}>
+    
+    <>
+      {isLoading && (
         <div style={{
-          background: "rgba(0, 0, 0, 0.8)",
-          padding: "20px 40px",
-          borderRadius: "10px",
-          textAlign: "center",
-          color: "white",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          // background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
         }}>
           <div style={{
-            width: "50px",
-            height: "50px",
-            border: "5px solid white",
-            borderTop: "5px solid transparent",
-            borderRadius: "50%",
-            animation: "spin 1s linear infinite",
-            margin: "0 auto 10px",
-          }}></div>
-          <p>Uploading data...</p>
+            // backgroundColor: "rgba(0,0,0,0.75)",
+            padding: "40px 60px",
+            borderRadius: "20px",
+            // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#fff",
+            textAlign: "center",
+          }}>
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+            />
+            <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Uploading Data...
+            </div>
+          </div>
         </div>
-      </div>
-    )}
-  </>
+      )}
+    </>
+
                     
 
 {/* ===========================================modal for send details start========================================================= */}
@@ -10014,29 +10066,29 @@ stage:selectedLead.stage
 >
   <div className="toast show">
     <div className="toast-header">
-      <strong className="me-auto">Customer Feedback</strong>
+      <strong className="me-auto">Customer Feedback of unit {feedbackform.unit_no}</strong>
     </div>
     <div className="toast-body"  style={{maxHeight: '90vh',overflowY: 'auto',paddingRight: '10px'}}>
           <div className="mb-2">
           <label className="form-label">Owner Name</label>
           <div className="d-flex align-items-center">
-            <select className="form-control form-control-sm me-2" style={{ marginRight: '10px' }}  name="owner" onChange={(e)=>setfeedbackform({...feedbackform,owner:e.target.value})}>
+            <select className="form-control form-control-sm me-2"   name="owner" onChange={(e)=>setfeedbackform({...feedbackform,owner:e.target.value})}>
               <option>---select owner---</option>
              {
-              contactdata.map((item)=>
+              ownerlist.map((item)=>
               {
                 return <option>{item.title} {item.first_name} {item.last_name}</option>
               })
              }
             </select>
-            <button className="btn btn-sm btn-primary"  onClick={() => window.open('/addcontact', '_blank')}>+</button>
+            {/* <button className="btn btn-sm btn-primary"  onClick={() => window.open('/addcontact', '_blank')}>+</button> */}
           </div>
         </div>
 
-      <div className="mb-2">
+      {/* <div className="mb-2">
         <label className="form-label">Unit No.</label>
         <input type="text" name="unit_no"  className="form-control form-control-sm"  value={feedbackform.unit_no || ""}/>
-      </div>
+      </div> */}
       <div className="mb-2">
         <label className="form-label">Owner Response on Sale</label>
         <select className="form-control form-control-sm" name="owner_response" onChange={(e)=>setfeedbackform({...feedbackform,owner_response:e.target.value})}>
@@ -10116,6 +10168,7 @@ stage:selectedLead.stage
     <i className="bi bi-handshake-fill me-2"></i> Create Deal
   </button>
     <button
+    onClick={()=>navigate('/leadrequirment',{state:feedbackform.owner})}
       className="btn btn-sm"
       style={{
         marginLeft: "10%",
@@ -10182,6 +10235,7 @@ stage:selectedLead.stage
 
   {
   feedbackform.owner_response === "No -But discussed about price" && (
+    <div style={{border:"1px solid gray",borderRadius:"8px",padding:"5px"}}>
     <div className="mb-2">
       <label className="form-label">Reason</label>
       <div>
@@ -10233,6 +10287,16 @@ stage:selectedLead.stage
         ))}
       </div>
     </div>
+       <div className="mb-2">
+        <label className="form-label">Price by Seller (₹)</label>
+        <input className="form-control form-control-sm" value={feedbackform.seller_price} name="seller_price" onChange={(e)=>setfeedbackform({...feedbackform,seller_price:e.target.value})}/>
+      </div>
+         <div className="mb-2">
+        <label className="form-label">Price Suggested by Me (₹)</label>
+        <input className="form-control form-control-sm" value={feedbackform.my_price} name="my_price" onChange={(e)=>setfeedbackform({...feedbackform,my_price:e.target.value})}/>
+      </div>
+
+      </div>
   )
 }
    {
@@ -10279,7 +10343,8 @@ stage:selectedLead.stage
       }
       {
   feedbackform.owner_response === "No" && (
-    <div className="mb-2">
+   
+    <div className="mb-2" style={{border:"1px solid gray",borderRadius:"8px",padding:"5px"}}>
       <label className="form-label">Reason</label>
       <div>
         {[
@@ -10406,13 +10471,7 @@ stage:selectedLead.stage
 
        <div className="mb-2">
         <label className="form-label">Stage</label>
-        <select className="form-control form-control-sm" name="stage" onChange={(e)=>setfeedbackform({...feedbackform,stage:e.target.value})}>
-          <option>---select stage---</option>
-          <option>Open</option>
-          <option>Close</option>
-          <option>Active</option>
-          <option>Inactive</option>
-        </select>
+        <input className="form-control form-control-sm" value={feedbackform.stage} name="stage"/>
       </div>
         <div className="mb-2">
         <label className="form-label">Remarks/Notes</label>

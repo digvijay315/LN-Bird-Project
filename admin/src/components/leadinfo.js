@@ -712,7 +712,7 @@ const handleOwnerChange = (event) => {
               console.log(error);
               
                   Swal.fire({
-                  title: 'Oops creating deal failed!',
+                  title: 'Oops creating lead failed!',
                   html: `
                   <img src="https://i.pinimg.com/originals/53/3f/f7/533ff77ef582abbfa00ccf9080137304.gif"
                   alt="Sad face" 

@@ -24,6 +24,7 @@
     "emoji-picker-react": "^4.12.2",
     "file-saver": "^2.0.5",
     "jquery": "^3.7.1",
+    "lottie-react": "^2.4.1",
     "number-to-words": "^1.2.4",
     "quill": "^2.0.3",
     "quill-image-resize-module-react": "^3.0.0",

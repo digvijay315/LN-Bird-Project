@@ -52,6 +52,7 @@ const mongoose = require('mongoose');
 const createCourse = new mongoose.Schema({
     course_title_main: { type: String },
     add_main_category: { type: String },
+    course_duration:{ type: String },
     add_sub_category: { type: String },
     add_tag: { type: String },
     creation_date: { type: String},
