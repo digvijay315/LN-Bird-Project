@@ -5082,7 +5082,18 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
               };
 
             const[feedbackform,setfeedbackform]=useState({owner:"",unit_no:"",owner_response:"",discussed_reason:"",other_discussed_reason:"",
-                                                          next_call_date4:"",no_reason:"",other_no_reason:"",stage:"",remarks:""})
+                                                          next_call_date:"",no_reason:"",other_no_reason:"",stage:"",remarks:""})
+          
+          useEffect(() => {
+          if (selectedItems3?.[0]?.unit_no) {
+            setfeedbackform(prev => ({
+              ...prev,
+              unit_no: selectedItems3[0].unit_no,
+            }));
+          }
+        }, [selectedItems3]);
+
+
           const reasonsList = [
             "Had bad experience with previous agent",
             "Will sell after completion of construction",
@@ -5109,7 +5120,37 @@ const noreasonsList = [
   "Other"
 ];
 
-console.log(selectedItems3);
+  const addfeedback=async()=>
+  {
+    try {
+      const resp=await api.post('addfeedback',feedbackform)
+      if(resp.status===200)
+      {
+         Swal.fire({
+          title: "Feedback Submitted",
+          text: "Feedback Submitted successfully!",
+          icon: "success",
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            handleCancel();
+          }
+        });
+
+      }
+      
+    } catch (error) {
+       Swal.fire({
+                  title: "Feedback Error",
+                  text:error.response.data.message,
+                  icon: "error",
+                  confirmButtonColor: '#d33',
+                  confirmButtonText: 'OK',
+              })
+      
+    }
+  }
 
 
 // ============================================feedback form end=====================================================================
@@ -9975,11 +10016,11 @@ stage:selectedLead.stage
     <div className="toast-header">
       <strong className="me-auto">Customer Feedback</strong>
     </div>
-    <div className="toast-body">
+    <div className="toast-body"  style={{maxHeight: '90vh',overflowY: 'auto',paddingRight: '10px'}}>
           <div className="mb-2">
           <label className="form-label">Owner Name</label>
           <div className="d-flex align-items-center">
-            <select className="form-control form-control-sm me-2" style={{ marginRight: '10px' }}>
+            <select className="form-control form-control-sm me-2" style={{ marginRight: '10px' }}  name="owner" onChange={(e)=>setfeedbackform({...feedbackform,owner:e.target.value})}>
               <option>---select owner---</option>
              {
               contactdata.map((item)=>
@@ -9994,11 +10035,11 @@ stage:selectedLead.stage
 
       <div className="mb-2">
         <label className="form-label">Unit No.</label>
-        <input type="text" className="form-control form-control-sm" value={selectedItems3?.[0]?.unit_no || ""}/>
+        <input type="text" name="unit_no"  className="form-control form-control-sm"  value={feedbackform.unit_no || ""}/>
       </div>
       <div className="mb-2">
         <label className="form-label">Owner Response on Sale</label>
-        <select className="form-control form-control-sm" onChange={(e)=>setfeedbackform({...feedbackform,owner_response:e.target.value})}>
+        <select className="form-control form-control-sm" name="owner_response" onChange={(e)=>setfeedbackform({...feedbackform,owner_response:e.target.value})}>
           <option>---select response---</option>
           <option>Yes</option>
           <option>Yes -Sell this property but buy another</option>
@@ -10112,7 +10153,6 @@ stage:selectedLead.stage
                <button
               className="btn btn-sm"
               style={{
-                marginLeft: "10%",
                 background: "linear-gradient(135deg, #28a745, #218838)",
                 color: "white",
                 fontWeight: "600",
@@ -10159,7 +10199,7 @@ stage:selectedLead.stage
             <input
               className="form-check-input"
               type="radio"
-              name="ownerReason"
+              name="discussed_reason"
               value={reason}
               id={`reason-${index}`}
               checked={
@@ -10182,6 +10222,7 @@ stage:selectedLead.stage
             {reason === "Other" && feedbackform.discussed_reason === "Other" && (
                 <input
                   type="text"
+                  name="other_discussed_reason"
                   className="form-control form-control-sm mt-2"
                   placeholder="Please specify"
                   onChange={(e)=>setfeedbackform({...feedbackform,other_discussed_reason:e.target.value})}
@@ -10231,7 +10272,7 @@ stage:selectedLead.stage
         (
             <div className="mb-2">
             <label className="form-label">Schedule Next Call Date</label>
-           <input type="datetime-local" className="form-control form-control-sm" />
+           <input type="datetime-local" name="next_call_date" className="form-control form-control-sm" onChange={(e)=>setfeedbackform({...feedbackform,next_call_date:e.target.value})} />
             </div>
         )
 
@@ -10259,7 +10300,7 @@ stage:selectedLead.stage
             <input
               className="form-check-input"
               type="radio"
-              name="noReason"
+              name="no_reason"
               value={reason}
               id={`reason-${index}`}
               checked={
@@ -10282,6 +10323,7 @@ stage:selectedLead.stage
             {reason === "Other" && feedbackform.no_reason === "Other" && (
                 <input
                   type="text"
+                  name="other_no_reason"
                   className="form-control form-control-sm mt-2"
                   placeholder="Please specify"
                   onChange={(e)=>setfeedbackform({...feedbackform,other_no_reason:e.target.value})}
@@ -10364,7 +10406,7 @@ stage:selectedLead.stage
 
        <div className="mb-2">
         <label className="form-label">Stage</label>
-        <select className="form-control form-control-sm">
+        <select className="form-control form-control-sm" name="stage" onChange={(e)=>setfeedbackform({...feedbackform,stage:e.target.value})}>
           <option>---select stage---</option>
           <option>Open</option>
           <option>Close</option>
@@ -10374,11 +10416,11 @@ stage:selectedLead.stage
       </div>
         <div className="mb-2">
         <label className="form-label">Remarks/Notes</label>
-        <textarea  className="form-control form-control-sm" style={{height:"100px"}}></textarea>
+        <textarea name="remarks"  className="form-control form-control-sm" style={{height:"100px"}} onChange={(e)=>setfeedbackform({...feedbackform,remarks:e.target.value})}></textarea>
       </div>
     
       <button className="btn btn-danger w-30" onClick={handleCancel}>Cancel</button>
-      <button className="btn btn-success w-60" style={{ marginLeft: "10%" }}>Save Feedback</button>
+      <button className="btn btn-success w-60" style={{ marginLeft: "10%" }} onClick={addfeedback}>Submit Feedback</button>
     </div>
   </div>
 </div>

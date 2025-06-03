@@ -25,6 +25,7 @@ const {sendwhatsapp,setWhatsAppWebhook, sendWhatsAppTextMessage, rcvmessage} = r
 const { add_leadscore, view_leadscore, delete_leadscore, updateleadscore } = require('../controllers/leadscore');
 const { add_templete, view_templete } = require('../controllers/addtemplets');
 const { add_instanceid, view_instanceid } = require('../controllers/whatsappinstanceid');
+const { add_feedback } = require('../controllers/feedbackform');
 
 
 
@@ -190,5 +191,7 @@ router.get('/viewtemplets',view_templete)
 
 router.post('/addinstanceid',add_instanceid)
 router.get('/viewinstanceid',view_instanceid)
+
+router.post('/addfeedback',add_feedback)
 
 module.exports=router;
