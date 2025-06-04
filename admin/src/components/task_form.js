@@ -20,6 +20,10 @@ import { useNavigate } from 'react-router-dom';
 function Task_form() {
   
    const navigate = useNavigate();
+   const location1=useLocation()
+
+  const leadoption=location1?.state?.selectedItem
+
 
 //============================================ fetch data for call fields start==================================================
 
@@ -1730,10 +1734,11 @@ const handleTimeChange = (e) => {
                         <div className="col-md-4"></div>
                     <div className="col-md-4"> <label className="labels">Select Lead</label>
                     <Autocomplete
-                    options={data}
+                    const options = {leadoption?data.filter(item => item._id === leadoption): data}
                     getOptionLabel={(option) =>
-                      `${option.title} ${option.first_name} ${option.last_name}`
-                    }
+                    `${option.title} ${option.first_name} ${option.last_name}`
+                  }
+
                     renderInput={(params) => (
                       <TextField {...params} size="small" placeholder="---select---" />
                     )}
@@ -1891,8 +1896,10 @@ const handleTimeChange = (e) => {
                     <div className="col-md-4">
                 <label className="labels">Select Lead</label>
                 <Autocomplete
-                  options={data}
-                  getOptionLabel={(option) => `${option.title} ${option.first_name} ${option.last_name}`}
+                   const options = {leadoption?data.filter(item => item._id === leadoption): data}
+                    getOptionLabel={(option) =>
+                    `${option.title} ${option.first_name} ${option.last_name}`
+                  }
                   renderInput={(params) => (
                     <TextField {...params} label="---select---" variant="outlined" size="small" />
                   )}
@@ -2253,9 +2260,37 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     
                       
                       
-
+                     <div className="col-md-4">
+                <label className="labels">Select Lead</label>
+                <Autocomplete
+                  const options = {leadoption?data.filter(item => item._id === leadoption): data}
+                    getOptionLabel={(option) =>
+                    `${option.title} ${option.first_name} ${option.last_name}`
+                  }
+                  renderInput={(params) => (
+                    <TextField {...params} label="---select---" variant="outlined" size="small" />
+                  )}
+                  onChange={(event, selectedLead) => {
+                    if (selectedLead) {
+                      const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                     setsitevisit(prevState => ({
+                    ...prevState,
+                    lead: fullName,
+                    title2: selectedLead.title,
+                    first_name: selectedLead.first_name,
+                    last_name: selectedLead.last_name,
+                    mobile_no: selectedLead.mobile_no,
+                    email: selectedLead.email,
+                    stage: selectedLead.stage,
+                    lead_id:selectedLead._id
+                }));
+                setactivity({...activity,activity_name:"create site visit task",lead:fullName})
+                    }
+                  }}
+                />
+              </div>
                          
-                        <div className="col-md-4"><label className="labels">Select Lead</label>
+                        {/* <div className="col-md-4"><label className="labels">Select Lead</label>
                         <select
                         className="form-control form-control-sm"
                         required
@@ -2278,7 +2313,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                             
                         }
                         </select>
-                        </div>
+                        </div> */}
                         <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
                     <option>Select </option>
                        <option>Confirmed</option>
@@ -2538,48 +2573,35 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         <option>Vivek</option>
                         </select>
                         </div>
-                        
-                <div className="col-md-4"><label className="labels">Select Lead</label> <select
-    className="form-control form-control-sm"
-    required
-    onChange={(e) => {
-      const selectedLead = data.find(item => item._id === e.target.value);
-      if (selectedLead) {
-        setleadidmeeting(selectedLead._id)
-        
-        const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
-        setmeetingtask(prevState => ({
-          ...prevState,
-          lead: fullName,
-          title2: selectedLead.title,
-          first_name: selectedLead.first_name,
-          last_name: selectedLead.last_name,
-          mobile_no:selectedLead.mobile_no,
-          email:selectedLead.email,
-          stage:selectedLead.stage
-        }));
-        setactivity({...activity,activity_name:"create meeting task",lead:fullName})
-      }
-    }}
-  >
-                     <option>---select---</option>
-
-                        {lead?._id && (
-                              <option value={lead._id}>
-                                  {id.title} {id.first_name} {id.last_name}
-                              </option>
-                          )}
-                        {
-                          !lead && (
-                            data.map((item)=>
-                            (
-                                <option value={item._id}> {item.title} {item.first_name} {item.last_name}</option>
-                                
-                            ))
-                          )
-                        }
-                        </select>
-                        </div>
+                             <div className="col-md-4">
+                <label className="labels">Select Lead</label>
+                <Autocomplete
+                  const options = {leadoption?data.filter(item => item._id === leadoption): data}
+                    getOptionLabel={(option) =>
+                    `${option.title} ${option.first_name} ${option.last_name}`
+                  }
+                  renderInput={(params) => (
+                    <TextField {...params} label="---select---" variant="outlined" size="small" />
+                  )}
+                  onChange={(event, selectedLead) => {
+                    if (selectedLead) {
+                      const fullName = `${selectedLead.title} ${selectedLead.first_name} ${selectedLead.last_name}`;
+                     setmeetingtask(prevState => ({
+                    ...prevState,
+                    lead: fullName,
+                    title2: selectedLead.title,
+                    first_name: selectedLead.first_name,
+                    last_name: selectedLead.last_name,
+                    mobile_no:selectedLead.mobile_no,
+                    email:selectedLead.email,
+                    stage:selectedLead.stage
+                  }));
+                      setactivity({...activity,activity_name:"create meeting task",lead:fullName})
+                    }
+                  }}
+                />
+              </div>
+             
                         <div className="col-md-4"></div>
                         
                         <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>

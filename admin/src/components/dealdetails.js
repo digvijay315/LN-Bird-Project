@@ -1,11 +1,10 @@
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState,useRef } from "react";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -13,24 +12,21 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ToastContainer,toast } from "react-toastify";
 import React from "react";
-import { event } from "jquery";
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { utils, writeFile } from "xlsx";
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import { duration, SvgIcon } from "@mui/material";
+import {  SvgIcon } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
 import api from "../api";
 import '../css/deal.css';
-import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import { toWords } from 'number-to-words';
 import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
 import Swal from "sweetalert2";
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
-import { arrayIncludes } from "@mui/x-date-pickers/internals/utils/utils";
 import Lottie from "lottie-react";
 
 function Dealdetails() {
@@ -1929,173 +1925,8 @@ function Dealdetails() {
                           website:"",social_media:"",send_matchedlead:"",matchedleads:[],matchinglead:"",remarks:""})
 
 
-                          const [show7, setshow7] = useState(false);
-                          const handleClose7 = () => setshow7(false);
-                          const handleShow7=async()=>
-                          {
-                            setshow7(true);
-                          
-                          }
-
-                          const [input, setInput] = useState('');
-        const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-        const [showSuggestions, setShowSuggestions] = useState(false);
-        const [allSuggestions, setAllSuggestions] = useState([]);
-        const [selectedContacts, setSelectedContacts] = useState([]);
-  
-        React.useEffect(() => {
-          const fetchSuggestions = async () => {
-            try {
-              const response = await api.get('viewcontact');
-              const data = response.data.contact;
-              
-              // Extract the first_name field from the fetched data
-              // const names = data.map(item => item.first_name);
-              setAllSuggestions(data);
-            } catch (error) {
-              console.error('Error fetching suggestions:', error);
-            }
-          };
+                        
       
-          fetchSuggestions();
-        }, []);
-
-        React.useEffect(() => {
-          if (input) {
-            const results = allSuggestions.filter(contact =>
-              contact.first_name?.toLowerCase().includes(input.toLowerCase())
-            );
-            setFilteredSuggestions(results);
-            setShowSuggestions(true);
-          } else {
-            setShowSuggestions(false)
-          }
-        }, [input,allSuggestions]);
-
-       
-      
-        const handleInputChange = (event) => {
-          setInput(event.target.value);
-          handleClose2()
-        };
-        
-        
-        const [show2, setshow2] = useState(false);
-        const handleClose2 = () => setshow2(false);
-        const handleShow2=async()=>
-        {
-          setshow2(true);
-        
-        }
-
-        
-        
-        const [selectedcontact1,setselectedcontact1]=useState([])
-        const [selectedcontact2,setselectedcontact2]=useState([])
-        const[newcontact,setnewcontact]=useState([])
-        
-        const[relation,setrelation]=useState("")
-
-        const handlerelationchange = (e) => {
-          setrelation(e.target.value);
-        };
-
-        const [relation1,setrelation1]=useState("")
-        React.useEffect(() => {
-          
-          
-          if (relation === "Self") {
-            setrelation("")
-            setselectedcontact1(prevContacts => [
-              ...prevContacts,
-              newcontact // Add the new contact (assumed to be an object)
-            ]);
-            setunits(prevDeal => ({
-              ...prevDeal,
-              owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
-            }));
-           
-          }
-           else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
-            
-            setselectedcontact2(prevContacts => [
-              ...prevContacts,
-              newcontact // Add the new contact for other relations
-            ]);
-            setunits(prevDeal => ({ ...prevDeal, relation: relation }));
-            setunits(prevDeal => ({
-              ...prevDeal,
-              associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
-            }));
-            setrelation1(relation)
-            setrelation("")
-          }
-        }, [relation,newcontact]);
-
-
-       
-        const handleSuggestionClick = (contact) => {
-          handleShow2();
-          
-          setnewcontact(contact)
-          // Update the selectedContacts array
-          const updatedContacts = [...selectedContacts, contact];
-          setSelectedContacts(updatedContacts);
-        
-          setInput(''); // Clear the input after selection
-          setShowSuggestions(false); // Hide suggestions after selection
-          //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
-        };
-
-       
-         
-        const removeContact = (id) => {
-    
-          const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
-       
-         
-          const updatedContacts3 = units.owner_details.filter(contact => contact._id !== id);
-          const updatedContacts4 = units.associated_contact.filter(contact => contact._id !== id);
-
-          setSelectedContacts(updatedContacts);
-
-          const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
-          setselectedcontact1(updatedContacts1);
-          setunits((prevState) => ({
-            ...prevState,
-            owner_details: updatedContacts3,
-          }));
-
-          const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
-          setselectedcontact2(updatedContacts2)
-          setunits((prevState) => ({
-            ...prevState,
-            associated_contact: updatedContacts4,
-          }));
-
-        };
-
-        const updatedealownerdata = async () => {
-          try {
-            const id = selectedItems;  // Assuming selectedItems is the ID of the lead to update
-            //const data = {remarks:note,stage:updatestage };  // Send only the stage field in the request body
-        
-            const resp = await api.put(`updatedealbyowner/${id}`, deal);  // Send the request with only stage in the body
-        
-            toast.success("Deal Updated Successfully...", { autoClose: 2000 });
-        
-            // After success, navigate to the lead details page or reload
-            setTimeout(() => {
-              navigate('/dealdetails');
-            }, 2000);
-            setTimeout(() => {
-              window.location.reload();  // If necessary, reload the page
-            }, 2000);
-          } catch (error) {
-            console.log(error);
-          }
-        };
-
 
 
         
@@ -3007,7 +2838,7 @@ const [show9, setshow9] = useState(false);
 
               const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units,config)
              
-              toast.success(`units updated successfully`,{autoClose:"2000"})
+              toast.success(`new owner added successfully`,{autoClose:"2000"})
                               setTimeout(() => {
                                 window.location.reload()
                               }, 2000);
@@ -5194,7 +5025,164 @@ const noreasonsList = [
 
 
 // ============================================feedback form end=====================================================================
-   
+  
+//============================================= add new owner start =======================================================================
+
+    const [show7, setshow7] = useState(false);
+                          const handleClose7 = () => setshow7(false);
+                          const handleShow7=async()=>
+                          {
+                            setshow7(true);
+                            handleCancel()
+                             const project=selectedItems3[0].project_name
+                              const block=selectedItems3[0].block
+                              const unit=selectedItems3[0].unit_no
+
+                              const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                              setunits(resp.data.project.add_unit[0])
+                          
+                          }
+
+          const [input, setInput] = useState('');
+        const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+        const [showSuggestions, setShowSuggestions] = useState(false);
+        const [allSuggestions, setAllSuggestions] = useState([]);
+        const [selectedContacts, setSelectedContacts] = useState([]);
+  
+        React.useEffect(() => {
+          const fetchSuggestions = async () => {
+            try {
+              const response = await api.get('viewcontact');
+              const data = response.data.contact;
+              
+              // Extract the first_name field from the fetched data
+              // const names = data.map(item => item.first_name);
+              setAllSuggestions(data);
+            } catch (error) {
+              console.error('Error fetching suggestions:', error);
+            }
+          };
+      
+          fetchSuggestions();
+        }, []);
+
+        React.useEffect(() => {
+          if (input) {
+            const results = allSuggestions.filter(contact =>
+              contact.first_name?.toLowerCase().includes(input.toLowerCase())
+            );
+            setFilteredSuggestions(results);
+            setShowSuggestions(true);
+          } else {
+            setShowSuggestions(false)
+          }
+        }, [input,allSuggestions]);
+
+       
+      
+        const handleInputChange = (event) => {
+          setInput(event.target.value);
+          handleClose2()
+        };
+        
+        
+        const [show2, setshow2] = useState(false);
+        const handleClose2 = () => setshow2(false);
+        const handleShow2=async()=>
+        {
+          setshow2(true);
+        
+        }
+
+        
+        
+        const [selectedcontact1,setselectedcontact1]=useState([])
+        const [selectedcontact2,setselectedcontact2]=useState([])
+        const[newcontact,setnewcontact]=useState([])
+        
+        const[relation,setrelation]=useState("")
+
+        const handlerelationchange = (e) => {
+          setrelation(e.target.value);
+        };
+
+        const [relation1,setrelation1]=useState("")
+        React.useEffect(() => {
+          
+          
+          if (relation === "Self") {
+            setrelation("")
+            setselectedcontact1(prevContacts => [
+              ...prevContacts,
+              newcontact // Add the new contact (assumed to be an object)
+            ]);
+            setunits(prevDeal => ({
+              ...prevDeal,
+              owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+            }));
+           
+          }
+           else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+            
+            setselectedcontact2(prevContacts => [
+              ...prevContacts,
+              newcontact // Add the new contact for other relations
+            ]);
+            setunits(prevDeal => ({ ...prevDeal, relation: relation }));
+            setunits(prevDeal => ({
+              ...prevDeal,
+              associated_contact: [...(prevDeal.associated_contact || []), newcontact._id] // Append new contact to the existing owner_details array
+            }));
+            setrelation1(relation)
+            setrelation("")
+          }
+        }, [relation,newcontact]);
+
+
+       
+        const handleSuggestionClick = (contact) => {
+          handleShow2();
+          
+          setnewcontact(contact)
+          // Update the selectedContacts array
+          const updatedContacts = [...selectedContacts, contact];
+          setSelectedContacts(updatedContacts);
+        
+          setInput(''); // Clear the input after selection
+          setShowSuggestions(false); // Hide suggestions after selection
+          //setdeal(prevDeal => ({ ...prevDeal, owner_details: updatedContacts }));
+        };
+
+       
+         
+        const removeContact = (id) => {
+    
+          const updatedContacts = selectedContacts.filter(contact => contact._id !== id);
+       
+         
+          const updatedContacts3 = units.owner_details.filter(contact => contact._id !== id);
+          const updatedContacts4 = units.associated_contact.filter(contact => contact._id !== id);
+
+          setSelectedContacts(updatedContacts);
+
+          const updatedContacts1 = selectedcontact1.filter(contact => contact._id !== id);
+          setselectedcontact1(updatedContacts1);
+          setunits((prevState) => ({
+            ...prevState,
+            owner_details: updatedContacts3,
+          }));
+
+          const updatedContacts2 = selectedcontact2.filter(contact => contact._id !== id);
+          setselectedcontact2(updatedContacts2)
+          setunits((prevState) => ({
+            ...prevState,
+            associated_contact: updatedContacts4,
+          }));
+
+        };
+
+
+// =================================================add new owner end===================================================================
 
 //=============================================== deal action buttons toggle start=============================================================
 
@@ -7358,143 +7346,7 @@ return (
           </Modal>
 
 
-          {/* <Modal show={show7} onHide={handleClose7} size='xl'>
-            <Modal.Header>
-              <Modal.Title>Update Property Owner</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
         
-
-            <div  style={{padding:"5px"}}>
-                <div className="row" style={{width:"100%"}}>
-               
-                        <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
-                        {showSuggestions && input && filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-list">
-                              {filteredSuggestions.map((suggestion, index) => (
-                                <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                                  {suggestion.first_name}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} >+</button></div>
-                    
-                     <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
-                     {selectedcontact1.length >= 0 && (
-                      <div className="contact-details">
-                        <table  style={{width:"100%"}}>
-                          
-                          <tbody>
-                          {selectedcontact1.map(contact => (
-                              <StyledTableRow>
-                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
-                                    {contact.title} {contact.first_name} {contact.last_name}<br></br>
-                                    <SvgIcon component={EmailIcon} />
-                                    <span>{contact.email}</span>
-                                </StyledTableCell>
-
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
-                                  {contact.mobile_no.map((number, index) => (
-                                    <span key={index}>
-                                      <SvgIcon component={PhoneIphoneIcon} />
-                                      {number}<br></br>
-                                    </span>
-                                  ))}
-                                </StyledTableCell>
-
-                                <StyledTableCell  style={{ cursor: 'pointer' }}>
-                                  S/W/O <br></br>{contact.father_husband_name}
-                                  </StyledTableCell>
-
-                                  <StyledTableCell  style={{   cursor: 'pointer' }}>
-                                  permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
-                                  {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
-                                  </StyledTableCell>
-
-                                  <StyledTableCell style={{  cursor: 'pointer' }}>
-                                        <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
-                                    </StyledTableCell>
-
-                                <StyledTableCell>
-                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
-                                   </StyledTableCell>
-                                
-                              </StyledTableRow>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-                </div>
-                
-                <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
-                {selectedcontact2.length >= 0 && (
-                <div className="contact-details">
-                    <table style={{width:"100%"}}>
-                        <tbody>
-                             {
-                              
-                              selectedcontact2.map(contact => (
-                                <StyledTableRow>
-                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
-                                        {contact.title} {contact.first_name} {contact.last_name}<br />
-                                        <SvgIcon component={EmailIcon} />
-                                        <span>{contact.email}</span>
-                                    </StyledTableCell>
-
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
-                                        {
-                                        Array.isArray(contact.mobile_no) ?
-                                        contact.mobile_no.map((number, index) => (
-                                            <span key={index}>
-                                                <SvgIcon component={PhoneIphoneIcon} />
-                                                {number}<br />
-                                            </span>
-                                        )):[]}
-                                    </StyledTableCell>
-
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
-                                        S/W/O <br />{contact.father_husband_name}
-                                    </StyledTableCell>
-
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
-                                        permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
-                                    </StyledTableCell>
-
-                                    <StyledTableCell style={{ cursor: 'pointer' }}>
-                                    <span style={{color:"orange",fontWeight:"bolder"}}>{relation1}</span>
-                                    </StyledTableCell>
-                                        
-                                    <StyledTableCell>
-                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))} 
-                        </tbody>
-                    </table>
-                </div>
-            )}
-            </div>
-                     </div>
-                  </div>
-            
-
-
-  
-
-          </Modal.Body>
-            <Modal.Footer>
-            <Button variant="secondary" onClick={updatedealownerdata}>
-                Update
-              </Button>
-              <Button variant="secondary" onClick={handleClose7}>
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal> */}
 
           <Modal show={show2} onHide={handleClose2} size='lg' style={{transition:"0.5s ease-in",backgroundColor:"gray"}}>
             <Modal.Header>
@@ -10056,6 +9908,145 @@ stage:selectedLead.stage
             </Modal.Footer>
           </Modal>
 
+{/*========================================= modal for add new owner in feedback form start =========================================*/}
+
+       <Modal show={show7} onHide={handleClose7} size='xl'>
+            <Modal.Header>
+              <Modal.Title>Add New Owner</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+        
+
+            <div  style={{padding:"5px"}}>
+                <div className="row" style={{width:"100%"}}>
+               
+                        <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
+                        {showSuggestions && input && filteredSuggestions.length > 0 && (
+                            <ul className="suggestion-list">
+                              {filteredSuggestions.map((suggestion, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                  {suggestion.first_name}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        <div className="col-md-3"><label className="labels">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} >+</button></div>
+                    
+                     <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Owner Contact</label><div className="col-md-12"><hr></hr></div>
+                     {selectedcontact1.length >= 0 && (
+                      <div className="contact-details">
+                        <table  style={{width:"100%"}}>
+                          
+                          <tbody>
+                          {
+                          [...selectedcontact1, ...units.owner_details].map(contact => (
+                              <StyledTableRow>
+                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                    {contact.title} {contact.first_name} {contact.last_name}<br></br>
+                                    <SvgIcon component={EmailIcon} />
+                                    <span>{contact.email}</span>
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                  {contact.mobile_no.map((number, index) => (
+                                    <span key={index}>
+                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      {number}<br></br>
+                                    </span>
+                                  ))}
+                                </StyledTableCell>
+
+                                <StyledTableCell  style={{ cursor: 'pointer' }}>
+                                  S/W/O <br></br>{contact.father_husband_name}
+                                  </StyledTableCell>
+
+                                  <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                  permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
+                                  {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
+                                  </StyledTableCell>
+
+                                  <StyledTableCell style={{  cursor: 'pointer' }}>
+                                        <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
+                                    </StyledTableCell>
+
+                                <StyledTableCell>
+                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                   </StyledTableCell>
+                                
+                              </StyledTableRow>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                </div>
+                
+                <div className="col-md-12" style={{marginTop:"20px"}}><label className="labels" >Associate Contact</label><div className="col-md-12"><hr></hr></div>
+                {selectedcontact2.length >= 0 && (
+                <div className="contact-details">
+                    <table style={{width:"100%"}}>
+                        <tbody>
+                             {
+                              
+                              [...selectedcontact2, ...units.associated_contact].map(contact => (
+                                <StyledTableRow>
+                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                        {contact.title} {contact.first_name} {contact.last_name}<br />
+                                        <SvgIcon component={EmailIcon} />
+                                        <span>{contact.email}</span>
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                        {
+                                        Array.isArray(contact.mobile_no) ?
+                                        contact.mobile_no.map((number, index) => (
+                                            <span key={index}>
+                                                <SvgIcon component={PhoneIphoneIcon} />
+                                                {number}<br />
+                                            </span>
+                                        )):[]}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                        S/W/O <br />{contact.father_husband_name}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                        permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
+                                    </StyledTableCell>
+
+                                    <StyledTableCell style={{ cursor: 'pointer' }}>
+                                    <span style={{color:"orange",fontWeight:"bolder"}}>{relation1}</span>
+                                    </StyledTableCell>
+                                        
+                                    <StyledTableCell>
+                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))} 
+                        </tbody>
+                    </table>
+                </div>
+            )}
+            </div>
+                     </div>
+                  </div>
+            
+          </Modal.Body>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={updateinventories}>
+                Update
+              </Button>
+              <Button variant="secondary" onClick={handleClose7}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal> 
+
+
+{/* ====================================modal for add new owner in feedback form end=============================================== */}
 
 {/* =============================================feedback form with toast start================================================== */}
 
@@ -10066,7 +10057,7 @@ stage:selectedLead.stage
 >
   <div className="toast show">
     <div className="toast-header">
-      <strong className="me-auto">Customer Feedback of unit {feedbackform.unit_no}</strong>
+      <strong className="me-auto">Customer Feedback of unit <span style={{fontWeight:'bold',color:"green"}}>{feedbackform.unit_no}</span></strong>
     </div>
     <div className="toast-body"  style={{maxHeight: '90vh',overflowY: 'auto',paddingRight: '10px'}}>
           <div className="mb-2">
@@ -10109,7 +10100,8 @@ stage:selectedLead.stage
         (
             <div className="mb-2">
               <button
-              onClick={() => window.open('/deal', '_blank')}
+             onClick={() =>window.open(`/deal?unit=${encodeURIComponent(JSON.stringify(selectedItems3[0]))}`, '_blank')}
+
               className="btn btn-sm"
               style={{
                 background: "linear-gradient(135deg, #28a745, #218838)",
@@ -10143,7 +10135,7 @@ stage:selectedLead.stage
         (
             <div className="mb-2">
               <button
-                 onClick={() => window.open('/deal', '_blank')}
+             onClick={() =>window.open(`/deal?unit=${encodeURIComponent(JSON.stringify(selectedItems3[0]))}`, '_blank')}
     className="btn btn-sm"
     style={{
       background: "linear-gradient(135deg, #28a745, #218838)",
@@ -10168,7 +10160,7 @@ stage:selectedLead.stage
     <i className="bi bi-handshake-fill me-2"></i> Create Deal
   </button>
     <button
-    onClick={()=>navigate('/leadrequirment',{state:feedbackform.owner})}
+    onClick={() => window.open(`/leadrequirment?owner=${feedbackform.owner}`, '_blank')}
       className="btn btn-sm"
       style={{
         marginLeft: "10%",
@@ -10204,6 +10196,7 @@ stage:selectedLead.stage
         (
             <div className="mb-2">
                <button
+               onClick={handleShow7}
               className="btn btn-sm"
               style={{
                 background: "linear-gradient(135deg, #28a745, #218838)",
@@ -10304,6 +10297,7 @@ stage:selectedLead.stage
         (
             <div className="mb-2">
                <button
+              onClick={() => window.open(`/leadrequirment?owner=${feedbackform.owner}`, '_blank')}
               className="btn btn-sm"
               style={{
                 background: "linear-gradient(135deg, #28a745, #218838)",
@@ -10439,7 +10433,7 @@ stage:selectedLead.stage
         (
     <div className="mb-2">
   <button
-      onClick={() => window.open('/deal', '_blank')}
+       onClick={() =>window.open(`/deal?unit=${encodeURIComponent(JSON.stringify(selectedItems3[0]))}`, '_blank')}
     className="btn btn-sm"
     style={{
       background: "linear-gradient(135deg, #28a745, #218838)",

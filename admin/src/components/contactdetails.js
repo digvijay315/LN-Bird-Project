@@ -240,7 +240,9 @@ const [currentPage, setCurrentPage] = useState(1);
 const [itemsPerPage, setItemsPerPage] = useState(7); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+const filteredDatas = data.filter(item => item.createdAt && !isNaN(new Date(item.createdAt)));
+const sortedData = [...filteredDatas].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // Handle items per page change
@@ -1520,17 +1522,6 @@ const renderPageNumbers1 = () => {
   const handleBlur = () => {
     setIsFlashing(false); // Remove the flash effect when focus is lost
   };
-
-const addtotask=(selecteditems)=>
-{
-  navigate('/tasksform')
-
-  
-}
-
-
-
-
 
 
 const mergeAndSave = async (selectedItems) => {
@@ -3747,7 +3738,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
             ? "https://cdn-icons-png.flaticon.com/512/12692/12692378.png" // hover image
             : "https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" // default image
         }
-        onClick={()=>addtotask(selectedItems)}
+        onClick={() => navigate('/tasksform', { state: { selectedItem: selectedItems[0] } })}
         onMouseEnter={() => setIsHoveringaddtotask(true)}
         onMouseLeave={() => setIsHoveringaddtotask(false)}
         alt="edit"

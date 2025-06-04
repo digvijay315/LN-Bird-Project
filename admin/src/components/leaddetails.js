@@ -400,7 +400,9 @@ useEffect(()=>
   const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const filteredData = data.filter(item => item.createdAt && !isNaN(new Date(item.createdAt)));
+  const sortedData = [...filteredData].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(data.length / itemsPerPage);
   
     // Handle items per page change
@@ -5078,7 +5080,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             ? "https://cdn-icons-png.flaticon.com/512/12692/12692378.png" // hover image
             : "https://cdn2.iconfinder.com/data/icons/interface-solid-7/30/interface-solid-task-add-512.png" // default image
         }
-        onClick={()=>navigate('/tasksform')}
+        onClick={() => navigate('/tasksform', { state: { selectedItem: selectedItems[0] } })}
         onMouseEnter={() => setIsHoveringaddtotask(true)}
         onMouseLeave={() => setIsHoveringaddtotask(false)}
         alt="edit"

@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import * as React from 'react';
 import { toast,ToastContainer } from "react-toastify";
 import api from "../api";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
@@ -25,6 +25,19 @@ import Swal from 'sweetalert2';
 
 function Deal() {
   const navigate=useNavigate()
+    
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const unitString = queryParams.get('unit');
+
+  let unitdata = null;
+  try {
+    unitdata = unitString ? JSON.parse(unitString) : null;
+  } catch (e) {
+    console.error('Invalid unit data in URL:', e);
+  }
+
+    
 // ================================select project,units and block from project data start==============================================================
 const[deal,setdeal]=useState({project_category:[],project_subcategory:"",location:"",ulocality:"",ucity:"",
   utype:"",ucategory:[],usub_category:[],usize:"",available_for:"",stage:"",project:"",block:"",unit_number:"",floors:"",
@@ -1526,7 +1539,7 @@ const formats = [
 
                         <div className="col-md-4"><label className="labels">Project</label>
                         <select className="form-control form-control-sm" name="project" onChange={handleprojectchange}>
-                        <option>choose</option>
+                          <option style={{color:"blue",fontWeight:"bold"}}>{unitdata?unitdata.project_name:"---select"}</option>
                         {
                           allproject.map((project)=>
                           (
@@ -1537,7 +1550,7 @@ const formats = [
                         </div>
                         <div className="col-md-4"><label className="labels">Block</label>
                         <select className="form-control form-control-sm" name="block" onChange={handleallblockchange} >
-                        <option>choose</option>
+                         <option style={{color:"blue",fontWeight:"bold"}}>{unitdata?unitdata.block:"---select---"}</option>
                     {
                       allblocks.map((block)=>
                       (
@@ -1550,7 +1563,7 @@ const formats = [
                         </div>
                         <div className="col-md-4"><label className="labels">Unit No.</label>
                         <select className="form-control form-control-sm" name="unit_no" onChange={handleallunitschange}  >
-                      <option>choose</option>
+                            <option style={{color:"blue",fontWeight:"bold"}}>{unitdata?unitdata.unit_no:"---select"}</option>
                       {
                         allUnits.map((units)=>
                         (

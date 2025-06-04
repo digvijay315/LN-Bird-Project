@@ -12,7 +12,9 @@ function Leadrequirmentform() {
     const navigate=useNavigate()
     
     const location=useLocation()
-    const leaddata=location.state
+    // const leaddata=location.state
+  const queryParams = new URLSearchParams(location.search);
+  const leaddata = queryParams.get('owner');
 
         
      const [leadinfo,setleadinfo]=useState({title:"Mr.",first_name:"",last_name:"",country_code:[''],mobile_no:[''],mobile_type:[''],action11:[],
