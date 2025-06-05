@@ -4937,7 +4937,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
             setownerlist(alllist)
           }
         }, [selectedItems3]);
-        console.log(ownerlist);
+        // console.log(ownerlist);
         
 
           useEffect(() => {

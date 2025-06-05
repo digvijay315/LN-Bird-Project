@@ -101,7 +101,7 @@ useEffect(()=>
 {
 viewprojectbyid()
 },[id])
-     console.log(project);
+     console.log(project.descriptions);
      
 
 
@@ -2408,7 +2408,7 @@ useEffect(() => {
     setrelation("")
   }
 }, [relation,newcontact]);
-console.log(units.associated_contact);
+// console.log(units.associated_contact);
 
 
 const handleSuggestionClick = (contact) => {
@@ -2579,8 +2579,8 @@ const handleSuggestionClick1 = (contact, index) => {
 // }, [units.linkded_contact, allSuggestions]);
 
 useEffect(() => {
-  console.log('Checking units.linkded_contact:', units.linkded_contact);
-  console.log('Checking allSuggestions:', allSuggestions);
+  // console.log('Checking units.linkded_contact:', units.linkded_contact);
+  // console.log('Checking allSuggestions:', allSuggestions);
 
   // Ensure that units.linkded_contact is an array before proceeding
   if (Array.isArray(units.linkded_contact)) {
@@ -3683,7 +3683,7 @@ const generateExcelFileunit = () => {
  {/*------------------------------------------ basic details start------------------------------------------------------------------------ */}
                
                 <div className="row" id='basicdetails1' style={{marginTop:"40px"}}>
-                <div className="col-md-6"><label className="labels">Name</label><input type="text" value={project.name} required="true" className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
+                <div className="col-md-6"><label className="labels">Name</label><input type="text" value={project.name}  className="form-control form-control-sm"  onChange={(e)=>setproject({...project,name:e.target.value})}/></div>
                 <div className='col-md-6'></div>
                     <div className="col-md-6"><label className="labels">Developer Name</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setproject({...project,developer_name:e.target.value})}>
                              <option>{project.developer_name?.name}</option>
@@ -3714,7 +3714,7 @@ const generateExcelFileunit = () => {
                     <div className="col-md-5"><label className="labels">Rera Number</label><input type="text" required="true" className="form-control form-control-sm" value={project.rera_number}  onChange={(e)=>setproject({...project,rera_number:e.target.value})}/></div>
                     <div className='col-md-7'></div>
 
-                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill value={project.descriptions} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setproject({ ...project, descriptions: value })}/></div>
+                    <div className="col-md-10"><label className="labels">Descriptions</label><ReactQuill  key={project.descriptions} value={project.descriptions} formats={formats} modules={modules}   style={{height:"200px"}} onChange={(value) => setproject({ ...project, descriptions: value })}/></div>
                     <div className="col-md-2"></div>
                     
                    
