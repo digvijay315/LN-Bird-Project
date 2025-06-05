@@ -1297,7 +1297,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                             if (block.block_name ) 
                                               {
                                                  
-                                                const updateblocks= [...blocks,...project.add_block, block];
+                                                const updateblocks= [...project.add_block, block];
                                                 setblocks(updateblocks);
                                                 setproject(prevState => ({
                                                   ...prevState,
@@ -1354,7 +1354,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                     if (sizes.size_name ) 
                                                       {
                                                        
-                                                        const updatesizes= [...size,...project.add_size, sizes];
+                                                        const updatesizes= [...project.add_size, sizes];
                                                         setsize(updatesizes);
                                                         setproject(prevState => ({
                                                           ...prevState,
@@ -1724,7 +1724,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
 
                                                   if (units.unit_no ) 
                                                     {
-                                                      const updateunit= [...unit,...project.add_unit, units];
+                                                      const updateunit= [...project.add_unit, units];
                                                       setunit(updateunit);
                                                       setproject(prevState => ({
                                                         ...prevState,
@@ -3713,7 +3713,10 @@ const generateExcelFileunit = () => {
             {item.status}
              </StyledTableCell>
              <StyledTableCell >
-             <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteblock(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+             <div style={{marginTop:"10px"}}>
+               <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteblock(index)}>delete</span>
+              {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteblock(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+              </div>
              </StyledTableCell>
               
           </StyledTableRow>
@@ -3922,7 +3925,10 @@ const generateExcelFileunit = () => {
              {item.size_name}
             </StyledTableCell>
             <StyledTableCell style={{ fontFamily: "times new roman" }}>
-            <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletesize(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+            <div style={{marginTop:"10px"}}>
+              <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deletesize(index)}>delete</span>
+            {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletesize(index)}  style={{height:"40px",cursor:"pointer"}}/>*/}
+            </div> 
             </StyledTableCell>
               
           </StyledTableRow>
@@ -4176,19 +4182,19 @@ const generateExcelFileunit = () => {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Unit No.</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Block</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Unit Type</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Direction</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Road</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Facing</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Ownership</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Lattitude</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Longitude</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Builtup Details</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
+          <StyledTableCell >Unit No.</StyledTableCell>
+          <StyledTableCell >Block</StyledTableCell>
+          <StyledTableCell >Category</StyledTableCell>
+          <StyledTableCell >Unit Type</StyledTableCell>
+          <StyledTableCell >Size</StyledTableCell>
+          <StyledTableCell >Direction</StyledTableCell>
+          <StyledTableCell >Road</StyledTableCell>
+          <StyledTableCell >Facing</StyledTableCell>
+          <StyledTableCell >Ownership</StyledTableCell>
+          <StyledTableCell >Lattitude</StyledTableCell>
+          <StyledTableCell >Longitude</StyledTableCell>
+          <StyledTableCell >Builtup Details</StyledTableCell>
+          <StyledTableCell >Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
@@ -4236,7 +4242,10 @@ const generateExcelFileunit = () => {
             </StyledTableCell>
             
             <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
-              <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteunit(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+              <div style={{marginTop:"10px"}}>
+               <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteunit(index)}>delete</span>
+                {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteunit(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+                </div>
             </StyledTableCell>
               
           </StyledTableRow>
