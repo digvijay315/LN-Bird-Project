@@ -6841,7 +6841,7 @@ return (
             ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4zfekzYjrE20ZK13_QCNaD79Ckw0ALRGgGA&s" // hover image
             : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3Ip10smoBiUPAxllgXOutryiGqQIj8CzJPQ&s" // default image
         }
-        onClick={()=>navigate('/deal')}
+        
         onMouseEnter={() => setIsHoveringunitadduser(true)}
         onMouseLeave={() => setIsHoveringunitadduser(false)}
         alt="edit"

@@ -1039,9 +1039,11 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                         [`&.${tableCellClasses.head}`]: {
                           backgroundColor: theme.palette.common.black,
                           color: theme.palette.common.white,
+                           lineHeight:"0px"
                         },
                         [`&.${tableCellClasses.body}`]: {
                           fontSize: 14,
+                          
                         },
                       }));
                       
@@ -3017,6 +3019,206 @@ const headerSuggestions = {
 
 // ========================================add unit in project end===================================================================
 
+// ===========================================add to size start=================================================================
+
+const [show10, setshow10] = useState(false);
+const handleClose10 = () => setshow10(false);
+const handleShow10=async()=>
+{
+  setshow10(true);
+
+}
+
+const databasefieldsize = [
+    'size_name', 'block1', 'category','sub_category','unit_type','total_sealable_area','sq_feet1',
+    'covered_area','sq_feet2','carpet_area','sq_feet3','loading','percentage','length','yard1',
+    'bredth','yard2','total_area','yard3'];
+  
+const [excelHeaderssize, setExcelHeaderssize] = useState([]); // Store Excel headers
+const [mappedFieldssize, setMappedFieldssize] = useState({}); // Store user-selected mapping
+const [selectedFilesize, setSelectedFilesize] = useState(null); // Store uploaded file
+
+const [duplicateEntriessize, setDuplicateEntriessize] = useState([]);
+const [pendingContactssize, setPendingContactssize] = useState([]);
+
+// 🔹 Step 1: Extract Headers from Excel File
+const handleFileChangesize1 = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  setIsLoading(true); // Start loading
+  setSelectedFilesize
+  (file); // Store file for later use
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const arrayBuffer = e.target.result;
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet,{ header: 1 });
+
+      if (data.length > 0) {
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`);
+        setExcelHeaderssize(headers); // Set headers manually
+      } else {
+        toast.error("No data found in the Excel file.");
+      }
+    } catch (error) {
+      toast.error("Error processing the Excel file.");
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+};
+
+
+
+
+
+// 🔹 Step 2: Process & Map Data Based on User Selection
+const handleProcessFilesize = () => {
+  try {
+    
+  setIsLoading(true);
+  if (!selectedFilesize) {
+    toast.error("No file selected. Please upload a file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    if (data.length > 0) {
+      const updatedsize = data.map((row) => {
+        let newcontact = {};
+
+        Object.keys(row).forEach((key) => {
+          let mappedKey = mappedFieldssize[key] || key; // Use mapped key or original key
+          let value = row[key];
+
+          // Automatically detect and convert CSV-style values to arrays
+          if (typeof value === "string" && value.includes(",")) {
+            newcontact[mappedKey] = value.split(",").map((v) => v.trim());
+          } else {
+            newcontact[mappedKey] = value;
+          }
+        });
+
+        return newcontact;
+      });
+
+ 
+      checkForDuplicatessize(updatedsize); // Call duplicate check after mapping
+    } else {
+      toast.error("No data found in the Excel file.");
+    }
+  };
+
+  reader.readAsArrayBuffer(selectedFilesize);
+} catch (error) {
+    console.log(error);
+    
+}finally {
+  setIsLoading(false); // Hide loader after API call
+}
+};
+
+
+const [allcontactssize, setallcontactssize] = useState([]);
+const checkForDuplicatessize = async (contacts) => {
+  try {
+    setIsLoading(true);
+
+    // Fetch existing units
+    const response = await api.get("viewproject");
+    const allsize = response.data.project.flatMap(project => project.add_size);
+
+    let newContacts = [];
+    let duplicates = [];
+
+    contacts.forEach((contact) => {
+   
+   // Check if unit is duplicate (case-insensitive and trimmed)
+        const isDuplicate = allsize.some(unit =>
+          unit.category.trim().toLowerCase() === contact.category.trim().toLowerCase() &&
+          unit.size_name.trim().toLowerCase() === contact.size_name.trim().toLowerCase()
+        );
+
+
+      if (isDuplicate) {
+        duplicates.push(contact);
+      } else {
+        newContacts.push(contact);
+      }
+    });
+
+    
+    setDuplicateEntriessize(duplicates);
+    setPendingContactssize(newContacts);
+    setallcontactssize([...newContacts, ...duplicates]);
+
+  } catch (error) {
+    console.error("❌ Error checking for duplicates:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+const addbulksize = () => {
+  // Step 1: Identify duplicates within pendingContacts
+  const seen = new Set();
+  const uniqueUnits = [];
+  const allUnitsWithColor = [];
+
+  pendingContactssize.forEach((unit) => {
+    const unitIdentifier = `${unit.size_name}-${unit.category}`; // Unique identifier for each unit
+    
+    if (seen.has(unitIdentifier)) {
+      // If the unit is a duplicate, mark it as duplicate and set color
+      unit.isDuplicate = true;
+      allUnitsWithColor.push(unit); // Add duplicate unit
+    } else {
+      // Otherwise, add to the unique units list and mark as non-duplicate
+      seen.add(unitIdentifier);
+      unit.isDuplicate = false;
+      allUnitsWithColor.push(unit); // Add unique unit
+    }
+  });
+
+
+  // Step 2: Update state with all units (including duplicates)
+  setsize((prevUnit) => [...prevUnit, ...allUnitsWithColor]); // Append all units (unique + duplicate) to the unit list
+  setproject((prevState) => ({
+    ...prevState,
+    add_size: [...prevState.add_size, ...allUnitsWithColor], // Add all units to the project state
+  }));
+
+
+};
+
+const headerSuggestionssize = {
+  owner_details: "Suggestion: Enter owner mobile no",
+  associated_contact: "Suggestion: Enter associated mobile no",
+  unit_no: "Suggestion: Enter unit no",
+  block: "Suggestion: Enter Block",
+  project_name: "Suggestion: Project Name",
+  unit_type:"Suggestion: Select unit type",
+  size:"Suggestion: Size of unit"
+  // Add more as needed
+};
+
+// ========================================add size in project end===================================================================
+
 
 const [show8, setshow8] = useState(false);
 const handleClose8 = () => setshow8(false);
@@ -3681,11 +3883,11 @@ const generateExcelFileunit = () => {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }} >Block Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Sub-Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Status</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Block Name</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Category</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Sub-Category</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Status</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
@@ -3693,10 +3895,10 @@ const generateExcelFileunit = () => {
          
         project.add_block.map ((item, index) => (
           <StyledTableRow key={index}>
-            <StyledTableCell >
+            <StyledTableCell style={{fontSize:"12px"}}>
             {item.block_name}
              </StyledTableCell>
-             <StyledTableCell>
+             <StyledTableCell style={{fontSize:"12px"}}>
               {Array.isArray(item.category) ? (
                 item.category.map((categoryItem, index) => (
                   <span key={index}>{categoryItem}<br></br></span> // Render each item with a key
@@ -3706,13 +3908,13 @@ const generateExcelFileunit = () => {
               )}
             </StyledTableCell>
 
-             <StyledTableCell >
+             <StyledTableCell style={{fontSize:"12px"}}>
             {item.sub_category}
              </StyledTableCell>
-             <StyledTableCell >
+             <StyledTableCell style={{fontSize:"12px"}}>
             {item.status}
              </StyledTableCell>
-             <StyledTableCell >
+             <StyledTableCell style={{fontSize:"12px"}}>
              <div style={{marginTop:"10px"}}>
                <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteblock(index)}>delete</span>
               {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteblock(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
@@ -3891,7 +4093,7 @@ const generateExcelFileunit = () => {
                 <div className="row " >
                 <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow2}>Add Size</button></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow9}>Import Size</button></div>
+                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow10}>Import Size</button></div>
                           <Tooltip title="Download Data.." arrow>
                                         <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFilesize} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
                                         </Tooltip>
@@ -3900,31 +4102,31 @@ const generateExcelFileunit = () => {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Block Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Sub-Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Action</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Block Name</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Category</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Sub-Category</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Size</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
         {
          
         project.add_size.map ((item, index) => (
-          <StyledTableRow key={index}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+          <StyledTableRow key={index} style={{ color: item.isDuplicate ? "red" : "black"}}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.block1}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px"  }}>
              {item.category}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px"  }}>
              {item.sub_category}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{fontSize:"12px"  }}>
              {item.size_name}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px"  }}>
             <div style={{marginTop:"10px"}}>
               <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deletesize(index)}>delete</span>
             {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletesize(index)}  style={{height:"40px",cursor:"pointer"}}/>*/}
@@ -4181,67 +4383,65 @@ const generateExcelFileunit = () => {
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
     <TableHead>
-        <TableRow>
-          <StyledTableCell >Unit No.</StyledTableCell>
-          <StyledTableCell >Block</StyledTableCell>
-          <StyledTableCell >Category</StyledTableCell>
-          <StyledTableCell >Unit Type</StyledTableCell>
-          <StyledTableCell >Size</StyledTableCell>
-          <StyledTableCell >Direction</StyledTableCell>
-          <StyledTableCell >Road</StyledTableCell>
-          <StyledTableCell >Facing</StyledTableCell>
-          <StyledTableCell >Ownership</StyledTableCell>
-          <StyledTableCell >Lattitude</StyledTableCell>
-          <StyledTableCell >Longitude</StyledTableCell>
-          <StyledTableCell >Builtup Details</StyledTableCell>
-          <StyledTableCell >Action</StyledTableCell>
+        <TableRow >
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Unit_No.</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Block</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Category</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Unit_Type</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Size</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Direction</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Road</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Facing</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Ownership</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Lattitude</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Longitude</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Builtup_Details</StyledTableCell>
+          <StyledTableCell style={{fontSize:"12px",backgroundColor:"gray"}}>Action</StyledTableCell>
         </TableRow>
       </TableHead>
       <tbody>
         {
 
-          
-         
       project.add_unit.map ((item, index) => (
           <StyledTableRow key={index}  style={{ color: item.isDuplicate ? "red" : "black",  }}   className={item.isDuplicate ? 'no-activity-flash' : ''}>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.unit_no}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.block}
              </StyledTableCell>
-             <StyledTableCell style={{ fontFamily: "times new roman" }}>
+             <StyledTableCell style={{ fontSize:"12px" }}>
              {item.category}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.unit_type}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.size}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.direction}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.road}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.facing}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px" }}>
              {item.ownership}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{fontSize:"12px" }}>
              {item.lattitude}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{fontSize:"12px" }}>
              {item.langitude}
             </StyledTableCell>
-            <StyledTableCell style={{ fontFamily: "times new roman" }}>
+            <StyledTableCell style={{ fontSize:"12px"}}>
              {item.type}
             </StyledTableCell>
             
-            <StyledTableCell style={{ fontFamily: "times new roman", fontSize: "10px" }}>
+            <StyledTableCell style={{ fontSize: "10px" }}>
               <div style={{marginTop:"10px"}}>
                <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteunit(index)}>delete</span>
                 {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteunit(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
@@ -5953,6 +6153,180 @@ const generateExcelFileunit = () => {
                 Import
               </Button> */}
               <Button variant="secondary" onClick={handleClose7}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+           <Modal show={show10} onHide={handleClose10} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Import Size Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+      <h3 className="text-2xl font-bold text-center mb-4 text-gray-800">
+        📂 Upload & Map Your Excel Data
+      </h3>
+
+      {/* File Upload Input */}
+      <div className="flex flex-col items-center space-y-4">
+        <input
+          type="file"
+          onChange={handleFileChangesize1}
+          accept=".xlsx, .xls"
+          className="block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-600 file:text-white
+            hover:file:bg-blue-700 cursor-pointer"
+        />
+      </div>
+
+      {/* Mapping UI */}
+      {excelHeaderssize.length > 0 && (
+  <div className="mt-4">
+    <h5 className="text-lg font-semibold mb-3 text-gray-700">🗺️ Map Your Excel Columns</h5>
+
+    <div className="row">
+      {excelHeaderssize.map((header, index) => (
+        <div key={index} className="col-md-4 mb-3 ">
+          <div className="p-2 border rounded shadow-sm bg-light zoom-card">
+            <label className="form-label fw-semibold">{header} ➝</label>
+            <select
+              className="form-control form-control-sm"
+              onChange={(e) =>
+                setMappedFieldssize((prev) => ({
+                  ...prev,
+                  [header]: e.target.value,
+                }))
+              }
+            >
+              <option value="">Select a field</option>
+              {databasefieldsize.map((dbField, idx) => (
+                <option key={idx} value={dbField}>
+                  {dbField}
+                </option>
+              ))}
+            </select>
+             {/* ✅ Suggestion Text */}
+             {/* {headerSuggestionssize[header] && (
+              <small  style={{color:"blue"}}>{headerSuggestionssize[header]}</small>
+            )} */}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <button
+      style={{ backgroundColor: "gray", width: "200px" }}
+      onClick={handleProcessFilesize}
+      className="mt-3 btn btn-success fw-semibold"
+    >
+      ✅ Process File
+    </button>
+  </div>
+)}
+
+
+      {/* Show Processed Data */}
+      {allcontactssize.length > 0 && (
+  <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+    <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
+    
+    <div className="mb-4">
+  <h4 className="font-semibold text-gray-800 mb-3" style={{ fontFamily: "arial" }}>
+    New Size
+  </h4>
+
+  <div className="row">
+    {pendingContactssize.map((entry, index) => (
+      <div key={index} className="col-md-4 mb-3">
+        <div className="p-2 border rounded bg-light">
+          <p className="mb-1"><strong>Size:</strong> {entry.size_name}</p>
+          <p className="mb-1"><strong>Category:</strong> {entry.category}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button
+    className="btn btn-primary mt-2"
+    style={{ width: "150px" }}
+    onClick={addbulksize}
+  >
+    ➕ Add Sizes
+  </button>
+</div>
+
+
+    <div>
+  <h4 className="font-semibold text-gray-800 mb-3" style={{ fontFamily: "arial" }}>
+    Duplicate Sizes
+  </h4>
+
+  <div className="row">
+    {duplicateEntriessize.map((entry, index) => (
+      <div key={index} className="col-md-4 mb-3">
+        <div className="p-2 border rounded bg-light">
+         <p className="mb-1"><strong>Size:</strong> {entry.size_name}</p>
+          <p className="mb-1"><strong>Category:</strong> {entry.category}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button className="btn btn-secondary mt-3" style={{ width: "200px" }}>
+    🔄 Update Sizes
+  </button>
+</div>
+
+  </div>
+)}
+
+    </div>
+    <>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading data...</p>
+        </div>
+      </div>
+    )}
+  </>
+            </Modal.Body>
+            <Modal.Footer>
+            {/* <Button variant="secondary" onClick={addpayment}>
+                Import
+              </Button> */}
+              <Button variant="secondary" onClick={handleClose10}>
                 Close
               </Button>
             </Modal.Footer>
