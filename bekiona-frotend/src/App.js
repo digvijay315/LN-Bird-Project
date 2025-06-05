@@ -61,7 +61,7 @@ function App() {
     <Route path='/' element={<Home1/>}/>
      <Route path='/contact' element={<Contact/>}/>
 
-     <Route path='/vitamincfaceash' element={<VitamincFacewash/>}/>
+     <Route path='/product/:productid' element={<VitamincFacewash/>}/>
      <Route path='/product/676a8c93d532d94d2ae75a53' element={<Antiacnefacewash/>}/>
      <Route path='/product/676d3602cf4b23cfcf414815' element={<Goldscrubfacewash/>}/>
      <Route path='/antihairfallshampoo' element={<Antihairfallshampoo/>}/>

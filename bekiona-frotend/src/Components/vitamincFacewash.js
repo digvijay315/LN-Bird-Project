@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from 'react-router-dom';
 import Header from "./Header";
 import Footer from "./footer";
 import "./VitamincFacewash.css";
@@ -50,7 +51,8 @@ function VitamincFacewash() {
 
   const location = useLocation();
   const id = location.state || {};
-
+   const { productid } = useParams();
+ 
   const [review, setReview] = useState({ productId:"",comment: "", name: "", email: "", rating: 0 });
 
   const [Products, setProducts] = useState([]);
@@ -58,16 +60,33 @@ function VitamincFacewash() {
   const [activeTab, setActiveTab] = useState("description"); // 🟢 State for Tab Switching
    const [cartMessage, setCartMessage] = useState({}); // Individual messages for each product
     const [buttonColors, setButtonColors] = useState({}); // Track button color per product
+
+    
+      // Fetch product data from the API
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await api.get("getproduct" );
+           const Allproduct=response.data.product
+            const matchedProduct = response.data.product.find((item) => item._id === productid);
+          setProducts([matchedProduct]);
+          } catch (error) {
+            console.error("Error fetching product data:", error);
+            setLoading(false);
+          }
+        };
+      
+        fetchData();
+      }, []);
+
   
 
   const [pid,setpid]=useState("")
   const getproduct = async () => {
     try {
-      const resp = await api.get(`getproductbyid/${id}`);
-      console.log(resp);
-      
+      const resp = await api.get(`getproductbyid/${productid}`);
       setcategory(resp.data.product[0].product_category);
-      setProducts(resp.data.product);
+      // setProducts(resp.data.product);
       setReview({...review,productId:resp.data.product[0].product_code})
       setpid(resp.data.product[0].product_code)
     } catch (error) {
@@ -75,8 +94,8 @@ function VitamincFacewash() {
     }
   };
  
-  console.log(Products);
-  console.log(Products.product_description);
+  // console.log(Products);
+  // console.log(Products.product_description);
   
 
   const [relatedproducts, setrelatedproducts] = useState([]);
@@ -191,7 +210,7 @@ function VitamincFacewash() {
         const fetchReviews = async () => {
           try {
             const response = await api.get(`getreview/${pid}`);
-            console.log(response);
+            // console.log(response);
             
             newSetReviews(response.data); // Updated state setter
           } catch (error) {

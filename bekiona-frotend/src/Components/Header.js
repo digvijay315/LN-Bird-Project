@@ -27,7 +27,7 @@ console.log(token);
 },[])
 
 const paymentoptions=localStorage.getItem("paymentoptions");
-console.log(paymentoptions);
+// console.log(paymentoptions);
 
 
 
@@ -62,7 +62,7 @@ setlength(clength)
 setFormData({...formData,cartItems:cart})
 },[cart])
 
-console.log(cart);
+// console.log(cart);
 
 
 const [show, setShow] = useState(false);

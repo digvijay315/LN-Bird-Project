@@ -453,7 +453,7 @@ Combo Products
     transition: "transform 0.3s ease",
     borderRadius: "10px",
   }}
-  onClick={() => navigate("/vitamincfaceash", { state: product._id })}
+  onClick={() => navigate(`/product/${product._id}`)}
 />
 
           </div>
