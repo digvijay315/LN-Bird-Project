@@ -3219,6 +3219,211 @@ const headerSuggestionssize = {
 
 // ========================================add size in project end===================================================================
 
+// ===========================================add to size start=================================================================
+
+const [show11, setshow11] = useState(false);
+const handleClose11 = () => setshow11(false);
+const handleShow11=async()=>
+{
+  setshow11(true);
+
+}
+
+const databasefieldblock = [
+    'block_name', 'category', 'sub_category','land_area','measurment','total_blocks','total_floors',
+    'total_units','status','launched_on','expected_competion','possession','parking_type','rera_no'];
+  
+const [excelHeadersblock, setExcelHeadersblock] = useState([]); // Store Excel headers
+const [mappedFieldsblock, setMappedFieldsblock] = useState({}); // Store user-selected mapping
+const [selectedFileblock, setSelectedFileblock] = useState(null); // Store uploaded file
+
+const [duplicateEntriesblock, setDuplicateEntriesblock] = useState([]);
+const [pendingContactsblock, setPendingContactsblock] = useState([]);
+
+// 🔹 Step 1: Extract Headers from Excel File
+const handleFileChangeblock1 = (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  setIsLoading(true); // Start loading
+  setSelectedFileblock(file); // Store file for later use
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const arrayBuffer = e.target.result;
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(sheet,{ header: 1 });
+
+      if (data.length > 0) {
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`);
+        setExcelHeadersblock(headers); // Set headers manually
+      } else {
+        toast.error("No data found in the Excel file.");
+      }
+    } catch (error) {
+      toast.error("Error processing the Excel file.");
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+};
+
+
+
+
+
+// 🔹 Step 2: Process & Map Data Based on User Selection
+const handleProcessFileblock = () => {
+  try {
+    
+  setIsLoading(true);
+  if (!selectedFileblock) {
+    toast.error("No file selected. Please upload a file first.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const arrayBuffer = e.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const data = XLSX.utils.sheet_to_json(sheet);
+
+    if (data.length > 0) {
+      const updatedblock = data.map((row) => {
+        let newcontact = {};
+
+        Object.keys(row).forEach((key) => {
+          let mappedKey = mappedFieldsblock[key] || key; // Use mapped key or original key
+          let value = row[key];
+
+          // Automatically detect and convert CSV-style values to arrays
+          if (typeof value === "string" && value.includes(",")) {
+            newcontact[mappedKey] = value.split(",").map((v) => v.trim());
+          } else {
+            newcontact[mappedKey] = value;
+          }
+        });
+
+        return newcontact;
+      });
+
+ 
+      checkForDuplicatesblock(updatedblock); // Call duplicate check after mapping
+    } else {
+      toast.error("No data found in the Excel file.");
+    }
+  };
+
+  reader.readAsArrayBuffer(selectedFileblock);
+} catch (error) {
+    console.log(error);
+    
+}finally {
+  setIsLoading(false); // Hide loader after API call
+}
+};
+
+
+const [allcontactsblock, setallcontactsblock] = useState([]);
+const checkForDuplicatesblock = async (contacts) => {
+  try {
+    setIsLoading(true);
+
+    // Fetch existing units
+    const response = await api.get("viewproject");
+    const allblock = response.data.project.flatMap(project => project.add_block);
+
+    let newContacts = [];
+    let duplicates = [];
+
+    contacts.forEach((contact) => {
+   
+   // Check if unit is duplicate (case-insensitive and trimmed)
+       const isDuplicate = allblock.some(unit =>
+        String(unit.block_name).trim().toLowerCase() === String(contact.block_name).trim().toLowerCase() &&
+        Array.isArray(unit.category) &&
+        Array.isArray(contact.category) &&
+        unit.category.map(item => item.trim().toLowerCase()).join(',') === contact.category.map(item => item.trim().toLowerCase()).join(',') &&
+        Array.isArray(unit.sub_category) &&
+        Array.isArray(contact.sub_category) &&
+        unit.sub_category.map(item => item.trim().toLowerCase()).join(',') === contact.sub_category.map(item => item.trim().toLowerCase()).join(',')
+      );
+
+
+
+      if (isDuplicate) {
+        duplicates.push(contact);
+      } else {
+        newContacts.push(contact);
+      }
+    });
+
+    
+    setDuplicateEntriesblock(duplicates);
+    setPendingContactsblock(newContacts);
+    setallcontactsblock([...newContacts, ...duplicates]);
+
+  } catch (error) {
+    console.error("❌ Error checking for duplicates:", error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
+const addbulkblock = () => {
+  // Step 1: Identify duplicates within pendingContacts
+  const seen = new Set();
+  const uniqueUnits = [];
+  const allUnitsWithColor = [];
+
+  pendingContactsblock.forEach((unit) => {
+    const unitIdentifier = `${unit.block_name}-${unit.category}-${unit.sub_category}`; // Unique identifier for each unit
+    
+    if (seen.has(unitIdentifier)) {
+      // If the unit is a duplicate, mark it as duplicate and set color
+      unit.isDuplicate = true;
+      allUnitsWithColor.push(unit); // Add duplicate unit
+    } else {
+      // Otherwise, add to the unique units list and mark as non-duplicate
+      seen.add(unitIdentifier);
+      unit.isDuplicate = false;
+      allUnitsWithColor.push(unit); // Add unique unit
+    }
+  });
+
+
+  // Step 2: Update state with all units (including duplicates)
+  setblocks((prevUnit) => [...prevUnit, ...allUnitsWithColor]); // Append all units (unique + duplicate) to the unit list
+  setproject((prevState) => ({
+    ...prevState,
+    add_block: [...prevState.add_block, ...allUnitsWithColor], // Add all units to the project state
+  }));
+
+
+};
+
+const headerSuggestionsblock = {
+  owner_details: "Suggestion: Enter owner mobile no",
+  associated_contact: "Suggestion: Enter associated mobile no",
+  unit_no: "Suggestion: Enter unit no",
+  block: "Suggestion: Enter Block",
+  project_name: "Suggestion: Project Name",
+  unit_type:"Suggestion: Select unit type",
+  size:"Suggestion: Size of unit"
+  // Add more as needed
+};
+
+// ========================================add size in project end===================================================================
+
 
 const [show8, setshow8] = useState(false);
 const handleClose8 = () => setshow8(false);
@@ -3874,7 +4079,7 @@ const generateExcelFileunit = () => {
                 
                     <div className="col-md-7"></div>
                     <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow1}>Add Block</button></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow8}>Import Block</button></div>
+                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow11}>Import Block</button></div>
                         <Tooltip title="Download Data.." arrow>
                                         <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileblock} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
                                         </Tooltip>
@@ -3894,7 +4099,7 @@ const generateExcelFileunit = () => {
         {
          
         project.add_block.map ((item, index) => (
-          <StyledTableRow key={index}>
+          <StyledTableRow key={index} style={{ color: item.isDuplicate ? "red" : "black"}}>
             <StyledTableCell style={{fontSize:"12px"}}>
             {item.block_name}
              </StyledTableCell>
@@ -6157,6 +6362,183 @@ const generateExcelFileunit = () => {
               </Button>
             </Modal.Footer>
           </Modal>
+
+            <Modal show={show11} onHide={handleClose11} size='lg'>
+            <Modal.Header>
+              <Modal.Title>Import Blocks Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
+      <h3 className="text-2xl font-bold text-center mb-4 text-gray-800">
+        📂 Upload & Map Your Excel Data
+      </h3>
+
+      {/* File Upload Input */}
+      <div className="flex flex-col items-center space-y-4">
+        <input
+          type="file"
+          onChange={handleFileChangeblock1}
+          accept=".xlsx, .xls"
+          className="block w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4
+            file:rounded-lg file:border-0
+            file:text-sm file:font-semibold
+            file:bg-blue-600 file:text-white
+            hover:file:bg-blue-700 cursor-pointer"
+        />
+      </div>
+
+      {/* Mapping UI */}
+      {excelHeadersblock.length > 0 && (
+  <div className="mt-4">
+    <h5 className="text-lg font-semibold mb-3 text-gray-700">🗺️ Map Your Excel Columns</h5>
+
+    <div className="row">
+      {excelHeadersblock.map((header, index) => (
+        <div key={index} className="col-md-4 mb-3 ">
+          <div className="p-2 border rounded shadow-sm bg-light zoom-card">
+            <label className="form-label fw-semibold">{header} ➝</label>
+            <select
+              className="form-control form-control-sm"
+              onChange={(e) =>
+                setMappedFieldsblock((prev) => ({
+                  ...prev,
+                  [header]: e.target.value,
+                }))
+              }
+            >
+              <option value="">Select a field</option>
+              {databasefieldblock.map((dbField, idx) => (
+                <option key={idx} value={dbField}>
+                  {dbField}
+                </option>
+              ))}
+            </select>
+             {/* ✅ Suggestion Text */}
+             {/* {headerSuggestionsblock[header] && (
+              <small  style={{color:"blue"}}>{headerSuggestions[header]}</small>
+            )} */}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <button
+      style={{ backgroundColor: "gray", width: "200px" }}
+      onClick={handleProcessFileblock}
+      className="mt-3 btn btn-success fw-semibold"
+    >
+      ✅ Process File
+    </button>
+  </div>
+)}
+
+
+      {/* Show Processed Data */}
+      {allcontactsblock.length > 0 && (
+  <div className="mt-6 bg-gray-100 p-4 rounded-lg">
+    <h3 className="text-lg font-semibold mb-2 text-gray-700">📜 Processed Data</h3>
+    
+    <div className="mb-4">
+  <h4 className="font-semibold text-gray-800 mb-3" style={{ fontFamily: "arial" }}>
+    New Blocks
+  </h4>
+
+  <div className="row">
+    {pendingContactsblock.map((entry, index) => (
+      <div key={index} className="col-md-4 mb-3">
+        <div className="p-2 border rounded bg-light">
+          <p className="mb-1"><strong>Block Name:</strong> {entry.block_name}</p>
+          <p className="mb-1"><strong>Category:</strong> {entry.category}</p>
+          <p className="mb-0"><strong>Sub Category:</strong> {entry.sub_category}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button
+    className="btn btn-primary mt-2"
+    style={{ width: "150px" }}
+    onClick={addbulkblock}
+  >
+    ➕ Add Blocks
+  </button>
+</div>
+
+
+    <div>
+  <h4 className="font-semibold text-gray-800 mb-3" style={{ fontFamily: "arial" }}>
+    Duplicate Blocks
+  </h4>
+
+  <div className="row">
+    {duplicateEntriesblock.map((entry, index) => (
+      <div key={index} className="col-md-4 mb-3">
+        <div className="p-2 border rounded bg-light">
+          <p className="mb-1"><strong>Block Name:</strong> {entry.block_name}</p>
+          <p className="mb-1"><strong>Category:</strong> {entry.category}</p>
+          <p className="mb-0"><strong>Sub Category:</strong> {entry.sub_category}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <button className="btn btn-secondary mt-3" style={{ width: "200px" }}>
+    🔄 Update Blocks
+  </button>
+</div>
+
+  </div>
+)}
+
+    </div>
+    <>
+    {isLoading && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(0, 0, 0, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>Uploading data...</p>
+        </div>
+      </div>
+    )}
+  </>
+            </Modal.Body>
+            <Modal.Footer>
+            {/* <Button variant="secondary" onClick={addpayment}>
+                Import
+              </Button> */}
+              <Button variant="secondary" onClick={handleClose11}>
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
 
            <Modal show={show10} onHide={handleClose10} size='lg'>
             <Modal.Header>

@@ -589,7 +589,7 @@ function Attendence() {
 
             <div className="assign-assessment">
               <div className="assessment-title">
-                <div className="select-wrapper">
+                <div className="select-wrapper"> 
                                   <CustomSelect
                                       label="Select Assessment"
                                       options={filteredAssessments}

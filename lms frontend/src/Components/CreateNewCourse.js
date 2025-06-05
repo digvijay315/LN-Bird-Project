@@ -13,11 +13,12 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import UploadIcon from '@mui/icons-material/Upload';
 import axios from "axios";
 import { base_url } from "./Utils/base_url";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import Swal from 'sweetalert2';
 import SellIcon from '@mui/icons-material/Sell';
 import PPTPreview from "./PPTPreview";
 import Lottie from "lottie-react";
+import '../StyleCode/Attendence.css'
 
 
 
@@ -344,28 +345,46 @@ function CreateNewCourse() {
     document.getElementById("add-lesson-div").style.display = "block"
   }
 
+  const[colorchange,setcolorchange]=useState("basic")
   function BasicContainer() {
+    setcolorchange("basic")
     document.getElementById("customize-course").style.display = "block";
     document.getElementById("add-new-category").style.display = "none"
     document.getElementById("add-document-category").style.display = "none";
+    document.getElementById("add-assesment-category").style.display = "none";
     document.getElementById("finish_div").style.display = "none";
+    
   }
 
   function MediaContainer() {
+    setcolorchange("media")
     document.getElementById("customize-course").style.display = "none";
     document.getElementById("add-new-category").style.display = "block"
     document.getElementById("add-document-category").style.display = "none";
+    document.getElementById("add-assesment-category").style.display = "none";
     document.getElementById("finish_div").style.display = "none";
   }
 
   function DocumentContainer() {
+    setcolorchange("document")
     document.getElementById("customize-course").style.display = "none";
     document.getElementById("add-new-category").style.display = "none"
     document.getElementById("add-document-category").style.display = "block";
+    document.getElementById("add-assesment-category").style.display = "none";
+    document.getElementById("finish_div").style.display = "none";
+  }
+
+  function AssesmentContainer() {
+    setcolorchange("assesement")
+    document.getElementById("customize-course").style.display = "none";
+    document.getElementById("add-new-category").style.display = "none"
+    document.getElementById("add-document-category").style.display = "none";
+    document.getElementById("add-assesment-category").style.display = "block";
     document.getElementById("finish_div").style.display = "none";
   }
 
   function FinishContainer() {
+    setcolorchange("finish")
     document.getElementById("customize-course").style.display = "none";
     document.getElementById("add-new-category").style.display = "none"
     document.getElementById("add-document-category").style.display = "none";
@@ -395,6 +414,133 @@ function CreateNewCourse() {
 
     setCourse({ ...course, course_duration: formatted });
   };
+
+
+// =====================================assign assessment code start==================================================================
+
+
+  function CustomSelect({ 
+      label, 
+      options, 
+      value, 
+      onSelect, 
+      searchQuery, 
+      onSearchChange, 
+      placeholder, 
+      renderOption 
+    }) {
+      const [isOpen, setIsOpen] = useState(false);
+      const dropdownRef = useRef(null);
+      const searchInputRef = useRef(null);
+    
+      useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            setIsOpen(false);
+          }
+        };
+    
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, []);
+    
+      const handleSearchClick = (e) => {
+        e.stopPropagation();
+        // Don't close the dropdown when clicking the search input
+        if (!isOpen) {
+          setIsOpen(true);
+        }
+      };
+    
+      const handleContainerClick = () => {
+        setIsOpen(!isOpen);
+        if (!isOpen && searchInputRef.current) {
+          // Focus the search input when opening the dropdown
+          setTimeout(() => {
+            searchInputRef.current.focus();
+          }, 0);
+        }
+      };
+    
+      return (
+        <div className="custom-select-container" ref={dropdownRef}>
+          <label className="label">{label}</label>
+          <div 
+            className="select-input-container" 
+            onClick={handleContainerClick}
+          >
+            <div className="selected-value">
+              {value ? renderOption(value) : placeholder}
+            </div>
+            <span className={`arrow ${isOpen ? 'open' : ''}`}>▼</span>
+          </div>
+          
+          {isOpen && (
+            <div className="dropdown-container" onClick={e => e.stopPropagation()}>
+              <div className="search-container">
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={onSearchChange}
+                  onClick={handleSearchClick}
+                  placeholder="Search..."
+                  className="dropdown-search"
+                />
+              </div>
+              <div className="options-container">
+                {options.length > 0 ? (
+                  options.map((option) => (
+                    <div
+                      key={option._id}
+                      className="option"
+                      onClick={() => {
+                        onSelect(option);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {renderOption(option)}
+                    </div>
+                  ))
+                ) : (
+                  <div className="no-options">No results found</div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      );
+  }
+
+  const [assessment, setAssessment] = useState(null);
+  const [selectedAssessment, setSelectedAssessment] = useState(null);
+  const [searchAssessmentQuery, setSearchAssessmentQuery] = useState('');
+
+  const fetchAssessmentData = async () => {
+    try {
+        const response = await axios.get(`${base_url}/assessment_data_fetch`);
+        console.log(response);
+        setAssessment(response.data.assessments);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+    useEffect(() =>{
+        fetchAssessmentData();
+    }, []);
+
+  const filteredAssessments = assessment?.filter(assessment => 
+    assessment.assessment_title.toLowerCase().includes(searchAssessmentQuery.toLowerCase()) ||
+    assessment.code.toLowerCase().includes(searchAssessmentQuery.toLowerCase())
+  ) || [];
+
+  const handleAssessmentSearch = (e) => {
+    e.stopPropagation(); // Prevent the dropdown from closing
+    setSearchAssessmentQuery(e.target.value);
+  };
+
+// ======================================assign assement code end========================================================================
 
   return (
     <div>
@@ -510,7 +656,7 @@ cursor: pointer;
           <div className="create-options-course">
             <div
               className="basic-option"
-              style={{ backgroundColor: "#7A1CAC", color: "white", borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease" }}
+              style={{ backgroundColor:colorchange=="basic"? "#7A1CAC":"#f5f5f5", color: "black", borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease",borderRight:"2px solid #7A1CAC" }}
               onClick={BasicContainer}
             >
               <h6>Basic</h6>
@@ -520,7 +666,7 @@ cursor: pointer;
               className="media-option" 
               id="media-option-id" 
               onClick={MediaContainer}
-              style={{ borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease", backgroundColor: "#f5f5f5", hover: { backgroundColor: "#7A1CAC", color: "white" } }}
+              style={{ backgroundColor:colorchange=="media"? "#7A1CAC":"#f5f5f5",borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease",  hover: { backgroundColor: "#7A1CAC", color: "white" } }}
             >
               <h6>
                 Media <br />
@@ -532,19 +678,26 @@ cursor: pointer;
               className="document-option addStyle" 
               id="document-option-id" 
               onClick={DocumentContainer}
-              style={{ borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease", backgroundColor: "#f5f5f5" }}
+              style={{ backgroundColor:colorchange=="document"? "#7A1CAC":"#f5f5f5",borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease",color:"black" }}
             >
               <h6>
                 Document <br />
                 (.pdf, .word, .jpg)
               </h6>
             </div>
+              <div
+              className="basic-option"
+              style={{backgroundColor:colorchange=="assesement"? "#7A1CAC":"#f5f5f5", color: "black", borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease",borderRight:"2px solid #7A1CAC"}}
+              onClick={AssesmentContainer}
+            >
+              <h6>Assesment</h6>
+            </div>
             
             <div 
               className="finish-div" 
               id="finish-div" 
               onClick={FinishContainer}
-              style={{ borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease", backgroundColor: "#f5f5f5" }}
+              style={{ backgroundColor:colorchange=="finish"? "#7A1CAC":"#f5f5f5",borderRadius: "8px", cursor: "pointer", transition: "all 0.3s ease",borderRight:"2px solid #7A1CAC" }}
             >
               <h6>Finish</h6>     
             </div>
@@ -999,7 +1152,7 @@ cursor: pointer;
             </div>
           </div>
 
-          <div className='content-div' style={{ marginTop: "2rem" }}>
+          {/* <div className='content-div' style={{ marginTop: "2rem" }}>
             <button 
               id='next-btn' 
               style={{ 
@@ -1020,7 +1173,7 @@ cursor: pointer;
             >
               Next <i className="fa-solid fa-arrow-right"></i>
             </button>
-          </div>
+          </div> */}
         </div>
 
         <div className='add-new-category' id="add-new-category" style={{ display: "none" }}>
@@ -1130,7 +1283,7 @@ cursor: pointer;
               </div> */}
             </div>
                  
-            <div className='content-div' style={{ marginTop: "2rem", display: "flex", gap: "15px" }}>
+            {/* <div className='content-div' style={{ marginTop: "2rem", display: "flex", gap: "15px" }}>
               <button 
                 id='previous-btn' 
                 style={{ 
@@ -1170,7 +1323,7 @@ cursor: pointer;
               >
                 Next <i className="fa-solid fa-arrow-right"></i>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -1315,7 +1468,7 @@ cursor: pointer;
               </div>
             </div>
 
-            <div className="content-div" style={{ marginTop: "2rem", display: "flex", gap: "15px" }}>
+            {/* <div className="content-div" style={{ marginTop: "2rem", display: "flex", gap: "15px" }}>
               <button 
                 id="previous-btn" 
                 style={{ 
@@ -1355,7 +1508,110 @@ cursor: pointer;
               >
                 Next <i className="fa-solid fa-arrow-right"></i>
               </button>
+            </div> */}
+          </div>
+        </div>
+{/* =========================================assign assesement code start======================================================== */}
+          <div className="add-new-category" id="add-assesment-category" style={{ display: "none" }}>
+          <div className="adding-course-div" style={{ 
+            width: "100%", 
+            backgroundColor: "#fff", 
+            padding: "20px", 
+            borderRadius: "10px", 
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)" 
+          }}>
+            <h5 style={{ color: "#2E073F", marginBottom: "1.5rem" }}>Assign Assesment</h5>
+            <div className="upload-options" style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
+            
+              <div className="assign-assessment">
+              <div className="assessment-title">
+                <div className="select-wrapper" > 
+                                  <CustomSelect
+                                      label="Select Assessment"
+                                      options={filteredAssessments}
+                                      value={selectedAssessment}
+                                      onSelect={setSelectedAssessment}
+                                      searchQuery={searchAssessmentQuery}
+                                      onSearchChange={handleAssessmentSearch}
+                                      placeholder="Select a Assessment"
+                                      renderOption={(assessment) => `${assessment.assessment_title} (${assessment.code})`}
+                                  />
+
+                                  {selectedAssessment && (
+                                      <div className="details-card">
+                                      <h5 className="details-title">Selected Assessment Details</h5>
+                                      <p className="details-text">Title: {selectedAssessment.assessment_title}</p>
+                                      <p className="details-text">Code: {selectedAssessment.code}</p>
+                                      {/* <p className="details-text">Valid Till: {new Date(selectedAssessment.validTill).toLocaleDateString()}</p> */}
+                                      </div>
+                                  )}
+                </div> 
+
+                <div class="assessment-settings">
+                    <div>
+                        <label>Complete the course by</label>
+                        <input type="date"/>
+                    </div> 
+                    <div>
+                        <label>Attempt limitation</label>
+                        <input type="number" placeholder="Enter limitation" />
+                    </div>
+                    <div>
+                        <label>Set passing score</label>
+                        <input type="number" placeholder="Enter passing score"/>
+                    </div>     
+                </div> 
+                <button className="assign-assessment-btn" >Assign Assessment</button>     
+              </div>
             </div>
+           
+
+             
+            </div>
+
+  {/* ==========================================assign assesement code end===================================================== */}
+
+            {/* <div className="content-div" style={{ marginTop: "2rem", display: "flex", gap: "15px" }}>
+              <button 
+                id="previous-btn" 
+                style={{ 
+                  height: "3rem", 
+                  backgroundColor: "#f0f0f0", 
+                  color: "#333", 
+                  border: "none", 
+                  padding: "0 20px", 
+                  borderRadius: "5px", 
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+                onClick={MediaContainer}
+              >
+                <i className="fa-solid fa-arrow-left"></i> Previous
+              </button>
+              <button 
+                id="next-btn" 
+                style={{ 
+                  height: "3rem", 
+                  backgroundColor: "#7A1CAC", 
+                  color: "white", 
+                  border: "none", 
+                  padding: "0 20px", 
+                  borderRadius: "5px", 
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+                onClick={FinishContainer}
+              >
+                Next <i className="fa-solid fa-arrow-right"></i>
+              </button>
+            </div> */}
           </div>
         </div>
 
@@ -1471,7 +1727,7 @@ cursor: pointer;
               <UploadIcon /> Upload Course
             </button>
 
-            <div className='content-div' style={{ marginTop: "1rem" }}>
+            {/* <div className='content-div' style={{ marginTop: "1rem" }}>
               <button 
                 id='previous-btn' 
                 style={{ 
@@ -1491,7 +1747,7 @@ cursor: pointer;
               > 
                 <i className="fa-solid fa-arrow-left"></i> Previous 
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
