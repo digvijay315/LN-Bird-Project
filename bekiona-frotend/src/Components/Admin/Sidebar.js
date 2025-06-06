@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../api'
 import {
   FaList,
   FaHome,
@@ -65,9 +66,9 @@ const Logout = () =>{
         setShow(true)
       }
 
-      const[paymentoptions,setpaymentoptions]=useState("")
-      const setpayment = () => {
-        if (!paymentoptions || paymentoptions === "---select---") {
+      const[paymenttype,setpaymenttype]=useState({payment_type:""})
+      const setpayment = async() => {
+        if (!paymenttype || paymenttype === "---select---") {
           Swal.fire({
             icon: "warning",
             title: "Please select a valid payment option",
@@ -76,13 +77,23 @@ const Logout = () =>{
           return;
         }
     
-        localStorage.setItem('paymentoptions', paymentoptions);
-        Swal.fire({
+        try {
+          const resp=await api.post('addpaymenttype',paymenttype)
+          if(resp.status===200)
+          {
+              Swal.fire({
           icon: "success",
           title: "Payment Methods Set",
           text: "Payment options set successfully",
           confirmButtonText: 'OK',
         });
+          }
+          
+        } catch (error) {
+          console.log(error);
+          
+        }
+      
       };
 
 
@@ -416,7 +427,7 @@ whiteSpace: "nowrap",
              <div className="row">
       
                        <div className="col-md-6" style={{fontSize:"12px",marginTop:"10px"}}><label className="labels" style={{fontSize:"14px"}}>Payment Options</label>
-                       <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}  onChange={(e) => setpaymentoptions(e.target.value)}>
+                       <select type="text" required="true" className="form-control form-control-sm"  style={{fontSize:"12px"}}  onChange={(e) => setpaymenttype({...paymenttype,payment_type:e.target.value})}>
                         <option>---select---</option>
                         <option>Only COD</option>
                         <option>Only ONLINE</option>

@@ -26,9 +26,23 @@ console.log(token);
 
 },[])
 
-const paymentoptions=localStorage.getItem("paymentoptions");
+
 // console.log(paymentoptions);
 
+const[paymentoptions,setpaymentoptions]=useState()
+  const getpaymentoptions = async () => {
+    try {
+      const resp = await api.get('getpaymenttype');
+      setpaymentoptions(resp.data[0]);
+    } catch (error) {
+      console.log("Error fetching payment types:", error);
+    }
+  };
+
+  useEffect(() => {
+    getpaymentoptions();
+  }, []);
+console.log(paymentoptions);
 
 
 
@@ -1967,12 +1981,12 @@ fontSize: "14px",
       }}
     >
       {
-    paymentoptions === "Only ONLINE" ? (
+        paymentoptions?.payment_type === "Only ONLINE" ? (
       <>
       <option>---select---</option>
       <option value="online">online</option>
       </>
-    ) : paymentoptions === "Only COD" ? (
+    ) :  paymentoptions?.payment_type  === "Only COD" ? (
       <>
       <option>---select---</option>
       <option value="cod">cod</option>

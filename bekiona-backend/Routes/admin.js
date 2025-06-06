@@ -13,6 +13,7 @@ const { addReview, getReviews, getallReviews, getCustomerSatisfaction } = requir
 const usercontact = require('../Modals/contact');
 const { usercontacts, getContact, deleteContact } = require('../Controllers/contact');
 const {send_mailotp,verifyotpandlogin} = require('../Controllers/loginwithotp');
+const { addpaymenttype, getpaymenttype } = require('../Controllers/paymenttype');
 const router=express.Router()
 
 
@@ -79,6 +80,9 @@ router.get('/totalorders', getTotalOrders);
 router.post('/createnimbusshipment',createNimbusShipment);
 router.post('/track-order/:tracking_id',trackOrder);
 router.post('/downloadlabel/:tracking_id',downloadlabel);
+
+router.post('/addpaymenttype',addpaymenttype);
+router.get('/getpaymenttype', getpaymenttype);
  
 
 module.exports=router
