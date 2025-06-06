@@ -9941,7 +9941,12 @@ stage:selectedLead.stage
                           
                           <tbody>
                           {
-                          [...selectedcontact1, ...units.owner_details].map(contact => (
+                         [...selectedcontact1, ...units.owner_details]
+                        .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                        .filter((contact, index, self) => 
+                          // Ensure that we only keep unique contacts based on _id
+                          index === self.findIndex((c) => c._id === contact._id)
+                        ).map(contact => (
                               <StyledTableRow>
                                 <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
                                 <StyledTableCell  style={{   cursor: 'pointer' }}>
@@ -9951,7 +9956,7 @@ stage:selectedLead.stage
                                 </StyledTableCell>
 
                                 <StyledTableCell  style={{   cursor: 'pointer' }}>
-                                  {contact.mobile_no.map((number, index) => (
+                                  {contact?.mobile_no?.map((number, index) => (
                                     <span key={index}>
                                       <SvgIcon component={PhoneIphoneIcon} />
                                       {number}<br></br>
@@ -9991,7 +9996,12 @@ stage:selectedLead.stage
                         <tbody>
                              {
                               
-                              [...selectedcontact2, ...units.associated_contact].map(contact => (
+                              [...selectedcontact2, ...units.associated_contact]
+                                .filter((contact) => contact && contact._id) // Ensure contact is valid (not empty)
+                                .filter((contact, index, self) => 
+                                  // Ensure that we only keep unique contacts based on _id
+                                  index === self.findIndex((c) => c._id === contact._id)
+                                ).map(contact => (
                                 <StyledTableRow>
                                     <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
                                     <StyledTableCell style={{  cursor: 'pointer' }}>

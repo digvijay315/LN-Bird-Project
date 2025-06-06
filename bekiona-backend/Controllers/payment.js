@@ -172,7 +172,7 @@ const createNimbusShipment = async (req, res) => {
       // shipping_charges: req.body.shipping_charges || 40,
       // discount: req.body.discount || 100,
       // cod_charges: req.body.cod_charges || 30,
-      payment_type: req.body.payment_type || "cod",  // payment type
+      payment_type: req.body.payment_mode || "cod",  // payment type
       order_amount: req.body.totalPrice || 1000,
       package_weight: req.body.package_weight || 300,
       package_length: req.body.package_lenght || 10,

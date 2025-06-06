@@ -183,12 +183,12 @@ function Login() {
                   <span style={{ fontSize: "15px" }}>Recover Password</span>
                 </Link>
               </div>
-              <div>
+              {/* <div>
                 <span style={{ fontSize: "15px" }}>New to Kiona Admin?</span>
                 <Link to="/singup" style={{ textDecoration: "none" }}>
                   <span style={{ fontSize: "15px" }}>Signup</span>
                 </Link>
-              </div>
+              </div> */}
             </div>
           </Form>
         </div>

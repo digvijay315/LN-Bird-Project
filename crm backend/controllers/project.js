@@ -526,6 +526,7 @@ unitDetails={
                 try {
                   // Retrieve project_name, block, and unit_no from the URL parameters (params)
                   const { project_name, block, unit_no } = req.params;
+          
                 
 
                   const exitproject=await addproject.findOne({name:project_name})
