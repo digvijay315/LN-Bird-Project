@@ -167,12 +167,26 @@ const createNimbusShipment = async (req, res) => {
         sku: item.product_sku            
       };
     });
+
+    let payment_mode = req.body.payment_mode;
+    let payment_type;
+
+    if (payment_mode === 'online') {
+        payment_type = 'prepaid';
+    } else if (payment_mode === 'cod') {
+        payment_type = 'cod';
+    } else {
+        // Optional: handle unexpected payment modes
+        payment_type = 'cod';
+    }
+
+
     const payload = {
       order_number: req.body.orderid || "#001",  // default order number
       // shipping_charges: req.body.shipping_charges || 40,
       // discount: req.body.discount || 100,
       // cod_charges: req.body.cod_charges || 30,
-      payment_type: req.body.payment_mode || "cod",  // payment type
+      payment_type: payment_type,  // payment type
       order_amount: req.body.totalPrice || 1000,
       package_weight: req.body.package_weight || 300,
       package_length: req.body.package_lenght || 10,

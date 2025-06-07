@@ -237,7 +237,7 @@ function Fetchcontact() {
 /*-------------------------------------------------------------------searching all contact data by mobile email tags and company end---------------------------------------------------------------------------- */                                                     
       
 const [currentPage, setCurrentPage] = useState(1);
-const [itemsPerPage, setItemsPerPage] = useState(7); // User-defined items per page
+const [itemsPerPage, setItemsPerPage] = useState(10); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 const filteredDatas = data.filter(item => item.createdAt && !isNaN(new Date(item.createdAt)));
@@ -3429,7 +3429,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
             <Sidebar1/>
             <div className={`flip-container ${isFlipped ? 'flipped' : ''}`}>
             <div id="contactlistview" className="flip-card-front">
-      <div style={{marginTop:"60px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+      <div style={{marginTop:"52px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload}>Contact </h3>
        
@@ -3597,7 +3597,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
        
           
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
       {/* <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" 
       style={{width:"25%",padding: '8px',
@@ -3826,7 +3826,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
         
       </div>
      
-          <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+          <div style={{marginLeft:"60px",marginTop:"2px",backgroundColor:"white"}}>
           <TableContainer component={Paper} style={{ maxHeight: '700px', overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 1 }}>
