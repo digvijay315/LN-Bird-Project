@@ -4991,37 +4991,148 @@ const noreasonsList = [
   "Other"
 ];
 
-  const addfeedback=async()=>
-  {
-    try {
-      const resp=await api.post('addfeedback',feedbackform)
-      if(resp.status===200)
-      {
-         Swal.fire({
-          title: "Feedback Submitted",
-          text: "Feedback Submitted successfully!",
-          icon: "success",
-          confirmButtonColor: '#d33',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            handleCancel();
-          }
-        });
+const addfeedback = async () => {
+  try {
+    const resp = await api.post('addfeedback', feedbackform);
+    if (resp.status === 200) {
+      let htmlContent = "<p>Feedback submitted successfully!</p>";
 
+      // Generate dynamic buttons based on owner_response
+      switch (feedbackform.owner_response) {
+        case "Yes":
+        case "Sold -But Interested to sell Another Property":
+          htmlContent += `
+            <button id="createDealBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Create Deal
+            </button>
+          `;
+          break;
+
+        case "Yes -Sell this property but buy another":
+          htmlContent += `
+            <button id="createDealBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Create Deal
+            </button>
+            <button id="leadRequirementBtn" style="${buttonStyle}; margin-left: 10%;">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Lead Requirement
+            </button>
+          `;
+          break;
+
+        case "No -But wants to buy another property":
+          htmlContent += `
+            <button id="leadRequirementBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Lead Requirement
+            </button>
+          `;
+          break;
+
+        case "Sold":
+          htmlContent += `
+            <button id="addOwnerBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Add New Owner
+            </button>
+          `;
+          break;
+
+        case "Sold -But Interested to Buy Another Property":
+          htmlContent += `
+            <button id="addLeadBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Add Lead
+            </button>
+          `;
+          break;
+
+        default:
+          // no buttons for other values
+          break;
       }
-      
-    } catch (error) {
-       Swal.fire({
-                  title: "Feedback Error",
-                  text:error.response.data.message,
-                  icon: "error",
-                  confirmButtonColor: '#d33',
-                  confirmButtonText: 'OK',
-              })
-      
+
+      Swal.fire({
+        title: "Feedback Submitted",
+        html: htmlContent,
+        icon: "success",
+        showConfirmButton: true,
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK',
+        didOpen: () => {
+          const addHoverEffects = (btn) => {
+            btn.addEventListener('mouseenter', () => {
+              btn.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
+              btn.style.transform = "scale(1.03)";
+            });
+            btn.addEventListener('mouseleave', () => {
+              btn.style.background = "linear-gradient(135deg, #28a745, #218838)";
+              btn.style.transform = "scale(1)";
+            });
+          };
+
+          const dealBtn = document.getElementById('createDealBtn');
+          if (dealBtn) {
+            addHoverEffects(dealBtn);
+            dealBtn.addEventListener('click', () => {
+              const unit = encodeURIComponent(JSON.stringify(selectedItems3[0]));
+              window.open(`/deal?unit=${unit}`, '_blank');
+            });
+          }
+
+          const leadBtn = document.getElementById('leadRequirementBtn');
+          if (leadBtn) {
+            addHoverEffects(leadBtn);
+            leadBtn.addEventListener('click', () => {
+              const owner = encodeURIComponent(feedbackform.owner);
+              window.open(`/leadrequirment?owner=${owner}`, '_blank');
+            });
+          }
+
+          const addOwnerBtn = document.getElementById('addOwnerBtn');
+          if (addOwnerBtn) {
+            addHoverEffects(addOwnerBtn);
+            addOwnerBtn.addEventListener('click', () => {
+              handleShow7();
+            });
+          }
+
+          const addLeadBtn = document.getElementById('addLeadBtn');
+          if (addLeadBtn) {
+            addHoverEffects(addLeadBtn);
+            addLeadBtn.addEventListener('click', () => {
+              window.open('/leadinfo', '_blank');
+            });
+          }
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          handleCancel(); // Close or reset form
+        }
+      });
     }
+  } catch (error) {
+    Swal.fire({
+      title: "Feedback Error",
+      text: error?.response?.data?.message || "Something went wrong!",
+      icon: "error",
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'OK',
+    });
   }
+};
+
+// Button style reused
+const buttonStyle = `
+  background: linear-gradient(135deg, #28a745, #218838);
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+`;
+
+
 
 
   
@@ -10107,7 +10218,7 @@ stage:selectedLead.stage
           <option>Sold -But Interested to sell Another Property</option>
         </select>
       </div>
-      {
+      {/* {
         feedbackform.owner_response==="Yes" && 
         (
             <div className="mb-2">
@@ -10140,9 +10251,9 @@ stage:selectedLead.stage
            
           </div>
         )
-      }
+      } */}
 
-      {
+      {/* {
         feedbackform.owner_response==="Yes -Sell this property but buy another" && 
         (
             <div className="mb-2">
@@ -10201,9 +10312,9 @@ stage:selectedLead.stage
           </div>
         )
 
-      }
+      } */}
 
-      {
+      {/* {
         feedbackform.owner_response==="Sold" && 
         (
             <div className="mb-2">
@@ -10236,7 +10347,7 @@ stage:selectedLead.stage
           </div>
         )
 
-      }
+      } */}
 
   {
   feedbackform.owner_response === "No -But discussed about price" && (
@@ -10304,7 +10415,7 @@ stage:selectedLead.stage
       </div>
   )
 }
-   {
+   {/* {
         feedbackform.owner_response==="No -But wants to buy another property" && 
         (
             <div className="mb-2">
@@ -10336,7 +10447,7 @@ stage:selectedLead.stage
           </div>
         )
 
-      }
+      } */}
         {
         feedbackform.owner_response==="Thinking may/be in future" && 
         (
@@ -10407,7 +10518,7 @@ stage:selectedLead.stage
     </div>
   )
 }
-  {
+  {/* {
         feedbackform.owner_response==="Sold -But Interested to Buy Another Property" && 
         (
             <div className="mb-2">
@@ -10439,8 +10550,8 @@ stage:selectedLead.stage
             </div>
         )
 
-      }
-        {
+      } */}
+        {/* {
         feedbackform.owner_response==="Sold -But Interested to sell Another Property" && 
         (
     <div className="mb-2">
@@ -10473,7 +10584,7 @@ stage:selectedLead.stage
 
         )
 
-      }
+      } */}
 
        <div className="mb-2">
         <label className="form-label">Stage</label>

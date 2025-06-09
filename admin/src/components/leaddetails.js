@@ -4911,7 +4911,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
     <div>
       <Header1/>
       <Sidebar1/>
-      <div style={{marginTop:"60px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+      <div style={{marginTop:"52px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={()=>window.location.reload()}>Leads</h3>
         
             <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
@@ -4936,7 +4936,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
              </Tooltip>
              <button onClick={handleAddColumnClick} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%",border:"none"}}>Add Fields</button>
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
         <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px",}} onClick={fetchdatabystage_incoming}>
           <h6>INCOMING</h6>
           <p>{countincoming}</p>
@@ -4968,7 +4968,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
         
       </div>
    
- <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+ <div style={{marginTop:"1px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
 {/* <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and lead type"  style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
 
@@ -5366,7 +5366,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
               )}
             </div>
 
-      <div style={{marginLeft:"70px",marginTop:"-20px",backgroundColor:"white",top:"100px",position:"sticky",zIndex:10,}}>
+      <div style={{marginLeft:"60px",marginTop:"-20px",backgroundColor:"white",top:"100px",position:"sticky",zIndex:10,}}>
       <TableContainer component={Paper} style={{ maxHeight: '700px',overflow: 'auto' }}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead style={{ position: "sticky", top: 0, zIndex: 10 }}>

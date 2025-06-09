@@ -800,7 +800,7 @@ Combo Products
                         margin: "0 auto",
                         padding: "10px",
                       }}
-                      onClick={() => navigate("/vitamincfaceash", { state: product._id })}
+                      onClick={() => navigate(`/product/${product._id}`)}
                     />
                   </div>
 

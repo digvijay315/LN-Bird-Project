@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useRef } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../Components/Navbar.css";
 import { Modal, Button, Form } from "react-bootstrap";
@@ -125,7 +125,7 @@ const subtotal = cart.reduce(
 0
 );
 
-const gstPercentage = 18; // Example: 18% GST (you can change this value)
+const gstPercentage = 0; // Example: 18% GST (you can change this value)
 const gstAmount = (subtotal * gstPercentage) / 100; // Calculate GST
 
 const total = subtotal + gstAmount; // Final total price including GST
@@ -160,11 +160,31 @@ const [show4, setShow4] = useState(false);
 const handleClose4 = () => setShow4(false);
 const handleShow4 = () => {
 
-
-
 setShow4(true);
 handleClose1()
+handleCancel()
 }
+
+ const [show5, setShow5] = useState(false);
+                const [isClosing, setIsClosing] = useState(false);
+                const toastRef = useRef(null);
+
+                    const toggleToast = () => {
+                   
+                      setShow5(true);
+                      // document.getElementById('unitlistview').style.filter = 'blur(5px)';
+                    };
+
+
+              const handleCancel = () => {
+                //  document.getElementById('unitlistview').style.filter = 'none';
+                setIsClosing(true); // trigger slide-out
+                setTimeout(() => {
+                  setShow5(false);     // hide the toast completely
+                  setIsClosing(false); // reset for next open
+                }, 500); // duration should match animation time
+              };
+
 
 
 
@@ -1001,7 +1021,7 @@ gap: "20px",
 }}
 >
 {/* Cart Icon */}
-<div style={{ position: "relative", cursor: "pointer" }} onClick={handleShow1}>
+<div style={{ position: "relative", cursor: "pointer" }} onClick={toggleToast}>
 <i className="fas fa-cart-shopping" style={{ fontSize: "25px", color: "#333" }}></i>
 {length > 0 && (
 <span
@@ -1597,7 +1617,7 @@ Close
 
 {/* modal----------------------------------------------------------------- */}
 
-<Modal show={show1} onHide={handleClose1}>
+{/* <Modal show={show1} onHide={handleClose1}>
 <Modal.Header closeButton>
 <Modal.Title>
 <div className="modal-title">
@@ -1654,7 +1674,66 @@ Close
 CheckOut
 </Button>
 </Modal.Footer>
-</Modal>
+</Modal> */}
+
+<div
+  ref={toastRef}
+  className={`feedback-toast ${show5 ? (isClosing ? 'hide' : 'show') : ''}`}
+  style={{ zIndex: 9999 }}
+>
+  <div className="toast show">
+    <div className="toast-header">
+            <div>
+            <img
+            className="img-fluid"
+            src={logo}
+            alt="Product"
+            style={{height:"40px"}}
+            />
+            </div>
+            <div>
+               <span style={{fontWeight:"bold",fontSize:"16px"}}>Your Cart Details</span>
+            </div>
+           
+         
+    </div>
+    <div className="toast-body"  style={{maxHeight: '90vh',overflowY: 'auto',paddingRight: '10px',}}>
+        {cart.map((item, index) => (
+        <div key={index} className="cart-item">
+        <img src={item.product_image} alt={item.product} />
+        <div className="cart-item-info">
+        <div className="cart-item-title">{item.product_name}</div>
+
+        <div className="cart-item-price">
+        ₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)}
+        <span style={{marginLeft:"4rem"}}>Quantity {item.product_quantity1}</span>
+
+        </div>
+        <span onClick={() => removeFromCart(index)} style={{ cursor: "pointer", color: "red" }}>
+        <i className="fa-solid fa-trash"></i>
+        </span>
+        </div>
+        <div className="cart-item-actions">
+        <button onClick={() => decrementQuantity(index)}>-</button>
+        <span className="quantity">{item.product_quantity1}</span>
+        <button onClick={() => incrementQuantity(index)}>+</button>
+        </div>
+        </div>
+
+        ))}
+        <div className="cart-total">
+        <h3>
+        Total Price: <span >
+        ₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
+        </span>
+        </h3>
+        </div>
+
+      <button className="btn btn-danger w-30" onClick={handleCancel}>Cancel</button>
+      <button className="btn btn-success w-60" style={{ marginLeft: "10%" }} onClick={handleShow4}>CheckOut</button>
+    </div>
+  </div>
+</div>
 
 {/* modal---------------------------------------------------------------------- */}
 
@@ -2139,9 +2218,10 @@ paddingBottom: "10px"
 <span style={{ color: "#333", fontSize: "18px", fontWeight: "400" }}>
 ₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
 </span>
+<span style={{fontSize:"12px"}}>(Including gst)</span>
 </div>
 
-<div style={{
+{/* <div style={{
 fontWeight: "600",
 fontSize: "20px",
 marginTop: "10px",
@@ -2155,7 +2235,7 @@ paddingBottom: "10px"
 <span style={{ color: "#e74c3c", fontSize: "18px", fontWeight: "400" }}>
 ₹{formData.gstAmount ? formData.gstAmount.toFixed(2) : '0.00'}
 </span>
-</div>
+</div> */}
 
 <div style={{
 fontWeight: "700",

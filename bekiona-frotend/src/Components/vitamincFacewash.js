@@ -67,7 +67,6 @@ function VitamincFacewash() {
         const fetchData = async () => {
           try {
             const response = await api.get("getproduct" );
-           const Allproduct=response.data.product
             const matchedProduct = response.data.product.find((item) => item._id === productid);
           setProducts([matchedProduct]);
           } catch (error) {
