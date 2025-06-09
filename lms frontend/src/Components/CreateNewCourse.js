@@ -388,6 +388,7 @@ function CreateNewCourse() {
     document.getElementById("customize-course").style.display = "none";
     document.getElementById("add-new-category").style.display = "none"
     document.getElementById("add-document-category").style.display = "none";
+    document.getElementById("add-assesment-category").style.display = "none";
     document.getElementById("finish_div").style.display = "block";
   }
 
@@ -1525,8 +1526,9 @@ cursor: pointer;
             
               <div className="assign-assessment">
               <div className="assessment-title">
+                <div style={{display:"flex",gap:"10rem"}}>
                 <div className="select-wrapper" > 
-                                  <CustomSelect
+                                  {/* <CustomSelect
                                       label="Select Assessment"
                                       options={filteredAssessments}
                                       value={selectedAssessment}
@@ -1542,10 +1544,74 @@ cursor: pointer;
                                       <h5 className="details-title">Selected Assessment Details</h5>
                                       <p className="details-text">Title: {selectedAssessment.assessment_title}</p>
                                       <p className="details-text">Code: {selectedAssessment.code}</p>
-                                      {/* <p className="details-text">Valid Till: {new Date(selectedAssessment.validTill).toLocaleDateString()}</p> */}
                                       </div>
-                                  )}
+                                  )} */}
+                                <select
+                                style={{
+                                  width: "300px",
+                                  padding: "10px 40px 10px 12px",
+                                  borderRadius: "6px",
+                                  border: "1px solid #ccc",
+                                  backgroundColor: "#fff",
+                                  fontSize: "16px",
+                                  color: "#333",
+                                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                                  appearance: "none",
+                                  WebkitAppearance: "none",
+                                  MozAppearance: "none",
+                                  backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundPosition: "right 12px center",
+                                  backgroundSize: "20px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <option disabled selected>
+                                  --- Select Assessment ---
+                                </option>
+
+                                {assessment?.map((item, index) => (
+                                  <option key={index} value={item.code}>
+                                    {item.assessment_title} - {item.code}
+                                  </option>
+                                ))}
+                              </select>
+
                 </div> 
+
+                 <div className="select-wrapper" > 
+                                 
+                                <select
+                                style={{
+                                  width: "300px",
+                                  padding: "10px 40px 10px 12px",
+                                  borderRadius: "6px",
+                                  border: "1px solid #ccc",
+                                  backgroundColor: "#fff",
+                                  fontSize: "16px",
+                                  color: "#333",
+                                  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                                  appearance: "none",
+                                  WebkitAppearance: "none",
+                                  MozAppearance: "none",
+                                  backgroundImage: `url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>")`,
+                                  backgroundRepeat: "no-repeat",
+                                  backgroundPosition: "right 12px center",
+                                  backgroundSize: "20px",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <option disabled selected>
+                                  --- Select Certificate ---
+                                </option>
+
+                               <option>certificate 1</option>
+                               <option>certificate 2</option>
+                               <option>certificate 3</option>
+                              </select>
+
+                </div> 
+                </div>
 
                 <div class="assessment-settings">
                     <div>
@@ -1561,7 +1627,7 @@ cursor: pointer;
                         <input type="number" placeholder="Enter passing score"/>
                     </div>     
                 </div> 
-                <button className="assign-assessment-btn" >Assign Assessment</button>     
+                {/* <button className="assign-assessment-btn" >Assign Assessment</button>      */}
               </div>
             </div>
            

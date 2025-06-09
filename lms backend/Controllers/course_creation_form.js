@@ -111,7 +111,12 @@ const post_course_creation = async (req, res) => {
             add_tag,
             creation_date, 
             description, 
-            course_price 
+            course_price ,
+            course_assesment,
+            course_certificate,
+            assesment_complete_date,
+            assesment_limitation,
+            assesment_passingscore
         } = req.body;
 
         const thumbnail = [];
@@ -161,6 +166,11 @@ const post_course_creation = async (req, res) => {
             description,
             course_price,
             sections,
+            course_assesment,
+            course_certificate,
+            assesment_complete_date,
+            assesment_limitation,
+            assesment_passingscore,
             thumbnail_upload: thumbnail,
             file_upload: fileUpload,
             video_upload: videUpload,

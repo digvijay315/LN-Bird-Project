@@ -73,6 +73,11 @@ const createCourse = new mongoose.Schema({
             ],
         }
     ],
+    course_assesment: { type: String },
+    course_certificate: { type: String },
+    assesment_complete_date: { type: String },
+    assesment_limitation: { type: String },
+    assesment_passingscore: { type: String },
     thumbnail_upload: {type: Array},
     file_upload: {type: Array},
     video_upload: {type: Array},
