@@ -202,14 +202,14 @@ const createNimbusShipment = async (req, res) => {
         phone: req.body.mobileNumber || "9999999999"
       },
       pickup: {
-        warehouse_name: "BIL",
-        name: "BIL",
-        address: "Khasra No 67102,11,12,20, 686Min, 14Min, 15Min,",
-        address_2: "Khasra No 67102,11,12,20, 686Min, 14Min, 15Min,",
-        city: "Gurugram",
-        state: "HR",
-        pincode: "110001",
-        phone: "9999888877",
+        warehouse_name: "bekiona",
+        name: "abhishek",
+        address: "shop no 326 3rd floor kashi plaza building kamrej surat",
+        address_2: "shop no 326 3rd floor kashi plaza building kamrej surat",
+        city: "surat",
+        state: "Gujarat",
+        pincode: "394185",
+        phone: "8929494422",
       },
       order_items: orderItems, 
     };

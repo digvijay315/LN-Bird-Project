@@ -1711,7 +1711,6 @@ const handleOwnerChange = (event) => {
                     {
                       contact.document_pic.map((item,index)=>(
                            <div key={index} className="custom-file-wrapper mt-2">
-                      
                         <input type="file" 
                         id={`doc-upload-${index}`}
                         style={{marginTop:"10px",display:"none"}}

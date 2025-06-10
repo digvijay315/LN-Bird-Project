@@ -70,6 +70,7 @@ StyledTableCell
   padding: 0.5rem 0.75rem;
   font-size: 0.95rem;
   background-color: #fdfdfd;
+  margin: 0;
 }
 
 .custom-input select.form-control {

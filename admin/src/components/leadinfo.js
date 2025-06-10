@@ -11,6 +11,8 @@ import { Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Swal from "sweetalert2";
+import Lottie from "lottie-react";
+import { icon } from "@fortawesome/fontawesome-svg-core";
 
 function Leadinfo() {
 
@@ -18,7 +20,13 @@ function Leadinfo() {
   const leadData = location.state?.leaddata; // Access lead data passed as state
 
   // console.log(leadData);
-
+   const [animationData, setAnimationData] = useState(null);
+    useEffect(() => {
+      fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+        .then((res) => res.json())
+        .then((data) => setAnimationData(data));
+    }, []);
+    const [isLoading,setIsLoading] = useState(false);
 
 
 const facing=["Park","Green Belt","Highway","Commercial","School","Hospital","Mandir","Gurudwara","Crech","Clinic","Community Centre",
@@ -687,11 +695,13 @@ const handleOwnerChange = (event) => {
         {
             e.preventDefault();
             try {
+              setIsLoading(true)
                 const resp=await api.post('leadinfo',leadinfo,config)
                 const resp1= await api.post('addcontact',leadinfo,config)
                  if(resp.status===200)
                   {
                     Swal.fire({
+                    icon:"success",
                     title: '🎉 Lead created successfully...!',
                     html: `
                     <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
@@ -712,6 +722,7 @@ const handleOwnerChange = (event) => {
               console.log(error);
               
                   Swal.fire({
+                  icon:"error",
                   title: 'Oops creating lead failed!',
                   html: `
                   <img src="https://i.pinimg.com/originals/53/3f/f7/533ff77ef582abbfa00ccf9080137304.gif"
@@ -733,6 +744,9 @@ const handleOwnerChange = (event) => {
                   }
                 });
                
+            }finally
+            {
+              setIsLoading(false)
             }
         }
 
@@ -1176,7 +1190,11 @@ const handleOwnerChange = (event) => {
                                   const handledocumentpicchange = (index, event) => {
                                     const newdocumentpic = [...leadinfo.document_pic];
                                     const files = Array.from(event.target.files);
-                                    newdocumentpic[index] = {files:files}
+                                     newdocumentpic[index] = files.map(file => ({
+                                                  file,
+                                                  preview: URL.createObjectURL(file)
+                                                }));
+
                                     setleadinfo({
                                       ...leadinfo,
                                       document_pic: newdocumentpic
@@ -1827,7 +1845,7 @@ return (
             <Sidebar1/>
             <div style={{padding:"50px"}}>
             <div className="container rounded bg-white mt-5 mb-12" style={{width:"70%",marginLeft:"200px"}}>
-            <div className="row" style={{marginTop:"50px"}}>
+            <div className="row" style={{marginTop:"0px"}}>
         <div className="col-12">
             <div className="p-3 py-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
@@ -1843,9 +1861,9 @@ return (
 {/*----------------------------------------leadinfo basic details start------------------------------------------------------------------- */}
                
                
-                <div className="row mt-2" id="leadinfobasic1">
+                <div className="row" id="leadinfobasic1">
                     
-                    <div className="col-md-3"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
+                    <div className="col-md-3 mb-3 custom-input mb-3 custom-input"><label className="form-label">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
                         <option>{leadData?.title|| 'Mr.'}</option>
                         <option>Mrs.</option>
                         <option>Smt.</option>
@@ -1855,15 +1873,15 @@ return (
                         <option>col</option>
                         </select>
                         </div>
-                    <div className="col-md-4"><label className="labels">Name</label><input type="text" defaultValue={leadData?.first_name || ''} required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,first_name:e.target.value})}/></div>
-                    <div className="col-md-4"><label className="labels">Surname</label><input type="text" defaultValue={leadData?.last_name || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Name</label><input type="text" defaultValue={leadData?.first_name || ''} required="true" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,first_name:e.target.value})}/></div>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Surname</label><input type="text" defaultValue={leadData?.last_name || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,last_name:e.target.value})}/></div>
                 </div>
-                <div className="row mt-3" id="leadinfobasic2">
-                       <div className="col-md-4" > <label className="labels">Country</label>
+                <div className="row" id="leadinfobasic2">
+                       <div className="col-md-4 mb-4 custom-input" > <label className="form-label">Country</label>
                     {
                       leadinfo.country_code.map((item,index)=>
                       (
-                        <select style={{marginTop:"10px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
+                        <select style={{marginTop:"1px"}} required="true" className="form-control form-control-sm" onChange={(event)=>handlecountry_codechange1(index,event)}>
                         <option value={item} >India +91</option>
                         {
                           countrycode.map((item)=>
@@ -1875,11 +1893,11 @@ return (
                       ))
                     }
                     </div>
-                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Mobile Number</label>
                     {
                        leadinfo.mobile_no.map((item,index)=>
                         (
-                          <input type="text" required="true" style={{marginTop:"10px"}} 
+                          <input type="text" required="true" style={{marginTop:"1px"}} 
                           className="form-control form-control-sm" 
                           placeholder="enter phone number" 
                           onChange={(event)=>handlemobile_nochange1(index,event)}/>
@@ -1887,11 +1905,11 @@ return (
                         ))
                     }
                     </div>
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-2 custom-input"><label className="form-label">Type</label>
                     {
                        leadinfo.mobile_type.map((item,index)=>
                         (
-                         <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                         <select className="form-control form-control-sm" style={{marginTop:"1px"}} 
                          onChange={(event)=>handlemobile_typechange1(index,event)}>
                                   
                                   <option>Personal</option>
@@ -1903,23 +1921,45 @@ return (
                         ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                     {
                        leadinfo.action11.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/></div>
-                                  
+                           <div style={{marginTop:"10px"}}>
+                            {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall11(index)} style={{height:"40px",cursor:"pointer"}}/> */}
+                                  <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={()=>deleteall11(index)}>delete</span> 
+                                  </div>
                           
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn11}>+</button></div>
+                  <div className="col-md-1 mb-1 custom-input">
+                  <label className="form-label">Add</label>
+                  <button
+                    className="form-control form-control-sm"
+                    onClick={addFn11}
+                    style={{
+                      backgroundColor: "#007bff",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontWeight: "500",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      transition: "all 0.2s ease-in-out"
+                    }}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                  >
+                    +
+                  </button>
+                </div>
 
-                   <div className="col-md-8"><label className="labels">Email-Address</label>
+
+                   <div className="col-md-8 mb-8 custom-input"><label className="form-label">Email-Address</label>
                     {
                         leadinfo.email.map((item,index)=>
                         (
-                          <input type="text" style={{marginTop:"10px"}}
+                          <input type="text" style={{marginTop:"1px"}}
                           className="form-control form-control-sm" 
                           placeholder="enter email-id"
                           onChange={(event)=>handleemailchange1(index,event)}/>
@@ -1927,11 +1967,11 @@ return (
                     }
                     </div>
                     
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-2 custom-input"><label className="form-label">Type</label>
                     {
                        leadinfo.email_type.map((item,index)=>
                         (
-                          <select className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                          <select className="form-control form-control-sm" style={{marginTop:"1px"}} 
                           onChange={(event)=>handleemail_typechange1(index,event)}>
                                 
                                 <option>Personal</option>
@@ -1942,24 +1982,46 @@ return (
                     }
                    </div>
                   
-                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                   <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                     {
                        leadinfo.action22.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                          <div style={{marginTop:"10px"}}>
+                            {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall22(index)} style={{height:"40px",cursor:"pointer"}}/> */}
+                           <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={()=>deleteall22(index)}>delete</span> 
+                            </div>
                                   
                           
                         ))
                     }
                     </div>
-                     <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn22}>+</button></div>
+                     <div className="col-md-1 mb-1 custom-input">
+                      <label className="form-label" >add</label>
+                          <button
+                    className="form-control form-control-sm"
+                    onClick={addFn22}
+                    style={{
+                      backgroundColor: "#007bff",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "4px",
+                      fontWeight: "500",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      transition: "all 0.2s ease-in-out"
+                    }}
+                    onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                    onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                  >
+                    +
+                  </button>
+                      </div>
 
-                     <div className="col-md-8"><label className="labels">Tags</label><input type="text" defaultValue={leadData?.tags || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
-                    <div className="col-md-10"><label className="labels">Descriptions</label><textarea defaultValue={leadData?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
+                     <div className="col-md-8 mb-8 custom-input"><label className="form-label">Tags</label><input type="text" defaultValue={leadData?.tags || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,tags:e.target.value})}/></div>
+                    <div className="col-md-10 mb-10 custom-input"><label className="form-label">Descriptions</label><textarea defaultValue={leadData?.descriptions || ''} className='form-control form-control-sm' onChange={(e)=>setleadinfo({...leadinfo,descriptions:e.target.value})}/></div>
                     
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-12 mb-12 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                    <div className="col-md-6"><label className="labels">Stage</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,stage:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Stage</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,stage:e.target.value})}>
                     <option>{leadData?.stage || '---Select---'}</option>
                         <option>Incoming</option>
                         <option>Prospect</option>
@@ -1975,7 +2037,7 @@ return (
                       
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Lead Type</label>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Lead Type</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,lead_type:e.target.value})}>
                     <option>{leadData?.lead_type || '---Select---'}</option>
                         <option>Hot</option>
@@ -1983,7 +2045,7 @@ return (
                         <option>Cold</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Owner</label>
                     {/* <select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,owner:e.target.value})}>
                               <option>{leadData?.owner[0] || '---select---'}</option>
                               <option>Suraj</option> 
@@ -2009,7 +2071,7 @@ return (
                     ))}
                 </Select>
                         </div>
-                    <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,team:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Team</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,team:e.target.value})}>
                               <option>{leadData?.team || '---select---'}</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -2017,25 +2079,25 @@ return (
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,visible_to:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,visible_to:e.target.value})}>
                                 <option>{leadData?.visible_to || '---Select---'}</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
                                 <option>All Users</option>
                                 </select>
                     </div>
-                    <div className="col-md-6"></div>
+                    <div className="col-md-6 mb-6 custom-input"></div>
                    
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Campegin Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-12 mb-12 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Campegin Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                    
-                        <div className="col-md-6"><label className="labels">Campaign</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,campaign:e.target.value})}>
+                        <div className="col-md-6 mb-6 custom-input"><label className="form-label">Campaign</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,campaign:e.target.value})}>
                     <option>{leadData?.campaign || '---Select---'}</option>
                         <option>Online Campaign</option>
                         <option>Offline Campaign</option>
                         <option>Organic Campaign</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,source:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,source:e.target.value})}>
                     <option>{leadData?.source || '---Select---'}</option>
                     {getSourceOptions().map((source, index) => (
                       <option key={index} value={source}>
@@ -2044,7 +2106,7 @@ return (
                     ))}
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Sub-Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,sub_source:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Sub-Source</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,sub_source:e.target.value})}>
                     <option>{leadData?.sub_source || '---Select---'}</option>
                         <option>Call</option>
                         <option>Sms</option>
@@ -2054,8 +2116,8 @@ return (
                     </div>
                     {(leadinfo.source === "Reference" || leadinfo.source === "Channel Partner" && leadinfo.campaign === "Organic Campaign") && (
                      <>
-                     <div className="col-md-5">
-                        <label className="labels">Referrer Name</label>
+                     <div className="col-md-5 mb-5 custom-input">
+                        <label className="form-label">Referrer Name</label>
                         <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}>
                           <option>{leadData?.channel_partner || '---Select---'}</option>
                          
@@ -2067,12 +2129,30 @@ return (
                       }
                         </select>
                       </div>
-                  <div className="col-md-1" onClick={handleShow1}><label className="labels">Add</label><button className="form-control form-control-sm">+</button></div>
+                  <div className="col-md-1 mb-1 custom-input" onClick={handleShow1}>
+                    <label className="form-label">Add</label>
+                     <button
+                      className="form-control form-control-sm"
+                      style={{
+                        backgroundColor: "#007bff",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                        transition: "all 0.2s ease-in-out"
+                      }}
+                      onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                      onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                    >
+                      +
+                    </button>
+                    </div>
                   </>
                     )}
                     
-                    <div className="col-md-12"><hr></hr></div>
-                    {/* <div className="col-md-6"><label className="labels">Intersted Project</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,intrested_project:e.target.value})}>
+                    <div className="col-md-12 mb-12 custom-input"><hr></hr></div>
+                    {/* <div className="col-md-6 mb-6 custom-input"><label className="form-label">Intersted Project</label><select className="form-control form-control-sm"onChange={(e)=>setleadinfo({...leadinfo,intrested_project:e.target.value})}>
                     <option>{leadData?.intrested_project || '---Select---'}</option>
                         <option>Suresh Kumar</option>
                         <option>Rakesh Kumar</option>
@@ -2087,7 +2167,7 @@ return (
               
               
                 <div className="row mt-2" id="leadinforequirment" style={{display:"none"}}>
-                <div className="col-md-3"><label className="labels">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
+                <div className="col-md-3 mb-3 custom-input"><label className="form-label">Requirment</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,requirment:e.target.value})}>
                     <option>Select</option>
                        {
                         requirment.map(item=>
@@ -2098,7 +2178,7 @@ return (
                        }
                         </select>
                         </div>
-                        <div className="col-md-3"><label className="labels">Property Type</label>
+                        <div className="col-md-3 mb-3 custom-input"><label className="form-label">Property Type</label>
                   
                          <Select
                          className="form-control form-control-sm" style={{border:"none"}}
@@ -2116,13 +2196,13 @@ return (
                         </Select>
                         </div>
                         
-                        <div className="col-md-4"><label className="labels" style={{display:"inline-block"}}>Purpose</label><br></br>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label" style={{display:"inline-block"}}>Purpose</label><br></br>
                         <input type="radio" name="purpose" value={"End use"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>End use<input type="radio" name="purpose" value={"Investor"} style={{marginLeft:"20px",marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,purpose:e.target.value})}/>Investor
                         </div>
-                        <div className="col-md-2"><label className="labels" >NRI</label><br></br>
+                        <div className="col-md-2 mb-2 custom-input"><label className="form-label" >NRI</label><br></br>
                         <input type="checkbox" value={"Yes"} style={{marginRight:"10px"}} onChange={(e)=>setleadinfo({...leadinfo,nri:e.target.value})}/>Yes
                         </div>
-                        <div className="col-md-6"><label className="labels">Sub Type</label>
+                        <div className="col-md-6 mb-6 custom-input"><label className="form-label">Sub Type</label>
                         
                         <Select
                         className="form-control form-control-sm" style={{border:"none"}}
@@ -2140,7 +2220,7 @@ return (
                     </Select>
                     </div>
                     
-                    <div className="col-md-6"><label className="labels">Unit Type</label>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Unit Type</label>
                     <Select
                         className="form-control form-control-sm" style={{border:"none"}}
                       multiple
@@ -2158,8 +2238,8 @@ return (
                         </div>
                         {leadinfo.requirment === "Rent" && (
                           <>
-                            <div id="rentbudgetmin" className="col-md-6">
-                              <label className="labels">Budget Min</label>
+                            <div id="rentbudgetmin" className="col-md-6 mb-6 custom-input">
+                              <label className="form-label">Budget Min</label>
                               <select
                                 className="form-control form-control-sm"
                                 onChange={(e) =>
@@ -2176,8 +2256,8 @@ return (
                               </select>
                             </div>
 
-                            <div id="rentbudgetmax" className="col-md-6">
-                              <label className="labels">Budget Max</label>
+                            <div id="rentbudgetmax" className="col-md-6 mb-6 custom-input">
+                              <label className="form-label">Budget Max</label>
                               <select
                                 className="form-control form-control-sm"
                                 onChange={(e) =>
@@ -2198,7 +2278,7 @@ return (
 
                         {leadinfo.requirment === "Buy" && (
                        <>
-                        <div id="buybudgetmin" className="col-md-6"><label className="labels">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
+                        <div id="buybudgetmin" className="col-md-6 mb-6 custom-input"><label className="form-label">Budget Min</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_min:e.target.value})}>
                         <option>---Select---</option>
                         {buyBudgetOptions.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2208,7 +2288,7 @@ return (
                         </select></div>
                       
                       
-                        <div id="buybudgetmax" className="col-md-6"><label className="labels">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
+                        <div id="buybudgetmax" className="col-md-6 mb-6 custom-input"><label className="form-label">Budget Max</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,budget_max:e.target.value})}>
                         <option>---Select---</option>
                         {filteredMaxBudgetOptionsbuy.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2218,7 +2298,7 @@ return (
                         </select></div>
                         </>
                       )}
-                        <div className="col-md-4"><label className="labels">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Minimum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,minimum_area:e.target.value})}>
                         <option>Select</option>
                         {areaoptions.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2227,7 +2307,7 @@ return (
                                 ))}
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Maximum Area</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maximum_area:e.target.value})}>
                         <option>Select</option>
                         {filteredarea.map((option) => (
                                   <option key={option.value} value={option.value}>
@@ -2237,7 +2317,7 @@ return (
                 
                         </select></div>
                    
-                        <div className="col-md-4"><label className="labels">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Area Metric</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area_metric:e.target.value})} >
                       
                         <option>Sq Yard</option>
                         <option>Marla</option>
@@ -2245,7 +2325,7 @@ return (
                         <option>Sq Feet</option>
                         <option>Kanal</option>
                         </select></div> 
-                        <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
+                        <div className="col-md-12 mb-12 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Location Details</label></div>
                        
                         <div className="row" id="search_location" style={{border:"1px solid black",margin:"5px",padding:"10px"}}>
                         <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
@@ -2255,7 +2335,7 @@ return (
                          </div>
 
                            <div className="row" id="select_location" style={{margin:"5px",padding:"10px"}}>
-                        <div className="col-md-5"><label className="labels">Country(country3)</label>
+                        <div className="col-md-5 mb-5 custom-input"><label className="form-label">Country(country3)</label>
                         <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,country3:e.target.value})}>
                         <option>India</option>
                     {asianCountries.map((country, index) => (
@@ -2266,7 +2346,7 @@ return (
                           </select>
                         </div>
                        
-                        <div className="col-md-5"><label className="labels">State(state3)</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
+                        <div className="col-md-5 mb-5 custom-input"><label className="form-label">State(state3)</label><select type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state3:e.target.value})}>
                         <option value="">--Select State--</option>
                       {states.map((state) => (
                         <option key={state} value={state}>
@@ -2275,9 +2355,9 @@ return (
                       ))}
                           </select>
                         </div>
-                        <div className="col-md-2"></div>
+                        <div className="col-md-2 mb-2 custom-input"></div>
 
-                        <div className="col-md-5"><label className="labels">City(city3)</label>
+                        <div className="col-md-5 mb-5 custom-input"><label className="form-label">City(city3)</label>
                         {/* <select  className="form-control form-control-sm"  onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}>
                           <option>---select country---</option>
                           <option>India</option>
@@ -2296,8 +2376,8 @@ return (
                     ))}
                   </select>
                         </div>
-                        <div className="col-md-5">
-                      <label className="labels">Area/Project</label>
+                        <div className="col-md-5 mb-5 custom-input">
+                      <label className="form-label">Area/Project</label>
                       <Select
                         className="form-control form-control-sm"
                         multiple
@@ -2322,8 +2402,8 @@ return (
                         ))}
                       </Select>
                     </div>
-                        <div className="col-md-5">
-                        <label className="labels">Block(block3)</label>
+                        <div className="col-md-5 mb-5 custom-input">
+                        <label className="form-label">Block(block3)</label>
                         <Select
                           className="form-control form-control-sm"
                           multiple
@@ -2349,15 +2429,15 @@ return (
                         </Select>
                       </div>
                  
-                        <div className="col-md-5"><label className="labels">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
+                        <div className="col-md-5 mb-5 custom-input"><label className="form-label">Specific Unit</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,specific_unit:e.target.value})}/></div>
                     </div>
 
                        <div className="row" id="search_location1" style={{margin:"5px",padding:"10px",display:"none"}}>
-                        <div className="col-md-8"><label className="labels">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
-                       <div className="col-md-2"></div>
-                        <div className="col-md-2"><label className="labels" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
-                        <div className="col-md-8"><label className="labels">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
-                        <div className="col-md-4"><label className="labels">Range</label>
+                        <div className="col-md-8 mb-8 custom-input"><label className="form-label">Search Location</label><input type="text" className="form-control form-control-sm"   ref={inputRef} value={leadinfo.search_location} onChange={(e)=>setleadinfo({...leadinfo,search_location:e.target.value})}/></div>
+                       <div className="col-md-2 mb-2 custom-input"></div>
+                        <div className="col-md-2 mb-2 custom-input"><label className="form-label" style={{visibility:"hidden"}}>Search</label><button className="form-control form-control-sm" onClick={getlocation}>Get</button></div>
+                        <div className="col-md-8 mb-8 custom-input"><label className="form-label">Street Address</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,street_address:e.target.value})}/></div>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Range</label>
                         <select  className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range:e.target.value})}>
                         <option>---select---</option>
                         <option value="1">Within 1 km.</option>
@@ -2369,7 +2449,7 @@ return (
                         <option value="25">Within 25 km.</option>
                           </select>
                         </div>
-                        {/* <div className="col-md-2"><label className="labels">Unit</label>
+                        {/* <div className="col-md-2 mb-2 custom-input"><label className="form-label">Unit</label>
                         <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,range_unit:e.target.value})}>
                           <option>---select---</option>
                           <option>K.M</option>
@@ -2377,23 +2457,23 @@ return (
                         </div> */}
                         {/* <div className="col-md-4"></div> */}
 
-                    <div className="col-md-3"><label className="labels">City(city2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Area(area2)</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Block(block)</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Pin Code(pincode2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">City(city2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Area(area2)</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Block(block)</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Pin Code(pincode2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
                     
-                    <div className="col-md-3"><label className="labels">Country(country2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">State(state2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3"><label className="labels">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
-                    {/* <div className="col-md-4"><label className="labels">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Country(country2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">State(state2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    {/* <div className="col-md-4"><label className="form-label">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
                     </div>
                     </div>
                     
-                    <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                    <div className="col-md-12 mb-12 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
                    
-                    <div className="col-md-4"><label className="labels">Facing</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Facing</label>
                     <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
                     value={facings}
@@ -2417,7 +2497,7 @@ return (
                     ))}
                 </Select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Road</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Road</label>
                     <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
                     value={roads}
@@ -2441,7 +2521,7 @@ return (
                     ))}
                 </Select>
                     </div>
-                    <div className="col-md-4"><label className="labels">Direction</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Direction</label>
                       <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
                     value={directions}
@@ -2467,7 +2547,7 @@ return (
                    
                     </div>
 
-                    <div className="col-md-4"><label className="labels">Funding</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Funding</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,funding:e.target.value})}>
                     <option>Select</option>
                    {
@@ -2480,7 +2560,7 @@ return (
                         </select>
                     </div>
                    
-                    <div className="col-md-4"><label className="labels">Timeline</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Timeline</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,timeline:e.target.value})}>
                     <option>Select</option>
                       {
@@ -2496,7 +2576,7 @@ return (
                 
                    
                 
-                    <div className="col-md-4"><label className="labels">Furnishing</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Furnishing</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,furnishing:e.target.value})}>
                     <option>Select</option>
                        {
@@ -2508,7 +2588,7 @@ return (
                        }
                         </select>
                     </div>     
-                    <div className="col-md-4"><label className="labels">Property Unit Type</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Property Unit Type</label>
                   <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
                     value={propertyunitstypes}
@@ -2533,7 +2613,7 @@ return (
                 </Select>
                     </div>
 
-                    <div className="col-md-4"><label className="labels">Transaction Type</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Transaction Type</label>
                     <select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,transaction_type:e.target.value})}>
                     <option>Select</option>
                      {
@@ -2550,8 +2630,8 @@ return (
                      
                       {/* Conditionally render the progress bar */}
                       {leadinfo.transaction_type === "Flexiable" && (
-                        <div className="col-md-8">
-                           <label className="labels">White Portion</label>
+                        <div className="col-md-8 mb-8 custom-input">
+                           <label className="form-label">White Portion</label>
                         <div className="progress-container" style={{height:"20px"}} onMouseDown={handleMouseDown}>
                           <div className="progress-bar"  style={{width: `${progress}%`,height:"20px",backgroundColor: progress >= 75 ? "green" : progress >= 50 ? "yellow" : "red",  }}/>
                           <div className="progress-percentage">{Math.round(progress)}%</div>
@@ -2561,7 +2641,7 @@ return (
                   
 
 
-                    <div className="col-md-4"><label className="labels">Send Matched Deal</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Send Matched Deal</label>
                     <Select className="form-control form-control-sm" style={{border:"none"}}
                     multiple
                     value={matchdeals}
@@ -2588,7 +2668,7 @@ return (
          
          
          <div className="row mt-2" id="leadinfoprofessional" style={{display:"none"}}>
-                     <div className="col-md-5"><label className="labels">Profession Category</label>
+                     <div className="col-md-5 mb-5 custom-input"><label className="form-label">Profession Category</label>
                      <select className="form-control form-control-sm"  onChange={handleProfessionCategoryChange} >
                                 <option>{leadData?.profession_subcategory || '---Select---'}</option>
                                 {professtiondetails.profession_category.map((category) => (
@@ -2598,7 +2678,7 @@ return (
                               ))}
                         </select>
                     </div>
-                    <div className="col-md-7"><label className="labels">Profession Sub-Category</label>
+                    <div className="col-md-7 mb-7 custom-input"><label className="form-label">Profession Sub-Category</label>
                     <select className="form-control form-control-sm"  onChange={handleProfessionSubcategoryChange} >
                                 <option>{leadData?.profession_subcategory || '---Select---'}</option>
                                 {availableSubcategories.map((subcategory) => (
@@ -2608,7 +2688,7 @@ return (
                               ))}
                         </select>
                     </div>
-                    <div className="col-md-5"><label className="labels">Designation</label>
+                    <div className="col-md-5 mb-5 custom-input"><label className="form-label">Designation</label>
                     <select className="form-control form-control-sm" onChange={handleDesignationChange}>
                     <option>{leadData?.designation || '---Select---'}</option>
                     {availableDesignations.map((designation) => (
@@ -2618,7 +2698,7 @@ return (
                         ))}
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,company_name:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Company/Organisation/Department Name</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,company_name:e.target.value})}>
                     <option>{leadData?.company_name || '---Select---'}</option>
                     <option>---Select company---</option>
                       {
@@ -2629,9 +2709,28 @@ return (
                       }
                         </select>
                     </div>
-                    <div className="col-md-1"><label className="labels">Add</label><button className="form-control form-control-sm" onClick={()=>{navigate('/addcompany')}}>+</button></div>
+                    <div className="col-md-1 mb-1 custom-input"
+                    ><label className="form-label">Add</label>
+                     <button
+                      className="form-control form-control-sm"
+                      onClick={()=>{navigate('/addcompany')}}
+                      style={{
+                        backgroundColor: "#007bff",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        fontWeight: "500",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                        transition: "all 0.2s ease-in-out"
+                      }}
+                      onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                      onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                    >
+                      +
+                    </button>
+                    </div>
                   
-                    <div className='col-md-12'><hr></hr></div>  
+                    <div className='col-md-12 mb-12 custom-input'><hr></hr></div>  
 
                      </div>
 
@@ -2639,30 +2738,30 @@ return (
 
 
 {/*=====================--------------------- leadinfo personal start-------------------------------------------============================= */}
-     <div className="row mt-2" id="leadinfopersonal" style={{display:"none"}}>
-                     <div className="col-md-12"><label className="labels">Father/Husband name</label><input type="text" defaultValue={leadData?.father_husband_name || ''} className="form-control form-control-sm"/></div>
+     <div className="row" id="leadinfopersonal" style={{display:"none"}}>
+                     <div className="col-md-12 mb-12 custom-input"><label className="form-label">Father/Husband name</label><input type="text" defaultValue={leadData?.father_husband_name || ''} className="form-control form-control-sm"/></div>
 
-                            <div className="col-md-3"><label className="labels">H.No</label><input type="text" defaultValue={leadData?.h_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
-                            <div className="col-md-9"><label className="labels">Area(area1)</label><input type="text" defaultValue={leadData?.area1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
+                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">H.No</label><input type="text" defaultValue={leadData?.h_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
+                            <div className="col-md-9 mb-9 custom-input"><label className="form-label">Area(area1)</label><input type="text" defaultValue={leadData?.area1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
 
-                            <div className="col-md-4"><label className="labels">Location(location1)</label><input type="text" defaultValue={leadData?.location1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">City(city1)</label><input type="text" defaultValue={leadData?.city1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}/></div>
-                            <div className="col-md-4"><label className="labels">Pin Code(pincode1)</label><input type="text" defaultValue={leadData?.pincode1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">Location(location1)</label><input type="text" defaultValue={leadData?.location1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">City(city1)</label><input type="text" defaultValue={leadData?.city1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,city1:e.target.value})}/></div>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">Pin Code(pincode1)</label><input type="text" defaultValue={leadData?.pincode1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,pincode1:e.target.value})}/></div>
 
-                            <div className="col-md-6"><label className="labels">State(state1)</label><input type="text" defaultValue={leadData?.state1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
-                            <div className="col-md-6"><label className="labels">Country(country1)
+                            <div className="col-md-6 mb-6 custom-input" ><label className="form-label">State(state1)</label><input type="text" defaultValue={leadData?.state1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,state1:e.target.value})}/></div>
+                            <div className="col-md-6 mb-6 custom-input"><label className="form-label">Country(country1)
                               </label><input type="text" defaultValue={leadData?.country1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,country1:e.target.value})}/></div>
 
-                            <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                            <div className="col-md-12 mb-12 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>Other Details</label><hr style={{marginTop:"-5px"}}></hr></div>
 
-                            <div className="col-md-5"><label className="labels">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,gender:e.target.value})}>
+                            <div className="col-md-5 mb-5 custom-input"><label className="form-label">Gender</label><select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,gender:e.target.value})}>
                                         <option>{leadData?.gender || '---Select---'}</option>
                                         <option>Male</option>
                                         <option>Female</option>
                                         <option>Others</option>
                                 </select>
                             </div>
-                            <div className="col-md-7"><label className="labels">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maritial_status:e.target.value})}>
+                            <div className="col-md-7 mb-7 custom-input"><label className="form-label">Maritial Status</label>< select className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,maritial_status:e.target.value})}>
                                     <option>{leadData?.maritial_status || '---Select---'}</option>
                                     <option>Married</option>
                                     <option>Unmarried</option>
@@ -2670,15 +2769,15 @@ return (
                                 </select>
                             </div>
 
-                            <div className="col-md-5"><label className="labels">Birth Date</label><input type="text" defaultValue={leadData?.birth_date || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,birth_date:e.target.value})}/></div>
-                            <div className="col-md-7"><label className="labels">Anniversary Date</label><input type="text" defaultValue={leadData?.anniversary_date || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,anniversary_date:e.target.value})}/></div>
+                            <div className="col-md-5 mb-5 custom-input"><label className="form-label">Birth Date</label><input type="text" defaultValue={leadData?.birth_date || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,birth_date:e.target.value})}/></div>
+                            <div className="col-md-7 mb-7 custom-input"><label className="form-label">Anniversary Date</label><input type="text" defaultValue={leadData?.anniversary_date || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,anniversary_date:e.target.value})}/></div>
 
-                            <div className="col-md-3"> <label className="labels">Education</label>
+                            <div className="col-md-3 mb-3 custom-input"> <label className="form-label">Education</label>
                                 
                                     {
                                        Array.isArray(leadinfo.education)?
                                     leadinfo.education.map((name, index) => (
-                                        <div key={index} style={{marginTop:"10px"}}>
+                                        <div key={index} style={{marginTop:"1px"}}>
                                         <select className="form-control form-control-sm"
                                             onChange={(event) => handleeducationChange(index, event)}
                                         >
@@ -2690,11 +2789,11 @@ return (
                                         </div>
                                     )):[]}
                                 </div>
-                            <div className="col-md-3"><label className="labels">Degree</label>
+                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">Degree</label>
                             {
                               Array.isArray(leadinfo.degree)?
                             leadinfo.degree.map((name, index) => (
-                                        <div key={index} style={{marginTop:"10px"}}>
+                                        <div key={index} style={{marginTop:"1px"}}>
                                         <select
                                             className="form-control form-control-sm"
                                             onChange={(event) => handledegreeChange(index, event)}
@@ -2726,11 +2825,11 @@ return (
                                         </div>
                                     )):[]}
                             </div>
-                            <div className="col-md-4"><label className="labels">School/College/University</label>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">School/College/University</label>
                             {
                                Array.isArray(leadinfo.school_college)?
                             leadinfo.school_college.map((name, index) => (
-                                        <div key={index} style={{marginTop:"10px"}}>
+                                        <div key={index} style={{marginTop:"1px"}}>
                                         <input
                                             type="text"
                                             className="form-control form-control-sm"
@@ -2741,24 +2840,46 @@ return (
                                         </div>
                                     )):[]}                    
                             </div>
-                            <div className="col-md-1" style={{marginTop:"90px"}}>
+                            <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                             {
                                Array.isArray(leadinfo.action4)?
                             leadinfo.action4.map((item,index)=>
                             (
-                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                <div style={{marginTop:"10px"}}>
+                                  {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+                                   <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall4(index)}>delete</span>
+                                  </div>
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn4}>+</button></div>
+                            <div className="col-md-1 mb-1 custom-input" >
+                              <label className="form-label">add</label>
+                               <button
+                                className="form-control form-control-sm"
+                                onClick={addFn4}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+                              </div>
 
-                            <div className="col-md-4"><label className="labels">Loan</label>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">Loan</label>
                             {
                                Array.isArray(leadinfo.loan)?
                             leadinfo.loan.map((item,index)=>
                             (
                                 <select type="text"
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleloanchange(index,event)}
                                 >
@@ -2768,13 +2889,13 @@ return (
                             )):[]
                             }
                             </div>
-                            <div className="col-md-3"><label className="labels">Bank</label>
+                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">Bank</label>
                             {
                                Array.isArray(leadinfo.bank)?
                             leadinfo.bank.map((item,index)=>
                             (
                                 <select type="text" 
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 className="form-control form-control-sm"
                                 onChange={(event)=>handlebankchange(index,event)}
                                 >
@@ -2800,39 +2921,61 @@ return (
 
                             }
                             </div>
-                            <div className="col-md-3"><label className="labels">Amount</label>
+                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">Amount</label>
                             {
                                Array.isArray(leadinfo.amount)?
                             leadinfo.amount.map((item,index)=>
                             (
                                 <input type="text" 
                                 defaultValue={leadData?.amount[index] || ''}
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 className="form-control form-control-sm"
                                 onCanPlay={(event)=>handleamountchange(index,event)} />
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" style={{marginTop:"90px"}}>
+                            <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                             {
                                Array.isArray(leadinfo.action5)?
                             leadinfo.action5.map((item,index)=>
                             (
-                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                <div style={{marginTop:"10px"}}>
+                                  {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall5(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+                                   <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall5(index)}>delete</span>
+                                  </div>
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn5}>+</button></div>
+                            <div className="col-md-1 mb-1 custom-input">
+                              <label className="form-label">add</label>
+                               <button
+                                className="form-control form-control-sm"
+                                onClick={addFn5}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+                              </div>
 
 
-                            <div className="col-md-4"><label className="labels">Social Media</label>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">Social Media</label>
                             {
                                Array.isArray(leadinfo.social_media)?
                             leadinfo.social_media.map((item,index)=>
                             (
                                 <select
                                 className='form-control form-control-sm'
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 onChange={(event)=>handlesocial_mediachange(index,event)}>
                                 
                                 <option>{leadData?.social_media[index] || '---Select---'}</option>
@@ -2842,35 +2985,57 @@ return (
                             )):[]
                             }
                             </div>
-                            <div className="col-md-6"><label className="labels">Url</label>
+                            <div className="col-md-6 mb-6 custom-input"><label className="form-label">Url</label>
                             {
                                Array.isArray(leadinfo.url)?
                             leadinfo.url.map((item,index)=>
                             (
-                                <input type="text" defaultValue={leadData?.url[index] || ''} className="form-control form-control-sm" style={{marginTop:"10px"}} 
+                                <input type="text" defaultValue={leadData?.url[index] || ''} className="form-control form-control-sm" style={{marginTop:"1px"}} 
                                 onChange={(event)=>handleurlChange(index,event)}/>
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" style={{marginTop:"90px"}}>
+                            <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                             {
                                Array.isArray(leadinfo.action6)?
                             leadinfo.action6.map((item,index)=>
                             (
-                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                <div style={{marginTop:"10px"}}>
+                                  {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall6(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+                                   <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall6(index)}>delete</span>
+                                  </div>
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn6}>+</button></div>
+                            <div className="col-md-1 mb-1 custom-input" >
+                              <label className="form-label">add</label>
+                               <button
+                                className="form-control form-control-sm"
+                                onClick={addFn6}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>                              
+                              </div>
 
-                            <div className="col-md-4"><label className="labels">Income</label>
+                            <div className="col-md-4 mb-4 custom-input"><label className="form-label">Income</label>
                             {
                                Array.isArray(leadinfo.income)?
                             leadinfo.income.map((item,index)=>
                             (
                                 <select
                                 className='form-control form-control-sm'
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 onChange={(event)=>handleincomechange(index,event)}>
                             
                             <option>{leadData?.income[index] || '---Select---'}</option>
@@ -2879,53 +3044,75 @@ return (
                             )):[]
                             }
                             </div>
-                            <div className="col-md-6"><label className="labels">Amount</label>
+                            <div className="col-md-6 mb-6 custom-input"><label className="form-label">Amount</label>
                             {
                                Array.isArray(leadinfo.amount1)?
                             leadinfo.amount1.map((item,index)=>
                             (
                                 <input type="text" 
                                 defaultValue={leadData?.amount1[index] || ''}
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handleamount1change(index,event)}
                                 />
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" style={{marginTop:"90px"}}>
+                            <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                             {
                                Array.isArray(leadinfo.action7)?
                             leadinfo.action7.map((item,index)=>
                             (
-                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                <div style={{marginTop:"10px"}}>
+                                  {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall7(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+                                   <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall7(index)}>delete</span>
+                                  </div>
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn7}>+</button></div>
+                            <div className="col-md-1 mb-1 custom-input">
+                              <label className="form-label">add</label>
+                               <button
+                                className="form-control form-control-sm"
+                                onClick={addFn7}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+                              </div>
 
-                            <div className="col-md-3"><label className="labels">Document No.</label>
+                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">Document No.</label>
                             {
                                Array.isArray(leadinfo.document_no)?
                             leadinfo.document_no.map((item,index)=>
                             (
                                 <input type="text" 
                                 defaultValue={leadData?.document_no[index] || ''}
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handledocumentnochange(index,event)}
                                 />
                             )):[]
                             }
                             </div>
-                            <div className="col-md-3"><label className="labels">Document Name</label>
+                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">Document Name</label>
                             {
                                Array.isArray(leadinfo.document_name)?
                             leadinfo.document_name.map((item,index)=>
                             (
                                 <select
                                 className='form-control form-control-sm'
-                                style={{marginTop:"10px"}}
+                                style={{marginTop:"1px"}}
                                 onChange={(event)=>handledocumentnamechange(index,event)}>
                             
                             <option>{leadData?.document_name[index] || '---Select---'}</option>
@@ -2935,7 +3122,7 @@ return (
                             )):[]
                             }
                             </div>
-                            {/* <div className="col-md-4"><label className="labels">Document Picture</label>
+                            {/* <div className="col-md-4 mb-4 custom-input"><label className="form-label">Document Picture</label>
                             {
                             leadinfo.document_pic.map((item,index)=>
                             (
@@ -2948,9 +3135,9 @@ return (
                             ))
                             }
                             </div> */}
-                            <div className="col-md-4">
-                              <label className="labels">Document Picture</label>
-                              {Array.isArray(leadinfo.document_pic) && leadinfo.document_pic.length > 0 
+                            <div className="col-md-4 mb-4 custom-input">
+                              <label className="form-label">Document Picture</label>
+                              {/* {Array.isArray(leadinfo.document_pic) && leadinfo.document_pic.length > 0 
                                 ? leadinfo.document_pic.map((pic, index) => 
                                   pic ? ( // Ensure the picture URL is valid
                                     <div key={index}>
@@ -2962,40 +3149,110 @@ return (
                                     </div>
                                   ) : null // Skip rendering if no valid data
                                 ) 
-                                : []}
+                                : []} */}
                                 {/* File input for new picture */}
                              {
                                Array.isArray(leadinfo.document_pic)?
                             leadinfo.document_pic.map((item,index)=>
                             (
+                                 <div key={index} className="custom-file-wrapper mt-2">
                                 <input type="file" 
-                                
-                                style={{marginTop:"10px"}}
+                                  id={`doc-upload-${index}`}
+                                style={{marginTop:"10px",display:"none"}}
                                 className="form-control form-control-sm" 
                                 onChange={(event)=>handledocumentpicchange(index,event)}
                                 />
+                                       <label htmlFor={`doc-upload-${index}`} className="upload-label">
+                                  <i className="bi bi-image-fill me-2" style={{fontSize: "1.4rem",cursor:"pointer"}}></i> Upload Image
+                                </label>
+                                  <div className="d-flex flex-wrap gap-2 mt-2">
+                                  {(item || []).map((obj, i) => (
+                                    <div key={i} style={{ position: "relative" }}>
+                                      <img
+                                        src={obj.preview}
+                                        alt="Preview"
+                                        style={{
+                                          width: "80px",
+                                          height: "80px",
+                                          objectFit: "cover",
+                                          borderRadius: "6px",
+                                          border: "1px solid #ccc",
+                                        }}
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                                </div>
                             )):[]
                             }
                         </div>
 
-                            <div className="col-md-1" style={{marginTop:"90px"}}>
+                            <div className="col-md-1 mb-1 custom-input" style={{marginTop:"120px"}}>
                             {
                                Array.isArray(leadinfo.action8)?
                             leadinfo.action8.map((item,index)=>
                             (
-                                <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall8(index)}  style={{height:"40px",cursor:"pointer"}}/></div>
+                                <div style={{marginTop:"10px"}}>
+                                  {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall8(index)}  style={{height:"40px",cursor:"pointer"}}/> */}
+                                   <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall8(index)}>delete</span>
+                                  </div>
                             )):[]
                             }
                             </div>
-                            <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn8}>+</button></div>
+                            <div className="col-md-1 mb-1 custom-input">
+                              <label className="form-label">add</label>
+                               <button
+                                className="form-control form-control-sm"
+                                onClick={addFn8}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+                              </div>
 
                      </div>
  {/*==================================================== leadinfo personal end======================================================= */}
                     <div className="row mt-4">
-                    <div className="col-md-4"><button className="form-control" >Shedule Follow-up</button></div>
-                    <div className="col-md-2"><button className="form-control" onClick={leadinfodetails}>Save</button></div>
-                    <div className="col-md-2"><button className="form-control" onClick={()=>navigate(-1)}>Cancel</button></div>
-                    <div className="col-md-4"><button className="form-control">Save & View Lead</button></div>
+                      <div className="col-md-8 mb-8 custom-input"></div>
+                    {/* <div className="col-md-4 mb-4 custom-input"><button className="form-control" >Shedule Follow-up</button></div> */}
+                    <div className="col-md-2 mb-2 custom-input">
+                       <button   className="btn btn-primary btn-sm form-control" onClick={leadinfodetails}
+                        style={{ fontWeight: '600', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', transition: 'all 0.3s ease',backgroundColor:"lightblue" }}
+                        onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0056b3'}
+                        onMouseLeave={e => e.currentTarget.style.backgroundColor = '#0d6efd'}>Save
+                        </button>
+                      </div>
+                      <div className="col-md-2 mb-2 custom-input">
+                                        <button
+                                          className="btn btn-outline-danger btn-sm form-control"
+                                          onClick={() => navigate(-1)}
+                                          style={{ fontWeight: '600', borderRadius: '8px', transition: 'all 0.3s ease' }}
+                                          onMouseEnter={e => {
+                                            e.currentTarget.style.backgroundColor = '#dc3545';
+                                            e.currentTarget.style.color = 'white';
+                                            e.currentTarget.style.borderColor = '#dc3545';
+                                          }}
+                                          onMouseLeave={e => {
+                                            e.currentTarget.style.backgroundColor = 'transparent';
+                                            e.currentTarget.style.color = '#dc3545';
+                                            e.currentTarget.style.borderColor = '#dc3545';
+                                          }}
+                                        >
+                                          Cancel
+                                        </button>
+                      </div>
+                                    
+                    {/* <div className="col-md-4 mb-4 custom-input"><button className="form-control">Save & View Lead</button></div> */}
                     </div>
                     </div>
                     </div>
@@ -3006,7 +3263,7 @@ return (
             <Modal.Body>
             <div style={{width:"100%"}}>
             <div className="row" id='basicdetails1'>
-                    <div className="col-md-2"><label className="labels">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
+                    <div className="col-md-2 mb-2 custom-input"><label className="form-label">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcontact({...contact,title:e.target.value})}>
                               <option>---Select---</option>
                               <option>Mr.</option>
                               <option>Mrs.</option>
@@ -3018,12 +3275,12 @@ return (
                               <option>Maj.</option>
                         </select>
                         </div>
-                    <div className="col-md-5"><label className="labels">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
-                    <div className="col-md-5"><label className="labels">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
+                    <div className="col-md-5 mb-5 custom-input"><label className="form-label">Name</label><input type="text" required="true" className="form-control form-control-sm" placeholder="first name" onChange={(e)=>setcontact({...contact,first_name:e.target.value})}/></div>
+                    <div className="col-md-5 mb-5 custom-input"><label className="form-label">Surname</label><input type="text" className="form-control form-control-sm"  placeholder="surname" onChange={(e)=>setcontact({...contact,last_name:e.target.value})}/></div>
                 </div>
                 </div>
                 <div className="row mt-3" id='basicdetails2'>
-                <div className="col-md-4" > <label className="labels">Country</label>
+                <div className="col-md-4 mb-4 custom-input" > <label className="form-label">Country</label>
                     {
                       contact.country_code.map((item,index)=>
                       (
@@ -3039,7 +3296,7 @@ return (
                       ))
                     }
                     </div>
-                    <div className="col-md-4"><label className="labels">Mobile Number</label>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Mobile Number</label>
                     {
                        contact.mobile_no.map((item,index)=>
                         (
@@ -3051,7 +3308,7 @@ return (
                         ))
                     }
                     </div>
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2 mb-2 custom-input"><label className="form-label">Type</label>
                     {
                        contact.mobile_type.map((item,index)=>
                         (
@@ -3067,7 +3324,7 @@ return (
                         ))
                     }
                     </div>
-                    <div className="col-md-1" style={{marginTop:"90px"}}>
+                    <div className="col-md-1 mb-1 custom-input" style={{marginTop:"90px"}}>
                     {
                        contact.action1.map((item,index)=>
                         (
@@ -3077,9 +3334,9 @@ return (
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
+                  <div className="col-md-1 mb-1 custom-input"><label className="form-label" >add</label><button className='form-control form-control-sm' onClick={addFn1}>+</button></div>
                     
-                  <div className="col-md-8"><label className="labels">Email-Address</label>
+                  <div className="col-md-8 mb-8 custom-input"><label className="form-label">Email-Address</label>
                     {
                         contact.email.map((item,index)=>
                         (
@@ -3091,7 +3348,7 @@ return (
                     }
                     </div>
                     
-                    <div className="col-md-2"><label className="labels">Type</label>
+                    <div className="col-md-2"><label className="form-label">Type</label>
                     {
                        contact.email_type.map((item,index)=>
                         (
@@ -3106,7 +3363,7 @@ return (
                     }
                    </div>
                   
-                   <div className="col-md-1" style={{marginTop:"90px"}}>
+                   <div className="col-md-1 mb-1 custom-input" style={{marginTop:"90px"}}>
                     {
                        contact.action2.map((item,index)=>
                         (
@@ -3116,10 +3373,10 @@ return (
                         ))
                     }
                     </div>
-                  <div className="col-md-1"><label className="labels" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
-                  <div className="col-md-12"><label className="labels" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
+                  <div className="col-md-1 mb-1 custom-input"><label className="form-label" >add</label><button className='form-control form-control-sm' onClick={addFn2}>+</button></div>
+                  <div className="col-md-12 mb-12 custom-input"><label className="form-label" style={{fontSize:"16px",marginTop:"10px"}}>System Details</label><hr style={{marginTop:"-5px"}}></hr></div>
                     
-                    <div className="col-md-6"><label className="labels">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Source</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,source:e.target.value})}>
                                     <option>Select</option> <option>Friends</option> <option>Relative</option> <option>Website</option>
                                     <option>Walkin</option><option>Magicbricks</option><option>Common Floor </option><option>Housing</option>
                                     <option>99acre</option><option>Olx</option><option>Square Yard </option><option>Real Estate India </option>
@@ -3127,7 +3384,7 @@ return (
                                     <option>Old Client</option><option>Google</option><option>Whatsapp</option>
                              </select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
+                        <div className="col-md-6 mb-6 custom-input"><label className="form-label">Team</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,team:e.target.value})}>
                               <option>Select</option> 
                               <option>Sales</option>
                               <option>Marketing</option>
@@ -3135,7 +3392,7 @@ return (
                               <option> Pre Sales</option>
                         </select>
                     </div>
-                    <div className="col-md-6"><label className="labels">Owner</label>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Owner</label>
                     {/* <select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,owner:e.target.value})}>
                     <option>Select</option>
                               <option>Suraj</option> 
@@ -3158,7 +3415,7 @@ return (
                     ))}
                 </Select>
                         </div>
-                        <div className="col-md-6"><label className="labels">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
+                        <div className="col-md-6 mb-6 custom-input"><label className="form-label">Visible to</label><select className="form-control form-control-sm" onChange={(e)=>setcontact({...contact,visible_to:e.target.value})}>
                                 <option>Select</option>
                                 <option>My Team</option>
                                 <option>My Self</option>
@@ -3181,6 +3438,48 @@ return (
         </div>
         </div>
         <ToastContainer/>
+
+        <>
+              {isLoading && (
+                <div style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100vw",
+                  height: "100vh",
+                  // background: "rgba(255, 255, 255, 0.1)",
+                  backdropFilter: "blur(5px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  zIndex: 9999,
+                }}>
+                  <div style={{
+                    // backgroundColor: "rgba(0,0,0,0.75)",
+                    padding: "40px 60px",
+                    borderRadius: "20px",
+                    // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    color: "black",
+                    textAlign: "center",
+                  }}>
+                    <Lottie
+                      animationData={animationData}
+                      loop
+                      autoplay
+                      style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+                    />
+                    <div style={{ fontSize: "18px", fontWeight: 1000,marginTop:"-40px" }}>
+                      Creating Lead...
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
+
         </div>
      );
 }

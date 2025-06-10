@@ -1451,7 +1451,35 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
                                                                           document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],image:[''],action12:[]})
 
-                                                                          useEffect(() => {
+                       
+                       const unit_type = {
+                         Plot: ["Vacant", "25% Built Up", "40% Built Up", "Fenced", "Boundry Wall"],
+                         'Independent House': ["Single Storey", "Duplex", "Triplex", "Double Storey", "Bunglow", "Courtyard", "Villa", "2.5 Storey", "Triple Storey"],
+                         'Flat/Apartment': ["Studio", "Penthouse", "Duplex", "Triplex", "Simplex"],
+                         'Builder Floor': ["Studio","Duplex", "Penthouse", "Simplex"],
+                       
+                         Shop: ["Booth With Basement", "Booth With First Floor","Booth With Basement & First Floor","Triple Storey","Double Storey"],
+                         Showroom: ["Ground Floor Builtup", "Ground Floor Builtup With Basement", "Double Storey","Double Storey With Basement","Double Height","Triple Storey Builtup","Triple Storey Builtup With Basement"],
+                         'Office Space': ["Locable Office", "Virtual Office"],
+                         'Retail Store': ["Hyper Market", "Departmetal Store"],
+                         Soho: ["Soho"],
+                         'Excutive Room': ["Room"],
+                       
+                         Land: ["Cropland", "Woodland", "Pasture", "Commercial"],
+                         'Farm House': ["Farm"],
+                         Plots: ["1 Kanal", "10 Marla", "2 Kanal", "1 Acre", "2 Kanal"],
+                         'Ware House': ["Wrhse"],
+                         'Cold Storage': ["Cldstrg"],
+                         'Rice Seller': ["Rcslr"],
+                         Building: ["Bldg"],
+                         Factory: ["Fctry"],
+                       
+                         School: ["Nursery School", "Crech", "High School", "Primery School"],
+                         Hotel: ["Hotel", "Guest House", "Homestays"],
+                         Universities: ["Deemed", "Private"],
+                         Hospital: ["Nursing Home", "Clinic"],
+                         College: ["Art College", "Technical College", "Medical College"]
+                       };                                                   useEffect(() => {
                                                                             if (project?.name) {
                                                                               setunits(prevState => ({
                                                                                 ...prevState,
@@ -4707,17 +4735,18 @@ const generateExcelFileunit = () => {
                 <>
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
-                    <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
-                          <option>---Select---</option>
-                          <option>Duplex</option>
-                          <option>Triplex</option>
-                          <option>Independent House</option>
-                          <option>Penthouse</option>
-                          <option>Apartments</option>
-                          <option>Studio Apartments</option>
-                          <option>Bunglow</option>
-                          <option>Farmhouse</option>
-                          <option>Courtyard House</option>
+                    <div className='col-md-6' ><label className='labels'>Type</label>
+                     <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                           <option>---Select---</option>
+                         {
+                            // Combine all unit types for selected sub_categories
+                            [...new Set(
+                              units.sub_category
+                                .flatMap(sub => unit_type[sub] || [])
+                            )].map((item, index) => (
+                              <option key={index} value={item}>{item}</option>
+                            ))
+                          }
                         </select>
                     </div>
                     <div className='col-md-6'></div>

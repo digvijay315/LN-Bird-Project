@@ -641,7 +641,7 @@ function Dealdetails() {
                   const[lead1,setlead1]=useState([])
                   const[deallocation,setdeallocation]=useState("")
 
-                 const [isLoading, setIsLoading] = useState(false);
+                 const [isLoading,setIsLoading] = useState(false);
 
               const handleMatchLeadClick = async (item) => {
                     try {
