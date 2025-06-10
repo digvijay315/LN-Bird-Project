@@ -4116,10 +4116,82 @@ const generateExcelFileunit = () => {
      
                 <div className="row " >
 
-                
                     <div className="col-md-7"></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow1}>Add Block</button></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow11}>Import Block</button></div>
+                    <div className="col-md-2">
+                      <button
+                        onClick={handleShow1}
+                        style={{
+                          width: '100%',
+                          height:"45px",
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          letterSpacing: '0.6px',
+                          backgroundColor: '#2c3e50', // dark navy blue, classy and modern
+                          color: '#ecf0f1',           // light grey text
+                          border: '1.5px solid #2c3e50',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          userSelect: 'none',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.backgroundColor = '#ecf0f1';  // light background on hover
+                          e.currentTarget.style.color = '#2c3e50';            // dark text on hover
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 62, 80, 0.2)';
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.backgroundColor = '#2c3e50';
+                          e.currentTarget.style.color = '#ecf0f1';
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        Add Block
+                      </button>
+                    </div>
+
+                      <div className="col-md-2">
+                      <button
+                        onClick={handleShow11}
+                        style={{
+                          width: '100%',
+                          height:"45px",
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          letterSpacing: '0.6px',
+                          backgroundColor: '#2c3e50', // dark navy blue, classy and modern
+                          color: '#ecf0f1',           // light grey text
+                          border: '1.5px solid #2c3e50',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          userSelect: 'none',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.backgroundColor = '#ecf0f1';  // light background on hover
+                          e.currentTarget.style.color = '#2c3e50';            // dark text on hover
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 62, 80, 0.2)';
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.backgroundColor = '#2c3e50';
+                          e.currentTarget.style.color = '#ecf0f1';
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        Import Block
+                      </button>
+                    </div>
                         <Tooltip title="Download Data.." arrow>
                                         <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileblock} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
                                         </Tooltip>
@@ -4143,7 +4215,7 @@ const generateExcelFileunit = () => {
             <StyledTableCell style={{fontSize:"12px"}}>
             {item.block_name}
              </StyledTableCell>
-             <StyledTableCell style={{fontSize:"12px"}}>
+             <StyledTableCell style={{fontSize:"12px"}}>Import Block
               {Array.isArray(item.category) ? (
                 item.category.map((categoryItem, index) => (
                   <span key={index}>{categoryItem}<br></br></span> // Render each item with a key
@@ -4337,8 +4409,80 @@ const generateExcelFileunit = () => {
             <div className="p-3 py-5">
                 <div className="row " >
                 <div className="col-md-7"></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow2}>Add Size</button></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow10}>Import Size</button></div>
+                    <div className="col-md-2">
+                      <button
+                        onClick={handleShow2}
+                        style={{
+                          width: '100%',
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          letterSpacing: '0.6px',
+                          backgroundColor: '#2c3e50', // dark navy blue, classy and modern
+                          color: '#ecf0f1',           // light grey text
+                          border: '1.5px solid #2c3e50',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          userSelect: 'none',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.backgroundColor = '#ecf0f1';  // light background on hover
+                          e.currentTarget.style.color = '#2c3e50';            // dark text on hover
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 62, 80, 0.2)';
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.backgroundColor = '#2c3e50';
+                          e.currentTarget.style.color = '#ecf0f1';
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        Add Size
+                      </button>
+                    </div>
+
+                    <div className="col-md-2">
+                      <button
+                        onClick={handleShow10}
+                        style={{
+                          width: '100%',
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          letterSpacing: '0.6px',
+                          backgroundColor: '#2c3e50', // dark navy blue, classy and modern
+                          color: '#ecf0f1',           // light grey text
+                          border: '1.5px solid #2c3e50',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          userSelect: 'none',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.backgroundColor = '#ecf0f1';  // light background on hover
+                          e.currentTarget.style.color = '#2c3e50';            // dark text on hover
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 62, 80, 0.2)';
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.backgroundColor = '#2c3e50';
+                          e.currentTarget.style.color = '#ecf0f1';
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        Import Size
+                      </button>
+                    </div>
+
                           <Tooltip title="Download Data.." arrow>
                                         <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFilesize} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
                                         </Tooltip>
@@ -4619,8 +4763,81 @@ const generateExcelFileunit = () => {
             <div className="p-3 py-5">
                 <div className="row " >
                 <div className="col-md-7"></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow3}>Add Unit</button></div>
-                    <div className="col-md-2"><button  className="form-control form-control-sm" onClick={handleShow7}>Import Unit</button></div>
+                  <div className="col-md-2">
+                    <button
+                      onClick={handleShow3}
+                      style={{
+                        width: '100%',
+                        padding: '6px 12px',
+                        borderRadius: '20px',
+                        fontWeight: '600',
+                        fontSize: '14px',
+                        letterSpacing: '0.6px',
+                        backgroundColor: '#2c3e50', // dark navy blue, classy and modern
+                        color: '#ecf0f1',           // light grey text
+                        border: '1.5px solid #2c3e50',
+                        transition: 'all 0.3s ease',
+                        cursor: 'pointer',
+                        outline: 'none',
+                        userSelect: 'none',
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.backgroundColor = '#ecf0f1';  // light background on hover
+                        e.currentTarget.style.color = '#2c3e50';            // dark text on hover
+                        e.currentTarget.style.borderColor = '#2c3e50';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 62, 80, 0.2)';
+                        e.currentTarget.style.transform = 'scale(1.05)';
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.backgroundColor = '#2c3e50';
+                        e.currentTarget.style.color = '#ecf0f1';
+                        e.currentTarget.style.borderColor = '#2c3e50';
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Add Unit
+                    </button>
+                  </div>
+
+                      <div className="col-md-2">
+                      <button
+                        onClick={handleShow7}
+                        style={{
+                          width: '100%',
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          fontWeight: '600',
+                          fontSize: '14px',
+                          letterSpacing: '0.6px',
+                          backgroundColor: '#2c3e50', // dark navy blue, classy and modern
+                          color: '#ecf0f1',           // light grey text
+                          border: '1.5px solid #2c3e50',
+                          transition: 'all 0.3s ease',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          userSelect: 'none',
+                        }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.backgroundColor = '#ecf0f1';  // light background on hover
+                          e.currentTarget.style.color = '#2c3e50';            // dark text on hover
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 62, 80, 0.2)';
+                          e.currentTarget.style.transform = 'scale(1.05)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.backgroundColor = '#2c3e50';
+                          e.currentTarget.style.color = '#ecf0f1';
+                          e.currentTarget.style.borderColor = '#2c3e50';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        Import Unit
+                      </button>
+                    </div>
+
+         
                      <Tooltip title="Download Data.." arrow>
                                         <div className="col-md-1"><img src='https://cdn-icons-png.flaticon.com/512/4007/4007698.png' onClick={generateExcelFileunit} style={{height:"40px",cursor:"pointer"}} alt=''></img></div>
                                         </Tooltip>
@@ -6800,10 +7017,83 @@ const generateExcelFileunit = () => {
                  <div className='col-md-12'><hr></hr></div> 
                     <ToastContainer/>
                 </div>
-                <div className='row' style={{marginLeft:"50%",marginBottom:"20px"}}>
-                    <div className="col-md-4" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Cancel</button></div>
-                    <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Project</button></div>
-                    <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addproject}>Update</button></div>
+                <div className='row' style={{marginLeft:"60%",marginBottom:"20px"}}>
+                  <div className='col-md-4'></div>
+                   <div className="col-md-4">
+                    <button
+                      onClick={() => navigate(-1)}
+                      style={{
+                        width: '100%',
+                        height: '45px',
+                        padding: '10px 20px',
+                        borderRadius: '12px',
+                        fontWeight: '600',
+                        fontSize: '15px',
+                        letterSpacing: '0.5px',
+                        backgroundColor: '#e74c3c', // classic red
+                        color: '#ffffff',           // white text
+                        border: '1.5px solid #e74c3c',
+                        transition: 'all 0.25s ease-in-out',
+                        cursor: 'pointer',
+                        outline: 'none',
+                        userSelect: 'none',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#c0392b'; // darker red on hover
+                        e.currentTarget.style.borderColor = '#c0392b';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(192, 57, 43, 0.3)';
+                        e.currentTarget.style.transform = 'scale(1.03)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#e74c3c';
+                        e.currentTarget.style.borderColor = '#e74c3c';
+                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+
+
+                    {/* <div className="col-md-5" style={{marginTop:"20px"}}><button className="form-control form-control-sm">Save & View Project</button></div> */}
+                    {/* <div className="col-md-3" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={addproject}>Update</button></div> */}
+                    <div className="col-md-4">
+                      <button
+                        onClick={addproject} 
+                        style={{
+                          width: '100%',
+                          height: '45px',
+                          padding: '10px 20px',
+                          borderRadius: '12px',
+                          fontWeight: '600',
+                          fontSize: '15px',
+                          letterSpacing: '0.5px',
+                          backgroundColor: '#27ae60', // green color for update
+                          color: '#ffffff',
+                          border: '1.5px solid #27ae60',
+                          transition: 'all 0.25s ease-in-out',
+                          cursor: 'pointer',
+                          outline: 'none',
+                          userSelect: 'none',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#1e8449'; // darker green on hover
+                          e.currentTarget.style.borderColor = '#1e8449';
+                          e.currentTarget.style.boxShadow = '0 4px 12px rgba(39, 174, 96, 0.3)';
+                          e.currentTarget.style.transform = 'scale(1.03)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#27ae60';
+                          e.currentTarget.style.borderColor = '#27ae60';
+                          e.currentTarget.style.boxShadow = 'none';
+                          e.currentTarget.style.transform = 'scale(1)';
+                        }}
+                      >
+                        Update
+                      </button>
+                    </div>
+
                     </div>
             </div>
         </div>

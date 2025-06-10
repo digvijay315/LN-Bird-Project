@@ -5345,7 +5345,7 @@ return (
             <Sidebar1/>
             <div className={`flip-container ${isFlipped ? 'flipped' : ''}`}>
             <div id="contactlistview" className="flip-card-front">
-      <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+      <div style={{marginTop:"52px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",marginTop:"10px",cursor:"pointer"}} onClick={pagereload}>Deals</h3>
         <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
@@ -5375,7 +5375,7 @@ return (
             </ul> */}
         </div>  
       </div>
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
         <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={fetchdatabystage_open}>
           <h6>OPEN</h6>
           <p>{countopen}</p>
@@ -5407,7 +5407,7 @@ return (
         
       </div>
 
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
       {/* <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/> */}
       
     {/* <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} /> */}
@@ -5777,7 +5777,7 @@ return (
       {/* <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
           <button className="form-control" style={{width:"150px",marginLeft:"86.5%"}} onClick={exportToExcel} >Export Data</button>
           </div> */}
-        <div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+        <div style={{marginLeft:"60px",marginTop:"2px",backgroundColor:"white"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -6317,7 +6317,7 @@ return (
 
 
           <div id="projectlistview" className="flip-card-back" style={{display:"none"}}>
-          <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+          <div style={{marginTop:"53px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload2}>Project </h3>
         <Tooltip title="Export Data.." arrow>
@@ -6339,7 +6339,7 @@ return (
           
       </div> 
 
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
 {/* <input id="projectsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleprojectsearchchange(e)} onKeyDown={handlekeypress3} /> */}
 
@@ -6687,7 +6687,7 @@ return (
 </div>
 
 
-<div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+<div style={{marginLeft:"60px",marginTop:"2px",backgroundColor:"white"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -6793,7 +6793,7 @@ return (
 {/* ==========================================unit list view start=========================================================== */}
 
           <div id="unitlistview" className="flip-card-back1" style={{display:"none"}}>
-          <div style={{marginTop:"80px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+          <div style={{marginTop:"53px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
         
         <h3 style={{marginLeft:"10px",cursor:"pointer"}} onClick={pagereload3}>Inventories</h3>
         <Tooltip title="Export Data.." arrow>
@@ -6815,7 +6815,7 @@ return (
           
       </div> 
 
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
         <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={fetchdatabystage_open}>
           <h6>Active</h6>
           <p>{countopen}</p>
@@ -6827,7 +6827,7 @@ return (
        
       </div>
 
-      <div style={{marginTop:"10px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
 
 {/* <input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleunitsearchchange(e)} onKeyDown={handlekeypress4}/> */}
 
@@ -7270,7 +7270,7 @@ return (
 </div>
 
 
-<div style={{marginLeft:"80px",marginTop:"10px",backgroundColor:"white"}}>
+<div style={{marginLeft:"60px",marginTop:"2px",backgroundColor:"white"}}>
           <TableContainer component={Paper}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>

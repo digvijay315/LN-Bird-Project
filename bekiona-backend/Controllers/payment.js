@@ -209,7 +209,7 @@ const createNimbusShipment = async (req, res) => {
         city: "surat",
         state: "Gujarat",
         pincode: "394185",
-        phone: "8929494422",
+        phone: "xxxxxxxxxx",
       },
       order_items: orderItems, 
     };
