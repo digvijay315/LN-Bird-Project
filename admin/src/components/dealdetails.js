@@ -38,7 +38,7 @@ function Dealdetails() {
       .then((data) => setAnimationData(data));
   }, []);
 
-
+        const [isLoading4, setIsLoading4] = useState(false);
 
   const navigate=useNavigate()
     React.useEffect(()=>{fetchdata()},[])
@@ -3566,9 +3566,11 @@ const [show9, setshow9] = useState(false);
 
 const deleteinventories=async()=>
   {
-    const project=selectedItems3[0].project_name
-    const block=selectedItems3[0].block
-    const unit=selectedItems3[0].unit_no
+    console.log(selectedItems3);
+    
+    // const project=selectedItems3[0].project_name
+    // const block=selectedItems3[0].block
+    // const unit=selectedItems3[0].unit_no
     
     try {
 
@@ -3586,12 +3588,25 @@ const deleteinventories=async()=>
       if (!result.isConfirmed) {
         return; // Stop execution if user cancels
       }
-
-      const resp=await api.delete(`deleteprojectforinventories/${project}/${unit}/${block}`)
-      toast.success(`units deleted successfully`,{autoClose:"2000"})
-                      setTimeout(() => {
-                        window.location.reload()
-                      }, 2000);
+    setIsLoading4(true)
+       await Promise.all(selectedItems3.map(item =>
+      api.delete(`deleteprojectforinventories/${item.project_name}/${item.unit_no}/${item.block}`)
+    ));
+                            Swal.fire({
+                             title: '🎉 Selected items deleted successfully...!',
+                             html: `
+                             <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
+                             alt="Thumbs up" 
+                             width="80" 
+                             style="margin-bottom: 0px;"/>`,
+                             width: '400px', // makes it small
+                             padding: '1.2em',
+                             showConfirmButton: true,
+                           }).then((result) => {
+                           if (result.isConfirmed) {
+                               window.location.reload();
+                             }
+                           })
     } catch (error) {
       toast.error(`failed to delete units`,{autoClose:"2000"})
       setTimeout(() => {
@@ -3599,7 +3614,10 @@ const deleteinventories=async()=>
       }, 2000);
       console.log(error);
       
-    }
+    }finally
+          {
+              setIsLoading4(false)
+          }
   }
 
 
@@ -6621,8 +6639,8 @@ return (
 
 <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
 <select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange1} style={{fontSize:"16px",height:"30px"}}>
-  <option value="5">10</option>
-  <option value="10">15</option>
+  <option value="10">10</option>
+  <option value="15">15</option>
   <option value="20">20</option>
   <option value="50">50</option>
 </select>
@@ -7203,9 +7221,9 @@ return (
 <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"68%",position:"absolute"}}>
 
 <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
-<select id="itemsPerPage" value={itemsPerPage1} onChange={handleItemsPerPageChange2} style={{fontSize:"16px",height:"30px"}}>
-  <option value="5">10</option>
-  <option value="10">15</option>
+<select id="itemsPerPage" value={itemsPerPage2} onChange={handleItemsPerPageChange2} style={{fontSize:"16px",height:"30px"}}>
+  <option value="10">10</option>
+  <option value="15">15</option>
   <option value="20">20</option>
   <option value="50">50</option>
 </select>
@@ -10610,6 +10628,41 @@ stage:selectedLead.stage
 
 
         <ToastContainer/>
+          <>
+    {isLoading4 && (
+      <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        background: "rgba(0, 0, 0, 0.6)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+      }}>
+        <div style={{
+          background: "rgba(187, 16, 19, 0.8)",
+          padding: "20px 40px",
+          borderRadius: "10px",
+          textAlign: "center",
+          color: "white",
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            border: "5px solid white",
+            borderTop: "5px solid transparent",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 10px",
+          }}></div>
+          <p>deleting contacts...</p>
+        </div>
+      </div>
+    )}
+  </>
         </div>
      );
 }

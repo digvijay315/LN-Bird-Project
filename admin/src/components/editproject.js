@@ -2925,10 +2925,21 @@ const checkForDuplicates = async (contacts) => {
     
     // If there are new contacts, stop and prompt the user to re-upload
     if (newContactList.length > 0) {
+      const contactListHtml = newContactList.map(contact => 
+          `<li>${contact.title} ${contact.first_name} ${contact.last_name}</li>`
+      ).join("");
       Swal.fire({
         title: "Are you sure?",
         icon: "warning",
-        text: `Do you want to add ${newContactList.length} new contacts?`,
+      html: `
+        <p>Do you want to add <strong>${newContactList.length}</strong> new contacts?</p>
+        <details style="text-align: left; margin-top: 10px;">
+            <summary style="cursor: pointer; font-weight: bold;">View contact list</summary>
+            <ul style="margin-top: 10px;">
+                ${contactListHtml}
+            </ul>
+        </details>
+    `,
         showCancelButton: true,
         confirmButtonText: "Yes, add them!",
         cancelButtonText: "No, cancel",
