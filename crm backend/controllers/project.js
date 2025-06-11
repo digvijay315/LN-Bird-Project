@@ -1,9 +1,9 @@
 const addproject = require("../models/project");
+const adddeal = require('../models/deal.js');
 const path = require('path');
 const cloudinary = require('cloudinary').v2;
 const fs = require('fs'); 
 const mongoose=require('mongoose')
-
 
 
 require('dotenv').config()
@@ -526,8 +526,11 @@ unitDetails={
                 try {
                   // Retrieve project_name, block, and unit_no from the URL parameters (params)
                   const { project_name, block, unit_no } = req.params;
-          
-                
+                    
+                  let dealproject=req.params.project_name
+                     let dealblock=req.params.block
+                        let dealunit=req.params.unit_no
+
 
                   const exitproject=await addproject.findOne({name:project_name})
                   if(!exitproject)
@@ -553,8 +556,18 @@ unitDetails={
 
               const existingUnit = project.add_unit[unitIndex];
               const unit = req.body
-             
-              
+          
+  // ============================this is for deal owner update start============================================
+              const result = await adddeal.updateMany(
+                { project: dealproject, block: dealblock, unit_number: dealunit },
+                {
+                  $set: {
+                    owner_details: unit.owner_details !== undefined ? unit.owner_details : [],
+                    associated_contact: unit.associated_contact !== undefined ? unit.associated_contact : []
+                  }
+                }
+              );
+  //====================================== deal owner update end=================================================
 
               let previousOwnerDetails = existingUnit.owner_details || [];
          

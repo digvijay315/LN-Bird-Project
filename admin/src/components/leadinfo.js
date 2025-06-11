@@ -1863,7 +1863,7 @@ return (
                
                 <div className="row" id="leadinfobasic1">
                     
-                    <div className="col-md-3 mb-3 custom-input mb-3 custom-input"><label className="form-label">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
+                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Title</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setleadinfo({...leadinfo,title:e.target.value})}>
                         <option>{leadData?.title|| 'Mr.'}</option>
                         <option>Mrs.</option>
                         <option>Smt.</option>
@@ -2457,15 +2457,15 @@ return (
                         </div> */}
                         {/* <div className="col-md-4"></div> */}
 
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">City(city2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Area(area2)</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Block(block)</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Pin Code(pincode2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">City(city2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.city2} onChange={(e)=>setleadinfo({...leadinfo,city2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">Area(area2)</label><input type="text" className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">Block(block)</label><input type="text" className="form-control form-control-sm" value={leadinfo.block} onChange={(e)=>setleadinfo({...leadinfo,block:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">Pin Code(pincode2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.pincode2} onChange={(e)=>setleadinfo({...leadinfo,pincode2:e.target.value})}/></div>
                     
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Country(country2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">State(state2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
-                    <div className="col-md-3 mb-3 custom-input"><label className="form-label">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">Country(country2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.country2} onChange={(e)=>setleadinfo({...leadinfo,country2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">State(state2)</label><input type="text" className="form-control form-control-sm" value={leadinfo.state2} onChange={(e)=>setleadinfo({...leadinfo,state2:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">Lattitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.lattitude} onChange={(e)=>setleadinfo({...leadinfo,lattitude:e.target.value})}/></div>
+                    <div className="col-md-3 mb-3 custom-input "><label className="form-label">Longitude</label><input type="text" className="form-control form-control-sm" value={leadinfo.longitude} onChange={(e)=>setleadinfo({...leadinfo,longitude:e.target.value})}/></div>
                     {/* <div className="col-md-4"><label className="form-label">Location</label><input type="text" className="form-control form-control-sm" /></div> */}
                     </div>
                     </div>
@@ -2741,7 +2741,7 @@ return (
      <div className="row" id="leadinfopersonal" style={{display:"none"}}>
                      <div className="col-md-12 mb-12 custom-input"><label className="form-label">Father/Husband name</label><input type="text" defaultValue={leadData?.father_husband_name || ''} className="form-control form-control-sm"/></div>
 
-                            <div className="col-md-3 mb-3 custom-input"><label className="form-label">H.No</label><input type="text" defaultValue={leadData?.h_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
+                            <div className="col-md-3 mb-3 custom-input "><label className="form-label">H.No</label><input type="text" defaultValue={leadData?.h_no || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,h_no:e.target.value})}/></div>
                             <div className="col-md-9 mb-9 custom-input"><label className="form-label">Area(area1)</label><input type="text" defaultValue={leadData?.area1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,area1:e.target.value})}/></div>
 
                             <div className="col-md-4 mb-4 custom-input"><label className="form-label">Location(location1)</label><input type="text" defaultValue={leadData?.location1 || ''} className="form-control form-control-sm" onChange={(e)=>setleadinfo({...leadinfo,location1:e.target.value})}/></div>

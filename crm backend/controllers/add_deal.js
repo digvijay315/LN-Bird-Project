@@ -219,8 +219,8 @@ const add_deal = async (req, res) => {
                         try {
                          
                           const { project, block,unit_number } = req.params;  // Extract project and unit from URL params
-                          
-                        
+                          console.log(req.body);
+                    
                           // Update all matching deals in a single operation
                           const result = await adddeal.updateMany(
                             { project: project, block: block, unit_number: unit_number },

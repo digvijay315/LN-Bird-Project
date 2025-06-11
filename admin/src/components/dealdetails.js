@@ -2836,7 +2836,13 @@ const [show9, setshow9] = useState(false);
               return; // Stop execution if user cancels
             }
 
-              const resp=await api.put(`updateprojectforinventories/${project}/${unit}/${block}`,units,config)
+
+               // ✅ Run both updates in parallel
+                const [resp, resp1] = await Promise.all([
+                  api.put(`updateprojectforinventories/${project}/${unit}/${block}`, units, config),
+                  // api.put(`updatedealowner/${project}/${block}/${unit}`, units, config),
+                ]);
+
              
               toast.success(`new owner added successfully`,{autoClose:"2000"})
                               setTimeout(() => {
@@ -5248,6 +5254,10 @@ const buttonStyle = `
               newcontact // Add the new contact (assumed to be an object)
             ]);
             setunits(prevDeal => ({
+              ...prevDeal,
+              owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
+            }));
+              setdeal(prevDeal => ({
               ...prevDeal,
               owner_details: [...(prevDeal.owner_details || []), newcontact._id] // Append new contact to the existing owner_details array
             }));

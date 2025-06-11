@@ -1,0 +1,297 @@
+
+                .curriculum-container {
+                    display: flex;
+                    height: 100vh;
+                }
+
+                .curriculum-sidebar {
+                    width: 22%;
+                    background: #f8f9fa;
+                    border-right: 1px solid #ddd;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .curriculum-header {
+                    position: sticky;
+                    top: 0;
+                    z-index: 1;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    background: #7a1cac;
+                    color: white;
+                }
+
+                .curriculum-header button {
+                    background-color: transparent;
+                }
+
+                .curriculum-sections {
+                    flex: 1;
+                    overflow-y: auto;
+                }
+
+                .section {
+                    border-bottom: 1px solid #ddd;
+                    padding: 10px;
+                }
+
+                .section-header h5 {
+                    background: #f8f9fa;
+                    cursor: pointer;
+                }
+
+                .dropdown {
+                    width: 100%;
+                    margin: 10px 0;
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                    background: #f8f9fa;
+                }
+
+                .dropdown option:disabled {
+                    color: #ccc;
+                    background: #f5f5f5;
+                }
+
+                .lesson-item {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 8px;
+                    margin: 5px 0;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.2s;
+                }
+
+                .lesson-item.accessible {
+                    background: #fff;
+                    border: 1px solid #ddd;
+                }
+
+                .lesson-item.accessible:hover {
+                    background: #f0f8ff;
+                }
+
+                .lesson-item.locked {
+                    background: #f5f5f5;
+                    color: #999;
+                    cursor: not-allowed;
+                    border: 1px solid #e0e0e0;
+                }
+
+                .lesson-item.completed {
+                    background: #e8f5e8;
+                    border: 1px solid #4caf50;
+                }
+
+                .lesson-status {
+                    font-size: 16px;
+                }
+
+                .content-area {
+                    flex: 1;
+                    padding: 20px;
+                    overflow-y: auto;
+                    position: relative !important;
+                }
+
+                .content-header {
+                    border-bottom: 1px solid rgba(0,0,0,0.3);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    padding: 10px;
+                }
+
+                .lesson-content {
+                    position: absolute;
+                    top: 80px;
+                    left: 20px;
+                    right: 20px;
+                    bottom: 100px;
+                    overflow: scroll;
+                }
+
+                .lesson-content h2 {
+                    margin-bottom: 10px;
+                }
+
+                .navigation-buttons {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .navigation-buttons button {
+                    background-color: #ffffff;
+                    box-shadow: inset 0 5px 10px rgba(0, 0, 0, 0.1), 0 2px 5px rgba(0, 0, 0, 0.5);
+                    color: #7a1cac;
+                    border-radius: 1.5rem;
+                    padding: 8px 1rem;
+                }
+
+                .navigation-buttons button:hover:not(:disabled) {
+                    background-color: #7a1cac;
+                    color: #ffffff;
+                }
+
+                .navigation-buttons button:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
+
+                .navigations-btn-div {
+                    border-top: 1px solid rgba(0, 0, 0, 0.3);
+                    padding: 30px 25px;
+                    position: absolute !important;
+                    z-index: 99;
+                    bottom: 0px;
+                    right: 0;
+                    left: 0;
+                    background-color: #fff;
+                }
+
+                .floating-book-icon {
+                    position: fixed;
+                    bottom: 120px;
+                    left: 20px;
+                    background: #7a1cac;
+                    color: white;
+                    padding: 10px 15px;
+                    border-radius: 50%;
+                    font-size: 20px;
+                    cursor: pointer;
+                    border: none;
+                }
+
+                .floating-book-icon:hover {
+                    background-color: #2e073f;
+                }
+
+                .media-container, .ppt-container {
+                    margin: 20px 0;
+                    width: 100%;
+                    height: auto;
+                    position: relative;
+                }
+
+                .media-controls {
+                    margin: 20px 0;
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .media-button {
+                    padding: 8px 16px;
+                    border: 1px solid #7a1cac;
+                    background: white;
+                    color: #7a1cac;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                .media-button:hover {
+                    background-color: #7a1cac;
+                    color: white;
+                }
+
+                .media-button.active {
+                    background: #7a1cac;
+                    color: white;
+                }
+
+                .ppt-files {
+                    margin: 20px 0;
+                }
+
+                .ppt-header {
+                    margin-bottom: 15px;
+                }
+
+                .ppt-actions {
+                    display: flex;
+                    gap: 10px;
+                    margin: 10px 0;
+                }
+
+                .view-button {
+                    padding: 8px 16px;
+                    background: #7a1cac;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                .view-button:hover {
+                    background: #621589;
+                }
+
+                .ppt-action-group {
+                    display: flex;
+                }
+
+                .descition-div {
+                    margin-top: 3rem;
+                }
+
+                .descition-div h5 {
+                    border-bottom: 2px solid #7a1cac;
+                    padding-bottom: 12px;
+                    margin-bottom: 1.5rem;
+                }
+
+                .completion-indicator {
+                    background: #e8f5e8;
+                    color: #2e7d32;
+                    padding: 10px;
+                    border-radius: 4px;
+                    margin: 10px 0;
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .mark-complete-btn {
+                    background: #4caf50;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    margin: 10px 0;
+                    display: block;
+                    width: 100%;
+                }
+
+                .mark-complete-btn:hover {
+                    background: #45a049;
+                }
+
+                .lesson-progress {
+                    background: #f0f8ff;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                    border-left: 4px solid #7a1cac;
+                }
+
+                .progress-item {
+                    display: flex;
+                    align-items: center;
+                    margin: 5px 0;
+                }
+
+                .progress-item.completed {
+                    color: #2e7d32;
+                }
+
+                .progress-item.pending {
+                    color: #666;
+                }
+              
+    
