@@ -613,14 +613,15 @@ const handleallunitschange = (event) => {
                             if(resp.status===200)
                                 {
                                           Swal.fire({
+                                                icon:"success",
                                                 title: '🎉 Success!',
                                                 text:"Deal created successfully...",
-                                                html: `
+                                                html: `Deal created successfully...<br></br>
                                         <img src="https://cdn.vectorstock.com/i/500p/63/50/thumbs-up-smiley-face-icon-vector-10176350.jpg"
                                         alt="Thumbs up" 
                                               width="80" 
                                               style="margin-bottom: 0px;"/>`,
-                                        width: '300px', // makes it small
+                                        width: '400px', // makes it small
                                         padding: '1.2em',
                                                 showConfirmButton: true,
                                               }).then((result) => {

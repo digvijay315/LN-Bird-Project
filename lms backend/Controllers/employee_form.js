@@ -222,7 +222,7 @@ const update_data_employee = async (req, res) => {
 const employee_login = async (req, res) => {
     try {
         const { email_id, employee_id, password } = req.body;
-        
+   
         // Determine whether to query by email or employee_id
         let query = {};
         if (email_id) {

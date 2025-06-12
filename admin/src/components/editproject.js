@@ -3046,6 +3046,46 @@ const addunits = () => {
 
 };
 
+const updateunits=async()=>
+          {
+            try {
+
+               // Show confirmation message
+            const result = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, update it!",
+            });
+        
+            if (!result.isConfirmed) {
+              return; // Stop execution if user cancels
+            }
+            
+            const resp=await api.put('updateprojectforinventoriesbulk',duplicateEntries,config)
+          
+              toast.success(`units update successfully`,{autoClose:"2000"})
+                              setTimeout(() => {
+                                window.location.reload()
+                              }, 2000);
+            } catch (error) {
+              Swal.fire({
+                title: "not found?",
+                text: "The project is not found plz check !",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "ok",
+              });
+              console.log(error);
+              
+            }
+          }
+
 const headerSuggestions = {
   owner_details: "Suggestion: Enter owner mobile no",
   associated_contact: "Suggestion: Enter associated mobile no",
@@ -6566,7 +6606,7 @@ const generateExcelFileunit = () => {
     ))}
   </div>
 
-  <button className="btn btn-secondary mt-3" style={{ width: "200px" }}>
+  <button className="btn btn-secondary mt-3" style={{ width: "200px" }} onClick={updateunits}>
     🔄 Update Units
   </button>
 </div>

@@ -122,8 +122,12 @@ const get_data_studentbyemail = async (req, res) => {
 
 const student_login = async (req, res) => {
     try {
+ 
+        
         const { email_id, password } = req.body;
         const user = await students_modal.findOne({ email_id: email_id });
+  
+        
         
         if (!user) {
             return res.status(404).send({ message: "Email ID not registered" });

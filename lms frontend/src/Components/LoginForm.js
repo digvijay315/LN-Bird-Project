@@ -374,8 +374,10 @@ function LoginForm() {
                 return;
             }
 
+
             // Store token in localStorage
             localStorage.setItem('token', token);
+           
             
             // Make sure we're storing the employee data with consistent property names
             const employeeData = resp.data.employee;

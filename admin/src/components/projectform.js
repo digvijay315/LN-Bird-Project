@@ -328,67 +328,35 @@ function Projectform() {
                           document.getElementById("prices").style.color="black"
                     }
 
-                                    const basicaminities=()=>
-                                      {
-                                        document.getElementById("basicaminities").style.display="flex"
-                                        document.getElementById("featuredaminities").style.display="none"
-                                        document.getElementById("nearbyaminities").style.display="none"
-                                    
-                                          
-                                        document.getElementById("featuredaminities1").style.color="black"
-                                        document.getElementById("featuredaminities1").style.backgroundColor="white"
-                                        document.getElementById("nearbyaminities1").style.color="black"
-                                        document.getElementById("nearbyaminities1").style.backgroundColor="white"
-                      
-                                        document.getElementById("basicaminities1").style.backgroundColor="black"
-                                        document.getElementById("basicaminities1").style.color="white"
-                                        document.getElementById("basicaminities1").style.borderRadius="50px"
-                                        document.getElementById("basicaminities1").style.width="80px"
-                                        document.getElementById("basicaminities1").style.textAlign="center"
-                                      
-                                      
-                                  
-                                        
-                                      }
-                                      const featuredaminities=()=>
-                                        {
-                                          document.getElementById("basicaminities").style.display="none"
-                                          document.getElementById("featuredaminities").style.display="flex"
-                                          document.getElementById("nearbyaminities").style.display="none"
-                                      
-                                        
-                                          document.getElementById("basicaminities1").style.color="black"
-                                          document.getElementById("basicaminities1").style.backgroundColor="white"
-                                          document.getElementById("nearbyaminities1").style.color="black"
-                                          document.getElementById("nearbyaminities1").style.backgroundColor="white"
-                      
-                                          document.getElementById("featuredaminities1").style.backgroundColor="black"
-                                          document.getElementById("featuredaminities1").style.color="white"
-                                          document.getElementById("featuredaminities1").style.borderRadius="50px"
-                                          document.getElementById("featuredaminities1").style.width="80px"
-                                          document.getElementById("featuredaminities1").style.textAlign="center"
-                                          
-                                        }
-                                        const nearbyaminities=()=>
-                                          {
-                                            
-                                            document.getElementById("basicaminities").style.display="none"
-                                            document.getElementById("featuredaminities").style.display="none"
-                                            document.getElementById("nearbyaminities").style.display="flex"
-                                        
-                                          
-                                            document.getElementById("basicaminities1").style.color="black"
-                                            document.getElementById("basicaminities1").style.backgroundColor="white"
-                                            document.getElementById("featuredaminities1").style.color="black"
-                                            document.getElementById("featuredaminities1").style.backgroundColor="white"
-                      
-                                            document.getElementById("nearbyaminities1").style.backgroundColor="black"
-                                            document.getElementById("nearbyaminities1").style.color="white"
-                                            document.getElementById("nearbyaminities1").style.borderRadius="50px"
-                                            document.getElementById("nearbyaminities1").style.width="80px"
-                                            document.getElementById("nearbyaminities1").style.textAlign="center"
-                                            
-                                          }
+                                   const activateTab = (activeId) => {
+                                    const allTabs = ["basicaminities1", "featuredaminities1", "nearbyaminities1"];
+                                    allTabs.forEach((id) => {
+                                      document.getElementById(id).classList.remove("active");
+                                    });
+                                    document.getElementById(activeId).classList.add("active");
+                                  };
+
+                                  const basicaminities = () => {
+                                    document.getElementById("basicaminities").style.display = "flex";
+                                    document.getElementById("featuredaminities").style.display = "none";
+                                    document.getElementById("nearbyaminities").style.display = "none";
+                                    activateTab("basicaminities1");
+                                  };
+
+                                  const featuredaminities = () => {
+                                    document.getElementById("basicaminities").style.display = "none";
+                                    document.getElementById("featuredaminities").style.display = "flex";
+                                    document.getElementById("nearbyaminities").style.display = "none";
+                                    activateTab("featuredaminities1");
+                                  };
+
+                                  const nearbyaminities = () => {
+                                    document.getElementById("basicaminities").style.display = "none";
+                                    document.getElementById("featuredaminities").style.display = "none";
+                                    document.getElementById("nearbyaminities").style.display = "flex";
+                                    activateTab("nearbyaminities1");
+                                  };
+
                     const pricedetails=()=>
                       {
                             document.getElementById("basicdetails1").style.display="none"
@@ -5771,41 +5739,167 @@ const generateExcelFileunit = () => {
                       <div className="p-3 py-5">
                           <div className="row " >
                             <div style={{display:"flex"}}>
-                          <div style={{display:"flex",gap:"50px",border:"1px solid gray",padding:"5px",borderRadius:"50px",marginLeft:"20%"}}>
-                             <div  id='basicaminities1' onClick={basicaminities} style={{cursor:'pointer',fontWeight:"bold",backgroundColor:"black",color:"white",borderRadius:"50px",width:"80px",textAlign:"center",transition:"0.5s ease-out"}}>Basic </div>
-                             <div  id='featuredaminities1' onClick={featuredaminities} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Featured</div>
-                             <div  id='nearbyaminities1' onClick={nearbyaminities} style={{cursor:'pointer',fontWeight:"bold",transition:"0.5s ease-out"}}>Nearby</div>
-                         </div>
+                      <div style={{ textAlign: "center", marginTop: "20px" }}>
+                        <button id="basicaminities1" className="amenity-tab active" onClick={basicaminities}>
+                          Basic
+                        </button>
+                        <button id="featuredaminities1" className="amenity-tab" onClick={featuredaminities}>
+                          Featured
+                        </button>
+                        <button id="nearbyaminities1" className="amenity-tab" onClick={nearbyaminities}>
+                          Nearby
+                        </button>
+                      </div>
                         
                          </div>
-                           <div className="row" id='basicaminities' style={{ marginTop: "20px" }}>
-                           <div className='col-md-12 mb-12 custom-input' style={{width:"250px",marginLeft:"200px"}}><input type="checkbox" style={{transform:"scale(1.5)",marginRight:"10px"}} checked={selectAll} onChange={handleSelectAllChange}></input>Select All</div>
-                              {checkboxItems.map((item, index) => (
-                                <div className="col-md-6 mb-6 custom-input" style={{ marginTop: "20px" }} key={index}>
-                                  <input
-                                    type="checkbox"
-                                    style={{ transform: "scale(1.5)", marginRight: "10px" }}
-                                    checked={checkedItems[index]}
-                                    onChange={() => handleCheckboxChange(index)}
-                                  />
-                                  {item}
-                                </div>
-                              ))}
-                        </div>
-                        <div className="row" id='featuredaminities' style={{ marginTop: "20px",display:"none" }}>
-                        <div className='col-md-12 mb-12 custom-input' style={{width:"250px",marginLeft:"200px"}}><input type="checkbox" style={{transform:"scale(1.5)",marginRight:"10px"}} checked={selectAll1} onChange={handleSelectAllChange1}></input>Select All</div>
-                              {checkboxItems1.map((item, index) => (
-                                <div className="col-md-3 mb-3 custom-input" style={{ marginTop: "20px" }} key={index}>
-                                  <input
-                                    type="checkbox"
-                                    style={{ transform: "scale(1.5)", marginRight: "10px" }}
-                                    checked={checkedItems1[index]}
-                                    onChange={() => handleCheckboxChange1(index)}
-                                  />
-                                  {item}
-                                </div>
-                              ))}
-                        </div>
+                       <div
+  id="basicaminities"
+  style={{
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    justifyContent: "center",
+    marginTop: "20px",
+  }}
+>
+  {/* SELECT ALL CARD */}
+  <div
+    onClick={handleSelectAllChange}
+    style={{
+      width: "220px",
+      padding: "18px",
+      borderRadius: "12px",
+      background: selectAll ? "#007BFF" : "#e3f2fd",
+      color: selectAll ? "#fff" : "#0d6efd",
+      fontWeight: "700",
+      fontSize: "17px",
+      display: "flex",
+      alignItems: "center",
+      cursor: "pointer",
+      boxShadow: "0 5px 10px rgba(0,0,0,0.1)",
+      transition: "all 0.3s ease",
+      border: selectAll ? "2px solid #0056b3" : "2px dashed #90caf9",
+    }}
+  >
+    <input
+      type="checkbox"
+      checked={selectAll}
+      onClick={(e) => e.stopPropagation()} // stop bubbling
+      onChange={handleSelectAllChange}
+      style={{ marginRight: "12px", transform: "scale(1.4)" }}
+    />
+    Select All Amenities
+  </div>
+
+  {/* AMENITY CARDS */}
+  {checkboxItems.map((item, index) => (
+    <div
+      key={index}
+      onClick={() => handleCheckboxChange(index)}
+      style={{
+        width: "220px",
+        padding: "16px",
+        borderRadius: "10px",
+        backgroundColor: checkedItems[index] ? "#4CAF50" : "#f9f9f9",
+        color: checkedItems[index] ? "#fff" : "#333",
+        fontWeight: "500",
+        fontSize: "16px",
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+        transition: "all 0.3s ease",
+        border: checkedItems[index] ? "2px solid #388e3c" : "2px solid #ddd",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={checkedItems[index]}
+        onClick={(e) => e.stopPropagation()} // prevent double trigger
+        onChange={() => handleCheckboxChange(index)}
+        style={{ marginRight: "10px", transform: "scale(1.3)" }}
+      />
+      {item}
+    </div>
+  ))}
+</div>
+
+                  <div
+  className="row"
+  id="featuredaminities"
+  style={{
+    marginTop: "20px",
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "20px",
+    justifyContent: "center",
+    display: "none", // keep this if you’re toggling visibility dynamically
+  }}
+>
+  {/* SELECT ALL CARD */}
+  <div
+    onClick={handleSelectAllChange1}
+    style={{
+      width: "220px",
+      padding: "18px",
+      borderRadius: "12px",
+      background: selectAll1 ? "#007BFF" : "#e3f2fd",
+      color: selectAll1 ? "#fff" : "#0d6efd",
+      fontWeight: "700",
+      fontSize: "17px",
+      display: "flex",
+      alignItems: "center",
+      cursor: "pointer",
+      boxShadow: "0 5px 10px rgba(0,0,0,0.1)",
+      transition: "all 0.3s ease",
+      border: selectAll1 ? "2px solid #0056b3" : "2px dashed #90caf9",
+    }}
+  >
+    <input
+      type="checkbox"
+      checked={selectAll1}
+      onClick={(e) => e.stopPropagation()}
+      onChange={handleSelectAllChange1}
+      style={{ marginRight: "12px", transform: "scale(1.4)" }}
+    />
+    Select All Featured
+  </div>
+
+  {/* FEATURED AMENITY CARDS */}
+  {checkboxItems1.map((item, index) => (
+    <div
+      key={index}
+      onClick={() => handleCheckboxChange1(index)}
+      style={{
+        width: "220px",
+        padding: "16px",
+        borderRadius: "10px",
+        backgroundColor: checkedItems1[index] ? "#4CAF50" : "#f9f9f9",
+        color: checkedItems1[index] ? "#fff" : "#333",
+        fontWeight: "500",
+        fontSize: "16px",
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer",
+        boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+        transition: "all 0.3s ease",
+        border: checkedItems1[index]
+          ? "2px solid #388e3c"
+          : "2px solid #ddd",
+      }}
+    >
+      <input
+        type="checkbox"
+        checked={checkedItems1[index]}
+        onClick={(e) => e.stopPropagation()}
+        onChange={() => handleCheckboxChange1(index)}
+        style={{ marginRight: "10px", transform: "scale(1.3)" }}
+      />
+      {item}
+    </div>
+  ))}
+</div>
+
                         <div className="row" id='nearbyaminities' style={{ marginTop: "20px",display:"none"}}>
                         <div className='col-md-12 mb-12 custom-input'></div><br></br>
                        

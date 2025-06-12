@@ -705,6 +705,180 @@ unitDetails={
                 }
               };
 
+                const update_projectforinventoriesbulk = async (req, res) => {
+                try {
+                  // Retrieve project_name, block, and unit_no from the URL parameters (params)
+                  const unitsdata = Array.isArray(req.body) ? req.body : Object.values(req.body);
+                  // console.log(unitsdata);
+                  
+                 for(let unit of unitsdata)
+                 {
+                  let projectname=unit.project_name
+                  let block=unit.block
+                  let unitno=unit.unit_no
+
+                  const exitproject=await addproject.findOne({name:projectname})
+                  if(!exitproject)
+                  {
+                    res.status(404).send('project not found')
+                    return
+                  }
+
+                   const project = await addproject.findOne({
+                    'add_unit': { $elemMatch: { project_name:projectname, block:block, unit_no:unitno} }
+                    });
+
+                       if (!project) {
+                                      return res.status(404).send({ message: "No project found matching the criteria" });
+                                      }
+
+                        // Step 2: Find the index of the unit to update
+                       const unitIndex = project.add_unit.findIndex(
+                        u => u.project_name === projectname && u.block === block && u.unit_no === unitno
+                      );
+                        if (unitIndex === -1) {
+                            return res.status(404).send({ message: "Unit not found" });
+                        }
+
+                        const existingUnit = project.add_unit[unitIndex];
+                        const upcomingunit = unit
+
+// ============================this is for deal owner update start============================================
+              const result = await adddeal.updateMany(
+                { project: projectname, block: block, unit_number: unitno },
+                {
+                  $set: {
+                    owner_details: upcomingunit.owner_details !== undefined ? upcomingunit.owner_details : [],
+                    associated_contact: upcomingunit.associated_contact !== undefined ? upcomingunit.associated_contact : []
+                  }
+                }
+              );
+  //====================================== deal owner update end=================================================
+                      let previousOwnerDetails = existingUnit.owner_details || [];
+
+                          unitDetails={
+                          project_name: upcomingunit.project_name,
+                          unit_no: upcomingunit.unit_no,
+                          previousowner_details: previousOwnerDetails, 
+                          owner_details: upcomingunit.owner_details,
+                          associated_contact:upcomingunit.associated_contact,
+                          unit_type: upcomingunit.unit_type,
+                          category: upcomingunit.category,
+                          sub_category:upcomingunit.sub_category,
+                          block: upcomingunit.block,
+                          size: upcomingunit.size,
+                          direction: upcomingunit.direction,
+                          facing: upcomingunit.facing,
+                          road:upcomingunit.road ,
+                          ownership:upcomingunit.ownership,
+                          stage: upcomingunit.stage,
+                          floor: upcomingunit.floor,
+                          cluter_details:upcomingunit.cluter_details ,
+                          length: upcomingunit.length,
+                          bredth: upcomingunit.bredth,
+                          total_area: upcomingunit.total_area,
+                          measurment2: upcomingunit.measurment2,
+                          ocupation_date: upcomingunit.ocupation_date,
+                          age_of_construction: upcomingunit.age_of_construction,
+                          furnishing_details: upcomingunit.furnishing_details,
+                          furnished_item: upcomingunit.furnished_item,
+                          location: upcomingunit.location,
+                          lattitude: upcomingunit.lattitude,
+                          langitude: upcomingunit.langitude,
+                          uaddress: upcomingunit.uaddress,
+                          ustreet: upcomingunit.ustreet,
+                          ulocality: upcomingunit.ulocality,
+                          ucity: upcomingunit.ucity,
+                          uzip: upcomingunit.uzip,
+                          ustate: upcomingunit.ustate,
+                          ucountry: upcomingunit.ucountry,
+                          relation: upcomingunit.relation,
+                          s_no: upcomingunit.s_no,
+                          descriptions: upcomingunit.descriptions,
+                          category: upcomingunit.category,
+                          s_no1: upcomingunit.s_no1,
+                          url: upcomingunit.url,
+                          document_name: upcomingunit.document_name,
+                          document_no: upcomingunit.document_no,
+                          document_Date: upcomingunit.document_Date,
+                          linkded_contact: upcomingunit.linkded_contact,
+                          preview: existingUnit.preview,
+                          image:existingUnit.image
+
+                        }
+
+                            // Prepare for file upload
+                            const imagefiles = [];
+                            const imagefiles1 = [];
+                            
+                            
+                            if (req.files) {
+                          
+                              const imagefield = req.files.filter(file => file.fieldname.includes(`preview`));
+                              const imagefield1 = req.files.filter(file => file.fieldname.includes(`image`));
+                            
+                          
+                              
+                              for (let file of imagefield) {
+                                try {
+                                  const result = await cloudinary.uploader.upload(file.path);
+                                  imagefiles.push(result.secure_url);  
+                          
+                                  // Delete file after upload
+                                  fs.unlink(file.path, (err) => {
+                                    if (err) {
+                                      console.error(`Failed to delete file: ${file.path}`, err);
+                                    } else {
+                                      console.log(`Successfully deleted file: ${file.path}`);
+                                    }
+                                  });
+                                } catch (error) {
+                                  console.error('Error uploading file:', error);
+                                }
+                              }
+                          
+                          
+                              for (let file of imagefield1) {
+                                try {
+                                  const result = await cloudinary.uploader.upload(file.path);
+                                  imagefiles1.push(result.secure_url);  
+                          
+                                  // Delete file after upload
+                                  fs.unlink(file.path, (err) => {
+                                    if (err) {
+                                      console.error(`Failed to delete file: ${file.path}`, err);
+                                    } else {
+                                      console.log(`Successfully deleted file: ${file.path}`);
+                                    }
+                                  });
+                                } catch (error) {
+                                  console.error('Error uploading file:', error);
+                                }
+                              }
+                          
+                            }
+                            if (imagefiles.length > 0) {
+                              unitDetails.preview = imagefiles;  // Attach preview images
+                            }
+                            if (imagefiles1.length > 0) {
+                              unitDetails.image = imagefiles1;  // Attach main images
+                            }
+
+                              project.add_unit[unitIndex] = unitDetails;
+                              await project.save();
+
+                 }
+                  
+                  res.status(200).send({
+                    message: "units updated successfully",
+                    // project: project
+                  });
+                } catch (error) {
+                  console.log(error);
+                  res.status(500).send({ message: "An error occurred while updating the project details", error: error.message });
+                }
+              };
+
 
               const update_projectaddunit=async(req,res)=>
                 {
@@ -898,4 +1072,4 @@ unitDetails={
               
 
    module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,
-    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit,delete_projectforinventories}
+    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit,delete_projectforinventories,update_projectforinventoriesbulk}

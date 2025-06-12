@@ -6,7 +6,7 @@ import { base_url } from "../Utils/base_url"
 import axios from "axios"
 import ReactPlayer from "react-player"
 import PptSlides from "../Pptslides"
-import '../Courses/curiculam.css'
+import "../Courses/curiculam.css"
 
 const Curriculum = () => {
   const location = useLocation()
@@ -19,7 +19,10 @@ const Curriculum = () => {
   const youtubePlayerRef = useRef(null)
   const youtubeTimerRef = useRef(null)
 
-  // New state for completion tracking
+  // Get current logged-in user from localStorage or session
+  const [currentUser, setCurrentUser] = useState(null)
+
+  // New state for completion tracking (now user-specific)
   const [completedLessons, setCompletedLessons] = useState(new Set())
   const [currentLessonProgress, setCurrentLessonProgress] = useState({
     videoWatched: false,
@@ -39,6 +42,28 @@ const Curriculum = () => {
   const [videoPositions, setVideoPositions] = useState({})
   const [savedProgress, setSavedProgress] = useState({})
 
+  // Get current user from localStorage or session
+  useEffect(() => {
+    // Get user data from localStorage (adjust this based on how your auth system stores user data)
+    const userData = localStorage.getItem("employeeData")
+    console.log(userData);
+    
+    if (userData) {
+      try {
+        const parsedUser = JSON.parse(userData)
+        setCurrentUser(parsedUser)
+      } catch (error) {
+        console.error("Error parsing user data:", error)
+      }
+    }
+  }, [])
+
+  // User-specific key generator for localStorage
+  const getUserSpecificKey = (baseKey) => {
+    if (!currentUser || !currentUser._id) return baseKey
+    return `user_${currentUser._id}_${baseKey}`
+  }
+
   const fetchCurriculum = async (courseId) => {
     if (!courseId) {
       console.error("No Course ID provided")
@@ -54,21 +79,32 @@ const Curriculum = () => {
       }
       setCurriculum(courseData)
 
-      // Load completion data from localStorage
-      const savedCompletions = localStorage.getItem(`course_${courseId}_completions`)
-      if (savedCompletions) {
-        setCompletedLessons(new Set(JSON.parse(savedCompletions)))
+      // Load completion data for current user
+      if (currentUser && currentUser._id) {
+        loadUserProgress(currentUser._id, courseId)
       }
     } catch (error) {
       console.error("Error fetching curriculum:", error)
     }
   }
 
+  // Load user progress from localStorage
+  const loadUserProgress = (userId, courseId) => {
+    const completionsKey = getUserSpecificKey(`course_${courseId}_completions`)
+    const savedCompletions = localStorage.getItem(completionsKey)
+
+    if (savedCompletions) {
+      setCompletedLessons(new Set(JSON.parse(savedCompletions)))
+    } else {
+      setCompletedLessons(new Set())
+    }
+  }
+
   useEffect(() => {
-    if (course?._id) {
+    if (course?._id && currentUser?._id) {
       fetchCurriculum(course._id)
     }
-  }, [course])
+  }, [course, currentUser])
 
   // Load YouTube API
   useEffect(() => {
@@ -153,19 +189,23 @@ const Curriculum = () => {
     return Object.keys(requiredProgress).every((key) => currentLessonProgress[key])
   }
 
-  // Mark lesson as completed
+  // Mark lesson as completed (user-specific)
   const markLessonCompleted = (lessonId) => {
+    if (!currentUser?._id || !course?._id) return
+
     const newCompletedLessons = new Set([...completedLessons, lessonId])
     setCompletedLessons(newCompletedLessons)
 
-    // Save to localStorage
-    localStorage.setItem(`course_${course._id}_completions`, JSON.stringify([...newCompletedLessons]))
+    // Save to localStorage with user-specific key
+    const completionsKey = getUserSpecificKey(`course_${course._id}_completions`)
+    localStorage.setItem(completionsKey, JSON.stringify([...newCompletedLessons]))
   }
 
-  // Save video progress to localStorage
+  // Save video progress to localStorage (user-specific)
   const saveVideoProgress = (lessonId, position, progress, mediaType) => {
-    const courseId = course._id
-    const progressKey = `course_${courseId}_video_progress`
+    if (!currentUser?._id || !course?._id) return
+
+    const progressKey = getUserSpecificKey(`course_${course._id}_video_progress`)
     const existingProgress = JSON.parse(localStorage.getItem(progressKey) || "{}")
 
     existingProgress[lessonId] = {
@@ -188,10 +228,11 @@ const Curriculum = () => {
     }))
   }
 
-  // Load video progress from localStorage
+  // Load video progress from localStorage (user-specific)
   const loadVideoProgress = (lessonId) => {
-    const courseId = course._id
-    const progressKey = `course_${courseId}_video_progress`
+    if (!currentUser?._id || !course?._id) return null
+
+    const progressKey = getUserSpecificKey(`course_${course._id}_video_progress`)
     const existingProgress = JSON.parse(localStorage.getItem(progressKey) || "{}")
 
     return existingProgress[lessonId] || null
@@ -292,6 +333,11 @@ const Curriculum = () => {
 
   // Handle lesson click with accessibility check
   const handleLessonClick = (chapterContent, sectionTitle, sectionIndex, chapterIndex) => {
+    if (!currentUser?._id) {
+      alert("Please log in to track your progress!")
+      return
+    }
+
     const lessonId = `${sectionIndex}-${chapterIndex}`
 
     if (!isLessonAccessible(lessonId)) {
@@ -647,9 +693,37 @@ const Curriculum = () => {
 
   const { previousLesson, nextLesson } = getNeighborLessons()
 
+  // If no user is logged in, show a message
+  if (!currentUser) {
+    return (
+      <div className="login-required" style={{ padding: "40px", textAlign: "center" }}>
+        <h2>👋 Please Log In</h2>
+        <p>You need to log in to access your personalized learning path.</p>
+      </div>
+    )
+  }
+
   return (
     <div>
-   
+      {/* User Header */}
+      <div
+        className="user-header"
+        style={{
+          backgroundColor: "#f8f9fa",
+          padding: "10px 20px",
+          borderBottom: "2px solid #dee2e6",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div className="current-user-info">
+          <h3 style={{ margin: 0, color: "#495057" }}>
+            👨‍🎓 {currentUser.name || currentUser.username || currentUser.email}
+          </h3>
+          {currentUser.email && <p style={{ margin: 0, fontSize: "14px", color: "#6c757d" }}>{currentUser.email}</p>}
+        </div>
+      </div>
 
       <div className="curriculum-container">
         {showCurriculum && (

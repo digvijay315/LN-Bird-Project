@@ -350,7 +350,33 @@ button:hover{
     color: #007bff;
   }
 
+  /* for project form aminitis style */
+.amenity-tab {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  background-color: #f1f1f1;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 10px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
 
+.amenity-tab:hover {
+  background: linear-gradient(135deg, #d1c4e9, #9575cd);
+  color: #fff;
+}
+
+.amenity-tab.active {
+  background: linear-gradient(135deg, #673ab7, #512da8);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(103, 58, 183, 0.4);
+  transform: scale(1.05);
+}
+
+/* for project aminities style */
 
   
 
