@@ -238,7 +238,7 @@ function Dealdetails() {
 
 
       const [currentPage, setCurrentPage] = useState(1);
-      const [itemsPerPage, setItemsPerPage] = useState(8); // User-defined items per page
+      const [itemsPerPage, setItemsPerPage] = useState(10); // User-defined items per page
       const indexOfLastItem = currentPage * itemsPerPage;
       const indexOfFirstItem = indexOfLastItem - itemsPerPage;
       const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
@@ -1327,7 +1327,7 @@ function Dealdetails() {
 
 
                   const [currentPage1, setCurrentPage1] = useState(1);
-                  const [itemsPerPage1, setItemsPerPage1] = useState(8); // User-defined items per page
+                  const [itemsPerPage1, setItemsPerPage1] = useState(10); // User-defined items per page
                   const indexOfLastItem1 = currentPage1 * itemsPerPage1;
                   const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
                   const currentItems2 = cdata.slice(indexOfFirstItem1, indexOfLastItem1);
@@ -1552,7 +1552,7 @@ function Dealdetails() {
 
 
                   const [currentPage2, setCurrentPage2] = useState(1);
-                  const [itemsPerPage2, setItemsPerPage2] = useState(8); // User-defined items per page
+                  const [itemsPerPage2, setItemsPerPage2] = useState(10); // User-defined items per page
                   const indexOfLastItem2 = currentPage2 * itemsPerPage2;
                   const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
                   const currentItems3 = flattenedUnits.slice(indexOfFirstItem2, indexOfLastItem2);
@@ -2802,8 +2802,7 @@ const [show9, setshow9] = useState(false);
 
                     const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
                     setunits(resp.data.project.add_unit[0])
-                    
-                   
+                   fetchdatabyprojectname(project)
                   }
                 // console.log(units.owner_details);
                 
@@ -3777,15 +3776,13 @@ const handleallblockchange = (event) => {
     try {
       
         const resp = await api.get(`viewprojectbyname/${projectNames}`);
-        // const allFetchedUnits= resp.data.project;
-        setunits1(resp.data.project);// Assuming resp.data.project is an array of units for that project
+        setunits1(resp.data.project);
+        setproject(resp.data.project[0])
     } catch (error) {
       console.log(error);
     }
   };
  
-  
-  
 
   React.useEffect(() => {
     if (deal.project) {
@@ -5349,6 +5346,9 @@ const buttonStyle = `
 
 // =============================================================deal action button toggle end==================================================
 
+
+
+
 return (
         <div>
             <Header1/>
@@ -5779,6 +5779,8 @@ return (
         <option value="10">10</option>
         <option value="20">20</option>
         <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
       </select>
     
     {renderPageNumbers()}
@@ -6653,6 +6655,8 @@ return (
   <option value="15">15</option>
   <option value="20">20</option>
   <option value="50">50</option>
+  <option value="100">100</option>
+  <option value="500">500</option>
 </select>
 
 {renderPageNumbers1()}
@@ -7236,6 +7240,8 @@ return (
   <option value="15">15</option>
   <option value="20">20</option>
   <option value="50">50</option>
+  <option value="100">100</option>
+  <option value="500">500</option>
 </select>
 
 {renderPageNumbers2()}
@@ -8301,7 +8307,7 @@ stage:selectedLead.stage
                     <div className="col-md-12" style={{display:"flex"}} >
                     <div className="col-md-12" style={{ display: "flex", flexWrap: "wrap" }}>
                       {
-                        project.category.map((type) => (
+                        project?.category?.map((type) => (
                           <div className="col-md-3" key={type}>
                             <button 
                               className="form-control form-control-sm"
@@ -8318,9 +8324,9 @@ stage:selectedLead.stage
 
                     <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
                     <option>{units.block}</option>
-                    <option>choose</option>
+                    <option>---choose---</option>
                     {
-                                project.add_block.map((item)=>
+                                project?.add_block?.map((item)=>
                                 (
                                   <option>{item.block_name}</option>
                                 ))
@@ -8329,9 +8335,9 @@ stage:selectedLead.stage
                     </div>
                     <div className="col-md-6"><label className="labels">Size</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,size:e.target.value})}>
                     <option>{units.size}</option>
-                    <option>choose</option>
+                    <option>---choose---</option>
                     {
-                                project.add_size.map((item)=>
+                                project?.add_size?.map((item)=>
                                 (
                                   <option>{item.size_name}</option>
                                 ))
@@ -8341,7 +8347,7 @@ stage:selectedLead.stage
                   
 
                   {
-                      project.category.includes("Agricultural") &&(
+                      project?.category?.includes("Agricultural") &&(
 
                           <>
 
@@ -8523,7 +8529,7 @@ stage:selectedLead.stage
           }
 
                       {
-                      !project.category.includes("Agricultural") &&(
+                      !project?.category?.includes("Agricultural") &&(
 
                           <>
 

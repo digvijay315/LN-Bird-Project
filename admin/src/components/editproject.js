@@ -101,9 +101,6 @@ useEffect(()=>
 {
 viewprojectbyid()
 },[id])
-     console.log(project.descriptions);
-     
-
 
     const addproject=async(e)=>
     {
@@ -3727,6 +3724,7 @@ const generateExcelFileunit = () => {
 };
 
 
+
               
     return ( 
         <div>
@@ -5087,7 +5085,7 @@ const generateExcelFileunit = () => {
                     <div className='col-md-6'></div>
 
                     <div className="col-md-6"><label className="labels">Block</label><select  className="form-control form-control-sm"  onChange={(e)=>setunits({...units,block:e.target.value})}>
-                    <option>choose</option>
+                    <option>---choose---</option>
                     {
                                 project.add_block.map((item)=>
                                 (

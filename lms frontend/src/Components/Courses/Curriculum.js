@@ -46,7 +46,6 @@ const Curriculum = () => {
   useEffect(() => {
     // Get user data from localStorage (adjust this based on how your auth system stores user data)
     const userData = localStorage.getItem("employeeData")
-    console.log(userData);
     
     if (userData) {
       try {

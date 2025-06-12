@@ -2095,7 +2095,7 @@ fontSize: "14px",
     </select>
   </div>
 
-<div className="mb-3">
+{/* <div className="mb-3">
 <div className="form-check">
 <input
 type="checkbox"
@@ -2109,9 +2109,9 @@ onChange={handleChange}
 Set as Default Address
 </label>
 </div>
-</div>
-<h5 style={{ marginTop: "20px", fontWeight: "600" }}>Address Type</h5>
-<div className="mb-3 address-type" style={{ marginBottom: "20px" }}>
+</div> */}
+{/* <h5 style={{ marginTop: "20px", fontWeight: "600" }}>Address Type</h5> */}
+{/* <div className="mb-3 address-type" style={{ marginBottom: "20px" }}>
 <button
 type="button"
 className={`btn ${
@@ -2175,7 +2175,7 @@ style={{ marginRight: "5px" }}
 ></i>
 Other
 </button>
-</div>
+</div> */}
 </form>
 </div>
 
