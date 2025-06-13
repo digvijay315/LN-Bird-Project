@@ -5346,9 +5346,14 @@ const buttonStyle = `
 
 // =============================================================deal action button toggle end==================================================
 
+//=============================== convert date format start==============================================================================
+const excelSerialToDateString = (serial) => {
+  const excelEpoch = new Date(1900, 0, 1); // Jan 1, 1900
+  const jsDate = new Date(excelEpoch.getTime() + (serial - 1) * 86400000);
+  return jsDate.toISOString().split('T')[0]; // "YYYY-MM-DD"
+};
 
-
-
+// ===========================================convert date format end================================================================
 return (
         <div>
             <Header1/>
@@ -8729,7 +8734,11 @@ stage:selectedLead.stage
                     </>
                     )}
 
-                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' value={units.ocupation_date} onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' value={
+      !isNaN(units.ocupation_date)
+        ? excelSerialToDateString(Number(units.ocupation_date))
+        : units.ocupation_date
+    } onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
                     <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' value={units.age_of_construction} onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
                     
 

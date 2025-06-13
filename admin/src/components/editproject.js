@@ -3061,14 +3061,53 @@ const updateunits=async()=>
             if (!result.isConfirmed) {
               return; // Stop execution if user cancels
             }
-            
-            const resp=await api.put('updateprojectforinventoriesbulk',duplicateEntries,config)
-          
-              toast.success(`units update successfully`,{autoClose:"2000"})
-                              setTimeout(() => {
-                                window.location.reload()
-                              }, 2000);
-            } catch (error) {
+        
+                setIsLoading(true);
+
+                    const total = duplicateEntries.length;
+                      let successCount = 0;
+                      let failCount = 0;
+                      const batchSize = 50;
+
+
+                          for (let i = 0; i < total; i += batchSize) {
+                            const batch = duplicateEntries.slice(i, i + batchSize);
+                      
+                            try {
+                              const [resp1] = await Promise.all([
+                                api.put('updateprojectforinventoriesbulk', batch, config),
+                              ]);
+                      
+                              if (resp1.status === 200) {
+                                successCount += batch.length;
+                                toast.success(`Updated ${successCount}/${total} units`, { autoClose: 2000 });
+                              } else {
+                                failCount += batch.length;
+                                toast.error(`Batch ${i + 1}-${i + batch.length} failed`, { autoClose: 2000 });
+                              }
+                      
+                            } catch (batchError) {
+                              failCount += batch.length;
+                              toast.error(`Error updating batch ${i + 1}-${i + batch.length}`, { autoClose: 3000 });
+                            }
+                          }
+
+                           if (successCount === total) {
+                                Swal.fire({
+                                  icon: 'success',
+                                  title: 'Updated Complete',
+                                  html: `All <b>${successCount}</b> units updated successfully.`,
+                                });
+                              } else {
+                                Swal.fire({
+                                  icon: 'warning',
+                                  title: 'Partial Updated Complete',
+                                  html: `<b>${successCount}</b> uunits updated successfully.<br><b>${failCount}</b> failed.`,
+                                });
+                              }
+
+                           } 
+            catch (error) {
               Swal.fire({
                 title: "not found?",
                 text: "The project is not found plz check !",
@@ -3080,6 +3119,9 @@ const updateunits=async()=>
               });
               console.log(error);
               
+            }finally
+            {
+              setIsLoading(false)
             }
           }
 
@@ -5475,7 +5517,7 @@ const generateExcelFileunit = () => {
                     </>
                     )}
 
-                    <div className='col-md-6'><label>Occupation Date</label><input type='date' className='form-control form-control-sm' onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
+                    <div className='col-md-6'><label>Occupation Date</label><input type='date'   value={units.ocupation_date} className='form-control form-control-sm' onChange={(e)=>setunits({...units,ocupation_date:e.target.value})}/></div>
                     <div className='col-md-6'><label>Age of Construction</label><input type='text' className='form-control form-control-sm' onChange={(e)=>setunits({...units,age_of_construction:e.target.value})}/></div>
                     
 

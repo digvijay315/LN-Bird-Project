@@ -5935,11 +5935,11 @@ const generateExcelFileunit = () => {
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Sr.</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Name Of Destination</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Type Of Destination</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Distance</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Action</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Sr.</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Name Of Destination</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Type Of Destination</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Distance</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Action</StyledTableCell>
           
         </TableRow>
       </TableHead>
@@ -5947,14 +5947,15 @@ const generateExcelFileunit = () => {
         {
           project.nearby_aminities.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontSize: "10px" }}  >
               {index+1}
             </StyledTableCell>
             <StyledTableCell >{item.name_of_destination} </StyledTableCell>
             <StyledTableCell >{item.destination} </StyledTableCell>
             <StyledTableCell >{item.distance}{item.measurment} </StyledTableCell> 
             <StyledTableCell >
-              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/>
+              {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletedestination(index)}   style={{height:"40px",cursor:"pointer"}}/> */}
+              <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={()=>deletedestination(index)}>delete</span> 
             </StyledTableCell>
               
           </StyledTableRow>
