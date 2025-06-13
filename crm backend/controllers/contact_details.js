@@ -14,46 +14,7 @@ cloudinary.config({
     api_secret:process.env.API_SECRET
 })
 
-// const add_contact = async (req, res) => {
-//     try {
-//         const { 
-//             title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
-//             source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
-//             company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
-//             father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, maritial_status,
-//             birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
-//             income, amount1, document_no, document_name, relation, lastcommunication
-//         } = req.body;
 
-//         // 'req.files' will contain the uploaded files
-//         const images = [];
-
-//         // Loop through each file in 'req.files' and upload them to Cloudinary
-//         for (let file of req.files) {
-//             const result = await cloudinary.uploader.upload(file.path);
-//             images.push(result.secure_url);
-//             //fs.unlinkSync(file.path);
-          
-          
-//         }
-
-//         // Create a new contact with the uploaded Cloudinary URLs
-//         const new_add_contact = new addcontact({
-//             title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
-//             source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
-//             company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
-//             father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, maritial_status,
-//             birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
-//             income, amount1, document_no, document_name, document_pic: images, relation, lastcommunication
-//         });
-
-//         const resp = await new_add_contact.save();
-//         res.status(200).send({ message: "Contact saved", user: resp });
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send({ message: "Error saving contact", error });
-//     }
-// };
 
 
 const add_contact = async (req, res) => {
@@ -79,6 +40,14 @@ const add_contact = async (req, res) => {
               // fs.unlinkSync(file.path);
             }
           }
+
+          const existingcontact=addcontact.findOne({mobile_no:mobile_no,email:email})
+
+           if(existingcontact)
+            {
+              res.status(400).send({message:"Contact already exist..."})
+              return
+            }
 
 
         // Create a new contact with the uploaded Cloudinary URLs

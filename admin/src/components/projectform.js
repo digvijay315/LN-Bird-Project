@@ -4645,61 +4645,93 @@ const generateExcelFileunit = () => {
                 <div  id='ownerdetails' style={{cursor:'pointer',fontWeight:"bold"}}  onClick={unitdetail3}><span>Add Owner</span></div>
                </div> */}
                <div style={{ display: "flex", gap: "50px" }}>
-  <div
-    id="unitdetail"
-    style={{
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      backgroundColor: activeUnit === 1 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
-    }}
-    onClick={unitdetail1}
-  >
-    <span>Unit</span>
-  </div>
-  <div
-    id="unitlocationdetails"
-    style={{
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      backgroundColor: activeUnit === 2 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
-    }}
-    onClick={unitdetail2}
-  >
-    <span>Location</span>
-  </div>
-  <div
-    id="ownerdetails1"
-    style={{
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      backgroundColor: activeUnit === 3 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
-    }}
-    onClick={unitdetail3}
-  >
-    <span>Add Owner</span>
-  </div>
-  <div
-    id="adddocuments"
-    style={{
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      backgroundColor: activeUnit === 4 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
-    }}
-    onClick={unitdetail4}
-  >
-    <span>Add Documents</span>
-  </div>
-  <div
-    id="upload"
-    style={{
-      cursor: 'pointer',
-      fontWeight: 'bold',
-      backgroundColor: activeUnit === 5 ? '#f0f0f0' : 'transparent', // Optional: to highlight active tab
-    }}
-    onClick={unitdetail5}
-  >
-    <span>Upload</span>
-  </div>
+ <div
+  id="unitdetail"
+  style={{
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    padding: '10px 16px',
+    borderRadius: '8px',
+    backgroundColor: activeUnit === 1 ? '#e6f0ff' : 'transparent',
+    color: activeUnit === 1 ? '#0056b3' : '#333',
+    boxShadow: activeUnit === 1 ? '0 4px 8px rgba(0, 86, 179, 0.2)' : 'none',
+    border: activeUnit === 1 ? '2px solid #0056b3' : '2px solid transparent',
+    transition: 'all 0.3s ease-in-out',
+  }}
+  onClick={unitdetail1}
+>
+  <span>🏠 Unit</span>
+</div>
+<div
+  id="unitlocationdetails"
+  style={{
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    padding: '10px 16px',
+    borderRadius: '8px',
+    backgroundColor: activeUnit === 2 ? '#e6ffe6' : 'transparent',
+    color: activeUnit === 2 ? '#218838' : '#333',
+    boxShadow: activeUnit === 2 ? '0 4px 8px rgba(33, 136, 56, 0.2)' : 'none',
+    border: activeUnit === 2 ? '2px solid #218838' : '2px solid transparent',
+    transition: 'all 0.3s ease-in-out',
+  }}
+  onClick={unitdetail2}
+>
+  <span>📍 Location</span>
+</div>
+
+<div
+  id="ownerdetails1"
+  style={{
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    padding: '10px 16px',
+    borderRadius: '8px',
+    backgroundColor: activeUnit === 3 ? '#f3e6ff' : 'transparent',
+    color: activeUnit === 3 ? '#6f42c1' : '#333',
+    boxShadow: activeUnit === 3 ? '0 4px 8px rgba(111, 66, 193, 0.2)' : 'none',
+    border: activeUnit === 3 ? '2px solid #6f42c1' : '2px solid transparent',
+    transition: 'all 0.3s ease-in-out',
+  }}
+  onClick={unitdetail3}
+>
+  <span>👤 Add Owner</span>
+</div>
+<div
+  id="adddocuments"
+  style={{
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    padding: '10px 16px',
+    borderRadius: '8px',
+    backgroundColor: activeUnit === 4 ? '#e0f7f7' : 'transparent',
+    color: activeUnit === 4 ? '#007777' : '#333',
+    boxShadow: activeUnit === 4 ? '0 4px 8px rgba(0, 119, 119, 0.2)' : 'none',
+    border: activeUnit === 4 ? '2px solid #007777' : '2px solid transparent',
+    transition: 'all 0.3s ease-in-out',
+  }}
+  onClick={unitdetail4}
+>
+  <span>📄 Add Documents</span>
+</div>
+<div
+  id="upload"
+  style={{
+    cursor: 'pointer',
+    fontWeight: 'bold',
+    padding: '10px 16px',
+    borderRadius: '8px',
+    backgroundColor: activeUnit === 5 ? '#fff8e1' : 'transparent',
+    color: activeUnit === 5 ? '#f9a825' : '#333',
+    boxShadow: activeUnit === 5 ? '0 4px 8px rgba(249, 168, 37, 0.2)' : 'none',
+    border: activeUnit === 5 ? '2px solid #f9a825' : '2px solid transparent',
+    transition: 'all 0.3s ease-in-out',
+  }}
+  onClick={unitdetail5}
+>
+  <span>⤴️ Upload</span>
+</div>
+
 </div>
 
               
@@ -5256,13 +5288,33 @@ const generateExcelFileunit = () => {
                         {showSuggestions && input && filteredSuggestions.length > 0 && (
                             <ul className="suggestion-list">
                               {filteredSuggestions.map((suggestion, index) => (
-                                <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                                  {suggestion.first_name}
+                                <li key={index} onClick={() => handleSuggestionClick(suggestion)} style={{fontSize:"12px"}}>
+                                  {suggestion.first_name} {suggestion.last_name}<br></br>
+                                  {suggestion.mobile_no}
                                 </li>
                               ))}
                             </ul>
                           )}
-                        <div className="col-md-3 mb-3 custom-input"><label className="form-label">Add Contact</label><button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button></div>
+                        <div className="col-md-1 mb-1 custom-input"><label className="form-label" style={{visibility:"hidden"}}>Add</label>
+                        {/* <button className="form-control form-control-sm" style={{width:"50px"}} onClick={()=>navigate('/sortaddcontact')}>+</button> */}
+                         <button
+                        className="form-control form-control-sm"
+                        onClick={()=>navigate('/sortaddcontact')}
+                        style={{
+                          backgroundColor: "#007bff",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "4px",
+                          fontWeight: "500",
+                          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                          transition: "all 0.2s ease-in-out"
+                        }}
+                        onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                        onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                      >
+                        +
+                     </button>
+                        </div>
                     
                      <div className="col-md-12 mb-12 custom-input" style={{marginTop:"20px"}}><label className="form-label" >Owner Contact</label><div className="col-md-12 mb-12 custom-input"><hr></hr></div>
                      {selectedcontact1.length >= 0 && (
@@ -5272,37 +5324,41 @@ const generateExcelFileunit = () => {
                           <tbody>
                           {selectedcontact1.map(contact => (
                               <StyledTableRow>
-                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                    <StyledTableCell  style={{cursor: 'pointer',fontSize:"12px"}}>
+                                   <img style={{height:"40px",width:"90px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                </StyledTableCell>
+                               
+                                <StyledTableCell  style={{cursor: 'pointer',fontSize:"12px"}}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
-                                    <SvgIcon component={EmailIcon} />
+                                    <SvgIcon component={EmailIcon} style={{fontSize:"10px"}}/>
                                     <span>{contact.email}</span>
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{cursor: 'pointer',fontSize:"12px" }}>
                                   {contact.mobile_no.map((number, index) => (
                                     <span key={index}>
-                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"10px"}}/>
                                       {number}<br></br>
                                     </span>
                                   ))}
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                <StyledTableCell  style={{cursor: 'pointer',fontSize:"12px" }}>
                                   S/W/O <br></br>{contact.father_husband_name}
                                   </StyledTableCell>
 
-                                  <StyledTableCell  style={{ fontFamily: "times new roman",  cursor: 'pointer' }}>
+                                  <StyledTableCell  style={{cursor: 'pointer',fontSize:"12px" }}>
                                   permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
                                   {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
                                   </StyledTableCell>
 
-                                  <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                  <StyledTableCell style={{cursor: 'pointer',fontSize:"12px" }}>
                                         <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
                                     </StyledTableCell>
 
                                 <StyledTableCell>
-                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                  {/* <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img> */}
+                                  <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={() => removeContact(contact._id)}>delete</span> 
                                    </StyledTableCell>
                                 
                               </StyledTableRow>
@@ -5322,38 +5378,42 @@ const generateExcelFileunit = () => {
                               
                               selectedcontact2.map(contact => (
                                 <StyledTableRow>
-                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                  <StyledTableCell>
+                                    <img style={{ height: "40px", width: "50px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                  </StyledTableCell>
+                                   
+                                    <StyledTableCell style={{ fontSize:"12px",cursor: 'pointer' }}>
                                         {contact.title} {contact.first_name} {contact.last_name}<br />
-                                        <SvgIcon component={EmailIcon} />
+                                        <SvgIcon component={EmailIcon} style={{fontSize:"10px"}}/>
                                         <span>{contact.email}</span>
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{ cursor: 'pointer',fontSize:"12px" }}>
                                         {
                                         Array.isArray(contact.mobile_no) ?
                                         contact.mobile_no.map((number, index) => (
                                             <span key={index}>
-                                                <SvgIcon component={PhoneIphoneIcon} />
+                                                <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"10px"}}/>
                                                 {number}<br />
                                             </span>
                                         )):[]}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{cursor: 'pointer',fontSize:"12px" }}>
                                         S/W/O <br />{contact.father_husband_name}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{ cursor: 'pointer',fontSize:"12px" }}>
                                         permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ fontFamily: "times new roman", cursor: 'pointer' }}>
+                                    <StyledTableCell style={{ cursor: 'pointer',fontSize:"12px" }}>
                                     <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
                                     </StyledTableCell>
                                         
                                     <StyledTableCell>
-                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                        {/* <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" /> */}
+                                         <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={() => removeContact(contact._id)}>delete</span> 
                                     </StyledTableCell>
                                 </StyledTableRow>
                             ))} 
@@ -5454,7 +5514,10 @@ const generateExcelFileunit = () => {
                        units.action10.map((name, index) => (
                                  <div key={index}className="col-md-12 mb-12 custom-input" style={{marginTop:"10px"}}>
                                  
-                                   <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                   <div>
+                                    {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit(index)} style={{height:"40px",cursor:"pointer"}}/> */}
+                                    <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={()=>deleteallunit(index)}>delete</span> 
+                                    </div>
                                  </div>
                                )):[]}
                        </td>
@@ -5464,7 +5527,7 @@ const generateExcelFileunit = () => {
                </table>
                    </div>
                    <div className="row mt-4">
-                   <div className="col-md-3 mb-3 custom-input" style={{marginLeft:"70%"}} onClick={addFnunit}><button className="form-control form-control-sm">Add Image</button></div>
+                   <div className="col-md-3 mb-3 custom-input" style={{marginLeft:"70%"}} onClick={addFnunit}><button className="form-control form-control-sm custom-btn">Add Image</button></div>
                  </div>
                  <div className="d-flex justify-content-between align-items-center mb-3">
                      <h6 className="text-right">Upload Videos</h6>
@@ -5514,7 +5577,10 @@ const generateExcelFileunit = () => {
                        units.action11.map((name, index) => (
                                  <div key={index}className="col-md-12 mb-12 custom-input" style={{marginTop:"10px"}}>
                                  
-                                   <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit1(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                   <div>
+                                    {/* <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteallunit1(index)} style={{height:"40px",cursor:"pointer"}}/> */}
+                                    <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={()=>deleteallunit1(index)}>delete</span> 
+                                    </div>
                                  </div>
                                )):[]}
                        </td>
@@ -5524,7 +5590,7 @@ const generateExcelFileunit = () => {
 
                </div>
                  <div className="row mt-4">
-                 <div className="col-md-3 mb-3 custom-input" style={{marginLeft:"70%"}} onClick={addFnunit1}><button className="form-control form-control-sm">Add Video Link</button></div>
+                 <div className="col-md-3 mb-3 custom-input" style={{marginLeft:"70%"}} onClick={addFnunit1}><button className="form-control form-control-sm custom-btn">Add Video Link</button></div>
                 
                  
                  <div className="col-md-12 mb-12 custom-input"><hr></hr></div>
@@ -5632,10 +5698,11 @@ const generateExcelFileunit = () => {
                     }
                     </div>
                         
-                        <div className="col-md-1 mb-1 custom-input"><label className="form-label" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={addFn12}>+</button></div>
+                        <div className="col-md-1 mb-1 custom-input"><label className="form-label" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm custom-btn" onClick={addFn12}>+</button></div>
                         {/* <TableContainer component={Paper} style={{height:"400px",width:"1000px",overflowY:"scroll",marginTop:"40px",marginLeft:"50px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
+
     <TableHead>
         <TableRow>
           <StyledTableCell style={{ fontFamily: "times new roman" }}>Serial</StyledTableCell>
@@ -5686,12 +5753,55 @@ const generateExcelFileunit = () => {
                 
           </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addunit}>
-                Add Unit
-              </Button>
-              <Button variant="secondary" onClick={handleClose3}>
-                Close
-              </Button>
+<Button
+  onClick={addunit}
+  style={{
+    background: 'linear-gradient(to right, #4facfe, #00f2fe)', // blue gradient
+    color: '#fff',
+    fontWeight: '600',
+    padding: '10px 24px',
+    border: 'none',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    marginRight: '12px',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  }}
+  onMouseEnter={e => {
+    e.target.style.transform = 'scale(1.05)';
+    e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.2)';
+  }}
+  onMouseLeave={e => {
+    e.target.style.transform = 'scale(1)';
+    e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+  }}
+>
+  Add Unit
+</Button>
+
+<Button
+  onClick={handleClose3}
+  style={{
+    background: 'linear-gradient(to right, #ff758c, #ff7eb3)', // pink gradient
+    color: '#fff',
+    fontWeight: '600',
+    padding: '10px 24px',
+    border: 'none',
+    borderRadius: '8px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+  }}
+  onMouseEnter={e => {
+    e.target.style.transform = 'scale(1.05)';
+    e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.2)';
+  }}
+  onMouseLeave={e => {
+    e.target.style.transform = 'scale(1)';
+    e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
+  }}
+>
+  Close
+</Button>
+
             </Modal.Footer>
           </Modal>
 
@@ -5927,7 +6037,26 @@ const generateExcelFileunit = () => {
                          <option>Select</option><option>K.M</option><option>Miles</option><option>Meter</option>
                           </select>
                            </div>
-                         <div className="col-md-1 mb-1 custom-input"><label className='form-label' style={{visibility:"hidden"}} >Add</label><button className='form-control form-control-sm' onClick={adddestination}>+</button></div>
+                         <div className="col-md-1 mb-1 custom-input"><label className='form-label' style={{visibility:"hidden"}} >Add</label>
+                         {/* <button className='form-control form-control-sm' onClick={adddestination}>+</button> */}
+                            <button
+                                className="form-control form-control-sm"
+                               onClick={adddestination}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+                         </div>
                     <div className='col-md-4 mb-4 custom-input'></div><br></br>
                     <div className='col-md-12 mb-12 custom-input'><label className='form-label'>List Of Destinations</label></div>
                     <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginTop:"40px",marginLeft:"10px"}}>
@@ -5979,19 +6108,38 @@ const generateExcelFileunit = () => {
                        
                       
                         <div className='col-md-10 mb-10 custom-input'><label className='form-label'>Price List</label></div>
-                         <div className="col-md-1 mb-1 custom-input"><button className='form-control form-control-sm' onClick={handleShow4}>Add</button></div>
+                         <div className="col-md-1 mb-1 custom-input">
+                          {/* <button className='form-control form-control-sm' onClick={handleShow4}>Add</button> */}
+                              <button
+                                className="form-control form-control-sm"
+                                onClick={handleShow4}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+                          </div>
                     <div className='col-md-12 mb-12 custom-input'><hr></hr></div>
                     <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginLeft:"10px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Block Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Sub Category</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman"}}>Size</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Charge</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Taxes</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Total Price</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Block Name</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Sub Category</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Size</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Charge</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Taxes</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Total Price</StyledTableCell>
           
         </TableRow>
       </TableHead>
@@ -5999,7 +6147,7 @@ const generateExcelFileunit = () => {
         {
           project.price_list.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-            <StyledTableCell style={{ padding: "10px", fontFamily: "times new roman"}}  >
+            <StyledTableCell style={{ padding: "10px", fontSize: "10px"}}  >
              {item.block}
             </StyledTableCell>
             <StyledTableCell >{item.sub_category} </StyledTableCell>
@@ -6007,7 +6155,8 @@ const generateExcelFileunit = () => {
             <StyledTableCell >{item.blank1}</StyledTableCell> 
             <StyledTableCell >{item.blank4}</StyledTableCell> 
             <StyledTableCell >
-              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteprice(index)}   style={{height:"40px",cursor:"pointer"}}/>
+              {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteprice(index)}   style={{height:"40px",cursor:"pointer"}}/> */}
+               <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteprice(index)}>delete</span>
             </StyledTableCell>
               
           </StyledTableRow>
@@ -6151,26 +6300,45 @@ const generateExcelFileunit = () => {
                   </div>
     </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addprice}>
+            <Button variant="secondary" onClick={addprice} className='custom-btn'>
                 Add Price
               </Button>
-              <Button variant="secondary" onClick={handleClose4}>
+              <Button variant="secondary" onClick={handleClose4} className='cancel-btn'>
                 Close
               </Button>
             </Modal.Footer>
           </Modal>
 
     <div className='col-md-10 mb-10 custom-input' style={{marginTop:"10px"}}><label className='form-label'>Payment Plan</label></div>
-    <div className='col-md-1 mb-1 custom-input' style={{marginTop:"10px"}}><button className='form-control form-control-sm' onClick={handleShow5}>Add</button></div>
+    <div className='col-md-1 mb-1 custom-input' style={{marginTop:"10px"}}>
+      {/* <button className='form-control form-control-sm' onClick={handleShow5}>Add</button> */}
+                            <button
+                                className="form-control form-control-sm"
+                                onClick={handleShow5}
+                                style={{
+                                  backgroundColor: "#007bff",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "4px",
+                                  fontWeight: "500",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                                  transition: "all 0.2s ease-in-out"
+                                }}
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = "#0056b3"}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = "#007bff"}
+                              >
+                                +
+                              </button>
+      </div>
                     <div className='col-md-12 mb-12 custom-input'><hr></hr></div>
                     <TableContainer component={Paper} style={{height:"400px",width:"1100px",overflowY:"scroll",marginLeft:"10px"}}>
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
      
     <TableHead>
         <TableRow>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Serial</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Plan Name</StyledTableCell>
-          <StyledTableCell style={{ fontFamily: "times new roman" }}>Action</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Serial</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Plan Name</StyledTableCell>
+          <StyledTableCell style={{backgroundColor:"gray"}}>Action</StyledTableCell>
           
         </TableRow>
       </TableHead>
@@ -6178,12 +6346,13 @@ const generateExcelFileunit = () => {
         {
           project.Payment_plan.map((item, index) => (
           <StyledTableRow key={index} style={{backgroundColor:"white"}}>
-            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontFamily: "times new roman", fontSize: "10px" }}  >
+            <StyledTableCell style={{ padding: "10px", cursor: "pointer", fontSize: "10px" }}  >
               {index+1}
             </StyledTableCell>
             <StyledTableCell >{item.payment_planname} </StyledTableCell>
             <StyledTableCell >
-              <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletepayment(index)}   style={{height:"40px",cursor:"pointer"}}/>
+              {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deletepayment(index)}   style={{height:"40px",cursor:"pointer"}}/> */}
+               <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deletepayment(index)}>delete</span>
             </StyledTableCell>
               
           </StyledTableRow>
@@ -6242,7 +6411,7 @@ const generateExcelFileunit = () => {
             }
              </div>
 
-             <div className='col-md-2'><label className='form-label' style={{visibility:"hidden"}}>Blank3</label>
+             <div className='col-md-2 mb-2 custom-input'><label className='form-label' style={{visibility:"hidden"}}>Blank3</label>
               {
               payments.blank3.map((item,index)=>
               (
@@ -6261,11 +6430,12 @@ const generateExcelFileunit = () => {
               {
               payments.action4.map((item,index)=>
               (
-               <img   src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)} style={{height:"40px",cursor:"pointer"}}/>
+              //  <img src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall4(index)} style={{height:"40px",cursor:"pointer"}}/>
+              <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}}  onClick={()=>deleteall4(index)}>delete</span> 
               ))
             }
             </div>
-            <div className='col-md-1 mb-1 custom-input'><label className='form-label' style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm' onClick={addFn4}>+</button></div>
+            <div className='col-md-1 mb-1 custom-input'><label className='form-label' style={{visibility:"hidden"}}>add</label><button className='form-control form-control-sm custom-btn' onClick={addFn4}>+</button></div>
            
            <div className='col-md-8 mb-8 custom-input'><label className='form-label'>Terms & Condition</label>
               <textarea className='form-control form-control-sm' style={{height:"100px"}}/>
@@ -6278,10 +6448,10 @@ const generateExcelFileunit = () => {
               </div>
     </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={addpayment}>
+            <Button variant="secondary" onClick={addpayment} className='custom-btn'>
                 Add Payment
               </Button>
-              <Button variant="secondary" onClick={handleClose5}>
+              <Button variant="secondary" onClick={handleClose5} className='cancel-btn'>
                 Close
               </Button>
             </Modal.Footer>

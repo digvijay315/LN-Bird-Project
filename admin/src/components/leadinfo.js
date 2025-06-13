@@ -733,7 +733,7 @@ const handleOwnerChange = (event) => {
                   ${error.response?.data?.message || 'Something went wrong. Please try again.'}
                   </p>
                   `,
-                  width: '300px', // makes it small
+                  width: '400px', // makes it small
                   padding: '1.2em',
                   showConfirmButton: true,
                   confirmButtonText: 'Okay',

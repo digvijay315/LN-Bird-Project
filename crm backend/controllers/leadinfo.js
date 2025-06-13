@@ -25,13 +25,13 @@ const lead_info = async (req, res) => {
       education,degree,school_college,loan,bank,amount,social_media,url,income,amount1,document_no,document_name,document_pic,
       lastcommunication,matcheddeals,matchingdeal,score} = req.body;
 
-    // const user=await leadinfo.findOne({email})
-    // if(user)
-    //     {
-    //         return res.status(400).send("email id already taken")
-    //     }
+   const existinglead=leadinfo.findOne({mobile_no:mobile_no,email:email})
+           if(existinglead)
+            {
+              res.status(400).send({message:"Lead already exist..."})
+              return
+            }
 
-    // const documentpic=req.files ? req.files.map(file => file.path) : [];
     const newDocumentPic = [];
 
     if (req.files) {
