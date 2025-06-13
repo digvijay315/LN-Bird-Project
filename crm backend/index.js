@@ -24,6 +24,7 @@ app.use(cors({
     origin: ['https://ln-bird-project-px3u.vercel.app', 'https://www.bharatproperties.co','http://localhost:3000'], // Allow both domains
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    credentials: true
 }));
 connect();
 app.get('/',(req,res)=>
