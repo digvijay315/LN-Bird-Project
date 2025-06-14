@@ -195,7 +195,7 @@ const createNimbusShipment = async (req, res) => {
       consignee: {
         name: `${req.body.firstName} ${req.body.lastName}` || "Customer Name",
         address: `${req.body.area}, ${req.body.landmark}, ${req.body.apartmentNumber}` || "190, ABC Road",
-        address_2: `${req.body.area}, ${req.body.landmark}, ${req.body.apartmentNumber}` || "Near Bus Stand",
+        // address_2: `${req.body.area}, ${req.body.landmark}, ${req.body.apartmentNumber}` || "Near Bus Stand",
         city: req.body.selectcity|| "Mumbai",
         state: req.body.selectstate || "Maharastra",
         pincode: req.body.pincode || "400001",
@@ -205,7 +205,7 @@ const createNimbusShipment = async (req, res) => {
         warehouse_name: "bekiona",
         name: "abhishek",
         address: "shop no 326 3rd floor kashi plaza building kamrej surat",
-        address_2: "shop no 326 3rd floor kashi plaza building kamrej surat",
+        // address_2: "shop no 326 3rd floor kashi plaza building kamrej surat",
         city: "surat",
         state: "Gujarat",
         pincode: "394185",
