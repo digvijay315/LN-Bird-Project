@@ -1702,8 +1702,8 @@ const handleTimeChange = (e) => {
                 <hr></hr>
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Activity Type</label><select className="form-control form-control-sm" id="forms" required="true" onChange={handleformchange}>
-                    <option>Select</option>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Activity Type</label><select className="form-control form-control-sm" id="forms" required="true" onChange={handleformchange}>
+                    <option>---Select---</option>
                         {
                             activitys.map(item=>
                                 (
@@ -1713,14 +1713,14 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                        <div className="col-md-8"></div>
+                        <div className="col-md-8 mb-8 custom-input"></div>
                         </div>
 {/*============================================ call task form=============================================================================== */}
 
                         <div className="row" id="call" style={{display:"none"}}>
                         
-                        <div className="col-md-12"><label className="labels">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date}.</p></div>
-                        <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
+                        <div className="col-md-12 mb-12 custom-input"><label className="form-label">Title</label><p id="title">Call {calltask.lead} for {calltask.reason} @ {calltask.due_date}.</p></div>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Reason</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,reason:e.target.value})}>
                     <option>---Select---</option>
                         {
                             callreason.map(item=>
@@ -1731,8 +1731,8 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"></div>
-                    <div className="col-md-4"> <label className="labels">Select Lead</label>
+                        <div className="col-md-4 mb-4 custom-input"></div>
+                    <div className="col-md-4 mb-4 custom-input"> <label className="form-label">Select Lead</label>
                     <Autocomplete
                     const options = {leadoption?data.filter(item => item._id === leadoption): data}
                     getOptionLabel={(option) =>
@@ -1766,30 +1766,30 @@ const handleTimeChange = (e) => {
                   />
                   </div>
 
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,executive:e.target.value})}>
                     <option>Select</option>
                         <option>Rajesh</option>
                         <option>Suresh</option>
                         <option>Vivek</option>
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
 
-                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setcalltask({...calltask,remarks:e.target.value})}/></div>
+                    <div className="col-md-10 mb-10 custom-input"><label className="form-label">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setcalltask({...calltask,remarks:e.target.value})}/></div>
 
                   
-                    <div className="col-md-2"></div>
+                    <div className="col-md-2 mb-2 custom-input"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={handleDateChange}/></div>
-                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div> */}
-                    <div className="col-md-8"></div>
-                    <div className="col-md-6"><label className="labels">Completed?</label> 
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={handleDateChange}/></div>
+                    {/* <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChange}/></div> */}
+                    <div className="col-md-8 mb-8 custom-input"></div>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle}/>
                         <span class="slider round"></span>
                         </label>
                     </div>
-                  <div className="col-md-2"></div>
+                  <div className="col-md-2 mb-2 custom-input"></div>
 
                   <div style={{width:"100%"}}>
             <div className="row" id='calldetails' style={{display:"none"}}>
@@ -1802,7 +1802,7 @@ const handleTimeChange = (e) => {
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,direction:e.target.value})}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,direction:e.target.value})}>
                     <option>---Select---</option>
                         {
                             calldirection.map(item=>
@@ -1813,7 +1813,7 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,status:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,status:e.target.value})}>
                     <option>---Select---</option>
                         {
                             callstatus.map(item=>
@@ -1824,15 +1824,15 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
                 
                 
                
-                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask({...calltask,date:e.target.value})}/></div>
-                <div className="col-md-4"><label className="labels">Duration</label><input type="time" className="form-control form-control-sm" onChange={(e)=>setcalltask({...calltask,duration:e.target.value})}/></div>
-                <div className="col-md-4"> </div>
+                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Date</label><input type="datetime-local" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1} onChange={(e)=>setcalltask({...calltask,date:e.target.value})}/></div>
+                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Duration</label><input type="time" className="form-control form-control-sm" onChange={(e)=>setcalltask({...calltask,duration:e.target.value})}/></div>
+                <div className="col-md-4 mb-4 custom-input"> </div>
 
-                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,result:e.target.value})}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Result</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,result:e.target.value})}>
                     <option>---Select---</option>
                        {
                         callresult.map(item=>
@@ -1843,7 +1843,7 @@ const handleTimeChange = (e) => {
                        }
                        </select>
                         </div>
-                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,intrested_inventory:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setcalltask({...calltask,intrested_inventory:e.target.value})}>
                         <option>---select---</option>
                         {
                           sitevisitdata.map((item)=>
@@ -1853,15 +1853,15 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setcalltask({...calltask,feedback:e.target.value})}/></div>
-                    <div className="col-md-12"><br></br></div>
-                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+                    <div className="col-md-8 mb-8 custom-input"><label className="form-label">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setcalltask({...calltask,feedback:e.target.value})}/></div>
+                    <div className="col-md-12 mb-12 custom-input"><br></br></div>
+                    <div className="col-md-12 mb-12 custom-input"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="form-label" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
                      
                     {/* <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
-                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-6 mb-6 custom-input"><button className="form-control form-control-sm" >Submit</button></div>
+                    <div className="col-md-6 mb-6 custom-input"><button className="form-control form-control-sm">Cancel</button></div>
                     </div> */}
                     </div>
                     
@@ -1869,8 +1869,8 @@ const handleTimeChange = (e) => {
         </div>
                     
                     <div className="row">
-                    <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={calltaskdetails}>Submit</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
+                    <div className="col-md-2 mb-2 custom-input" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm save-btn" onClick={calltaskdetails}>Submit</button></div>
+                    <div className="col-md-2 mb-2 custom-input" style={{marginTop:"20px"}}><button className="form-control form-control-sm cancel-btn" onClick={()=>navigate(-1)}>Cancel</button></div>
                     </div>
                     </div>
                     </div>
@@ -1881,20 +1881,20 @@ const handleTimeChange = (e) => {
 
                     <div className="row" id="email" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} @ {mailtask.due_date}  of {mailtask.inventory.join(',')} </p></div> 
+                    <div className="col-md-12 mb-12 custom-input"><label className="form-label">Title</label><p id="mailtitle">Mail to {mailtask.lead} For {mailtask.subject} @ {mailtask.due_date}  of {mailtask.inventory.join(',')} </p></div> 
 
-                    <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,executive:e.target.value})}>
                     <option>Select </option>
                     <option>Rajesh</option>
                         <option>Suresh</option>
                         <option>Vivek</option>
                         </select>
                         </div>
-                    <div className="col-md-8"></div>
+                    <div className="col-md-8 mb-8 custom-input"></div>
                 
                 
-                    <div className="col-md-4">
-                <label className="labels">Select Lead</label>
+                    <div className="col-md-4 mb-4 custom-input">
+                <label className="form-label">Select Lead</label>
                 <Autocomplete
                    const options = {leadoption?data.filter(item => item._id === leadoption): data}
                     getOptionLabel={(option) =>
@@ -1926,9 +1926,9 @@ const handleTimeChange = (e) => {
                 />
               </div>
 
-                        <div className="col-md-8"></div>
+                        <div className="col-md-8 mb-8 custom-input"></div>
 
-                        <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Intrested Project</label> 
                                 <Select className="form-control form-control-sm" style={{border:"none"}}
                             multiple
                             value={mailprojects}
@@ -1944,8 +1944,8 @@ const handleTimeChange = (e) => {
                         </Select>
                                 </div>
 
-                                <div className="col-md-4">
-              <label className="labels">Select Interested Block</label>
+                                <div className="col-md-4 mb-4 custom-input">
+              <label className="form-label">Select Interested Block</label>
               <Select
                 className="form-control form-control-sm"
                 style={{ border: "none" }}
@@ -1980,7 +1980,7 @@ const handleTimeChange = (e) => {
 
 
 
-                                <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+                                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Intersted Inventory</label>
                              
                                 <Select
   className="form-control form-control-sm"
@@ -2018,7 +2018,7 @@ const handleTimeChange = (e) => {
                       
                  
 
-                    <div className="col-md-4"><label className="labels">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Subject</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,subject:e.target.value})}>
                     <option>---Select---</option>
                        {
                         mailsubject.map((item)=>
@@ -2029,15 +2029,15 @@ const handleTimeChange = (e) => {
                         </select>
                         </div>
 
-                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
-                        <div className="col-md-2"></div>
+                    <div className="col-md-10 mb-10 custom-input"><label className="form-label">Remark</label><textarea className='form-control form-control-sm' onChange={(e)=>setmailtask({...mailtask,remarks:e.target.value})}/></div>
+                        <div className="col-md-2 mb-2 custom-input"></div>
                  
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={handleDateChangemail}/></div>
-                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemail}/></div> */}
-                    <div className="col-md-8"></div>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={handleDateChangemail}/></div>
+                    {/* <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemail}/></div> */}
+                    <div className="col-md-8 mb-8 custom-input"></div>
                     
                   
-                    <div className="col-md-6"><label className="labels">Completed?</label>
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Completed?</label>
                     <label class="switch" onChange={handleToggle1}>
                     <input type="checkbox" />
                         <span class="slider round"></span>
@@ -2051,7 +2051,7 @@ const handleTimeChange = (e) => {
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Direction</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,direction:e.target.value})}>
                     <option>Select</option>
                         {
                             maildirection.map(item=>
@@ -2062,7 +2062,7 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Status</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmailtask({...mailtask,status:e.target.value})}>
                     <option>---Select---</option>
                     {
                             mailstatus.map(item=>
@@ -2073,23 +2073,23 @@ const handleTimeChange = (e) => {
                         }
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
-                <div className="col-md-8"> </div>
+                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setmailtask({...mailtask,date:e.target.value})}/></div>
+                <div className="col-md-8 mb-8 custom-input"> </div>
 
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
 
-                    <div className="col-md-10"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setmailtask({...mailtask,feedback:e.target.value})}/></div>
-                    <div className="col-md-12"><br></br></div>
-                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+                    <div className="col-md-10 mb-10 custom-input"><label className="form-label">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setmailtask({...mailtask,feedback:e.target.value})}/></div>
+                    <div className="col-md-12 mb-12 custom-input"><br></br></div>
+                    <div className="col-md-12 mb-12 custom-input"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="form-label" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
                      </div>
                    
                     </div>
                   
-                   <div className="col-md-2" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={mailtaskdetails}>Submit</button></div>
-                   <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
+                   <div className="col-md-2 mb-2 custom-input" style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm save-btn" onClick={mailtaskdetails}>Submit</button></div>
+                   <div className="col-md-2 mb-2 custom-input" style={{marginTop:"20px"}}><button className="form-control form-control-sm cancel-btn" onClick={()=>navigate(-1)}>Cancel</button></div>
                     </div>
 
 {/* ==========================================================mail task end================================================================= */}
@@ -2101,9 +2101,9 @@ const handleTimeChange = (e) => {
                   
                     <div className="row" id="sitevisit" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')} @ {sitevisit.start_date}  {sitevisit.participants ? ` also associate with ${sitevisit.participants}` : ""}</p></div>
+                    <div className="col-md-12 mb-12 custom-input"><label className="form-label">Title</label><p id="sitevisittitle">Site Visit with {sitevisit.lead} For {sitevisit.inventory.join(',')} @ {sitevisit.start_date}  {sitevisit.participants ? ` also associate with ${sitevisit.participants}` : ""}</p></div>
 
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,executive:e.target.value})} >
                     <option>Select </option>
                     <option>Rajesh</option>
                         <option>Suresh</option>
@@ -2111,7 +2111,7 @@ const handleTimeChange = (e) => {
                         </select>
                         </div>
 
-                        <div className="col-md-4"><label className="labels">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Site Visit Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,sitevisit_type:e.target.value})}>
                     <option>---Select---</option>
                        {
                         sitevisit_visittype.map(item=>
@@ -2122,15 +2122,15 @@ const handleTimeChange = (e) => {
                        }
                         </select>
                         </div>
-                        <div className="col-md-4"></div>
+                        <div className="col-md-4 mb-4 custom-input"></div>
 
 
       
 
     
    
-      <div className="col-md-4">
-        <label className="labels">Select Project</label> 
+      <div className="col-md-4 mb-4 custom-input">
+        <label className="form-label">Select Project</label> 
         <Select
           className="form-control form-control-sm"
           style={{ border: "none" }}
@@ -2148,8 +2148,8 @@ const handleTimeChange = (e) => {
         </Select>
       </div>
 
-      {/* <div className="col-md-4">
-        <label className="labels">Select Block</label>
+      {/* <div className="col-md-4 mb-4 custom-input">
+        <label className="form-label">Select Block</label>
         <Select
           className="form-control form-control-sm"
           style={{ border: "none" }}
@@ -2167,8 +2167,8 @@ const handleTimeChange = (e) => {
         </Select>
       </div> */}
 
-      <div className="col-md-4">
-              <label className="labels">Select Block</label>
+      <div className="col-md-4 mb-4 custom-input">
+              <label className="form-label">Select Block</label>
               <Select
                 className="form-control form-control-sm"
                 style={{ border: "none" }}
@@ -2202,8 +2202,8 @@ const handleTimeChange = (e) => {
 </div>
 
 
-      {/* <div className="col-md-4">
-        <label className="labels">Select Inventory</label>
+      {/* <div className="col-md-4 mb-4 custom-input">
+        <label className="form-label">Select Inventory</label>
         <Select
           className="form-control form-control-sm"
           style={{ border: "none" }}
@@ -2221,7 +2221,7 @@ const handleTimeChange = (e) => {
         </Select>
       </div> */}
 
-<div className="col-md-4"><label className="labels">Select Inventory</label>
+<div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Inventory</label>
                              
                              <Select
 className="form-control form-control-sm"
@@ -2260,8 +2260,8 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     
                       
                       
-                     <div className="col-md-4">
-                <label className="labels">Select Lead</label>
+                     <div className="col-md-4 mb-4 custom-input">
+                <label className="form-label">Select Lead</label>
                 <Autocomplete
                   const options = {leadoption?data.filter(item => item._id === leadoption): data}
                     getOptionLabel={(option) =>
@@ -2290,7 +2290,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 />
               </div>
                          
-                        {/* <div className="col-md-4"><label className="labels">Select Lead</label>
+                        {/* <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Lead</label>
                         <select
                         className="form-control form-control-sm"
                         required
@@ -2314,18 +2314,18 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div> */}
-                        <div className="col-md-4"><label className="labels">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Confirmation</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,confirmation:e.target.value})}>
                     <option>Select </option>
                        <option>Confirmed</option>
                        <option>Tentative</option>
                         </select>
                         </div>
-                        <div className="col-md-4"></div>
+                        <div className="col-md-4 mb-4 custom-input"></div>
 
-                        <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
+                        <div className="col-md-10 mb-10 custom-input"><label className="form-label">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,remark:e.target.value})} /></div>
                 
                
-                        <div className="col-md-4"><label className="labels">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Participants</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setsitevisit({...sitevisit,participants:e.target.value})}>
                     <option>Select</option>
                        {
                         contactdata.filter((item)=>item.profession_category==="Self Employed" && item.profession_subcategory==="Real Estate Agent" || item.profession_category==="Private Employee" && item.profession_subcategory==="Sales Person").map((item)=>
@@ -2335,24 +2335,24 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                        }
                         </select>
                         </div>
-                        <div className="col-md-6"></div>
+                        <div className="col-md-6 mb-6 custom-input"></div>
 
-                        {/* <div className="col-md-6"><label className="labels">Remind Me?</label> 
+                        {/* <div className="col-md-6 mb-6 custom-input"><label className="form-label">Remind Me?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={(e)=>setsitevisit({...sitevisit,remind_me:e.target.checked})}/>
                         <span class="slider round"></span>
                         </label>
                     </div> */}
-                    {/* <div className="col-md-6"></div> */}
+                    {/* <div className="col-md-6 mb-6 custom-input"></div> */}
 
                    
                             
-                          <div className="col-md-4"><label className="labels">Select Start Date</label><input type="datetime-local"  className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
-                          <div className="col-md-4"><label className="labels">Select End Date</label><input type="datetime-local"  className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
-                            <div className="col-md-4"></div>
+                          <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Start Date</label><input type="datetime-local"  className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,start_date:e.target.value})}/></div>
+                          <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select End Date</label><input type="datetime-local"  className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,end_date:e.target.value})}/></div>
+                            <div className="col-md-4 mb-4 custom-input"></div>
              
                   
-                    <div className="col-md-6"><label className="labels">Mark As Completed?</label> 
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Mark As Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle3}/>
                         <span class="slider round"></span>
@@ -2368,7 +2368,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Status</label><select className="form-control form-control-sm" required="true" onChange={handleleadstatuschange} >
                     <option>---Select---</option>
                      {
                       sitevisit_status.map((item)=>
@@ -2378,12 +2378,12 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                      }
                         </select>
                         </div>
-                        <div className="col-md-8"></div>
+                        <div className="col-md-8 mb-8 custom-input"></div>
                         {
                             sitevisit.status==="Conducted" &&(
                                 <>
 
-                                {/* <div className="col-md-4"><label className="labels">Select Intrested Project</label> 
+                                {/* <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Intrested Project</label> 
                                 <Select className="form-control form-control-sm" style={{border:"none"}}
                             multiple
                             value={siteprojects}
@@ -2399,8 +2399,8 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         </Select>
                                 </div>
 
-                                <div className="col-md-4">
-              <label className="labels">Select Interested Block</label>
+                                <div className="col-md-4 mb-4 custom-input">
+              <label className="form-label">Select Interested Block</label>
               <Select
                 className="form-control form-control-sm"
                 style={{ border: "none" }}
@@ -2435,7 +2435,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
 
 
 
-                                <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+                                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Intersted Inventory</label>
                              
                                 <Select
   className="form-control form-control-sm"
@@ -2470,7 +2470,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
 
                                     </div> */}
 
-          <div className="col-md-4"><label className="labels">Select Intersted Inventory</label>
+          <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Intersted Inventory</label>
               {Array.isArray(sitevisit.intrested_inventory) ?
                 sitevisit.intrested_inventory.map((item,index)=>
                 (
@@ -2494,7 +2494,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
          
       </div> 
 
-      <div className="col-md-4"><label className="labels">Result</label>
+      <div className="col-md-4 mb-4 custom-input"><label className="form-label">Result</label>
                                       
       {
                                Array.isArray(sitevisit.result)?
@@ -2518,7 +2518,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                             }
                   </div> 
 
-                  <div className="col-md-1" style={{marginTop:"70px"}}>
+                  <div className="col-md-1 mb-1 custom-input" style={{marginTop:"70px"}}>
                             {
                                Array.isArray(sitevisit.action1)?
                                sitevisit.action1.map((item,index)=>
@@ -2528,8 +2528,8 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                             }
                             </div>
 
-      <div className="col-md-1" ><label className="labels">add</label><button className="form-control form-control-sm" onClick={addFn1}>+</button></div>
-      <div className="col-md-2"></div>
+      <div className="col-md-1 mb-1 custom-input" ><label className="form-label">add</label><button className="form-control form-control-sm" onClick={addFn1}>+</button></div>
+      <div className="col-md-2 mb-2 custom-input"></div>
                                     </>
                             )
                         }
@@ -2537,23 +2537,23 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     
               
                 
-               <div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
-                <div className="col-md-8"></div>
+               <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={(e)=>setsitevisit({...sitevisit,date:e.target.value})}/></div>
+                <div className="col-md-8 mb-8 custom-input"></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,feedback:e.target.value})}/></div>
+                    <div className="col-md-8 mb-8 custom-input"><label className="form-label">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}} onChange={(e)=>setsitevisit({...sitevisit,feedback:e.target.value})}/></div>
                  
                    
                     </div>
                     </div>
        
 
-                    <div className="col-md-2"></div>
-                    <div className="col-md-2" style={{marginLeft:"50%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={sitevisitdetails}>Submit</button></div>
-                    <div className="col-md-2" style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
+                    <div className="col-md-2 mb-2 custom-input"></div>
+                    <div className="col-md-2 mb-2 custom-input" style={{marginLeft:"50%",marginTop:"20px"}}><button className="form-control form-control-sm save-btn" onClick={sitevisitdetails}>Submit</button></div>
+                    <div className="col-md-2 mb-2 custom-input" style={{marginTop:"20px"}}><button className="form-control form-control-sm cancel-btn" onClick={()=>navigate(-1)}>Cancel</button></div>
                    
                     
-                    {/* <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
-                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div> */}
+                    {/* <div className="col-md-6 mb-6 custom-input"><button className="form-control form-control-sm" >Submit</button></div>
+                    <div className="col-md-6 mb-6 custom-input"><button className="form-control form-control-sm">Cancel</button></div> */}
                    
                     </div>
                 
@@ -2563,18 +2563,18 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 
                     <div className="row" id="meeting" style={{display:"none"}}>
 
-                    <div className="col-md-12"><label className="labels">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory.join(',')} at {meetingtask.location_type} @ {meetingtask.due_date}.
+                    <div className="col-md-12 mb-12 custom-input"><label className="form-label">Title</label><p id="meetingtitle">MEETING with {meetingtask.lead} For {meetingtask.reason} of {meetingtask.inventory.join(',')} at {meetingtask.location_type} @ {meetingtask.due_date}.
                       </p></div>
                         
-                        <div className="col-md-4"><label className="labels">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Executive</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,executive:e.target.value})}>
                     <option>Select </option>
                     <option>Rajesh</option>
                         <option>Suresh</option>
                         <option>Vivek</option>
                         </select>
                         </div>
-                             <div className="col-md-4">
-                <label className="labels">Select Lead</label>
+                             <div className="col-md-4 mb-4 custom-input">
+                <label className="form-label">Select Lead</label>
                 <Autocomplete
                   const options = {leadoption?data.filter(item => item._id === leadoption): data}
                     getOptionLabel={(option) =>
@@ -2602,9 +2602,9 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 />
               </div>
              
-                        <div className="col-md-4"></div>
+                        <div className="col-md-4 mb-4 custom-input"></div>
                         
-                        <div className="col-md-4"><label className="labels">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Location Type</label><select className="form-control form-control-sm" required="true" onChange={(e)=>setmeetingtask({...meetingtask,location_type:e.target.value})}>
                     <option>Select</option>
                         {
                             location.map(item=>
@@ -2615,13 +2615,13 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div>
-                    <div className="col-md-8"></div>
+                    <div className="col-md-8 mb-8 custom-input"></div>
 
-                    <div className="col-md-8"><label className="labels">Location Address</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-8 mb-8 custom-input"><label className="form-label">Location Address</label><input type="text" required="true" className="form-control form-control-sm" onChange={(e)=>setmeetingtask({...meetingtask,location_address:e.target.value})}/></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
                   
 
-                    <div className="col-md-4"><label className="labels">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Reason</label><select className="form-control form-control-sm" required="true" onChange={handlereasonchangemeeting}>
                     <option>---Select---</option>
                     {
                             meetingreason.map(item=>
@@ -2633,7 +2633,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                      
                         </select>
                         </div>
-                    <div className="col-md-8"></div>
+                    <div className="col-md-8 mb-8 custom-input"></div>
 
                     {
                       meetingtask.reason==="Discuss" && (
@@ -2641,8 +2641,8 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
 
                       
 
-                            <div className="col-md-4">
-        <label className="labels">Select Project</label> 
+                            <div className="col-md-4 mb-4 custom-input">
+        <label className="form-label">Select Project</label> 
         <Select
           className="form-control form-control-sm"
           style={{ border: "none" }}
@@ -2661,8 +2661,8 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
       </div>
 
 
-<div className="col-md-4">
-              <label className="labels">Select Block</label>
+<div className="col-md-4 mb-4 custom-input">
+              <label className="form-label">Select Block</label>
               <Select
                 className="form-control form-control-sm"
                 style={{ border: "none" }}
@@ -2695,7 +2695,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
               </Select>
         </div>
 
-            <div className="col-md-4"><label className="labels">Select Inventory</label>
+            <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Inventory</label>
                              
                              <Select
                         className="form-control form-control-sm"
@@ -2737,7 +2737,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                     {
                       meetingtask.reason !=="Discuss" && (
 
-                        <div className="col-md-4"><label className="labels">Inventory</label>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Inventory</label>
                         <select className="form-control form-control-sm"
                     onChange={handleallunitschange2}
                 >
@@ -2757,15 +2757,15 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
 
                    
 
-                    <div className="col-md-10"><label className="labels">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
-                    <div className="col-md-2"></div>
+                    <div className="col-md-10 mb-10 custom-input"><label className="form-label">Remark</label><textarea className='form-control form-control-sm' style={{height:"100px"}} onChange={(e)=>setmeetingtask({...meetingtask,remark:e.target.value})}/></div>
+                    <div className="col-md-2 mb-2 custom-input"></div>
 
-                    <div className="col-md-4"><label className="labels">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={handleDateChangemeeting}/></div>
-                    {/* <div className="col-md-4"><label className="labels">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemeeting}/></div> */}
-                    <div className="col-md-8"></div>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Due Date</label><input type="datetime-local" className="form-control form-control-sm" onChange={handleDateChangemeeting}/></div>
+                    {/* <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Time</label><input type="time" className="form-control form-control-sm"  onChange={handleTimeChangemeeting}/></div> */}
+                    <div className="col-md-8 mb-8 custom-input"></div>
                     
                   
-                    <div className="col-md-6"><label className="labels">Completed?</label> 
+                    <div className="col-md-6 mb-6 custom-input"><label className="form-label">Completed?</label> 
                     <label class="switch">
                     <input type="checkbox" onChange={handleToggle2} />
                         <span class="slider round"></span>
@@ -2785,7 +2785,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Select Status</label><select className="form-control form-control-sm" required="true"  onChange={(e)=>setmeetingtask({...meetingtask,status:e.target.value})}>
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Status</label><select className="form-control form-control-sm" required="true"  onChange={(e)=>setmeetingtask({...meetingtask,status:e.target.value})}>
                     <option>---Select---</option>
                     {
                             meetingstatus.map(item=>
@@ -2796,7 +2796,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Meeting Result</label><select className="form-control form-control-sm" required="true"  onChange={(e)=>setmeetingtask({...meetingtask,meeting_result:e.target.value})}>
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Meeting Result</label><select className="form-control form-control-sm" required="true"  onChange={(e)=>setmeetingtask({...meetingtask,meeting_result:e.target.value})}>
                     <option>---Select---</option>
                     {
                             meetingresult.map(item=>
@@ -2807,18 +2807,18 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Select Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setmeetingtask({...meetingtask,date:e.target.value})}/></div>
+                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Select Date</label><input type="datetime-local" className="form-control form-control-sm"  onChange={(e)=>setmeetingtask({...meetingtask,date:e.target.value})}/></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}  onChange={(e)=>setmeetingtask({...meetingtask,feedback:e.target.value})}/></div>
+                    <div className="col-md-8 mb-8 custom-input"><label className="form-label">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}  onChange={(e)=>setmeetingtask({...meetingtask,feedback:e.target.value})}/></div>
                      </div>
                    
                         </div>
                         
-                    <div className="col-md-2"  style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm" onClick={meetingtaskdetails}>Submit</button></div>
-                    <div className="col-md-2"  style={{marginTop:"20px"}}><button className="form-control form-control-sm" onClick={()=>navigate(-1)}>Cancel</button></div>
+                    <div className="col-md-2 mb-2 custom-input"  style={{marginLeft:"60%",marginTop:"20px"}}><button className="form-control form-control-sm save-btn" onClick={meetingtaskdetails}>Submit</button></div>
+                    <div className="col-md-2 mb-2 custom-input"  style={{marginTop:"20px"}}><button className="form-control form-control-sm cancel-btn" onClick={()=>navigate(-1)}>Cancel</button></div>
                    
                         </div> 
                        
@@ -2839,7 +2839,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                 
                 <div className="row mt-2">
                     
-                    <div className="col-md-4"><label className="labels">Direction</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Direction</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                         {
                             direction.map(item=>
@@ -2850,7 +2850,7 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div>
-                        <div className="col-md-4"><label className="labels">Status</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label">Status</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                         {
                             status.map(item=>
@@ -2861,14 +2861,14 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                         }
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
                 </div>
                 <div className="row mt-3">
-                <div className="col-md-4"><label className="labels">Date</label><input type="date" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1}/></div>
-                <div className="col-md-4"><label className="labels">Duration</label><input type="time" className="form-control form-control-sm" /></div>
-                <div className="col-md-4"> </div>
+                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Date</label><input type="date" id="date1" className="form-control form-control-sm" style={{color:"transparent"}} onClick={handler1}/></div>
+                <div className="col-md-4 mb-4 custom-input"><label className="form-label">Duration</label><input type="time" className="form-control form-control-sm" /></div>
+                <div className="col-md-4 mb-4 custom-input"> </div>
 
-                    <div className="col-md-4"><label className="labels">Result</label><select className="form-control form-control-sm" required="true" >
+                    <div className="col-md-4 mb-4 custom-input"><label className="form-label">Result</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                        {
                         result.map(item=>
@@ -2879,20 +2879,20 @@ renderValue={(selected) => selected.map(item => item.split('-')[0]).join(', ')} 
                        }
                        </select>
                         </div>
-                        <div className="col-md-4"><label className="labels" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" >
+                        <div className="col-md-4 mb-4 custom-input"><label className="form-label" style={{width:"120%"}}>Select Intersted Inventory(If any)</label><select className="form-control form-control-sm" required="true" >
                     <option>Select</option>
                         <option>Mr.</option>
                         </select>
                         </div>
-                    <div className="col-md-4"></div>
+                    <div className="col-md-4 mb-4 custom-input"></div>
 
-                    <div className="col-md-8"><label className="labels">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
-                    <div className="col-md-12"><br></br></div>
-                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="labels" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
+                    <div className="col-md-8 mb-8 custom-input"><label className="form-label">FeedBack</label><textarea className='form-control form-control-sm'  style={{height:"100px"}}/></div>
+                    <div className="col-md-12 mb-12 custom-input"><br></br></div>
+                    <div className="col-md-12"><input type="checkbox" style={{height:"15px",width:"15px"}}/><label className="form-label" style={{marginLeft:"10px"}}>Sheduled Follow Up</label></div> 
                      </div>
                     {/* <div className="row mt-4"  style={{marginLeft:"70%"}}>
-                    <div className="col-md-6"><button className="form-control form-control-sm" >Submit</button></div>
-                    <div className="col-md-6"><button className="form-control form-control-sm">Cancel</button></div>
+                    <div className="col-md-6 mb-6 custom-input"><button className="form-control form-control-sm" >Submit</button></div>
+                    <div className="col-md-6 mb-6 custom-input"><button className="form-control form-control-sm">Cancel</button></div>
                     </div> 
                     </div>
                     

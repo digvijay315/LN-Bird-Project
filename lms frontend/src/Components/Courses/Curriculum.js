@@ -5,8 +5,8 @@ import { useLocation } from "react-router-dom"
 import { base_url } from "../Utils/base_url"
 import axios from "axios"
 import ReactPlayer from "react-player"
-import PptSlides from "../Pptslides"
 import "../Courses/curiculam.css"
+import PptSlides from "../Pptslides"
 
 const Curriculum = () => {
   const location = useLocation()
@@ -16,8 +16,10 @@ const Curriculum = () => {
   const [showCurriculum, setShowCurriculum] = useState(true)
   const [activeMediaType, setActiveMediaType] = useState("video")
   const [activePptUrl, setActivePptUrl] = useState(null)
-  const youtubePlayerRef = useRef(null)
-  const youtubeTimerRef = useRef(null)
+  const [pptViewerType, setPptViewerType] = useState("office") // 'office', 'google', 'iframe'
+  const [pptError, setPptError] = useState(null)
+  const [pptLoading, setPptLoading] = useState(false)
+  const reactPlayerRef = useRef(null)
 
   // Get current logged-in user from localStorage or session
   const [currentUser, setCurrentUser] = useState(null)
@@ -31,22 +33,21 @@ const Curriculum = () => {
     descriptionRead: false,
   })
 
-  // YouTube player state
-  const [youtubePlayerReady, setYoutubePlayerReady] = useState(false)
-  const [youtubeVideoProgress, setYoutubeVideoProgress] = useState(0)
-  const [youtubeWatchedSegments, setYoutubeWatchedSegments] = useState([])
-  const [youtubeVideoDuration, setYoutubeVideoDuration] = useState(0)
-  const [youtubeVideoEnoughWatched, setYoutubeVideoEnoughWatched] = useState(false)
+  // YouTube/Video player state (unified)
+  const [videoProgress, setVideoProgress] = useState(0)
+  const [videoEnoughWatched, setVideoEnoughWatched] = useState(false)
 
   // Video resume state
   const [videoPositions, setVideoPositions] = useState({})
   const [savedProgress, setSavedProgress] = useState({})
 
+  // New state for download materials
+  const [showDownloadSection, setShowDownloadSection] = useState(false)
+
   // Get current user from localStorage or session
   useEffect(() => {
-    // Get user data from localStorage (adjust this based on how your auth system stores user data)
     const userData = localStorage.getItem("employeeData")
-    
+
     if (userData) {
       try {
         const parsedUser = JSON.parse(userData)
@@ -78,7 +79,6 @@ const Curriculum = () => {
       }
       setCurriculum(courseData)
 
-      // Load completion data for current user
       if (currentUser && currentUser._id) {
         loadUserProgress(currentUser._id, courseId)
       }
@@ -105,29 +105,6 @@ const Curriculum = () => {
     }
   }, [course, currentUser])
 
-  // Load YouTube API
-  useEffect(() => {
-    if (!window.YT) {
-      const tag = document.createElement("script")
-      tag.src = "https://www.youtube.com/iframe_api"
-      const firstScriptTag = document.getElementsByTagName("script")[0]
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
-
-      window.onYouTubeIframeAPIReady = () => {
-        setYoutubePlayerReady(true)
-      }
-    } else {
-      setYoutubePlayerReady(true)
-    }
-
-    // Cleanup function
-    return () => {
-      if (youtubeTimerRef.current) {
-        clearInterval(youtubeTimerRef.current)
-      }
-    }
-  }, [])
-
   // Get flat list of all lessons with their indices
   const getFlatLessons = () => {
     if (!curriculum?.sections) return []
@@ -151,15 +128,101 @@ const Curriculum = () => {
     return flatLessons
   }
 
+  // Check if all lessons are completed
+  const areAllLessonsCompleted = () => {
+    const flatLessons = getFlatLessons()
+    return flatLessons.length > 0 && flatLessons.every((lesson) => completedLessons.has(lesson.id))
+  }
+
+  // Get all downloadable materials from curriculum
+  const getDownloadableMaterials = () => {
+    if (!curriculum) return { wordFiles: [], pdfFiles: [], imageFiles: [] }
+
+    const materials = {
+      wordFiles: [],
+      pdfFiles: [],
+      imageFiles: [],
+    }
+
+    if (curriculum.word_file && Array.isArray(curriculum.word_file)) {
+      curriculum.word_file.forEach((file, fileIndex) => {
+        materials.wordFiles.push({
+          url: file,
+          name: `${curriculum.course_title_main || "Course"} - Word Document ${fileIndex + 1}`,
+          sectionTitle: curriculum.course_title_main || "Course Materials",
+          chapterTitle: `Document ${fileIndex + 1}`,
+        })
+      })
+    }
+
+    if (curriculum.pdf_file && Array.isArray(curriculum.pdf_file)) {
+      curriculum.pdf_file.forEach((file, fileIndex) => {
+        materials.pdfFiles.push({
+          url: file,
+          name: `${curriculum.course_title_main || "Course"} - PDF Document ${fileIndex + 1}`,
+          sectionTitle: curriculum.course_title_main || "Course Materials",
+          chapterTitle: `PDF ${fileIndex + 1}`,
+        })
+      })
+    }
+
+    if (curriculum.image_file && Array.isArray(curriculum.image_file)) {
+      curriculum.image_file.forEach((file, fileIndex) => {
+        materials.imageFiles.push({
+          url: file,
+          name: `${curriculum.course_title_main || "Course"} - Image ${fileIndex + 1}`,
+          sectionTitle: curriculum.course_title_main || "Course Materials",
+          chapterTitle: `Image ${fileIndex + 1}`,
+        })
+      })
+    }
+
+    return materials
+  }
+
+  // Download file function
+  const downloadFile = async (fileUrl, fileName) => {
+    try {
+      const link = document.createElement("a")
+      link.href = fileUrl
+      link.download = fileName
+      link.target = "_blank"
+      link.rel = "noopener noreferrer"
+
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    } catch (error) {
+      console.error("Error downloading file:", error)
+      alert("Error downloading file. Please try again or check if the file URL is valid.")
+    }
+  }
+
+  // Download all files of a specific type
+  const downloadAllFiles = async (files, fileType) => {
+    if (files.length === 0) {
+      alert(`No ${fileType} files available for download.`)
+      return
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const extension = fileType === "word" ? ".docx" : fileType === "pdf" ? ".pdf" : ".jpg"
+      await downloadFile(file.url, `${file.name}${extension}`)
+
+      if (i < files.length - 1) {
+        await new Promise((resolve) => setTimeout(resolve, 1000))
+      }
+    }
+  }
+
   // Check if a lesson is accessible
   const isLessonAccessible = (lessonId) => {
     const flatLessons = getFlatLessons()
     const lessonIndex = flatLessons.findIndex((lesson) => lesson.id === lessonId)
 
-    // First lesson is always accessible
     if (lessonIndex === 0) return true
 
-    // Check if all previous lessons are completed
     for (let i = 0; i < lessonIndex; i++) {
       if (!completedLessons.has(flatLessons[i].id)) {
         return false
@@ -177,14 +240,13 @@ const Curriculum = () => {
     const hasPpt = lesson.pptFiles && lesson.pptFiles.length > 0
 
     const requiredProgress = {
-      descriptionRead: true, // Always required
+      descriptionRead: true,
     }
 
     if (hasVideo) requiredProgress.videoWatched = true
     if (hasYoutube) requiredProgress.youtubeWatched = true
     if (hasPpt) requiredProgress.pptViewed = true
 
-    // Check if all required progress is met
     return Object.keys(requiredProgress).every((key) => currentLessonProgress[key])
   }
 
@@ -195,7 +257,6 @@ const Curriculum = () => {
     const newCompletedLessons = new Set([...completedLessons, lessonId])
     setCompletedLessons(newCompletedLessons)
 
-    // Save to localStorage with user-specific key
     const completionsKey = getUserSpecificKey(`course_${course._id}_completions`)
     localStorage.setItem(completionsKey, JSON.stringify([...newCompletedLessons]))
   }
@@ -237,99 +298,6 @@ const Curriculum = () => {
     return existingProgress[lessonId] || null
   }
 
-  // Track YouTube video progress
-  const trackYoutubeProgress = () => {
-    if (!youtubePlayerRef.current || typeof youtubePlayerRef.current.getCurrentTime !== "function") {
-      return
-    }
-
-    try {
-      const currentTime = youtubePlayerRef.current.getCurrentTime()
-      const duration = youtubePlayerRef.current.getDuration()
-      const playerState = youtubePlayerRef.current.getPlayerState()
-
-      // Update duration if needed
-      if (duration > 0 && duration !== youtubeVideoDuration) {
-        setYoutubeVideoDuration(duration)
-      }
-
-      // Only track progress when video is playing
-      if (playerState === window.YT.PlayerState.PLAYING && duration > 0) {
-        setYoutubeWatchedSegments((prevSegments) => {
-          const updatedSegments = [...prevSegments]
-          const lastSegment = updatedSegments.length > 0 ? updatedSegments[updatedSegments.length - 1] : null
-
-          if (!lastSegment || Math.abs(currentTime - lastSegment.end) > 2) {
-            // Start a new segment if there's no previous segment or if there's a gap > 2 seconds
-            updatedSegments.push({ start: currentTime, end: currentTime })
-          } else {
-            // Update the end time of the current segment
-            updatedSegments[updatedSegments.length - 1].end = currentTime
-          }
-
-          // Calculate watched percentage with updated segments
-          let totalWatchedTime = 0
-          const mergedSegments = []
-
-          // Sort segments by start time
-          const sortedSegments = [...updatedSegments].sort((a, b) => a.start - b.start)
-
-          // Merge overlapping segments
-          for (const segment of sortedSegments) {
-            if (mergedSegments.length === 0) {
-              mergedSegments.push({ ...segment })
-              continue
-            }
-
-            const lastMergedSegment = mergedSegments[mergedSegments.length - 1]
-
-            // If current segment overlaps with last merged segment
-            if (segment.start <= lastMergedSegment.end + 1) {
-              lastMergedSegment.end = Math.max(lastMergedSegment.end, segment.end)
-            } else {
-              mergedSegments.push({ ...segment })
-            }
-          }
-
-          // Calculate total watched time from merged segments
-          for (const segment of mergedSegments) {
-            totalWatchedTime += Math.max(0, segment.end - segment.start)
-          }
-
-          // Calculate percentage
-          const watchedPercentage = Math.min((totalWatchedTime / duration) * 100, 100)
-
-          // Update progress state
-          setYoutubeVideoProgress(watchedPercentage)
-
-          // Save progress every 5 seconds
-          if (Math.floor(currentTime) % 5 === 0) {
-            saveVideoProgress(activeLesson.id, currentTime, watchedPercentage, "youtube")
-          }
-
-          // Check if enough of the video has been watched (80%)
-          if (watchedPercentage >= 80 && !youtubeVideoEnoughWatched) {
-            setYoutubeVideoEnoughWatched(true)
-          }
-
-          console.log(
-            `Progress: ${watchedPercentage.toFixed(1)}%, Duration: ${duration.toFixed(1)}s, Watched: ${totalWatchedTime.toFixed(1)}s`,
-          )
-
-          return updatedSegments
-        })
-      }
-
-      // Save progress when video is paused
-      if (playerState === window.YT.PlayerState.PAUSED && duration > 0) {
-        const watchedPercentage = youtubeVideoProgress
-        saveVideoProgress(activeLesson.id, currentTime, watchedPercentage, "youtube")
-      }
-    } catch (error) {
-      console.error("Error tracking YouTube progress:", error)
-    }
-  }
-
   // Handle lesson click with accessibility check
   const handleLessonClick = (chapterContent, sectionTitle, sectionIndex, chapterIndex) => {
     if (!currentUser?._id) {
@@ -344,6 +312,9 @@ const Curriculum = () => {
       return
     }
 
+    setActivePptUrl(null)
+    setPptError(null)
+
     const lesson = {
       id: lessonId,
       title: chapterContent.chapter_title,
@@ -356,10 +327,8 @@ const Curriculum = () => {
 
     setActiveLesson(lesson)
 
-    // Load saved progress
     const savedVideoProgress = loadVideoProgress(lessonId)
 
-    // Reset progress for new lesson
     setCurrentLessonProgress({
       videoWatched: false,
       youtubeWatched: false,
@@ -367,26 +336,14 @@ const Curriculum = () => {
       descriptionRead: false,
     })
 
-    // Reset YouTube state but restore saved progress if available
-    if (savedVideoProgress && savedVideoProgress.mediaType === "youtube") {
-      setYoutubeVideoProgress(savedVideoProgress.progress)
-      setYoutubeWatchedSegments([]) // Will be rebuilt as video plays
-      setYoutubeVideoDuration(0)
-      setYoutubeVideoEnoughWatched(savedVideoProgress.progress >= 80)
+    if (savedVideoProgress) {
+      setVideoProgress(savedVideoProgress.progress)
+      setVideoEnoughWatched(savedVideoProgress.progress >= 80)
     } else {
-      setYoutubeVideoProgress(0)
-      setYoutubeWatchedSegments([])
-      setYoutubeVideoDuration(0)
-      setYoutubeVideoEnoughWatched(false)
+      setVideoProgress(0)
+      setVideoEnoughWatched(false)
     }
 
-    // Clear any existing timer
-    if (youtubeTimerRef.current) {
-      clearInterval(youtubeTimerRef.current)
-      youtubeTimerRef.current = null
-    }
-
-    // Set initial media type
     if (lesson.videoUrl) {
       setActiveMediaType("video")
     } else if (lesson.youtubeLink) {
@@ -419,6 +376,11 @@ const Curriculum = () => {
     }
   }, [currentLessonProgress, activeLesson])
 
+  // Check if download section should be shown
+  useEffect(() => {
+    setShowDownloadSection(areAllLessonsCompleted())
+  }, [completedLessons, curriculum])
+
   const getNeighborLessons = () => {
     const flatLessons = getFlatLessons()
     const currentIndex = flatLessons.findIndex((lesson) => lesson.id === activeLesson?.id)
@@ -438,6 +400,7 @@ const Curriculum = () => {
         alert("Please complete the current lesson first!")
         return
       }
+
       setActiveLesson(targetLesson)
       setCurrentLessonProgress({
         videoWatched: false,
@@ -446,101 +409,165 @@ const Curriculum = () => {
         descriptionRead: false,
       })
 
-      // Reset YouTube state
-      setYoutubeVideoProgress(0)
-      setYoutubeWatchedSegments([])
-      setYoutubeVideoDuration(0)
-      setYoutubeVideoEnoughWatched(false)
+      setVideoProgress(0)
+      setVideoEnoughWatched(false)
     }
   }
 
-  const getYouTubeVideoId = (url) => {
-    if (!url) return ""
-
-    const standardPattern =
-      /(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    const match = url.match(standardPattern)
-
-    return match ? match[1] : ""
+  const handleMediaTypeSwitch = (mediaType) => {
+    setActiveMediaType(mediaType)
+    setVideoProgress(0)
+    setVideoEnoughWatched(false)
   }
 
-  // Initialize YouTube player
-  const initializeYouTubePlayer = (videoId) => {
-    if (!window.YT || !youtubePlayerReady) return
+  // PPT Viewer Component
+  const PptViewer = ({ pptUrl, index }) => {
+    const [currentViewer, setCurrentViewer] = useState("office")
+    const [viewerError, setViewerError] = useState(null)
 
-    // Clear any existing timer
-    if (youtubeTimerRef.current) {
-      clearInterval(youtubeTimerRef.current)
-    }
-
-    if (youtubePlayerRef.current) {
-      youtubePlayerRef.current.destroy()
-    }
-
-    youtubePlayerRef.current = new window.YT.Player("youtube-player", {
-      height: "500",
-      width: "100%",
-      videoId: videoId,
-      playerVars: {
-        autoplay: 0,
-        controls: 1,
-        rel: 0,
-        showinfo: 0,
-        modestbranding: 1,
+    const viewers = [
+      {
+        id: "office",
+        name: "Microsoft Office Online",
+        url: `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(pptUrl)}`,
+        description: "Best for PowerPoint files",
       },
-      events: {
-        onReady: (event) => {
-          console.log("YouTube player ready")
-
-          // Seek to saved position if available
-          const savedVideoProgress = loadVideoProgress(activeLesson.id)
-          if (savedVideoProgress && savedVideoProgress.mediaType === "youtube" && savedVideoProgress.position > 0) {
-            setTimeout(() => {
-              youtubePlayerRef.current.seekTo(savedVideoProgress.position, true)
-              console.log(`Resumed YouTube video at ${savedVideoProgress.position} seconds`)
-            }, 1000)
-          }
-
-          // Start tracking progress
-          youtubeTimerRef.current = setInterval(trackYoutubeProgress, 1000)
-        },
-        onStateChange: (event) => {
-          if (event.data === window.YT.PlayerState.ENDED) {
-            // Mark as enough watched when video ends naturally
-            setYoutubeVideoEnoughWatched(true)
-          }
-        },
+      {
+        id: "google",
+        name: "Google Docs Viewer",
+        url: `https://docs.google.com/gview?url=${encodeURIComponent(pptUrl)}&embedded=true`,
+        description: "Alternative viewer",
       },
-    })
+      {
+        id: "iframe",
+        name: "Direct View",
+        url: pptUrl,
+        description: "Direct file access",
+      },
+    ]
+
+    const currentViewerData = viewers.find((v) => v.id === currentViewer)
+
+    const handleViewerError = () => {
+      setViewerError(`Failed to load with ${currentViewerData.name}`)
+    }
+
+    const handleViewerLoad = () => {
+      setViewerError(null)
+    }
+
+    return (
+      <div className="ppt-viewer-container">
+        <div className="ppt-viewer-header">
+          <h5>📊 Presentation {index + 1}</h5>
+          <div className="viewer-selector">
+            <label>Viewer: </label>
+            <select value={currentViewer} onChange={(e) => setCurrentViewer(e.target.value)}>
+              {viewers.map((viewer) => (
+                <option key={viewer.id} value={viewer.id}>
+                  {viewer.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {viewerError && (
+          <div className="viewer-error">
+            <p>⚠️ {viewerError}</p>
+            <p>Try switching to a different viewer above, or use the fallback options below.</p>
+          </div>
+        )}
+
+        <div className="ppt-iframe-container">
+          <iframe
+            key={currentViewer}
+            src={currentViewerData.url}
+            width="100%"
+            height="600px"
+            frameBorder="0"
+            title={`Presentation ${index + 1} - ${currentViewerData.name}`}
+            onError={handleViewerError}
+            onLoad={handleViewerLoad}
+            style={{
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+              background: "#f8f9fa",
+            }}
+          />
+        </div>
+
+        <div className="ppt-viewer-footer">
+          <div className="viewer-info">
+            <small>Using: {currentViewerData.description}</small>
+          </div>
+          <div className="ppt-actions">
+            <button
+              className="ppt-action-btn fullscreen-btn"
+              onClick={() => window.open(currentViewerData.url, "_blank")}
+            >
+              🔍 Open in Full Screen
+            </button>
+            <button className="ppt-action-btn complete-btn" onClick={() => handleMediaComplete("pptViewed")}>
+              ✅ Mark as Viewed
+            </button>
+          </div>
+        </div>
+
+        {currentLessonProgress.pptViewed && <div className="completion-indicator">✅ Presentation completed</div>}
+      </div>
+    )
   }
 
-  // Effect to initialize YouTube player when switching to YouTube media type
-  useEffect(() => {
-    if (activeMediaType === "youtube" && activeLesson?.youtubeLink && youtubePlayerReady) {
-      const videoId = getYouTubeVideoId(activeLesson.youtubeLink)
-      if (videoId) {
-        setTimeout(() => {
-          initializeYouTubePlayer(videoId)
-        }, 100)
-      }
+  // Handle PPT viewing
+  const handlePptView = (pptUrl, index) => {
+    setPptLoading(true)
+    setPptError(null)
+
+    // Simulate loading time
+    setTimeout(() => {
+      setActivePptUrl(pptUrl)
+      setPptLoading(false)
+    }, 500)
+  }
+
+  // Unified video progress handler
+  const handleVideoProgress = (progress) => {
+    const currentTime = progress.playedSeconds
+    const watchedPercentage = progress.played * 100
+
+    setVideoProgress(watchedPercentage)
+
+    if (Math.floor(currentTime) % 5 === 0) {
+      const mediaType = activeMediaType === "youtube" ? "youtube" : "video"
+      saveVideoProgress(activeLesson.id, currentTime, watchedPercentage, mediaType)
     }
 
-    // Cleanup function
-    return () => {
-      if (youtubeTimerRef.current) {
-        clearInterval(youtubeTimerRef.current)
-      }
+    if (watchedPercentage >= 80 && !videoEnoughWatched) {
+      setVideoEnoughWatched(true)
     }
-  }, [activeMediaType, activeLesson?.youtubeLink, youtubePlayerReady])
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (youtubeTimerRef.current) {
-        clearInterval(youtubeTimerRef.current)
-      }
+    if (progress.played > 0.9) {
+      const completionType = activeMediaType === "youtube" ? "youtubeWatched" : "videoWatched"
+      handleMediaComplete(completionType)
     }
-  }, [])
+  }
+
+  const handleVideoPause = () => {
+    if (reactPlayerRef.current && activeLesson) {
+      const currentTime = reactPlayerRef.current.getCurrentTime()
+      const duration = reactPlayerRef.current.getDuration()
+      const watchedPercentage = (currentTime / duration) * 100
+      const mediaType = activeMediaType === "youtube" ? "youtube" : "video"
+      saveVideoProgress(activeLesson.id, currentTime, watchedPercentage, mediaType)
+    }
+  }
+
+  const handleVideoEnded = () => {
+    const completionType = activeMediaType === "youtube" ? "youtubeWatched" : "videoWatched"
+    handleMediaComplete(completionType)
+    setVideoEnoughWatched(true)
+  }
 
   const renderMedia = () => {
     if (!activeLesson) return null
@@ -552,8 +579,10 @@ const Curriculum = () => {
           savedVideoProgress && savedVideoProgress.mediaType === "video" ? savedVideoProgress.position : 0
 
         return activeLesson.videoUrl ? (
-          <div className="media-container">
+          <div key={`video-${activeLesson.id}`} className="media-container">
             <ReactPlayer
+              ref={reactPlayerRef}
+              key={`player-${activeLesson.id}-video`}
               url={activeLesson.videoUrl}
               controls
               width="100%"
@@ -561,30 +590,14 @@ const Curriculum = () => {
               onReady={() => {
                 if (startTime > 0) {
                   console.log(`Resuming regular video at ${startTime} seconds`)
+                  if (reactPlayerRef.current) {
+                    reactPlayerRef.current.seekTo(startTime, "seconds")
+                  }
                 }
               }}
-              onProgress={(progress) => {
-                const currentTime = progress.playedSeconds
-                const watchedPercentage = progress.played * 100
-
-                // Save progress every 5 seconds
-                if (Math.floor(currentTime) % 5 === 0) {
-                  saveVideoProgress(activeLesson.id, currentTime, watchedPercentage, "video")
-                }
-
-                if (progress.played > 0.9) {
-                  // 90% watched
-                  handleMediaComplete("videoWatched")
-                }
-              }}
-              onPause={(e) => {
-                // Save progress when paused
-                const currentTime = e.target.getCurrentTime()
-                const duration = e.target.getDuration()
-                const watchedPercentage = (currentTime / duration) * 100
-                saveVideoProgress(activeLesson.id, currentTime, watchedPercentage, "video")
-              }}
-              onEnded={() => handleMediaComplete("videoWatched")}
+              onProgress={handleVideoProgress}
+              onPause={handleVideoPause}
+              onEnded={handleVideoEnded}
               config={{
                 file: {
                   attributes: {
@@ -612,14 +625,44 @@ const Curriculum = () => {
             {currentLessonProgress.videoWatched && <div className="completion-indicator">✅ Video completed</div>}
           </div>
         ) : null
+
       case "youtube":
         const savedYoutubeProgress = loadVideoProgress(activeLesson.id)
+        const youtubeStartTime =
+          savedYoutubeProgress && savedYoutubeProgress.mediaType === "youtube" ? savedYoutubeProgress.position : 0
 
         return activeLesson.youtubeLink ? (
-          <div className="media-container">
-            <div id="youtube-player" style={{ borderRadius: "8px" }}></div>
+          <div key={`youtube-${activeLesson.id}`} className="media-container">
+            <ReactPlayer
+              ref={reactPlayerRef}
+              key={`player-${activeLesson.id}-youtube`}
+              url={activeLesson.youtubeLink}
+              controls
+              width="100%"
+              height="500px"
+              onReady={() => {
+                if (youtubeStartTime > 0) {
+                  console.log(`Resuming YouTube video at ${youtubeStartTime} seconds`)
+                  if (reactPlayerRef.current) {
+                    reactPlayerRef.current.seekTo(youtubeStartTime, "seconds")
+                  }
+                }
+              }}
+              onProgress={handleVideoProgress}
+              onPause={handleVideoPause}
+              onEnded={handleVideoEnded}
+              config={{
+                youtube: {
+                  playerVars: {
+                    showinfo: 0,
+                    modestbranding: 1,
+                    rel: 0,
+                  },
+                },
+              }}
+            />
 
-            {savedYoutubeProgress && savedYoutubeProgress.position > 0 && (
+            {youtubeStartTime > 0 && (
               <div className="resume-indicator">
                 <p
                   style={{
@@ -630,22 +673,21 @@ const Curriculum = () => {
                     fontSize: "14px",
                   }}
                 >
-                  ▶️ Will resume from {Math.floor(savedYoutubeProgress.position / 60)}:
-                  {(savedYoutubeProgress.position % 60).toFixed(0).padStart(2, "0")}
-                  (Progress: {savedYoutubeProgress.progress.toFixed(0)}%)
+                  ▶️ Will resume from {Math.floor(youtubeStartTime / 60)}:
+                  {(youtubeStartTime % 60).toFixed(0).padStart(2, "0")}
+                  (Progress: {videoProgress.toFixed(0)}%)
                 </p>
               </div>
             )}
 
-            {/* Progress bar */}
             <div className="youtube-progress-container">
               <div className="youtube-progress-bar">
-                <div className="youtube-progress-fill" style={{ width: `${youtubeVideoProgress}%` }}></div>
+                <div className="youtube-progress-fill" style={{ width: `${videoProgress}%` }}></div>
               </div>
-              <div className="youtube-progress-text">{youtubeVideoProgress.toFixed(0)}% watched</div>
+              <div className="youtube-progress-text">{videoProgress.toFixed(0)}% watched</div>
             </div>
 
-            {youtubeVideoEnoughWatched && !currentLessonProgress.youtubeWatched && (
+            {videoEnoughWatched && !currentLessonProgress.youtubeWatched && (
               <button className="mark-complete-btn" onClick={() => handleMediaComplete("youtubeWatched")}>
                 Mark YouTube Video as Completed
               </button>
@@ -653,7 +695,7 @@ const Curriculum = () => {
             {currentLessonProgress.youtubeWatched && (
               <div className="completion-indicator">✅ YouTube video completed</div>
             )}
-            {!youtubeVideoEnoughWatched && (
+            {!videoEnoughWatched && (
               <div className="youtube-instruction">
                 <p
                   style={{
@@ -671,31 +713,191 @@ const Curriculum = () => {
             )}
           </div>
         ) : null
-      case "ppt":
-        return activePptUrl ? (
-          <div>
-            <PptSlides pptUrl={activePptUrl} />
-            <button className="mark-complete-btn" onClick={() => handleMediaComplete("pptViewed")}>
-              Mark Presentation as Viewed
-            </button>
-            {currentLessonProgress.pptViewed && <div className="completion-indicator">✅ Presentation completed</div>}
-          </div>
-        ) : (
-          <div className="ppt-prompt">
-            <p>Select a presentation to view</p>
+
+  
+        // case "ppt":
+        //   return (
+        //     <div key={`ppt-${activeLesson.id}-${activePptUrl}`} className="media-container">
+        //       {activePptUrl ? (
+        //         <div>
+        //           <PptSlides key={`ppt-slides-${activePptUrl}`} pptUrl={activePptUrl} />
+        //           <button className="mark-complete-btn" onClick={() => handleMediaComplete("pptViewed")}>
+        //             Mark Presentation as Viewed
+        //           </button>
+        //           {currentLessonProgress.pptViewed && (
+        //             <div className="completion-indicator">✅ Presentation completed</div>
+        //           )}
+        //         </div>
+        //       ) : (
+        //         <div className="ppt-prompt">
+        //           <p>Select a presentation to view</p>
+        //         </div>
+        //       )}
+        //     </div>
+        //   )
+  
+         case "ppt":
+        return (
+          <div key={`ppt-${activeLesson.id}-${activePptUrl}`} className="media-container">
+            {pptLoading ? (
+              <div className="ppt-loading">
+                <div style={{ textAlign: "center", padding: "40px" }}>
+                  <div className="loading-spinner">🔄</div>
+                  <p>Loading presentation...</p>
+                </div>
+              </div>
+            ) : activePptUrl ? (
+              <PptViewer pptUrl={activePptUrl} index={activeLesson.pptFiles.indexOf(activePptUrl)} />
+            ) : (
+              <div className="ppt-prompt">
+                <p>Select a presentation to view</p>
+              </div>
+            )}
           </div>
         )
+
       default:
         return null
     }
   }
 
+  // Render Download Materials Section
+  const renderDownloadSection = () => {
+    if (!showDownloadSection) return null
+
+    const materials = getDownloadableMaterials()
+    const totalFiles = materials.wordFiles.length + materials.pdfFiles.length + materials.imageFiles.length
+
+    if (totalFiles === 0) {
+      return (
+        <div className="download-section completion-card">
+          <div className="completion-header">
+            <h3>🏆 Congratulations! Course Completed</h3>
+          </div>
+          <div className="completion-content">
+            <p>
+              You have successfully completed all lessons in this course! Unfortunately, no additional materials are
+              available for download at this time.
+            </p>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <div className="download-section completion-card">
+        <div className="completion-header">
+          <h3>🏆 Congratulations! Course Completed</h3>
+          <p>You have successfully completed all lessons! You can now download the course materials.</p>
+        </div>
+        <div className="completion-content">
+          {/* Word Files Section */}
+          {materials.wordFiles.length > 0 && (
+            <div className="material-section">
+              <div className="material-header">
+                <h4>📄 Word Documents ({materials.wordFiles.length})</h4>
+                <button
+                  onClick={() => downloadAllFiles(materials.wordFiles, "word")}
+                  className="download-all-btn word-btn"
+                >
+                  📥 Download All Word Files
+                </button>
+              </div>
+              <div className="file-list">
+                {materials.wordFiles.map((file, index) => (
+                  <div key={index} className="file-item">
+                    <div className="file-info">
+                      <p className="file-name">{file.name}</p>
+                      <p className="file-section">{file.sectionTitle}</p>
+                    </div>
+                    <button onClick={() => downloadFile(file.url, `${file.name}.docx`)} className="download-btn">
+                      📥
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* PDF Files Section */}
+          {materials.pdfFiles.length > 0 && (
+            <div className="material-section">
+              <div className="material-header">
+                <h4>📋 PDF Documents ({materials.pdfFiles.length})</h4>
+                <button
+                  onClick={() => downloadAllFiles(materials.pdfFiles, "pdf")}
+                  className="download-all-btn pdf-btn"
+                >
+                  📥 Download All PDF Files
+                </button>
+              </div>
+              <div className="file-list">
+                {materials.pdfFiles.map((file, index) => (
+                  <div key={index} className="file-item">
+                    <div className="file-info">
+                      <p className="file-name">{file.name}</p>
+                      <p className="file-section">{file.sectionTitle}</p>
+                    </div>
+                    <button onClick={() => downloadFile(file.url, `${file.name}.pdf`)} className="download-btn">
+                      📥
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Image Files Section */}
+          {materials.imageFiles.length > 0 && (
+            <div className="material-section">
+              <div className="material-header">
+                <h4>🖼️ Images ({materials.imageFiles.length})</h4>
+                <button
+                  onClick={() => downloadAllFiles(materials.imageFiles, "image")}
+                  className="download-all-btn image-btn"
+                >
+                  📥 Download All Images
+                </button>
+              </div>
+              <div className="file-list">
+                {materials.imageFiles.map((file, index) => (
+                  <div key={index} className="file-item">
+                    <div className="file-info">
+                      <p className="file-name">{file.name}</p>
+                      <p className="file-section">{file.sectionTitle}</p>
+                    </div>
+                    <button onClick={() => downloadFile(file.url, `${file.name}.jpg`)} className="download-btn">
+                      📥
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Download All Materials Button */}
+          <div className="download-all-section">
+            <button
+              onClick={async () => {
+                await downloadAllFiles(materials.wordFiles, "word")
+                await downloadAllFiles(materials.pdfFiles, "pdf")
+                await downloadAllFiles(materials.imageFiles, "image")
+              }}
+              className="download-all-materials-btn"
+            >
+              📥 Download All Course Materials ({totalFiles} files)
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   const { previousLesson, nextLesson } = getNeighborLessons()
 
-  // If no user is logged in, show a message
   if (!currentUser) {
     return (
-      <div className="login-required" style={{ padding: "40px", textAlign: "center" }}>
+      <div className="login-required">
         <h2>👋 Please Log In</h2>
         <p>You need to log in to access your personalized learning path.</p>
       </div>
@@ -705,22 +907,19 @@ const Curriculum = () => {
   return (
     <div>
       {/* User Header */}
-      <div
-        className="user-header"
-        style={{
-          backgroundColor: "#f8f9fa",
-          padding: "10px 20px",
-          borderBottom: "2px solid #dee2e6",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+      <div className="user-header">
         <div className="current-user-info">
-          <h3 style={{ margin: 0, color: "#495057" }}>
-            👨‍🎓 {currentUser.name || currentUser.username || currentUser.email}
-          </h3>
-          {currentUser.email && <p style={{ margin: 0, fontSize: "14px", color: "#6c757d" }}>{currentUser.email}</p>}
+          <h3>👨‍🎓 {currentUser.employee_name || currentUser.employee_email}</h3>
+          {currentUser.email && <p>{currentUser.email}</p>}
+        </div>
+        <div className="course-progress">
+          <span className={`progress-badge ${areAllLessonsCompleted() ? "completed" : "in-progress"}`}>
+            {areAllLessonsCompleted() ? (
+              <>✅ Course Completed!</>
+            ) : (
+              `${completedLessons.size}/${getFlatLessons().length} Lessons Completed`
+            )}
+          </span>
         </div>
       </div>
 
@@ -728,7 +927,7 @@ const Curriculum = () => {
         {showCurriculum && (
           <div className="curriculum-sidebar">
             <div className="curriculum-header">
-              <h3 style={{ color: "#ffffff" }}>📖 Curriculum</h3>
+              <h3>📖 Curriculum</h3>
               <button onClick={() => setShowCurriculum(false)}>
                 <i className="fa-solid fa-xmark"></i>
               </button>
@@ -773,14 +972,16 @@ const Curriculum = () => {
           <div className="content-header">
             <h3>{curriculum?.course_title_main}</h3>
           </div>
+
           <div className="lesson-content">
+            {renderDownloadSection()}
+
             {activeLesson ? (
               <>
                 <h4>
                   {activeLesson.sectionTitle}: {activeLesson.title}
                 </h4>
 
-                {/* Progress Tracker */}
                 <div className="lesson-progress">
                   <h5>Lesson Progress:</h5>
                   {activeLesson.videoUrl && (
@@ -807,7 +1008,7 @@ const Curriculum = () => {
                   {activeLesson.videoUrl && (
                     <button
                       className={`media-button ${activeMediaType === "video" ? "active" : ""}`}
-                      onClick={() => setActiveMediaType("video")}
+                      onClick={() => handleMediaTypeSwitch("video")}
                     >
                       Course Video
                     </button>
@@ -815,7 +1016,7 @@ const Curriculum = () => {
                   {activeLesson.youtubeLink && (
                     <button
                       className={`media-button ${activeMediaType === "youtube" ? "active" : ""}`}
-                      onClick={() => setActiveMediaType("youtube")}
+                      onClick={() => handleMediaTypeSwitch("youtube")}
                     >
                       YouTube Video
                     </button>
@@ -823,7 +1024,7 @@ const Curriculum = () => {
                   {activeLesson.pptFiles && activeLesson.pptFiles.length > 0 && (
                     <button
                       className={`media-button ${activeMediaType === "ppt" ? "active" : ""}`}
-                      onClick={() => setActiveMediaType("ppt")}
+                      onClick={() => handleMediaTypeSwitch("ppt")}
                     >
                       Presentation Files
                     </button>
@@ -840,10 +1041,11 @@ const Curriculum = () => {
                         <div key={index} className="ppt-action-group">
                           <button
                             className="view-button"
-                            onClick={() => setActivePptUrl(ppt)}
+                            onClick={() => handlePptView(ppt, index)}
                             style={{ marginRight: "10px" }}
+                            disabled={pptLoading}
                           >
-                            View PPT {index + 1}
+                            {pptLoading ? "Loading..." : `📊 View PPT ${index + 1}`}
                           </button>
                         </div>
                       ))}
@@ -866,7 +1068,15 @@ const Curriculum = () => {
                 </div>
               </>
             ) : (
-              <p>Select a lesson to view its content</p>
+              <div className="no-lesson-selected">
+                <p>Select a lesson to view its content</p>
+                {areAllLessonsCompleted() && (
+                  <div className="completion-celebration">
+                    <h4>🎉 Congratulations!</h4>
+                    <p>You have completed all lessons in this course!</p>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 

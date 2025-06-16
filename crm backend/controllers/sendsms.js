@@ -39,7 +39,7 @@ const makecall=async(req,res)=>
                 to: to,
                 from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio phone number
               });
-        res.status(200).send({message:"message send successfully",resp})
+        res.status(200).send({message:"call send successfully",resp})
             
         } catch (error) {
             console.log(error);

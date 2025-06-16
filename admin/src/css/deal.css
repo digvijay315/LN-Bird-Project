@@ -470,7 +470,7 @@
   }
   
 
-.feedback-toast {
+/* .feedback-toast {
   position: fixed;
   top: 20px;
   right: 10px;
@@ -480,13 +480,13 @@
   z-index: 9999;
 }
 
-/* When opening */
+
 .feedback-toast.show {
   display: block;
   animation: slideInRight 0.5s ease forwards;
 }
 
-/* When closing */
+
 .feedback-toast.hide {
   display: block;
   animation: slideOutRight 0.5s ease forwards;
@@ -513,6 +513,6 @@
     opacity: 0;
   }
 }
-
+ */
 
 

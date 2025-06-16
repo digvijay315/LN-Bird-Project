@@ -1496,7 +1496,7 @@ function Dealdetails() {
                   
                     { id: 'sno', name: '#' },
                     { id: 'details', name: 'Details' },
-                    { id: 'status', name: 'Status' },
+                    { id: 'stage', name: 'Status' },
                     { id: 'ownerdetails', name: 'Owner_Details' },
                     { id: 'owneraddress', name: ' Owner_Address' },
                     { id: 'associatedcontact', name: 'Associated_Contact ' },
@@ -4928,10 +4928,17 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                 const [isClosing, setIsClosing] = useState(false);
                 const toastRef = useRef(null);
 
-                    const toggleToast = () => {
+                    const toggleToast = async() => {
 
                       setShow(true);
                       document.getElementById('unitlistview').style.filter = 'blur(5px)';
+                    
+                    const project=selectedItems3[0].project_name
+                    const block=selectedItems3[0].block
+                    const unit=selectedItems3[0].unit_no
+
+                    const resp=await api.get(`viewprojectforinventories/${project}/${unit}/${block}`)
+                    setunits(resp.data.project.add_unit[0])
                     };
 
 
@@ -4965,7 +4972,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
           if (feedbackform.owner_response==="Yes" || feedbackform.owner_response==="Yes -Sell this property but buy another") {
             setfeedbackform(prev => ({
               ...prev,
-              stage: "Open",
+              stage: "Active",
             }));
           }
           if (feedbackform.owner_response==="Sold" || feedbackform.owner_response==="No -But discussed about price"
@@ -4980,7 +4987,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
             if (feedbackform.owner_response==="No") {
             setfeedbackform(prev => ({
               ...prev,
-              stage: "Inactive(may vary by reason)",
+              stage: "Inactive",
             }));
           }
         }, [feedbackform.owner_response]);
@@ -5014,13 +5021,19 @@ const noreasonsList = [
 
 const addfeedback = async () => {
   try {
+            const project=selectedItems3[0].project_name
+            const block=selectedItems3[0].block
+            const unit=selectedItems3[0].unit_no
+            let updatedUnits = { ...units, stage: feedbackform.stage };
     const resp = await api.post('addfeedback', feedbackform);
     if (resp.status === 200) {
+  
       let htmlContent = "<p>Feedback submitted successfully!</p>";
 
       // Generate dynamic buttons based on owner_response
       switch (feedbackform.owner_response) {
         case "Yes":
+        await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
         case "Sold -But Interested to sell Another Property":
           htmlContent += `
             <button id="createDealBtn" style="${buttonStyle}">
@@ -5049,6 +5062,7 @@ const addfeedback = async () => {
           break;
 
         case "Sold":
+          await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
           htmlContent += `
             <button id="addOwnerBtn" style="${buttonStyle}">
               <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Add New Owner
@@ -5057,6 +5071,7 @@ const addfeedback = async () => {
           break;
 
         case "Sold -But Interested to Buy Another Property":
+          await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
           htmlContent += `
             <button id="addLeadBtn" style="${buttonStyle}">
               <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Add Lead
@@ -7328,12 +7343,33 @@ return (
               />
               {index + 1}
             </StyledTableCell>
-            <StyledTableCell 
-              style={{ padding: "10px", cursor:"pointer",fontSize:"12px" }} onClick={()=>navigate('/inventorysingleview',{state:item})}  >
-              <span style={{fontWeight:"bolder",fontSize:"14px",color:"#0086b3"}}>{item.unit_no}</span> ({item.unit_type})<br></br>
-              {item.category} {item.size} <br></br>
-              {item.project_name}
-            </StyledTableCell>
+        <StyledTableCell 
+          style={{ padding: "10px", cursor: "pointer", fontSize: "12px" }}
+          onClick={() => navigate('/inventorysingleview', { state: item })}
+        >
+          {(() => {
+            const isMatched = data.some(deal =>
+              String(deal.project) === String(item.project) &&
+              String(deal.block) === String(item.block) &&
+              String(deal.unit_number) === String(item.unit_no)
+            );
+
+            return (
+              <>
+                <span style={{
+                  fontWeight: "bolder",
+                  fontSize: "14px",
+                  color: isMatched ? "red" : "#0086b3"
+                }}>
+                  {item.unit_no}
+                </span> ({item.unit_type})<br />
+                {item.category} {item.size} <br />
+                {item.project_name}
+              </>
+            );
+          })()}
+        </StyledTableCell>
+
             {visibleColumns3
               .filter((col) => col.id !== 'details' && col.id !== 'sno')
               .map((col) => (

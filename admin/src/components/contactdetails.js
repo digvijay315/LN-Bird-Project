@@ -1254,6 +1254,23 @@ const handleSort = (key) => {
 
 // ===============================================filter code start==================================================================
 
+      const [show, setShow] = useState(false);
+                const [isClosing, setIsClosing] = useState(false);
+                const toastRef = useRef(null);
+
+                    const toggleToast = async() => {
+                      setShow(true);
+                    };
+
+
+              const handleCancel = () => {
+                setIsClosing(true); // trigger slide-out
+                setTimeout(() => {
+                  setShow(false);     // hide the toast completely
+                  setIsClosing(false); // reset for next open
+                }, 500); // duration should match animation time
+              };
+
 
 const professions = [
   'Self Employed', 
@@ -1270,6 +1287,18 @@ const professions = [
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDropdown1, setShowDropdown1] = useState(false);
  
+    const filterRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowDropdown(false); // close the filter box
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handlefilterCheckboxChange = (profession) => {
     const updatedSelections = selectedProfessions.includes(profession)
@@ -3447,109 +3476,146 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
             Download Data(sample)</li>
             </ul>
             
-      <Tooltip title="filter contacts..." arrow>
-            <button  style={{ position:"relative",marginLeft: '75%',width:"50px",padding: '8px',color: 'white',border: 'none',
-                             borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center'}}
-                              className="form-control form-control-sm form-control form-control-sm-sm" onClick={() => setShowDropdown(!showDropdown)} >
-                                <img src="https://cdn-icons-png.flaticon.com/512/107/107799.png" style={{height:"25px"}}></img>
-                              </button></Tooltip>
-            {showDropdown && (
-        <div className="dropdown-container" style={{position: 'absolute',marginTop:"40px",left: '75%',width: '200px',backgroundColor: '#f9f9f9',
-                        border: '1px solid #ddd',borderRadius: '4px',padding: '10px',boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',zIndex: 10,}}>
-                                <h3 style={{fontSize:"12px"}}><u>Filter Contacts By...</u></h3><br></br>
-           
-           <div>
-            <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              cursor: 'pointer',
-            }}
-            onClick={() => setShowDropdown1(!showDropdown1)} // Toggle dropdown visibility
-          >
-      
-            <h4
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                color: '#333',
-                marginBottom: '8px',
-                textAlign: 'center',
-                fontFamily:"arial"
-              }}
-            >
-              <u>Filter By Profession</u>
-            </h4>
-            <span
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                transform: showDropdown1 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the icon when dropdown is visible
-                transition: 'transform 0.3s ease', // Smooth rotation effect
-              }}
-            >
-              &#9660; {/* Down arrow symbol */}
-            </span>
+    <Tooltip title="Filter contacts..." arrow>
+  <button
+    // onClick={() => setShowDropdown(!showDropdown)}
+      onClick={toggleToast}
+    style={{
+      position: "relative",
+      marginLeft: '75%',
+      width: "50px",
+      padding: '8px',
+      backgroundColor: '#6366f1', // modern indigo color
+      color: 'white',
+      border: 'none',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+      transition: 'all 0.3s ease',
+    }}
+  >
+    {/* Funnel Icon - SVG (modern look) */}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      height="24"
+      width="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 4h18" />
+      <path d="M6 8h12" />
+      <path d="M10 12h4" />
+      <path d="M12 16v4" />
+    </svg>
+  </button>
+</Tooltip>
 
-          </div>
+ <div
+  ref={toastRef}
+  className={`feedback-toast ${show ? (isClosing ? 'hide' : 'show') : ''}`}
+  style={{ zIndex: 9999 }}
+>
 
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              cursor: 'pointer',
-            }}
-            onClick={() => setShowDropdown2(!showDropdown2)} // Toggle dropdown visibility
-          >
-      
-            <h4
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                color: '#333',
-                marginBottom: '8px',
-                textAlign: 'center',
-                fontFamily:"arial"
-              }}
-            >
-              <u>Filter By Fields</u>
-            </h4>
-            <span
-              style={{
-                fontSize: '12px',
-                fontWeight: 'bold',
-                transform: showDropdown2 ? 'rotate(180deg)' : 'rotate(0deg)', // Rotate the icon when dropdown is visible
-                transition: 'transform 0.3s ease', // Smooth rotation effect
-              }}
-            >
-              &#9660; {/* Down arrow symbol */}
-            </span>
+  <div  ref={filterRef} style={{
+    position: 'absolute',
+    top: '100px',
+    right: '25px',
+    width: '340px',
+    background: 'linear-gradient(135deg, #fdfdfd, #f3f4f6)',
+    border: '1px solid #ccc',
+    borderRadius: '12px',
+    padding: '18px',
+    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+    zIndex: 1000,
+    fontFamily: 'Segoe UI, sans-serif',
+  }}>
+    <h3 style={{
+      fontSize: '15px',
+      marginBottom: '12px',
+      textAlign: 'center',
+      color: '#333',
+      borderBottom: '1px solid #ddd',
+      paddingBottom: '6px'
+    }}>
+      <u>🔍 Filter Contacts</u>
+    </h3>
 
-          </div>
+    {/* Profession Filter */}
+    <div style={{ marginBottom: '16px' }}>
+      <div onClick={() => setShowDropdown1(!showDropdown1)}
+        style={{
+          cursor: 'pointer',
+          display: 'flex',
+          justifyContent: 'space-between',
+          background: '#f0f2f5',
+          padding: '8px 10px',
+          borderRadius: '6px',
+          fontWeight: 'bold',
+          fontSize: '13px',
+          color: '#333',
+          transition: 'background 0.3s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = '#e2e6ea'}
+        onMouseLeave={e => e.currentTarget.style.background = '#f0f2f5'}
+      >
+        <span>📌 Profession</span>
+        <span style={{
+          transform: showDropdown1 ? 'rotate(180deg)' : 'rotate(0)',
+          transition: '0.3s'
+        }}>▼</span>
+      </div>
 
+      {showDropdown1 && (
+        <div style={{ marginTop: '10px', paddingLeft: '12px' }}>
+          {professions.map((profession) => (
+            <label key={profession} style={{ display: 'block', marginBottom: '8px', fontSize: '13px', color: '#444' }}>
+              <input
+                type="checkbox"
+                checked={selectedProfessions.includes(profession)}
+                onChange={() => handlefilterCheckboxChange(profession)}
+                style={{ marginRight: '8px' }}
+              />
+              {profession}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
 
-          </div>
-          {showDropdown1 &&
-            professions.map((profession) => (
-              <div key={profession} className="dropdown-item" style={{ marginBottom: '6px' }}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={selectedProfessions.includes(profession)}
-                    onChange={() => handlefilterCheckboxChange(profession)}
-                    style={{ marginRight: '8px' }}
-                  />
-                  {profession}
-                </label>
-              </div>
-            ))}
+    {/* Custom Fields Filter */}
+    <div>
+      <div onClick={() => setShowDropdown2(!showDropdown2)}
+        style={{
+          cursor: 'pointer',
+          display: 'flex',
+          justifyContent: 'space-between',
+          background: '#f0f2f5',
+          padding: '8px 10px',
+          borderRadius: '6px',
+          fontWeight: 'bold',
+          fontSize: '13px',
+          color: '#333',
+          transition: 'background 0.3s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = '#e2e6ea'}
+        onMouseLeave={e => e.currentTarget.style.background = '#f0f2f5'}
+      >
+        <span>📋 Custom Fields</span>
+        <span style={{
+          transform: showDropdown2 ? 'rotate(180deg)' : 'rotate(0)',
+          transition: '0.3s'
+        }}>▼</span>
+      </div>
 
-        {showDropdown2 && contactfields.map(({ label, field }) => (
-          <div key={field} style={{ marginBottom: '6px' }}>
-            <label style={{ display: 'flex', flexDirection: 'column' }}>
-              <div>
+      {showDropdown2 && (
+        <div style={{ marginTop: '10px', paddingLeft: '12px' }}>
+          {contactfields.map(({ label, field }) => (
+            <div key={field} style={{ marginBottom: '12px' }}>
+              <label style={{ fontSize: '13px', color: '#444' }}>
                 <input
                   type="checkbox"
                   checked={field in selectfield}
@@ -3557,34 +3623,54 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                   style={{ marginRight: '8px' }}
                 />
                 {label}
-              </div>
+              </label>
 
-              {field in selectfield && field.includes('date') ? (
-      // Render date input fields for From Date and To Date
-              <input
-                type="date"
-                value={selectfield[field]}
-                onChange={(e) => handleFieldInputChange(field, e.target.value)}
-                style={{ marginTop: '5px', marginLeft: '20px' }}
-              />
-            ) : (
-              // Render text input fields for other fields
-              field in selectfield && (
-                <input
-                  type="text"
-                  placeholder={`Search by ${label}`}
-                  value={selectfield[field]}
-                  onChange={(e) => handleFieldInputChange(field, e.target.value)}
-                  style={{ marginTop: '5px', marginLeft: '20px' }}
-                />
-              )
-            )}
-            </label>
-          </div>
-        ))}
-
+              {field in selectfield && (
+                field.includes('date') ? (
+                  <input
+                    type="date"
+                    value={selectfield[field]}
+                    onChange={(e) => handleFieldInputChange(field, e.target.value)}
+                    style={{
+                      display: 'block',
+                      marginTop: '6px',
+                      marginLeft: '20px',
+                      width: '85%',
+                      padding: '6px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      fontSize: '13px',
+                      color: '#333',
+                    }}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    placeholder={`Search by ${label}`}
+                    value={selectfield[field]}
+                    onChange={(e) => handleFieldInputChange(field, e.target.value)}
+                    style={{
+                      display: 'block',
+                      marginTop: '6px',
+                      marginLeft: '20px',
+                      width: '85%',
+                      padding: '6px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      fontSize: '13px',
+                      color: '#333',
+                    }}
+                  />
+                )
+              )}
+            </div>
+          ))}
         </div>
       )}
+    </div>
+     <button className="btn btn-danger w-30" style={{marginTop:"20px"}} onClick={handleCancel}>Cancel</button>
+  </div>
+</div>
 
         
         
