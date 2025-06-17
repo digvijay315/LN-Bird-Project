@@ -7349,7 +7349,7 @@ return (
         >
           {(() => {
             const isMatched = data.some(deal =>
-              String(deal.project) === String(item.project) &&
+              String(deal.project) === String(item.project_name) &&
               String(deal.block) === String(item.block) &&
               String(deal.unit_number) === String(item.unit_no)
             );
@@ -7359,7 +7359,7 @@ return (
                 <span style={{
                   fontWeight: "bolder",
                   fontSize: "14px",
-                  color: isMatched ? "red" : "#0086b3"
+                  color: isMatched ? "green" : "#0086b3"
                 }}>
                   {item.unit_no}
                 </span> ({item.unit_type})<br />
@@ -7396,6 +7396,25 @@ return (
                       </>
                     )):[]}
                       </>
+                    ) : col.id==='stage' ?
+                    (
+                      <>
+                       {(() => {
+                    const isMatched = data.some(deal =>
+                      String(deal.project) === String(item.project_name) &&
+                      String(deal.block) === String(item.block) &&
+                      String(deal.unit_number) === String(item.unit_no)
+                    );
+
+                    return (
+                      <>
+                      <img style={{height:"40px",display:isMatched?"block":"none"}} src="https://static.vecteezy.com/system/resources/thumbnails/049/539/805/small_2x/3d-render-business-deal-for-business-icon-transparent-background-png.png"></img>
+                        {item.stage}
+                      </>
+                    );
+                  })()}
+                      
+                    </>
                     ) :   col.id==='owneraddress' ?
                     (
                       <>

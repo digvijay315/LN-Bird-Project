@@ -300,9 +300,9 @@ const handlePayment = async () => {
       description: 'Test Transaction',
       order_id: order.razorpayOrderId,
       handler: function (response) {
-        console.log('Payment Success Response:', response);
-
+       
         if (response && response.razorpay_payment_id) {
+            verifyPayment(response);
           Swal.fire({
             title: 'Payment Successful!',
             text: 'Thank You for Shopping with Kiona! Keep shopping like this 🛍️😊',
@@ -312,9 +312,6 @@ const handlePayment = async () => {
             handleClose4(); // Close modal
             setcart([]); // Clear cart
             setFormData({ ...formData, payment_status: 'success' });
-
-            // Step 3: Send payment details to backend for verification
-            verifyPayment(response);
           });
 
         } else {
@@ -366,6 +363,7 @@ const verifyPayment = async (paymentResponse) => {
       });
 
       if (paymentVerificationResponse.data.message === "Payment successful, order updated!") {
+         generateInvoice(paymentVerificationResponse,formData,companyDetails)
           Swal.fire({
             title: 'Order Confirmed!',
             text: 'Your order is confirmed and payment is successful.',
@@ -375,7 +373,7 @@ const verifyPayment = async (paymentResponse) => {
             navigate("/"); // Redirect to home or any other page
           });
 
-          generateInvoice(paymentVerificationResponse,formData,companyDetails)
+         
       } else {
           Swal.fire({
             title: 'Payment Failed!',

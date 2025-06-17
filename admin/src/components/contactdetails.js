@@ -3277,6 +3277,7 @@ const[isloading3,setisloading3]=useState(false)
                           
                                             if (value.trim() === '') {
                                               setSuggestionscontact([]);
+                                              fetchdata()
                                               return;
                                             }
                           
@@ -3304,7 +3305,8 @@ const[isloading3,setisloading3]=useState(false)
                                               
                                            } );
                           
-                                            setSuggestionscontact(filtered); // Limit to 5 suggestions
+                                            setSuggestionscontact(filtered);
+                                            setdata(filtered) // Limit to 5 suggestions
                                           };
                           
                                           const handleSuggestionClickcontact = (item) => {
@@ -3711,7 +3713,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
               // onKeyDown={handleKeyPress2}
               autoComplete="off"
             />
-          {suggestionscontact.length > 0 && (
+          {/* {suggestionscontact.length > 0 && (
   <ul
     className="list-group position-absolute"
     style={{
@@ -3749,7 +3751,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
             );
           })}
         </ul>
-      )}
+      )} */}
 
 
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>

@@ -25,12 +25,28 @@ const lead_info = async (req, res) => {
       education,degree,school_college,loan,bank,amount,social_media,url,income,amount1,document_no,document_name,document_pic,
       lastcommunication,matcheddeals,matchingdeal,score} = req.body;
 
-   const existinglead=leadinfo.findOne({mobile_no:mobile_no,email:email})
-           if(existinglead)
-            {
-              res.status(400).send({message:"Lead already exist..."})
-              return
+         // Check if mobile_no exists (and is array with values)
+          if (Array.isArray(mobile_no)) {
+            const validMobileNos = mobile_no.filter(num => num && num.trim() !== "");
+            
+            if (validMobileNos.length > 0) {
+              const existingMobile = await addcontact.findOne({ mobile_no: { $in: validMobileNos } });
+              if (existingMobile) {
+                return res.status(400).send({ message: "Mobile number already exists..." });
+              }
             }
+          }
+
+          if (Array.isArray(email)) {
+          const validemails = email.filter(num => num && num.trim() !== "");
+          
+          if (validemails.length > 0) {
+            const existingemail = await addcontact.findOne({ email: { $in: validemails } });
+            if (existingemail) {
+              return res.status(400).send({ message: "Email id already exists..." });
+            }
+          }
+        }
 
     const newDocumentPic = [];
 

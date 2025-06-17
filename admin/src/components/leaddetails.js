@@ -4506,6 +4506,7 @@ const replaceVariables = (template, lead, property) => {
                           
                                             if (value.trim() === '') {
                                               setSuggestionslead([]);
+                                              fetchdata()
                                               return;
                                             }
                           
@@ -4533,7 +4534,8 @@ const replaceVariables = (template, lead, property) => {
                                               
                                            } );
                           
-                                            setSuggestionslead(filtered); // Limit to 5 suggestions
+                                            setSuggestionslead(filtered);
+                                              setdata(filtered) // Limit to 5 suggestions
                                           };
                           
                                           const handleSuggestionClicklead = (item) => {
@@ -4984,7 +4986,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
               // onKeyDown={handleKeyPress2}
               autoComplete="off"
             />
-          {suggestionslead.length > 0 && (
+          {/* {suggestionslead.length > 0 && (
   <ul
     className="list-group position-absolute"
     style={{
@@ -5022,7 +5024,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
             );
           })}
         </ul>
-      )}
+      )} */}
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
 
