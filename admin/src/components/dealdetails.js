@@ -4766,6 +4766,7 @@ const [suggestions, setSuggestions] = useState([]);
 
                   if (value.trim() === '') {
                     setSuggestions([]);
+                    fetchdata()
                     return;
                   }
 
@@ -4775,7 +4776,8 @@ const [suggestions, setSuggestions] = useState([]);
                     (item.unit_number && item.unit_number.toLowerCase().includes(value.toLowerCase()))
                   );
 
-                  setSuggestions(filtered); // Limit to 5 suggestions
+                  setSuggestions(filtered);
+                  setdata(filtered) // Limit to 5 suggestions
                 };
 
                 const handleSuggestionClickdeal = (item) => {
@@ -4802,6 +4804,7 @@ const [suggestionsproject, setSuggestionsproject] = useState([]);
 
                   if (value.trim() === '') {
                     setSuggestionsproject([]);
+                    fetchcdata()
                     return;
                   }
 
@@ -4827,6 +4830,7 @@ const [suggestionsproject, setSuggestionsproject] = useState([]);
                  } );
 
                   setSuggestionsproject(filtered); // Limit to 5 suggestions
+                  setcdata(filtered)
                 };
 
                 const handleSuggestionClickproject = (item) => {
@@ -4872,6 +4876,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
 
                   if (value.trim() === '') {
                     setSuggestionsunit([]);
+                    fetchcdata()
                     return;
                   }
 
@@ -4904,6 +4909,7 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
                  } );
 
                   setSuggestionsunit(filtered); // Limit to 5 suggestions
+                  setFlattenedUnits(filtered)
                 };
 
                 const handleSuggestionClickunit = (item) => {
@@ -5455,7 +5461,7 @@ return (
               // onKeyDown={handleKeyPress2}
               autoComplete="off"
             />
-            {suggestions.length > 0 && (
+            {/* {suggestions.length > 0 && (
               <ul className="list-group position-absolute" style={{ width: "20%", zIndex: 1000,marginTop:"40px",fontSize:"14px",cursor:"pointer", boxShadow: "0 4px 12px rgba(0, 0, 0, 0.25)",backgroundColor: "#fff", borderRadius: "4px",  maxHeight: "300px", overflowY: "auto"}}>
                 {suggestions.map((item, index) => (
                   <li
@@ -5467,7 +5473,7 @@ return (
                   </li>
                 ))}
               </ul>
-            )}
+            )} */}
 
      
       <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
@@ -6387,7 +6393,7 @@ return (
               // onKeyDown={handleKeyPress2}
               autoComplete="off"
             />
-          {suggestionsproject.length > 0 && (
+          {/* {suggestionsproject.length > 0 && (
   <ul
     className="list-group position-absolute"
     style={{
@@ -6430,7 +6436,7 @@ return (
             );
           })}
         </ul>
-      )}
+      )} */}
 
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
@@ -6877,7 +6883,7 @@ return (
               // onKeyDown={handleKeyPress2}
               autoComplete="off"
             />
-          {suggestionsunit.length > 0 && (
+          {/* {suggestionsunit.length > 0 && (
   <ul
     className="list-group position-absolute"
     style={{
@@ -6918,7 +6924,7 @@ return (
             );
           })}
         </ul>
-      )}
+      )} */}
 
 
 <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>

@@ -1693,59 +1693,48 @@ CheckOut
   className={`feedback-toast ${show5 ? (isClosing ? 'hide' : 'show') : ''}`}
   style={{ zIndex: 9999 }}
 >
-  <div className="toast show">
-    <div className="toast-header">
-            <div>
-            <img
-            className="img-fluid"
-            src={logo}
-            alt="Product"
-            style={{height:"40px"}}
-            />
-            </div>
-            <div>
-               <span style={{fontWeight:"bold",fontSize:"16px"}}>Your Cart Details</span>
-            </div>
-           
-         
+  <div className="toast show custom-toast">
+    <div className="toast-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <img className="cart-logo" src={logo} alt="Product" />
+      <span className="cart-heading">Your Cart Details</span>
     </div>
-    <div className="toast-body"  style={{maxHeight: '90vh',overflowY: 'auto',paddingRight: '10px',}}>
-        {cart.map((item, index) => (
+
+    <div className="toast-body custom-toast-body">
+      {cart.map((item, index) => (
         <div key={index} className="cart-item">
-        <img src={item.product_image} alt={item.product} />
-        <div className="cart-item-info">
-        <div className="cart-item-title">{item.product_name}</div>
+          <img src={item.product_image} alt={item.product} className="cart-item-img" />
+          <div className="cart-item-info">
+            <div className="cart-item-title">{item.product_name}</div>
+            <div className="cart-item-price">
+              ₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)}
+              <span className="cart-qty">Qty: {item.product_quantity1}</span>
+            </div>
+            <span onClick={() => removeFromCart(index)} className="delete-icon">
+              <i className="fa-solid fa-trash"></i>
+            </span>
+            <div className="cart-item-actions">
+              <button onClick={() => decrementQuantity(index)}>-</button>
+              <span className="quantity">{item.product_quantity1}</span>
+              <button onClick={() => incrementQuantity(index)}>+</button>
+            </div>
+          </div>
+        </div>
+      ))}
 
-        <div className="cart-item-price">
-        ₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)}
-        <span style={{marginLeft:"4rem"}}>Quantity {item.product_quantity1}</span>
-
-        </div>
-        <span onClick={() => removeFromCart(index)} style={{ cursor: "pointer", color: "red" }}>
-        <i className="fa-solid fa-trash"></i>
-        </span>
-        </div>
-        <div className="cart-item-actions">
-        <button onClick={() => decrementQuantity(index)}>-</button>
-        <span className="quantity">{item.product_quantity1}</span>
-        <button onClick={() => incrementQuantity(index)}>+</button>
-        </div>
-        </div>
-
-        ))}
-        <div className="cart-total">
+      <div className="cart-total">
         <h3>
-        Total Price: <span >
-        ₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
-        </span>
+          Total Price: <span>₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}</span>
         </h3>
-        </div>
+      </div>
 
-      <button className="btn btn-danger w-30" onClick={handleCancel}>Cancel</button>
-      <button className="btn btn-success w-60" style={{ marginLeft: "10%" }} onClick={handleShow4}>CheckOut</button>
+      <div className="cart-buttons">
+        <button className="btn btn-danger w-100 mb-2" onClick={handleCancel}>Cancel</button>
+        <button className="btn btn-success w-100" onClick={handleShow4}>CheckOut</button>
+      </div>
     </div>
   </div>
 </div>
+
 
 {/* modal---------------------------------------------------------------------- */}
 
@@ -1754,536 +1743,163 @@ CheckOut
 
 
 <Modal show={show4} onHide={handleClose4} size="xl">
-<Modal.Header closeButton>
-<Modal.Title> <div>
-<h3>Add New Address</h3>
-</div></Modal.Title>
-</Modal.Header>
-<Modal.Body>
-<div
-className="container"
-style={{
-display: "flex",
-gap: "2rem",
-flexWrap: "wrap",
-padding: "20px",
-backgroundColor: "#f9f9f9",
-borderRadius: "8px",
-boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-}}
->
-{/* Form Section */}
-<div
-style={{
-flex: "1",
-backgroundColor: "#ffffff",
-borderRadius: "8px",
-padding: "20px",
-boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-maxWidth: "600px",
-}}
->
-<form>
-<h5 style={{ marginBottom: "20px", fontWeight: "600" }}>
-*Area Details
-</h5>
-<div className="mb-3 row">
-<div className="col-md-6">
-<label htmlFor="apartmentNumber" className="form-label">
-*Apartment / House No.
-</label>
-<input
-type="text"
-className="form-control"
-id="apartmentNumber"
-name="apartmentNumber"
-value={formData.apartmentNumber}
-onChange={handleChange}
-placeholder="e.g. 12/228"
-required
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.apartmentNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation1.apartmentNumber}</span>}
-</div>
-{/* <div className="col-md-6">
-<label htmlFor="apartmentNumber" className="form-label">
-*user email
-</label>
-<input
-type="text"
-className="form-control"
-id="apartmentNumber"
-name="apartmentNumber"
-value={useremail}
-// onChange={handleChange}
-// placeholder="e.g. 12/228"
-// required
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-</div> */}
-<div className="col-md-6">
-<label htmlFor="apartmentName" className="form-label">
-*Apartment Name
-</label>
-<input
-type="text"
-className="form-control"
-id="apartmentName"
-name="apartmentName"
-value={formData.apartmentName}
-onChange={handleChange}
-placeholder="e.g. Park Avenue"
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.apartmentName && <span style={{ color: "red", fontSize: "12px" }}>{validation1.apartmentName}</span>}
-</div>
-</div>
-<div className="mb-3 row">
-<div className="col-md-6">
-<label htmlFor="area" className="form-label">
-*Area
-</label>
-<input
-type="text"
-className="form-control"
-id="area"
-name="area"
-onChange={handleChange}
-placeholder="e.g. 12/228"
-required
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.area && <span style={{ color: "red", fontSize: "12px" }}>{validation1.area}</span>}
-</div>
-<div className="col-md-6">
-<label htmlFor="StreetDetails" className="form-label">
-*Street Details/Landmark
-</label>
-<input
-type="text"
-className="form-control"
-id="landmark"
-name="landmark"
+  <Modal.Header closeButton>
+    <Modal.Title><h3>Add New Address</h3></Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <div className="container-fluid">
+      <div className="row gy-4">
+        {/* Left Form Section */}
+        <div className="col-lg-7 col-md-12">
+          <div className="p-3 shadow-sm bg-white rounded" style={{ minWidth: "0" }}>
+            <form>
+              <h5 className="mb-3 fw-semibold">*Area Details</h5>
 
-onChange={handleChange}
-placeholder="e.g. Park Avenue"
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.landmark && <span style={{ color: "red", fontSize: "12px" }}>{validation1.landmark}</span>}
-</div>
-</div>
-<div className="d-flex justify-content-between" style={{ gap: "20px" }}>
-  {/* State Dropdown */}
-  <div className="col-md-6">
-    <label htmlFor="state" className="form-label">
-      *Select State
-    </label>
-    <select
-      className="form-control" id="state" name="selectstate"  value={formData.selectstate} onChange={handleChange}
-      style={{
-        borderRadius: "5px",
-        padding: "10px",
-        fontSize: "14px",
-      }}
-    >
-      <option value="" disabled>
-        Select a state
-      </option>
-      {Object.keys(statesAndCities).map((state, index) => (
-    <option key={index} value={state}>
-      {state}
-    </option>
-  ))}
-    </select>
-    {validation1.selectstate && <span style={{ color: "red", fontSize: "12px" }}>{validation1.selectstate}</span>}
-  </div>
+              <div className="row mb-3">
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">*Apartment / House No.</label>
+                  <input type="text" className="form-control" name="apartmentNumber" value={formData.apartmentNumber} onChange={handleChange} required />
+                  {validation1.apartmentNumber && <small className="text-danger">{validation1.apartmentNumber}</small>}
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">*Apartment Name</label>
+                  <input type="text" className="form-control" name="apartmentName" value={formData.apartmentName} onChange={handleChange} />
+                  {validation1.apartmentName && <small className="text-danger">{validation1.apartmentName}</small>}
+                </div>
+              </div>
 
-  {/* City Dropdown */}
-  <div className="col-md-6">
-    <label htmlFor="city" className="form-label">
-      *Select City
-    </label>
-    <select
-      className="form-control"
-      id="city"
-      name="selectcity"
-      value={formData.selectcity}
-      onChange={handleChange}
-      style={{
-        borderRadius: "5px",
-        padding: "10px",
-        fontSize: "14px",
-      }}
-    >
-      <option value="" disabled>
-        Select a city
-      </option>
-      {indianCities.map((city, index) => (
-        <option key={index} value={city}>
-          {city}
-        </option>
-      ))}
-    </select>
-    {validation1.selectcity && <span style={{ color: "red", fontSize: "12px" }}>{validation1.selectcity}</span>}
-  </div>
-</div>
-    
-<div className="col-md-6 mb-3">
-<label htmlFor="landmark" className="form-label">
-*Pincode
-</label>
-<input
-type="text"
-className="form-control"
-id="pincode"
-name="pincode"
-required
-onChange={handleChange}
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.pincode && <span style={{ color: "red", fontSize: "12px" }}>{validation1.pincode}</span>}
-</div>
-<h5 style={{ marginTop: "20px", fontWeight: "600" }}>
-Personal Details
-</h5>
-<div className="mb-3 row">
-<div className="col-md-6">
-<label htmlFor="firstName" className="form-label">
-First Name
-</label>
-<input
-type="text"
-className="form-control"
-id="firstName"
-name="firstName"
-value={formData.firstName}
-onChange={handleChange}
-placeholder="e.g. John"
-required
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.firstName && <span style={{ color: "red", fontSize: "12px" }}>{validation1.firstName}</span>}
-</div>
-<div className="col-md-6">
-<label htmlFor="lastName" className="form-label">
-Last Name
-</label>
-<input
-type="text"
-className="form-control"
-id="lastName"
-name="lastName"
-value={formData.lastName}
-onChange={handleChange}
-placeholder="e.g. Doe"
-required
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.lastName && <span style={{ color: "red", fontSize: "12px" }}>{validation1.lastName}</span>}
-</div>
-</div>
-<div className="col-md-6 mb-3">
-<label htmlFor="mobileNumber" className="form-label">
-Mobile Number
-</label>
-<input
-type="tel"
-className="form-control"
-id="mobileNumber"
-name="mobileNumber"
-value={formData.mobileNumber}
-onChange={handleChange}
-placeholder="e.g. 9876543210"
-required
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-{validation1.mobileNumber && <span style={{ color: "red", fontSize: "12px" }}>{validation1.mobileNumber}</span>}
-</div>
+              <div className="row mb-3">
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">*Area</label>
+                  <input type="text" className="form-control" name="area" onChange={handleChange} required />
+                  {validation1.area && <small className="text-danger">{validation1.area}</small>}
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">*Street Details/Landmark</label>
+                  <input type="text" className="form-control" name="landmark" onChange={handleChange} />
+                  {validation1.landmark && <small className="text-danger">{validation1.landmark}</small>}
+                </div>
+              </div>
 
-<div className="col-md-6">
-<label htmlFor="email" className="form-label">
-Email Id
-</label>
-<input
-type="text"
-className="form-control"
-id="email"
-name="email"
-value={formData.email }
-onChange={handleChange}
-placeholder="e.g. Doe"
-style={{
-borderRadius: "5px",
-padding: "10px",
-fontSize: "14px",
-}}
-/>
-</div>
+              <div className="row mb-3">
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">*Select State</label>
+                  <select className="form-control" name="selectstate" value={formData.selectstate} onChange={handleChange}>
+                    <option value="">Select a state</option>
+                    {Object.keys(statesAndCities).map((state, i) => (
+                      <option key={i} value={state}>{state}</option>
+                    ))}
+                  </select>
+                  {validation1.selectstate && <small className="text-danger">{validation1.selectstate}</small>}
+                </div>
 
-<div className="col-md-6">
-    <label htmlFor="city" className="form-label">
-      *Select payment Type
-    </label>
-    <select
-      className="form-control"
-      id="payment_mode"
-      name="payment_mode"
-      onChange={handleChange}
-      style={{
-        borderRadius: "5px",
-        padding: "10px",
-        fontSize: "14px",
-      }}
-    >
-      {
-        paymentoptions?.payment_type === "Only ONLINE" ? (
-      <>
-      <option>---select---</option>
-      <option value="online">online</option>
-      </>
-    ) :  paymentoptions?.payment_type  === "Only COD" ? (
-      <>
-      <option>---select---</option>
-      <option value="cod">cod</option>
-      </>
-    ) : (
-      <>
-        <option>---select---</option>
-        <option value="online">online</option>
-        <option value="cod">cod</option>
-      </>
-    )
-  }
-     
-    </select>
-  </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">*Select City</label>
+                  <select className="form-control" name="selectcity" value={formData.selectcity} onChange={handleChange}>
+                    <option value="">Select a city</option>
+                    {indianCities.map((city, i) => (
+                      <option key={i} value={city}>{city}</option>
+                    ))}
+                  </select>
+                  {validation1.selectcity && <small className="text-danger">{validation1.selectcity}</small>}
+                </div>
+              </div>
 
-{/* <div className="mb-3">
-<div className="form-check">
-<input
-type="checkbox"
-className="form-check-input"
-id="setDefault"
-name="setDefault"
-checked={formData.setDefault}
-onChange={handleChange}
-/>
-<label htmlFor="setDefault" className="form-check-label">
-Set as Default Address
-</label>
-</div>
-</div> */}
-{/* <h5 style={{ marginTop: "20px", fontWeight: "600" }}>Address Type</h5> */}
-{/* <div className="mb-3 address-type" style={{ marginBottom: "20px" }}>
-<button
-type="button"
-className={`btn ${
-formData.addressType === "Home"
-? "btn-primary"
-: "btn-outline-primary"
-}`}
-onClick={() => handleAddressType("Home")}
-style={{
-marginRight: "10px",
-fontSize: "14px",
-padding: "8px 15px",
-borderRadius: "5px",
-}}
->
-<i
-className="fa-solid fa-house"
-style={{ marginRight: "5px" }}
-></i>
-Home
-</button>
-<button
-type="button"
-className={`btn ${
-formData.addressType === "Office"
-? "btn-primary"
-: "btn-outline-primary"
-}`}
-onClick={() => handleAddressType("Office")}
-style={{
-marginRight: "10px",
-fontSize: "14px",
-padding: "8px 15px",
-borderRadius: "5px",
-}}
->
-<i
-className="fa-solid fa-building"
-style={{ marginRight: "5px" }}
-></i>
-Office
-</button>
-<button
-type="button"
-className={`btn ${
-formData.addressType === "Other"
-? "btn-primary"
-: "btn-outline-primary"
-}`}
-onClick={() => handleAddressType("Other")}
-style={{
-marginRight: "10px",
-fontSize: "14px",
-padding: "8px 15px",
-borderRadius: "5px",
-}}
->
-<i
-className="fa-solid fa-ellipsis"
-style={{ marginRight: "5px" }}
-></i>
-Other
-</button>
-</div> */}
-</form>
-</div>
+              <div className="mb-3">
+                <label className="form-label">*Pincode</label>
+                <input type="text" className="form-control" name="pincode" onChange={handleChange} />
+                {validation1.pincode && <small className="text-danger">{validation1.pincode}</small>}
+              </div>
 
+              <h5 className="mt-4 mb-3 fw-semibold">Personal Details</h5>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">First Name</label>
+                  <input type="text" className="form-control" name="firstName" value={formData.firstName} onChange={handleChange} />
+                  {validation1.firstName && <small className="text-danger">{validation1.firstName}</small>}
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Last Name</label>
+                  <input type="text" className="form-control" name="lastName" value={formData.lastName} onChange={handleChange} />
+                  {validation1.lastName && <small className="text-danger">{validation1.lastName}</small>}
+                </div>
+              </div>
 
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Mobile Number</label>
+                  <input type="tel" className="form-control" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} />
+                  {validation1.mobileNumber && <small className="text-danger">{validation1.mobileNumber}</small>}
+                </div>
 
-{/* Cart Section */}
-<div
-style={{
-flex: "1",
-backgroundColor: "#ffffff",
-borderRadius: "8px",
-padding: "20px",
-boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-maxWidth: "400px",
-}}
->
-<h5 style={{ marginBottom: "20px", fontWeight: "600" }}>Cart Items</h5>
-{cart.map((item, index) => (
-<div
-key={index}
-style={{
-display: "flex",
-justifyContent: "space-between",
-alignItems: "center",
-marginBottom: "15px",
-padding: "10px",
-border: "1px solid #ddd",
-borderRadius: "5px",
-}}
->
+                <div className="col-md-6 mb-3">
+                  <label className="form-label">Email ID</label>
+                  <input type="email" className="form-control" name="email" value={formData.email} onChange={handleChange} />
+                </div>
+              </div>
 
-<div>
-<div style={{ fontWeight: "600", marginBottom: "5px" }}>
-{item.product_name}
-</div>
-<div style={{ fontSize: "14px", color: "#555" }}>
-₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)} <span style={{marginLeft:"13rem"}}>Quantity {item.product_quantity1}</span>
-</div>
-</div>
-</div>
-))}
-<div style={{
-fontWeight: "600",
-fontSize: "20px",
-marginTop: "20px",
-color: "#333",
-textAlign: "left",
-letterSpacing: "0.5px",
-borderBottom: "2px solid #ddd",
-paddingBottom: "10px"
-}}>
-<strong>Subtotal:</strong>
-<span style={{ color: "#333", fontSize: "18px", fontWeight: "400" }}>
-₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}
-</span>
-<span style={{fontSize:"12px"}}>(Including gst)</span>
-</div>
+              <div className="mb-3">
+                <label className="form-label">*Select Payment Type</label>
+                <select className="form-control" name="payment_mode" onChange={handleChange}>
+                  <option>---select---</option>
+                  {paymentoptions?.payment_type === "Only ONLINE" ? (
+                    <option value="online">Online</option>
+                  ) : paymentoptions?.payment_type === "Only COD" ? (
+                    <option value="cod">COD</option>
+                  ) : (
+                    <>
+                      <option value="online">Online</option>
+                      <option value="cod">COD</option>
+                    </>
+                  )}
+                </select>
+              </div>
+            </form>
+          </div>
+        </div>
 
-{/* <div style={{
-fontWeight: "600",
-fontSize: "20px",
-marginTop: "10px",
-color: "#333",
-textAlign: "left",
-letterSpacing: "0.5px",
-borderBottom: "2px solid #ddd",
-paddingBottom: "10px"
-}}>
-<strong>GST (18%):</strong>
-<span style={{ color: "#e74c3c", fontSize: "18px", fontWeight: "400" }}>
-₹{formData.gstAmount ? formData.gstAmount.toFixed(2) : '0.00'}
-</span>
-</div> */}
+        {/* Right Cart Section */}
+        <div className="col-lg-5 col-md-12">
+          <div className="p-3 shadow-sm bg-white rounded">
+            <h5 className="mb-3 fw-semibold">Cart Items</h5>
+            {cart.map((item, index) => (
+              <div key={index} className="d-flex justify-content-between align-items-center border p-2 rounded mb-2">
+                <div>
+                  <div className="fw-semibold">{item.product_name}</div>
+                  <div className="text-muted" style={{ fontSize: "14px" }}>
+                    ₹{((parseFloat(item.product_price) || 0) * 1).toFixed(2)}
+                    <span className="ms-3">Qty {item.product_quantity1}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
 
-<div style={{
-fontWeight: "700",
-fontSize: "22px",
-marginTop: "10px",
-color: "#333",
-textAlign: "left",
-letterSpacing: "0.5px",
-paddingTop: "10px",
-borderTop: "2px solid #ddd"
-}}>
-<strong>Total Price:</strong>
-<span style={{
-color: "#27ae60",
-fontSize: "20px",
-fontWeight: "500"
-}}>
-₹{formData.totalPrice ? formData.totalPrice.toFixed(2) : '0.00'}
-</span>
-</div>
-</div>
-</div>
-
-</Modal.Body>
-<Modal.Footer>
-<Button variant="secondary" onClick={handleClose4}>
-Close
-</Button>
-<Button variant="primary" onClick={handlePayment} style={{display:formData.payment_mode==="online"?"flex":"none"}}>
-Go to Payment
-</Button>
-<Button variant="primary" onClick={handlecodpayment} style={{display:formData.payment_mode==="cod"?"flex":"none"}}>
-Order Now
-</Button>
-</Modal.Footer>
+            <div className="border-top pt-3 mt-3">
+              <div className="d-flex justify-content-between fw-bold mb-2">
+                <span>Subtotal:</span>
+                <span>₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}</span>
+              </div>
+              <div className="d-flex justify-content-between fw-bold text-success">
+                <span>Total Price:</span>
+                <span>₹{formData.totalPrice ? formData.totalPrice.toFixed(2) : '0.00'}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleClose4}>Close</Button>
+    {formData.payment_mode === "online" && (
+      <Button variant="primary" onClick={handlePayment}>Go to Payment</Button>
+    )}
+    {formData.payment_mode === "cod" && (
+      <Button variant="primary" onClick={handlecodpayment}>Order Now</Button>
+    )}
+  </Modal.Footer>
 </Modal>
+
 
 
 
