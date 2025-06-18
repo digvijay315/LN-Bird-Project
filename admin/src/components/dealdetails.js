@@ -28,6 +28,7 @@ import Swal from "sweetalert2";
 import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
 import Lottie from "lottie-react";
+import deallogo from '../icons/deal.jpg'
 
 function Dealdetails() {
 
@@ -1215,6 +1216,18 @@ function Dealdetails() {
                     }
                   
                   }
+
+                  const[activeunits,setactiveunits]=useState([])
+                  const[inactiveunits,setinactiveunits]=useState([])
+                  useEffect(()=>
+                  {
+                    const active=flattenedUnits.filter((item)=>item.stage==="Active")
+                    setactiveunits(active)
+
+                    const inactive=flattenedUnits.filter((item)=>item.stage==="InActive")
+                    setinactiveunits(inactive)
+
+                  },[flattenedUnits])
   
                   
                   const[totalinventories,settotalinventories]=useState(0)
@@ -1555,9 +1568,20 @@ function Dealdetails() {
                   const [itemsPerPage2, setItemsPerPage2] = useState(10); // User-defined items per page
                   const indexOfLastItem2 = currentPage2 * itemsPerPage2;
                   const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
-                  const currentItems3 = flattenedUnits.slice(indexOfFirstItem2, indexOfLastItem2);
+               
                   const totalPages2 = Math.ceil(flattenedUnits.length / itemsPerPage2);
                   
+                const extractUnitNumber = (value) => {
+                if (!value) return 0;
+                const str = String(value); // Ensure it's a string
+                const match = str.match(/\d+/); // Extract first number
+                return match ? parseInt(match[0], 10) : 0;
+              };
+              const sortedUnits = [...flattenedUnits].sort(
+              (a, b) => extractUnitNumber(a.unit_no) - extractUnitNumber(b.unit_no)
+            );
+               const currentItems3 = sortedUnits.slice(indexOfFirstItem2, indexOfLastItem2);
+
               
                   
                     // Handle items per page change
@@ -5343,6 +5367,157 @@ const buttonStyle = `
 
 // =================================================add new owner end===================================================================
 
+
+  // ===============================================filter code start==================================================================
+  
+        const [showunit, setShowunit] = useState(false);
+                  const [isClosingunit, setIsClosingunit] = useState(false);
+                  const toastRefunit = useRef(null);
+  
+                      const toggleToastunit = async() => {
+                        setShowunit(true);
+                      };
+  
+  
+                const handleCancelunit = () => {
+                  setIsClosingunit(true); // trigger slide-out
+                  setTimeout(() => {
+                    setShowunit(false);     // hide the toast completely
+                    setIsClosingunit(false); // reset for next open
+                  }, 500); // duration should match animation time
+                };
+  
+                const handleResetFiltersunit = () => {
+                setSelectedunitcategory([]);        // Clear profession selections
+                setselectfieldunit({});                // Clear custom field filters
+              };
+  
+  
+  const unitcategory = [
+    'Residential', 
+    'Commercial', 
+    'Agricultural', 
+    'Institutional', 
+    'Industrial', 
+  ];
+  
+          
+    const [selectedunitcategory, setSelectedunitcategory] = useState([]);
+    const [showDropdown, setShowDropdown] = useState(false);
+    const [showDropdown1, setShowDropdown1] = useState(false);
+   
+      const filterRefunit = useRef();
+  
+      const [activeTab, setActiveTab] = useState('profession');
+  
+  
+  const enhancedInputStyle = {
+    display: 'block',
+    marginTop: '6px',
+    marginLeft: '20px',
+    width: '85%',
+    padding: '8px 10px',
+    border: '1px solid #ccc',
+    borderRadius: '6px',
+    fontSize: '14px',
+    transition: '0.3s ease',
+    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
+    background: '#fff',
+    color: '#333'
+  };
+  
+  
+  
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (filterRefunit.current && !filterRefunit.current.contains(event.target)) {
+          setShowDropdown(false); // close the filter box
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+  
+    const handlefilterCheckboxChange = (profession) => {
+      const updatedSelections = selectedunitcategory.includes(profession)
+        ? selectedunitcategory.filter((p) => p !== profession)
+        : [...selectedunitcategory, profession];
+      setSelectedunitcategory(updatedSelections);
+      
+      // Filter the data based on selected professions
+     const newFilteredData = allunitsforsearch.filter((item) =>
+        updatedSelections.length === 0 ||  item.category?.some(cat => updatedSelections.includes(cat))
+      );
+      setFlattenedUnits(newFilteredData);
+    };
+  
+   
+    const unitfields = [
+      { label: 'City', field: 'ucity' },
+      { label: 'Location', field: 'location' },
+      { label: 'Project Name', field: 'project_name' },
+      { label: 'Block/Tower', field: 'block' },
+      { label: 'Category', field: 'category' },
+      { label: 'Sub Category', field: 'sub_category' },
+      { label: 'Unit Type', field: 'unit_type' },
+      { label: 'Size', field: 'size' },
+      { label: 'Stages/Status', field: 'stage' },
+      { label: 'Direction', field: 'direction' },
+      { label: 'Road', field: 'road' }, // Added field for from date
+      { label: 'Facing', field: 'facing' }
+    ];
+    
+  
+    const [showDropdown2, setShowDropdown2] = useState(false);
+    const [selectfieldunit, setselectfieldunit] = useState([]);
+  
+     // Handle checkbox toggle
+     const handlefilterCheckboxChange1 = (field) => {
+      setselectfieldunit(prev => {
+        if (prev.hasOwnProperty(field)) {
+          // Remove the field
+          const { [field]: _, ...rest } = prev;
+          return rest;
+        } else {
+          // Add the field with empty value
+          return { ...prev, [field]: '' };
+        }
+      });
+    };
+  
+      // Handle input change for filtering values
+      const handleFieldInputChange = (field, value) => {
+        setselectfieldunit((prev) => ({
+          ...prev,
+          [field]: value,
+        }));
+      };
+  
+  
+      useEffect(() => {
+    
+        const filtered = allunitsforsearch.filter(contact => {
+          const matchesTextFilters = Object.keys(selectfieldunit).every(field => {
+            const value = selectfieldunit[field]?.toLowerCase();
+            const contactValue = contact[field]?.toString().toLowerCase() || '';
+            return !value || contactValue.includes(value);
+          });
+          return matchesTextFilters
+        });
+      
+        setFlattenedUnits(filtered);
+      }, [selectfieldunit, allunitsforsearch]);
+      
+      
+      
+      
+    
+  
+  
+  //================================================== filter code end==================================================================
+
+
 //=============================================== deal action buttons toggle start=============================================================
 
               const [isHoveringDelete, setIsHoveringDelete] = useState(false);
@@ -6847,8 +7022,289 @@ return (
             </ul>
             
 
-            <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button>
-            <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"1%"}}>Add Fields</button>
+<Tooltip title="Filter here.." arrow>
+             <div   style={{marginLeft:"65%",border:"none",cursor:"pointer"}}>
+              <button
+                // onClick={() => setShowDropdown(!showDropdown)}
+                  onClick={toggleToastunit}
+                style={{
+                  position: "relative",
+                  marginLeft: '65%',
+                  width: "50px",
+                  padding: '8px',
+                  backgroundColor: '#6366f1', // modern indigo color
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                  transition: 'all 0.3s ease',
+                }}
+              >
+                {/* Funnel Icon - SVG (modern look) */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24"
+                  width="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 4h18" />
+                  <path d="M6 8h12" />
+                  <path d="M10 12h4" />
+                  <path d="M12 16v4" />
+                </svg>
+              </button>
+
+              </div>
+             </Tooltip>
+
+                 <div
+            ref={toastRefunit}
+            className={`feedback-toast ${showunit ? (isClosingunit ? 'hide' : 'show') : ''}`}
+            style={{ zIndex: 9999 }}
+          >
+            <div
+              ref={filterRefunit}
+              style={{
+                position: 'absolute',
+                top: '60px',
+                right: '25px',
+                width: '380px',
+                background: 'linear-gradient(135deg, #ffffff, #f7f9fb)',
+                border: '1px solid #e0e0e0',
+                borderRadius: '16px',
+                padding: 0,
+                boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)',
+                zIndex: 1000,
+                fontFamily: 'Segoe UI, sans-serif',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Header */}
+              <h3 style={{
+                fontSize: '16px',
+                margin: 0,
+                padding: '16px',
+                textAlign: 'center',
+                background: 'linear-gradient(to right, #00b4db, #0083b0)',
+                color: '#fff',
+                borderBottom: '1px solid #ddd',
+                letterSpacing: '0.5px'
+              }}>
+                🔍 Filter Units
+              </h3>
+
+              {/* Tab Navigation */}
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                background: '#f2f4f7',
+                borderBottom: '1px solid #ccc'
+              }}>
+                {[
+                  { id: 'profession', label: '🗂️ Category' },
+                  { id: 'custom', label: '📋 Custom Fields' }
+                ].map(tab => (
+                  <div
+                    key={tab.id}
+                    style={{
+                      flex: 1,
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      padding: '10px 0',
+                      fontWeight: 'bold',
+                      color: activeTab === tab.id ? '#007bff' : '#555',
+                      background: activeTab === tab.id ? '#fff' : '#f2f4f7',
+                      borderBottom: activeTab === tab.id ? '3px solid #007bff' : '3px solid transparent',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onClick={() => setActiveTab(tab.id)}
+                  >
+                    {tab.label}
+                  </div>
+                ))}
+              </div>
+
+              {/* Tab Content */}
+              <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'auto' }}>
+                {/* Profession Tab */}
+                {activeTab === 'profession' && (
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '12px',
+                  }}>
+                    {unitcategory.map((profession) => (
+                      <label
+                        key={profession}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          background: '#fff',
+                          border: '1px solid #ddd',
+                          borderRadius: '10px',
+                          padding: '10px 14px',
+                          fontSize: '14px',
+                          color: '#333',
+                          cursor: 'pointer',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                          transition: 'all 0.3s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#f0f8ff';
+                          e.currentTarget.style.borderColor = '#007bff';
+                          e.currentTarget.style.boxShadow = '0 3px 8px rgba(0, 123, 255, 0.2)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#fff';
+                          e.currentTarget.style.borderColor = '#ddd';
+                          e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedunitcategory.includes(profession)}
+                          onChange={() => handlefilterCheckboxChange(profession)}
+                          style={{
+                            marginRight: '10px',
+                            accentColor: '#007bff'
+                          }}
+                        />
+                        {profession}
+                      </label>
+                    ))}
+                  </div>
+
+                )}
+
+                {/* Custom Fields Tab */}
+                {activeTab === 'custom' && (
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr',
+                    gap: '14px',
+                  }}>
+                    {unitfields.map(({ label, field }) => (
+                      <div
+                        key={field}
+                        style={{
+                          background: '#fff',
+                          border: '1px solid #ddd',
+                          borderRadius: '10px',
+                          padding: '14px 16px',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                          transition: 'all 0.3s ease',
+                          position: 'relative'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#f9fdfc';
+                          e.currentTarget.style.borderColor = '#28a745';
+                          e.currentTarget.style.boxShadow = '0 3px 10px rgba(40,167,69,0.2)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#fff';
+                          e.currentTarget.style.borderColor = '#ddd';
+                          e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
+                        }}
+                      >
+                        <label style={{
+                          fontSize: '14px',
+                          color: '#333',
+                          fontWeight: 500,
+                          display: 'flex',
+                          alignItems: 'center',
+                          marginBottom: field in selectfieldunit ? '10px' : 0
+                        }}>
+                          <input
+                            type="checkbox"
+                            checked={field in selectfieldunit}
+                            onChange={() => handlefilterCheckboxChange1(field)}
+                            style={{
+                              marginRight: '10px',
+                              accentColor: '#28a745'
+                            }}
+                          />
+                          {label}
+                        </label>
+
+                        {field in selectfieldunit && (
+                          field.includes('date') ? (
+                            <input
+                              type="date"
+                              value={selectfieldunit[field]}
+                              onChange={(e) => handleFieldInputChange(field, e.target.value)}
+                              style={enhancedInputStyle}
+                            />
+                          ) : (
+                            <input
+                              type="text"
+                              placeholder={`Search by ${label}`}
+                              value={selectfieldunit[field]}
+                              onChange={(e) => handleFieldInputChange(field, e.target.value)}
+                              style={enhancedInputStyle}
+                            />
+                          )
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                        )}
+                      </div>
+
+              {/* Cancel Button */}
+                  <div style={{
+                  padding: '14px',
+                  borderTop: '1px solid #eee',
+                  background: '#f9f9f9',
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  gap: '10px'
+                }}>
+                  <button
+                    className="btn btn-secondary"
+                    style={{
+                      width: '45%',
+                      padding: '6px 12px',
+                      fontSize: '14px',
+                      borderRadius: '6px',
+                      backgroundColor: '#6c757d',
+                      border: 'none',
+                      color: '#fff',
+                      boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
+                      transition: 'background 0.3s ease',
+                    }}
+                    onClick={handleResetFiltersunit}
+                  >
+                    🔄 Reset
+                  </button>
+
+                  <button
+                    className="btn btn-danger"
+                    style={{
+                      width: '45%',
+                      padding: '6px 12px',
+                      fontSize: '14px',
+                      borderRadius: '6px',
+                      boxShadow: '0 3px 8px rgba(0,0,0,0.1)'
+                    }}
+                    onClick={handleCancelunit}
+                  >
+                    ❌ Cancel
+                  </button>
+                </div>
+
+            </div>
+          </div>
+
+
+            {/* <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button> */}
+            <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"3%"}}>Add Fields</button>
         
        
        
@@ -6856,13 +7312,13 @@ return (
       </div> 
 
       <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
-        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={fetchdatabystage_open}>
+        <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={()=>setFlattenedUnits(activeunits)}>
           <h6>Active</h6>
-          <p>{countopen}</p>
+          <p>{activeunits.length}</p>
         </div>
-        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={fetchdatabystage_quote}>
+        <div className="lead" style={{width:"200px",borderTopRightRadius:"10px",borderBottomRightRadius:"10px",padding:"10px"}} onClick={()=>setFlattenedUnits(inactiveunits)}>
           <h6>Inactive</h6>
-          <p>{countquote}</p>
+          <p>{inactiveunits.length}</p>
         </div>
        
       </div>
@@ -7338,8 +7794,9 @@ return (
       </TableHead>
       <tbody>
         {
-         
-         currentItems3.map ((item, index) => (
+     [...currentItems3]
+      .sort((a, b) => extractUnitNumber(a.unit_no) - extractUnitNumber(b.unit_no))
+      .map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell>
               <input 
@@ -7414,7 +7871,7 @@ return (
 
                     return (
                       <>
-                      <img style={{height:"40px",display:isMatched?"block":"none"}} src="https://static.vecteezy.com/system/resources/thumbnails/049/539/805/small_2x/3d-render-business-deal-for-business-icon-transparent-background-png.png"></img>
+                      <img style={{height:"30px",display:isMatched?"block":"none"}} src={deallogo}></img>
                         {item.stage}
                       </>
                     );

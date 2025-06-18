@@ -161,7 +161,7 @@ const registerLawyer = async (req, res) => {
       yearsOfExperience
     } = req.body;
 
-    console.log(req.body);
+
     
     if (!firstName || !lastName || !email || !password || !barRegistrationNumber || !username) {
       return res.status(400).json({ error: 'Missing required fields' });
@@ -187,7 +187,7 @@ const registerLawyer = async (req, res) => {
         });
       }
     }
-console.log(hashedPassword);
+
 
     const lawyer = await LawyerModel.create({
       firstName,

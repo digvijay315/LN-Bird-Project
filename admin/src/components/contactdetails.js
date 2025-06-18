@@ -1271,6 +1271,11 @@ const handleSort = (key) => {
                 }, 500); // duration should match animation time
               };
 
+              const handleResetFilters = () => {
+              setSelectedProfessions([]);        // Clear profession selections
+              setselectfield({});                // Clear custom field filters
+            };
+
 
 const professions = [
   'Self Employed', 
@@ -1288,6 +1293,26 @@ const professions = [
   const [showDropdown1, setShowDropdown1] = useState(false);
  
     const filterRef = useRef();
+
+    const [activeTab, setActiveTab] = useState('profession');
+
+
+const enhancedInputStyle = {
+  display: 'block',
+  marginTop: '6px',
+  marginLeft: '20px',
+  width: '85%',
+  padding: '8px 10px',
+  border: '1px solid #ccc',
+  borderRadius: '6px',
+  fontSize: '14px',
+  transition: '0.3s ease',
+  boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
+  background: '#fff',
+  color: '#333'
+};
+
+
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -3521,108 +3546,166 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
   className={`feedback-toast ${show ? (isClosing ? 'hide' : 'show') : ''}`}
   style={{ zIndex: 9999 }}
 >
-
-  <div  ref={filterRef} style={{
-    position: 'absolute',
-    top: '100px',
-    right: '25px',
-    width: '340px',
-    background: 'linear-gradient(135deg, #fdfdfd, #f3f4f6)',
-    border: '1px solid #ccc',
-    borderRadius: '12px',
-    padding: '18px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-    zIndex: 1000,
-    fontFamily: 'Segoe UI, sans-serif',
-  }}>
+  <div
+    ref={filterRef}
+    style={{
+      position: 'absolute',
+      top: '100px',
+      right: '25px',
+      width: '380px',
+      background: 'linear-gradient(135deg, #ffffff, #f7f9fb)',
+      border: '1px solid #e0e0e0',
+      borderRadius: '16px',
+      padding: 0,
+      boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)',
+      zIndex: 1000,
+      fontFamily: 'Segoe UI, sans-serif',
+      overflow: 'hidden',
+    }}
+  >
+    {/* Header */}
     <h3 style={{
-      fontSize: '15px',
-      marginBottom: '12px',
+      fontSize: '16px',
+      margin: 0,
+      padding: '16px',
       textAlign: 'center',
-      color: '#333',
+      background: 'linear-gradient(to right, #00b4db, #0083b0)',
+      color: '#fff',
       borderBottom: '1px solid #ddd',
-      paddingBottom: '6px'
+      letterSpacing: '0.5px'
     }}>
-      <u>🔍 Filter Contacts</u>
+      🔍 Filter Contacts
     </h3>
 
-    {/* Profession Filter */}
-    <div style={{ marginBottom: '16px' }}>
-      <div onClick={() => setShowDropdown1(!showDropdown1)}
-        style={{
-          cursor: 'pointer',
-          display: 'flex',
-          justifyContent: 'space-between',
-          background: '#f0f2f5',
-          padding: '8px 10px',
-          borderRadius: '6px',
-          fontWeight: 'bold',
-          fontSize: '13px',
-          color: '#333',
-          transition: 'background 0.3s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.background = '#e2e6ea'}
-        onMouseLeave={e => e.currentTarget.style.background = '#f0f2f5'}
-      >
-        <span>📌 Profession</span>
-        <span style={{
-          transform: showDropdown1 ? 'rotate(180deg)' : 'rotate(0)',
-          transition: '0.3s'
-        }}>▼</span>
-      </div>
+    {/* Tab Navigation */}
+    <div style={{
+      display: 'flex',
+      justifyContent: 'space-between',
+      background: '#f2f4f7',
+      borderBottom: '1px solid #ccc'
+    }}>
+      {[
+        { id: 'profession', label: '📌 Profession' },
+        { id: 'custom', label: '📋 Custom Fields' }
+      ].map(tab => (
+        <div
+          key={tab.id}
+          style={{
+            flex: 1,
+            textAlign: 'center',
+            cursor: 'pointer',
+            padding: '10px 0',
+            fontWeight: 'bold',
+            color: activeTab === tab.id ? '#007bff' : '#555',
+            background: activeTab === tab.id ? '#fff' : '#f2f4f7',
+            borderBottom: activeTab === tab.id ? '3px solid #007bff' : '3px solid transparent',
+            transition: 'all 0.3s ease'
+          }}
+          onClick={() => setActiveTab(tab.id)}
+        >
+          {tab.label}
+        </div>
+      ))}
+    </div>
 
-      {showDropdown1 && (
-        <div style={{ marginTop: '10px', paddingLeft: '12px' }}>
+    {/* Tab Content */}
+    <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'auto' }}>
+      {/* Profession Tab */}
+      {activeTab === 'profession' && (
+       <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '12px',
+        }}>
           {professions.map((profession) => (
-            <label key={profession} style={{ display: 'block', marginBottom: '8px', fontSize: '13px', color: '#444' }}>
+            <label
+              key={profession}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                background: '#fff',
+                border: '1px solid #ddd',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                fontSize: '14px',
+                color: '#333',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f0f8ff';
+                e.currentTarget.style.borderColor = '#007bff';
+                e.currentTarget.style.boxShadow = '0 3px 8px rgba(0, 123, 255, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#fff';
+                e.currentTarget.style.borderColor = '#ddd';
+                e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
+              }}
+            >
               <input
                 type="checkbox"
                 checked={selectedProfessions.includes(profession)}
                 onChange={() => handlefilterCheckboxChange(profession)}
-                style={{ marginRight: '8px' }}
+                style={{
+                  marginRight: '10px',
+                  accentColor: '#007bff'
+                }}
               />
               {profession}
             </label>
           ))}
         </div>
+
       )}
-    </div>
 
-    {/* Custom Fields Filter */}
-    <div>
-      <div onClick={() => setShowDropdown2(!showDropdown2)}
-        style={{
-          cursor: 'pointer',
-          display: 'flex',
-          justifyContent: 'space-between',
-          background: '#f0f2f5',
-          padding: '8px 10px',
-          borderRadius: '6px',
-          fontWeight: 'bold',
-          fontSize: '13px',
-          color: '#333',
-          transition: 'background 0.3s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.background = '#e2e6ea'}
-        onMouseLeave={e => e.currentTarget.style.background = '#f0f2f5'}
-      >
-        <span>📋 Custom Fields</span>
-        <span style={{
-          transform: showDropdown2 ? 'rotate(180deg)' : 'rotate(0)',
-          transition: '0.3s'
-        }}>▼</span>
-      </div>
-
-      {showDropdown2 && (
-        <div style={{ marginTop: '10px', paddingLeft: '12px' }}>
+      {/* Custom Fields Tab */}
+      {activeTab === 'custom' && (
+       <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr',
+          gap: '14px',
+        }}>
           {contactfields.map(({ label, field }) => (
-            <div key={field} style={{ marginBottom: '12px' }}>
-              <label style={{ fontSize: '13px', color: '#444' }}>
+            <div
+              key={field}
+              style={{
+                background: '#fff',
+                border: '1px solid #ddd',
+                borderRadius: '10px',
+                padding: '14px 16px',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                transition: 'all 0.3s ease',
+                position: 'relative'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#f9fdfc';
+                e.currentTarget.style.borderColor = '#28a745';
+                e.currentTarget.style.boxShadow = '0 3px 10px rgba(40,167,69,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#fff';
+                e.currentTarget.style.borderColor = '#ddd';
+                e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
+              }}
+            >
+              <label style={{
+                fontSize: '14px',
+                color: '#333',
+                fontWeight: 500,
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: field in selectfield ? '10px' : 0
+              }}>
                 <input
                   type="checkbox"
                   checked={field in selectfield}
                   onChange={() => handlefilterCheckboxChange1(field)}
-                  style={{ marginRight: '8px' }}
+                  style={{
+                    marginRight: '10px',
+                    accentColor: '#28a745'
+                  }}
                 />
                 {label}
               </label>
@@ -3633,17 +3716,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                     type="date"
                     value={selectfield[field]}
                     onChange={(e) => handleFieldInputChange(field, e.target.value)}
-                    style={{
-                      display: 'block',
-                      marginTop: '6px',
-                      marginLeft: '20px',
-                      width: '85%',
-                      padding: '6px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      fontSize: '13px',
-                      color: '#333',
-                    }}
+                    style={enhancedInputStyle}
                   />
                 ) : (
                   <input
@@ -3651,28 +3724,62 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                     placeholder={`Search by ${label}`}
                     value={selectfield[field]}
                     onChange={(e) => handleFieldInputChange(field, e.target.value)}
-                    style={{
-                      display: 'block',
-                      marginTop: '6px',
-                      marginLeft: '20px',
-                      width: '85%',
-                      padding: '6px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      fontSize: '13px',
-                      color: '#333',
-                    }}
+                    style={enhancedInputStyle}
                   />
                 )
               )}
             </div>
           ))}
         </div>
-      )}
-    </div>
-     <button className="btn btn-danger w-30" style={{marginTop:"20px"}} onClick={handleCancel}>Cancel</button>
+
+              )}
+            </div>
+
+    {/* Cancel Button */}
+        <div style={{
+        padding: '14px',
+        borderTop: '1px solid #eee',
+        background: '#f9f9f9',
+        display: 'flex',
+        justifyContent: 'space-around',
+        gap: '10px'
+      }}>
+        <button
+          className="btn btn-secondary"
+          style={{
+            width: '45%',
+            padding: '6px 12px',
+            fontSize: '14px',
+            borderRadius: '6px',
+            backgroundColor: '#6c757d',
+            border: 'none',
+            color: '#fff',
+            boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
+            transition: 'background 0.3s ease',
+          }}
+          onClick={handleResetFilters}
+        >
+          🔄 Reset
+        </button>
+
+        <button
+          className="btn btn-danger"
+          style={{
+            width: '45%',
+            padding: '6px 12px',
+            fontSize: '14px',
+            borderRadius: '6px',
+            boxShadow: '0 3px 8px rgba(0,0,0,0.1)'
+          }}
+          onClick={handleCancel}
+        >
+          ❌ Cancel
+        </button>
+      </div>
+
   </div>
 </div>
+
 
         
         

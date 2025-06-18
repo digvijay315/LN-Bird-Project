@@ -302,19 +302,15 @@ const handlePayment = async () => {
       handler: function (response) {
         if (response && response.razorpay_payment_id) {
             verifyPayment(response);
-          Swal.fire({
-            title: 'Payment Successful!',
-            text: 'Thank You for Shopping with Kiona! Keep shopping like this 🛍️😊',
-            icon: 'success',
-            confirmButtonText: 'OK',
-          }).then(() => {
+          // Swal.fire({
+          //   title: 'Payment Successful!',
+          //   text: 'Thank You for Shopping with Kiona! Keep shopping like this 🛍️😊',
+          //   icon: 'success',
+          //   confirmButtonText: 'OK',
+          // })
             handleClose4(); // Close modal
             setcart([]); // Clear cart
             setFormData({ ...formData, payment_status: 'success' });
-
-            // Step 3: Send payment details to backend for verification
-          
-          });
 
         } else {
           Swal.fire({
@@ -327,7 +323,7 @@ const handlePayment = async () => {
       },
       prefill: {
         name: formData.firstName,
-        email: 'narayanniket2@gmail.com',
+        email: formData.email,
         contact: formData.mobileNumber,
       },
       theme: {
@@ -370,10 +366,7 @@ const verifyPayment = async (paymentResponse) => {
             text: 'Your order is confirmed and payment is successful.',
             icon: 'success',
             confirmButtonText: 'OK',
-          }).then(() => {
-            navigate("/"); // Redirect to home or any other page
-          });
-
+          })
           generateInvoice(paymentVerificationResponse,formData,companyDetails)
       } else {
           Swal.fire({
