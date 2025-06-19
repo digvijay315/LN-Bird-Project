@@ -8,6 +8,7 @@ import Login from './components/login';
 import ClientDashboard from './components/ClientDashboard';
 import LawyerDashboard from './components/LawyerDashboard';
 import AdminPanel from './components/AdminPanel';
+import LawyerProfileModal from './components/LawyerProfileModel';
 
 
 
@@ -22,6 +23,7 @@ function App() {
       <Route path='/ClientDashboard' element={<ClientDashboard/>}></Route>
       <Route path='/LawyerDashboard' element={<LawyerDashboard/>}></Route>
       <Route path='/AdminPanel' element={<AdminPanel/>}></Route>
+      <Route path='LawyerDashboard/completelawyerprofile' element={<LawyerProfileModal/>}></Route>
     
       
     </Routes>  

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import api from '../api';
+import { Offcanvas, Button, Tab, Tabs } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2';
+import '../css/adminpanel.css'
+
 
 const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [pendingLawyers, setPendingLawyers] = useState([]);
-  const [lawyers, setLawyers] = useState([
-    { id: 1, name: 'Adv. Raj Malhotra', email: 'raj@example.com', active: true },
-    { id: 2, name: 'Adv. Meena Joshi', email: 'meena@example.com', active: false },
-  ]);
+  const [lawyers, setLawyers] = useState([]);
 
   const clients = [
     { id: 1, name: 'Karan Verma', email: 'karan@example.com' },
@@ -18,24 +21,83 @@ const AdminPanel = () => {
     { id: 2, title: 'Fraud Allegation', lawyer: 'Meena Joshi', status: 'Closed' },
   ];
 
-  // Simulate fetching pending lawyers (replace with actual API call)
+
+  const fetchlawyers=async()=>
+  {
+    try {
+      const resp=await api.get('api/lawyer/getalllawyerprofile')
+      setLawyers(resp.data.filter((item)=>(item.status==="verified")))
+      setPendingLawyers(resp.data)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
   useEffect(() => {
-    const fetchPendingLawyers = async () => {
-      const mockPendingLawyers = [
-        { id: 3, name: 'Adv. Arjun Patel', email: 'arjun@example.com', documents: 'view-documents.pdf' },
-        { id: 4, name: 'Adv. Priya Sharma', email: 'priya@example.com', documents: 'view-documents.pdf' },
-      ];
-      setPendingLawyers(mockPendingLawyers);
-    };
-    fetchPendingLawyers();
+    fetchlawyers();
   }, []);
 
-  const handleApprove = (lawyerId) => {
-    const lawyerToApprove = pendingLawyers.find(l => l.id === lawyerId);
-    setLawyers([...lawyers, { ...lawyerToApprove, active: true }]);
-    setPendingLawyers(pendingLawyers.filter(l => l.id !== lawyerId));
-    alert(`Lawyer ${lawyerToApprove.name} approved!`);
+
+
+  const handleApprove = async(lawyer) => {
+    try {
+      const resp=await api.put(`api/lawyer/approvedlawyer/${lawyer._id}`,{status:"verified"})
+      if(resp.status===200)
+      {
+        setLawyers(...lawyers,lawyer)
+        Swal.fire({
+        icon: 'success',
+        title: 'Approved...',
+        text: "Lawyer Approved Successfully...",
+        showConfirmButton: true,
+        }).then(()=>
+        (
+          window.location.reload()
+        ))
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
   };
+
+
+   const [show, setShow] = useState(false);
+  const [selectedLawyer, setSelectedLawyer] = useState(null);
+  const[lawyerprofile,setlawyerprofile]=useState([])
+    const [activeTab1, setActiveTab1] = useState('dashboard');
+  
+  const handleview = async(lawyerid) => {
+    try {
+      const resp=await api.get(`api/lawyer/getlawyer/${lawyerid}`)
+      if(resp.status===200)
+      {
+        handleShow(resp.data)
+       setlawyerprofile(resp.data)
+      }
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  };
+  
+ 
+
+
+  const handleShow = (lawyer) => {
+    setSelectedLawyer(lawyer);
+    setActiveTab1('basic');
+    setShow(true);
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    setSelectedLawyer(null);
+  };
+  
 
   const handleReject = (lawyerId) => {
     const lawyerToReject = pendingLawyers.find(l => l.id === lawyerId);
@@ -56,7 +118,7 @@ const AdminPanel = () => {
             <div className="card">👨‍⚖️ Lawyers: {lawyers.length}</div>
             <div className="card">🧑‍💼 Clients: {clients.length}</div>
             <div className="card">📂 Cases: {cases.length}</div>
-            <div className="card">⏳ Pending Lawyers: {pendingLawyers.length}</div>
+            <div className="card">⏳ Pending Lawyers: {pendingLawyers.filter((item)=>(item.status!=="verified")).length}</div>
           </div>
         );
       case 'lawyers':
@@ -73,11 +135,11 @@ const AdminPanel = () => {
               </thead>
               <tbody>
                 {lawyers.map((l) => (
-                  <tr key={l.id}>
-                    <td>{l.name}</td>
+                  <tr key={l._id}>
+                    <td>{l.firstName}</td>
                     <td>{l.email}</td>
-                    <td style={{ color: l.active ? 'green' : 'red' }}>
-                      {l.active ? 'Active' : 'Inactive'}
+                    <td>
+                    {l.status}
                     </td>
                   </tr>
                 ))}
@@ -148,9 +210,9 @@ const AdminPanel = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {pendingLawyers.map((l) => (
+                  {pendingLawyers.filter((item)=>(item.status!=="verified")).map((l) => (
                     <tr key={l.id}>
-                      <td>{l.name}</td>
+                      <td>{l.firstName}</td>
                       <td>{l.email}</td>
                       <td>
                         <a href={l.documents} target="_blank" rel="noopener noreferrer">
@@ -158,8 +220,9 @@ const AdminPanel = () => {
                         </a>
                       </td>
                       <td className="actions">
-                        <button className="approve-btn" onClick={() => handleApprove(l.id)}>Approve</button>
-                        <button className="reject-btn" onClick={() => handleReject(l.id)}>Reject</button>
+                        <button className="approve-btn" onClick={() => handleApprove(l)}>Approve</button>
+                        <button className="reject-btn" onClick={() => handleReject(l._id)}>Reject</button>
+                        <button className="approve-btn" onClick={() => handleview(l._id)}>View</button>
                       </td>
                     </tr>
                   ))}
@@ -194,7 +257,7 @@ const AdminPanel = () => {
             <li onClick={() => setActiveTab('pending-lawyers')} className={activeTab === 'pending-lawyers' ? 'active' : ''}>
               Pending Lawyers
               {pendingLawyers.length > 0 && (
-                <span className="pending-count">{pendingLawyers.length}</span>
+                <span className="pending-count">{pendingLawyers.filter((item)=>(item.status!=="verified")).length}</span>
               )}
             </li>
           </ul>
@@ -204,6 +267,61 @@ const AdminPanel = () => {
           {renderContent()}
         </main>
       </div>
+
+        {/* Offcanvas Panel */}
+       <Offcanvas show={show} onHide={handleClose} placement="end" className="lawyer-offcanvas">
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title className="text-primary">Lawyer Details</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          {selectedLawyer && (
+            <Tabs
+              activeKey={activeTab1}
+              onSelect={(k) => setActiveTab1(k)}
+              className="mb-3 nav-pills"
+              justify
+            >
+              {/* BASIC TAB */}
+              <Tab eventKey="basic" title="🧾 Basic">
+                <div className="tab-content-section">
+                  <p><strong>Name:</strong> {selectedLawyer.firstName} {selectedLawyer.lastName}</p>
+                  <p><strong>Username:</strong> {selectedLawyer.username}</p>
+                  <p><strong>Status:</strong> <span className="badge bg-success">{selectedLawyer.status}</span></p>
+                </div>
+              </Tab>
+
+              {/* PERSONAL TAB */}
+              <Tab eventKey="personal" title="👤 Personal">
+                <div className="tab-content-section">
+                  <p><strong>Email:</strong> {selectedLawyer.email}</p>
+                  <p><strong>Phone:</strong> {selectedLawyer.phone}</p>
+                </div>
+              </Tab>
+
+              {/* WORK TAB */}
+              <Tab eventKey="work" title="💼 Work">
+                <div className="tab-content-section">
+                  <p><strong>Bar Reg No:</strong> {selectedLawyer.barRegistrationNumber}</p>
+                  <p><strong>Practice Areas:</strong> {
+                    Array.isArray(selectedLawyer.practiceAreas)
+                      ? selectedLawyer.practiceAreas.join(', ')
+                      : selectedLawyer.practiceAreas
+                  }</p>
+                  <p><strong>Experience:</strong> {selectedLawyer.yearsOfExperience} years</p>
+                </div>
+              </Tab>
+
+              {/* OTHER TAB */}
+              <Tab eventKey="other" title="📁 Other">
+                <div className="tab-content-section">
+                  <p><strong>ID:</strong> {selectedLawyer._id}</p>
+                  {/* Add any other additional info here */}
+                </div>
+              </Tab>
+            </Tabs>
+          )}
+        </Offcanvas.Body>
+      </Offcanvas>
 
       <style jsx>{`
         .admin-panel {
@@ -305,7 +423,7 @@ const AdminPanel = () => {
         }
         .table-container {
           background: white;
-          padding: 2rem;
+          padding: 1rem;
           border-radius: 8px;
           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
@@ -324,6 +442,7 @@ const AdminPanel = () => {
           font-weight: 600;
         }
         .actions {
+          width:150px;
           display: flex;
           gap: 0.5rem;
         }

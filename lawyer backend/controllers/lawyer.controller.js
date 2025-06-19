@@ -92,6 +92,7 @@ const loginLawyer = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
     
+
     // Check if lawyer has a password
     if (!lawyer.password) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -116,8 +117,10 @@ const loginLawyer = async (req, res) => {
     res.status(200).json({
       message: 'Login successful',
       token,
-      lawyer: lawyerWithoutPassword
+      // lawyer: lawyerWithoutPassword
+      lawyer: lawyer
     });
+
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error' });
@@ -241,6 +244,31 @@ function sendConfirmationEmail(toEmail, firstName) {
 }
 
 // ---------------------- Profile & Availability ----------------------
+
+const getallProfile = async (req, res) => {
+  try {
+    const lawyer = await LawyerModel.find()
+    if (!lawyer) return res.status(404).json({ message: 'Lawyer not found' });
+    res.json(lawyer);
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const getallProfilebyid = async (req, res) => {
+  try {
+    const lawyerid=req.params._id
+    const lawyer = await LawyerModel.findById({_id:lawyerid})
+    if (!lawyer) return res.status(404).json({ message: 'Lawyer not found' });
+    res.json(lawyer);
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 const getProfile = async (req, res) => {
   try {
     const lawyerId = req.user.id; // Assuming JWT middleware sets this
@@ -252,6 +280,29 @@ const getProfile = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+const approveProfile = async (req, res) => {
+  try {
+    const lawyerId = req.params._id; // Correct route param
+    const updates = req.body;       // e.g., { status: 'approved' }
+
+    const lawyer = await LawyerModel.findByIdAndUpdate(
+      lawyerId,
+      { $set: updates },
+      { new: true, runValidators: true }
+    );
+
+    if (!lawyer) {
+      return res.status(404).json({ message: 'Lawyer not found' });
+    }
+
+    res.json({ message: 'Profile updated', lawyer });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 const updateProfile = async (req, res) => {
   try {
@@ -335,5 +386,8 @@ module.exports = {
   getProfile,
   updateProfile,
   updateAvailability,
-  toggleOnlineStatus
+  toggleOnlineStatus,
+  getallProfile,
+  approveProfile,
+  getallProfilebyid
 };

@@ -1,10 +1,8 @@
 import axios from "axios";
 const instance=axios.create({
    
-        //  baseURL:'https://ln-bird-project.onrender.com/'
-          // baseURL:'https://api.bharatproperties.co/'
-        // baseURL:' https://onlinerealestatecrm.in/'
-        baseURL:'http://localhost:5000/'
+         baseURL:'https://ln-bird-project.onrender.com/'
+        // baseURL:'http://localhost:5000/'
 
        
 })

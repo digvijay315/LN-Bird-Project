@@ -1,8 +1,4 @@
 
-
-
-
-
 const express = require('express');
 const router = express.Router();
 
@@ -32,10 +28,7 @@ router.post('/login', lawyerController.loginLawyer);
 
 // Register lawyer with multi-file upload for documents
 // ✅ Correct route
-router.post('/register/lawyer', (req, res, next) => {
-  req.uploadTarget = 'lawyers';
-  next();
-}, upload.any('documents', 5), lawyerController.registerLawyer);
+router.post('/register/lawyer',upload.any('documents', 5), lawyerController.registerLawyer);
 
 
 
@@ -54,6 +47,9 @@ router.post('/consultations/:id/reject', authMiddleware, rejectConsultation);
 router.get('/earning', authMiddleware, getLawyerEarnings);
 
 
+router.get('/getalllawyerprofile',lawyerController.getallProfile);
+router.put('/approvedlawyer/:_id',lawyerController.approveProfile);
+router.get('/getlawyer/:_id',lawyerController.getallProfilebyid);
 
 
 

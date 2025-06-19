@@ -1,99 +1,57 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import LawyerProfileModal from './LawyerProfileModel';
-import api from '../api'; // adjust the path as needed
 
-const LawyerDashboard = () => {
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [headerMenuOpen, setHeaderMenuOpen] = useState(false); // New state for mobile header menu
-  const navigate = useNavigate();
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+function Lawyersidebar() {
 
-  useEffect(() => {
-    const handleResize = () => setScreenWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+   const [showProfileModal, setShowProfileModal] = useState(false);
+   const [userDetails, setUserDetails] = useState(null);
+   const [loading, setLoading] = useState(false);
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+   const [headerMenuOpen, setHeaderMenuOpen] = useState(false); // New state for mobile header menu
+   const navigate = useNavigate();
+   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  const lawyerdetails = JSON.parse(localStorage.getItem('userDetails'));
 
-  // const fetchLawyerDetails = async () => {
-  //   try {
-  //     const token = lawyerdetails?.token;
-  //     if (!token) return;
-  //     const response = await api.get('api/lawyers/profile', {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     console.log(response);
-      
-  //     setUserDetails(response.data);
-  //     return response.data;
-  //   } catch (err) {
-  //     console.error('Error fetching profile:', err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   const data = localStorage.getItem('userDetails');
-  //   console.log(data);
-    
-  //   if (data) setUserDetails(data);
-  //   // fetchLawyerDetails();
-  // }, []);
-
-  const menuItems = [
-    { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
-    { label: 'Profile', icon: '🧑', path: './completelawyerprofile' },
-    { label: 'Clients', icon: '👥', path: '/clients' },
-    { label: 'Messages', icon: '💬', path: '/messages' },
-    { label: 'My Cases', icon: '📂', path: '/cases' },
-    { label: 'Schedule', icon: '📅', path: '/schedule' },
-    { label: 'Billing', icon: '💳', path: '/billing' },
-    { label: 'Documents', icon: '📁', path: '/documents' },
-    { label: 'Settings', icon: '⚙️', path: '/settings' },
-    { label: 'Support', icon: '🆘', path: '/support' },
-    { label: 'Logout', icon: '🔒', path: '/logout' },
-  ];
-
-  const headerMenu = [
-    // { label: 'Dashboard', path: '/dashboard' },
-    // { label: 'Profile', path: './dashboard' },
-    // { label: 'Clients', path: '/clients' },
-    // { label: 'Messages', path: '/messages' },
-    // { label: 'Reports', path: '/reports' },
-    { label: 'Notifications', path: '/notifications' },
-  ];
-
-  const cases = [
-    { id: 1, title: 'Contract Dispute', status: 'Active' },
-    { id: 2, title: 'Intellectual Property', status: 'Pending' },
-    { id: 3, title: 'Personal Injury', status: 'Closed' },
-    { id: 4, title: 'Real Estate', status: 'Active' },
-  ];
-
-  const clients = [
-    { id: 1, name: 'Ram Kumar', email: 'ram.kumar@example.com' },
-    { id: 2, name: 'Anita Singh', email: 'anita.singh@example.com' },
-    { id: 3, name: 'John Doe', email: 'john.doe@example.com' },
-  ];
-
-  const statusColor = (status) => {
-    switch (status) {
-      case 'Active': return '#28a745';
-      case 'Pending': return '#ffc107';
-      case 'Closed': return '#dc3545';
-      default: return '#6c757d';
-    }
-  };
-
-  const handleLogout = () => navigate('/logout');
+   
+ 
+   
+   
+ 
+  
+ 
+   const menuItems = [
+     { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
+     { label: 'Profile', icon: '🧑', path: './completelawyerprofile' },
+     { label: 'Clients', icon: '👥', path: '/clients' },
+     { label: 'Messages', icon: '💬', path: '/messages' },
+     { label: 'My Cases', icon: '📂', path: '/cases' },
+     { label: 'Schedule', icon: '📅', path: '/schedule' },
+     { label: 'Billing', icon: '💳', path: '/billing' },
+     { label: 'Documents', icon: '📁', path: '/documents' },
+     { label: 'Settings', icon: '⚙️', path: '/settings' },
+     { label: 'Support', icon: '🆘', path: '/support' },
+     { label: 'Logout', icon: '🔒', path: '/logout' },
+   ];
+ 
+   const headerMenu = [
+     // { label: 'Dashboard', path: '/dashboard' },
+     // { label: 'Profile', path: './dashboard' },
+     // { label: 'Clients', path: '/clients' },
+     // { label: 'Messages', path: '/messages' },
+     // { label: 'Reports', path: '/reports' },
+     { label: 'Notifications', path: '/notifications' },
+   ];
+ 
+  
+ 
+   
+ 
+   const handleLogout = () => navigate('/logout');
 
   return (
-    <>
-      <style>{`
+    <div>
+        <style>{`
         @media (max-width: 768px) {
           header, aside {
             width: 100%;
@@ -237,7 +195,7 @@ const LawyerDashboard = () => {
 
       `}</style>
 
-      {/* HEADER */}
+ {/* HEADER */}
       <header style={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
@@ -296,9 +254,7 @@ const LawyerDashboard = () => {
           <span role="img" aria-label="lawyer icon">👨‍⚖️</span>
         </div>
       </header>
-
-      {/* SIDEBAR */}
-      <aside
+         <aside
         style={{
           display: sidebarOpen || screenWidth >= 769 ? 'block' : 'none',
           overflowX: 'auto',
@@ -345,77 +301,9 @@ const LawyerDashboard = () => {
           </li>
         </ul>
       </aside>
+      
+    </div>
+  )
+}
 
-      {/* MAIN CONTENT */}
-      <main className='main1'>
-        <h6>Welcome Back, {lawyerdetails?.lawyer.firstName || 'Lawyer'}!</h6>
-
-        <div className="quick-access">
-          {[{ label: 'Total Clients', value: clients.length },
-            { label: 'Active Cases', value: cases.filter(c => c.status === 'Active').length },
-            { label: 'Pending Cases', value: cases.filter(c => c.status === 'Pending').length },
-            { label: 'Closed Cases', value: cases.filter(c => c.status === 'Closed').length }
-          ].map((stat, idx) => (
-            <div className="stats-card" key={idx}>
-              <div className="stats-label">{stat.label}</div>
-              <div className="stats-value">{stat.value}</div>
-            </div>
-          ))}
-        </div>
-
-        <section style={{ marginTop: '40px' }}>
-          <h2>🗂 My Cases</h2>
-          {cases.map((c) => (
-            <div className="case-card" key={c.id}>
-              <div className="case-title">{c.title}</div>
-              <div className="case-status" style={{ backgroundColor: statusColor(c.status) }}>
-                {c.status}
-              </div>
-            </div>
-          ))}
-        </section>
-
-        <section style={{ marginTop: '40px' }}>
-          <h2>👥 Clients</h2>
-          <table>
-            <thead>
-              <tr><th>Name</th><th>Email</th></tr>
-            </thead>
-            <tbody>
-              {clients.map((client) => (
-                <tr key={client.id}><td>{client.name}</td><td>{client.email}</td></tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        <section style={{ marginTop: '40px' }}>
-          <h2>⚡ Quick Access</h2>
-          <div className="quick-access">
-            {menuItems.slice(0, 6).map((item) => (
-              <div
-                key={item.label}
-                className="quick-card"
-                onClick={() => navigate('./Dashboard')}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="quick-icon">{item.icon}</div>
-                <div>{item.label}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      {showProfileModal && (
-        <LawyerProfileModal
-          onClose={() => setShowProfileModal(false)}
-          userDetails={userDetails}
-        />
-      )}
-    </>
-  );
-};
-
-export default LawyerDashboard;
+export default Lawyersidebar

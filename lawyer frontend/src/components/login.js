@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Header from './header';
 import { useNavigate } from 'react-router-dom';
+import api from '../api'; // adjust the path as needed
+import Swal from 'sweetalert2';
 
 const Login = () => {
   const [activeTab, setActiveTab] = useState('login');
@@ -44,60 +46,86 @@ const Login = () => {
     setLoginData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+ 
 
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match.');
-      return;
-    }
+const handleRegister = async (e) => {
+  e.preventDefault();
 
-    try {
-      if (role === 'user') {
-        const response = await fetch('http://localhost:5000/api/user', {
-          method: 'POST',
+  if (formData.password !== formData.confirmPassword) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Password Mismatch',
+      text: 'Passwords do not match.',
+    });
+    return;
+  }
+
+  try {
+    if (role === 'user') {
+      const response = await api.post(
+        'api/user',
+        {
+          fullName: formData.fullName,
+          email: formData.email,
+          username: formData.username,
+          password: formData.password,
+          role: 'user',
+        },
+        {
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            fullName: formData.fullName,
-            email: formData.email,
-            username: formData.username,
-            password: formData.password,
-            role: 'user',
-          }),
-        });
-
-        const data = await response.json();
-        alert(data.message);
-        if (response.ok) setActiveTab('login');
-      } else {
-        const fd = new FormData();
-        fd.append('firstName', formData.firstName);
-        fd.append('lastName', formData.lastName);
-        fd.append('email', formData.email);
-        fd.append('username', formData.username);
-        fd.append('password', formData.password);
-        fd.append('phone', formData.phone);
-        fd.append('barRegistrationNumber', formData.barRegistrationNumber);
-        fd.append('practiceAreas', JSON.stringify(formData.practiceAreas.split(',').map(p => p.trim())));
-        fd.append('yearsOfExperience', formData.yearsOfExperience);
-        for (let i = 0; i < formData.documents.length; i++) {
-          fd.append('documents', formData.documents[i]);
         }
+      );
 
-        const response = await fetch('http://localhost:5000/api/lawyer/register/lawyer', {
-          method: 'POST',
-          body: fd,
-        });
+      const data = response.data;
 
-        const data = await response.json();
-        alert(data.message);
-        if (response.ok) setActiveTab('login');
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: data.message,
+      });
+
+      setActiveTab('login');
+    } else {
+      const fd = new FormData();
+      fd.append('firstName', formData.firstName);
+      fd.append('lastName', formData.lastName);
+      fd.append('email', formData.email);
+      fd.append('username', formData.username);
+      fd.append('password', formData.password);
+      fd.append('phone', formData.phone);
+      fd.append('barRegistrationNumber', formData.barRegistrationNumber);
+      fd.append(
+        'practiceAreas',
+        JSON.stringify(formData.practiceAreas.split(',').map((p) => p.trim()))
+      );
+      fd.append('yearsOfExperience', formData.yearsOfExperience);
+
+      for (let i = 0; i < formData.documents.length; i++) {
+        fd.append('documents', formData.documents[i]);
       }
-    } catch (err) {
-      console.error('Registration error:', err);
-      alert(err.message || 'Something went wrong');
+
+      const response = await api.post('api/lawyer/register/lawyer', fd);
+
+      const data = response.data;
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: data.message,
+      });
+
+      setActiveTab('login');
     }
-  };
+  } catch (err) {
+    console.error('Registration error:', err);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: err?.response?.data?.message || err.message || 'Something went wrong',
+    });
+  }
+};
+
 
   const containerStyle = {
     width: '100%',
@@ -162,60 +190,67 @@ const Login = () => {
     transition: 'background 0.3s',
   };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
 
-    try {
-      const endpoint = loginRole === 'user' 
-        ? 'http://localhost:5000/api/user/login' 
-        : 'http://localhost:5000/api/lawyer/login';
 
-      const credentials = loginRole === 'user'
-        ? { username: loginData.username, password: loginData.password }
-        : { email: loginData.email, password: loginData.password };
 
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(credentials),
+const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const endpoint = loginRole === 'user'
+      ? '/api/user/login'
+      : '/api/lawyer/login';
+
+    const credentials = loginRole === 'user'
+      ? { username: loginData.username, password: loginData.password }
+      : { email: loginData.email, password: loginData.password };
+
+    const response = await api.post(endpoint, credentials);
+    const data = response.data;
+    console.log(data);
+    
+
+    if(response.status===200)
+    {
+       Swal.fire({
+        icon: 'success',
+        title: 'Login Successful!',
+        text: data.message,
+        showConfirmButton: true,
       });
+     localStorage.setItem('userDetails', JSON.stringify(data));
+      navigate('/LawyerDashboard');
+    }
+      
+      
+      // (data.message);
+    // localStorage.setItem('userRole', loginRole);
+    // localStorage.setItem('token', data.token);
 
-      const data = await response.json();
+    // // Save user details locally
+    // if (loginRole === 'user') {
+    //   localStorage.setItem('userDetails', JSON.stringify({
+    //     fullName: data.user.fullName,
+    //     username: data.user.username,
+    //     email: data.user.email,
+    //   }));
+    //   localStorage.setItem('clientName', data.user.fullName); // For client avatar initials
+    //   navigate('/ClientDashboard');
+    // } else {
+    //   localStorage.setItem('userDetails',data)
+    //   navigate('/LawyerDashboard');
+    // }
 
-      if (!response.ok) {
-  alert(data.message || 'Login failed');
-} else {
-  alert(data.message);
-  localStorage.setItem('userRole', loginRole);
-  localStorage.setItem('token', data.token);
-
-  // Save user details locally
-  if (loginRole === 'user') {
-    localStorage.setItem('userDetails', JSON.stringify({
-      fullName: data.user.fullName,
-      username: data.user.username,
-      email: data.user.email,
-    }));
-    localStorage.setItem('clientName', data.user.fullName); // For client avatar initials
-    navigate('/ClientDashboard');
-  } else {
-    localStorage.setItem('userDetails', JSON.stringify({
-      fullName: data.lawyer.name,
-      username: data.lawyer.username,
-      email: data.lawyer.email,
-    }));
-    localStorage.setItem('clientName', `${data.lawyer.firstName} ${data.lawyer.lastName}`);
-    navigate('/LawyerDashboard');
-  }
-}
-
-    } catch (err) {
-      console.error('Login error:', err);
+  } catch (err) {
+    console.error('Login error:', err);
+    if (err.response && err.response.data && err.response.data.message) {
+      alert(err.response.data.message);
+    } else {
       alert('Something went wrong during login');
     }
-  };
+  }
+};
+
 
   return (
     <div>
