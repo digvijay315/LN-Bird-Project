@@ -11,14 +11,14 @@ const lawyerSchema = new mongoose.Schema({
   practiceAreas: { type: [String], default: [] },
   workingHours: { type: Object, default: {} },
   onlineStatus: { type: Boolean, default: false },
-  status: {
-    type: String,
-    enum: ['pending', 'verified', 'rejected'],
-    default: 'pending'
-  },
+  status: {type: String,enum: ['pending', 'verified', 'rejected'],default: 'pending'},
+  profilepic:{type:Array},
+
+
+
+
 
   isVerified: { type: Boolean, default: false },
-
   verificationHistory: [
     {
       adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },

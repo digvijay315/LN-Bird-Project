@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Header from './header';
 import { useNavigate } from 'react-router-dom';
 import api from '../api'; // adjust the path as needed
 import Swal from 'sweetalert2';
+import Lottie from "lottie-react";
 
 const Login = () => {
+
+     const [isLoading, setIsLoading] = useState(false);
+  const [animationData, setAnimationData] = useState(null);
+    useEffect(() => {
+    fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
+
+
+
   const [activeTab, setActiveTab] = useState('login');
   const [role, setRole] = useState('user'); // For registration
   const [loginRole, setLoginRole] = useState('user'); // For login
@@ -22,7 +34,7 @@ const Login = () => {
     barRegistrationNumber: '',
     practiceAreas: '',
     yearsOfExperience: '',
-    documents: [],
+    profilepic: [],
   });
 
   const [loginData, setLoginData] = useState({
@@ -33,9 +45,9 @@ const Login = () => {
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'documents') {
+    if (name === 'profilepic') {
       const files = Array.from(e.target.files);
-      setFormData((prev) => ({ ...prev, documents: files }));
+      setFormData((prev) => ({ ...prev, profilepic: files }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -61,6 +73,7 @@ const handleRegister = async (e) => {
   }
 
   try {
+    setIsLoading(true)
     if (role === 'user') {
       const response = await api.post(
         'api/user',
@@ -100,8 +113,8 @@ const handleRegister = async (e) => {
       );
       fd.append('yearsOfExperience', formData.yearsOfExperience);
 
-      for (let i = 0; i < formData.documents.length; i++) {
-        fd.append('documents', formData.documents[i]);
+      for (let i = 0; i < formData.profilepic.length; i++) {
+        fd.append('profilepic', formData.profilepic[i]);
       }
 
       const response = await api.post('api/lawyer/register/lawyer', fd);
@@ -123,6 +136,9 @@ const handleRegister = async (e) => {
       title: 'Error',
       text: err?.response?.data?.message || err.message || 'Something went wrong',
     });
+  }finally
+  {
+    setIsLoading(false)
   }
 };
 
@@ -339,7 +355,7 @@ const handleLogin = async (e) => {
                   <input type="text" name="barRegistrationNumber" placeholder="Bar Registration Number" value={formData.barRegistrationNumber} onChange={handleInputChange} style={inputStyle} required />
                   <input type="text" name="practiceAreas" placeholder="Practice Areas (comma-separated)" value={formData.practiceAreas} onChange={handleInputChange} style={inputStyle} required />
                   <input type="number" name="yearsOfExperience" placeholder="Years of Experience" value={formData.yearsOfExperience} onChange={handleInputChange} style={inputStyle} required />
-                  <input type="file" name="documents" multiple onChange={handleInputChange} style={inputStyle} />
+                  <input type="file" name="profilepic" multiple onChange={handleInputChange} style={inputStyle} />
                   <input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} style={inputStyle} required />
                   <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleInputChange} style={inputStyle} required />
                 </>
@@ -349,6 +365,48 @@ const handleLogin = async (e) => {
           )}
         </div>
       </div>
+
+          <>
+      {isLoading && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          // background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
+        }}>
+          <div style={{
+            // backgroundColor: "rgba(0,0,0,0.75)",
+            padding: "40px 60px",
+            borderRadius: "20px",
+            // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#fff",
+            textAlign: "center",
+          }}>
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+            />
+            <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Creating id...
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+
     </div>
   );
 };

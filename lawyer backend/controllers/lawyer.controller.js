@@ -176,13 +176,13 @@ const registerLawyer = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const documents = [];
+    const lawyerpic = [];
 
     // Upload documents to Cloudinary if files exist
     if (req.files && Array.isArray(req.files)) {
       for (const file of req.files) {
         const result = await cloudinary.uploader.upload(file.path);
-        documents.push(result.secure_url);
+        lawyerpic.push(result.secure_url);
         
         // Delete local file after upload
         fs.unlink(file.path, err => {
@@ -202,7 +202,7 @@ const registerLawyer = async (req, res) => {
       barRegistrationNumber,
       practiceAreas: practiceAreas ? JSON.parse(practiceAreas) : [],
       yearsOfExperience: yearsOfExperience || 0,
-      documents,
+      profilepic:lawyerpic,
       status: 'pending'
     });
 
