@@ -30,7 +30,7 @@ const lead_info = async (req, res) => {
             const validMobileNos = mobile_no.filter(num => num && num.trim() !== "");
             
             if (validMobileNos.length > 0) {
-              const existingMobile = await addcontact.findOne({ mobile_no: { $in: validMobileNos } });
+              const existingMobile = await leadinfo.findOne({ mobile_no: { $in: validMobileNos } });
               if (existingMobile) {
                 return res.status(400).send({ message: "Mobile number already exists..." });
               }
@@ -41,7 +41,7 @@ const lead_info = async (req, res) => {
           const validemails = email.filter(num => num && num.trim() !== "");
           
           if (validemails.length > 0) {
-            const existingemail = await addcontact.findOne({ email: { $in: validemails } });
+            const existingemail = await leadinfo.findOne({ email: { $in: validemails } });
             if (existingemail) {
               return res.status(400).send({ message: "Email id already exists..." });
             }
