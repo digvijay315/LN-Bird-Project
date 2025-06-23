@@ -152,6 +152,11 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.12);
 }
 
+/* In your CSS file */
+.lawyer-offcanvas.offcanvas-end {
+  width: 600px !important
+}
+
 
 /* personalForm.css */
 
@@ -214,7 +219,7 @@
 .custom-textfield .MuiOutlinedInput-root {
   border-radius: 8px;
   background-color: #fff;
-  border: 1px solid #c4c4c4;
+  /* border: 1px solid #c4c4c4; */
   transition: border-color 0.3s;
 }
 
@@ -239,6 +244,7 @@
 .custom-textfield .MuiOutlinedInput-input {
   padding: 10px 12px;
   font-size: 14px;
+  
 }
 
 /* Buttons */
