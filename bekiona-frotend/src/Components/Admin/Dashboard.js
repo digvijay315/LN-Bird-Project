@@ -891,7 +891,7 @@ const handleDownloadLabel = async (awb_no) => {
     .map((item, index, sortedItems) => {
       const isNew = index < newOrderCount; // First N are "New"
       return (
-        <StyledTableRow key={index}>
+        <StyledTableRow key={index} style={{backgroundColor:item.tracking_id?"pink":""}}>
           <StyledTableCell style={{ fontSize: "12px" }}>
             {index + 1}
           </StyledTableCell>
