@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const lawyerModel = require('../models/lawyer.model');
+const { Certificate } = require('crypto');
 
 // Configure Cloudinary
 require('dotenv').config();
@@ -218,6 +220,59 @@ const registerLawyer = async (req, res) => {
   }
 };
 
+
+const updatelawyerprofile = async (req, res) => {
+ try {
+  const lawyerid=req.params._id
+
+    // Prepare for file upload
+  const imagefiles = [];
+
+  console.log(req.files);
+  
+  if (req.files) {
+    const imagefield = req.files.filter(file => file.fieldname.includes(`certificate`));
+
+    for (let file of imagefield) {
+      try {
+        const result = await cloudinary.uploader.upload(file.path);
+        imagefiles.push(result.secure_url);  
+
+        // Delete file after upload
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.error(`Failed to delete file: ${file.path}`, err);
+          } else {
+            console.log(`Successfully deleted file: ${file.path}`);
+          }
+        });
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+
+  }
+
+   const updatedFields = {
+                        ...req.body,
+                        certificate:imagefiles,
+                    };
+
+  const resp = await lawyerModel.findByIdAndUpdate(
+      lawyerid,                  // ID to find
+      { $set: updatedFields },        // Update data
+      { new: true }              // Return updated document
+    );
+  res.status(200).send({message:"profile update successfully",lawyer:resp})
+  
+ } catch (error) {
+  console.log(error);
+  
+ }
+};
+
+
+
 function sendConfirmationEmail(toEmail, firstName) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -389,5 +444,6 @@ module.exports = {
   toggleOnlineStatus,
   getallProfile,
   approveProfile,
-  getallProfilebyid
+  getallProfilebyid,
+  updatelawyerprofile
 };

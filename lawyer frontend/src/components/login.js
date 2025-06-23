@@ -352,7 +352,7 @@ const handleLogin = async (e) => {
                   <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleInputChange} style={inputStyle} required />
                   <input type="username" name="username" placeholder="username" value={formData.username} onChange={handleInputChange} style={inputStyle} required />
                   <input type="text" name="phone" placeholder="Phone" value={formData.phone} onChange={handleInputChange} style={inputStyle} required />
-                  <input type="text" name="barRegistrationNumber" placeholder="Bar Registration Number" value={formData.barRegistrationNumber} onChange={handleInputChange} style={inputStyle} required />
+                  {/* <input type="text" name="barRegistrationNumber" placeholder="Bar Registration Number" value={formData.barRegistrationNumber} onChange={handleInputChange} style={inputStyle} required /> */}
                   <input type="text" name="practiceAreas" placeholder="Practice Areas (comma-separated)" value={formData.practiceAreas} onChange={handleInputChange} style={inputStyle} required />
                   <input type="number" name="yearsOfExperience" placeholder="Years of Experience" value={formData.yearsOfExperience} onChange={handleInputChange} style={inputStyle} required />
                   <input type="file" name="profilepic" multiple onChange={handleInputChange} style={inputStyle} />
@@ -405,7 +405,7 @@ const handleLogin = async (e) => {
           </div>
         </div>
       )}
-    </>
+          </>
 
     </div>
   );

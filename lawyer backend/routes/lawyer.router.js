@@ -13,6 +13,7 @@ const {
 
 // Middlewares
 const upload = require('../middlewares/fileupload');
+const uploadFields=require('../middlewares/multiuploads')
 const authMiddleware = require('../middlewares/auth');
 
 // ---------- Public Endpoints ----------
@@ -50,7 +51,7 @@ router.get('/earning', authMiddleware, getLawyerEarnings);
 router.get('/getalllawyerprofile',lawyerController.getallProfile);
 router.put('/approvedlawyer/:_id',lawyerController.approveProfile);
 router.get('/getlawyer/:_id',lawyerController.getallProfilebyid);
-
+router.put('/updatelawyerprofile/:_id',uploadFields,lawyerController.updatelawyerprofile);
 
 
 

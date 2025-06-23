@@ -9,8 +9,19 @@ import { Country, State, City } from 'country-state-city';
 import { IconButton, Tooltip } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Lottie from "lottie-react";
+import Swal from 'sweetalert2';
+import { event } from 'jquery';
 
 const LawyerProfileModal = () => {
+
+     const [isLoading, setIsLoading] = useState(false);
+    const [animationData, setAnimationData] = useState(null);
+      useEffect(() => {
+      fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+        .then((res) => res.json())
+        .then((data) => setAnimationData(data));
+    }, []);
     
       const lawyerdetails = JSON.parse(localStorage.getItem('userDetails'));
 
@@ -26,13 +37,16 @@ const LawyerProfileModal = () => {
             setShow(false);
         };
 
-const[lawyerprofile,setlawyerprofile]=useState({specializations:"",languages:[],practice:"",proofofpractice:[],degree:[],university:[],
-                                                certificate:[],barEnrolment: '',barState: '',barYear: '',barCertificate:[],
-                                                aibeNo: '',aibeCertificate:[],identity_proof:[],identity_number:[],identity_pic:[],
-                                              address_proof:[''],address_pic:[''], consultation_fee: "",available_days: [],available_from: "",
-                                              available_to: "",consultation_mode: [''],account_holder_name:"",bank_name:"",
-                                            account_number:"",ifsc_code:"",cancelled_cheque:[],declaration_authenticity: false,consent_verification: false,
-                                            accept_terms: false})
+const[lawyerprofile,setlawyerprofile]=useState({gender:"",dob:"",alternet_contact:"",residential_address:"",state:"",city:"",
+                                        pin_code:"",corrosponding_address:"",
+                                        degree:[],university:[],certificate:[],
+                                        barEnrolment: '',barState: '',barYear: '',barCertificate:[], aibeNo: '',aibeCertificate:[],
+                                        specializations:"",languages:[],practice_type:"",lawfarm_name:"",office_address:"",
+                                        bar_membership:"",proofofpractice:[],professional_bio:"",
+                                        identity_proof:[],identity_number:[],identity_pic:[],address_proof:[],address_pic:[],
+                                        consultation_fee: "",available_days: [],available_from: "",available_to: "",consultation_mode: [],
+                                        account_holder_name:"",bank_name:"",account_number:"",ifsc_code:"",cancelled_cheque:[],
+                                        declaration_authenticity: false,consent_verification: false,accept_terms: false})
 
   const [selectedState, setSelectedState] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -148,6 +162,68 @@ const consultation_mode  = [
   { value: 'video',label: 'Video' },
   { value: 'inperson', label: 'In Person' },
 ];
+
+const handlearrayChange = (index, field, value) => {
+  setlawyerprofile((prev) => {
+    const updatedArray = [...prev[field]];
+    updatedArray[index] = value;
+    return {
+      ...prev,
+      [field]: updatedArray,
+    };
+  });
+};
+
+const handleCertificateUpload = (index, file) => {
+  setlawyerprofile((prev) => {
+    const updatedCertificates = [...prev.certificate];
+    updatedCertificates[index] = file;
+    return {
+      ...prev,
+      certificate: updatedCertificates,
+    };
+  });
+};
+  // const handleCertificateUpload = (index, event) => {
+  //                         const newdocumentpic = [...lawyerprofile.certificate];
+  //                         const files = Array.from(event.target.files);
+  //                        newdocumentpic[index] = files.map(file => ({
+  //                         file,
+  //                         preview: URL.createObjectURL(file)
+  //                       }));
+
+  //                         setlawyerprofile({
+  //                           ...lawyerprofile,
+  //                           certificate: newdocumentpic
+  //                         });
+  //                       };
+
+console.log(lawyerprofile.certificate);
+
+
+const completelawyerprofile=async()=>
+{
+  try {
+
+    const resp=await api.put(`api/lawyer/updatelawyerprofile/${lawyerdetails.lawyer._id}`,lawyerprofile, {headers: {
+    "Content-Type": "multipart/form-data",
+  }},)
+    if(resp.status===200)
+    {
+      Swal.fire({
+        icon:"success",
+        title:"Profile Updated",
+        text:"Your Profile Completed Successfully",
+        showConfirmButton:"true"
+      })
+    }
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 
 return (  
    <div className="profile-container">
@@ -312,7 +388,7 @@ return (
 
         {/* Buttons */}
         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-          <Button variant="contained" color="primary" className="custom-button save">
+          <Button variant="contained" color="primary" className="custom-button save" onClick={completelawyerprofile}>
             Save
           </Button>
           <Button variant="outlined" color="secondary" className="custom-button reset">
@@ -355,9 +431,7 @@ return (
                   select
                   label="Degree"
                   value={lawyerprofile.degree[index] || ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "degree", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                  onChange={(e) =>handlearrayChange(index, "degree", e.target.value)}
                   fullWidth
                   size="small"
                 >
@@ -375,9 +449,7 @@ return (
                 name='university'
                   label="University/College Name"
                   value={lawyerprofile.university[index] || ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                  onChange={(e) =>handlearrayChange(index, "university", e.target.value)}
                   fullWidth
                   size="small"
                 />
@@ -401,7 +473,8 @@ return (
                   accept=".pdf, .jpg, .jpeg, .png"
                   id={`certificate-${index}`}
                   style={{ display: "none" }}
-                   onChange={(e) => setlawyerprofile({...lawyerprofile,certificate:Array.from(e.target.files)})}
+                  // onChange={(event)=>handleCertificateUpload(index,event)}
+                   onChange={(e) => handleCertificateUpload(index, e.target.files[0])}
                 />
                 <label htmlFor={`certificate-${index}`}>
                   <IconButton
@@ -432,6 +505,7 @@ return (
                 >
                 <DeleteIcon fontSize="small" />
                 </IconButton>
+
             )}
             </Grid>
             </Grid>
@@ -626,7 +700,7 @@ return (
       </Grid>
 
        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-          <Button variant="contained" color="primary" className="custom-button save">
+          <Button variant="contained" color="primary" className="custom-button save" onClick={completelawyerprofile}>
             Save
           </Button>
           <Button variant="outlined" color="secondary" className="custom-button reset">
@@ -799,7 +873,7 @@ return (
         </Grid>
 
          <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-          <Button variant="contained" color="primary" className="custom-button save">
+          <Button variant="contained" color="primary" className="custom-button save" onClick={completelawyerprofile}>
             Save
           </Button>
           <Button variant="outlined" color="secondary" className="custom-button reset">
@@ -846,9 +920,7 @@ return (
                   select
                   label="Identity Proof"
                   value={lawyerprofile.identity_proof[index] || ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "degree", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                   onChange={(e) =>handlearrayChange(index, "identity_proof", e.target.value)}
                   fullWidth
                   size="small"
                 >
@@ -866,9 +938,7 @@ return (
                 name='identity_number'
                   label="Identity Number"
                   value={lawyerprofile.identity_number[index] || ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                   onChange={(e) =>handlearrayChange(index, "identity_number", e.target.value)}
                   fullWidth
                   size="small"
                 />
@@ -921,9 +991,7 @@ return (
                   select
                   label="Address Proof"
                   value={lawyerprofile.address_proof[index] || ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "degree", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                   onChange={(e) =>handlearrayChange(index, "address_proof", e.target.value)}
                   fullWidth
                   size="small"
                 >
@@ -1135,7 +1203,7 @@ return (
 
           {/* Buttons */}
         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-          <Button variant="contained" color="primary" className="custom-button save">
+          <Button variant="contained" color="primary" className="custom-button save" onClick={completelawyerprofile}>
             Save
           </Button>
           <Button variant="outlined" color="secondary" className="custom-button reset">
@@ -1154,7 +1222,7 @@ return (
     {/*==================================== BANK DETAILS TAB ========================================================================*/}
 
 
-    <Tab eventKey="bank_details" title="🏦 Bank Details">
+    {/* <Tab eventKey="bank_details" title="🏦 Bank Details">
       <div className="tab-content-section">
       <Card
           variant="outlined"
@@ -1175,7 +1243,6 @@ return (
                 <TextField
                 name='account_holder_name'
                  className="custom-textfield"
-                  select
                   label="Account Holder Name"
                   value={lawyerprofile.account_holder_name || ""}
                 //   onChange={(e) =>
@@ -1193,9 +1260,9 @@ return (
                 name='bank_name'
                   label="Bank Name"
                   value={lawyerprofile.bank_name|| ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                  onChange={(e) =>
+                    handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
+                  }
                   fullWidth
                   size="small"
                 />
@@ -1208,9 +1275,9 @@ return (
                 name='account_number'
                   label="Account Number"
                   value={lawyerprofile.account_number|| ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                  onChange={(e) =>
+                    handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
+                  }
                   fullWidth
                   size="small"
                 />
@@ -1222,9 +1289,9 @@ return (
                 name='ifsc_code'
                   label="IFSC Code"
                   value={lawyerprofile.ifsc_code|| ""}
-                //   onChange={(e) =>
-                //     handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
-                //   }
+                  onChange={(e) =>
+                    handleEducationChange(index, "university", e.target.value, lawyerprofile, setlawyerprofile)
+                  }
                   fullWidth
                   size="small"
                 />
@@ -1277,7 +1344,7 @@ return (
            
               </Grid>
 
-                        {/* Buttons */}
+                    
         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
           <Button variant="contained" color="primary" className="custom-button save">
             Save
@@ -1291,7 +1358,7 @@ return (
           </CardContent>
         </Card>
       </div>
-    </Tab>
+    </Tab> */}
 
     {/* DECLARATIONS & AGREEMENTS TAB */}
     <Tab eventKey="declarations_agreements" title="📝 Declarations">
@@ -1361,7 +1428,7 @@ return (
     </Card>
                {/* Buttons */}
         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-          <Button variant="contained" color="primary" className="custom-button save">
+          <Button variant="contained" color="primary" className="custom-button save" onClick={completelawyerprofile}>
             Save
           </Button>
           <Button variant="outlined" color="secondary" className="custom-button reset">
@@ -1375,6 +1442,47 @@ return (
 </Offcanvas.Body>
 
       </Offcanvas>
+
+        <>
+      {isLoading && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          // background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
+        }}>
+          <div style={{
+            // backgroundColor: "rgba(0,0,0,0.75)",
+            padding: "40px 60px",
+            borderRadius: "20px",
+            // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#fff",
+            textAlign: "center",
+          }}>
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+            />
+            <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Updating Profile...
+            </div>
+          </div>
+        </div>
+      )}
+          </>
 
 </div>
 

@@ -21,7 +21,7 @@ const fileFilter = (req, file, cb) => {
     };
 
     // Check for image files
-    if (file.fieldname.includes('preview') && fileTypes.image.includes(file.mimetype)) {
+    if (file.fieldname.includes('certificate') && fileTypes.image.includes(file.mimetype)) {
       return cb(null, true); // Accept image files for preview
     }
 
