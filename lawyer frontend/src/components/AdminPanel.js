@@ -282,41 +282,230 @@ const AdminPanel = () => {
               justify
             >
               {/* BASIC TAB */}
-              <Tab eventKey="basic" title="🧾 Basic">
-                <div className="tab-content-section">
-                  <p><strong>Name:</strong> {selectedLawyer.firstName} {selectedLawyer.lastName}</p>
-                  <p><strong>Username:</strong> {selectedLawyer.username}</p>
-                  <p><strong>Status:</strong> <span className="badge bg-success">{selectedLawyer.status}</span></p>
+            <Tab eventKey="basic" title="🧾 Basic">
+          <div className="basic-tab-content">
+            <div className="profile-pic">
+              <img 
+                src={selectedLawyer.profilepic} 
+                alt="Profile" 
+              />
+            </div>
+            <div className="profile-info">
+              <h2 className="profile-name">
+                {selectedLawyer.firstName} {selectedLawyer.lastName}
+              </h2>
+              <p className="info-item"><strong>Username: </strong>{selectedLawyer.username}</p>
+              <p className="info-item">
+                <strong>Email: </strong>
+                <span className="badge bg-success">{selectedLawyer.email}</span>
+              </p>
+              <p className="info-item"><strong>Phone: </strong>{selectedLawyer.phone}</p>
+              <p className="info-item"><strong>Gender: </strong>{selectedLawyer.gender}</p>
+              <p className="info-item"><strong>Date Of Birth: </strong>{selectedLawyer.dob}</p>
+              <p className="info-item">
+                <strong>Residential Address: </strong>
+                {selectedLawyer.residential_address}, {selectedLawyer.city}, {selectedLawyer.state}, {selectedLawyer.pin_code}
+              </p>
+            </div>
+          </div>
+
+          <div className="tab-content-section" style={{marginTop:"10px"}}>
+                <h6><u>KYC Details</u></h6>
+            <div className="education-grid">
+              {selectedLawyer.identity_proof?.map((deg, index) => (
+                <div className="education-card" key={index}>
+                  <div className="card-item"><strong>🎓 Identity:</strong> {deg}</div>
+                  <div className="card-item"><strong>🏛️ Identity No:</strong> {selectedLawyer.identity_number?.[index]}</div>
+                  <div className="card-item">
+                    <strong>📄 Identity Proof:</strong>
+                    {selectedLawyer.identity_pic?.[index] && (
+                      <div className="certificate-preview">
+                        <img
+                          src={selectedLawyer.identity_pic[index]}
+                          alt={`Certificate ${index + 1}`}
+                        />
+                        <a
+                          href={selectedLawyer.identity_pic[index]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="eye-icon"
+                          title="View Full Certificate"
+                        >
+                          👁️
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                   <div className="card-item"><strong>🎓 Address Proof:</strong>{selectedLawyer.address_proof?.[index]}</div>
+                       <div className="card-item">
+                    <strong>📄 Address Proof:</strong>
+                    {selectedLawyer.address_pic?.[index] && (
+                      <div className="certificate-preview">
+                        <img
+                          src={selectedLawyer.address_pic[index]}
+                          alt={`Certificate ${index + 1}`}
+                        />
+                        <a
+                          href={selectedLawyer.address_pic[index]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="eye-icon"
+                          title="View Full Certificate"
+                        >
+                          👁️
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </Tab>
+              ))}
+            </div>
+          </div>
+
+        </Tab>
+
 
               {/* PERSONAL TAB */}
-              <Tab eventKey="personal" title="👤 Personal">
-                <div className="tab-content-section">
-                  <p><strong>Email:</strong> {selectedLawyer.email}</p>
-                  <p><strong>Phone:</strong> {selectedLawyer.phone}</p>
+           <Tab eventKey="educational" title="🎓 Educational">
+          <div className="tab-content-section">
+            <div className="education-grid">
+              {selectedLawyer.degree?.map((deg, index) => (
+                <div className="education-card" key={index}>
+                  <div className="card-item"><strong>🎓 Degree:</strong> {deg}</div>
+                  <div className="card-item"><strong>🏛️ University:</strong> {selectedLawyer.university?.[index]}</div>
+                  <div className="card-item">
+                    <strong>📄 Certificate:</strong>
+                    {selectedLawyer.certificate?.[index] && (
+                      <div className="certificate-preview">
+                        <img
+                          src={selectedLawyer.certificate[index]}
+                          alt={`Certificate ${index + 1}`}
+                        />
+                        <a
+                          href={selectedLawyer.certificate[index]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="eye-icon"
+                          title="View Full Certificate"
+                        >
+                          👁️
+                        </a>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </Tab>
+              ))}
+            </div>
+          </div>
+        </Tab>
+
 
               {/* WORK TAB */}
               <Tab eventKey="work" title="💼 Work">
-                <div className="tab-content-section">
-                  <p><strong>Bar Reg No:</strong> {selectedLawyer.barRegistrationNumber}</p>
-                  <p><strong>Practice Areas:</strong> {
-                    Array.isArray(selectedLawyer.practiceAreas)
-                      ? selectedLawyer.practiceAreas.join(', ')
-                      : selectedLawyer.practiceAreas
-                  }</p>
-                  <p><strong>Experience:</strong> {selectedLawyer.yearsOfExperience} years</p>
-                </div>
+              <div className="tab-content-section">
+    <div className="education-grid">
+ 
+        <div className="education-card">
+          <h6><u>Bar Association Details</u></h6>
+          <div className="card-item"><strong>🪪 Bar Enrolment No:</strong> {selectedLawyer.barEnrolment}</div>
+          <div className="card-item"><strong>🌐 Bar Council State:</strong> {selectedLawyer.barState}</div>
+          <div className="card-item"><strong>📅 Registration Year:</strong> {selectedLawyer.barYear}</div>
+          <div className="card-item">
+            <strong>📄 Bar Council Certificate:</strong>
+         
+              <div className="certificate-preview">
+                <img
+                  src={selectedLawyer.barCertificate}
+                  alt={`bar council Certificate`}
+                />
+                <a
+                  href={selectedLawyer.barCertificate}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="eye-icon"
+                  title="View Full Certificate"
+                >
+                  👁️
+                </a>
+              </div>
+          </div>
+            <div className="card-item"><strong>🔖 AIBE No:</strong> {selectedLawyer.aibeNo}</div>
+              <div className="card-item">
+            <strong>📄 Aibe Certificate:</strong>
+         
+              <div className="certificate-preview">
+                <img
+                  src={selectedLawyer.aibeCertificate}
+                  alt={`bar council Certificate`}
+                />
+                <a
+                  href={selectedLawyer.aibeCertificate}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="eye-icon"
+                  title="View Full Certificate"
+                >
+                  👁️
+                </a>
+              </div>
+          </div>
+        </div>
+
+         <div className="education-card">
+          <h6><u>Professional Details</u></h6>
+          <div className="card-item"><strong>🎯 Specializations:</strong> {selectedLawyer.specializations}</div>
+          <div className="card-item"><strong>🗣️ Languages:</strong> {selectedLawyer.languages.map(lang => lang.label).join(', ')}</div>
+          <div className="card-item"><strong>⚖️ Practice Types:</strong> {selectedLawyer.practice_type}</div>
+          <div className="card-item"><strong>🏢 Law Firm Name:</strong> {selectedLawyer.lawfarm_name}</div>
+          <div className="card-item"><strong>📍 Office Address:</strong> {selectedLawyer.office_address}</div>
+          <div className="card-item"><strong>🪪 Bar Association Membership:</strong> {selectedLawyer.bar_membership}</div>
+          <div className="card-item"><strong>📝 Professional Bio:</strong> {selectedLawyer.professional_bio}</div>
+
+          <div className="card-item">
+            <strong>📄 Practice Proof:</strong>
+         
+              <div className="certificate-preview">
+                <img
+                  src={selectedLawyer.proofofpractice}
+                  alt={`Certificate`}
+                />
+                <a
+                  href={selectedLawyer.certificate}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="eye-icon"
+                  title="View Full Certificate"
+                >
+                  👁️
+                </a>
+              </div>
+     
+          </div>
+        </div>
+    
+    </div>
+              </div>
               </Tab>
 
               {/* OTHER TAB */}
               <Tab eventKey="other" title="📁 Other">
-                <div className="tab-content-section">
-                  <p><strong>ID:</strong> {selectedLawyer._id}</p>
-                  {/* Add any other additional info here */}
-                </div>
+            <div className="tab-content-section">
+              <div className="education-grid">
+ 
+         <div className="education-card">
+          <div className="card-item"><strong>💰 Consultation Fee:</strong> {selectedLawyer.consultation_fee}</div>
+          <div className="card-item"><strong>📅 Available Days:</strong> {selectedLawyer.available_days.map(lang => lang.label).join(', ')}</div>
+          <div className="card-item"><strong>⏰ Available From:</strong> {selectedLawyer.available_from}</div>
+          <div className="card-item"><strong>⏱️ Available To:</strong> {selectedLawyer.available_to}</div>
+          <div className="card-item"><strong>💻 Consultation Mode:</strong>{selectedLawyer.consultation_mode.map(lang => lang.label).join(', ')}</div>
+          <div className="card-item"><strong>✅ Declaration Authenticity:</strong> {selectedLawyer.declaration_authenticity}</div>
+          <div className="card-item"><strong>🔒 Accept Terms:</strong> {selectedLawyer.accept_terms}</div>
+
+        
+        </div>
+    
+    </div>
+  </div>
               </Tab>
             </Tabs>
           )}

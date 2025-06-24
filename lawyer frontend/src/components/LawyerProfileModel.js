@@ -60,6 +60,7 @@ const[lawyerprofile,setlawyerprofile]=useState({gender:"",dob:"",alternet_contac
       label: state.name
     }));
     setStateOptions(mappedStates);
+
   }, []);
 
   useEffect(() => {
@@ -75,7 +76,7 @@ const[lawyerprofile,setlawyerprofile]=useState({gender:"",dob:"",alternet_contac
   }, [selectedState]);
 
 
-  const specializations = [
+  const lawyerspecializations = [
   { value: 'family', label: 'Family Law' },
   { value: 'criminal', label: 'Criminal Law' },
   { value: 'corporate', label: 'Corporate Law' },
@@ -163,6 +164,14 @@ const consultation_mode  = [
   { value: 'inperson', label: 'In Person' },
 ];
 
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setlawyerprofile((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
+};
+
 const handlearrayChange = (index, field, value) => {
   setlawyerprofile((prev) => {
     const updatedArray = [...prev[field]];
@@ -184,27 +193,34 @@ const handleCertificateUpload = (index, file) => {
     };
   });
 };
-  // const handleCertificateUpload = (index, event) => {
-  //                         const newdocumentpic = [...lawyerprofile.certificate];
-  //                         const files = Array.from(event.target.files);
-  //                        newdocumentpic[index] = files.map(file => ({
-  //                         file,
-  //                         preview: URL.createObjectURL(file)
-  //                       }));
 
-  //                         setlawyerprofile({
-  //                           ...lawyerprofile,
-  //                           certificate: newdocumentpic
-  //                         });
-  //                       };
 
-console.log(lawyerprofile.certificate);
+const handleidentityupload = (index, file) => {
+  setlawyerprofile((prev) => {
+    const updateidentity = [...prev.identity_pic];
+    updateidentity[index] = file;
+    return {
+      ...prev,
+      identity_pic: updateidentity,
+    };
+  });
+};
 
+const handleaddresspicupload = (index, file) => {
+  setlawyerprofile((prev) => {
+    const updateaddresspic = [...prev.address_pic];
+    updateaddresspic[index] = file;
+    return {
+      ...prev,
+      address_pic: updateaddresspic,
+    };
+  });
+};
 
 const completelawyerprofile=async()=>
 {
   try {
-
+    setIsLoading(true)
     const resp=await api.put(`api/lawyer/updatelawyerprofile/${lawyerdetails.lawyer._id}`,lawyerprofile, {headers: {
     "Content-Type": "multipart/form-data",
   }},)
@@ -216,11 +232,17 @@ const completelawyerprofile=async()=>
         text:"Your Profile Completed Successfully",
         showConfirmButton:"true"
       })
+      setlawyerprofile([])
+       handleClose()
     }
+   
     
   } catch (error) {
     console.log(error);
     
+  }finally
+  {
+    setIsLoading(false)
   }
 }
 
@@ -286,6 +308,7 @@ return (
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           >
             <MenuItem value="male">Male</MenuItem>
             <MenuItem value="female">Female</MenuItem>
@@ -303,6 +326,7 @@ return (
             size="small"
             InputLabelProps={{ shrink: true }}
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -310,11 +334,12 @@ return (
           <TextField
             className="custom-textfield"
             label="Alternate Contact No"
-            name="altContact"
+            name="alternet_contact"
             type="tel"
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -322,12 +347,13 @@ return (
           <TextField
             className="custom-textfield"
             label="Residential Address"
-            name="residentialAddress"
+            name="residential_address"
             multiline
             minRows={2}
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -337,7 +363,13 @@ return (
             classNamePrefix="react-select"
             options={stateOptions}
             value={selectedState}
-            onChange={setSelectedState}
+            onChange={(value) => {
+            setSelectedState(value);
+            setlawyerprofile((prev) => ({
+              ...prev,
+              state: value.label, // stores the state's name like "Maharashtra"
+            }));
+          }}
             name="state"
             placeholder="Select State"
             menuPortalTarget={document.body}
@@ -351,7 +383,13 @@ return (
             classNamePrefix="react-select"
             options={cityOptions}
             value={selectedCity}
-            onChange={setSelectedCity}
+              onChange={(value) => {
+            setSelectedCity(value);
+            setlawyerprofile((prev) => ({
+              ...prev,
+              city: value.label, // stores the state's name like "Maharashtra"
+            }));
+          }}
             name="city"
             placeholder="Select City"
             isDisabled={!selectedState}
@@ -364,12 +402,13 @@ return (
           <TextField
             className="custom-textfield"
             label="PIN Code"
-            name="pincode"
+            name="pin_code"
             type="text"
             inputProps={{ maxLength: 6 }}
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -377,12 +416,13 @@ return (
           <TextField
             className="custom-textfield"
             label="Correspondence Address (Optional)"
-            name="correspondenceAddress"
+            name="corrosponding_address"
             multiline
             minRows={2}
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -407,7 +447,7 @@ return (
 
     <Tab eventKey="education" title="🎓 Education">
       <div className="tab-content-section">
-    {lawyerprofile.degree.map((_, index) => (
+    {lawyerprofile?.degree?.map((_, index) => (
         <Card
           key={index}
           variant="outlined"
@@ -426,7 +466,7 @@ return (
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                name='degree'
+                  name='degree'
                  className="custom-textfield"
                   select
                   label="Degree"
@@ -473,7 +513,6 @@ return (
                   accept=".pdf, .jpg, .jpeg, .png"
                   id={`certificate-${index}`}
                   style={{ display: "none" }}
-                  // onChange={(event)=>handleCertificateUpload(index,event)}
                    onChange={(e) => handleCertificateUpload(index, e.target.files[0])}
                 />
                 <label htmlFor={`certificate-${index}`}>
@@ -559,7 +598,7 @@ return (
           label="Bar Council Enrolment Number"
           name="barEnrolment"
           value={lawyerprofile.barEnrolment || ''}
-        //   onChange={(e) => handleInputChange('barEnrolment', e.target.value)}
+          onChange={handleChange}
           fullWidth
           size="small"
           variant="outlined"
@@ -573,7 +612,7 @@ return (
           label="State Bar Council"
           name="barState"
           value={lawyerprofile.barState || ''}
-        //   onChange={(e) => handleInputChange('barState', e.target.value)}
+          onChange={handleChange}
           fullWidth
           size="small"
           variant="outlined"
@@ -593,7 +632,7 @@ return (
           label="Year of Registration"
           name="barYear"
           value={lawyerprofile.barYear || ''}
-        //   onChange={(e) => handleInputChange('barYear', e.target.value)}
+          onChange={handleChange}
           fullWidth
           size="small"
           variant="outlined"
@@ -616,7 +655,7 @@ return (
           type="file"
           name="barCertificate"
           accept=".pdf,.jpg,.jpeg,.png"
-         onChange={(e) => setlawyerprofile({...lawyerprofile,barCertificate:Array.from(e.target.files)})}
+          onChange={(e) => setlawyerprofile({...lawyerprofile,barCertificate:Array.from(e.target.files)})}
           style={{ display: 'none' }}
         />
         <label htmlFor="barCertificate">
@@ -652,7 +691,7 @@ return (
           label="AIBE Certificate Number (Optional)"
           name="aibeNo"
           value={lawyerprofile.aibeNo || ''}
-        //   onChange={(e) => handleInputChange('aibeNo', e.target.value)}
+          onChange={handleChange}
           fullWidth
           size="small"
           variant="outlined"
@@ -669,7 +708,7 @@ return (
           type="file"
           name="aibeCertificate"
           accept=".pdf,.jpg,.jpeg,.png"
-         onChange={(e) => setlawyerprofile({...lawyerprofile,aibeCertificate:Array.from(e.target.files)})}
+          onChange={(e) => setlawyerprofile({...lawyerprofile,aibeCertificate:Array.from(e.target.files)})}
           style={{ display: 'none' }}
         />
         <label htmlFor="aibeCertificate">
@@ -734,21 +773,30 @@ return (
             </Typography>
 
         <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Select
-            className="react-select-container"
-            classNamePrefix="react-select"
-            isMulti
-            options={specializations}
-            value={lawyerprofile.specializations}
-            placeholder="Select Specializations"
-            menuPortalTarget={document.body}
-            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-          />
-        </Grid>
+       
+         <Grid item xs={12}>
+        <TextField
+         className="custom-textfield"
+          select
+          label="Select Specializations"
+          name="specializations"
+          value={lawyerprofile.specializations || ''}
+          onChange={handleChange}
+          fullWidth
+          size="small"
+          variant="outlined"
+        >
+          {lawyerspecializations.map((sp) => (
+            <MenuItem key={sp.value} value={sp.value}>
+              {sp.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Grid>
 
        <Grid item xs={12}>
         <Select
+            name='languages'
             className="react-select-container"
             classNamePrefix="react-select"
             isMulti
@@ -766,27 +814,35 @@ return (
         />
         </Grid>
 
-
-        <Grid item xs={12}>
-          <Select
-            className="react-select-container"
-            classNamePrefix="react-select"
-            options={practiceTypes}
-            value={lawyerprofile.practice}
-            placeholder="Current Practice Type"
-            menuPortalTarget={document.body}
-            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-          />
-        </Grid>
+         <Grid item xs={12}>
+        <TextField
+         className="custom-textfield"
+          select
+          label="Current Practice Type"
+          name="practice_type"
+          value={lawyerprofile.practice || ''}
+          onChange={handleChange}
+          fullWidth
+          size="small"
+          variant="outlined"
+        >
+          {practiceTypes.map((practice) => (
+            <MenuItem key={practice.value} value={practice.value}>
+              {practice.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </Grid>
 
         <Grid item xs={12}>
           <TextField
             className="custom-textfield"
             label="Name of Law Firm/Organization"
-            name="firmName"
+            name="lawfarm_name"
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -794,12 +850,13 @@ return (
           <TextField
             className="custom-textfield"
             label="Office Address"
-            name="officeAddress"
+            name="office_address"
             multiline
             minRows={2}
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -807,10 +864,11 @@ return (
           <TextField
             className="custom-textfield"
             label="Bar Association Membership"
-            name="barAssociation"
+            name="bar_membership"
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -821,7 +879,7 @@ return (
 
   <input
     id="proofOfPractice"
-    name="proofOfPractice"
+    name="proofofpractice"
     type="file"
     accept=".pdf, .jpg, .jpeg, .png"
     multiple
@@ -863,12 +921,13 @@ return (
           <TextField
             className="custom-textfield"
             label="Professional Bio / Description"
-            name="bio"
+            name="professional_bio"
             multiline
             minRows={4}
             fullWidth
             size="small"
             variant="outlined"
+            onChange={handleChange}
           />
         </Grid>
 
@@ -920,7 +979,7 @@ return (
                   select
                   label="Identity Proof"
                   value={lawyerprofile.identity_proof[index] || ""}
-                   onChange={(e) =>handlearrayChange(index, "identity_proof", e.target.value)}
+                  onChange={(e) =>handlearrayChange(index, "identity_proof", e.target.value)}
                   fullWidth
                   size="small"
                 >
@@ -935,7 +994,7 @@ return (
               <Grid item xs={12}>
                 <TextField
                  className="custom-textfield"
-                name='identity_number'
+                  name='identity_number'
                   label="Identity Number"
                   value={lawyerprofile.identity_number[index] || ""}
                    onChange={(e) =>handlearrayChange(index, "identity_number", e.target.value)}
@@ -962,7 +1021,7 @@ return (
                   accept=".pdf, .jpg, .jpeg, .png"
                   id={`identity_pic-${index}`}
                   style={{ display: "none" }}
-                   onChange={(e) => setlawyerprofile({...lawyerprofile,identity_pic:Array.from(e.target.files)})}
+                  onChange={(e) => handleidentityupload(index, e.target.files[0])}
                 />
                 <label htmlFor={`identity_pic-${index}`}>
                   <IconButton
@@ -986,12 +1045,12 @@ return (
 
                    <Grid item xs={12}>
                 <TextField
-                name='address_proof'
+                  name='address_proof'
                  className="custom-textfield"
                   select
                   label="Address Proof"
                   value={lawyerprofile.address_proof[index] || ""}
-                   onChange={(e) =>handlearrayChange(index, "address_proof", e.target.value)}
+                  onChange={(e) =>handlearrayChange(index, "address_proof", e.target.value)}
                   fullWidth
                   size="small"
                 >
@@ -1015,13 +1074,13 @@ return (
                   Address Pic
                 </label>
                 <input
-                name='address_pic'
+                  name='address_pic'
                  className="custom-textfield"
                   type="file"
                   accept=".pdf, .jpg, .jpeg, .png"
                   id={`address_pic-${index}`}
                   style={{ display: "none" }}
-                   onChange={(e) => setlawyerprofile({...lawyerprofile,address_pic:Array.from(e.target.files)})}
+                  onChange={(e) => handleaddresspicupload(index, e.target.files[0])}
                 />
                 <label htmlFor={`address_pic-${index}`}>
                   <IconButton
@@ -1104,12 +1163,7 @@ return (
               type="number"
               name="consultation_fee"
               value={lawyerprofile.consultation_fee || ""}
-              onChange={(e) =>
-                setlawyerprofile({
-                  ...lawyerprofile,
-                  consultation_fee: e.target.value,
-                })
-              }
+              onChange={handleChange}
               fullWidth
               size="small"
             />
@@ -1117,6 +1171,7 @@ return (
 
                <Grid item xs={12}>
             <Select
+            name='available_days'
             className="react-select-container"
             classNamePrefix="react-select"
             isMulti
@@ -1141,12 +1196,7 @@ return (
               type="time"
               name="available_from"
               value={lawyerprofile.available_from || ""}
-              onChange={(e) =>
-                setlawyerprofile({
-                  ...lawyerprofile,
-                  available_from: e.target.value,
-                })
-              }
+              onChange={handleChange}
               fullWidth
               size="small"
               InputLabelProps={{
@@ -1165,12 +1215,7 @@ return (
               type="time"
               name="available_to"
               value={lawyerprofile.available_to || ""}
-              onChange={(e) =>
-                setlawyerprofile({
-                  ...lawyerprofile,
-                  available_to: e.target.value,
-                })
-              }
+              onChange={handleChange}
               fullWidth
               size="small"
               InputLabelProps={{
@@ -1381,6 +1426,7 @@ return (
           <FormControlLabel
             control={
               <Checkbox
+              name='declaration_authenticity'
                 checked={lawyerprofile.declaration_authenticity || false}
                 onChange={(e) =>
                   setlawyerprofile({
@@ -1396,6 +1442,7 @@ return (
           <FormControlLabel
             control={
               <Checkbox
+              name='consent_verification'
                 checked={lawyerprofile.consent_verification || false}
                 onChange={(e) =>
                   setlawyerprofile({
@@ -1411,6 +1458,7 @@ return (
           <FormControlLabel
             control={
               <Checkbox
+              name='accept_terms'
                 checked={lawyerprofile.accept_terms || false}
                 onChange={(e) =>
                   setlawyerprofile({

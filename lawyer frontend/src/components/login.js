@@ -213,6 +213,7 @@ const handleLogin = async (e) => {
   e.preventDefault();
 
   try {
+    setIsLoading(true)
     const endpoint = loginRole === 'user'
       ? '/api/user/login'
       : '/api/lawyer/login';
@@ -264,6 +265,9 @@ const handleLogin = async (e) => {
     } else {
       alert('Something went wrong during login');
     }
+  }finally
+  {
+    setIsLoading(false)
   }
 };
 

@@ -25,12 +25,24 @@ const fileFilter = (req, file, cb) => {
       return cb(null, true); // Accept image files for preview
     }
 
-    else if (file.fieldname.includes('image') && fileTypes.image.includes(file.mimetype)) {
+    else if (file.fieldname.includes('identity_pic') && fileTypes.image.includes(file.mimetype)) {
       return cb(null, true); // Accept image files for document details
     }
 
 
-    else if (file.fieldname.includes('pic') && fileTypes.image.includes(file.mimetype)) {
+    else if (file.fieldname.includes('address_pic') && fileTypes.image.includes(file.mimetype)) {
+      return cb(null, true); // Accept image files for document details
+    }
+
+     else if (file.fieldname.includes('barCertificate') && fileTypes.image.includes(file.mimetype)) {
+      return cb(null, true); // Accept image files for document details
+    }
+
+      else if (file.fieldname.includes('aibeCertificate') && fileTypes.image.includes(file.mimetype)) {
+      return cb(null, true); // Accept image files for document details
+    }
+
+        else if (file.fieldname.includes('proofofpractice') && fileTypes.image.includes(file.mimetype)) {
       return cb(null, true); // Accept image files for document details
     }
     // Reject file if it doesn't match the allowed types
