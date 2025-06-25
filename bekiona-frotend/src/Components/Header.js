@@ -12,12 +12,12 @@ import 'jspdf-autotable';
 import { useAuth } from './authguard';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Navbar, Nav, NavDropdown, Offcanvas, Container, } from "react-bootstrap";
+import Lottie from "lottie-react";
+
+
 function Header() {
 const [utocken, setutocken] = useState('')
 const [validation1, setValidation1] = useState({});
-
-
-
 
 const token=localStorage.getItem('usertoken')
 useEffect(()=>
@@ -272,6 +272,13 @@ console.log("Form Data Submitted:", formData);
 };
 
 
+     const [isLoading1, setIsLoading1] = useState(false);
+  const [animationData, setAnimationData] = useState(null);
+    useEffect(() => {
+    fetch("https://assets6.lottiefiles.com/packages/lf20_usmfx6bp.json")
+      .then((res) => res.json())
+      .then((data) => setAnimationData(data));
+  }, []);
 
 
 const handlePayment = async () => {
@@ -287,6 +294,7 @@ const handlePayment = async () => {
   }
 
   try {
+    setIsLoading1(true)
     // Step 1: Create Order on Backend
     const { data: order } = await api.post('payment', { formData });
 
@@ -346,6 +354,9 @@ const handlePayment = async () => {
     });
 
     setFormData({ ...formData, payment_status: 'failed' });
+  }finally
+  {
+    setIsLoading1(false)
   }
 };
 
@@ -1847,6 +1858,9 @@ CheckOut
                   )}
                 </select>
               </div>
+              <p style={{display:formData.payment_mode==="online" ?"block":"none",fontWeight:"bold"}}>Note: After click go to payment you will redirect to payment gatway. After complete the payment dont refresh
+                the page or press back button. After successfully payment you will automatically redirect to home page and download option of invoice.
+              </p>
             </form>
           </div>
         </div>
@@ -1881,6 +1895,48 @@ CheckOut
         </div>
       </div>
     </div>
+
+       <>
+      {isLoading1 && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          // background: "rgba(255, 255, 255, 0.1)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
+        }}>
+          <div style={{
+            // backgroundColor: "rgba(0,0,0,0.75)",
+            padding: "40px 60px",
+            borderRadius: "20px",
+            // boxShadow: "0 15px 35px rgba(0, 0, 0, 0.4)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            color: "#fff",
+            textAlign: "center",
+          }}>
+            <Lottie
+              animationData={animationData}
+              loop
+              autoplay
+              style={{ height: '120px', width: '120px', marginBottom: '20px' }}
+            />
+            <div style={{ fontSize: "18px", fontWeight: 500 }}>
+              Payment Initializing...
+            </div>
+          </div>
+        </div>
+      )}
+          </>
+
   </Modal.Body>
   <Modal.Footer>
     <Button variant="secondary" onClick={handleClose4}>Close</Button>
