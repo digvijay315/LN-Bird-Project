@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientProfileModal from './ClientProfileModal';
+import api from '../api';
+import { io } from 'socket.io-client';
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -17,23 +19,9 @@ const ClientDashboard = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    const storedName = localStorage.getItem('clientName') || '';
-    setClientName(storedName);
+  const userData =  JSON.parse(localStorage.getItem('userDetails'));
+console.log(userData);
 
-    const userData = localStorage.getItem('userDetails');
-    if (userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        console.log('Loaded userDetails:', parsedUser);
-        setUserDetails(parsedUser);
-      } catch (error) {
-        console.error('Failed to parse userDetails:', error);
-      }
-    } else {
-      console.warn('No userDetails found in localStorage');
-    }
-  }, []);
 
   const menuItems = [
     { label: 'Dashboard / Home', icon: '🏠', path: '/dashboard' },
@@ -48,12 +36,9 @@ const ClientDashboard = () => {
   ];
 
   const headerMenu = [
-    { label: 'Home', path: '/dashboard' },
-    { label: 'User profile', path: '/settings' },
-    { label: 'Case History', path: '/casehistory' },
-    { label: 'Legal News', path: '/Legalnews' },
+ 
     { label: 'Notifications', path: '/notifications' },
-    { label: 'Logout', path: '/logout' },
+    // { label: 'Logout', path: '/logout' },
   ];
 
   const caseStatuses = [
@@ -70,6 +55,74 @@ const ClientDashboard = () => {
       default: return '#6c757d';
     }
   };
+
+ const iconOnlyButtonStyle = {
+  background: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '6px',
+  borderRadius: '50%',
+  transition: 'transform 0.2s ease',
+};
+
+const iconStyle = {
+  width: '22px',
+  height: '22px',
+  filter: 'grayscale(0%)',
+};
+
+
+
+    const [lawyers, setLawyers] = useState([]);
+  
+        const fetchlawyers=async()=>
+          {
+              try {
+              const resp=await api.get('api/lawyer/getalllawyerprofile')
+              setLawyers(resp.data.filter((item)=>(item.status==="verified")))
+              } catch (error) {
+              console.log(error);
+              
+              }
+          }
+          useEffect(() => {
+              fetchlawyers();
+          }, []);
+
+        const [onlineLawyers, setOnlineLawyers] = useState([]);
+
+   const socket = io('http://localhost:5000'); 
+
+ useEffect(() => {
+    // Connect socket if not already
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    // Step 1: When connected, request online list
+    socket.on('connect', () => {
+      console.log('✅ Connected on user side');
+      socket.emit('getOnlineLawyers'); // ✅ Ask server for the list
+    });
+
+    // Step 2: Receive list from backend
+    socket.on('onlineLawyersList', (ids) => {
+      console.log('✅ Received online lawyers:', ids);
+      setOnlineLawyers(ids);
+    });
+
+    // Step 3: Also listen for real-time updates
+    socket.on('updateOnlineUsers', (ids) => {
+      setOnlineLawyers(ids);
+    });
+
+    // Cleanup
+    return () => {
+      socket.off('connect');
+      socket.off('onlineLawyersList');
+      socket.off('updateOnlineUsers');
+    };
+  }, []);
 
   return (
     <>
@@ -150,7 +203,7 @@ const ClientDashboard = () => {
             <div style={{ width: '25px', height: '3px', backgroundColor: 'white', margin: '4px 0' }}></div>
           </div>
 
-          <nav className="header-nav">
+          {/* <nav className="header-nav">
             <ul style={{
               display: 'flex',
               listStyle: 'none',
@@ -198,7 +251,7 @@ const ClientDashboard = () => {
                 </li>
               ))}
             </ul>
-          </nav>
+          </nav> */}
 
           <div className="profile-icon" style={{
             width: '42px',
@@ -282,6 +335,7 @@ const ClientDashboard = () => {
           {/* Main Content */}
           <main style={{
             flex: 1,
+            marginLeft:"20%",
             padding: '50px 50px 60px 50px',
             overflowY: 'auto',
             backgroundColor: '#fefefe',
@@ -293,7 +347,7 @@ const ClientDashboard = () => {
               fontSize: '28px',
               color: '#004080',
             }}>
-              {clientName ? `Welcome Back, ${clientName}!` : 'Welcome Back!'}
+             Welcome Back, {userData?.user?.fullName}
             </h1>
 
             {/* Case Status Section */}
@@ -394,16 +448,137 @@ const ClientDashboard = () => {
                 ))}
               </div>
             </section>
+            
+{/* =======================================popular lawyers==================================================================== */}
+
+
+<section style={{ marginTop: '20px' }}>
+  <h2 style={{
+    fontSize: '24px',
+    fontWeight: '800',
+    marginBottom: '30px',
+    color: '#1e3a8a',
+    borderBottom: '3px solid #3b82f6',
+    display: 'inline-block',
+    paddingBottom: '5px',
+  }}>
+    🌟 Popular Lawyers
+  </h2>
+
+  <div style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 240px)',
+    gap: '30px',
+  }}>
+    {lawyers.map((item, index) => {
+       const isOnline = onlineLawyers.includes(item._id);
+      return(
+      <div
+        key={index}
+        style={{
+          padding: '20px',
+          borderRadius: '16px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+          cursor: 'pointer',
+          textAlign: 'center',
+          background: '#fff',
+          transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-5px)';
+          e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
+        }}
+      >
+        <div style={{ marginBottom: '15px' }}>
+          <img
+            src={item.profilepic}
+            alt='no image available'
+            style={{
+              height: '90px',
+              width: '90px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '3px solid #3b82f6',
+            }}
+          />
+        </div>
+
+        <div style={{ fontSize: '17px', fontWeight: '600', color: '#0f172a' }}>
+          {item.firstName} {item.lastName}
+        </div>
+
+             <div style={{ fontSize: '14px', marginTop: '4px' }}>
+                <span style={{ color: isOnline ? 'green' : 'red' }}>
+                  {isOnline ? '🟢 Online' : '🔴 Offline'}
+                </span>
+              </div>
+       
+         <div style={{ fontSize: '14px', marginTop: '4px' }}>
+                <span style={{fontWeight:"bold"}}>Specializations:</span>:{item.specializations}
+          </div>
+           <div style={{ fontSize: '14px', marginTop: '4px' }}>
+              <span style={{fontWeight:"bold"}}>Experience:</span>{item.yearsOfExperience}
+          </div>
+
+        <div style={{
+          marginTop: '12px',
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '12px',
+        }}>
+          {/* Chat */}
+          <button
+            style={iconOnlyButtonStyle}
+            title="Chat"
+            onClick={() => alert("Chat clicked")}
+          >
+            💬
+          </button>
+
+          {/* WhatsApp */}
+          <button
+            title="WhatsApp"
+            onClick={() => window.open(`https://wa.me/${item.mobile || ''}`, '_blank')}
+            style={iconOnlyButtonStyle}
+          >
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+              alt="WhatsApp"
+              style={iconStyle}
+            />
+          </button>
+
+          {/* Message */}
+          <button
+            style={iconOnlyButtonStyle}
+            title="Message"
+            onClick={() => alert("Message clicked")}
+          >
+            ✉️
+          </button>
+        </div>
+      </div>
+      )
+      })}
+  </div>
+</section>
+
+
+
           </main>
         </div>
 
         {/* Profile Modal */}
-        {showProfileModal && (
+        {/* {showProfileModal && (
           <ClientProfileModal
             userDetails={userDetails}
             onClose={() => setShowProfileModal(false)}
           />
-        )}
+        )} */}
       </div>
     </>
   );

@@ -44,7 +44,7 @@ const[paymentoptions,setpaymentoptions]=useState()
   }, []);
 console.log(paymentoptions);
 
-
+const [manualCityMode, setManualCityMode] = useState(false);
 
 const {cart,setcart}=useCart()
 const [formData, setFormData] = useState({
@@ -1797,16 +1797,60 @@ CheckOut
                   {validation1.selectstate && <small className="text-danger">{validation1.selectstate}</small>}
                 </div>
 
-                <div className="col-md-6 mb-3">
-                  <label className="form-label">*Select City</label>
-                  <select className="form-control" name="selectcity" value={formData.selectcity} onChange={handleChange}>
-                    <option value="">Select a city</option>
-                    {indianCities.map((city, i) => (
-                      <option key={i} value={city}>{city}</option>
-                    ))}
-                  </select>
-                  {validation1.selectcity && <small className="text-danger">{validation1.selectcity}</small>}
-                </div>
+              <div className="col-md-6 mb-3">
+  <label className="form-label">*Select City</label>
+
+  {/* Show dropdown unless checkbox is checked */}
+  {!manualCityMode ? (
+    <select
+      className="form-control"
+      name="selectcity"
+      value={formData.selectcity}
+      onChange={handleChange}
+    >
+      <option value="">Select a city</option>
+      {indianCities.map((city, i) => (
+        <option key={i} value={city}>{city}</option>
+      ))}
+    </select>
+  ) : (
+    <input
+      type="text"
+      className="form-control"
+      placeholder="Enter your city"
+      name="selectcity"
+      value={formData.selectcity}
+      onChange={handleChange}
+    />
+  )}
+
+  {/* Checkbox to toggle manual entry */}
+  <div className="form-check mt-2">
+    <input
+      className="form-check-input"
+      type="checkbox"
+      id="manualCityCheck"
+      checked={manualCityMode}
+      onChange={(e) => {
+        setManualCityMode(e.target.checked);
+        // Clear selectcity if switching modes (optional)
+        setFormData(prev => ({
+          ...prev,
+          selectcity: e.target.checked ? '' : prev.selectcity
+        }));
+      }}
+    />
+    <label className="form-check-label" htmlFor="manualCityCheck">
+      City not listed? Enter manually
+    </label>
+  </div>
+
+  {/* Validation error */}
+  {validation1.selectcity && (
+    <small className="text-danger">{validation1.selectcity}</small>
+  )}
+</div>
+
               </div>
 
               <div className="mb-3">

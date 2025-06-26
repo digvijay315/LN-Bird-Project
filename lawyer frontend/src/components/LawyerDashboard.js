@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LawyerProfileModal from './LawyerProfileModel';
 import api from '../api'; // adjust the path as needed
+import { io } from 'socket.io-client';
+
 
 const LawyerDashboard = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -13,6 +15,8 @@ const LawyerDashboard = () => {
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
+  const socket = io('http://localhost:5000'); 
+
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
@@ -21,28 +25,29 @@ const LawyerDashboard = () => {
 
   const lawyerdetails = JSON.parse(localStorage.getItem('userDetails'));
 
-  // const fetchLawyerDetails = async () => {
-  //   try {
-  //     const token = lawyerdetails?.token;
-  //     if (!token) return;
-  //     const response = await api.get('api/lawyers/profile', {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     });
-  //     console.log(response);
-      
-  //     setUserDetails(response.data);
-  //     return response.data;
-  //   } catch (err) {
-  //     console.error('Error fetching profile:', err);
-  //   }
-  // };
-  // useEffect(() => {
-  //   const data = localStorage.getItem('userDetails');
-  //   console.log(data);
-    
-  //   if (data) setUserDetails(data);
-  //   // fetchLawyerDetails();
-  // }, []);
+
+useEffect(() => {
+  if (!lawyerdetails) return;
+
+  socket.on('connect', () => {
+    console.log('✅ Socket connected:', socket.id);
+    socket.emit('lawyerOnline', lawyerdetails?.lawyer?._id);
+    console.log('📤 lawyerOnline emitted for:', lawyerdetails?.lawyer?._id);
+  });
+
+  return () => {
+    socket.off('connect');
+    socket.disconnect();
+    console.log('❌ Socket disconnected');
+  };
+}, []);
+
+    const handleLogout = () => {
+        socket.disconnect();
+        localStorage.removeItem('userDetails'); // or however you're storing it
+        navigate('/login');
+        };
+  
 
   const menuItems = [
     { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
@@ -89,7 +94,8 @@ const LawyerDashboard = () => {
     }
   };
 
-  const handleLogout = () => navigate('/logout');
+
+
 
   return (
     <>
@@ -348,7 +354,7 @@ const LawyerDashboard = () => {
 
       {/* MAIN CONTENT */}
       <main className='main1'>
-        <h6>Welcome Back, {lawyerdetails?.lawyer.firstName || 'Lawyer'}!</h6>
+        <h6>Welcome Back, {lawyerdetails?.lawyer?.firstName || 'Lawyer'}!</h6>
 
         <div className="quick-access">
           {[{ label: 'Total Clients', value: clients.length },

@@ -41,7 +41,7 @@ const Adminsidebar = () => {
   const menuItems = [
     { icon: <FaUserTie />, label: 'Dashboard',route:'/Adminpanel' },
     { icon: <FaGavel />, label: 'Cases' },
-    { icon: <FaUsers />, label: 'Clients' },
+    { icon: <FaUsers />, label: 'Clients', route: '/allclients', },
     { icon: <FaFolderOpen />, label: 'Documents' },
     { icon: <FaCalendarAlt />, label: 'Appointments' },
     { icon: <FaDollarSign />, label: 'Payments' },

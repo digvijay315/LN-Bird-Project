@@ -226,7 +226,6 @@ const handleLogin = async (e) => {
     const data = response.data;
     console.log(data);
     
-
     if(response.status===200)
     {
        Swal.fire({
@@ -236,27 +235,14 @@ const handleLogin = async (e) => {
         showConfirmButton: true,
       });
      localStorage.setItem('userDetails', JSON.stringify(data));
+     if (loginRole === 'user') {
+       navigate('/ClientDashboard');
+     }else
       navigate('/LawyerDashboard');
     }
       
       
-      // (data.message);
-    // localStorage.setItem('userRole', loginRole);
-    // localStorage.setItem('token', data.token);
-
-    // // Save user details locally
-    // if (loginRole === 'user') {
-    //   localStorage.setItem('userDetails', JSON.stringify({
-    //     fullName: data.user.fullName,
-    //     username: data.user.username,
-    //     email: data.user.email,
-    //   }));
-    //   localStorage.setItem('clientName', data.user.fullName); // For client avatar initials
-    //   navigate('/ClientDashboard');
-    // } else {
-    //   localStorage.setItem('userDetails',data)
-    //   navigate('/LawyerDashboard');
-    // }
+   
 
   } catch (err) {
     console.error('Login error:', err);

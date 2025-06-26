@@ -5,6 +5,7 @@ import { Visibility, CheckCircle, Cancel } from '@mui/icons-material';
 import api from '../api';
 import Adminsidebar from './adminsidebar';
 import Adminpanelheader from './adminpanelheader';
+import Swal from 'sweetalert2';
 
 const PendingLawyersTable = () => {
   const [pendingLawyers, setPendingLawyers] = useState([]);
@@ -19,10 +20,47 @@ const PendingLawyersTable = () => {
     }
   };
 
-  const handleApprove = async (id) => {
-    // Add your API call here
-    console.log('Approved:', id);
-  };
+    const [lawyers, setLawyers] = useState([]);
+  
+ const handleApprove = async (lawyer) => {
+  const confirmResult = await Swal.fire({
+    title: 'Are you sure?',
+    text: `Do you want to approve ${lawyer.firstName} ${lawyer.lastName}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#28a745',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, approve',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (confirmResult.isConfirmed) {
+    try {
+      const resp = await api.put(`api/lawyer/approvedlawyer/${lawyer._id}`, { status: "verified" });
+
+      if (resp.status === 200) {
+        setLawyers(prev => [...prev]); // optional UI update logic
+        Swal.fire({
+          icon: 'success',
+          title: 'Approved!',
+          text: 'Lawyer approved successfully.',
+          showConfirmButton: true,
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Something went wrong while approving the lawyer.',
+      });
+    }
+  }
+};
+
 
   const handleReject = async (id) => {
     // Add your API call here
@@ -69,7 +107,7 @@ const PendingLawyersTable = () => {
           <IconButton
             color="success"
             title="Approve"
-            onClick={() => handleApprove(params.row.id)}
+            onClick={() => handleApprove(params.row)}
           >
             <CheckCircle />
           </IconButton>

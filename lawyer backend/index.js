@@ -31,8 +31,11 @@ const io = socketIO(server, {
   }
 });
 
-// Attach `io` to app so controllers can use it
+// Attach io to app (optional but nice)
 app.set('io', io);
+
+// Register socket logic
+chatSocket(io);
 
 // Middlewares
 app.use(cors());
