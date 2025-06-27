@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import ClientProfileModal from './ClientProfileModal';
 import api from '../api';
 import { io } from 'socket.io-client';
+// ✅ CORRECT
+import socket from './socket';
+
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +23,7 @@ const ClientDashboard = () => {
   }, []);
 
   const userData =  JSON.parse(localStorage.getItem('userDetails'));
-console.log(userData);
+
 
 
   const menuItems = [
@@ -89,40 +92,71 @@ const iconStyle = {
               fetchlawyers();
           }, []);
 
-        const [onlineLawyers, setOnlineLawyers] = useState([]);
 
-   const socket = io('http://localhost:5000'); 
+// ======================================chat code start================================================================
 
- useEffect(() => {
-    // Connect socket if not already
-    if (!socket.connected) {
-      socket.connect();
+
+  //  const socket = io('http://localhost:5000'); 
+
+ const [chatLawyer, setChatLawyer] = useState(null);
+const [onlineLawyers, setOnlineLawyers] = useState([]);
+const [messages, setMessages] = useState([]);
+
+useEffect(() => {
+  if (!userData.user._id) return;
+
+  if (!socket.connected) socket.connect();
+
+  socket.on('connect', () => {
+    console.log('✅ Connected (client):', socket.id);
+    socket.emit('clientOnline', userData.user._id);
+    socket.emit('getOnlineLawyers');
+  });
+
+  socket.on('onlineLawyersList', (ids) => {
+    console.log('✅ Received online lawyers:', ids);
+    setOnlineLawyers(ids);
+  });
+
+  socket.on('updateOnlineUsers', (ids) => {
+    setOnlineLawyers(ids);
+  });
+
+  socket.on('receiveMessage', ({ from, message }) => {
+    if (chatLawyer?._id === from) {
+      setMessages((prev) => [...prev, { text: message, isMe: false }]);
     }
+  });
 
-    // Step 1: When connected, request online list
-    socket.on('connect', () => {
-      console.log('✅ Connected on user side');
-      socket.emit('getOnlineLawyers'); // ✅ Ask server for the list
-    });
+  return () => {
+    socket.off('connect');
+    socket.off('receiveMessage');
+    socket.off('onlineLawyersList');
+    socket.off('updateOnlineUsers');
+  };
+}, [userData.user._id, chatLawyer]);
 
-    // Step 2: Receive list from backend
-    socket.on('onlineLawyersList', (ids) => {
-      console.log('✅ Received online lawyers:', ids);
-      setOnlineLawyers(ids);
-    });
+const handleSendMessage = (text) => {
+  if (!text.trim() || !chatLawyer?._id) return;
 
-    // Step 3: Also listen for real-time updates
-    socket.on('updateOnlineUsers', (ids) => {
-      setOnlineLawyers(ids);
-    });
+  socket.emit('privateMessage', {
+    toUserId: chatLawyer._id,
+    message: text,
+    fromUserType: 'client',
+  });
 
-    // Cleanup
-    return () => {
-      socket.off('connect');
-      socket.off('onlineLawyersList');
-      socket.off('updateOnlineUsers');
-    };
-  }, []);
+  setMessages((prev) => [...prev, { text, isMe: true }]);
+};
+
+   const handleOpenChat = (lawyer) => {
+    const isOnline = onlineLawyers.includes(lawyer._id);
+    setChatLawyer({ ...lawyer, isOnline });
+    setMessages([]); // optionally load old messages
+  };
+
+  //============================================== chat code end==============================================================
+ 
+
 
   return (
     <>
@@ -534,7 +568,7 @@ const iconStyle = {
           <button
             style={iconOnlyButtonStyle}
             title="Chat"
-            onClick={() => alert("Chat clicked")}
+            onClick={() => handleOpenChat(item)}
           >
             💬
           </button>
@@ -565,6 +599,114 @@ const iconStyle = {
       )
       })}
   </div>
+
+  {/* Chat Window Inline */}
+      {chatLawyer && (
+        <div style={{
+          position: 'fixed',
+          bottom: '20px',
+          right: '20px',
+          width: '300px',
+          height: '400px',
+          backgroundColor: '#fff',
+          borderRadius: '10px',
+          boxShadow: '0 0 15px rgba(0,0,0,0.15)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden',
+          zIndex: 1000,
+          fontFamily: 'Arial',
+        }}>
+          {/* Header */}
+          <div style={{
+            backgroundColor: '#3b82f6',
+            padding: '10px',
+            display: 'flex',
+            alignItems: 'center',
+            color: '#fff',
+            justifyContent: 'space-between',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img
+                src={chatLawyer.profilepic}
+                alt="profile"
+                style={{
+                  width: '35px',
+                  height: '35px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid white',
+                }}
+              />
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
+                  {chatLawyer.firstName} {chatLawyer.lastName}
+                </div>
+                <div style={{ fontSize: '12px', color: chatLawyer.isOnline ? 'lightgreen' : 'lightgray' }}>
+                  {chatLawyer.isOnline ? '🟢 Online' : '🔴 Offline'}
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setChatLawyer(null)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                cursor: 'pointer',
+              }}
+            >✖</button>
+          </div>
+
+          {/* Messages */}
+          <div style={{
+            flex: 1,
+            padding: '10px',
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px',
+            backgroundColor: '#fafafa',
+          }}>
+            {messages.map((msg, index) => (
+              <div key={index} style={{
+                alignSelf: msg.isMe ? 'flex-end' : 'flex-start',
+                backgroundColor: msg.isMe ? '#dcf8c6' : '#f1f1f1',
+                padding: '8px 12px',
+                borderRadius: '16px',
+                maxWidth: '80%',
+                fontSize: '14px',
+              }}>
+                {msg.text}
+              </div>
+            ))}
+          </div>
+
+          {/* Input */}
+          <div style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
+            <input
+              type="text"
+              placeholder="Type a message..."
+              style={{
+                width: '100%',
+                padding: '8px',
+                borderRadius: '20px',
+                border: '1px solid #ccc',
+                fontSize: '14px',
+              }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  handleSendMessage(e.target.value.trim());
+                  e.target.value = '';
+                }
+              }}
+            />
+          </div>
+        </div>
+      )}
+
+
 </section>
 
 

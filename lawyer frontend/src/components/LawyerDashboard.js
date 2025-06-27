@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import LawyerProfileModal from './LawyerProfileModel';
 import api from '../api'; // adjust the path as needed
 import { io } from 'socket.io-client';
+// ✅ CORRECT
+import socket from './socket';
 
 
 const LawyerDashboard = () => {
@@ -15,7 +17,7 @@ const LawyerDashboard = () => {
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  const socket = io('http://localhost:5000'); 
+  // const socket = io('http://localhost:5000'); 
 
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
@@ -23,24 +25,117 @@ const LawyerDashboard = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const lawyerdetails = JSON.parse(localStorage.getItem('userDetails'));
+  const lawyerdetails = JSON.parse(localStorage.getItem('lawyerDetails'));
 
+
+//=============================================== chat code start================================================================
+
+
+   const [chatClients, setChatClients] = useState([]);
+const [messages, setMessages] = useState([]);
+const [selectedClient, setSelectedClient] = useState(null);
+const [hasNewMessages, setHasNewMessages] = useState(false);
+const fetchedClientsRef = useRef(new Set()); // ✅ Store fetched client IDs
+
+const [messageMap, setMessageMap] = useState({}); // { [clientId]: [ {text, isMe} ] }
 
 useEffect(() => {
-  if (!lawyerdetails) return;
+  if (!lawyerdetails?.lawyer?._id) return;
+
+  if (!socket.connected) socket.connect();
+  
 
   socket.on('connect', () => {
-    console.log('✅ Socket connected:', socket.id);
-    socket.emit('lawyerOnline', lawyerdetails?.lawyer?._id);
-    console.log('📤 lawyerOnline emitted for:', lawyerdetails?.lawyer?._id);
+    const lawyerId = lawyerdetails.lawyer._id;
+    socket.emit('lawyerOnline', lawyerId);
   });
+
+  const handleReceiveMessage = async ({ from, message }) => {
+    setHasNewMessages(true);
+
+    // ✅ Save to messageMap regardless of chat being open
+  setMessageMap((prev) => ({
+    ...prev,
+    [from]: [...(prev[from] || []), { text: message, isMe: false }],
+  }));
+    // ✅ Update message list if open
+    if (selectedClient?._id === from) {
+      setMessages((prev) => [...prev, { text: message, isMe: false }]);
+    }
+
+    // ✅ Prevent refetch if already fetched
+    if (!fetchedClientsRef.current.has(from)) {
+      try {
+        const res = await api.get(`api/user/${from}`);
+        const data = res.data;
+
+        const newClient = {
+          _id: data._id,
+          firstName: data.fullName || 'Client',
+          profilepic: data.profilepic || '',
+          lastMessage: message,
+        };
+
+        // ✅ Deduplication inside setChatClients
+        setChatClients((prev) => {
+          const exists = prev.find((c) => c._id === from);
+          if (exists) return prev.map((c) =>
+            c._id === from ? { ...c, lastMessage: message } : c
+          );
+          return [...prev, newClient];
+        });
+
+        fetchedClientsRef.current.add(from);
+      } catch (err) {
+        console.error('❌ Failed to fetch client:', err);
+      }
+    } else {
+      // ✅ Client already exists, just update message
+      setChatClients((prev) =>
+        prev.map((c) =>
+          c._id === from ? { ...c, lastMessage: message } : c
+        )
+      );
+    }
+  };
+
+  socket.on('receiveMessage', handleReceiveMessage);
 
   return () => {
     socket.off('connect');
+    socket.off('receiveMessage', handleReceiveMessage);
     socket.disconnect();
-    console.log('❌ Socket disconnected');
   };
-}, []);
+}, [lawyerdetails?.lawyer?._id, selectedClient]);
+
+
+const handleOpenChat = (client) => {
+  setSelectedClient(client);
+  const msgs = messageMap[client._id] || [];
+  setMessages(msgs); // ✅ Show past messages
+};
+
+  
+
+  const handleSend = (e) => {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      const msg = e.target.value.trim();
+      e.target.value = '';
+
+      socket.emit('privateMessage', {
+        toUserId: selectedClient._id,
+        message: msg,
+        fromUserType: 'lawyer'
+      });
+
+      setMessages(prev => [...prev, { text: msg, isMe: true }]);
+    }
+  };
+
+// =========================================chat code end========================================================================
+
+const [showChat, setShowChat] = useState(false);
+
 
     const handleLogout = () => {
         socket.disconnect();
@@ -53,7 +148,7 @@ useEffect(() => {
     { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
     { label: 'Profile', icon: '🧑', path: './completelawyerprofile' },
     { label: 'Clients', icon: '👥', path: '/clients' },
-    { label: 'Messages', icon: '💬', path: '/messages' },
+    { label: 'Messages', icon: '💬' },
     { label: 'My Cases', icon: '📂', path: '/cases' },
     { label: 'Schedule', icon: '📅', path: '/schedule' },
     { label: 'Billing', icon: '💳', path: '/billing' },
@@ -402,16 +497,200 @@ useEffect(() => {
               <div
                 key={item.label}
                 className="quick-card"
-                onClick={() => navigate('./Dashboard')}
+                 onClick={() => {
+              if (item.label === 'Messages') {
+                setHasNewMessages(false);
+                 setShowChat(true);
+              }
+              navigate(item.path);
+            }}
                 role="button"
                 tabIndex={0}
               >
+                
                 <div className="quick-icon">{item.icon}</div>
                 <div>{item.label}</div>
+                 {item.label === 'Messages' && hasNewMessages && (
+              <span style={{
+                width: '10px',
+                height: '10px',
+                backgroundColor: 'red',
+                borderRadius: '50%',
+                display: 'inline-block',
+              }}></span>
+            )}
+              </div>
+              
+            ))}
+          </div>
+
+          {/* Floating Chat Popup */}
+{showChat && (
+  <div style={{
+    position: 'fixed',
+    bottom: '20px',
+    right: '20px',
+    width: '350px',
+    height: '450px',
+    border: '1px solid #ccc',
+    borderRadius: '10px',
+    backgroundColor: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+    zIndex: 1000,
+  }}>
+    {/* Header */}
+    <div style={{
+      padding: '10px',
+      backgroundColor: '#3b82f6',
+      color: '#fff',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px',
+    }}>
+      <span>Messages</span>
+      <button onClick={() => setShowChat(false)} style={{ background: 'none', border: 'none', color: '#fff', fontSize: '18px' }}>✖</button>
+    </div>
+
+    {/* Tabs (Clients) */}
+    <div style={{
+      display: 'flex',
+      overflowX: 'auto',
+      borderBottom: '1px solid #ccc',
+      padding: '5px',
+      gap: '8px',
+    }}>
+      {chatClients?.map((client) => (
+        <div
+          key={client._id}
+          onClick={() => {
+           handleOpenChat(client);
+            setHasNewMessages(false);
+          }}
+          style={{
+            padding: '6px 10px',
+            backgroundColor: selectedClient?._id === client._id ? '#3b82f6' : '#e5e5e5',
+            color: selectedClient?._id === client._id ? '#fff' : '#000',
+            borderRadius: '15px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {client.firstName}
+        </div>
+      ))}
+    </div>
+
+    {/* Messages List */}
+    <div style={{
+      flex: 1,
+      overflowY: 'auto',
+      padding: '10px',
+      background: '#f9f9f9',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '6px',
+    }}>
+      {messages.map((msg, index) => (
+        <div key={index} style={{
+          alignSelf: msg.isMe ? 'flex-end' : 'flex-start',
+          backgroundColor: msg.isMe ? '#dcf8c6' : '#fff',
+          padding: '8px 12px',
+          borderRadius: '15px',
+          maxWidth: '80%',
+        }}>
+          {msg.text}
+        </div>
+      ))}
+    </div>
+
+    {/* Input */}
+    <div style={{ padding: '8px', borderTop: '1px solid #ccc' }}>
+      <input
+        type="text"
+        placeholder="Type a message..."
+        style={{
+          width: '100%',
+          padding: '8px',
+          borderRadius: '20px',
+          border: '1px solid #ccc',
+          fontSize: '14px',
+        }}
+        onKeyDown={handleSend}
+        disabled={!selectedClient}
+      />
+    </div>
+  </div>
+)}
+
+
+        </section>
+
+         {/* Chat Window */}
+      {/* {selectedClient && (
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100vh',
+        }}>
+          <div style={{
+            padding: '10px',
+            backgroundColor: '#3b82f6',
+            color: '#fff',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}>
+            <span>{selectedClient.firstName}</span>
+            <button onClick={() => setSelectedClient(null)} style={{
+              background: 'none', border: 'none', color: 'white', fontSize: '18px'
+            }}>✖</button>
+          </div>
+
+          <div style={{
+            flex: 1,
+            padding: '10px',
+            overflowY: 'auto',
+            background: '#f1f1f1',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '6px'
+          }}>
+            {messages.map((msg, i) => (
+              <div key={i} style={{
+                alignSelf: msg.isMe ? 'flex-end' : 'flex-start',
+                backgroundColor: msg.isMe ? '#dcf8c6' : '#fff',
+                padding: '8px 12px',
+                borderRadius: '15px',
+              }}>
+                {msg.text}
               </div>
             ))}
           </div>
-        </section>
+
+          <div style={{ padding: '10px', borderTop: '1px solid #ccc' }}>
+            <input
+              type="text"
+              placeholder="Type a message"
+              style={{ width: '100%', padding: '8px', borderRadius: '20px' }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  const msg = e.target.value.trim();
+                  setMessages(prev => [...prev, { text: msg, isMe: true }]);
+                  socket.emit('privateMessage', {
+                    toLawyerId: selectedClient._id, // for client chat, send to client
+                    message: msg,
+                  });
+                  e.target.value = '';
+                }
+              }}
+            />
+          </div>
+        </div>
+      )} */}
       </main>
 
       {showProfileModal && (

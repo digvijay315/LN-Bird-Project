@@ -35,7 +35,7 @@ const io = socketIO(server, {
 app.set('io', io);
 
 // Register socket logic
-chatSocket(io);
+// chatSocket(io);
 
 // Middlewares
 app.use(cors());

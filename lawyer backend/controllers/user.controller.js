@@ -164,7 +164,9 @@ const setNewPassword = async (req, res) => {
 // Add this to your user.controller.js
 const getUserDetails = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.params._id;
+    console.log(userId);
+    
     const user = await UserModel.findById(userId).select('-password'); // Exclude password
     
     if (!user) {
@@ -178,6 +180,22 @@ const getUserDetails = async (req, res) => {
   }
 };
 
+const getalluser = async (req, res) => {
+  try {
+  
+    const user = await UserModel.find(); // Exclude password
+    
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' });
+    }
+
+    return res.status(200).send(user);
+  } catch (error) {
+    console.error('Get user error:', error);
+    return res.status(500).send({ error: 'Internal server error' });
+  }
+};
+
 // Add to exports
-module.exports = { registerUser, loginUser, resetPassword, sendResetEmail, setNewPassword, getUserDetails };
+module.exports = { registerUser, loginUser, resetPassword, sendResetEmail, setNewPassword, getUserDetails,getalluser };
 

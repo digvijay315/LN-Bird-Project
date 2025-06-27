@@ -234,11 +234,16 @@ const handleLogin = async (e) => {
         text: data.message,
         showConfirmButton: true,
       });
-     localStorage.setItem('userDetails', JSON.stringify(data));
+    
      if (loginRole === 'user') {
+       localStorage.setItem('userDetails', JSON.stringify(data));
        navigate('/ClientDashboard');
      }else
+     {
+      localStorage.setItem('lawyerDetails', JSON.stringify(data));
       navigate('/LawyerDashboard');
+     }
+      
     }
       
       

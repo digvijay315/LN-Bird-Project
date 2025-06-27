@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { io } from 'socket.io-client';
+import socket from './socket';
 
 function Lawyersidebar() {
 
@@ -13,18 +15,33 @@ function Lawyersidebar() {
    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
 
-   
+      // const socket = io('http://localhost:5000'); 
+
+      const [hasNewMessages, setHasNewMessages] = useState(false);
+
+   useEffect(() => {
+    // ✅ Only run this once when component mounts
+    const handleReceive = ({ from, message }) => {
+      console.log('📨 New message from client:', message);
+      setHasNewMessages(true);
+    };
+
+    socket.on('receiveMessage', handleReceive);
+
+    return () => {
+      socket.off('receiveMessage', handleReceive); // ✅ cleanup
+    };
+  }, []);
  
    
    
  
   
- 
    const menuItems = [
      { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
      { label: 'Profile', icon: '🧑', path: './completelawyerprofile' },
      { label: 'Clients', icon: '👥', path: '/clients' },
-     { label: 'Messages', icon: '💬', path: '/messages' },
+     { label: 'Messages', icon: '💬'},
      { label: 'My Cases', icon: '📂', path: '/cases' },
      { label: 'Schedule', icon: '📅', path: '/schedule' },
      { label: 'Billing', icon: '💳', path: '/billing' },
@@ -271,6 +288,7 @@ function Lawyersidebar() {
               onClick={() => {
                 setSidebarOpen(false);
                 navigate(item.path);
+                if (item.label === 'Messages') setHasNewMessages(false); // ✅ clear on click
               }}
               tabIndex={0}
               role="button"
@@ -281,8 +299,22 @@ function Lawyersidebar() {
               }}
             >
               <span>{item.icon}</span> {item.label}
+
+                 {/* ✅ Show red dot only on Messages if new message exists */}
+    {item.label === 'Messages' && hasNewMessages && (
+      <span style={{
+        display: 'inline-block',
+        width: '10px',
+        height: '10px',
+        backgroundColor: 'red',
+        borderRadius: '50%',
+        marginLeft: '8px',
+      }}></span>
+    )}
+
             </li>
           ))}
+          
           <li
             className="logout"
             onClick={() => {
