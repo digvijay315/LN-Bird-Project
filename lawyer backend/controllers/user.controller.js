@@ -165,8 +165,7 @@ const setNewPassword = async (req, res) => {
 const getUserDetails = async (req, res) => {
   try {
     const userId = req.params._id;
-    console.log(userId);
-    
+
     const user = await UserModel.findById(userId).select('-password'); // Exclude password
     
     if (!user) {
@@ -180,10 +179,10 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-const getalluser = async (req, res) => {
+const getuser = async (req, res) => {
   try {
   
-    const user = await UserModel.find(); // Exclude password
+    const user = await UserModel.find(); 
     
     if (!user) {
       return res.status(404).send({ message: 'User not found' });
@@ -197,5 +196,5 @@ const getalluser = async (req, res) => {
 };
 
 // Add to exports
-module.exports = { registerUser, loginUser, resetPassword, sendResetEmail, setNewPassword, getUserDetails,getalluser };
+module.exports = { registerUser, loginUser, resetPassword, sendResetEmail, setNewPassword, getUserDetails,getuser };
 

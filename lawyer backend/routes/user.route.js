@@ -7,7 +7,7 @@ const {
   sendResetEmail,
   setNewPassword,
   getUserDetails,
-  getalluser,
+  getuser,
 } = require('../controllers/user.controller');
 
 // Register a new user
@@ -26,8 +26,8 @@ router.post('/set-new-password', setNewPassword);
 router.put('/password', resetPassword);
 
 // Get user details by ID
-// router.get('/:_id', getUserDetails);
+router.get('/:_id', getUserDetails);
 
-router.get('/getalluser', getalluser);
+router.get('/', getuser);
 
 module.exports = router;

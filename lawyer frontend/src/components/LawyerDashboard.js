@@ -117,6 +117,7 @@ const handleOpenChat = async(client) => {
   await fetchChatHistory(lawyerId, clientId); 
 };
 
+  console.log(selectedClient);
   
 
   const handleSend = (e) => {
