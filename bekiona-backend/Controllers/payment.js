@@ -131,17 +131,18 @@ const verifyPayment = async (req, res) => {
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
 
-cron.schedule('*/30 * * * *', async () => {
-  console.log('🔁 Running Razorpay payment status checker...');
+cron.schedule('*/15 * * * *', async () => {
+  console.log('🔁 [CRON] Checking Razorpay payments every 15 mins...');
 
   try {
-    const pendingPayments = await Order.find({ payment_status: 'pending' });
+    const orders = await Order.find({
+      payment_status: { $in: ['pending', 'failed'] }
+    });
 
-    for (const payment of pendingPayments) {
-      const razorpayOrderId = payment.orderid;
+    for (const order of orders) {
+      const razorpayOrderId = order.orderid;
 
-       // Skip invalid order IDs that don't start with "order_"
-      if (!razorpayOrderId.startsWith("order_")) {
+      if (!razorpayOrderId?.startsWith("order_")) {
         console.warn(`⚠️ Skipping invalid Razorpay order ID: ${razorpayOrderId}`);
         continue;
       }
@@ -160,57 +161,160 @@ cron.schedule('*/30 * * * *', async () => {
         const payments = response.data.items;
 
         if (!payments || payments.length === 0) {
-          const orderCreatedAt = new Date(payment.createdAt);
+          const orderCreatedAt = new Date(order.createdAt);
           const now = new Date();
-          const diffInMinutes = (now - orderCreatedAt) / (1000 * 60);
+          const diffMinutes = (now - orderCreatedAt) / (1000 * 60);
 
-          if (diffInMinutes > 60) {
-            payment.payment_status = 'expired';
-            await payment.save();
-            console.log(`⌛ Expired: No payment after 60 mins for ${razorpayOrderId}`);
+          if (diffMinutes > 60) {
+            order.payment_status = 'expired';
+            await order.save();
+            console.log(`⌛ Order ${razorpayOrderId} expired (no payment after 60 mins)`);
           } else {
-            console.log(`ℹ️ Still waiting: No payment yet for ${razorpayOrderId}`);
+            console.log(`⏳ Order ${razorpayOrderId} still pending (within 60 mins)`);
           }
+
           continue;
         }
 
+        // ✅ Priority: captured > refunded > failed
+        let updated = false;
+
         for (const pay of payments) {
           if (pay.status === 'captured') {
-            payment.payment_status = 'success';
-            payment.paymentId = pay.id;
-            payment.paymentDate = new Date(pay.created_at * 1000);
-            await payment.save();
-            console.log(`✅ Captured: Updated payment ${pay.id} as success`);
+            order.payment_status = 'success';
+            order.paymentId = pay.id;
+            order.paymentDate = new Date(pay.created_at * 1000);
+            await order.save();
+            console.log(`✅ Order ${razorpayOrderId} updated to SUCCESS`);
+            updated = true;
             break;
           }
+        }
 
-          if (pay.status === 'failed') {
-            payment.payment_status = 'failed';
-            payment.paymentId = pay.id;
-            payment.paymentDate = new Date(pay.created_at * 1000);
-            await payment.save();
-            console.log(`❌ Failed: Updated payment ${pay.id} as failed`);
-            break;
+        if (!updated) {
+          for (const pay of payments) {
+            if (pay.status === 'refunded') {
+              order.payment_status = 'refunded';
+              order.paymentId = pay.id;
+              order.paymentDate = new Date(pay.created_at * 1000);
+              await order.save();
+              console.log(`💸 Order ${razorpayOrderId} updated to REFUNDED`);
+              updated = true;
+              break;
+            }
           }
+        }
 
-          if (pay.status === 'refunded') {
-            payment.payment_status = 'refunded';
-            payment.paymentId = pay.id;
-            payment.paymentDate = new Date(pay.created_at * 1000);
-            await payment.save();
-            console.log(`💸 Refunded: Updated payment ${pay.id} as refunded`);
-            break;
+        if (!updated) {
+          for (const pay of payments) {
+            if (pay.status === 'failed') {
+              order.payment_status = 'failed';
+              order.paymentId = pay.id;
+              order.paymentDate = new Date(pay.created_at * 1000);
+              await order.save();
+              console.log(`❌ Order ${razorpayOrderId} updated to FAILED`);
+              updated = true;
+              break;
+            }
           }
         }
 
       } catch (err) {
-        console.error(`❗ Error fetching payments for order ${razorpayOrderId}: ${err.message}`);
+        console.error(`🚨 Razorpay fetch error for ${razorpayOrderId}: ${err.message}`);
       }
     }
+
   } catch (err) {
-    console.error('🚨 Error during scheduled payment status check:', err.message);
+    console.error('🚨 CRON JOB ERROR:', err.message);
   }
 });
+
+
+const RAZORPAY_WEBHOOK_SECRET_V2 = process.env.RAZORPAY_WEBHOOK_SECRET_V2;
+
+// const handleRazorpayWebhook = async (req, res) => {
+//   console.log('🚀 Webhook called:', req.body); 
+//   const signature = req.headers['x-razorpay-signature'];
+//   const body = JSON.stringify(req.body);
+
+//   const expectedSignature = crypto
+//     .createHmac('sha256', RAZORPAY_WEBHOOK_SECRET_V2)
+//     .update(body)
+//     .digest('hex');
+
+//   if (expectedSignature !== signature) {
+//     console.log('❌ Invalid Razorpay signature');
+//     return res.status(400).send('Invalid signature');
+//   }
+
+//   const event = req.body.event;
+//   const payment = req.body.payload?.payment?.entity;
+//   const refund = req.body.payload?.refund?.entity;
+
+//   try {
+//     if (event === 'payment.captured' && payment) {
+//       const order = await Order.findOne({ orderid: payment.order_id });
+//       if (order && order.payment_status !== 'success') {
+//         order.payment_status = 'success';
+//         order.paymentId = payment.id;
+//         order.paymentDate = new Date(payment.created_at * 1000);
+//         await order.save();
+//         console.log(`✅ Payment captured: ${payment.order_id}`);
+//       }
+//     }
+
+//     else if (event === 'payment.failed' && payment) {
+//       const order = await Order.findOne({ orderid: payment.order_id });
+//       if (order && order.payment_status !== 'success') {
+//         const attemptTime = new Date(payment.created_at * 1000);
+//         const now = new Date();
+//         const minutesAgo = (now - attemptTime) / (1000 * 60);
+
+//         if (minutesAgo > 60) {
+//           order.payment_status = 'expired';
+//           console.log(`⌛ Failed → Expired: Order ${payment.order_id} attempt too old`);
+//         } else {
+//           order.payment_status = 'failed';
+//           console.log(`❌ Payment failed: ${payment.order_id}`);
+//         }
+
+//         order.paymentId = payment.id;
+//         order.paymentDate = attemptTime;
+//         await order.save();
+//       }
+//     }
+
+//     else if (event === 'refund.processed' && refund) {
+//       const order = await Order.findOne({ paymentId: refund.payment_id });
+//       if (order) {
+//         order.payment_status = 'refunded';
+//         // order.refundId = refund.id;
+//         // order.refundDate = new Date(refund.created_at * 1000);
+//         await order.save();
+//         console.log(`💸 Refund processed: ${refund.payment_id}`);
+//       }
+//     }
+
+//     res.status(200).json({ status: 'ok' });
+
+//   } catch (error) {
+//     console.error(`🚨 Webhook error: ${error.message}`);
+//     res.status(500).send('Server error');
+//   }
+// };
+
+
+// const handleRazorpayWebhook = async (req, res) => {
+//   try {
+//       console.log('🔥 Webhook route hit');
+//   res.status(200).send('Webhook OK');
+//   } catch (error) {
+//     console.log(error);
+    
+//   }
+
+// };
+
 
 
 const codpayment = async (req, res) => {

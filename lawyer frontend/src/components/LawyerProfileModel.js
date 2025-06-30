@@ -23,7 +23,7 @@ const LawyerProfileModal = () => {
         .then((data) => setAnimationData(data));
     }, []);
     
-      const lawyerdetails = JSON.parse(localStorage.getItem('userDetails'));
+      const lawyerdetails = JSON.parse(localStorage.getItem('lawyerDetails'));
 
         const [show, setShow] = useState(false);
         const [activeTab1, setActiveTab1] = useState('');
@@ -256,16 +256,16 @@ return (
       <h2>My Profile</h2>
 
       <img
-        src={lawyerdetails.lawyer.profilepic[0]}
+        src={lawyerdetails?.lawyer?.profilepic[0]}
         alt="Profile"
         className="profile-image"
       />
 
       <div className="profile-info">
-        <h4>Name: {lawyerdetails.lawyer.firstName} {lawyerdetails.lawyer.lastName}</h4>
-        <h4>Phone: {lawyerdetails.lawyer.phone}</h4>
-        <h4>Experience: {lawyerdetails.lawyer.yearsOfExperience} years</h4>
-        <h4>Status: {lawyerdetails.lawyer.status}</h4>
+        <h4>Name: {lawyerdetails?.lawyer?.firstName} {lawyerdetails?.lawyer?.lastName}</h4>
+        <h4>Phone: {lawyerdetails?.lawyer?.phone}</h4>
+        <h4>Experience: {lawyerdetails?.lawyer?.yearsOfExperience} years</h4>
+        <h4>Status: {lawyerdetails?.lawyer?.status}</h4>
       </div>
 
       <div className="profile-buttons">

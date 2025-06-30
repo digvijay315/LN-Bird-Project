@@ -33,7 +33,7 @@ const addLawyer = async (req, res) => {
     } = req.body;
 
     // Basic validation
-    if (!firstName || !lastName || !email || !password || !barRegistrationNumber || !username) {
+    if (!firstName || !lastName || !email || !password || !username) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -63,7 +63,7 @@ const addLawyer = async (req, res) => {
       email,
       password: hashedPassword,
       phone,
-      barRegistrationNumber,
+      // barRegistrationNumber,
       practiceAreas: parsedPracticeAreas,
       yearsOfExperience: yearsOfExperience || 0,
       workingHours: parsedWorkingHours,
@@ -168,7 +168,7 @@ const registerLawyer = async (req, res) => {
 
 
     
-    if (!firstName || !lastName || !email || !password || !barRegistrationNumber || !username) {
+    if (!firstName || !lastName || !email || !password  || !username) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -201,7 +201,7 @@ const registerLawyer = async (req, res) => {
       email,
       password: hashedPassword,
       phone,
-      barRegistrationNumber,
+      // barRegistrationNumber,
       practiceAreas: practiceAreas ? JSON.parse(practiceAreas) : [],
       yearsOfExperience: yearsOfExperience || 0,
       profilepic:lawyerpic,
@@ -210,7 +210,7 @@ const registerLawyer = async (req, res) => {
 
     // sendConfirmationEmail(lawyer.email, lawyer.firstName);
 
-    res.status(201).json({
+    res.status(200).send({
       message: 'Registration successful. Your application is pending verification.',
       lawyerId: lawyer._id
     });

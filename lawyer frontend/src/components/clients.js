@@ -24,52 +24,100 @@ function Clients() {
             fetchlawyers();
         }, []);
 
+          const[users,setusers]=useState([])
+  const fetchusers=async()=>
+  {
+    try {
+      const resp=await api.get('api/user/getalluser')
+      console.log(resp);
+      
+      setusers(resp.data)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+  useEffect(() => {
+    fetchusers();
+  }, []);
+
+
           const columns = [
 
-    {
-      field: 'fullName',
-      headerName: 'Name',
-      flex: 1,
-      valueGetter: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      flex: 1,
-    },
-    {
-      field: 'phone',
-      headerName: 'Phone',
-      width: 130,
+            {
+              field: 'fullName',
+              headerName: 'Name',
+              flex: 1,
+              valueGetter: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+            },
+            {
+              field: 'email',
+              headerName: 'Email',
+              flex: 1,
+            },
+            {
+              field: 'phone',
+              headerName: 'Phone',
+              width: 130,
 
-    },
+            },
 
-    {
-      field: 'barEnrolment',
-      headerName: 'Bar Enrolment',
-      width: 130,
-    },
+            {
+              field: 'barEnrolment',
+              headerName: 'Bar Enrolment',
+              width: 130,
+            },
 
-     {
-      field: 'yearsOfExperience',
-      headerName: 'Experience',
-      width: 130,
-    },
+            {
+              field: 'yearsOfExperience',
+              headerName: 'Experience',
+              width: 130,
+            },
 
-     {
-      field: 'createdAt',
-      headerName: 'Reg. Date',
-      width: 130,
-      valueGetter: (params) => new Date(params.row.createdAt).toLocaleString(),
-    },
-  
-    
-  ];
+            {
+              field: 'createdAt',
+              headerName: 'Reg. Date',
+              width: 130,
+              valueGetter: (params) => new Date(params.row.createdAt).toLocaleString(),
+            },
+          
+            
+          ];
 
-    const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 2, // default value
-  });
+            const usercolumns = [
+
+            {
+              field: 'fullName',
+              headerName: 'Name',
+              flex: 1,
+            },
+            {
+              field: 'email',
+              headerName: 'Email',
+              flex: 1,
+            },
+            {
+              field: 'username',
+              headerName: 'User Name',
+              width: 130,
+
+            },
+
+            {
+              field: 'createdAt',
+              headerName: 'Reg. Date',
+              width: 130,
+              valueGetter: (params) => new Date(params.row.createdAt).toLocaleString(),
+            },
+          
+            
+          ];
+
+  //   const [paginationModel, setPaginationModel] = useState({
+  //   page: 0,
+  //   pageSize: 2, // default value
+  // });
 
   return (
     <div>
@@ -84,6 +132,34 @@ function Clients() {
                <DataGrid
                 rows={lawyers}
                 columns={columns}
+                getRowId={(row) => row._id}
+                // pagination
+                // paginationModel={paginationModel}
+                // onPaginationModelChange={setPaginationModel}
+                // pageSizeOptions={[2]} // ✅ only 2 allowed
+                disableRowSelectionOnClick
+                sx={{
+                '& .MuiDataGrid-columnHeaders': {
+                    backgroundColor: '#f0f0f0',
+                    fontWeight: 'bold',
+                },
+                '& .MuiDataGrid-cell': {
+                    py: 1,
+                },
+                }}
+            />
+            </Box>
+
+            </div>
+
+               <div style={{padding:"50px"}}>
+            <Box sx={{ height: 500, width: '100%', p: 2 }}>
+              <Typography variant="h5" gutterBottom>
+                🕵️‍♂️ All Verified Users
+              </Typography>
+               <DataGrid
+                rows={users}
+                columns={usercolumns}
                 getRowId={(row) => row._id}
                 // pagination
                 // paginationModel={paginationModel}

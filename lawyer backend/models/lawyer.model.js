@@ -5,7 +5,7 @@ const lawyerSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   phone: { type: String, default: '' },
-  barRegistrationNumber: { type: String, required: true },
+  barRegistrationNumber: { type: String},
   yearsOfExperience: { type: Number, default: 0 },
   password: { type: String, required: true },
   practiceAreas: { type: [String], default: [] },

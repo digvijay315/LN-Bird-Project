@@ -106,7 +106,7 @@ const handleRegister = async (e) => {
       fd.append('username', formData.username);
       fd.append('password', formData.password);
       fd.append('phone', formData.phone);
-      fd.append('barRegistrationNumber', formData.barRegistrationNumber);
+      // fd.append('barRegistrationNumber', formData.barRegistrationNumber);
       fd.append(
         'practiceAreas',
         JSON.stringify(formData.practiceAreas.split(',').map((p) => p.trim()))

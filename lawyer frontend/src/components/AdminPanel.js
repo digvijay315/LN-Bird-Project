@@ -49,14 +49,7 @@ const AdminPanel = () => {
     setTotalLawyers(42);
     setTotalUsers(153);
 
-    setChartData([
-      { month: 'Jan', lawyers: 5, users: 10 },
-      { month: 'Feb', lawyers: 7, users: 20 },
-      { month: 'Mar', lawyers: 10, users: 30 },
-      { month: 'Apr', lawyers: 12, users: 25 },
-      { month: 'May', lawyers: 15, users: 35 },
-      { month: 'Jun', lawyers: 8, users: 28 },
-    ]);
+   
   }, []);
 
 
@@ -81,30 +74,104 @@ const AdminPanel = () => {
     fetchlawyers();
   }, []);
 
-
-
-  const handleApprove = async(lawyer) => {
+  
+  const[users,setusers]=useState([])
+  const fetchusers=async()=>
+  {
     try {
-      const resp=await api.put(`api/lawyer/approvedlawyer/${lawyer._id}`,{status:"verified"})
-      if(resp.status===200)
-      {
-        setLawyers(...lawyers,lawyer)
-        Swal.fire({
-        icon: 'success',
-        title: 'Approved...',
-        text: "Lawyer Approved Successfully...",
-        showConfirmButton: true,
-        }).then(()=>
-        (
-          window.location.reload()
-        ))
-      }
+      const resp=await api.get('api/user/getalluser')
+      console.log(resp);
+      
+      setusers(resp.data)
       
     } catch (error) {
       console.log(error);
       
     }
-  };
+  }
+  useEffect(() => {
+    fetchusers();
+  }, []);
+
+
+  const groupByMonth = (data) => {
+  const counts = {};
+
+  data.forEach((item) => {
+    const date = new Date(item.createdAt);
+    const month = date.toLocaleString('default', { month: 'short' }); // Jan, Feb, ...
+    
+    counts[month] = (counts[month] || 0) + 1;
+  });
+
+  return counts; // { Jan: 5, Feb: 2, ... }
+};
+
+const generateChartData = (lawyers, users) => {
+  const lawyerCounts = groupByMonth(lawyers);
+  const userCounts = groupByMonth(users);
+
+  const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const chartData = allMonths.map(month => ({
+    month,
+    lawyers: lawyerCounts[month] || 0,
+    users: userCounts[month] || 0,
+  }));
+
+  return chartData;
+};
+
+
+
+useEffect(() => {
+  if (lawyers.length && users.length) {
+    const data = generateChartData(lawyers, users);
+    setChartData(data);
+  }
+}, [lawyers, users]);
+  
+
+
+
+   const handleApprove = async (lawyer) => {
+  const confirmResult = await Swal.fire({
+    title: 'Are you sure?',
+    text: `Do you want to approve ${lawyer.firstName} ${lawyer.lastName}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#28a745',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, approve',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (confirmResult.isConfirmed) {
+    try {
+      const resp = await api.put(`api/lawyer/approvedlawyer/${lawyer._id}`, { status: "verified" });
+
+      if (resp.status === 200) {
+        setLawyers(prev => [...prev]); // optional UI update logic
+        Swal.fire({
+          icon: 'success',
+          title: 'Approved!',
+          text: 'Lawyer approved successfully.',
+          showConfirmButton: true,
+        }).then(() => {
+          window.location.reload();
+        });
+      }
+
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Something went wrong while approving the lawyer.',
+      });
+    }
+  }
+};
 
 
    const [show, setShow] = useState(false);
@@ -295,7 +362,7 @@ const AdminPanel = () => {
 
       <div className="stats-cards">
         <div className="card blue">Total Lawyers: {lawyers.length}</div>
-        <div className="card purple">Total Users: {totalUsers}</div>
+        <div className="card purple">Total Users: {users.length}</div>
         <div className="card green">Pending Lawyers: {pendingLawyers.length}</div>
         <div className="card orange">Activities: {activities.length}</div>
       </div>
@@ -335,7 +402,7 @@ const AdminPanel = () => {
                 <td>{lawyer.phone}</td>
                 <td>{new Date(lawyer.createdAt).toLocaleString()}</td>
                 <td>
-                   <button className="icon-btn green" onClick={() => handleApprove(lawyer.id)}><FaCheck /></button>
+                   <button className="icon-btn green" onClick={() => handleApprove(lawyer)}><FaCheck /></button>
                   <button className="icon-btn red" onClick={() => handleReject(lawyer.id)}><FaTimes /></button>
                   <button className="icon-btn black" onClick={() => handleview(lawyer._id)}><FaEye /></button>
                 </td>
@@ -355,14 +422,27 @@ const AdminPanel = () => {
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>
-            {recentLawyers.map((lawyer, index) => (
-              <tr key={index}>
-                <td>{lawyer.name}</td>
-                <td>{lawyer.date}</td>
-              </tr>
-            ))}
+         <tbody>
+            {[...lawyers]
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // sort by createdAt
+              .slice(0, 2) // take only latest 2
+              .map((lawyer, index) => (
+                <tr key={index}>
+                  <td>{lawyer.firstName}</td>
+                  <td>
+                    {new Date(lawyer.createdAt).toLocaleString('en-IN', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}
+                  </td>
+                </tr>
+              ))}
           </tbody>
+
         </table>
       </div>
 
@@ -376,13 +456,25 @@ const AdminPanel = () => {
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>
-            {recentUsers.map((user, index) => (
-              <tr key={index}>
-                <td>{user.name}</td>
-                <td>{user.date}</td>
-              </tr>
-            ))}
+        <tbody>
+            {[...users]
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // sort by createdAt
+              .slice(0, 2) // take only latest 2
+              .map((user, index) => (
+                <tr key={index}>
+                  <td>{user.fullName}</td>
+                  <td>
+                    {new Date(user.createdAt).toLocaleString('en-IN', {
+                      day: '2-digit',
+                      month: 'short',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

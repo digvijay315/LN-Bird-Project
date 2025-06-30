@@ -1,3 +1,7 @@
+
+const Message = require('../models/chathistory'); // Adjust path if needed
+
+
 const onlineLawyers = {};
 const onlineClients = {};
 
@@ -30,25 +34,47 @@ module.exports = (io) => {
     });
 
     // Private messaging
-    socket.on('privateMessage', ({ toUserId, message, fromUserType }) => {
-      let receiverSocketId;
+  socket.on('privateMessage', async ({ toUserId, message, fromUserType }) => {
+  let receiverSocketId;
+  let fromModel, toModel;
 
-      // If sender is client → toUserId is lawyer
-      if (fromUserType === 'client') {
-        receiverSocketId = onlineLawyers[toUserId];
-      } else if (fromUserType === 'lawyer') {
-        receiverSocketId = onlineClients[toUserId];
-      }
+  if (fromUserType === 'client') {
+    receiverSocketId = onlineLawyers[toUserId];
+    fromModel = 'User';
+    toModel = 'Lawyer';
+  } else if (fromUserType === 'lawyer') {
+    receiverSocketId = onlineClients[toUserId];
+    fromModel = 'Lawyer';
+    toModel = 'User';
+  }
 
-      console.log(`📨 Private message from ${socket.userId} to ${toUserId}`);
+  const fromUserId = socket.userId;
 
-      if (receiverSocketId) {
-        io.to(receiverSocketId).emit('receiveMessage', {
-          from: socket.userId,
-          message,
-        });
-      }
+  console.log(`📨 Private message from ${fromUserId} to ${toUserId}`);
+
+  // Send to receiver if online
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit('receiveMessage', {
+      from: fromUserId,
+      message,
     });
+  }
+
+  // ✅ Save message to DB
+  try {
+    await Message.create({
+      from: fromUserId,
+      fromModel,
+      to: toUserId,
+      toModel,
+      message,
+    });
+    console.log('💾 Message saved to DB');
+  } catch (err) {
+    console.error('❌ Error saving message to DB:', err);
+  }
+});
+
 
     // Disconnect
     socket.on('disconnect', () => {
@@ -67,3 +93,5 @@ module.exports = (io) => {
     });
   });
 };
+
+

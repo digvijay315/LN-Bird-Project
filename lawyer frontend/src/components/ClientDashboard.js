@@ -5,6 +5,7 @@ import api from '../api';
 import { io } from 'socket.io-client';
 // ✅ CORRECT
 import socket from './socket';
+import Swal from 'sweetalert2';
 
 
 const ClientDashboard = () => {
@@ -139,6 +140,18 @@ useEffect(() => {
 const handleSendMessage = (text) => {
   if (!text.trim() || !chatLawyer?._id) return;
 
+    if (containsSensitiveInfo(text)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Not Allowed 🚫',
+        text: 'Sharing mobile numbers or emails is not permitted!',
+        timer: 3000, // disappear after 3 seconds
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+
+    return;
+  }
   socket.emit('privateMessage', {
     toUserId: chatLawyer._id,
     message: text,
@@ -148,11 +161,53 @@ const handleSendMessage = (text) => {
   setMessages((prev) => [...prev, { text, isMe: true }]);
 };
 
-   const handleOpenChat = (lawyer) => {
-    const isOnline = onlineLawyers.includes(lawyer._id);
-    setChatLawyer({ ...lawyer, isOnline });
-    setMessages([]); // optionally load old messages
-  };
+const [messageMap, setMessageMap] = useState({});
+
+const handleOpenChat = async (lawyer) => {
+  const isOnline = onlineLawyers.includes(lawyer._id);
+  setChatLawyer({ ...lawyer, isOnline });
+
+  const clientId = userData.user._id;
+  const lawyerId = lawyer._id;
+
+  // Fetch previous messages from server
+  try {
+    const res = await api.get(`api/admin/chathistory/${clientId}/${lawyerId}`);
+    const data = await res.data;
+
+    let formatted = data.map(msg => ({
+      text: msg.message,
+      isMe: msg.from === clientId,
+      isSystem: false,
+    }));
+
+    // Check if first-time chat (no messages yet)
+    if (formatted.length === 0) {
+      const systemMessage = {
+        text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} (${lawyer.specializations},${lawyer.yearsOfExperience}).
+        Feel free to share your concern or upload documents securely`,
+        isSystem: true,
+        isMe: false,
+      };
+      formatted = [systemMessage];
+    }
+
+    setMessages(formatted);
+    setMessageMap(prev => ({ ...prev, [lawyerId]: formatted }));
+  } catch (err) {
+    console.error('❌ Error fetching chat history:', err);
+  }
+};
+
+
+function containsSensitiveInfo(text) {
+  const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{9}/g; // Indian mobile numbers
+  const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/i;
+
+  return phoneRegex.test(text) || emailRegex.test(text);
+}
+
+
 
   //============================================== chat code end==============================================================
  

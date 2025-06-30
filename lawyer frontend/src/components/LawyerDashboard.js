@@ -4,8 +4,8 @@ import axios from 'axios';
 import LawyerProfileModal from './LawyerProfileModel';
 import api from '../api'; // adjust the path as needed
 import { io } from 'socket.io-client';
-// ✅ CORRECT
 import socket from './socket';
+import Swal from 'sweetalert2';
 
 
 const LawyerDashboard = () => {
@@ -109,10 +109,12 @@ useEffect(() => {
 }, [lawyerdetails?.lawyer?._id, selectedClient]);
 
 
-const handleOpenChat = (client) => {
+const handleOpenChat = async(client) => {
   setSelectedClient(client);
-  const msgs = messageMap[client._id] || [];
-  setMessages(msgs); // ✅ Show past messages
+ const lawyerId = lawyerdetails.lawyer._id;
+  const clientId = client._id;
+
+  await fetchChatHistory(lawyerId, clientId); 
 };
 
   
@@ -122,6 +124,17 @@ const handleOpenChat = (client) => {
       const msg = e.target.value.trim();
       e.target.value = '';
 
+         if (containsSensitiveInfo(msg)) {
+           Swal.fire({
+                 icon: 'warning',
+                 title: 'Not Allowed 🚫',
+                 text: 'Sharing mobile numbers or emails is not permitted!',
+                 timer: 3000, // disappear after 3 seconds
+                 timerProgressBar: true,
+                 showConfirmButton: false,
+               });
+          return;
+        }
       socket.emit('privateMessage', {
         toUserId: selectedClient._id,
         message: msg,
@@ -131,6 +144,38 @@ const handleOpenChat = (client) => {
       setMessages(prev => [...prev, { text: msg, isMe: true }]);
     }
   };
+
+
+  const fetchChatHistory = async (user1Id, user2Id) => {
+  try {
+    const res = await api.get(`api/admin/chathistory/${user1Id}/${user2Id}`);
+    const data = await res.data;
+console.log(data);
+
+    if (res.status===200) {
+      // format as needed
+      const formatted = data.map(msg => ({
+        text: msg.message,
+        isMe: msg.from === user1Id, // mark sent vs received
+      }));
+
+      setMessages(formatted);
+    } else {
+      console.error('❌ Failed to fetch history:', data.error);
+    }
+  } catch (err) {
+    console.error('❌ Network error:', err);
+  }
+};
+
+function containsSensitiveInfo(text) {
+  const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{9}/g; // Indian mobile numbers
+  const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/i;
+
+  return phoneRegex.test(text) || emailRegex.test(text);
+}
+
+
 
 // =========================================chat code end========================================================================
 

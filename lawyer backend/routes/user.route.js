@@ -26,8 +26,8 @@ router.post('/set-new-password', setNewPassword);
 router.put('/password', resetPassword);
 
 // Get user details by ID
-router.get('/:_id', getUserDetails);
+// router.get('/:_id', getUserDetails);
 
-// router.get('/getalluser', getalluser);
+router.get('/getalluser', getalluser);
 
 module.exports = router;
