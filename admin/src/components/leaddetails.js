@@ -239,6 +239,9 @@ const[allleaddataforsearch,setallleaddataforsearch]=useState([])
       { label: 'From Date', field: 'from_date' }, // Added field for from date
       { label: 'To Date', field: 'to_date' }
     ];
+
+      const sourceList = [ "Friends","Relative","Website", "Walkin","Magicbricks","Common Floor ","Housing", "99acre","Olx","Square Yard" ,"Real Estate, India","Refrence","Facebook", "Instagram", "Linkdin","Old Client" ,"Google ","Whatsapp"]; 
+ const owneroption=[ "Suraj"," Suresh Kumar","Ramesh Singh","Maanav Sharma",  "Sukram"];
     
   
     const [showDropdown2, setShowDropdown2] = useState(false);
@@ -5302,8 +5305,73 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                           />
                           {label}
                         </label>
-
+                        
+                            
                         {field in selectfield && (
+                          
+                            field === 'owner' ? (
+           <div style={{ marginTop: '10px',
+             display: 'grid',
+             gap:'12px',
+             gridTemplateColumns: '1fr 1fr', // 2 columns
+            }}>
+          {owneroption.map((item) => (
+           <label key={item} style={{ display: 'block',
+            marginBottom: '4px', 
+            fontSize: '13px',
+            display: 'flex',
+                alignItems: 'center',
+                background: '#fff',
+                border: '1px solid #ddd',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                fontSize: '14px',
+                color: '#333',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                transition: 'all 0.3s ease', }}>
+           <input
+            type="checkbox"
+           checked={selectfield[field]?.includes(item)}
+              onChange={() =>handleFieldInputChange(field, item)}
+             style={{ marginRight: '6px' }}
+              />
+              {item}
+            </label>
+            ))}
+           </div>
+          ) : 
+                              
+         field === 'source' ? (
+           <div style={{ marginTop: '10px' , display: 'grid',
+      gridTemplateColumns: '1fr 1fr', // 2 columns
+      gap: '12px', }}>
+           {sourceList.map((item) => (
+           <label key={item} style={{ display: 'block',   
+                display: 'flex',
+                alignItems: 'center',
+                background: '#fff',
+                border: '1px solid #ddd',
+                borderRadius: '10px',
+                padding: '10px 14px',
+                fontSize: '14px',
+                color: '#333',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
+                transition: 'all 0.3s ease',
+                marginBottom: '4px',
+                fontSize: '13px' }}>
+            <input
+             type="checkbox"
+            checked={selectfield[field]?.includes(item)}
+             onChange={() =>handleFieldInputChange(field, item)}
+            style={{ marginRight: '6px' }}
+           />
+            {item}
+         </label>
+       ))}
+           </div>
+  ) :
                           field.includes('date') ? (
                             <input
                               type="date"
@@ -5406,7 +5474,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
         
       </div>
    
- <div style={{marginTop:"1px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+ <div className="" style={{marginTop:"1px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"999"}}>
 
 {/* <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and lead type"  style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
 

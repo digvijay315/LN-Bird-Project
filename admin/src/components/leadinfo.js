@@ -13,6 +13,8 @@ import Modal from 'react-bootstrap/Modal';
 import Swal from "sweetalert2";
 import Lottie from "lottie-react";
 import { icon } from "@fortawesome/fontawesome-svg-core";
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 function Leadinfo() {
 
@@ -180,10 +182,10 @@ const options = {
     Institutional: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
   },
   unit_type: {
-    PLOT: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
-    "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
-    "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
-    "BUILDER FLOOR": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+    PLOT: ["1 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK",,"STUDIO"],
+    "BUILDER FLOOR": ["1 BHK", "12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla","2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
     SHOP:["BOOTH","KIOSAK",],
     SHOWROOM:["SCO","SCF","DSS"],
     "OFFICE SPACE":["LOCABLE OFFICE","VIRTUAL OFFICE"],
@@ -2116,19 +2118,35 @@ return (
                     </div>
                     {(leadinfo.source === "Reference" || leadinfo.source === "Channel Partner" && leadinfo.campaign === "Organic Campaign") && (
                      <>
-                     <div className="col-md-5 mb-5 custom-input">
+                     {/* <div className="col-md-5 mb-5 custom-input">
                         <label className="form-label">Referrer Name</label>
-                        <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}>
-                          <option>{leadData?.channel_partner || '---Select---'}</option>
-                         
-                      {
-                        contactdata.map((item)=>
+                        <select className="form-control form-control-sm" onChange={(e) => setleadinfo({ ...leadinfo, channel_partner: e.target.value })}
+                          value={leadinfo.channel_partner || ''}
+                         >
+                          <option value="">{leadData?.channel_partner || '---Select---'}</option>
+                       {
+                        contactdata
+                        .map((item)=>
                         (
-                          <option>{item.title} {item.first_name} {item.last_name}</option>
+                          <option>{item.title} {item.first_name} {item.last_name} ({item.mobile_no})</option> 
                         ))
-                      }
+                        }
                         </select>
-                      </div>
+                      </div> */}
+                        <div className="col-md-5 mb-5 custom-input"> <label className="form-label">Referrer Name</label>
+                           <Autocomplete
+                           const options = {contactdata.filter(item => item._id )
+                           
+                           }
+                           getOptionLabel={(option) =>
+                         `${option.title} ${option.first_name} ${option.last_name} (${option.mobile_no}) ` 
+                           }
+                      
+                         renderInput={(params) => (
+                          <TextField {...params} size="small" placeholder="---select---" />
+                           )}          
+                           />
+                          </div>
                   <div className="col-md-1 mb-1 custom-input" onClick={handleShow1}>
                     <label className="form-label">Add</label>
                      <button

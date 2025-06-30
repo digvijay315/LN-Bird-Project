@@ -1165,6 +1165,8 @@ function Dealdetails() {
                   const[allprojectforsearch,setallprojectforsearch]=useState([])
                   const[cdata,setcdata]=useState([]);
                   const [flattenedUnits, setFlattenedUnits] = useState([]);
+                 
+                  
                   const[allunitsforsearch,setallunitsforsearch]=useState([])
                   // const [filteredData, setFilteredData] = useState([]);
                   const[totalproject,settotalproject]=useState()
@@ -1216,6 +1218,17 @@ function Dealdetails() {
                     }
                   
                   }
+                
+                  
+      const [allcitis,setallcitis]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.ucity)
+     setallcitis([...new Set(result)]);
+     
+     },[flattenedUnits])
+     // console.log(allcitis);
+
 
                   const[activeunits,setactiveunits]=useState([])
                   const[inactiveunits,setinactiveunits]=useState([])
@@ -5618,7 +5631,7 @@ return (
         
       </div>
 
-      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"999"}}>
       {/* <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/> */}
       
     {/* <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} /> */}
@@ -6552,7 +6565,7 @@ return (
           
       </div> 
 
-      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"999"}}>
 
 {/* <input id="projectsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleprojectsearchchange(e)} onKeyDown={handlekeypress3} /> */}
 
@@ -7323,7 +7336,7 @@ return (
        
       </div>
 
-      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px"}}>
+      <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"999"}}>
 
 {/* <input id="unitsearch" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by name,email,mobile,company and tags" style={{width:"25%"}} onChange={(e)=>handleunitsearchchange(e)} onKeyDown={handlekeypress4}/> */}
 
