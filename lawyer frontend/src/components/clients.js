@@ -28,7 +28,7 @@ function Clients() {
   const fetchusers=async()=>
   {
     try {
-      const resp=await api.get('api/user/getalluser')
+      const resp=await api.get('api/user')
       console.log(resp);
       
       setusers(resp.data)

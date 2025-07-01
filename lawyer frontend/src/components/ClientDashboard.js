@@ -3,29 +3,208 @@ import { useNavigate } from 'react-router-dom';
 import ClientProfileModal from './ClientProfileModal';
 import api from '../api';
 import { io } from 'socket.io-client';
-// ✅ CORRECT
 import socket from './socket';
 import Swal from 'sweetalert2';
-
+import Clientsidebar from './clientsidebar';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
-  const [clientName, setClientName] = useState('');
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [headerMenuOpen, setHeaderMenuOpen] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [lastLogin, setLastLogin] = useState(null);
+  const [sessionStartTime, setSessionStartTime] = useState(Date.now());
+  const [currentSessionTime, setCurrentSessionTime] = useState(0);
 
+  const userData = JSON.parse(localStorage.getItem('userDetails'));
+
+  // Sample data for charts
+  const consultationData = [
+    { month: 'Jan', consultations: 2, resolved: 1 },
+    { month: 'Feb', consultations: 4, resolved: 3 },
+    { month: 'Mar', consultations: 3, resolved: 2 },
+    { month: 'Apr', consultations: 5, resolved: 4 },
+    { month: 'May', consultations: 6, resolved: 5 },
+    { month: 'Jun', consultations: 3, resolved: 3 },
+  ];
+
+  const caseTypeData = [
+    { type: 'Divorce', count: 2, color: '#ef4444' },
+    { type: 'Property', count: 1, color: '#f59e0b' },
+    { type: 'Criminal', count: 1, color: '#10b981' },
+    { type: 'Corporate', count: 1, color: '#3b82f6' },
+  ];
+
+  const weeklyActivityData = [
+    { day: 'Mon', hours: 1.5 },
+    { day: 'Tue', hours: 2.2 },
+    { day: 'Wed', hours: 0.8 },
+    { day: 'Thu', hours: 3.1 },
+    { day: 'Fri', hours: 2.5 },
+    { day: 'Sat', hours: 1.2 },
+    { day: 'Sun', hours: 0.5 },
+  ];
+
+  const COLORS = ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'];
+
+  // Time tracking
   useEffect(() => {
     const handleResize = () => setScreenWidth(window.innerWidth);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    
+    // Set last login
+    const storedLastLogin = localStorage.getItem('lastLogin');
+    if (storedLastLogin) {
+      setLastLogin(new Date(storedLastLogin));
+    }
+    localStorage.setItem('lastLogin', new Date().toISOString());
+
+    // Get session start time
+    const storedSessionStart = localStorage.getItem('sessionStartTime');
+    const actualSessionStart = storedSessionStart ? parseInt(storedSessionStart) : Date.now();
+    setSessionStartTime(actualSessionStart);
+
+    // Update session time every minute
+    const interval = setInterval(() => {
+      const timeSpent = (Date.now() - actualSessionStart) / (1000 * 60 * 60); // hours
+      setCurrentSessionTime(timeSpent);
+    }, 60000);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearInterval(interval);
+    };
   }, []);
 
-  const userData =  JSON.parse(localStorage.getItem('userDetails'));
+  const formatLastLogin = (date) => {
+    if (!date) return 'First time login';
+    const now = new Date();
+    const diff = now - date;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor(diff / (1000 * 60));
 
+    if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+    if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  };
 
+  // Your existing chat and lawyer code...
+  const [lawyers, setLawyers] = useState([]);
+  const [chatLawyer, setChatLawyer] = useState(null);
+  const [onlineLawyers, setOnlineLawyers] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [messageMap, setMessageMap] = useState({});
+
+  const fetchlawyers = async () => {
+    try {
+      const resp = await api.get('api/lawyer/getalllawyerprofile');
+      setLawyers(resp.data.filter((item) => (item.status === "verified")));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchlawyers();
+  }, []);
+
+  // Your existing chat functionality...
+  useEffect(() => {
+    if (!userData.user._id) return;
+
+    if (!socket.connected) socket.connect();
+
+    socket.on('connect', () => {
+      console.log('✅ Connected (client):', socket.id);
+      socket.emit('clientOnline', userData.user._id);
+      socket.emit('getOnlineLawyers');
+    });
+
+    socket.on('onlineLawyersList', (ids) => {
+      console.log('✅ Received online lawyers:', ids);
+      setOnlineLawyers(ids);
+    });
+
+    socket.on('updateOnlineUsers', (ids) => {
+      setOnlineLawyers(ids);
+    });
+
+    socket.on('receiveMessage', ({ from, message }) => {
+      if (chatLawyer?._id === from) {
+        setMessages((prev) => [...prev, { text: message, isMe: false }]);
+      }
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('receiveMessage');
+      socket.off('onlineLawyersList');
+      socket.off('updateOnlineUsers');
+    };
+  }, [userData.user._id, chatLawyer]);
+
+  const handleSendMessage = (text) => {
+    if (!text.trim() || !chatLawyer?._id) return;
+
+    if (containsSensitiveInfo(text)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Not Allowed 🚫',
+        text: 'Sharing mobile numbers or emails is not permitted!',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+      return;
+    }
+    
+    socket.emit('privateMessage', {
+      toUserId: chatLawyer._id,
+      message: text,
+      fromUserType: 'client',
+    });
+
+    setMessages((prev) => [...prev, { text, isMe: true }]);
+  };
+
+  const handleOpenChat = async (lawyer) => {
+    const isOnline = onlineLawyers.includes(lawyer._id);
+    setChatLawyer({ ...lawyer, isOnline });
+
+    const clientId = userData.user._id;
+    const lawyerId = lawyer._id;
+
+    try {
+      const res = await api.get(`api/admin/chathistory/${clientId}/${lawyerId}`);
+      const data = await res.data;
+
+      let formatted = data.map(msg => ({
+        text: msg.message,
+        isMe: msg.from === clientId,
+        isSystem: false,
+      }));
+
+      if (formatted.length === 0) {
+        const systemMessage = {
+          text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} (${lawyer.specializations}, ${lawyer.yearsOfExperience} years experience). Feel free to share your concern or upload documents securely`,
+          isSystem: true,
+          isMe: false,
+        };
+        formatted = [systemMessage];
+      }
+
+      setMessages(formatted);
+      setMessageMap(prev => ({ ...prev, [lawyerId]: formatted }));
+    } catch (err) {
+      console.error('❌ Error fetching chat history:', err);
+    }
+  };
+
+  function containsSensitiveInfo(text) {
+    const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{9}/g;
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/i;
+    return phoneRegex.test(text) || emailRegex.test(text);
+  }
 
   const menuItems = [
     { label: 'Dashboard / Home', icon: '🏠', path: '/dashboard' },
@@ -36,658 +215,678 @@ const ClientDashboard = () => {
     { label: 'Payments & Invoices', icon: '💳', path: '/payments' },
     { label: 'Profile / Settings', icon: '⚙', path: '/settings' },
     { label: 'Support / Help', icon: '🆘', path: '/support' },
-    { label: 'Logout', icon: '🔒', path: '/logout' },
-  ];
-
-  const headerMenu = [
- 
-    { label: 'Notifications', path: '/notifications' },
-    // { label: 'Logout', path: '/logout' },
   ];
 
   const caseStatuses = [
-    { id: 1, title: 'Divorce Case', status: 'Active' },
-    { id: 2, title: 'Property Dispute', status: 'Pending' },
-    { id: 3, title: 'Trademark Filing', status: 'Closed' },
+    { id: 1, title: 'Divorce Case', status: 'Active', progress: 65 },
+    { id: 2, title: 'Property Dispute', status: 'Pending', progress: 30 },
+    { id: 3, title: 'Trademark Filing', status: 'Closed', progress: 100 },
   ];
 
   const statusColor = (status) => {
     switch (status) {
-      case 'Active': return '#28a745';
-      case 'Pending': return '#ffc107';
-      case 'Closed': return '#dc3545';
-      default: return '#6c757d';
+      case 'Active': return '#10b981';
+      case 'Pending': return '#f59e0b';
+      case 'Closed': return '#ef4444';
+      default: return '#6b7280';
     }
   };
 
- const iconOnlyButtonStyle = {
-  background: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  padding: '6px',
-  borderRadius: '50%',
-  transition: 'transform 0.2s ease',
-};
-
-const iconStyle = {
-  width: '22px',
-  height: '22px',
-  filter: 'grayscale(0%)',
-};
-
-
-
-    const [lawyers, setLawyers] = useState([]);
-  
-        const fetchlawyers=async()=>
-          {
-              try {
-              const resp=await api.get('api/lawyer/getalllawyerprofile')
-              setLawyers(resp.data.filter((item)=>(item.status==="verified")))
-              } catch (error) {
-              console.log(error);
-              
-              }
-          }
-          useEffect(() => {
-              fetchlawyers();
-          }, []);
-
-
-// ======================================chat code start================================================================
-
-
-  //  const socket = io('http://localhost:5000'); 
-
- const [chatLawyer, setChatLawyer] = useState(null);
-const [onlineLawyers, setOnlineLawyers] = useState([]);
-const [messages, setMessages] = useState([]);
-
-useEffect(() => {
-  if (!userData.user._id) return;
-
-  if (!socket.connected) socket.connect();
-
-  socket.on('connect', () => {
-    console.log('✅ Connected (client):', socket.id);
-    socket.emit('clientOnline', userData.user._id);
-    socket.emit('getOnlineLawyers');
-  });
-
-  socket.on('onlineLawyersList', (ids) => {
-    console.log('✅ Received online lawyers:', ids);
-    setOnlineLawyers(ids);
-  });
-
-  socket.on('updateOnlineUsers', (ids) => {
-    setOnlineLawyers(ids);
-  });
-
-  socket.on('receiveMessage', ({ from, message }) => {
-    if (chatLawyer?._id === from) {
-      setMessages((prev) => [...prev, { text: message, isMe: false }]);
-    }
-  });
-
-  return () => {
-    socket.off('connect');
-    socket.off('receiveMessage');
-    socket.off('onlineLawyersList');
-    socket.off('updateOnlineUsers');
+  const iconOnlyButtonStyle = {
+    background: 'transparent',
+    border: 'none',
+    cursor: 'pointer',
+    padding: '8px',
+    borderRadius: '50%',
+    transition: 'all 0.2s ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   };
-}, [userData.user._id, chatLawyer]);
 
-const handleSendMessage = (text) => {
-  if (!text.trim() || !chatLawyer?._id) return;
-
-    if (containsSensitiveInfo(text)) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Not Allowed 🚫',
-        text: 'Sharing mobile numbers or emails is not permitted!',
-        timer: 3000, // disappear after 3 seconds
-        timerProgressBar: true,
-        showConfirmButton: false,
-      });
-
-    return;
-  }
-  socket.emit('privateMessage', {
-    toUserId: chatLawyer._id,
-    message: text,
-    fromUserType: 'client',
-  });
-
-  setMessages((prev) => [...prev, { text, isMe: true }]);
-};
-
-const [messageMap, setMessageMap] = useState({});
-
-const handleOpenChat = async (lawyer) => {
-  const isOnline = onlineLawyers.includes(lawyer._id);
-  setChatLawyer({ ...lawyer, isOnline });
-
-  const clientId = userData.user._id;
-  const lawyerId = lawyer._id;
-
-  // Fetch previous messages from server
-  try {
-    const res = await api.get(`api/admin/chathistory/${clientId}/${lawyerId}`);
-    const data = await res.data;
-
-    let formatted = data.map(msg => ({
-      text: msg.message,
-      isMe: msg.from === clientId,
-      isSystem: false,
-    }));
-
-    // Check if first-time chat (no messages yet)
-    if (formatted.length === 0) {
-      const systemMessage = {
-        text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} (${lawyer.specializations},${lawyer.yearsOfExperience}).
-        Feel free to share your concern or upload documents securely`,
-        isSystem: true,
-        isMe: false,
-      };
-      formatted = [systemMessage];
-    }
-
-    setMessages(formatted);
-    setMessageMap(prev => ({ ...prev, [lawyerId]: formatted }));
-  } catch (err) {
-    console.error('❌ Error fetching chat history:', err);
-  }
-};
-
-
-function containsSensitiveInfo(text) {
-  const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{9}/g; // Indian mobile numbers
-  const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/i;
-
-  return phoneRegex.test(text) || emailRegex.test(text);
-}
-
-
-
-  //============================================== chat code end==============================================================
- 
-
+  const iconStyle = {
+    width: '20px',
+    height: '20px',
+    filter: 'grayscale(0%)',
+  };
 
   return (
     <>
       <style>{`
-        @media (max-width: 768px) {
-          .header-nav {
-            display: ${headerMenuOpen ? 'flex' : 'none'};
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: #0052cc;
-            flex-direction: column;
-            padding: 20px;
-            gap: 15px;
-            z-index: 100;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-          }
-          .header-menu-item {
-            color: white !important;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 10px;
-          }
-          .hamburger {
-            display: block !important;
-            cursor: pointer;
-          }
-          .profile-icon {
-            margin-left: auto !important;
-          }
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
         }
-        @media (min-width: 769px) {
-          .hamburger {
-            display: none !important;
+
+        body {
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          background: #f8fafc;
+          min-height: 100vh;
+        }
+
+        .dashboard-container {
+          display: flex;
+          min-height: 100vh;
+          background: #f8fafc;
+        }
+
+        .main-content {
+          flex: 1;
+          margin-left: 280px;
+          padding: 2rem;
+          background: #f8fafc;
+        }
+
+        .welcome-section {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 16px;
+          padding: 2rem;
+          margin-bottom: 2rem;
+          color: white;
+          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-title {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+          font-size: 1rem;
+          opacity: 0.9;
+          margin-bottom: 1.5rem;
+        }
+
+        .time-info {
+          display: flex;
+          gap: 2rem;
+          margin-top: 1rem;
+        }
+
+        .time-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(255, 255, 255, 0.1);
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          font-size: 0.875rem;
+        }
+
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .stats-card {
+          background: white;
+          border-radius: 12px;
+          padding: 1.5rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e7eb;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .stats-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .stats-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-value {
+          font-size: 2rem;
+          font-weight: 800;
+          color: #1e40af;
+          margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+          color: #6b7280;
+          font-size: 0.875rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .charts-grid {
+          display: grid;
+          grid-template-columns: 2fr 1fr;
+          gap: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        .chart-container {
+          background: white;
+          border-radius: 12px;
+          padding: 1.5rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e7eb;
+        }
+
+        .chart-title {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #1f2937;
+          margin-bottom: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .case-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .case-card {
+          background: white;
+          border-radius: 12px;
+          padding: 1.5rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e7eb;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .case-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .case-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 1rem;
+        }
+
+        .case-title {
+          font-weight: 600;
+          font-size: 1.125rem;
+          color: #1f2937;
+        }
+
+        .case-status {
+          padding: 0.25rem 0.75rem;
+          border-radius: 9999px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: white;
+        }
+
+        .progress-bar {
+          width: 100%;
+          height: 8px;
+          background: #e5e7eb;
+          border-radius: 4px;
+          overflow: hidden;
+          margin-top: 1rem;
+        }
+
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(90deg, #10b981, #34d399);
+          border-radius: 4px;
+          transition: width 0.3s ease;
+        }
+
+        .lawyers-section {
+          background: white;
+          border-radius: 12px;
+          padding: 1.5rem;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1f2937;
+          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .lawyers-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .lawyer-card {
+          background: #f9fafb;
+          border-radius: 12px;
+          padding: 1.5rem;
+          text-align: center;
+          transition: all 0.3s ease;
+          border: 1px solid #e5e7eb;
+        }
+
+        .lawyer-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+          background: white;
+        }
+
+        .lawyer-avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid #3b82f6;
+          margin: 0 auto 1rem;
+        }
+
+        .lawyer-name {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #1f2937;
+          margin-bottom: 0.5rem;
+        }
+
+        .lawyer-status {
+          font-size: 0.875rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .lawyer-details {
+          font-size: 0.875rem;
+          color: #6b7280;
+          margin-bottom: 1rem;
+        }
+
+        .lawyer-actions {
+          display: flex;
+          justify-content: center;
+          gap: 0.75rem;
+        }
+
+        .action-btn {
+          background: white;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 0.5rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .action-btn:hover {
+          background: #f3f4f6;
+          transform: translateY(-1px);
+        }
+
+        .chat-popup {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 380px;
+          height: 500px;
+          background: white;
+          border-radius: 16px;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e7eb;
+          overflow: hidden;
+          z-index: 1000;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chat-header {
+          background: linear-gradient(135deg, #3b82f6, #1e40af);
+          color: white;
+          padding: 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .chat-messages {
+          flex: 1;
+          padding: 1rem;
+          overflow-y: auto;
+          background: #f9fafb;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .message {
+          max-width: 80%;
+          padding: 0.75rem 1rem;
+          border-radius: 18px;
+          font-size: 0.875rem;
+          line-height: 1.4;
+          word-wrap: break-word;
+        }
+
+        .message.sent {
+          align-self: flex-end;
+          background: #3b82f6;
+          color: white;
+        }
+
+        .message.received {
+          align-self: flex-start;
+          background: white;
+          color: #1f2937;
+          border: 1px solid #e5e7eb;
+        }
+
+        .message.system {
+          align-self: center;
+          background: #eff6ff;
+          color: #1e40af;
+          border: 1px solid #bfdbfe;
+          text-align: center;
+          font-style: italic;
+        }
+
+        .chat-input {
+          padding: 1rem;
+          border-top: 1px solid #e5e7eb;
+          background: white;
+        }
+
+        .chat-input input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border-radius: 20px;
+          border: 1px solid #e5e7eb;
+          font-size: 0.875rem;
+          outline: none;
+          transition: border-color 0.2s ease;
+        }
+
+        .chat-input input:focus {
+          border-color: #3b82f6;
+        }
+
+        @media (max-width: 768px) {
+          .main-content {
+            margin-left: 0;
+            padding: 1rem;
           }
-          .header-nav {
-            display: flex !important;
+
+          .charts-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .time-info {
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+
+          .lawyers-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .chat-popup {
+            width: calc(100vw - 20px);
+            height: calc(100vh - 100px);
+            bottom: 10px;
+            right: 10px;
+            left: 10px;
           }
         }
       `}</style>
 
-      <div style={{
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: '#f4f7fa',
-        color: '#333',
-      }}>
-        {/* Header */}
-        <header style={{
-          backgroundColor: '#0052cc',
-          color: 'white',
-          padding: '15px 20px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          boxShadow: '0 3px 8px rgba(0, 0, 0, 0.15)',
-          position: 'relative',
-        }}>
-          <div style={{ fontSize: '18px', fontWeight: '700', letterSpacing: '1.2px' }}>
-            Client Dashboard Portal
-          </div>
-
-          {/* Hamburger Menu (visible on mobile) */}
-          <div 
-            className="hamburger" 
-            style={{ 
-              display: 'none', 
-              cursor: 'pointer',
-              padding: '8px',
-            }} 
-            onClick={() => setHeaderMenuOpen(!headerMenuOpen)}
-          >
-            <div style={{ width: '25px', height: '3px', backgroundColor: 'white', margin: '4px 0' }}></div>
-            <div style={{ width: '25px', height: '3px', backgroundColor: 'white', margin: '4px 0' }}></div>
-            <div style={{ width: '25px', height: '3px', backgroundColor: 'white', margin: '4px 0' }}></div>
-          </div>
-
-          {/* <nav className="header-nav">
-            <ul style={{
-              display: 'flex',
-              listStyle: 'none',
-              margin: 0,
-              padding: 0,
-              gap: screenWidth >= 769 ? '40px' : '10px',
-              fontSize: '16px',
-              cursor: 'pointer',
-              fontWeight: '600',
-              flexDirection: screenWidth >= 769 ? 'row' : 'column',
-            }}>
-              {headerMenu.map((item, index) => (
-                <li
-                  key={index}
-                  className="header-menu-item"
-                  onClick={() => {
-                    if (item.label === 'User profile') {
-                      setShowProfileModal(true);
-                    } else {
-                      navigate(item.path);
-                    }
-                    setHeaderMenuOpen(false);
-                  }}
-                  style={{
-                    position: 'relative',
-                    padding: '6px 8px',
-                    borderRadius: '6px',
-                    transition: 'background-color 0.3s, color 0.3s',
-                    color: 'white',
-                  }}
-                  onMouseEnter={e => {
-                    if (screenWidth >= 769) {
-                      e.currentTarget.style.backgroundColor = '#0041a8';
-                      e.currentTarget.style.color = '#ffdb4d';
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (screenWidth >= 769) {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                >
-                  {item.label}
-                </li>
-              ))}
-            </ul>
-          </nav> */}
-
-          <div className="profile-icon" style={{
-            width: '42px',
-            height: '42px',
-            borderRadius: '50%',
-            backgroundColor: '#ffcc00',
-            color: '#0052cc',
-            fontWeight: '700',
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            userSelect: 'none',
-            boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-            cursor: 'default',
-          }}>
-            {clientName ? clientName.split(' ').map(n => n[0]).join('') : 'U'}
-          </div>
-        </header>
-
-        {/* Main Area */}
-        <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
-          {/* Sidebar */}
-          <aside style={{
-            width: sidebarOpen || screenWidth >= 769 ? '260px' : '0px',
-            background: 'white',
-            padding: sidebarOpen || screenWidth >= 769 ? '30px 20px' : '0px',
-            borderRight: sidebarOpen || screenWidth >= 769 ? '1px solid #ddd' : 'none',
-            overflowY: 'auto',
-            boxShadow: sidebarOpen || screenWidth >= 769 ? '2px 0 6px rgba(0,0,0,0.05)' : 'none',
-            transition: 'width 0.3s ease',
-          }}>
-            {(sidebarOpen || screenWidth >= 769) && (
-              <>
-                <h2 style={{
-                  marginBottom: '35px',
-                  color: '#004080',
-                  fontWeight: '700',
-                  fontSize: '22px',
-                  letterSpacing: '0.5px',
-                }}>Client Portal</h2>
-                <ul style={{ listStyle: 'none', padding: 0 }}>
-                  {menuItems.map((item, index) => (
-                    <li
-                      key={index}
-                      onClick={() => {
-                        navigate(item.path);
-                        if (screenWidth < 769) setSidebarOpen(false);
-                      }}
-                      style={{
-                        marginBottom: '20px',
-                        cursor: 'pointer',
-                        padding: '10px 12px',
-                        borderRadius: '8px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        fontWeight: '600',
-                        fontSize: '16px',
-                        color: '#333',
-                        transition: 'background-color 0.3s, color 0.3s',
-                        userSelect: 'none',
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.backgroundColor = '#e6f0ff';
-                        e.currentTarget.style.color = '#0052cc';
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = '#333';
-                      }}
-                    >
-                      <span style={{ marginRight: '14px', fontSize: '20px' }}>{item.icon}</span>
-                      {item.label}
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-          </aside>
-
-          {/* Main Content */}
-          <main style={{
-            flex: 1,
-            marginLeft:"20%",
-            padding: '50px 50px 60px 50px',
-            overflowY: 'auto',
-            backgroundColor: '#fefefe',
-          }}>
-            <h1 style={{
-              marginBottom: '20px',
-              marginTop: '20px',
-              fontWeight: '700',
-              fontSize: '28px',
-              color: '#004080',
-            }}>
-             Welcome Back, {userData?.user?.fullName}
+      <Clientsidebar />
+      
+      <div className="dashboard-container">
+        <main className="main-content">
+          {/* Welcome Section */}
+          <div className="welcome-section">
+            <h1 className="welcome-title">
+              Welcome back, {userData?.user?.fullName}! 👋
             </h1>
+            <p className="welcome-subtitle">
+              Here's your legal dashboard overview
+            </p>
+            <div className="time-info">
+              <div className="time-item">
+                <span>🕒</span>
+                <span>Last login: {formatLastLogin(lastLogin)}</span>
+              </div>
+              <div className="time-item">
+                <span>⏱️</span>
+                <span>Session time: {currentSessionTime.toFixed(1)} hours</span>
+              </div>
+              <div className="time-item">
+                <span>📊</span>
+                <span>Status: Active</span>
+              </div>
+            </div>
+          </div>
 
-            {/* Case Status Section */}
-            <section style={{ marginBottom: '50px' }}>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                marginBottom: '25px',
-                color: '#0066cc',
-              }}>📁 Case Status</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-                {caseStatuses.map((caseItem) => (
-                  <div
-                    key={caseItem.id}
-                    onClick={() => navigate('/case-details')}
-                    style={{
-                      padding: '20px 25px',
-                      borderRadius: '12px',
-                      boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
+          {/* Stats Grid */}
+          <div className="stats-grid">
+            <div className="stats-card">
+              <div className="stats-value">{caseStatuses.length}</div>
+              <div className="stats-label">Active Cases</div>
+            </div>
+            <div className="stats-card">
+              <div className="stats-value">{consultationData.reduce((sum, item) => sum + item.consultations, 0)}</div>
+              <div className="stats-label">Total Consultations</div>
+            </div>
+            <div className="stats-card">
+              <div className="stats-value">{onlineLawyers.length}</div>
+              <div className="stats-label">Lawyers Online</div>
+            </div>
+            <div className="stats-card">
+              <div className="stats-value">{weeklyActivityData.reduce((sum, day) => sum + day.hours, 0).toFixed(1)}</div>
+              <div className="stats-label">Hours This Week</div>
+            </div>
+          </div>
+
+          {/* Charts Section */}
+          <div className="charts-grid">
+            <div className="chart-container">
+              <h3 className="chart-title">📈 Consultation Trends</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <AreaChart data={consultationData}>
+                  <defs>
+                    <linearGradient id="consultationGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.1}/>
+                    </linearGradient>
+                    <linearGradient id="resolvedGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
+                      <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="month" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
+                  <Tooltip 
+                    contentStyle={{
                       backgroundColor: 'white',
-                      fontWeight: '600',
-                      fontSize: '17px',
-                      color: '#333',
-                      userSelect: 'none',
-                      cursor: 'pointer',
-                      transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                     }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'translateY(-6px)';
-                      e.currentTarget.style.boxShadow = '0 8px 18px rgba(0,0,0,0.2)';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 3px 8px rgba(0,0,0,0.1)';
-                    }}
+                  />
+                  <Area type="monotone" dataKey="consultations" stroke="#3b82f6" fill="url(#consultationGradient)" />
+                  <Area type="monotone" dataKey="resolved" stroke="#10b981" fill="url(#resolvedGradient)" />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="chart-container">
+              <h3 className="chart-title">📊 Case Types</h3>
+              <ResponsiveContainer width="100%" height={250}>
+                <PieChart>
+                  <Pie
+                    data={caseTypeData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ type, count }) => `${type}: ${count}`}
+                    outerRadius={80}
+                    innerRadius={40}
+                    fill="#8884d8"
+                    dataKey="count"
                   >
-                    <span>{caseItem.title}</span>
-                    <span style={{
-                      padding: '7px 16px',
-                      borderRadius: '25px',
-                      backgroundColor: statusColor(caseItem.status),
-                      color: 'white',
-                      fontWeight: '700',
-                      fontSize: '14px',
-                      boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
-                    }}>
-                      {caseItem.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Quick Access Section */}
-            <section>
-              <h2 style={{
-                fontSize: '22px',
-                fontWeight: '700',
-                marginBottom: '25px',
-                color: '#0066cc',
-              }}>⚡ Quick Access</h2>
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-                gap: '25px',
-              }}>
-                {menuItems.slice(0, 4).map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => navigate(item.path)}
-                    style={{
-                      padding: '25px',
-                      borderRadius: '14px',
-                      boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
-                      cursor: 'pointer',
-                      textAlign: 'center',
-                      backgroundColor: '#ffffff',
-                      fontWeight: '700',
-                      color: '#0052cc',
-                      transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-                      userSelect: 'none',
+                    {caseTypeData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'white',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                     }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = 'translateY(-6px)';
-                      e.currentTarget.style.boxShadow = '0 8px 18px rgba(0,0,0,0.2)';
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 3px 10px rgba(0,0,0,0.12)';
-                    }}
-                  >
-                    <div style={{ fontSize: '36px', marginBottom: '15px' }}>{item.icon}</div>
-                    <div style={{ fontSize: '17px' }}>{item.label}</div>
-                  </div>
-                ))}
-              </div>
-            </section>
-            
-{/* =======================================popular lawyers==================================================================== */}
-
-
-<section style={{ marginTop: '20px' }}>
-  <h2 style={{
-    fontSize: '24px',
-    fontWeight: '800',
-    marginBottom: '30px',
-    color: '#1e3a8a',
-    borderBottom: '3px solid #3b82f6',
-    display: 'inline-block',
-    paddingBottom: '5px',
-  }}>
-    🌟 Popular Lawyers
-  </h2>
-
-  <div style={{
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 240px)',
-    gap: '30px',
-  }}>
-    {lawyers.map((item, index) => {
-       const isOnline = onlineLawyers.includes(item._id);
-      return(
-      <div
-        key={index}
-        style={{
-          padding: '20px',
-          borderRadius: '16px',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-          cursor: 'pointer',
-          textAlign: 'center',
-          background: '#fff',
-          transition: 'transform 0.25s ease, box-shadow 0.25s ease',
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.transform = 'translateY(-5px)';
-          e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.transform = 'translateY(0)';
-          e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
-        }}
-      >
-        <div style={{ marginBottom: '15px' }}>
-          <img
-            src={item.profilepic}
-            alt='no image available'
-            style={{
-              height: '90px',
-              width: '90px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-              border: '3px solid #3b82f6',
-            }}
-          />
-        </div>
-
-        <div style={{ fontSize: '17px', fontWeight: '600', color: '#0f172a' }}>
-          {item.firstName} {item.lastName}
-        </div>
-
-             <div style={{ fontSize: '14px', marginTop: '4px' }}>
-                <span style={{ color: isOnline ? 'green' : 'red' }}>
-                  {isOnline ? '🟢 Online' : '🔴 Offline'}
-                </span>
-              </div>
-       
-         <div style={{ fontSize: '14px', marginTop: '4px' }}>
-                <span style={{fontWeight:"bold"}}>Specializations:</span>:{item.specializations}
-          </div>
-           <div style={{ fontSize: '14px', marginTop: '4px' }}>
-              <span style={{fontWeight:"bold"}}>Experience:</span>{item.yearsOfExperience}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
 
-        <div style={{
-          marginTop: '12px',
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '12px',
-        }}>
-          {/* Chat */}
-          <button
-            style={iconOnlyButtonStyle}
-            title="Chat"
-            onClick={() => handleOpenChat(item)}
-          >
-            💬
-          </button>
+          {/* Weekly Activity Chart */}
+          <div className="chart-container" style={{ marginBottom: '2rem' }}>
+            <h3 className="chart-title">📅 Weekly Activity</h3>
+            <ResponsiveContainer width="100%" height={250}>
+              <BarChart data={weeklyActivityData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="day" stroke="#6b7280" />
+                <YAxis stroke="#6b7280" />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                  }}
+                  formatter={(value) => [`${value} hours`, 'Time Spent']}
+                />
+                <Bar dataKey="hours" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-          {/* WhatsApp */}
-          <button
-            title="WhatsApp"
-            onClick={() => window.open(`https://wa.me/${item.mobile || ''}`, '_blank')}
-            style={iconOnlyButtonStyle}
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
-              alt="WhatsApp"
-              style={iconStyle}
-            />
-          </button>
+          {/* Cases Section */}
+          <div className="case-grid">
+            {caseStatuses.map((caseItem) => (
+              <div className="case-card" key={caseItem.id} onClick={() => navigate('/case-details')}>
+                <div className="case-header">
+                  <div className="case-title">{caseItem.title}</div>
+                  <div 
+                    className="case-status" 
+                    style={{ backgroundColor: statusColor(caseItem.status) }}
+                  >
+                    {caseItem.status}
+                  </div>
+                </div>
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${caseItem.progress}%` }}
+                  ></div>
+                </div>
+                <div style={{ marginTop: '0.5rem', fontSize: '0.875rem', color: '#6b7280' }}>
+                  Progress: {caseItem.progress}%
+                </div>
+              </div>
+            ))}
+          </div>
 
-          {/* Message */}
-          <button
-            style={iconOnlyButtonStyle}
-            title="Message"
-            onClick={() => alert("Message clicked")}
-          >
-            ✉️
-          </button>
-        </div>
+          {/* Lawyers Section */}
+          <div className="lawyers-section">
+            <h2 className="section-title">
+              🌟 Available Lawyers
+            </h2>
+            <div className="lawyers-grid">
+              {lawyers.slice(0, 6).map((lawyer, index) => {
+                const isOnline = onlineLawyers.includes(lawyer._id);
+                return (
+                  <div key={index} className="lawyer-card">
+                    <img
+                      src={lawyer.profilepic}
+                      alt="Lawyer"
+                      className="lawyer-avatar"
+                    />
+                    <div className="lawyer-name">
+                      {lawyer.firstName} {lawyer.lastName}
+                    </div>
+                    <div className="lawyer-status">
+                      <span style={{ color: isOnline ? '#10b981' : '#ef4444' }}>
+                        {isOnline ? '🟢 Online' : '🔴 Offline'}
+                      </span>
+                    </div>
+                    <div className="lawyer-details">
+                      <div><strong>Specialization:</strong> {lawyer.specializations}</div>
+                      <div><strong>Experience:</strong> {lawyer.yearsOfExperience} years</div>
+                    </div>
+                    <div className="lawyer-actions">
+                      <button
+                        className="action-btn"
+                        title="Chat"
+                        onClick={() => handleOpenChat(lawyer)}
+                      >
+                        💬
+                      </button>
+                      <button
+                        className="action-btn"
+                        title="WhatsApp"
+                        onClick={() => window.open(`https://wa.me/${lawyer.mobile || ''}`, '_blank')}
+                      >
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
+                          alt="WhatsApp"
+                          style={iconStyle}
+                        />
+                      </button>
+                      <button
+                        className="action-btn"
+                        title="Message"
+                        onClick={() => alert("Message clicked")}
+                      >
+                        ✉️
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </main>
       </div>
-      )
-      })}
-  </div>
 
-  {/* Chat Window Inline */}
+      {/* Chat Popup */}
       {chatLawyer && (
-        <div style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          width: '300px',
-          height: '400px',
-          backgroundColor: '#fff',
-          borderRadius: '10px',
-          boxShadow: '0 0 15px rgba(0,0,0,0.15)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden',
-          zIndex: 1000,
-          fontFamily: 'Arial',
-        }}>
-          {/* Header */}
-          <div style={{
-            backgroundColor: '#3b82f6',
-            padding: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            color: '#fff',
-            justifyContent: 'space-between',
-          }}>
+        <div className="chat-popup">
+          <div className="chat-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <img
                 src={chatLawyer.profilepic}
                 alt="profile"
                 style={{
-                  width: '35px',
-                  height: '35px',
+                  width: '40px',
+                  height: '40px',
                   borderRadius: '50%',
                   objectFit: 'cover',
                   border: '2px solid white',
@@ -697,7 +896,7 @@ function containsSensitiveInfo(text) {
                 <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
                   {chatLawyer.firstName} {chatLawyer.lastName}
                 </div>
-                <div style={{ fontSize: '12px', color: chatLawyer.isOnline ? 'lightgreen' : 'lightgray' }}>
+                <div style={{ fontSize: '12px', opacity: 0.9 }}>
                   {chatLawyer.isOnline ? '🟢 Online' : '🔴 Offline'}
                 </div>
               </div>
@@ -714,42 +913,21 @@ function containsSensitiveInfo(text) {
             >✖</button>
           </div>
 
-          {/* Messages */}
-          <div style={{
-            flex: 1,
-            padding: '10px',
-            overflowY: 'auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '5px',
-            backgroundColor: '#fafafa',
-          }}>
+          <div className="chat-messages">
             {messages.map((msg, index) => (
-              <div key={index} style={{
-                alignSelf: msg.isMe ? 'flex-end' : 'flex-start',
-                backgroundColor: msg.isMe ? '#dcf8c6' : '#f1f1f1',
-                padding: '8px 12px',
-                borderRadius: '16px',
-                maxWidth: '80%',
-                fontSize: '14px',
-              }}>
+              <div 
+                key={index} 
+                className={`message ${msg.isMe ? 'sent' : msg.isSystem ? 'system' : 'received'}`}
+              >
                 {msg.text}
               </div>
             ))}
           </div>
 
-          {/* Input */}
-          <div style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
+          <div className="chat-input">
             <input
               type="text"
               placeholder="Type a message..."
-              style={{
-                width: '100%',
-                padding: '8px',
-                borderRadius: '20px',
-                border: '1px solid #ccc',
-                fontSize: '14px',
-              }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.target.value.trim()) {
                   handleSendMessage(e.target.value.trim());
@@ -760,23 +938,6 @@ function containsSensitiveInfo(text) {
           </div>
         </div>
       )}
-
-
-</section>
-
-
-
-          </main>
-        </div>
-
-        {/* Profile Modal */}
-        {/* {showProfileModal && (
-          <ClientProfileModal
-            userDetails={userDetails}
-            onClose={() => setShowProfileModal(false)}
-          />
-        )} */}
-      </div>
     </>
   );
 };

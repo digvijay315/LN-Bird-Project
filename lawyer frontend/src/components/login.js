@@ -213,7 +213,7 @@ const handleLogin = async (e) => {
   e.preventDefault();
 
   try {
-    setIsLoading(true)
+    setIsLoading(true);
     const endpoint = loginRole === 'user'
       ? '/api/user/login'
       : '/api/lawyer/login';
@@ -226,28 +226,49 @@ const handleLogin = async (e) => {
     const data = response.data;
     console.log(data);
     
-    if(response.status===200)
-    {
-       Swal.fire({
+    if(response.status === 200) {
+      // Set current login time BEFORE showing success message
+      const currentLoginTime = new Date().toISOString();
+      localStorage.setItem('currentLoginTime', currentLoginTime);
+      
+      // Get and store previous login time for "last login" display
+      const previousLogin = localStorage.getItem('lastLogin');
+      if (previousLogin) {
+        localStorage.setItem('previousLogin', previousLogin);
+      }
+      
+      // Update last login time
+      localStorage.setItem('lastLogin', currentLoginTime);
+      
+      // Initialize session tracking
+      localStorage.setItem('sessionStartTime', Date.now().toString());
+      
+      // Initialize daily time tracking
+      const today = new Date().toLocaleDateString();
+      const dailyTimeData = JSON.parse(localStorage.getItem('dailyTimeSpent') || '[]');
+      
+      // Check if today's entry exists, if not create it
+      const todayExists = dailyTimeData.find(d => d.date === today);
+      if (!todayExists) {
+        dailyTimeData.push({ date: today, hours: 0, loginTime: currentLoginTime });
+        localStorage.setItem('dailyTimeSpent', JSON.stringify(dailyTimeData));
+      }
+
+      Swal.fire({
         icon: 'success',
         title: 'Login Successful!',
         text: data.message,
         showConfirmButton: true,
       });
     
-     if (loginRole === 'user') {
-       localStorage.setItem('userDetails', JSON.stringify(data));
-       navigate('/ClientDashboard');
-     }else
-     {
-      localStorage.setItem('lawyerDetails', JSON.stringify(data));
-      navigate('/LawyerDashboard');
-     }
-      
+      if (loginRole === 'user') {
+        localStorage.setItem('userDetails', JSON.stringify(data));
+        navigate('/ClientDashboard');
+      } else {
+        localStorage.setItem('lawyerDetails', JSON.stringify(data));
+        navigate('/LawyerDashboard');
+      }
     }
-      
-      
-   
 
   } catch (err) {
     console.error('Login error:', err);
@@ -256,11 +277,11 @@ const handleLogin = async (e) => {
     } else {
       alert('Something went wrong during login');
     }
-  }finally
-  {
-    setIsLoading(false)
+  } finally {
+    setIsLoading(false);
   }
 };
+
 
 
   return (
