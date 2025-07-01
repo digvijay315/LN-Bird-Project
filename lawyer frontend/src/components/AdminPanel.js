@@ -611,24 +611,49 @@ const AdminPanel = () => {
         {/* Weekly Login Activity Chart */}
         <div className="chart-section full-width-chart">
           <h3 className="chart-title">📅 Weekly Login Activity</h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={loginActivityData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="day" stroke="#6b7280" />
-              <YAxis stroke="#6b7280" />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }}
-              />
-              <Legend />
-              <Bar dataKey="lawyers" fill="#82ca9d" name="Lawyers" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="users" fill="#8884d8" name="Users" radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+         <ResponsiveContainer width="100%" height={300}>
+  <AreaChart data={loginActivityData}>
+    <defs>
+      <linearGradient id="lawyersGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8}/>
+        <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.2}/>
+      </linearGradient>
+      <linearGradient id="usersGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+        <stop offset="95%" stopColor="#8884d8" stopOpacity={0.2}/>
+      </linearGradient>
+    </defs>
+    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+    <XAxis dataKey="day" stroke="#6b7280" />
+    <YAxis stroke="#6b7280" />
+    <Tooltip
+      contentStyle={{
+        backgroundColor: 'white',
+        border: '1px solid #e5e7eb',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+      }}
+    />
+    <Legend />
+    <Area 
+      type="monotone" 
+      dataKey="lawyers" 
+      stackId="1" 
+      stroke="#82ca9d" 
+      fill="url(#lawyersGradient)" 
+      name="Lawyers"
+    />
+    <Area 
+      type="monotone" 
+      dataKey="users" 
+      stackId="1" 
+      stroke="#8884d8" 
+      fill="url(#usersGradient)" 
+      name="Users"
+    />
+  </AreaChart>
+</ResponsiveContainer>
+
         </div>
 
         {/* Enhanced Pending Lawyers Table */}
