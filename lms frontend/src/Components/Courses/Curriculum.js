@@ -1,17 +1,26 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"//Added Naviagte here
 import { base_url } from "../Utils/base_url"
 import axios from "axios"
 import ReactPlayer from "react-player"
 import "../Courses/curiculam.css"
 import PptSlides from "../Pptslides"
+import { Assessment } from "@mui/icons-material"
 
 const Curriculum = () => {
+  const [curriculum, setCurriculum] = useState(null)
+  const navigate = useNavigate();
+
+   const [assessment, setAssessment] = useState([]);
+  
+
   const location = useLocation()
   const { course } = location.state || {}
-  const [curriculum, setCurriculum] = useState(null)
+
+
+
   const [activeLesson, setActiveLesson] = useState(null)
   const [showCurriculum, setShowCurriculum] = useState(true)
   const [activeMediaType, setActiveMediaType] = useState("video")
@@ -20,6 +29,17 @@ const Curriculum = () => {
   const [pptError, setPptError] = useState(null)
   const [pptLoading, setPptLoading] = useState(false)
   const reactPlayerRef = useRef(null)
+
+
+  //Add attempt count and score state
+  const [attemptCount, setAttemptCount] = useState(curriculum?.attempt_count || 0);
+  // const [attemptCount, setAttemptCount] = useState(0);
+  // const attemptLimit = course?.assesment_limitation;
+  const [userScore, setUserScore] = useState(null);// Will store score after test
+  const [totalScore, setTotalScore] = useState(null);
+  const [timeSpent, setTimeSpent] = useState(null);
+  // const [assessmentCompleted, setAssessmentCompleted] = useState(false);
+
 
   // Get current logged-in user from localStorage or session
   const [currentUser, setCurrentUser] = useState(null)
@@ -64,6 +84,30 @@ const Curriculum = () => {
     return `user_${currentUser._id}_${baseKey}`
   }
 
+  //fetch the curriculum, And the API returns the score
+  useEffect(() => {
+  const fetchCurriculum = async () => {
+    try {
+      const response = await axios.get(`${base_url}your-endpoint`, {
+        params: {
+          course_id: course?.id,
+          user_id: currentUser?.id,
+        },
+      });
+
+      if (response.data) {
+        setCurriculum(response.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch curriculum", error);
+    }
+  };
+  if (course && currentUser) {
+    fetchCurriculum();
+  }
+  }, [course, currentUser]);
+  
+
   const fetchCurriculum = async (courseId) => {
     if (!courseId) {
       console.error("No Course ID provided")
@@ -87,6 +131,26 @@ const Curriculum = () => {
     }
   }
 
+   useEffect(() => {
+    const fetchAssessmentData = async () => {
+      try {
+        const response = await axios.get(`${base_url}/assessment_data_fetch`);
+        console.log(response);
+        setAssessment(
+          response.data.assessments.filter(
+            (item) => item.code === curriculum.course_assesment
+          )
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAssessmentData();
+  }, [curriculum]);
+
+  console.log(assessment);
+  
   // Load user progress from localStorage
   const loadUserProgress = (userId, courseId) => {
     const completionsKey = getUserSpecificKey(`course_${courseId}_completions`)
@@ -179,6 +243,95 @@ const Curriculum = () => {
 
     return materials
   }
+
+  //Get Details of Assign Assessment and the Score Gained
+  // const getAssessmentDetails = () => {
+  //   if (!curriculum || !curriculum.assessment) 
+  //     return null
+  //   return {
+  //     title: curriculum.assessment.title || "Assessment",
+  //     certificate: curriculum.assessment.certificate || null,
+  //     completionDate: curriculum.assessment.completionDate || null,
+  //     isCompleted: curriculum.assessment.isCompleted || false,
+  //     score: curriculum.assessment.score || 0,
+  //     passingScore: curriculum.assessment.passingScore || 0,
+  //   }
+  // }
+
+  // const assessmentDetails = getAssessmentDetails();
+  
+  // console.log(curriculum);
+  //Fetch attempt count & latest score from backend API
+
+  //Replace with actual values based on your data/context
+  // const userId = localStorage.getItem('token');
+  console.log(currentUser);
+  const assessmentId = assessment?.[0]?._id
+  useEffect(() => {
+    const fetchAssessmentStats = async () => {
+      // if (!assessmentId) return;
+
+      try {
+        const res = await axios.get(`${base_url}/api/get/submitted/assessment/atten/${assessmentId}`);
+        // const data = await res.data
+        // console.log(data);
+
+        const submissions = res.data?.data || [];
+        console.log(submissions);
+
+        // Filter only submissions of the current employee
+        const employeeSubmissions = submissions.filter(
+          (item) =>
+            item.employeeId === currentUser._id
+        );
+
+        setAttemptCount(employeeSubmissions.length);
+
+        // Get latest submission by submittedAt timestamp
+        const latestSubmission = employeeSubmissions
+          .sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt))[0];
+
+        if (latestSubmission) {
+          setTotalScore(latestSubmission.totalScore ?? 0);
+          setTimeSpent(latestSubmission.timeSpent ?? 0);
+        }
+      } catch (error) {
+        console.error('Failed to fetch assessment data:', error);
+      }
+
+        // if (data.success) {
+        //   setAttemptCount(data.attemptCount);     // Set attempt count from backend
+        //   setUserScore(data.latestScore);         // Set latest score from backend
+        // } else {
+        //   console.error("Failed to fetch assessment stats");
+        // }
+      }
+
+    fetchAssessmentStats();
+  }, [assessmentId]);
+
+  const handleDownloadCertificate = async () => {
+  try {
+    const res = await axios.post(`${base_url}/api/certificates/download`, {
+      userId: currentUser._id,
+      courseId: curriculum._id,
+    }, {
+      responseType: 'blob',
+    });
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'certificate.pdf');
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (error) {
+    console.error('Certificate download error:', error);
+    alert('Failed to download certificate.');
+  }
+};
+
 
   // Download file function
   const downloadFile = async (fileUrl, fileName) => {
@@ -784,6 +937,9 @@ const Curriculum = () => {
       )
     }
 
+  
+    
+
     return (
       <div className="download-section completion-card">
         <div className="completion-header">
@@ -889,9 +1045,18 @@ const Curriculum = () => {
             </button>
           </div>
         </div>
+
+ 
+
       </div>
+
+      
     )
   }
+  
+  
+
+
 
   const { previousLesson, nextLesson } = getNeighborLessons()
 
@@ -903,6 +1068,56 @@ const Curriculum = () => {
       </div>
     )
   }
+  
+  
+ 
+
+   
+// useEffect(() => {
+//   if (curriculum?.attempt_count !== undefined) {
+//     setAttemptCount(curriculum.attempt_count);
+//   }
+// }, [curriculum]);   
+
+
+  //Limit pulled from course object (default Infinity)
+  const attemptLimit = course?.assesment_limitation ?? Infinity;
+
+  // //Replace with actual values based on your data/context
+  // const assessmentId = assessment?.[0]?._id;
+  // const userId = localStorage.getItem('userId');
+
+  // Handle button press: Go to assessment if within limits
+  const handleTakeAssessment = () => {
+    if (attemptCount >= attemptLimit) {
+      alert("❌ You’ve reached the maximum number of attempts.");
+      return;
+    }
+
+    //This is a local increment for UI only — real increment happens after test submission
+    setAttemptCount(prev => prev + 1);
+
+    //Navigate to assessment page
+    navigate(`/takeAssessmentPlatform/${assessmentId}`);
+  };
+
+    
+//   const handleTakeAssessment = () => {
+//   if (attemptCount >= attemptLimit) {
+//     alert("❌ You’ve reached the maximum number of attempts.");
+//     return;
+//   }
+
+//   setAttemptCount(prev => prev + 1); // Simulate incrementing attempts
+//   navigate(`/takeAssessmentPlatform/${assessment[0]._id}`);
+// };
+
+// const handleTakeAssessment = () => {
+//   navigate(`/takeAssessmentPlatform/${assessment[0]._id}`); //The actual path to your assessment page
+// };
+
+
+
 
   return (
     <div>
@@ -1078,7 +1293,87 @@ const Curriculum = () => {
                 )}
               </div>
             )}
+            {/* GetAssessment Section */}
+              <div className="assessment-content">
+                {curriculum ? (
+                  <div className="assessment-details">
+                    <div><strong>Assessment Title:</strong> {curriculum.course_assesment}</div>
+                    {/* <div><strong>Certificate:</strong> {curriculum.course_certificate || "N/A"}</div> */}
+                    <div><strong>Completion Date:</strong> {curriculum.assesment_complete_date || "Not set"}</div>
+                    {/* <div><strong>Status:</strong> {curriculum.isCompleted ? "✅ Completed" : "❌ Not Completed"}</div> */}
+                    <div><strong>Latest Total Score:</strong> {totalScore ?? 'N/A'}</div>
+                    <div><strong>Passing Score:</strong> {curriculum.assesment_passingscore}</div>
+                    <div><strong>Attempts:</strong> {attemptCount} / {attemptLimit ?? "∞"}</div>
+
+                    {/* <div><strong>Attempts:</strong> {curriculum.attempt_count || 0} / {course?.assesment_limitation || "∞"}</div> */}
+
+
+                    {/* If score exists */}
+                    {curriculum.score !== undefined && curriculum.score !== null ? (
+                    <>
+                      <div><strong>Your Score:</strong> {curriculum.score}</div>
+
+                      {curriculum.score >= curriculum.assesment_passingscore ? (
+                        <div className="assessment-passed">✅ You passed the assessment!</div>
+                      ) : (
+                        attemptCount < attemptLimit ? (
+                          <button className="take-assessment-btn" onClick={handleTakeAssessment}>
+                            🔁 Retake Assessment
+                          </button>
+                        ) : (
+                          <div className="assessment-limit-reached">
+                            ❌ You did not pass. Maximum attempts reached.
+                          </div>
+                        )
+                      )}
+                    </>
+                    ) : (
+                      // If no score (never taken assessment)
+                      attemptCount < attemptLimit ? (
+                      <button className="take-assessment-btn" 
+                      onClick={handleTakeAssessment}>
+                      📝 Take Assessment
+                      </button>
+                      ) : (
+                        <div className="assessment-limit-reached">❌ Assessment attempt limit reached. You cannot take the assessment.</div>
+                      )
+                    )}
+                  </div>
+                      ) : (
+                        <p>No assessment details found.</p>
+                      )}
+              </div>
+
+
+              {/* Certificate Button
+              {curriculum && totalScore >= curriculum.assesment_passingscore && (
+                <div className="certificate-download">
+                  <button
+                    onClick={handleDownloadCertificate}
+                  >
+                    🎓 Download Certificate
+                  </button>
+                </div>
+              )} */}
+              {/* Certificate Button */}
+              {curriculum && totalScore >= curriculum.assesment_passingscore && (
+                <div className="certificate-download">
+                  <p>🎉 <strong>Congratulations!</strong> You have successfully passed the assessment.</p>
+                  <p>🧠 <strong>Your Score:</strong> {totalScore}</p>
+                  <button
+                    onClick={handleDownloadCertificate}
+                  >
+                    🎓 Download Certificate
+                  </button>
+                </div>
+              )}
+
+
           </div>
+
+        
+
+
 
           <div className="navigations-btn-div">
             <div className="navigation-buttons">
@@ -1097,7 +1392,7 @@ const Curriculum = () => {
 
         {!showCurriculum && (
           <button className="floating-book-icon" onClick={() => setShowCurriculum(true)}>
-            📖
+            📖 
           </button>
         )}
       </div>

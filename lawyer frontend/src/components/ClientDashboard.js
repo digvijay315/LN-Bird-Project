@@ -7,6 +7,7 @@ import socket from './socket';
 import Swal from 'sweetalert2';
 import Clientsidebar from './clientsidebar';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import changaccount from '../img/change-account.svg'
 
 const ClientDashboard = () => {
   const navigate = useNavigate();
@@ -901,7 +902,35 @@ const ClientDashboard = () => {
                 </div>
               </div>
             </div>
-            <button
+            <div className="header-actions">
+        <button
+           style={{
+                background: 'none',
+                color: 'white',
+                fontSize: '22px',
+                cursor: 'pointer',
+              }}
+          // onClick={() => setShowLawyerSwitch(!showLawyerSwitch)}
+          title="Switch Lawyer"
+        >
+          🔄
+          {/* <span style={{fontSize:"14px"}}>switch</span> */}
+        </button>
+        <button
+           style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                cursor: 'pointer',
+              }}
+          onClick={() => setChatLawyer(null)}
+          title="Close Chat"
+        >
+          ✖
+        </button>
+      </div>
+            {/* <button
               onClick={() => setChatLawyer(null)}
               style={{
                 background: 'none',
@@ -910,7 +939,7 @@ const ClientDashboard = () => {
                 fontSize: '18px',
                 cursor: 'pointer',
               }}
-            >✖</button>
+            >✖</button> */}
           </div>
 
           <div className="chat-messages">

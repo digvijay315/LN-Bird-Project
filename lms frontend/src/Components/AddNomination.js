@@ -975,11 +975,100 @@ import 'react-toastify/dist/ReactToastify.css';
 import $ from 'jquery';
 import 'datatables.net';
 // import './AddNomination.css';
+import { TrainingTimeDisplay } from './TrainingTimeDisplay';
+import { formatTrainingTimes } from './Utils/timeUtils';
+
+
+
+
+
+const generateDateRange = (startDate, endDate) => {
+  const dates = [];
+  const current = new Date(startDate);
+  const end = new Date(endDate);
+
+  while (current <= end) {
+    dates.push(new Date(current).toISOString().split('T')[0]); // Format as YYYY-MM-DD
+    current.setDate(current.getDate() + 1);
+  }
+
+  return dates;
+};
+
+
 
 const AddNomination = () => {
   const { trainingId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+
+
+
+  
+
+
+
+ const getDatesInMonth = (year, month) => {
+  const date = new Date(year, month, 1);
+  const dates = [];
+  while (date.getMonth() === month) {
+    dates.push(date.toISOString().split('T')[0]); // e.g., "2025-06-01"
+    date.setDate(date.getDate() + 1);
+  }
+  return dates;
+};
+
+const [attendanceData, setAttendanceData] = useState({});
+const [selectedMonth] = useState(new Date().getMonth());
+const [selectedYear] = useState(new Date().getFullYear());
+
+
+function convertToUTC(localDate, localTime) {
+  // Combine date and time to create a full Date object
+  const combined = new Date(`${localDate}T${localTime}`);
+  return combined.toUTCString(); // Or use .toISOString() if you want full ISO
+}
+
+
+const handleSaveAttendance = () => {
+  const formattedData = [];
+
+  // Assuming attendanceData is your state object like:
+  // {
+  //   "Test01": { "2025-06-01": true, "2025-06-02": false },
+  //   ...
+  // }
+
+  Object.entries(attendanceData).forEach(([employeeId, dates]) => {
+    Object.entries(dates).forEach(([date, present]) => {
+      if (present) {
+        formattedData.push({
+          employeeId,
+          date,
+          present,
+        });
+      }
+    });
+  });
+
+  // Debug log
+  console.log("Formatted Attendance Data:", formattedData);
+
+  // Send to backend using Axios
+  axios
+    .post('http://localhost:5000/api/attendance/upload-attendance', {
+      records: formattedData,
+    })
+    .then((res) => {
+      alert('✅ Attendance saved successfully!');
+    })
+    .catch((err) => {
+      console.error('❌ Error saving attendance:', err);
+      alert('Failed to save attendance.');
+    });
+};
+
+
   
   // Get training from location state or fetch it
   const [selectedTraining, setSelectedTraining] = useState(location.state?.training || null);
@@ -991,9 +1080,31 @@ const AddNomination = () => {
   const [nominatedEmployees, setNominatedEmployees] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+
+  const handleAttendanceChange = (e, employee) => {
+  const isChecked = e.target.checked;
+  const attendanceDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+  console.log(`Attendance for ${employee.name}:`, isChecked ? 'Present' : 'Absent', 'on', attendanceDate);
+
+  // Optionally, update state or send to backend here
+};
+
+
+const [attendanceDates, setAttendanceDates] = useState([]);
+
+useEffect(() => {
+  if (selectedTraining.from_date && selectedTraining.to_date) {
+    const dates = generateDateRange(selectedTraining.from_date, selectedTraining.to_date);
+    setAttendanceDates(dates);
+  }
+}, [selectedTraining]);
+
+    
+
   // Handle confirmation dialog
   const closeConfirmation = () => setIsConfirmationOpen(false);
-  const openConfirmation = () => setIsConfirmationOpen(true);
+  const   openConfirmation = () => setIsConfirmationOpen(true);
 
   // Fetch training if not provided in state
   useEffect(() => {
@@ -1078,29 +1189,37 @@ const AddNomination = () => {
   };
 
   // Add employee to selected list
-  const addEmployee = () => {
-    if (!selectedEmployee) {
-      toast.warning('Please select an employee');
-      return;
-    }
+ const addEmployee = () => {
+  if (!selectedEmployee) return;
 
-    const employee = employees.find((emp) => emp._id === selectedEmployee);
-    
-    // Check if employee is already selected
-    if (selectedEmployees.some((emp) => emp._id === employee._id)) {
-      toast.warning('Employee already added to nomination list');
-      return;
-    }
-    
-    // Add employee to selection (without attendance fields)
-    const employeeWithStatus = {
-      ...employee,
-      emailStatus: 'Not Sent'
-    };
-    
-    setSelectedEmployees([...selectedEmployees, employeeWithStatus]);
-    setSelectedEmployee('');
-  };
+  // Check if already nominated
+  const alreadyNominated = nominatedEmployees.some(
+    emp => emp._id === selectedEmployee || emp.employee_id === selectedEmployee
+  );
+  if (alreadyNominated) {
+    alert("This employee is already nominated.");
+    return;
+  }
+
+  // Check if already selected in current session
+  const alreadySelected = selectedEmployees.some(
+    emp => emp._id === selectedEmployee
+  );
+  if (alreadySelected) {
+    alert("This employee is already selected.");
+    return;
+  }
+
+  // Add to selected list
+  const employeeToAdd = employees.find(emp => emp._id === selectedEmployee);
+  if (employeeToAdd) {
+    setSelectedEmployees(prev => [...prev, employeeToAdd]);
+    setSelectedEmployee(''); // Reset dropdown
+  }
+};
+
+console.log(employees);
+
 
   // Remove employee from selected list
   const removeEmployee = (employeeId) => {
@@ -1115,22 +1234,106 @@ const AddNomination = () => {
         return;
       }
 
+
+
+//.........................................
+
+// In your AddNomination component
+const generateEmailContent = (training, employee) => {
+  const times = formatTrainingTimes(training, employee.region);
+  
+  return `
+    <h2>Training Nomination: ${training.training_name}</h2>
+    
+    <p><strong>Training Details:</strong></p>
+    <p>Global Time (UTC): From ${times.utcStart} to ${times.utcEnd}</p>
+    <p>Your Local Time (${employee.region}): From ${times.localStart} to ${times.localEnd}</p>
+    
+    <p><strong>Venue:</strong> ${training.venue_name}</p>
+    <p><strong>Mode:</strong> ${training.training_mode}</p>
+    
+    ${notificationLink ? `<p>Additional Information: <a href="${notificationLink}">Click here</a></p>` : ''}
+  `;
+};
+
+const sendNominations = async () => {
+  try {
+    if (selectedEmployees.length === 0) {
+      toast.warning('Please add employees to nominate');
+      return;
+    }
+
+    const emails = selectedEmployees.map(employee => ({
+      to: employee.employee_email,
+      subject: `Nomination for ${selectedTraining.training_name}`,
+      html: generateEmailContent(selectedTraining, employee)
+    }));
+
+    const response = await axios.post(`${base_url}/send-emails`, {
+      emails,
+      training_id: selectedTraining._id
+    });
+
+    if (response.status === 200) {
+      toast.success('Nominations sent successfully');
+      // Update status for sent emails
+      const updatedEmployees = selectedEmployees.map(emp => ({
+        ...emp,
+        emailStatus: 'Sent'
+      }));
+      setNominatedEmployees([...nominatedEmployees, ...updatedEmployees]);
+      setSelectedEmployees([]);
+    }
+  } catch (error) {
+    console.error('Error sending nominations:', error);
+    toast.error('Failed to send nominations');
+  }
+};
+
+
+    //  const generateEmailContent = (training, employee) => {
+ // const times = formatTrainingTimes(training, employee.region);
+  
+ // return `
+   // <h2>Training Nomination: ${training.training_name}</h2>
+    
+   // <p><strong>Training Details:</strong></p>
+    //<p>Global Time (UTC): From ${times.utcStart} to ${times.utcEnd}</p>
+    //<p>Your Local Time (${employee.region}): From ${times.localStart} to ${times.localEnd}</p>
+    
+    //<p><strong>Venue:</strong> ${training.venue_name}</p>
+    //<p><strong>Mode:</strong> ${training.training_mode}</p>
+    
+  //  ${notificationLink ? `<p>Additional Information: <a href="${notificationLink}">Click here</a></p>` : ''}
+ // `;
+//};
+
       const nominationData = {
-        training_id: selectedTraining._id,
-        training_name: selectedTraining.training_name,
-        from_date: selectedTraining.from_date,
-        to_date: selectedTraining.to_date,
-        from_time: selectedTraining.from_time,
-        to_time: selectedTraining.to_time,
-        notification_link: notificationLink,
-        employees: selectedEmployees.map(emp => ({
-          employee_id: emp._id,
-          employee_code: emp.employee_id,
-          name: emp.employee_name,
-          email: emp.employee_email,
-          designation: emp.designation
-        }))
-      };
+  training_id: selectedTraining._id,
+  training_name: selectedTraining.training_name,
+  from_date: selectedTraining.from_date,
+  to_date: selectedTraining.to_date,
+  from_time: selectedTraining.from_time,
+  to_time: selectedTraining.to_time,
+  notification_link: notificationLink,
+  employees: selectedEmployees.map(emp => {
+    const times = formatTrainingTimes(selectedTraining, emp.region);
+    
+    return {
+      employee_id: emp._id,
+      employee_code: emp.employee_id,
+      name: emp.employee_name,
+      email: emp.employee_email,
+      region: emp.region,
+      designation: emp.designation,
+      local_times: {
+        start: times.localStart,
+        end: times.localEnd,
+        timezone: times.timezone
+      }
+    };
+  })
+};
 
       const response = await axios.post(`${base_url}/create_nomination`, nominationData);
       
@@ -1167,6 +1370,9 @@ const AddNomination = () => {
     return <div className="error-container">Training not found. <button onClick={navigateBack} className="back-btn">Go Back</button></div>;
   }
 
+
+
+  
   return (
     <div>
       <style>{`
@@ -1556,76 +1762,115 @@ const AddNomination = () => {
       </div>
 
       <div className="content-container">
-        <div className="training-details">
-          <h4>Training Details</h4>
-          <div className="details-table">
-            <div className="details-row">
-              <div className="details-cell">
-                <span className="label">Training Name:</span>
-                <span className="value">{selectedTraining.training_name}</span>
-              </div>
-              <div className="details-cell">
-                <span className="label">Category:</span>
-                <span className="value">{selectedTraining.training_category}</span>
-              </div>
-            </div>
-            <div className="details-row">
-              <div className="details-cell">
-                <span className="label">From Date:</span>
-                <span className="value">{formatDate(selectedTraining.from_date)}</span>
-              </div>
-              <div className="details-cell">
-                <span className="label">To Date:</span>
-                <span className="value">{formatDate(selectedTraining.to_date)}</span>
-              </div>
-            </div>
-            <div className="details-row">
-              <div className="details-cell">
-                <span className="label">From Time:</span>
-                <span className="value">{selectedTraining.from_time}</span>
-              </div>
-              <div className="details-cell">
-                <span className="label">To Time:</span>
-                <span className="value">{selectedTraining.to_time}</span>
-              </div>
-            </div>
-            <div className="details-row">
-              <div className="details-cell">
-                <span className="label">Venue:</span>
-                <span className="value">{selectedTraining.venue_name}</span>
-              </div>
-              <div className="details-cell">
-                <span className="label">Mode:</span>
-                <span className="value">{selectedTraining.training_mode}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+
+<div className="training-details">
+  <h4>Training Details</h4>
+  <div className="details-table">
+
+    <div className="details-row">
+      <div className="details-cell">
+        <span className="label">Training Name:</span>
+        <span className="value">{selectedTraining.training_name}</span>
+      </div>
+      <div className="details-cell">
+        <span className="label">Category:</span>
+        <span className="value">{selectedTraining.training_category}</span>
+      </div>
+    </div>
+
+    <div className="details-row">
+      <div className="details-cell">
+        <span className="label">From Time (World Time):</span>
+        <span className="value">
+          {convertToUTC(selectedTraining.from_date, selectedTraining.from_time)}
+        </span>
+      </div>
+      <div className="details-cell">
+        <span className="label">To Time (World Time):</span>
+        <span className="value">
+          {convertToUTC(selectedTraining.to_date, selectedTraining.to_time)}
+        </span>
+      </div>
+    </div>
+
+    <div className="details-row">
+      <div className="details-cell">
+        <span className="label">From Time:</span>
+        <span className="value">{selectedTraining.from_time}</span>
+      </div>
+      <div className="details-cell">
+        <span className="label">To Time:</span>
+        <span className="value">{selectedTraining.to_time}</span>
+      </div>
+    </div>
+
+    <div className="details-row">
+      <div className="details-cell">
+        <span className="label">Venue:</span>
+        <span className="value">{selectedTraining.venue_name}</span>
+      </div>
+      <div className="details-cell">
+        <span className="label">Mode:</span>
+        <span className="value">{selectedTraining.training_mode}</span>
+      </div>
+    </div>
+
+    <div className="details-row">
+      <div className="details-cell" style={{ flex: 1 }}>
+        
+        <span className="value">
+          <TrainingTimeDisplay 
+            training={selectedTraining} 
+            region="Asia/Kolkata" // Replace with dynamic region if needed
+          />
+        </span>
+      </div>
+    </div>
+
+  </div>
+</div>
 
         <div className="nomination-section">
           <h4>Add Employees for Nomination</h4>
           <div className="employee-selector">
-            <select 
-              className="employee-select" 
-              value={selectedEmployee} 
-              onChange={handleEmployeeChange}
-            >
-              <option value="">Select Employee</option>
-              {employees.map((employee) => (
-                <option key={employee._id} value={employee._id}>
-                  {employee.employee_id} - {employee.employee_name}
-                </option>
-              ))}
-            </select>
+
+
+
+
+           <select 
+  className="employee-select" 
+  value={selectedEmployee} 
+  onChange={handleEmployeeChange}
+>
+  <option value="">Select Employee</option>
+  {employees
+    .filter(emp =>
+      !selectedEmployees.some(sel => sel._id === emp._id) &&
+      !nominatedEmployees.some(nom => nom._id === emp._id)
+    )
+    .map((employee) => (
+      <option key={employee._id} value={employee._id}>
+        {employee.employee_id} - {employee.employee_name}
+      </option>
+  ))}
+</select>
+
+
+
+            
             <button className="add-btn" onClick={addEmployee}>
               Add
             </button>
           </div>
 
+
+         
+
           {selectedEmployees.length > 0 && (
             <div className="selected-employees">
               <h5>Selected Employees</h5>
               <div className="table-responsive">
+
                 <table className="data-table">
                   <thead>
                     <tr>
@@ -1633,6 +1878,7 @@ const AddNomination = () => {
                       <th>Name</th>
                       <th>Designation</th>
                       <th>Email</th>
+                      <th>Region</th>
                       <th>Email Status</th>
                       <th>Action</th>
                     </tr>
@@ -1644,6 +1890,7 @@ const AddNomination = () => {
                         <td>{employee.employee_name}</td>
                         <td>{employee.designation}</td>
                         <td>{employee.employee_email}</td>
+                        <td>{employee.region}</td>
                         <td>{employee.emailStatus}</td>
                         <td>
                           <button 
@@ -1657,6 +1904,7 @@ const AddNomination = () => {
                     ))}
                   </tbody>
                 </table>
+
               </div>
             </div>
           )}
@@ -1678,37 +1926,77 @@ const AddNomination = () => {
             </button>
           )}
 
-          {nominatedEmployees.length > 0 && (
-            <div className="nominated-employees">
-              <h4>Nominated Employees</h4>
-              <div className="table-responsive">
-                <table id="nominationsTable" className="data-table">
-                  <thead>
-                    <tr>
-                      <th>Employee ID</th>
-                      <th>Name</th>
-                      <th>Designation</th>
-                      <th>Email</th>
-                      <th>Email Status</th>
-                      <th>Nomination Date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {nominatedEmployees.map((employee) => (
-                      <tr key={employee._id}>
-                        <td>{employee.employee_code}</td>
-                        <td>{employee.name}</td>
-                        <td>{employee.designation}</td>
-                        <td>{employee.email}</td>
-                        <td>{employee.emailStatus || 'Sent'}</td>
-                        <td>{formatDate(employee.createdAt || new Date())}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+        {nominatedEmployees.length > 0 && (
+  <div className="nominated-employees">
+    <h4>Nominated Employees</h4>
+    <div className="table-responsive">
+      <table id="nominationsTable" className="data-table">
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Designation</th>
+            <th>Email</th>
+            <th>Email Status</th>
+            <th>Nomination Date</th>
+            <th>Attendance</th> {/* New column */}
+          </tr>
+        </thead>
+        <tbody>
+          {nominatedEmployees.map((employee) => (
+            <tr key={employee._id}>
+              <td>{employee.employee_code}</td>
+              <td>{employee.name}</td>
+              <td>{employee.designation}</td>
+              <td>{employee.email}</td>
+              <td>{employee.emailStatus || 'Sent'}</td>
+              <td>{formatDate(employee.createdAt || new Date())}</td>
+
+             <td>
+  <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
+    {attendanceDates.map((date) => (
+      <div key={date}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <input
+            type="checkbox"
+            checked={attendanceData[employee._id]?.[date] || false}
+            onChange={(e) => {
+              const isChecked = e.target.checked;
+              setAttendanceData((prev) => ({
+                ...prev,
+                [employee._id]: {
+                  ...(prev[employee._id] || {}),
+                  [date]: isChecked,
+                },
+              }));
+            }}
+          />
+          <span>{date}</span>
+        </label>
+      </div>
+    ))}
+  </div>
+</td>
+
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+<button
+  onClick={handleSaveAttendance}
+  style={{ marginTop: '20px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '4px' }}
+>
+  Upload Attendance
+</button>
+
+
+
+
+    </div>
+  </div>
+)}
+
         </div>
       </div>
 

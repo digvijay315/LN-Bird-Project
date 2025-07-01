@@ -50,6 +50,11 @@ function CreateNewCourse() {
     creation_date: "",
     description: "",
     course_price: "",
+    course_assesment:"",
+    course_certificate:"",
+    assesment_complete_date:"",
+    assesment_limitation:"",
+    assesment_passingscore:"",
     sections: [],
     thumbnail_upload: [],
     file_upload: [],
@@ -268,6 +273,13 @@ function CreateNewCourse() {
       formData.append("creation_date", course.creation_date);
       formData.append("description", course.description);
       formData.append("course_price", course.course_price);
+      formData.append("course_assesment", course.course_assesment || "");
+      formData.append("course_certificate", course.course_certificate || "");
+      formData.append("assesment_complete_date", course.assesment_complete_date || "");
+      formData.append("assesment_limitation", course.assesment_limitation || "");
+      formData.append("assesment_passingscore", course.assesment_passingscore || "");
+
+
     
   
       // Append sections and their chapters
@@ -299,6 +311,8 @@ function CreateNewCourse() {
         }
       });
   
+      console.log(formData);
+      
       const response = await axios.post(`${base_url}/add_course_details`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -1547,6 +1561,10 @@ cursor: pointer;
                                       </div>
                                   )} */}
                                 <select
+                                name="course_assesment"
+                                // value={course.course_assesment}
+                                onChange={(e)=>{setCourse({...course,course_assesment:e.target.value})}}
+                               
                                 style={{
                                   width: "300px",
                                   padding: "10px 40px 10px 12px",
@@ -1582,6 +1600,12 @@ cursor: pointer;
                  <div className="select-wrapper" > 
                                  
                                 <select
+                                name="course_certificate"
+                                value={course.course_certificate}
+                                onChange={(e) =>
+                                  setCourse({ ...course, [e.target.name]: e.target.value })
+                                }
+
                                 style={{
                                   width: "300px",
                                   padding: "10px 40px 10px 12px",
@@ -1616,15 +1640,34 @@ cursor: pointer;
                 <div class="assessment-settings">
                     <div>
                         <label>Complete the course by</label>
-                        <input type="date"/>
+                        <input 
+                        type="date"
+                        name="assesment_complete_date"
+                        value={course.assesment_complete_date}
+                        onChange={(e) =>
+                          setCourse({ ...course, [e.target.name]: e.target.value })
+                        }/>
                     </div> 
                     <div>
                         <label>Attempt limitation</label>
-                        <input type="number" placeholder="Enter limitation" />
+                        <input type="number" 
+                        name="assesment_limitation"
+                        placeholder="Enter limitation"
+                        value={course.assesment_limitation}
+                        onChange={(e) =>
+                          setCourse({ ...course, [e.target.name]: e.target.value })
+                        } />
                     </div>
                     <div>
                         <label>Set passing score</label>
-                        <input type="number" placeholder="Enter passing score"/>
+                        <input type="number" 
+                        name="assesment_passingscore"
+                        placeholder="Enter passing score"
+                        value={course.assesment_passingscore}
+                        onChange={(e) =>
+                          setCourse({ ...course, [e.target.name]: e.target.value })
+                        }
+                        />
                     </div>     
                 </div> 
                 {/* <button className="assign-assessment-btn" >Assign Assessment</button>      */}

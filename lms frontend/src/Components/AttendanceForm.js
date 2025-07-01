@@ -881,7 +881,7 @@ const AttendanceForm = () => {
   // API calls
   const fetchTrainings = async () => {
     try {
-      const response = await axios.get(`${base_url}/trainings_for_attendance`);
+      const response = await axios.get(`${base_url}/event_details_get`);
       console.log(response);
       setTrainings(response.data);
     } catch (error) {
@@ -955,11 +955,16 @@ const AttendanceForm = () => {
       console.error('Error assigning assessment:', error);
     }
   };
+
+  console.log(trainings);
+  
   
   // Event handlers
   const handleTrainingSelect = (e) => {
     const trainingId = e.target.value;
     const selectedTraining = trainings.find(t => t._id === trainingId);
+    console.log(selectedTraining);
+    
     
     if (selectedTraining) {
       setAttendanceData({
@@ -968,8 +973,10 @@ const AttendanceForm = () => {
         training_name: selectedTraining.training_name,
         training_type: selectedTraining.training_type,
         training_category: selectedTraining.training_category,
-        date_from: new Date(selectedTraining.from_date),
-        date_to: new Date(selectedTraining.to_date),
+        // date_from: new Date(selectedTraining.from_date),
+        // date_to: new Date(selectedTraining.to_date),
+        date_from: selectedTraining.from_date || '', // keep as string
+        date_to: selectedTraining.to_date || '',
         time_from: selectedTraining.from_time,
         time_to: selectedTraining.to_time,
         venue: selectedTraining.venue_name,
@@ -1225,7 +1232,7 @@ const AttendanceForm = () => {
           <input
             type="date"
             id="dateFrom"
-            // value={formatDateForInput(attendanceData.date_from)}
+            value={attendanceData.date_from}
             onChange={(e) => setAttendanceData({ 
               ...attendanceData, 
               date_from: e.target.value ? new Date(e.target.value) : null 
@@ -1238,7 +1245,7 @@ const AttendanceForm = () => {
           <input
             type="date"
             id="dateTo"
-            // value={formatDateForInput(attendanceData.date_to)}
+            value={attendanceData.date_to}
             onChange={(e) => setAttendanceData({ 
               ...attendanceData, 
               date_to: e.target.value ? new Date(e.target.value) : null 
@@ -1253,6 +1260,7 @@ const AttendanceForm = () => {
             type="time"
             id="timeFrom"
             value={attendanceData.time_from}
+            // 
             onChange={(e) => setAttendanceData({ ...attendanceData, time_from: e.target.value })}
           />
         </div>

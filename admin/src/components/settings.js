@@ -1,10 +1,13 @@
+// 
+
 import {React} from 'react';
-import '../css/crmsettings.css';
+// import '../css/crmsettings.css'
 import { FiUser, FiShield, FiSettings, FiDatabase, FiBell, FiMail, FiMap } from 'react-icons/fi';
 import { FaWhatsapp } from "react-icons/fa";
 import Header1 from './header1';
-import Sidebar1 from './sidebar1';
+// import Sidebar1 from './sidebar1';
 import { useNavigate } from 'react-router-dom';
+import Sidebarsetting from './settingsidebar';
 
 
 function Crmsettings() {
@@ -81,9 +84,10 @@ function Crmsettings() {
   return (
   <div>
     <Header1/>
-    <Sidebar1/>
+    {/* <Sidebar1/> */}
+  <Sidebarsetting/>
     {/* <h4 style={{marginLeft:"70px",marginTop:"60px"}}>Settings</h4> */}
-    <div className="dashboard-container" style={{margin:"50px"}}>
+    {/* <div className="dashboard-container" style={{margin:"50px"}}>
       <div className="card-grid">
         {settingsOptions.map((option, index) => (
           <div className="setting-card" key={index} onClick={option.onClick}   style={{ background: tileColors[index % tileColors.length] }}>
@@ -94,7 +98,7 @@ function Crmsettings() {
         ))}
       </div>
       
-    </div>
+    </div> */}
     </div>
   );
 }

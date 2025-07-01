@@ -130,6 +130,27 @@
   margin-bottom: 10px;
 }
 
+
+/* Move the assessment block directly under the congratulations block */
+.assessment-content, .certificate-download {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f0f8ff 0%, #e8f5e8 100%);
+  border: 2px solid #7a1cac;
+  border-radius: 12px;
+  margin: 20px 0;
+
+  /* Visually pull it up into the celebration block */
+  transform: translateY(-50px);
+}
+
+/* Optional: Reduce font and tweak spacing */
+.assessment-details > div {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
@@ -340,6 +361,7 @@
   position: relative;
   z-index: 5;
 }
+
 
 .completion-card {
   background: #ffffff;

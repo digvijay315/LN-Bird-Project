@@ -1223,6 +1223,38 @@ const LawyerDashboard = () => {
         <div className="chat-popup">
           <div className="chat-header">
             <span>💬 Messages</span>
+         <style>
+          {`
+          .close-case-btn {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        color: #ef4444;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.75rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+      }
+
+      .close-case-btn:hover {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: rgba(239, 68, 68, 0.5);
+        transform: scale(1.05);
+      }`
+          }
+         </style>
+          <button 
+            className="close-case-btn"
+           
+            title="Close case"
+          >
+            🔒 Close Case
+          </button>
+      
             <button 
               onClick={() => setShowChat(false)} 
               style={{ 
@@ -1271,12 +1303,12 @@ const LawyerDashboard = () => {
         </div>
       )}
 
-      {showProfileModal && (
+      {/* {showProfileModal && (
         <LawyerProfileModal
           onClose={() => setShowProfileModal(false)}
           userDetails={userDetails}
         />
-      )}
+      )} */}
     </>
   );
 };

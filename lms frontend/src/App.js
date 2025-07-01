@@ -249,6 +249,7 @@ function App() {
         <Route path='/employee-ina/:employeeId/:inaCode/:competencyItemId' element={<EmployeeINAPlatform/>}></Route>
         <Route path='/training-details/:trainingId' element={<TrainingDetails/>}></Route>
         <Route path='/takeAssessmentPlatform/:id' element={<AssessmentTestAttenTraining/>}></Route>
+        
         <Route path='/employee-certificate' element={<EmployeeCertificates/>}></Route>
         <Route path='/certificate-viewer' element={<CertificateViewer/>}></Route>
 
