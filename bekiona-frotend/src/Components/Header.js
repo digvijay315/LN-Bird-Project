@@ -64,7 +64,7 @@ setDefault: false,
 cartItems: [],
 totalPrice:0,
 payment_status:"",
-payment_mode:""
+payment_mode:"online"
 });
 
 
@@ -1889,6 +1889,7 @@ CheckOut
               <div className="mb-3">
                 <label className="form-label">*Select Payment Type</label>
                 <select className="form-control" name="payment_mode" onChange={handleChange}>
+                 <option>{formData.payment_mode}</option>
                   <option>---select---</option>
                   {paymentoptions?.payment_type === "Only ONLINE" ? (
                     <option value="online">Online</option>
