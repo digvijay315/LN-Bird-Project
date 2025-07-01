@@ -125,7 +125,7 @@ const subtotal = cart.reduce(
 0
 );
 
-const gstPercentage = 0; // Example: 18% GST (you can change this value)
+const gstPercentage = 12; // Example: 18% GST (you can change this value)
 const gstAmount = (subtotal * gstPercentage) / 100; // Calculate GST
 
 const total = subtotal + gstAmount; // Final total price including GST
@@ -562,7 +562,7 @@ const subtotal = formData?.subtotal || 0;
 const gstAmount = formData?.gstAmount || 18;
 const totalPrice = formData?.totalPrice || 0;
 doc.text(`Subtotal: ${subtotal}`, summaryX + 5, finalY + 17);
-doc.text(`GST (${gstAmount}%): ${(subtotal * (gstAmount / 100)).toFixed(2)}`, summaryX + 5, finalY + 27);
+doc.text(`Courier Charge (${gstAmount}%): ${(subtotal * (gstAmount / 100)).toFixed(2)}`, summaryX + 5, finalY + 27);
 doc.text(`Grand Total: ${totalPrice}`, summaryX + 5, finalY + 37);
 
 finalY += summaryHeight + 10;
@@ -1929,6 +1929,10 @@ CheckOut
               <div className="d-flex justify-content-between fw-bold mb-2">
                 <span>Subtotal:</span>
                 <span>₹{formData.subtotal ? formData.subtotal.toFixed(2) : '0.00'}</span>
+              </div>
+                 <div className="d-flex justify-content-between fw-bold mb-2">
+                <span>Delivery Charge:</span>
+                <span>₹{formData.gstAmount}</span>
               </div>
               <div className="d-flex justify-content-between fw-bold text-success">
                 <span>Total Price:</span>
