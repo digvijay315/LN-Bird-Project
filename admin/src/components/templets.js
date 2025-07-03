@@ -267,24 +267,67 @@ Quill.register('modules/imageResize', ImageResize);
   
   };
 
-   const variableList = [
-    '{{title}}',
-    '{{first_name}}',
-    '{{last_name}}',
-    '{{propertyDetails}}',
-    '{{icon}}',
-    '{{location}}',
-    '{{price}}',
-    '{{propertyDetails}}',
-    '{{facing}}',
-    '{{registry}}',
-    '{{ownership}}',
-    '{{possession}}',
-    '{{amenities}}',
-    '{{nearby}}',
-    '{{listingGalleryLink}}',
-    '{{bookingLink}}',
-  ];
+ const variableList = [
+  '{{title}}',
+  '{{first_name}}',
+  '{{last_name}}',
+  '{{propertyDetails}}',
+  '{{icon}}',
+  '{{location}}',
+  '{{price}}',
+  '{{facing}}',
+  '{{registry}}',
+  '{{ownership}}',
+  '{{possession}}',
+  '{{amenities}}',
+  '{{nearby}}',
+  '{{listingGalleryLink}}',
+  '{{bookingLink}}',
+  '{{project_name}}',
+  '{{unit_no}}',
+  '{{unit_type}}',
+  '{{category}}',
+  '{{sub_category}}',
+  '{{block}}',
+  '{{size}}',
+  '{{direction}}',
+  '{{road}}',
+  '{{stage}}',
+  '{{floor}}',
+  '{{cluter_details}}',
+  '{{length}}',
+  '{{bredth}}',
+  '{{total_area}}',
+  '{{measurment2}}',
+  '{{ocupation_date}}',
+  '{{age_of_construction}}',
+  '{{furnishing_details}}',
+  '{{furnished_item}}',
+  '{{lattitude}}',
+  '{{langitude}}',
+  '{{uaddress}}',
+  '{{ustreet}}',
+  '{{ulocality}}',
+  '{{ucity}}',
+  '{{uzip}}',
+  '{{ustate}}',
+  '{{ucountry}}',
+  '{{relation}}',
+  '{{s_no}}',
+  '{{preview}}',
+  '{{descriptions}}',
+  '{{s_no1}}',
+  '{{url}}',
+  '{{document_name}}',
+  '{{document_no}}',
+  '{{document_Date}}',
+  '{{owner_details}}',
+  '{{associated_contact}}',
+  '{{previousowner_details}}'
+];
+
+
+ 
 
     const quillRef = useRef(null); // Create a ref for the ReactQuill component
       const [showEmojiPicker, setShowEmojiPicker] = useState(false);
@@ -678,6 +721,8 @@ Quill.register('modules/imageResize', ImageResize);
                                                               borderRadius: '4px',
                                                               zIndex: 1000,
                                                               boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                                                              overflow:"auto",
+                                                              height:"300px"
                                                             }}
                                                           >
                                                             {variableList.map((variable) => (

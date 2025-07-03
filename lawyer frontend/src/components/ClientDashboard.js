@@ -207,6 +207,41 @@ const ClientDashboard = () => {
     return phoneRegex.test(text) || emailRegex.test(text);
   }
 
+  const [isFlipping, setIsFlipping] = useState(false);
+
+const handleSwapLawyer = async () => {
+  setIsFlipping(true); // Start flip
+
+  // Wait for the first half of the flip
+  setTimeout(async () => {
+    const availableOnlineLawyers = lawyers.filter(
+      (lawyer) => onlineLawyers.includes(lawyer._id) && lawyer._id !== chatLawyer._id
+    );
+
+    if (availableOnlineLawyers.length === 0) {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Other Lawyers Online',
+        text: 'Sorry, there are no other online lawyers to swap with right now.',
+        timer: 2500,
+        showConfirmButton: false,
+      });
+      setIsFlipping(false);
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableOnlineLawyers.length);
+    const newLawyer = availableOnlineLawyers[randomIndex];
+
+    await handleOpenChat(newLawyer);
+
+    // End flip after the second half
+    setTimeout(() => setIsFlipping(false), 300); // 300ms for the second half
+  }, 300); // 300ms for the first half
+};
+
+
+
   const menuItems = [
     { label: 'Dashboard / Home', icon: '🏠', path: '/dashboard' },
     { label: 'Find a Lawyer', icon: '👨‍⚖', path: '/find-lawyer' },
@@ -879,7 +914,7 @@ const ClientDashboard = () => {
 
       {/* Chat Popup */}
       {chatLawyer && (
-        <div className="chat-popup">
+        <div className={`chat-popup${isFlipping ? ' flip' : ''}`}>
           <div className="chat-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <img
@@ -904,6 +939,7 @@ const ClientDashboard = () => {
             </div>
             <div className="header-actions">
         <button
+        onClick={handleSwapLawyer}
            style={{
                 background: 'none',
                 color: 'white',

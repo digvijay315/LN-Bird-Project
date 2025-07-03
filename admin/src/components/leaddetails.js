@@ -4293,6 +4293,37 @@ const handlepropertyunitstypesChange = (event) => {
                           possession: projectinfo?.possession,
                           amenities: projectinfo?.features_aminities || [],
                           nearby: projectinfo?.nearby_aminities || [],
+                          project_name: unitData?.project_name,
+                          unit_no: unitData?.unit_no,
+                          unit_type: unitData?.unit_type,
+                          category: unitData?.category || [],
+                          stage: unitData?.stage,
+                          floor: unitData?.floor || [],
+                          cluter_details: unitData?.cluter_details || [],
+                          length: unitData?.length || [],
+                          bredth: unitData?.bredth || [],
+                          total_area: unitData?.total_area || [],
+                          measurment2: unitData?.measurment2 || [],
+                          ocupation_date: unitData?.ocupation_date,
+                          age_of_construction: unitData?.age_of_construction,
+                          furnishing_details: unitData?.furnishing_details,
+                          furnished_item: unitData?.furnished_item,
+                          lattitude: unitData?.lattitude,
+                          langitude: unitData?.langitude,
+                          uaddress: unitData?.uaddress,
+                          ustreet: unitData?.ustreet,
+                          ulocality: unitData?.ulocality,
+                          ucity: unitData?.ucity,
+                          uzip: unitData?.uzip,
+                          ustate: unitData?.ustate,
+                          ucountry: unitData?.ucountry,
+                          owner_details: unitData?.owner_details || [],
+                          associated_contact: unitData?.associated_contact || [],
+                          previousowner_details: unitData?.previousowner_details || [],
+                          relation: unitData?.relation,
+                          ucity: unitData?.ucity,
+                          ucity: unitData?.ucity,
+                          ucity: unitData?.ucity,
                         });
 
                         return formattedDetails;
@@ -4420,6 +4451,7 @@ const endTag = '&lt;!--END:deal--&gt;';
   console.log("Start index:", start, "End index:", end);
   console.log("Property count:", propertyDetailsList.length);
 
+
   if (start === -1 || end === -1) {
     // Fallback: if tags not found, treat whole template as static
     const replaced = replaceVariables(template, lead, propertyDetailsList[0]);
@@ -4484,6 +4516,8 @@ const endTag = '&lt;!--END:deal--&gt;';
                         }
                      // Replace variables in the template with actual data
 const replaceVariables = (template, lead, property) => {
+  console.log(property);
+  
   return template
     .replace(/{{title}}/g, lead?.title || '')
     .replace(/{{first_name}}/g, lead?.first_name || '')
@@ -4495,8 +4529,58 @@ const replaceVariables = (template, lead, property) => {
 .replace(/{{registry}}/g, property?.registry ? `<strong>Registry:</strong> ${property.registry}` : 'not available')
 .replace(/{{ownership}}/g, property?.ownership ? `<strong>Ownership:</strong> ${property.ownership}` : 'not available')
 .replace(/{{possession}}/g, property?.possession ? `<strong>Possession:</strong> ${property.possession}` : 'not available')
+.replace(/{{project_name}}/g, property?.project_name ? `<strong>Project Name:</strong> ${property.project_name}` : 'not available')
+.replace(/{{unit_no}}/g, property?.unit_no ? `<strong>Unit No:</strong> ${property.unit_no}` : 'not available')
+.replace(/{{unit_type}}/g, property?.unit_type ? `<strong>Unit Type:</strong> ${property.unit_type}` : 'not available')
+.replace(/{{category}}/g, Array.isArray(property?.category) && property.category.length > 0
+    ? `<strong>Category:</strong> ${property.category.join(', ')}`
+    : 'not available')
+.replace(/{{block}}/g, property?.block ? `<strong>Block:</strong> ${property.block}` : 'not available')
+.replace(/{{size}}/g, property?.size ? `<strong>Size:</strong> ${property.size}` : 'not available')
+.replace(/{{stage}}/g, property?.stage ? `<strong>Stage:</strong> ${property.stage}` : 'not available')
+.replace(/{{floor}}/g, Array.isArray(property?.floor) && property.floor.length > 0
+    ? `<strong>Floor:</strong> ${property.floor.join(', ')}`
+    : 'not available')
+.replace(/{{cluter_details}}/g, Array.isArray(property?.cluter_details) && property.cluter_details.length > 0
+    ? `<strong>Cluter Details:</strong> ${property.cluter_details.join(', ')}`
+    : 'not available')
+.replace(/{{length}}/g, Array.isArray(property?.length) && property.length.length > 0
+    ? `<strong>Length:</strong> ${property.length.join(', ')}`
+    : 'not available')
+.replace(/{{bredth}}/g, Array.isArray(property?.bredth) && property.bredth.length > 0
+    ? `<strong>Bredth:</strong> ${property.bredth.join(', ')}`
+    : 'not available')
+.replace(/{{total_area}}/g, Array.isArray(property?.total_area) && property.total_area.length > 0
+    ? `<strong>Total Area:</strong> ${property.total_area.join(', ')}`
+    : 'not available')
+.replace(/{{measurment2}}/g, Array.isArray(property?.measurment2) && property.measurment2.length > 0
+    ? `<strong>Measurment:</strong> ${property.measurment2.join(', ')}`
+    : 'not available')
+.replace(/{{ocupation_date}}/g, property?.ocupation_date ? `<strong>Ocupation Date:</strong> ${property.ocupation_date}` : 'not available')
+.replace(/{{age_of_construction}}/g, property?.age_of_construction ? `<strong>Age Of Construction:</strong> ${property.age_of_construction}` : 'not available')
+.replace(/{{furnishing_details}}/g, property?.furnishing_details ? `<strong>Furnishing Details:</strong> ${property.furnishing_details}` : 'not available')
+.replace(/{{furnished_item}}/g, property?.furnished_item ? `<strong>Furnished Item:</strong> ${property.furnished_item}` : 'not available')
+.replace(/{{lattitude}}/g, property?.lattitude ? `<strong>Lattitude:</strong> ${property.lattitude}` : 'not available')
+.replace(/{{langitude}}/g, property?.langitude ? `<strong>Langitude:</strong> ${property.langitude}` : 'not available')
+.replace(/{{uaddress}}/g, property?.uaddress ? `<strong>Address:</strong> ${property.uaddress}` : 'not available')
+.replace(/{{ustreet}}/g, property?.ustreet ? `<strong>Street:</strong> ${property.ustreet}` : 'not available')
+.replace(/{{ulocality}}/g, property?.ulocality ? `<strong>Locality:</strong> ${property.ulocality}` : 'not available')
+.replace(/{{ucity}}/g, property?.ucity ? `<strong>City:</strong> ${property.ucity}` : 'not available')
+.replace(/{{uzip}}/g, property?.uzip ? `<strong>Zip:</strong> ${property.uzip}` : 'not available')
+.replace(/{{ustate}}/g, property?.ustate ? `<strong>Project Name:</strong> ${property.ustate}` : 'not available')
+.replace(/{{ucountry}}/g, property?.ucountry ? `<strong>Country:</strong> ${property.ucountry}` : 'not available')
+.replace(/{{relation}}/g, property?.relation ? `<strong>Relation:</strong> ${property.relation}` : 'not available')
+.replace(/{{owner_details}}/g, Array.isArray(property?.owner_details) && property.owner_details.length > 0
+    ? `<strong>Owner Details:</strong> ${property.owner_details.join(', ')}`
+    : 'not available')
 .replace(/{{amenities}}/g, Array.isArray(property?.amenities) && property.amenities.length > 0
     ? `<strong>Amenities:</strong> ${property.amenities.join(', ')}`
+    : 'not available')
+.replace(/{{associated_contact}}/g, Array.isArray(property?.associated_contact) && property.associated_contact.length > 0
+    ? `<strong>Associated Contact:</strong> ${property.associated_contact.join(', ')}`
+    : 'not available')
+.replace(/{{previousowner_details}}/g, Array.isArray(property?.previousowner_details) && property.previousowner_details.length > 0
+    ? `<strong>Previousowner Details:</strong> ${property.previousowner_details.join(', ')}`
     : 'not available')
 .replace(/{{nearby}}/g, Array.isArray(property?.nearby) && property.nearby.length > 0
     ? `<strong>Nearby:</strong> ${property.nearby.map(item =>
@@ -4508,6 +4592,7 @@ const replaceVariables = (template, lead, property) => {
     .replace(/{{bookingLink}}/g, 'http://example.com/book');
 };
                         
+
 
 
 // =======================================fetch templets code end=================================================================

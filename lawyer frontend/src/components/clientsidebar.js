@@ -137,7 +137,7 @@ function Clientsidebar() {
 
          /* Header Styles */
          .client-header {
-           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+           background: linear-gradient(135deg,rgb(7, 25, 85) 0%, #3b82f6 100%);
            color: white;
            padding: 1rem 2rem;
            display: flex;
@@ -231,7 +231,7 @@ function Clientsidebar() {
          /* Sidebar Styles */
          .client-sidebar {
            background: linear-gradient(180deg, #1f2937 0%, #111827 100%);
-           width: 280px;
+           width: 250px;
            height: calc(100vh - 70px);
            position: fixed;
            top: 70px;
