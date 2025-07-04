@@ -464,6 +464,7 @@ const approveProfile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
+ 
     const lawyerId = req.user.id;
     const updates = req.body;
     

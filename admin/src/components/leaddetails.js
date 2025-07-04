@@ -4526,6 +4526,8 @@ const replaceVariables = (template, lead, property) => {
    .replace(/{{location}}/g, property?.location ? `${property.location}` : 'not available')
 .replace(/{{price}}/g, property?.price ? `<strong>Price:</strong> ${property.price}` : 'not available')
 .replace(/{{facing}}/g, property?.facing ? `<strong>Facing:</strong> ${property.facing}` : 'not available')
+.replace(/{{direction}}/g, property?.facing ? `<strong>Direction:</strong> ${property.direction}` : 'not available')
+.replace(/{{road}}/g, property?.facing ? `<strong>Road:</strong> ${property.road}` : 'not available')
 .replace(/{{registry}}/g, property?.registry ? `<strong>Registry:</strong> ${property.registry}` : 'not available')
 .replace(/{{ownership}}/g, property?.ownership ? `<strong>Ownership:</strong> ${property.ownership}` : 'not available')
 .replace(/{{possession}}/g, property?.possession ? `<strong>Possession:</strong> ${property.possession}` : 'not available')
