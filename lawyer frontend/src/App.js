@@ -11,6 +11,9 @@ import AdminPanel from './components/AdminPanel';
 import LawyerProfileModal from './components/LawyerProfileModel';
 import PendingLawyersTable from './components/pendinglawyer';
 import Clients from './components/clients';
+import Findalawyer from './components/findalawyer';
+import Support from './components/support';
+
 
 
 
@@ -28,6 +31,8 @@ function App() {
       <Route path='LawyerDashboard/completelawyerprofile' element={<LawyerProfileModal/>}></Route>
       <Route path='/pendinglawyers' element={<PendingLawyersTable/>}></Route>
       <Route path='/allclients' element={<Clients/>}></Route>
+      <Route path='/findlawyer' element={<Findalawyer/>}></Route>
+      <Route path='/supports' element={<Support/>}></Route>
     
       
     </Routes>  

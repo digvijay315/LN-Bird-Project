@@ -135,6 +135,7 @@ const LawyerDashboard = () => {
 }, []); 
 
 
+
   // Chat functionality (keeping your existing chat code)
   useEffect(() => {
     if (!lawyerdetails?.lawyer?._id) return;

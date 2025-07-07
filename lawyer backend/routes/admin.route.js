@@ -9,7 +9,7 @@ const {
 } = require('../controllers/adminLawyerController');
 
 const { getAdminDashboard } = require('../controllers/adminController');
-const  getchathistory  = require('../controllers/chathistory');
+const  {getchathistory,getallchathistory}  = require('../controllers/chathistory');
 
 // Admin dashboard route
 router.get('/dashboard', getAdminDashboard);
@@ -20,6 +20,7 @@ router.get('/lawyers/:id', getLawyerById);
 router.post('/lawyers/:id/verify', verifyLawyer);
 
 router.get('/chathistory/:user1Id/:user2Id',getchathistory);
+router.get('/chathistory',getallchathistory);
 
 
 

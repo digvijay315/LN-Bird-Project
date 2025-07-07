@@ -10,6 +10,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import changaccount from '../img/change-account.svg'
 
 const ClientDashboard = () => {
+      const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [lastLogin, setLastLogin] = useState(null);
@@ -210,10 +212,12 @@ const ClientDashboard = () => {
   const [isFlipping, setIsFlipping] = useState(false);
 
 const handleSwapLawyer = async () => {
-  setIsFlipping(true); // Start flip
 
+setIsLoading(true)
   // Wait for the first half of the flip
   setTimeout(async () => {
+      setIsFlipping(true); // Start flip
+      setIsLoading(false)
     const availableOnlineLawyers = lawyers.filter(
       (lawyer) => onlineLawyers.includes(lawyer._id) && lawyer._id !== chatLawyer._id
     );
@@ -237,7 +241,7 @@ const handleSwapLawyer = async () => {
 
     // End flip after the second half
     setTimeout(() => setIsFlipping(false), 300); // 300ms for the second half
-  }, 300); // 300ms for the first half
+  }, 2000); // 300ms for the first half
 };
 
 
@@ -321,6 +325,7 @@ const handleSwapLawyer = async () => {
           margin-bottom: 2rem;
           color: white;
           box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+          margin-top:20px
         }
 
         .welcome-title {
@@ -856,17 +861,17 @@ const handleSwapLawyer = async () => {
               🌟 Available Lawyers
             </h2>
             <div className="lawyers-grid">
-              {lawyers.slice(0, 6).map((lawyer, index) => {
+              {lawyers?.slice(0, 6).map((lawyer, index) => {
                 const isOnline = onlineLawyers.includes(lawyer._id);
                 return (
                   <div key={index} className="lawyer-card">
                     <img
-                      src={lawyer.profilepic}
+                      src={lawyer?.profilepic}
                       alt="Lawyer"
                       className="lawyer-avatar"
                     />
                     <div className="lawyer-name">
-                      {lawyer.firstName} {lawyer.lastName}
+                      {lawyer?.firstName} {lawyer?.lastName}
                     </div>
                     <div className="lawyer-status">
                       <span style={{ color: isOnline ? '#10b981' : '#ef4444' }}>
@@ -874,8 +879,14 @@ const handleSwapLawyer = async () => {
                       </span>
                     </div>
                     <div className="lawyer-details">
-                      <div><strong>Specialization:</strong> {lawyer.specializations}</div>
-                      <div><strong>Experience:</strong> {lawyer.yearsOfExperience} years</div>
+                      <div>
+                      <strong>Specialization:</strong>{" "}
+                      {Array.isArray(lawyer?.specializations)
+                        ? lawyer.specializations.map(spec => spec.label).join(", ")
+                        : (lawyer?.specializations?.label || lawyer?.specializations || "")}
+                    </div>
+
+                      <div><strong>Experience:</strong> {lawyer?.yearsOfExperience} years</div>
                     </div>
                     <div className="lawyer-actions">
                       <button
@@ -888,7 +899,7 @@ const handleSwapLawyer = async () => {
                       <button
                         className="action-btn"
                         title="WhatsApp"
-                        onClick={() => window.open(`https://wa.me/${lawyer.mobile || ''}`, '_blank')}
+                        onClick={() => window.open(`https://wa.me/${lawyer?.mobile || ''}`, '_blank')}
                       >
                         <img
                           src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"
@@ -1003,6 +1014,54 @@ const handleSwapLawyer = async () => {
           </div>
         </div>
       )}
+
+        {isLoading && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      background: "rgba(255,255,255,0.5)",
+      backdropFilter: "blur(8px)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: "rgba(255,255,255,0.9)",
+        padding: "40px 60px",
+        borderRadius: "20px",
+        boxShadow: "0 8px 32px rgba(80,120,220,0.10)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          border: "6px solid #e0e7ff",
+          borderTop: "6px solid #6366f1",
+          borderRadius: "50%",
+          width: 60,
+          height: 60,
+          animation: "spin 1s linear infinite",
+          marginBottom: 16,
+        }}
+      />
+      <span style={{ color: "#6366f1", fontSize: 18, fontWeight: 600 }}>
+        Connecting you to a lawyer...
+      </span>
+      <style>
+        {`@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }`}
+      </style>
+    </div>
+  </div>
+        )}
     </>
   );
 };

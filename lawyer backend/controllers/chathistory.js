@@ -22,4 +22,17 @@ const getchathistory=async(req,res)=>
   }
 }
 
-module.exports=getchathistory
+const getallchathistory=async(req,res)=>
+{
+   try {
+
+    const messages = await Message.find()
+    res.status(200).send(messages);
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to fetch messages' });
+    console.log(error);
+    
+  }
+}
+
+module.exports={getchathistory,getallchathistory}
