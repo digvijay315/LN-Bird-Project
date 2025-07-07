@@ -30,6 +30,7 @@ import { saveAs } from 'file-saver';
 import Tooltip from '@mui/material/Tooltip';
 import Swal from 'sweetalert2';
 import { icon } from '@fortawesome/fontawesome-svg-core';
+import { Factory, Hotel, School, Warehouse } from '@mui/icons-material';
 
 
 
@@ -2029,7 +2030,7 @@ const handleTypeClick3 = (type) => {
                     subcategories.push('Plot','Ware House','Cold Storage','Rice Seller','Building','Factory');
                   }
                 if (isSelected('Institutional')) {
-                  subcategories.push('School','Hotel','Universities','Hospital','Collage');
+                  subcategories.push('School','Hotel','Universities','Hospital','College');
                 }
                   return subcategories;
               };
@@ -2420,31 +2421,31 @@ useEffect(()=>
 // ========================================add onwer end==============================================================================
 
 const options = {
-unit_type: {
-  Plot: ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
-  "Independent House": ["1 Kanal", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
-  "Flat/Apartment": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
-  "Builder Floor": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
-  Shop:["BOOTH","KIOSAK",],
-  Showroom:["SCO","SCF","DSS"],
-  "Office Space":["LOCABLE OFFICE","VIRTUAL OFFICE"],
-  "Retail Store":["HYPER MARKET","DEPARTMETAL STORE"],
-  Soho:["SOHO"],
-  "Excutive Room":["ROOM"],
-  Land:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
-  "Farm House":["FARM"],
-  Plots:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
-  Warehouse:["WRHSE"],
-  "Cold Storage":["CLDSTRG"],
-  "Rice Seller":["RCSLR"],
-  "Building":["BLDG"],
-  Factory:["FCTRY"],
-  School:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
-  Hotel:["HOTEL","GUEST HOUSE","HOMESTAYS"],
-  Universitites:["DEEMED","PRIVATE"],
-  Hospital:["NURSING HOME","CLINIC"],
-  college:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
-}
+ unit_type: {
+    Plot: ["1 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla", "2 Kanal","16 Marla","14 Marla","12 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    "Independent House": ["1 Kanal", "2 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    "Flat/Apartment": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK",,"STUDIO"],
+    "Builder Floor": ["1 BHK", "12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla","2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
+    Shop:["BOOTH","KIOSAK",],
+    Showroom:["SCO","SCF","DSS"],
+    "Office Space":["LOCABLE OFFICE","VIRTUAL OFFICE"],
+    "Retail Store":["HYPER MARKET","DEPARTMETAL STORE"],
+    Soho:["SOHO"],
+    "Excutive Room":["ROOM"],
+    Land:["CROPLAND","WOODLAND","PASTURE","COMMERCIAL"],
+    "Farm House":["FARM"],
+    Plots:["1 KANAL","10 MARLA","2 KANAL","1 ACRE","2 KANAL"],
+    "Ware house":["WRHSE"],
+    "Cold Storage":["CLDSTRG"],
+    "Rice Seller":["RCSLR"],
+    "Building":["BLDG"],
+    Factory:["FCTRY"],
+    School:["NURSERY SCHOOL","CRECH","HIGH SCHOOL","PRIMERY SCHOOL"],
+    Hotel:["HOTEL","GUEST HOUSE","HOMESTAYS"],
+    Universities:["DEEMED","PRIVATE"],
+    Hospital:["NURSING HOME","CLINIC"],
+    College:["ART COLLEGE","TECHNICAL COLLEGE","MEDICAL COLLEGE"]
+  },
 }
 
 const [availableunit, setavailableunit] = useState([]);

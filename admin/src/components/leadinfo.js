@@ -182,7 +182,7 @@ const options = {
     Institutional: ["SCHOOL", "HOTEL","UNIVERSITIES","HOSPITAL","COLLEGE"]
   },
   unit_type: {
-    PLOT: ["1 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla", "2 Kanal","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
+    PLOT: ["1 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla", "2 Kanal","16 Marla","14 Marla","12 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
     "INDEPENDENT HOUSE": ["1 Kanal", "2 Kanal","12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla","16 Marla","14 Marla","10 Marla","8 Marla","6 Marla","4 Marla","3 Marla","2 Marla"],
     "FLAT/APARTMENT": ["1 BHK", "2 BHK","3 BHK","4 BHK","5 BHK",,"STUDIO"],
     "BUILDER FLOOR": ["1 BHK", "12 Marla", "3 Kanal","4 Kanal","5 Kanal","6 Kanal","7 Kanal","1 Acre","2 Acre","3 Acre","4 Acre","5 Acre","6 Acre","7 Acre","8 Acre","9 Acre","10 Acre","5 Marla","2 BHK","3 BHK","4 BHK","5 BHK","STUDIO"],
