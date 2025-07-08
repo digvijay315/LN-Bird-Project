@@ -57,6 +57,7 @@ import Whatsapplogin from './components/whatsapplogin.js';
 import Users from './components/users.js';
 import Templets from './components/templets.js';
 import Leadrequirmentform from './components/leadrequirmentform.js';
+import Alldeals from './components/alldeals.js';
 
 function App() {
   return (
@@ -106,7 +107,8 @@ function App() {
       <Route path='/whatsapplogin' element={<Whatsapplogin/>}/>
       <Route path='/addusers' element={<Users/>}/>
       <Route path='/createtemplets' element={<Templets/>}/>
-       <Route path='/leadrequirment' element={<Leadrequirmentform/>}/>
+      <Route path='/leadrequirment' element={<Leadrequirmentform/>}/>
+      <Route path='/alldeals' element={<Alldeals/>}/>
     </Routes>  
   {/* <Leadrequirmentform/> */}
    </div>

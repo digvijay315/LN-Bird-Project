@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import socket from './socket';
+import logo from '../components/counvoImg/Counvo - LOGO.png'
 
 function Lawyersidebar() {
    const [showProfileModal, setShowProfileModal] = useState(false);
@@ -307,7 +308,7 @@ function Lawyersidebar() {
        `}</style>
 
        <header>
-         <div className="logo-text">⚖️ Lawyer Portal</div>
+         <div className="logo-text"><img src={logo} style={{height:"50px"}}></img>Lawyer Portal</div>
          
          {screenWidth < 769 && (
            <div 

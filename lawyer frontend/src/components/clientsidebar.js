@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import socket from './socket';
+import logo from '../components/counvoImg/Counvo - LOGO (1).png'
 
 function Clientsidebar() {
    const [showProfileModal, setShowProfileModal] = useState(false);
@@ -102,7 +103,7 @@ function Clientsidebar() {
            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
          </svg>
        ), 
-       path: '/profile' 
+       path: '/clientprofile' 
      },
      { 
        label: 'Support', 
@@ -351,7 +352,7 @@ function Clientsidebar() {
            }
 
            .logo-text {
-             font-size: 1.25rem;
+             font-size: 1rem;
            }
          }
 
@@ -375,7 +376,7 @@ function Clientsidebar() {
        {/* Header */}
        <header className="client-header">
          <div className="logo-text">
-           <span>⚖️</span>
+           <span><img src={logo} style={{height:"40px"}}></img></span>
            <span>Client Portal</span>
          </div>
 

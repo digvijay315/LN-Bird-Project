@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../middlewares/fileupload');
 const {
   registerUser,
   loginUser,
@@ -8,6 +9,7 @@ const {
   setNewPassword,
   getUserDetails,
   getuser,
+  updateuserprofile,
 } = require('../controllers/user.controller');
 
 // Register a new user
@@ -29,5 +31,7 @@ router.put('/password', resetPassword);
 router.get('/:_id', getUserDetails);
 
 router.get('/', getuser);
+
+router.put('/updateuserprofile/:_id',upload.any(), updateuserprofile);
 
 module.exports = router;

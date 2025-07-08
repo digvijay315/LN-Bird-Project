@@ -53,11 +53,15 @@ recentChats.forEach(chat => {
 
   const SPECIALIZATIONS = [
   { value: '', label: 'Select Specialization' },
-  { value: 'criminal', label: 'Criminal Law' },
-  { value: 'civil', label: 'Civil Law' },
-  { value: 'corporate', label: 'Corporate Law' },
-  { value: 'family', label: 'Family Law' },
-  // ...add more
+  { value: 'property lawyer', label: 'Property Lawyer' },
+  { value: 'family lawyer', label: 'Family Lawyer' },
+  { value: 'civil lawyer', label: 'Civil Lawyer' },
+  { value: 'cyber lawyer', label: 'Cyber Lawyer' },
+  { value: 'criminal lawyer', label: 'Criminal Lawyer' },
+  { value: 'consumer lawyer', label: 'Consumer Lawyer' },
+  { value: 'labour lawyer', label: 'Labour Lawyer' },
+  { value: 'legal notice drafting', label: 'Legal Notice Drafting' },
+  { value: 'company law & corporate compliance', label: 'Company Law & Corporate Compliance' },
 ];
 
 const STATES = [
@@ -455,6 +459,98 @@ const handleSwapLawyer = async () => {
           border-color: #3b82f6;
         }
 
+        .findlawyer {
+  padding: 32px 40px;
+  background: linear-gradient(120deg, #f8fafc 60%, #e0e7ff 100%);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(60, 80, 180, 0.08);
+  margin: 32px 0;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+}
+  .findlawyer-glass {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(6px);
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.findlawyer-title {
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+  color: #2d3a5c;
+  letter-spacing: 1px;
+}
+
+.findlawyer-controls {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+  flex-wrap: wrap;
+}
+
+.findlawyer-select {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1.5px solid #b6c2e2;
+  min-width: 180px;
+  background: #fff;
+  font-size: 16px;
+  color: #243056;
+  box-shadow: 0 2px 8px 0 rgba(80,120,220,0.06);
+  transition: border 0.2s;
+  flex: 1 1 180px;
+}
+
+.findlawyer-btn {
+  padding: 12px 32px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #6366f1 0%, #60a5fa 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 17px;
+  border: none;
+  box-shadow: 0 2px 12px 0 rgba(80,120,220,0.10);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.2s, transform 0.1s;
+  flex: 1 1 120px;
+  min-width: 120px;
+}
+  @media (max-width: 700px) {
+  .findlawyer {
+    padding: 20px 10px;
+    border-radius: 12px;
+    max-width: 98vw;
+  }
+  .findlawyer-controls {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+  .findlawyer-select, .findlawyer-btn {
+
+      padding: 4px 8px;   
+    font-size: 14px;  
+    border-radius: 6px;
+    height: 32px;         
+    min-height: 32px;
+    max-height: 36px;
+    box-sizing: border-box;
+  }
+  .findlawyer-title {
+    font-size: 1.1rem;
+    margin-bottom: 18px;
+  }
         @media (max-width: 768px) {
           .main-content {
             margin-left: 0;
@@ -481,64 +577,67 @@ const handleSwapLawyer = async () => {
             right: 10px;
             left: 10px;
           }
-        }
+              @media (max-width: 1024px) {
+    .lawyers-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .chat-popup {
+      width: 320px;
+      height: 450px;
+    }
+  }
+
+  @media (max-width: 480px) {
+  .main1{
+      margin-left:20px
+      }
+    .lawyers-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .chat-popup {
+      width: 100vw;
+      height: 100vh;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-radius: 0;
+    }
+    .chat-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .chat-input input {
+      font-size: 1rem;
+    }
+    select {
+      min-width: 100% !important;
+    }
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .main1 > div {
+      padding: 20px 16px !important;
+    }
+      
+        
       `}</style>
       <Clientsidebar />
 
       {/* Search Section */}
        <main className="main1">
-    <div
-  style={{
-    padding: '32px 40px',
-    background: 'linear-gradient(120deg, #f8fafc 60%, #e0e7ff 100%)',
-    borderRadius: '24px',
-    boxShadow: '0 8px 32px 0 rgba(60, 80, 180, 0.08)',
-    margin: '32px 0',
-    maxWidth: 800,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    position: 'relative',
-    overflow: 'hidden',
-  }}
->
-  {/* Optional glass effect overlay */}
-  <div
-    style={{
-      position: 'absolute',
-      inset: 0,
-      background: 'rgba(255,255,255,0.5)',
-      backdropFilter: 'blur(6px)',
-      borderRadius: 'inherit',
-      zIndex: 0,
-    }}
-  />
-  <h2 style={{ marginBottom: 24, position: 'relative', zIndex: 1, color: '#2d3a5c', letterSpacing: 1 }}>
+<div className="findlawyer">
+  <div className="findlawyer-glass" />
+  <h2 className="findlawyer-title">
     🔎 Find a Lawyer
   </h2>
-  <div
-    style={{
-      display: 'flex',
-      gap: 20,
-      alignItems: 'center',
-      marginBottom: 24,
-      position: 'relative',
-      zIndex: 1,
-    }}
-  >
+  <div className="findlawyer-controls">
     <select
       value={specialization}
       onChange={e => setSpecialization(e.target.value)}
-      style={{
-        padding: '12px 16px',
-        borderRadius: 10,
-        border: '1.5px solid #b6c2e2',
-        minWidth: 220,
-        background: '#fff',
-        fontSize: 16,
-        color: '#243056',
-        boxShadow: '0 2px 8px 0 rgba(80,120,220,0.06)',
-        transition: 'border 0.2s',
-      }}
+      className="findlawyer-select"
     >
       {SPECIALIZATIONS.map(spec => (
         <option key={spec.value} value={spec.value}>
@@ -549,17 +648,7 @@ const handleSwapLawyer = async () => {
     <select
       value={state}
       onChange={e => setState(e.target.value)}
-      style={{
-        padding: '12px 16px',
-        borderRadius: 10,
-        border: '1.5px solid #b6c2e2',
-        minWidth: 220,
-        background: '#fff',
-        fontSize: 16,
-        color: '#243056',
-        boxShadow: '0 2px 8px 0 rgba(80,120,220,0.06)',
-        transition: 'border 0.2s',
-      }}
+      className="findlawyer-select"
     >
       {STATES.map(st => (
         <option key={st.value} value={st.value}>
@@ -568,24 +657,9 @@ const handleSwapLawyer = async () => {
       ))}
     </select>
     <button
-      className="action-btn"
+      className="action-btn findlawyer-btn"
       title="Chat Now"
       onClick={filterLawyersAndChat}
-      style={{
-        padding: '12px 32px',
-        borderRadius: 10,
-        background: 'linear-gradient(90deg, #6366f1 0%, #60a5fa 100%)',
-        color: '#fff',
-        fontWeight: 600,
-        fontSize: 17,
-        border: 'none',
-        boxShadow: '0 2px 12px 0 rgba(80,120,220,0.10)',
-        cursor: 'pointer',
-        letterSpacing: 1,
-        transition: 'background 0.2s, transform 0.1s',
-      }}
-      onMouseOver={e => (e.currentTarget.style.background = 'linear-gradient(90deg, #60a5fa 0%, #6366f1 100%)')}
-      onMouseOut={e => (e.currentTarget.style.background = 'linear-gradient(90deg, #6366f1 0%, #60a5fa 100%)')}
     >
       Chat Now
     </button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import logo1 from '../components/counvoImg/counvo - Findmylawyer_Icon (1).png';
+import logo1 from '../components/counvoImg/Counvo - LOGO (1).png';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {

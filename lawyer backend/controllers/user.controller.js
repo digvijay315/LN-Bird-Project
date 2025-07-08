@@ -3,6 +3,15 @@
 const UserModel=require('../models/user.model');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+
+require('dotenv').config();
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 
 const registerUser = async (req, res) => {
@@ -195,6 +204,51 @@ const getuser = async (req, res) => {
   }
 };
 
+const updateuserprofile = async (req, res) => {
+ try {
+  const userid=req.params._id
+
+  const imagefiles = [];
+  if (req.files) {
+
+    for (let file of req.files) {
+      try {
+        const result = await cloudinary.uploader.upload(file.path);
+        imagefiles.push(result.secure_url);  
+
+        // Delete file after upload
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.error(`Failed to delete file: ${file.path}`, err);
+          } else {
+            console.log(`Successfully deleted file: ${file.path}`);
+          }
+        });
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    }
+
+  }
+
+   const updatedFields = {
+                        ...req.body,
+                        profilepic:imagefiles,
+                    };
+
+  const resp = await UserModel.findByIdAndUpdate(
+      userid,                  // ID to find
+      { $set: updatedFields },        // Update data
+      { new: true }              // Return updated document
+    );
+  res.status(200).send({message:"profile update successfully",lawyer:resp})
+  
+ } catch (error) {
+  console.log(error);
+  
+ }
+};
+
 // Add to exports
-module.exports = { registerUser, loginUser, resetPassword, sendResetEmail, setNewPassword, getUserDetails,getuser };
+module.exports = { registerUser, loginUser, resetPassword, sendResetEmail, setNewPassword, getUserDetails,getuser,updateuserprofile };
 

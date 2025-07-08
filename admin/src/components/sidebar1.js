@@ -1,119 +1,143 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../css/mystyle.css';
-import 'react-router-dom';
 import Icon from '@mdi/react';
-import { mdiNetworkStrength4, mdiPhone } from '@mdi/js';
-// import { mdiStickerCheckOutline } from '@mdi/js';
-import { mdiAccountBox } from '@mdi/js';
-import { mdiCurrencyUsd } from '@mdi/js';
-// import { mdiMessageOutline } from '@mdi/js';
-import { mdiCalendarCheck } from '@mdi/js';
-import { mdiApplication } from '@mdi/js';
-function Sidebar1() {
-	
-	  
-	
-    
-    return ( 
-        <div>
+import {
+  mdiNetworkStrength4,
+  mdiPhone,
+  mdiAccountBox,
+  mdiCurrencyUsd,
+  mdiCalendarCheck,
+  mdiApplication,
+  mdiHome,
+  mdiHandshakeOutline,
+  mdiDomain,
+  mdiOfficeBuilding,
+} from '@mdi/js';
+import '../css/mystyle.css';
 
-<div class="left-side-bar">
-		<div class="brand-logo">
-			<Link to={'/dashboard'}>
-				<img src="vendors/images/deskapp-logo.svg" alt="" class="dark-logo"/>
-				<img src="./WhatsApp Image 2024-11-13 at 09.36.23_ba950cdb.jpg" alt="" class="light-logo" style={{height:"80px",width:"80px",marginLeft:"60px",backgroundColor:"transparent"}}/>
-			</Link>
-			<div class="close-sidebar" data-toggle="left-sidebar-close">
-				<i class="ion-close-round"></i>
-			</div>
-		</div>
-		<div class="menu-block customscroll">
-			<div class="sidebar-menu">
-				<ul id="accordion-menu">
-					<li class="dropdown">
-						<Link to={'/dashboard'} class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-house-1"></span><span class="mtext">Dashboard</span>
-						</Link>
-					</li>
-				
-					<li>
-						<Link to={'/contactdetails'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiAccountBox} size={1} /><span class="mtext">Contacts</span>
-						</Link>
-					</li>
-					<li>
-						<Link to={'/leaddetails'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiCurrencyUsd} size={1} /><span class="mtext">Leads</span>
-						</Link>
-						
-					</li>
-				
-					<li class="dropdown">
-						<Link to={'/dealdetails'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiApplication} size={1} /><span class="mtext"> Inventory </span>
-						</Link>
-					</li>
-					<li class="dropdown">
-						<Link to={'/tasks'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Tasks</span>
-						</Link>
-					
-					</li>
-				
-					<li class="dropdown">
-						<Link to={'/bookingdetailsdata'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Post Sales</span>
-						</Link>
-					
-					</li>
-					{/* <li class="dropdown">
-						<Link to={'/paymentdetailsdata'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Payment Details</span>
-						</Link>
-					
-					</li> */}
-					<li class="dropdown">
-					<Link to={'/marketing'} class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}}path={mdiCalendarCheck} size={1} /><span class="mtext">Marketing</span>
-						</Link>
-						<ul class="submenu">
-						
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a  class="dropdown-toggle no-arrow">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiPhone} size={1} /><span class="mtext">Communication</span>
-						</a>
-						
-					</li>
-					<li class="dropdown">
-						<a  class="dropdown-toggle">
-						<Icon style={{position:"absolute",marginLeft:"-50px"}} path={mdiNetworkStrength4} size={1}/><span class="mtext">Report</span>
-						</a>
-						<ul class="submenu">
-							
-						</ul>
-					</li>
-					<li class="dropdown">
-						<Link to={'/crmsettings'}  class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-settings"></span><span class="mtext">Settings</span>
-						</Link>
-						<ul class="submenu">
-							
-						</ul>
-					</li>
-					<li>
-						<a  class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-diagram"></span><span class="mtext">LogOut</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="mobile-menu-overlay"></div>
+function Sidebar1() {
+  const [inventoryOpen, setInventoryOpen] = useState(false);
+
+  return (
+    <div>
+      <aside className="sidebar">
+        <div className="sidebar__brand">
+          <Link to="/dashboard">
+            <img
+              src="./WhatsApp Image 2024-11-13 at 09.36.23_ba950cdb.jpg"
+              alt="User"
+              className="sidebar__avatar"
+            />
+          </Link>
         </div>
-     );
+        <nav className="sidebar__nav">
+          <ul>
+            <li>
+              <Link to="/dashboard" className="sidebar__link">
+                <Icon path={mdiHome} size={1.2} className="sidebar__icon" />
+                <span>Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/contactdetails" className="sidebar__link">
+                <Icon path={mdiAccountBox} size={1.2} className="sidebar__icon" />
+                <span>Contacts</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/leaddetails" className="sidebar__link">
+                <Icon path={mdiCurrencyUsd} size={1.2} className="sidebar__icon" />
+                <span>Leads</span>
+              </Link>
+            </li>
+
+            {/* Inventory with attractive submenu */}
+            <li className={`sidebar__dropdown${inventoryOpen ? ' open' : ''}`}>
+              <button
+                className="sidebar__link sidebar__dropdown-toggle"
+                onClick={() => setInventoryOpen((prev) => !prev)}
+                aria-expanded={inventoryOpen}
+                aria-controls="inventory-submenu"
+                type="button"
+              >
+                <Icon path={mdiApplication} size={1.2} className="sidebar__icon" />
+                <span>Inventory</span>
+                <span className="sidebar__chevron">{inventoryOpen ? '▲' : '▼'}</span>
+              </button>
+              <ul
+                id="inventory-submenu"
+                className="sidebar__submenu"
+                style={{ display: inventoryOpen ? 'block' : 'none' }}
+              >
+                <li>
+                  <Link to="/alldeals" className="sidebar__sublink">
+                    <Icon path={mdiHandshakeOutline} size={1.2} className="sidebar__icon" />
+                    All Deals
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/inventory/add" className="sidebar__sublink">
+                    <Icon path={mdiDomain} size={1.2} className="sidebar__icon" />
+                    All Units
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/dealdetails" className="sidebar__sublink">
+                    <Icon path={mdiOfficeBuilding} size={1.2} className="sidebar__icon" />
+                    All Project
+                  </Link>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <Link to="/tasks" className="sidebar__link">
+                <Icon path={mdiCalendarCheck} size={1.2} className="sidebar__icon" />
+                <span>Tasks</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/bookingdetailsdata" className="sidebar__link">
+                <Icon path={mdiCalendarCheck} size={1.2} className="sidebar__icon" />
+                <span>Post Sales</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/marketing" className="sidebar__link">
+                <Icon path={mdiCalendarCheck} size={1.2} className="sidebar__icon" />
+                <span>Marketing</span>
+              </Link>
+            </li>
+            <li>
+              <Link className="sidebar__link">
+                <Icon path={mdiPhone} size={1.2} className="sidebar__icon" />
+                <span>Communication</span>
+              </Link>
+            </li>
+            <li>
+              <Link className="sidebar__link">
+                <Icon path={mdiNetworkStrength4} size={1.2} className="sidebar__icon" />
+                <span>Report</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/crmsettings" className="sidebar__link">
+                <span className="sidebar__icon dw dw-settings"></span>
+                <span>Settings</span>
+              </Link>
+            </li>
+            <li>
+              <Link className="sidebar__link">
+                <span className="sidebar__icon dw dw-diagram"></span>
+                <span>LogOut</span>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+      <div className="mobile-menu-overlay"></div>
+    </div>
+  );
 }
 
 export default Sidebar1;

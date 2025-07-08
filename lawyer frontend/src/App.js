@@ -13,6 +13,8 @@ import PendingLawyersTable from './components/pendinglawyer';
 import Clients from './components/clients';
 import Findalawyer from './components/findalawyer';
 import Support from './components/support';
+import ClientProfileModal from './components/clientprofile';
+
 
 
 
@@ -33,6 +35,7 @@ function App() {
       <Route path='/allclients' element={<Clients/>}></Route>
       <Route path='/findlawyer' element={<Findalawyer/>}></Route>
       <Route path='/supports' element={<Support/>}></Route>
+      <Route path='/clientprofile' element={<ClientProfileModal/>}></Route>
     
       
     </Routes>  
