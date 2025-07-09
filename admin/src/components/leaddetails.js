@@ -5561,7 +5561,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
         
       </div>
    
- <div className="" style={{marginTop:"1px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"999"}}>
+ <div className="" style={{marginTop:"1px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"111"}}>
 
 {/* <input id="search" type="text" className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search by email,mobile,company and lead type"  style={{width:"25%"}} onChange={(e)=>setsearchdata(e.target.value)} onKeyDown={handlekeypress1}/> */}
 
@@ -6242,7 +6242,7 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
       </tbody>
     </Table>
   </TableContainer>
-  <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"10px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+  <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"10px",bottom:"0",backgroundColor:"#f8f9fa",marginLeft:"10px"}}>
           <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
           <h6 style={{lineHeight:"50px"}}>Total Lead- <span style={{color:"green",fontSize:"12px"}}>{countall}</span></h6>
           <h6 style={{lineHeight:"50px"}}>Untouched Lead- <span style={{color:"red",fontSize:"12px"}}>{untouchedlead}</span></h6>

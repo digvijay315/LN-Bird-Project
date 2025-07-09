@@ -58,6 +58,7 @@ import Users from './components/users.js';
 import Templets from './components/templets.js';
 import Leadrequirmentform from './components/leadrequirmentform.js';
 import Alldeals from './components/alldeals.js';
+import Allprojects from './components/allprojects.js';
 
 function App() {
   return (
@@ -99,7 +100,7 @@ function App() {
       <Route path='/dealsingleview' element={<Dealsingleview/>}/>
       <Route path='/projectsingleview' element={<Projectsingleview/>}/>
       <Route path='/inventorysingleview' element={<Inventorysingleview/>}/>
-      <Route path='/dealdetails/projectpreview' element={<Projectpreview/>}/>
+      <Route path='/allprojects/projectpreview' element={<Projectpreview/>}/>
       <Route path='/addinventory' element={<Editinventory/>}/>
       <Route path='/sendmail' element={<Sendmail/>}/>
       <Route path='/crmsettings' element={<Crmsettings/>}/>
@@ -109,6 +110,7 @@ function App() {
       <Route path='/createtemplets' element={<Templets/>}/>
       <Route path='/leadrequirment' element={<Leadrequirmentform/>}/>
       <Route path='/alldeals' element={<Alldeals/>}/>
+      <Route path='/allprojects' element={<Allprojects/>}/>
     </Routes>  
   {/* <Leadrequirmentform/> */}
    </div>

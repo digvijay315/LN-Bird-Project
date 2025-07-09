@@ -76,7 +76,7 @@ function Header1() {
               background: "white",
               borderRadius: "5px",
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-              zIndex: 1000,
+              zIndex: 9999,
               padding: "5px",
 			  marginLeft:"60px",
 			  marginTop:"15px",

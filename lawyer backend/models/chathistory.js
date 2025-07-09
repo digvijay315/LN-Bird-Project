@@ -9,7 +9,7 @@ const messageSchema = new mongoose.Schema({
   fromModel: {
     type: String,
     required: true,
-    enum: ['User', 'Lawyer'], // Models you want to support
+    enum: ['User', 'Lawyer'],
   },
   to: {
     type: mongoose.Schema.Types.ObjectId,
@@ -23,8 +23,11 @@ const messageSchema = new mongoose.Schema({
   },
   message: {
     type: String,
-    required: true,
+    required: false, // <-- Now optional!
   },
+  fileUrl: String,
+  fileName: String,
+  fileType: String,
   timestamp: {
     type: Date,
     default: Date.now,

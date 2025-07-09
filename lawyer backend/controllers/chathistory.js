@@ -1,6 +1,8 @@
 
 const Message = require('../models/chathistory'); // Adjust path if needed
 
+const { v2: cloudinary } = require('cloudinary');
+const streamifier = require('streamifier');
 
 const getchathistory=async(req,res)=>
 {
@@ -35,4 +37,34 @@ const getallchathistory=async(req,res)=>
   }
 }
 
-module.exports={getchathistory,getallchathistory}
+
+
+
+cloudinary.config({
+  cloud_name: 'dplgmreai',
+  api_key: '967352841637756',
+  api_secret: 'sgr_ptgAzZfDOwIen9EwWwmY0IY'
+});
+
+
+
+const uploaddocument= async (req, res) => {
+  try {
+    const file = req.file;
+    const stream = cloudinary.uploader.upload_stream(
+      { resource_type: 'auto' },
+      (error, result) => {
+        if (error) return res.status(500).json({ error: error.message });
+        res.json({ url: result.secure_url, type: result.resource_type });
+      }
+    );
+    streamifier.createReadStream(file.buffer).pipe(stream);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+
+module.exports={getchathistory,getallchathistory,uploaddocument}

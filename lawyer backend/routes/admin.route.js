@@ -8,8 +8,9 @@ const {
   verifyLawyer
 } = require('../controllers/adminLawyerController');
 
+const chatupload=require('../middlewares/chatupload')
 const { getAdminDashboard } = require('../controllers/adminController');
-const  {getchathistory,getallchathistory}  = require('../controllers/chathistory');
+const  {getchathistory,getallchathistory, uploaddocument}  = require('../controllers/chathistory');
 
 // Admin dashboard route
 router.get('/dashboard', getAdminDashboard);
@@ -21,7 +22,7 @@ router.post('/lawyers/:id/verify', verifyLawyer);
 
 router.get('/chathistory/:user1Id/:user2Id',getchathistory);
 router.get('/chathistory',getallchathistory);
-
+router.post('/document', chatupload.single('file'),uploaddocument)
 
 
 module.exports = router;

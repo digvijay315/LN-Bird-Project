@@ -34,7 +34,7 @@ module.exports = (io) => {
     });
 
     // Private messaging
-  socket.on('privateMessage', async ({ toUserId, message, fromUserType }) => {
+   socket.on('privateMessage', async ({ toUserId, message, fromUserType, fileUrl, fileName, fileType }) => {
   let receiverSocketId;
   let fromModel, toModel;
 
@@ -53,22 +53,28 @@ module.exports = (io) => {
   console.log(`📨 Private message from ${fromUserId} to ${toUserId}`);
 
   // Send to receiver if online
-  if (receiverSocketId) {
-    io.to(receiverSocketId).emit('receiveMessage', {
-      from: fromUserId,
-      message,
-    });
-  }
+ if (receiverSocketId) {
+        io.to(receiverSocketId).emit('receiveMessage', {
+          from: fromUserId,
+          message,
+          fileUrl,
+          fileName,
+          fileType
+        });
+      }
 
   // ✅ Save message to DB
   try {
     await Message.create({
-      from: fromUserId,
-      fromModel,
-      to: toUserId,
-      toModel,
-      message,
-    });
+          from: fromUserId,
+          fromModel,
+          to: toUserId,
+          toModel,
+          message,
+          fileUrl,
+          fileName,
+          fileType
+        });
     console.log('💾 Message saved to DB');
   } catch (err) {
     console.error('❌ Error saving message to DB:', err);

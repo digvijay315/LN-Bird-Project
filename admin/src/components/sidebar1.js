@@ -72,19 +72,19 @@ function Sidebar1() {
                 <li>
                   <Link to="/alldeals" className="sidebar__sublink">
                     <Icon path={mdiHandshakeOutline} size={1.2} className="sidebar__icon" />
-                    All Deals
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/inventory/add" className="sidebar__sublink">
-                    <Icon path={mdiDomain} size={1.2} className="sidebar__icon" />
-                    All Units
+                    Deals
                   </Link>
                 </li>
                 <li>
                   <Link to="/dealdetails" className="sidebar__sublink">
+                    <Icon path={mdiDomain} size={1.2} className="sidebar__icon" />
+                    Units
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/allprojects" className="sidebar__sublink">
                     <Icon path={mdiOfficeBuilding} size={1.2} className="sidebar__icon" />
-                    All Project
+                    Project
                   </Link>
                 </li>
               </ul>

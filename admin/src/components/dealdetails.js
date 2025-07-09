@@ -2817,7 +2817,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
                                   size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                   total_land_area:"",
                                   water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
-                                  direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
+                                  direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",builtup_type:"",floor:[''],
                                   cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                   action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                   furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
@@ -7838,7 +7838,7 @@ return (
                   color: isMatched ? "green" : "#0086b3"
                 }}>
                   {item.unit_no}
-                </span> ({item.unit_type})<br />
+                </span> ({item.unit_type}) {item.builtup_type} {item.sub_category.join(',')}<br />
                 {item.category} {item.size} <br />
                 {item.project_name}
               </>
@@ -9153,8 +9153,8 @@ stage:selectedLead.stage
                 <>
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
-                    <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
-                          <option>{units.type}</option>
+                    <div className='col-md-6' ><label className='labels'>Type</label> <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,builtup_type:e.target.value})}>
+                          <option>{units.builtup_type}</option>
                           <option>---Select---</option>
                           <option>Duplex</option>
                           <option>Triplex</option>

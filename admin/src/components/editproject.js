@@ -1470,7 +1470,7 @@ const [mapLoaded1, setMapLoaded1] = useState(false);
                                                                           size:"",land_type:"",khewat_no:[''],killa_no:[''],share:[''],action5:[],
                                                                           total_land_area:"",
                                                                           water_source:[''],water_level:[''],water_pump_type:[''],action6:[],
-                                                                          direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",type:"",floor:[''],
+                                                                          direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",builtup_type:"",floor:[''],
                                                                           cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                                                           action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
                                                                           furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
@@ -5408,8 +5408,9 @@ const generateExcelFileunit = () => {
                     <div className='col-md-12'><label className='labels'>Builtup Details</label><hr></hr></div>
 
                     <div className='col-md-6' ><label className='labels'>Type</label>
-                     <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,unit_type:e.target.value})}>
+                     <select className="form-control form-control-sm" style={{marginTop:"10px"}} onChange={(e)=>setunits({...units,builtup_type:e.target.value})}>
                           <option>---Select---</option>
+                       
                          {
                             // Combine all unit types for selected sub_categories
                             [...new Set(

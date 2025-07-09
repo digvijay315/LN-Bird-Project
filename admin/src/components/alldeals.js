@@ -3285,7 +3285,7 @@ const handleTimeChangemail = (e) => {
                 
               </div>
         
-              <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"999"}}>
+              <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"10px",paddingTop:"10px",position:"sticky",top:"50px",zIndex:"1"}}>
               {/* <input id="dealtoggelsearch" type="checkbox" onChange={handleischeckedchange}/> */}
               
             {/* <input id="dealsearch" type="text" disabled={!ischecked} className="form-control form-control-sm form-control form-control-sm-sm" placeholder="search for deals via project name" style={{width:"25%"}} onChange={(e)=>handlesearchchange(e)} onKeyDown={handlekeypress2} /> */}
@@ -3774,7 +3774,7 @@ const handleTimeChangemail = (e) => {
               </tbody>
             </Table>
           </TableContainer>
-            <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+            <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa",marginLeft:"10px"}}>
                   <h5 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h5>
                   <h6 style={{lineHeight:"50px"}}>Total Deals <span style={{color:"green",fontSize:"20px"}}>{data.length}</span></h6>
                 </footer>

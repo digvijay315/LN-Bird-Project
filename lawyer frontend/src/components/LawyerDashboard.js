@@ -147,49 +147,60 @@ const LawyerDashboard = () => {
       socket.emit('lawyerOnline', lawyerId);
     });
 
-    const handleReceiveMessage = async ({ from, message }) => {
-      setHasNewMessages(true);
-      setMessageMap((prev) => ({
-        ...prev,
-        [from]: [...(prev[from] || []), { text: message, isMe: false }],
-      }));
+ const handleReceiveMessage = async ({ from, message, fileUrl, fileName, fileType }) => {
+  setHasNewMessages(true);
 
-      if (selectedClient?._id === from) {
-        setMessages((prev) => [...prev, { text: message, isMe: false }]);
-      }
+  // Add message (with file info if present) to the message map
+  setMessageMap((prev) => ({
+    ...prev,
+    [from]: [
+      ...(prev[from] || []),
+      { text: message, fileUrl, fileName, fileType, isMe: false }
+    ],
+  }));
 
-      if (!fetchedClientsRef.current.has(from)) {
-        try {
-          const res = await api.get(`api/user/${from}`);
-          const data = res.data;
+  // If this client is currently selected, add message to visible chat
+  if (selectedClient?._id === from) {
+    setMessages((prev) => [
+      ...prev,
+      { text: message, fileUrl, fileName, fileType, isMe: false }
+    ]);
+  }
 
-          const newClient = {
-            _id: data._id,
-            firstName: data.fullName || 'Client',
-            profilepic: data.profilepic || '',
-            lastMessage: message,
-          };
+  // Fetch client info if not already fetched
+  if (!fetchedClientsRef.current.has(from)) {
+    try {
+      const res = await api.get(`api/user/${from}`);
+      const data = res.data;
 
-          setChatClients((prev) => {
-            const exists = prev.find((c) => c._id === from);
-            if (exists) return prev.map((c) =>
-              c._id === from ? { ...c, lastMessage: message } : c
-            );
-            return [...prev, newClient];
-          });
+      const newClient = {
+        _id: data._id,
+        firstName: data.fullName || 'Client',
+        profilepic: data.profilepic || '',
+        lastMessage: message,
+      };
 
-          fetchedClientsRef.current.add(from);
-        } catch (err) {
-          console.error('❌ Failed to fetch client:', err);
-        }
-      } else {
-        setChatClients((prev) =>
-          prev.map((c) =>
-            c._id === from ? { ...c, lastMessage: message } : c
-          )
+      setChatClients((prev) => {
+        const exists = prev.find((c) => c._id === from);
+        if (exists) return prev.map((c) =>
+          c._id === from ? { ...c, lastMessage: message } : c
         );
-      }
-    };
+        return [...prev, newClient];
+      });
+
+      fetchedClientsRef.current.add(from);
+    } catch (err) {
+      console.error('❌ Failed to fetch client:', err);
+    }
+  } else {
+    setChatClients((prev) =>
+      prev.map((c) =>
+        c._id === from ? { ...c, lastMessage: message } : c
+      )
+    );
+  }
+};
+
 
     socket.on('receiveMessage', handleReceiveMessage);
 
@@ -224,13 +235,16 @@ const LawyerDashboard = () => {
         return;
       }
       
+      const timestamp = new Date().toISOString();
+
       socket.emit('privateMessage', {
         toUserId: selectedClient._id,
         message: msg,
-        fromUserType: 'lawyer'
+        fromUserType: 'lawyer',
+        timestamp
       });
 
-      setMessages(prev => [...prev, { text: msg, isMe: true }]);
+      setMessages(prev => [...prev, { text: msg, isMe: true,timestamp }]);
     }
   };
 
@@ -1285,13 +1299,25 @@ const LawyerDashboard = () => {
             ))}
           </div>
 
-          <div className="chat-messages">
-            {messages.map((msg, index) => (
-              <div key={index} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
-                {msg.text}
-              </div>
-            ))}
-          </div>
+       <div className="chat-messages">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
+            {msg.text}
+            {msg.fileUrl && (
+              msg.fileType && msg.fileType.startsWith('image/') ? (
+                <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
+              ) : (
+                <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
+                  📄 {msg.fileName}
+                </a>
+              )
+            )}
+            <div style={{ fontSize: '10px', color: 'black', marginTop: '2px', textAlign: msg.isMe ? 'right' : 'left' }}>
+      {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
+        </div>
+      </div>
+    ))}
+      </div>
 
           <div className="chat-input">
             <input

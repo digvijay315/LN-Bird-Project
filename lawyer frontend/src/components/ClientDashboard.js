@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState ,useRef} from 'react';
 import { useNavigate } from 'react-router-dom';
 import ClientProfileModal from './ClientProfileModal';
 import api from '../api';
@@ -91,12 +91,17 @@ const ClientDashboard = () => {
     return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
   };
 
-  // Your existing chat and lawyer code...
+  //========================================= chat code start==================================================================
+
+
   const [lawyers, setLawyers] = useState([]);
   const [chatLawyer, setChatLawyer] = useState(null);
   const [onlineLawyers, setOnlineLawyers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [messageMap, setMessageMap] = useState({});
+  const fileInputRef = useRef(null);
+  const [inputValue, setInputValue] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const fetchlawyers = async () => {
     try {
@@ -110,6 +115,8 @@ const ClientDashboard = () => {
   useEffect(() => {
     fetchlawyers();
   }, []);
+
+
 
   // Your existing chat functionality...
   useEffect(() => {
@@ -161,15 +168,54 @@ const ClientDashboard = () => {
       return;
     }
     
+     const timestamp = new Date().toISOString();
+
     socket.emit('privateMessage', {
       toUserId: chatLawyer._id,
       message: text,
       fromUserType: 'client',
+      timestamp
     });
 
-    setMessages((prev) => [...prev, { text, isMe: true }]);
+    setMessages((prev) => [...prev, { text, isMe: true,timestamp  }]);
   };
 
+    const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !chatLawyer?._id) return;
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await api.post('/api/admin/document', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const fileUrl = res.data.url;
+      const fileType = file.type;
+
+      socket.emit('privateMessage', {
+        toUserId: chatLawyer._id,
+        message: '',
+        fileUrl,
+        fileName: file.name,
+        fileType,
+        fromUserType: 'client'
+      });
+
+      setMessages((prev) => [
+        ...prev,
+        { text: '', fileUrl, fileName: file.name, fileType, isMe: true }
+      ]);
+    } catch (err) {
+      alert('Upload failed');
+    }
+    setIsUploading(false);
+  };
+
+
+  
   const handleOpenChat = async (lawyer) => {
     const isOnline = onlineLawyers.includes(lawyer._id);
     setChatLawyer({ ...lawyer, isOnline });
@@ -189,7 +235,7 @@ const ClientDashboard = () => {
 
       if (formatted.length === 0) {
         const systemMessage = {
-          text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} (${lawyer.specializations}, ${lawyer.yearsOfExperience} years experience). Feel free to share your concern or upload documents securely`,
+          text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} who practices in ${lawyer.practicingcourts.map((item)=>item.label).join(',')} Courts and specializes in ${lawyer.specializations.map((item)=>item.label).join(',')}, With ${lawyer.yearsOfExperience} of experience. Feel free to share your concern or upload documents securely`,
           isSystem: true,
           isMe: false,
         };
@@ -581,10 +627,10 @@ setIsLoading(true)
 
         .chat-popup {
           position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 380px;
-          height: 500px;
+          bottom: 10px;
+          left:40%;
+          width: 480px;
+          height: 600px;
           background: white;
           border-radius: 16px;
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
@@ -596,8 +642,9 @@ setIsLoading(true)
         }
 
         .chat-header {
-          background: linear-gradient(135deg, #3b82f6, #1e40af);
-          color: white;
+          
+           background: linear-gradient(135deg,rgb(162, 167, 167),rgb(168, 168, 168));
+          color: black;
           padding: 1rem;
           display: flex;
           justify-content: space-between;
@@ -942,6 +989,10 @@ setIsLoading(true)
               <div>
                 <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
                   {chatLawyer.firstName} {chatLawyer.lastName}
+                  {/* <span style={{fontSize:"10px",color:"lightgray",fontWeight:"normal"}}>
+                    {chatLawyer.yearsOfExperience}years of experience</span> */}
+                 
+
                 </div>
                 <div style={{ fontSize: '12px', opacity: 0.9 }}>
                   {chatLawyer.isOnline ? '🟢 Online' : '🔴 Offline'}
@@ -953,14 +1004,15 @@ setIsLoading(true)
         onClick={handleSwapLawyer}
            style={{
                 background: 'none',
-                color: 'white',
-                fontSize: '22px',
+                border:"1px solid lightgray",
+                color: 'black',
+                fontSize: '12px',
                 cursor: 'pointer',
               }}
-          // onClick={() => setShowLawyerSwitch(!showLawyerSwitch)}
+        
           title="Switch Lawyer"
         >
-          🔄
+          Switch
           {/* <span style={{fontSize:"14px"}}>switch</span> */}
         </button>
         <button
@@ -989,18 +1041,34 @@ setIsLoading(true)
             >✖</button> */}
           </div>
 
-          <div className="chat-messages">
-            {messages.map((msg, index) => (
-              <div 
-                key={index} 
-                className={`message ${msg.isMe ? 'sent' : msg.isSystem ? 'system' : 'received'}`}
-              >
-                {msg.text}
-              </div>
-            ))}
-          </div>
+        <div className="chat-messages">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
+            {msg.text}
+            {msg.fileUrl && (
+              msg.fileType && msg.fileType.startsWith('image/') ? (
+                <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
+              ) : (
+                <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
+                  📄 {msg.fileName}
+                </a>
+              )
+            )}
+       <div style={{ fontSize: '10px', color: 'black', marginTop: '2px', textAlign: msg.isMe ? 'right' : 'left' }}>
+      {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
+    </div>
+  </div>
+))}
+      </div>
 
           <div className="chat-input">
+            <input
+    type="file"
+    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+    ref={fileInputRef}
+    style={{ display: 'none' }}
+    onChange={handleFileChange}
+  />
             <input
               type="text"
               placeholder="Type a message..."
@@ -1011,6 +1079,28 @@ setIsLoading(true)
                 }
               }}
             />
+   <button
+  type="button"
+  onClick={() => fileInputRef.current.click()}
+  style={{
+    position: 'absolute',
+    right: '25px',
+    top: '93%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    color: 'gray',
+    fontSize: '20px',
+    cursor: 'pointer',
+    padding: 0,
+    margin: 0
+  }}
+  title="Attach Document"
+  tabIndex={-1}
+>
+  🗂️
+</button>
+
           </div>
         </div>
       )}

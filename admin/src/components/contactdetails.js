@@ -4133,7 +4133,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
       </tbody>
     </Table>
   </TableContainer>
-    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa"}}>
+    <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"40px",bottom:"0",backgroundColor:"#f8f9fa",marginLeft:"10px"}}>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman",color:"GrayText"}}>Summary</h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Total Contact <span style={{color:"green",fontSize:"25px"}}>{totalcontact}</span></h5>
           <h5 style={{lineHeight:"50px",fontFamily:"times new roman"}}>Customer  <span style={{color:"#A92904",fontSize:"25px"}}>{totalcontact}</span></h5>
