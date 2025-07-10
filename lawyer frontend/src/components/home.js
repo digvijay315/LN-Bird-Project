@@ -456,6 +456,35 @@ const faqs = [
   };
 
 
+  const [specialization, setSpecialization] = useState('');
+  const [court, setcourt] = useState('');
+
+    const SPECIALIZATIONS = [
+  { value: '', label: 'Select Specialization' },
+  { value: 'property lawyer', label: 'Property Lawyer' },
+  { value: 'family lawyer', label: 'Family Lawyer' },
+  { value: 'civil lawyer', label: 'Civil Lawyer' },
+  { value: 'cyber lawyer', label: 'Cyber Lawyer' },
+  { value: 'criminal lawyer', label: 'Criminal Lawyer' },
+  { value: 'consumer lawyer', label: 'Consumer Lawyer' },
+  { value: 'labour lawyer', label: 'Labour Lawyer' },
+  { value: 'legal notice drafting', label: 'Legal Notice Drafting' },
+  { value: 'company law & corporate compliance', label: 'Company Law & Corporate Compliance' },
+];
+
+const Courts = [
+  { value: '', label: 'Select Courts' },
+  { value: 'other', label: 'Other' },
+  { value: 'maharashtra', label: 'Maharashtra' },
+  { value: 'karnataka', label: 'Karnataka' },
+  { value: 'delhi', label: 'Delhi' },
+  { value: 'tamilnadu', label: 'Tamil Nadu' },
+  // ...add more
+];
+
+
+
+
     return(
 <div>
       <Header/>
@@ -463,18 +492,52 @@ const faqs = [
 
     <section className="olc-banner-bg" style={{marginTop:"10px"}}>
       <div className="olc-banner" id="main-banner">
-        {/* <img
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"
-          alt="bg-shade"
-          width="140"
-          height="67"
-          className="olc-banner-bgimg"
-        /> */}
+       
         <div className="olc-banner-content">
           {/* Left: Headline and Benefits */}
           <div className="olc-banner-left">
             <h1 className="olc-banner-title">Online Lawyer Consultation India</h1>
-            <ul className="olc-benefits-list">
+
+            <div className="findlawyer">
+  <div className="findlawyer-glass" />
+  <h2 className="findlawyer-title">
+    🔎 Find a Lawyer
+  </h2>
+  <div className="findlawyer-controls">
+    <select
+      value={specialization}
+      onChange={e => setSpecialization(e.target.value)}
+      className="findlawyer-select"
+    >
+      {SPECIALIZATIONS.map(spec => (
+        <option key={spec.value} value={spec.value}>
+          {spec.label}
+        </option>
+      ))}
+    </select>
+    <select
+      value={court}
+      onChange={e => setcourt(e.target.value)}
+      className="findlawyer-select"
+    >
+      {Courts.map(st => (
+        <option key={st.value} value={st.value}>
+          {st.label}
+        </option>
+      ))}
+    </select>
+    <button
+      className="action-btn findlawyer-btn"
+      title="Chat Now"
+    //   onClick={filterLawyersAndChat}
+    >
+      Chat Now
+    </button>
+  </div>
+</div>
+
+
+            {/* <ul className="olc-benefits-list">
               <li>
                 <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick" width="20" height="20" />
                 <span>Consult a lawyer online and get expert legal service.</span>
@@ -491,27 +554,27 @@ const faqs = [
                 <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick" width="20" height="20" />
                 <span>End-to-end legal notice drafting and documentation services.</span>
               </li>
-            </ul>
+            </ul> */}
             {/* Process Steps (Desktop) */}
             <div className="olc-process-desktop">
               <p className="olc-process-title">Process</p>
               <div className="olc-process-steps">
                 <div className="olc-process-step">
                   <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Fill Form" />
-                  <span>Fill Out the Form</span>
+                  <span>Select details</span>
                 </div>
                 <div className="olc-process-step">
                   <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Schedule" />
-                  <span>Schedule an Appointment</span>
+                  <span>Wait for a few minutes</span>
                 </div>
                 <div className="olc-process-step">
                   <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Payment" />
-                  <span>Make Payment</span>
+                  <span>chat with lawyer</span>
                 </div>
-                <div className="olc-process-step">
+                {/* <div className="olc-process-step">
                   <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
                   <span>Lawyer Will Call You</span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -551,20 +614,20 @@ const faqs = [
           <div className="olc-process-steps">
             <div className="olc-process-step">
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Fill Form" />
-              <span>Fill Out the Form</span>
+              <span>Select details</span>
             </div>
             <div className="olc-process-step">
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Schedule" />
-              <span>Schedule an Appointment</span>
+              <span>Wait for a few minutes</span>
             </div>
             <div className="olc-process-step">
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Payment" />
-              <span>Make Payment</span>
+              <span>chat with lawyer</span>
             </div>
-            <div className="olc-process-step">
+            {/* <div className="olc-process-step">
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
               <span>Lawyer Will Call You</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -572,16 +635,10 @@ const faqs = [
       {/* Stats and Reviews Section */}
 <div className="olc-stats-section">
   {/* Decorative Banner Image (right corner) */}
-  {/* <img
-    src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=340&q=80"
-    alt="bg-shade"
-    width="170"
-    height="57"
-    className="olc-banner-corner-img"
-  /> */}
+
 
   {/* Stats Grid */}
-  <div className="olc-stats-bg">
+  {/* <div className="olc-stats-bg">
     <div className="olc-stats-grid">
       <div className="olc-stat">
         <p className="olc-stat-value">5,00,000+</p>
@@ -601,7 +658,7 @@ const faqs = [
       </div>
     </div>
 
-    {/* Google Reviews */}
+  
     <div className="olc-reviews">
       <div className="olc-review-logo">
         <img
@@ -649,7 +706,7 @@ const faqs = [
         </div>
       </div>
     </div>
-  </div>
+  </div> */}
 </div>
 
 {/* We Cover Everything You Need Section */}

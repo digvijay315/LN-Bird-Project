@@ -59,6 +59,7 @@ import Templets from './components/templets.js';
 import Leadrequirmentform from './components/leadrequirmentform.js';
 import Alldeals from './components/alldeals.js';
 import Allprojects from './components/allprojects.js';
+import Allunits from './components/allunits.js';
 
 function App() {
   return (
@@ -111,6 +112,7 @@ function App() {
       <Route path='/leadrequirment' element={<Leadrequirmentform/>}/>
       <Route path='/alldeals' element={<Alldeals/>}/>
       <Route path='/allprojects' element={<Allprojects/>}/>
+      <Route path='/allunits' element={<Allunits/>}/>
     </Routes>  
   {/* <Leadrequirmentform/> */}
    </div>

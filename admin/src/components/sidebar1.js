@@ -76,7 +76,7 @@ function Sidebar1() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/dealdetails" className="sidebar__sublink">
+                  <Link to="/allunits" className="sidebar__sublink">
                     <Icon path={mdiDomain} size={1.2} className="sidebar__icon" />
                     Units
                   </Link>
