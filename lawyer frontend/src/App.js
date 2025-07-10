@@ -14,6 +14,7 @@ import Clients from './components/clients';
 import Findalawyer from './components/findalawyer';
 import Support from './components/support';
 import ClientProfileModal from './components/clientprofile';
+import OnlineLawyerConsultation from './components/landingpage';
 
 
 
@@ -23,7 +24,7 @@ function App() {
   return (
     <BrowserRouter>
     <div>
-     <Routes>
+      <Routes>
       <Route path='/' element={<Home/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/home' element={<Home/>}></Route>
@@ -38,12 +39,8 @@ function App() {
       <Route path='/clientprofile' element={<ClientProfileModal/>}></Route>
     
       
-    </Routes>  
- {/* <Home/> */}
- {/* <Login/> */}
- {/* <Register/> */}
- {/* <AuthTabs/> */}
- {/* <Header/> */}
+    </Routes> 
+{/* <OnlineLawyerConsultation/> */}
    </div>
    </BrowserRouter>
   );

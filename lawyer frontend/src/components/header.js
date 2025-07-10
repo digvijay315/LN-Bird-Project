@@ -6,17 +6,22 @@ function Header() {
   const navigate = useNavigate();
 
   return (
-    <header
-      className="fl-header fl-header-single fl-header-type1"
-      style={{
-        padding: '10px 30px',
-        backgroundColor: '#fff',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}
-    >
+ 
+ <header
+  className="fl-header fl-header-single fl-header-type1"
+        style={{
+          padding: '10px 30px',
+          backgroundColor: '#fff',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          position: 'sticky',    // or 'fixed'
+          top: 0,                // stick to the top
+          zIndex: 1000,          // ensure it's above other content
+          width: '100%',         // full width if using fixed
+        }}
+      >
       {/* Logo */}
       <div className="nav-logo d-flex align-items-center">
         <img
@@ -111,6 +116,7 @@ function Header() {
         </button>
       </div>
     </header>
+  
   );
 }
 
