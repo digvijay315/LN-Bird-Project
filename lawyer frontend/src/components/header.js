@@ -1,159 +1,211 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import logo1 from '../components/counvoImg/Counvo - LOGO (1).png';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-function Header() {
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation();
   const userData = JSON.parse(localStorage.getItem('userDetails'));
 
-    const handleLogout = () => {
-     localStorage.removeItem('userDetails');
-      Swal.fire({
-             icon: 'success',
-             title: 'Logout Successfull',
-             text:  'You are Successfully Logout..!',
-             showConfirmButton: true,
-           });
-     navigate('/');
-   };
+  const handleLogout = () => {
+    localStorage.removeItem('userDetails');
+    Swal.fire({
+      icon: 'success',
+      title: 'Logout Successfull',
+      text: 'You are Successfully Logout..!',
+      showConfirmButton: true,
+    });
+    navigate('/');
+    setMenuOpen(false);
+  };
+
+  // Helper to check active path (for subpaths)
+  const isActive = (path) => {
+    if (path === '/') return location.pathname === '/';
+    return location.pathname.startsWith(path);
+  };
 
   return (
- 
- <header
-  className="fl-header fl-header-single fl-header-type1"
-        style={{
-          padding: '10px 30px',
-          backgroundColor: '#fff',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          position: 'sticky',    // or 'fixed'
-          top: 0,                // stick to the top
-          zIndex: 1000,          // ensure it's above other content
-          width: '100%',         // full width if using fixed
-        }}
-      >
-      {/* Logo */}
-      <div className="nav-logo d-flex align-items-center">
+    <>
+      <style>{`
+        .header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          background: #fff;
+          padding: 10px 20px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+        }
+
+        .logo {
+          height: 50px;
+          cursor: pointer;
+        }
+
+        .nav-links {
+          color: black;
+          display: flex;
+          gap: 30px;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .nav-links li {
+          cursor: pointer;
+          font-weight: 500;
+          position: relative;
+          transition: color 0.2s;
+        }
+
+        .nav-links li.active {
+          color: #1956d2;
+        }
+
+        .nav-links li.active::after {
+          content: '';
+          display: block;
+          margin: 0 auto;
+          width: 60%;
+          border-bottom: 3px solid #1956d2;
+          border-radius: 2px;
+          animation: underlineGrow 0.3s cubic-bezier(.4,0,.2,1);
+        }
+
+        @keyframes underlineGrow {
+          from { width: 0; }
+          to { width: 60%; }
+        }
+
+        .hamburger {
+          display: none;
+          flex-direction: column;
+          cursor: pointer;
+          gap: 5px;
+        }
+
+        .hamburger span {
+          width: 25px;
+          height: 3px;
+          background: #333;
+        }
+
+        @media (max-width: 768px) {
+          .nav-links {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: #fff;
+            flex-direction: column;
+            gap: 20px;
+            padding: 30px;
+            transform: translateY(-120%);
+            transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+          }
+
+          .nav-links.open {
+            transform: translateY(0);
+          }
+
+          .hamburger {
+            display: flex;
+          }
+        }
+      `}</style>
+
+      <header className="header">
         <img
           src={logo1}
           alt="Logo"
-          style={{ height: '65px', cursor: 'pointer' }}
-          onClick={() => navigate('/')}
+          className="logo"
+          onClick={() => { navigate('/'); setMenuOpen(false); }}
         />
-      </div>
 
-      {/* Navigation Menu */}
-     <nav className="fl-mega-menu nav-menu" style={{ flexGrow: 1, marginLeft: '35%' }}>
-  <ul
-    id="menu-main-menu-1"
-    className="menu nav-menu"
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '45px', // slightly reduced gap
-      listStyle: 'none',
-      margin: 0,
-    }}
-  >
-    <li className="nav-item">
-      <a
-        onClick={() => navigate('/')}
-        className="menu-link main-menu-link item-title"
-        style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-      >
-        Home
-      </a>
-    </li>
-    {/* <li className="nav-item">
-      <a
-        className="menu-link main-menu-link item-title"
-        style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-      >
-        Find Lawyers
-      </a>
-    </li> */}
-    {/* <li className="nav-item">
-      <a
-        className="menu-link main-menu-link item-title"
-        style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-      >
-        How It Works
-      </a>
-    </li> */}
-    {/* <li className="nav-item">
-      <a
-        className="menu-link main-menu-link item-title"
-        style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-      >
-        Legal Resources
-      </a>
-    </li> */}
-    <li className="nav-item">
-      <a
-        className="menu-link main-menu-link item-title"
-        style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-      >
-        About Us
-      </a>
-    </li>
-    <li className="nav-item">
-      <a
-        className="menu-link main-menu-link item-title"
-        style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
-      >
-        Contact
-      </a>
-    </li>
-   <li className="nav-item dropdown" style={{ display: userData?.user ? 'block' : 'none' }}>
-  <a
-    className="menu-link main-menu-link item-title dropdown-toggle"
-    href="#"
-    id="userDropdown"
-    role="button"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
-    style={{ cursor: 'pointer', whiteSpace: 'nowrap',color:"blue",fontWeight:"bold" }}
-  >
-     {userData?.user?.fullName} <span style={{ fontSize: '14px' }}>▼</span>
-  </a>
-  <ul className="dropdown-menu" aria-labelledby="userDropdown" style={{cursor:"pointer"}}>
-    <li><a className="dropdown-item" onClick={()=>navigate('/')} >Home</a></li>
-    <li><a className="dropdown-item" onClick={()=>navigate('/findlawyer')}>Find Lawyer</a></li>
-    <li><a className="dropdown-item" onClick={()=>navigate('/clientprofile')}> Profile</a></li>
-    <li><a className="dropdown-item" onClick={()=>navigate('/supports')} >Supports</a></li>
-    <li><a className="dropdown-item" onClick={()=>navigate('/clientchathistory')}>History</a></li>
-    <li><a className="dropdown-item" onClick={handleLogout}>Logout</a></li>
-  </ul>
-</li>
+        <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
+          <li
+            className={isActive('/') ? 'active' : ''}
+            onClick={() => { navigate('/'); setMenuOpen(false); }}
+          >
+            Home
+          </li>
+          <li
+            className={isActive('/about') ? 'active' : ''}
+            onClick={() => { navigate('/about'); setMenuOpen(false); }}
+          >
+            About
+          </li>
+          <li
+            className={isActive('/contact') ? 'active' : ''}
+            onClick={() => { navigate('/contact'); setMenuOpen(false); }}
+          >
+            Contact
+          </li>
+          {userData?.user && (
+            <>
+              <li style={{ fontWeight: 'bold', color: 'blue' }}>
+                {userData.user.fullName}
+              </li>
+              <li
+                className={isActive('/findlawyer') ? 'active' : ''}
+                onClick={() => { navigate('/findlawyer'); setMenuOpen(false); }}
+              >
+                Find Lawyer
+              </li>
+              <li
+                className={isActive('/clientprofile') ? 'active' : ''}
+                onClick={() => { navigate('/clientprofile'); setMenuOpen(false); }}
+              >
+                Profile
+              </li>
+              <li
+                className={isActive('/supports') ? 'active' : ''}
+                onClick={() => { navigate('/supports'); setMenuOpen(false); }}
+              >
+                Supports
+              </li>
+              <li
+                className={isActive('/clientchathistory') ? 'active' : ''}
+                onClick={() => { navigate('/clientchathistory'); setMenuOpen(false); }}
+              >
+                History
+              </li>
+              <li
+                className={isActive('/termsandconditions') ? 'active' : ''}
+                onClick={() => { navigate('/termsandconditions'); setMenuOpen(false); }}
+              >
+                Terms & Conditions
+              </li>
+              <li
+                onClick={() => { handleLogout(); setMenuOpen(false); }}
+              >
+                Logout
+              </li>
+            </>
+          )}
+          <li
+            onClick={() => { navigate('/login'); setMenuOpen(false); }}
+            style={{ display: userData?.user ? "none" : "block" }}
+            className={isActive('/login') ? 'active' : ''}
+          >
+            Login
+          </li>
+        </ul>
 
-  </ul>
-</nav>
-
-      {/* Login / Sign Up Button aligned to right */}
-      <div className="link-reg" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <button
-          onClick={() => navigate('/login')}
-          style={{
-            backgroundColor: '#007bff',
-            color: '#fff',
-            border: 'none',
-            padding: '10px 20px',
-            borderRadius: '6px',
-            fontSize: '16px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-          }}
+        <div
+          className="hamburger"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          Login / Sign Up
-        </button>
-      </div>
-    </header>
-  
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </header>
+    </>
   );
 }
-
-export default Header;

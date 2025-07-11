@@ -16,6 +16,7 @@ import Support from './components/support';
 import ClientProfileModal from './components/clientprofile';
 import OnlineLawyerConsultation from './components/landingpage';
 import Clientchathistory from './components/clientchathistory';
+import TermsAndConditions from './components/terms&condition';
 
 
 
@@ -39,7 +40,7 @@ function App() {
       <Route path='/supports' element={<Support/>}></Route>
       <Route path='/clientprofile' element={<ClientProfileModal/>}></Route>
       <Route path='/clientchathistory' element={<Clientchathistory/>}></Route>
-      
+      <Route path='/termsandconditions' element={<TermsAndConditions/>}></Route>
     </Routes> 
 {/* <OnlineLawyerConsultation/> */}
    </div>
