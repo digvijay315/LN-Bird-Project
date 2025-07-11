@@ -1,9 +1,23 @@
 import React from 'react';
 import logo1 from '../components/counvoImg/Counvo - LOGO (1).png';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function Header() {
   const navigate = useNavigate();
+
+  const userData = JSON.parse(localStorage.getItem('userDetails'));
+
+    const handleLogout = () => {
+     localStorage.removeItem('userDetails');
+      Swal.fire({
+             icon: 'success',
+             title: 'Logout Successfull',
+             text:  'You are Successfully Logout..!',
+             showConfirmButton: true,
+           });
+     navigate('/');
+   };
 
   return (
  
@@ -33,7 +47,7 @@ function Header() {
       </div>
 
       {/* Navigation Menu */}
-     <nav className="fl-mega-menu nav-menu" style={{ flexGrow: 1, marginLeft: '20px' }}>
+     <nav className="fl-mega-menu nav-menu" style={{ flexGrow: 1, marginLeft: '35%' }}>
   <ul
     id="menu-main-menu-1"
     className="menu nav-menu"
@@ -54,30 +68,30 @@ function Header() {
         Home
       </a>
     </li>
-    <li className="nav-item">
+    {/* <li className="nav-item">
       <a
         className="menu-link main-menu-link item-title"
         style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
       >
         Find Lawyers
       </a>
-    </li>
-    <li className="nav-item">
+    </li> */}
+    {/* <li className="nav-item">
       <a
         className="menu-link main-menu-link item-title"
         style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
       >
         How It Works
       </a>
-    </li>
-    <li className="nav-item">
+    </li> */}
+    {/* <li className="nav-item">
       <a
         className="menu-link main-menu-link item-title"
         style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}
       >
         Legal Resources
       </a>
-    </li>
+    </li> */}
     <li className="nav-item">
       <a
         className="menu-link main-menu-link item-title"
@@ -94,6 +108,28 @@ function Header() {
         Contact
       </a>
     </li>
+   <li className="nav-item dropdown" style={{ display: userData?.user ? 'block' : 'none' }}>
+  <a
+    className="menu-link main-menu-link item-title dropdown-toggle"
+    href="#"
+    id="userDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+    style={{ cursor: 'pointer', whiteSpace: 'nowrap',color:"blue",fontWeight:"bold" }}
+  >
+     {userData?.user?.fullName} <span style={{ fontSize: '14px' }}>▼</span>
+  </a>
+  <ul className="dropdown-menu" aria-labelledby="userDropdown" style={{cursor:"pointer"}}>
+    <li><a className="dropdown-item" onClick={()=>navigate('/')} >Home</a></li>
+    <li><a className="dropdown-item" onClick={()=>navigate('/findlawyer')}>Find Lawyer</a></li>
+    <li><a className="dropdown-item" onClick={()=>navigate('/clientprofile')}> Profile</a></li>
+    <li><a className="dropdown-item" onClick={()=>navigate('/supports')} >Supports</a></li>
+    <li><a className="dropdown-item" onClick={()=>navigate('/clientchathistory')}>History</a></li>
+    <li><a className="dropdown-item" onClick={handleLogout}>Logout</a></li>
+  </ul>
+</li>
+
   </ul>
 </nav>
 

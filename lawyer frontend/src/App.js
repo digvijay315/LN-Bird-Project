@@ -15,6 +15,7 @@ import Findalawyer from './components/findalawyer';
 import Support from './components/support';
 import ClientProfileModal from './components/clientprofile';
 import OnlineLawyerConsultation from './components/landingpage';
+import Clientchathistory from './components/clientchathistory';
 
 
 
@@ -37,7 +38,7 @@ function App() {
       <Route path='/findlawyer' element={<Findalawyer/>}></Route>
       <Route path='/supports' element={<Support/>}></Route>
       <Route path='/clientprofile' element={<ClientProfileModal/>}></Route>
-    
+      <Route path='/clientchathistory' element={<Clientchathistory/>}></Route>
       
     </Routes> 
 {/* <OnlineLawyerConsultation/> */}

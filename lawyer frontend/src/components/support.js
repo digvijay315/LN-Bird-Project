@@ -3,6 +3,7 @@ import { useDropzone } from 'react-dropzone';
 import api from '../api';
 import Swal from 'sweetalert2';
 import Clientsidebar from './clientsidebar';
+import Header from './header';
 // import { Support } from '@mui/icons-material';
 
 function Support() {
@@ -65,7 +66,8 @@ function Support() {
 
   return (
     <>
-    <Clientsidebar/>
+    {/* <Clientsidebar/> */}
+    <Header/>
       
     <div style={{
       maxWidth: 480,

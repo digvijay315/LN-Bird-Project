@@ -1,87 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import Clientsidebar from './clientsidebar';
 import socket from './socket';
 import Swal from 'sweetalert2';
 import api from '../api';
 import Header from './header';
 
-function Findalawyer() {
-    const [isLoading, setIsLoading] = useState(false);
+function Clientchathistory() {
 
-  const [specialization, setSpecialization] = useState('');
-  const [state, setState] = useState('');
-  const [filteredLawyers, setFilteredLawyers] = useState([]);
-  const [recentChats, setRecentChats] = useState([]);
+    const userData = JSON.parse(localStorage.getItem('userDetails'));
 
-
-const userData = JSON.parse(localStorage.getItem('userDetails'));
-
-
-  const fetchChatHistory=async()=>
-  {
-    try {
-        const res=await api.get('api/admin/chathistory')
-        const result=res.data
-        const clientChats = result.filter(
-            chat => chat.from === userData.user._id && chat.fromModel === "User"
-            );
-        setRecentChats(clientChats)
-        
-    } catch (error) {
-        console.log(error);
-        
-    }
-  }
-  // Fetch chat history for the logged-in user
-  useEffect(() => {
-    
-    fetchChatHistory()
-  }, []);
-
-  // Deduplicate by lawyer ID ("to" field)
-const uniqueChatsMap = {};
-const uniqueChats = [];
-recentChats.forEach(chat => {
-  if (!uniqueChatsMap[chat.to]) {
-    uniqueChatsMap[chat.to] = true;
-    uniqueChats.push(chat);
-  }
-});
+      const [recentChats, setRecentChats] = useState([]);
+       const [onlineLawyers, setOnlineLawyers] = useState([]);
+       const [lawyers, setLawyers] = useState([]);
+         const [chatLawyer, setChatLawyer] = useState(null);
+         const [messages, setMessages] = useState([]);
+         const [messageMap, setMessageMap] = useState({});
+         const [isFlipping, setIsFlipping] = useState(false);
+             const [isLoading, setIsLoading] = useState(false);
+               const [isUploading, setIsUploading] = useState(false);
+                 const fileInputRef = useRef(null);
 
 
-
-  const iconStyle = { width: 22, height: 22, verticalAlign: 'middle' };
-
-  const SPECIALIZATIONS = [
-  { value: '', label: 'Select Specialization' },
-  { value: 'property lawyer', label: 'Property Lawyer' },
-  { value: 'family lawyer', label: 'Family Lawyer' },
-  { value: 'civil lawyer', label: 'Civil Lawyer' },
-  { value: 'cyber lawyer', label: 'Cyber Lawyer' },
-  { value: 'criminal lawyer', label: 'Criminal Lawyer' },
-  { value: 'consumer lawyer', label: 'Consumer Lawyer' },
-  { value: 'labour lawyer', label: 'Labour Lawyer' },
-  { value: 'legal notice drafting', label: 'Legal Notice Drafting' },
-  { value: 'company law & corporate compliance', label: 'Company Law & Corporate Compliance' },
-];
-
-const STATES = [
-  { value: '', label: 'Select State' },
-  { value: 'maharashtra', label: 'Maharashtra' },
-  { value: 'karnataka', label: 'Karnataka' },
-  { value: 'delhi', label: 'Delhi' },
-  { value: 'tamilnadu', label: 'Tamil Nadu' },
-  // ...add more
-];
-
-
-  const [lawyers, setLawyers] = useState([]);
-  const [chatLawyer, setChatLawyer] = useState(null);
-  const [onlineLawyers, setOnlineLawyers] = useState([]);
-  const [messages, setMessages] = useState([]);
-  const [messageMap, setMessageMap] = useState({});
-
-  const fetchlawyers = async () => {
+        const fetchlawyers = async () => {
     try {
       const resp = await api.get('api/lawyer/getalllawyerprofile');
       setLawyers(resp.data.filter((item) => (item.status === "verified")));
@@ -94,138 +34,140 @@ const STATES = [
     fetchlawyers();
   }, []);
 
-  const getLawyerById = (id) => lawyers.find(lawyer => lawyer._id === id);
 
-    // Filter lawyers based on search
-const filterLawyersAndChat = () => {
-    setIsLoading(true)
-
-     setTimeout(() => {
-    setIsLoading(false);
-  
-      // Filter lawyers by specialization and state
-  let filtered = lawyers;
-
-  if (specialization) {
-    filtered = filtered.filter(lawyer =>
-      Array.isArray(lawyer.specializations)
-        ? lawyer.specializations.some(
-            spec =>
-              spec.label &&
-              spec.label.toLowerCase().includes(specialization.toLowerCase())
-          )
-        : (lawyer.specializations?.label || lawyer.specializations || '')
-            .toLowerCase()
-            .includes(specialization.toLowerCase())
-    );
-  }
-
-  if (state) {
-    filtered = filtered.filter(
-      lawyer =>
-        lawyer.state &&
-        lawyer.state.toLowerCase().includes(state.toLowerCase())
-    );
-  }
-
-  // Try to find an online lawyer from filtered list, random order
-  let candidates = [...filtered];
-  while (candidates.length > 0) {
-    const idx = Math.floor(Math.random() * candidates.length);
-    const candidate = candidates[idx];
-    if (onlineLawyers.includes(candidate._id)) {
-      handleOpenChat(candidate);
-      return;
-    }
-    candidates.splice(idx, 1); // Remove tried candidate
-  }
-
-  // If no online lawyer found in filtered, pick any online lawyer
-  const onlineLawyerObjs = lawyers.filter(lawyer =>
-    onlineLawyers.includes(lawyer._id)
-  );
-  if (onlineLawyerObjs.length > 0) {
-    const randomLawyer =
-      onlineLawyerObjs[Math.floor(Math.random() * onlineLawyerObjs.length)];
-    handleOpenChat(randomLawyer);
-  } else {
-    Swal.fire({
-        icon:"info",
-        title:"Search result...",
-        text:"No lawyers available.",
-        showConfirmButton:"true"
-    })
+        const getLawyerById = (id) => lawyers.find(lawyer => lawyer._id === id);
     
-  }
-
-  }, 2000);
-
-};
-
-
-
-
-
-  // Your existing chat functionality...
-  useEffect(() => {
-    if (!userData.user._id) return;
-
-    if (!socket.connected) socket.connect();
-
-    socket.on('connect', () => {
-      console.log('✅ Connected (client):', socket.id);
-      socket.emit('clientOnline', userData.user._id);
-      socket.emit('getOnlineLawyers');
-    });
-
-    socket.on('onlineLawyersList', (ids) => {
-      console.log('✅ Received online lawyers:', ids);
-      setOnlineLawyers(ids);
-    });
-
-    socket.on('updateOnlineUsers', (ids) => {
-      setOnlineLawyers(ids);
-    });
-
-    socket.on('receiveMessage', ({ from, message }) => {
-      if (chatLawyer?._id === from) {
-        setMessages((prev) => [...prev, { text: message, isMe: false }]);
+      const fetchChatHistory=async()=>
+      {
+        try {
+            const res=await api.get('api/admin/chathistory')
+            const result=res.data
+            const clientChats = result.filter(
+                chat => chat.from === userData.user._id && chat.fromModel === "User"
+                );
+            setRecentChats(clientChats)
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+      }
+      // Fetch chat history for the logged-in user
+      useEffect(() => {
+        
+        fetchChatHistory()
+      }, []);
+    
+      // Deduplicate by lawyer ID ("to" field)
+    const uniqueChatsMap = {};
+    const uniqueChats = [];
+    recentChats.forEach(chat => {
+      if (!uniqueChatsMap[chat.to]) {
+        uniqueChatsMap[chat.to] = true;
+        uniqueChats.push(chat);
       }
     });
 
-    return () => {
-      socket.off('connect');
-      socket.off('receiveMessage');
-      socket.off('onlineLawyersList');
-      socket.off('updateOnlineUsers');
-    };
-  }, [userData.user._id, chatLawyer]);
 
-  const handleSendMessage = (text) => {
-    if (!text.trim() || !chatLawyer?._id) return;
-
-    if (containsSensitiveInfo(text)) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Not Allowed 🚫',
-        text: 'Sharing mobile numbers or emails is not permitted!',
-        timer: 3000,
-        timerProgressBar: true,
-        showConfirmButton: false,
-      });
-      return;
-    }
+      // Your existing chat functionality...
+      useEffect(() => {
+        if (!userData.user._id) return;
     
-    socket.emit('privateMessage', {
-      toUserId: chatLawyer._id,
-      message: text,
-      fromUserType: 'client',
-    });
-
-    setMessages((prev) => [...prev, { text, isMe: true }]);
-  };
-
-  const handleOpenChat = async (lawyer) => {
+        if (!socket.connected) socket.connect();
+    
+        socket.on('connect', () => {
+          console.log('✅ Connected (client):', socket.id);
+          socket.emit('clientOnline', userData.user._id);
+          socket.emit('getOnlineLawyers');
+        });
+    
+        socket.on('onlineLawyersList', (ids) => {
+          console.log('✅ Received online lawyers:', ids);
+          setOnlineLawyers(ids);
+        });
+    
+        socket.on('updateOnlineUsers', (ids) => {
+          setOnlineLawyers(ids);
+        });
+    
+        socket.on('receiveMessage', ({ from, message }) => {
+          if (chatLawyer?._id === from) {
+            setMessages((prev) => [...prev, { text: message, isMe: false }]);
+          }
+        });
+    
+        return () => {
+          socket.off('connect');
+          socket.off('receiveMessage');
+          socket.off('onlineLawyersList');
+          socket.off('updateOnlineUsers');
+        };
+      }, [userData.user._id, chatLawyer]);
+    
+      const handleSendMessage = (text) => {
+        if (!text.trim() || !chatLawyer?._id) return;
+    
+        if (containsSensitiveInfo(text)) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Not Allowed 🚫',
+            text: 'Sharing mobile numbers or emails is not permitted!',
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
+          return;
+        }
+        
+         const timestamp = new Date().toISOString();
+    
+        socket.emit('privateMessage', {
+          toUserId: chatLawyer._id,
+          message: text,
+          fromUserType: 'client',
+          timestamp
+        });
+    
+        setMessages((prev) => [...prev, { text, isMe: true,timestamp  }]);
+      };
+    
+        const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        if (!file || !chatLawyer?._id) return;
+        setIsUploading(true);
+    
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+          const res = await api.post('/api/admin/document', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+          });
+          const fileUrl = res.data.url;
+          const fileType = file.type;
+    
+          socket.emit('privateMessage', {
+            toUserId: chatLawyer._id,
+            message: '',
+            fileUrl,
+            fileName: file.name,
+            fileType,
+            fromUserType: 'client'
+          });
+    
+          setMessages((prev) => [
+            ...prev,
+            { text: '', fileUrl, fileName: file.name, fileType, isMe: true }
+          ]);
+        } catch (err) {
+          alert('Upload failed');
+        }
+        setIsUploading(false);
+      };
+    
+    
+      
+      const handleOpenChat = async (lawyer) => {
     const isOnline = onlineLawyers.includes(lawyer._id);
     setChatLawyer({ ...lawyer, isOnline });
 
@@ -240,11 +182,14 @@ const filterLawyersAndChat = () => {
         text: msg.message,
         isMe: msg.from === clientId,
         isSystem: false,
+        fileUrl:msg.fileUrl,
+        fileName:msg.fileName, 
+        fileType:msg.fileType
       }));
 
       if (formatted.length === 0) {
         const systemMessage = {
-          text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} (${lawyer.specializations}, ${lawyer.yearsOfExperience} years experience). Feel free to share your concern or upload documents securely`,
+          text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} who practices in ${lawyer.practicingcourts.map((item)=>item.label).join(',')} Courts and specializes in ${lawyer.specializations.map((item)=>item.label).join(',')}, With ${lawyer.yearsOfExperience} of experience. Feel free to share your concern or upload documents securely`,
           isSystem: true,
           isMe: false,
         };
@@ -258,51 +203,56 @@ const filterLawyersAndChat = () => {
     }
   };
 
-  function containsSensitiveInfo(text) {
+
+    
+
+      const handleSwapLawyer = async () => {
+          setIsLoading(true)
+          
+        setTimeout(async () => {
+           setIsLoading(false)
+            setIsFlipping(true); // Start flip
+          const availableOnlineLawyers = lawyers.filter(
+            (lawyer) => onlineLawyers.includes(lawyer._id) && lawyer._id !== chatLawyer._id
+          );
+      
+          if (availableOnlineLawyers.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Other Lawyers Online',
+              text: 'Sorry, there are no other online lawyers to swap with right now.',
+              timer: 2500,
+              showConfirmButton: false,
+            });
+            setIsFlipping(false);
+            return;
+          }
+      
+          const randomIndex = Math.floor(Math.random() * availableOnlineLawyers.length);
+          const newLawyer = availableOnlineLawyers[randomIndex];
+      
+          await handleOpenChat(newLawyer);
+      
+          // End flip after the second half
+          setTimeout(() => setIsFlipping(false), 300); // 300ms for the second half
+        }, 2000); // 300ms for the first half
+      };
+
+
+      
+
+
+          function containsSensitiveInfo(text) {
     const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{9}/g;
     const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/i;
     return phoneRegex.test(text) || emailRegex.test(text);
   }
 
-  const [isFlipping, setIsFlipping] = useState(false);
-
-const handleSwapLawyer = async () => {
-    setIsLoading(true)
-    
-  setTimeout(async () => {
-     setIsLoading(false)
-      setIsFlipping(true); // Start flip
-    const availableOnlineLawyers = lawyers.filter(
-      (lawyer) => onlineLawyers.includes(lawyer._id) && lawyer._id !== chatLawyer._id
-    );
-
-    if (availableOnlineLawyers.length === 0) {
-      Swal.fire({
-        icon: 'info',
-        title: 'No Other Lawyers Online',
-        text: 'Sorry, there are no other online lawyers to swap with right now.',
-        timer: 2500,
-        showConfirmButton: false,
-      });
-      setIsFlipping(false);
-      return;
-    }
-
-    const randomIndex = Math.floor(Math.random() * availableOnlineLawyers.length);
-    const newLawyer = availableOnlineLawyers[randomIndex];
-
-    await handleOpenChat(newLawyer);
-
-    // End flip after the second half
-    setTimeout(() => setIsFlipping(false), 300); // 300ms for the second half
-  }, 2000); // 300ms for the first half
-};
 
 
   return (
     <div>
-      <Header/>
-         <style>{`
+               <style>{`
 
   .lawyers-grid {
           display: grid;
@@ -626,50 +576,8 @@ const handleSwapLawyer = async () => {
       
         
       `}</style>
-   
-
-      {/* Search Section */}
-       <main className="main1">
-<div className="findlawyer">
-  <div className="findlawyer-glass" />
-  <h2 className="findlawyer-title">
-    🔎 Find a Lawyer
-  </h2>
-  <div className="findlawyer-controls">
-    <select
-      value={specialization}
-      onChange={e => setSpecialization(e.target.value)}
-      className="findlawyer-select"
-    >
-      {SPECIALIZATIONS.map(spec => (
-        <option key={spec.value} value={spec.value}>
-          {spec.label}
-        </option>
-      ))}
-    </select>
-    <select
-      value={state}
-      onChange={e => setState(e.target.value)}
-      className="findlawyer-select"
-    >
-      {STATES.map(st => (
-        <option key={st.value} value={st.value}>
-          {st.label}
-        </option>
-      ))}
-    </select>
-    <button
-      className="action-btn findlawyer-btn"
-      title="Chat Now"
-      onClick={filterLawyersAndChat}
-    >
-      Chat Now
-    </button>
-  </div>
-</div>
-
-
-      {/* Recent Chat Section */}
+        <Header/>
+          {/* Recent Chat Section */}
       <div className="recent-chat" style={{ padding: '32px', background: '#fff' }}>
         <h2 style={{ marginBottom: 16 }}> Recent Chats</h2>
         <div className="lawyers-grid">
@@ -682,6 +590,7 @@ const handleSwapLawyer = async () => {
       if (!lawyer) return null; // Skip if lawyer data not found
 
       return (
+
         <div key={chat._id} className="lawyer-card">
           <img
             src={lawyer.profilepic}
@@ -739,8 +648,8 @@ const handleSwapLawyer = async () => {
 </div>
 
       </div>
-          {/* Chat Popup */}
-      {chatLawyer && (
+
+         {chatLawyer && (
         <div className={`chat-popup${isFlipping ? ' flip' : ''}`}>
           <div className="chat-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -830,9 +739,145 @@ const handleSwapLawyer = async () => {
           </div>
         </div>
       )}
-      </main>
 
-    {isLoading && (
+{/* ==============chat popup ===========================================*/}
+
+
+         {chatLawyer && (
+        <div className={`chat-popup${isFlipping ? ' flip' : ''}`}>
+          <div className="chat-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img
+                src={chatLawyer.profilepic}
+                alt="profile"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid white',
+                }}
+              />
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
+                  {chatLawyer.firstName} {chatLawyer.lastName}
+                  {/* <span style={{fontSize:"10px",color:"lightgray",fontWeight:"normal"}}>
+                    {chatLawyer.yearsOfExperience}years of experience</span> */}
+                 
+
+                </div>
+                <div style={{ fontSize: '12px', opacity: 0.9 }}>
+                  {chatLawyer.isOnline ? '🟢 Online' : '🔴 Offline'}
+                </div>
+              </div>
+            </div>
+            <div className="header-actions">
+        <button
+        onClick={handleSwapLawyer}
+           style={{
+                background: 'none',
+                border:"1px solid lightgray",
+                color: 'black',
+                fontSize: '12px',
+                cursor: 'pointer',
+              }}
+        
+          title="Switch Lawyer"
+        >
+          Switch
+          {/* <span style={{fontSize:"14px"}}>switch</span> */}
+        </button>
+        <button
+           style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                cursor: 'pointer',
+              }}
+          onClick={() => setChatLawyer(null)}
+          title="Close Chat"
+        >
+          ✖
+        </button>
+      </div>
+            {/* <button
+              onClick={() => setChatLawyer(null)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                cursor: 'pointer',
+              }}
+            >✖</button> */}
+          </div>
+
+        <div className="chat-messages">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
+            {msg.text}
+            {msg.fileUrl && (
+              msg.fileType && msg.fileType.startsWith('image/') ? (
+                <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
+              ) : (
+                <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
+                  📄 {msg.fileName}
+                </a>
+              )
+            )}
+       <div style={{ fontSize: '10px', color: 'black', marginTop: '2px', textAlign: msg.isMe ? 'right' : 'left' }}>
+      {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
+    </div>
+  </div>
+))}
+      </div>
+
+          <div className="chat-input">
+            <input
+    type="file"
+    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+    ref={fileInputRef}
+    style={{ display: 'none' }}
+    onChange={handleFileChange}
+  />
+            <input
+              type="text"
+              placeholder="Type a message..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  handleSendMessage(e.target.value.trim());
+                  e.target.value = '';
+                }
+              }}
+            />
+   <button
+  type="button"
+  onClick={() => fileInputRef.current.click()}
+  style={{
+    position: 'absolute',
+    right: '25px',
+    top: '93%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    color: 'gray',
+    fontSize: '20px',
+    cursor: 'pointer',
+    padding: 0,
+    margin: 0
+  }}
+  title="Attach Document"
+  tabIndex={-1}
+>
+  🗂️
+</button>
+
+          </div>
+        </div>
+      )}
+
+         {isLoading && (
   <div
     style={{
       position: "fixed",
@@ -879,10 +924,9 @@ const handleSwapLawyer = async () => {
     </div>
   </div>
 )}
-
-
+      
     </div>
-  );
+  )
 }
 
-export default Findalawyer;
+export default Clientchathistory

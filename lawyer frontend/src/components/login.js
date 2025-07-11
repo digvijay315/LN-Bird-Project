@@ -263,7 +263,8 @@ const handleLogin = async (e) => {
     
       if (loginRole === 'user') {
         localStorage.setItem('userDetails', JSON.stringify(data));
-        navigate('/ClientDashboard');
+        // navigate('/ClientDashboard');
+         navigate('/');
       } else {
         localStorage.setItem('lawyerDetails', JSON.stringify(data));
         navigate('/LawyerDashboard');

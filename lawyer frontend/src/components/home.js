@@ -1,8 +1,11 @@
 import React from "react";
-import { useRef,useState } from "react";
+import { useRef,useState,useEffect } from "react";
 import '../css/OnlineLawyerConsultation.css'; // Uncomment after you add the CSS
 import Header from './header';
 import Footer from "./footer";
+import socket from './socket';
+import Swal from 'sweetalert2';
+import api from '../api';
 
 const Home = () => {
 
@@ -73,117 +76,123 @@ const CARDS_PER_PAGE1 = 3;
 
   const legalPoints = [
   {
-    title: "Expert Legal Advice:",
-    desc: "Receive guidance on understanding rights and the law.",
+    title: "Expert Guidance:",
+    desc: " A lawyer understands the law and can guide you through complex legal processes.",
   },
   {
-    title: "Handling Legal Matters:",
-    desc: "Legal issues are managed on your behalf, reducing time and stress.",
+    title: "Right Representation:",
+    desc: "Whether you're facing a dispute, sending/receiving a legal notice, or filing a complaint — a lawyer ensures your rights are protected. ",
   },
   {
-    title: "Court Representation:",
-    desc: "Interests are represented in court with effective case presentation.",
+    title: "Risk Reduction:",
+    desc: "Avoid costly mistakes or penalties by having a professional represent you. ",
   },
   {
-    title: "Negotiating Agreements:",
-    desc: "Agreements and settlements are negotiated to achieve the best outcome.",
+    title: "Peace of Mind:",
+    desc: " Knowing you have someone experienced handling your legal matter helps reduce stress. ",
   },
   {
-    title: "Protecting Rights:",
-    desc: "Legal representation ensures rights are safeguarded throughout the legal process.",
+    title: "Better Negotiation:",
+    desc: " Lawyers can communicate formally and effectively, often leading to better outcomes.",
   },
-  {
-    title: "Managing Paperwork:",
-    desc: "Necessary legal documentation and filings are handled efficiently.",
-  },
-  {
-    title: "Guiding the Legal System:",
-    desc: "Gain clarity for complex legal procedures, ensuring compliance and smooth progress.",
-  },
+ 
 ];
 
 
 const legalExpertise = [
   {
-    title: "Family Lawyer",
-    img: "https://assets.vakilsearch.com/consult_family.svg",
+    title: "Criminal Case ",
+    img: "https://assets.vakilsearch.com/consult_civil.svg",
     alt: "Family Lawyer",
     link: "https://www.zolvit.com/lawyers/family",
     description:
-      "A professional who can help address legal issues related to family law: divorces, child custody, child support, paternity, alimony, legal separation, guardianship, adoption, prenuptial agreements, domestic violence, and dowry issues.",
-    cta: "Consult Family Lawyer Online",
+      `Criminal cases involve actions that are considered offenses against society or the 
+state. These include crimes like theft, assault, fraud, murder, cybercrime, and more. 
+A criminal lawyer defends individuals accused of such crimes or helps victims file 
+complaints and pursue justice under the Indian Penal Code (IPC). `,
   },
   {
-    title: "Property Lawyer",
+    title: "Civil Case",
     img: "https://assets.vakilsearch.com/consult_property.svg",
     alt: "Property Lawyer",
     link: "https://www.zolvit.com/lawyers/property",
     description:
-      "Helps with property disputes, real estate transactions, landlord-tenant issues, title deeds, registration, zoning, land use, inheritance, homeowner association services, foreclosure, and property dispute taxes.",
-    cta: "Consult Property Lawyer Online",
+      `Civil cases deal with personal disputes between individuals or organizations. 
+Common civil matters include property disputes, breach of contract, loan recovery, 
+defamation, and more. Civil lawyers help in filing suits, sending legal notices, and 
+court representation.`
   },
   {
-    title: "Civil Lawyer",
-    img: "https://assets.vakilsearch.com/consult_civil.svg",
+    title: "Family Case",
+    img: "https://assets.vakilsearch.com/consult_family.svg",
     alt: "Civil Lawyer",
     link: "https://www.zolvit.com/lawyers/civil",
     description:
-      "Presents cases that don't involve criminal charges: personal injury, breach of contract, defamation, employment disputes, debt collections, and ensures businesses follow the law in dealings with customers.",
-    cta: "Consult Civil Lawyer Online",
+     `Family cases include legal issues related to personal relationships such as marriage, 
+divorce, child custody, maintenance, domestic violence, and inheritance. A family 
+lawyer helps resolve these matters through court or mutual agreement. `
   },
   {
-    title: "Business Lawyer",
+    title: "Corporate Case",
     img: "https://assets.vakilsearch.com/consult_company.svg",
     alt: "Business Lawyer",
     link: "https://www.zolvit.com/lawyers/business",
     description:
-      "Advises business owners on legal issues: contracts, employment law, negotiations, taxation, regulatory compliance, mergers & acquisitions, anti-trust, corruption, commercial real estate, business litigation, and corporate governance.",
-    cta: "Consult Business Lawyer Online",
+      `Corporate legal cases involve legal matters related to companies and business 
+operations. This includes company registration, mergers, shareholder disputes, 
+regulatory compliance, and corporate fraud. Corporate lawyers work with businesses 
+of all sizes.`
   },
   {
-    title: "Criminal Lawyer",
+    title: "Consumer Case",
     img: "https://assets.vakilsearch.com/consult_criminal.svg",
     alt: "Criminal Lawyer",
     link: "https://www.zolvit.com/lawyers/criminal",
     description:
-      "Represents or prosecutes people accused of crimes: drug offenses, DUIs, assault, theft, murder, white-collar crimes, cybercrimes, tax evasion, identity theft, and forgeries.",
-    cta: "Consult Criminal Lawyer Online",
+     `Consumer cases are filed when a consumer faces fraud, poor service, or defective 
+products. A consumer lawyer helps you file a complaint in the consumer court and 
+ensures your consumer rights are protected.`
   },
   {
-    title: "Consumer Lawyer",
-    img: "https://assets.vakilsearch.com/consult_consumer.svg",
+    title: "Labour Case",
+    img: "https://assets.vakilsearch.com/consult_labour.svg",
     alt: "Consumer Lawyer",
     link: "https://www.zolvit.com/lawyers/consumer",
     description:
-      "Advocates for consumer rights: product liability, false advertising, unfair trade practices, consumer fraud, warranty claims, debt collection, credit reporting, bankruptcy, and privacy/data protection.",
-    cta: "Consult Consumer Lawyer Online",
+    ` Labour or employment cases deal with disputes between employers and employees. 
+This includes wrongful termination, unpaid wages, harassment at work, and labor law 
+violations. Labour lawyers ensure your rights at the workplace are legally protected.`,
   },
   {
-    title: "Labour Lawyer",
-    img: "https://assets.vakilsearch.com/consult_labour.svg",
+    title: "Cyber Case",
+    img: "https://assets.vakilsearch.com/consult_consumer.svg",
     alt: "Labour Lawyer",
     link: "https://www.zolvit.com/lawyers/labour",
     description:
-      "Helps with employment and labor law issues: contracts, wrongful termination, discrimination, harassment, wage disputes, workplace safety, collective bargaining, leave, retirement benefits, and workplace policy.",
-    cta: "Consult Labour Lawyer Online",
+     `Cyber legal cases involve crimes committed using the internet or digital platforms. 
+Common examples include online fraud, cyberbullying, hacking, financial scams, 
+identity theft, and data breaches. A cyber lawyer helps file complaints and take legal 
+action under the IT Act.`
   },
   {
-    title: "Constitutional Lawyer",
+    title: "Property Case",
     img: "https://assets.vakilsearch.com/consult_constitutional.svg",
     alt: "Constitutional Lawyer",
     link: "https://www.zolvit.com/lawyers/constitutional",
     description:
-      "Handles cases involving constitutional rights and freedoms: civil rights, liberties, equal protection, due process, freedom of speech/religion, privacy, separation of powers, and voting rights.",
-    cta: "Consult Constitutional Lawyer Online",
+  ` Property cases include land disputes, illegal possession, boundary issues, ancestral 
+property conflicts, and builder fraud. A property lawyer helps in title verification, 
+property transfer, and litigation.`
   },
   {
-    title: "Intellectual Property (IP) Lawyer",
+    title: "Tax Case",
     img: "https://assets.vakilsearch.com/consult_ip.svg",
     alt: "Intellectual Property (IP) Lawyer",
     link: "https://www.zolvit.com/lawyers/intellectual-property",
     description:
-      "Protects and enforces rights of creators/owners: patents, trademarks, copyrights, trade secrets, licensing, IP litigation, domain disputes, counterfeiting, international IP, and digital rights management.",
-    cta: "Consult IP Lawyer Online",
+     `Tax cases involve issues with income tax, GST, business tax disputes, or notices 
+from tax authorities. A tax lawyer or consultant helps with tax filing, appeals, audits, 
+and notices from the Income Tax Department.`
   },
 ];
 
@@ -267,37 +276,30 @@ const expertServices = [
 
 const onlineBenefits = [
   {
-    title: "Convenience",
-    desc: "Consult a lawyer from home, without the need to travel or schedule an in-person appointment.",
+    title: "Save Time & Effort",
+    desc: " No need to visit chambers or courts just for a consultation.",
   },
   {
-    title: "Privacy",
-    desc: "Maintain confidentiality by consulting a lawyer privately, avoiding visits to law offices or court premises.",
+    title: "Convenient Access",
+    desc: " Talk to a verified lawyer from anywhere using your phone or laptop.",
   },
   {
-    title: "Cost-Effectiveness",
-    desc: "Lower overheads make online consultations more competitively priced compared to traditional law firms.",
+    title: "Discreet & Confidential",
+    desc: " Private legal matters stay private — you choose when and how to talk.",
   },
   {
-    title: "Efficiency",
-    desc: "Online law practices offer tools for sharing and collaborating on documents, improving transparency and productivity.",
+    title: "Faster Solutions",
+    desc: " Quick answers to urgent questions like legal notices, challans, disputes, etc.",
   },
   {
-    title: "Accessibility",
-    desc: "Access legal experts from anywhere, regardless of your location.",
+    title: "Affordable Options",
+    desc: "Flexible consultation options compared to traditional visits.",
   },
   {
-    title: "Time Efficiency",
-    desc: "Save time and energy by opting for quicker online consultations.",
+    title: "Wide Choice",
+    desc: "Access lawyers from various practice areas — all in one place.",
   },
-  {
-    title: "Dispute Resolution",
-    desc: "Online platforms can help resolve disputes swiftly and cost-effectively.",
-  },
-  {
-    title: "Confidential and Secure",
-    desc: "Ensure your legal matters are handled with the utmost confidentiality and security.",
-  },
+
 ];
 
 
@@ -305,27 +307,27 @@ const onlineBenefits = [
 const whyZolvitCards = [
   {
     img: "https://assets.vakilsearch.com/live-images/whyZolvit1.svg",
-    desc: "Connect with top legal professionals for expert advice",
+    desc: "No waiting, no booking — connect with available lawyers immediately via chat or call.",
   },
   {
     img: "https://assets.vakilsearch.com/live-images/whyZolvit2.svg",
-    desc: "We cover all your legal needs comprehensively",
+    desc: "From civil and criminal to family, consumer, cyber, and more — we connect you with the right expert. ",
   },
   {
     img: "https://assets.vakilsearch.com/live-images/whyZolvit3.svg",
-    desc: "Access legal assistance anytime, anywhere through our easy platform",
+    desc: "Every lawyer on our platform is verified for qualification and authenticity. ",
   },
   {
     img: "https://assets.vakilsearch.com/live-images/whyZolvit4.svg",
-    desc: "Enjoy transparent pricing with no hidden costs",
+    desc: " Just open the app or website, choose your issue, and talk to a lawyer — it's that simple.",
   },
   {
     img: "https://assets.vakilsearch.com/live-images/whyZolvit5.svg",
-    desc: "Get personalised legal services tailored to your requirements",
+    desc: " Access legal support even from remote areas or small towns.",
   },
   {
     img: "https://assets.vakilsearch.com/live-images/whyZolvit6.svg",
-    desc: "Save time with prompt responses and quick resolutions.",
+    desc: "Your data and conversations stay safe, and pricing (if any) is always shown upfront.",
   },
 ];
 
@@ -458,6 +460,7 @@ const faqs = [
 
   const [specialization, setSpecialization] = useState('');
   const [court, setcourt] = useState('');
+  const[language,setlanguage]=useState('')
 
     const SPECIALIZATIONS = [
   { value: '', label: 'Select Specialization' },
@@ -481,6 +484,375 @@ const Courts = [
   { value: 'tamilnadu', label: 'Tamil Nadu' },
   // ...add more
 ];
+const languages=[
+  {value:'',label:'Select language'},
+  {value:'hindi',label:'Hindi'},
+  {value:'english',label:'English'},
+  {value:'marathi',label:'Marathi'},
+  {value:'tamil',label:'Tamil'},
+  {value:'bengali',label:'Bengali'},
+]
+
+
+//========================================== chat start=========================================================================
+
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [state, setState] = useState('');
+  const [filteredLawyers, setFilteredLawyers] = useState([]);
+  const [recentChats, setRecentChats] = useState([]);
+  const fileInputRef = useRef(null);
+
+
+const userData = JSON.parse(localStorage.getItem('userDetails'));
+
+
+  const fetchChatHistory=async()=>
+  {
+    try {
+        const res=await api.get('api/admin/chathistory')
+        const result=res.data
+        const clientChats = result.filter(
+            chat => chat.from === userData.user._id && chat.fromModel === "User"
+            );
+        setRecentChats(clientChats)
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+  }
+  // Fetch chat history for the logged-in user
+  useEffect(() => {
+    
+    fetchChatHistory()
+  }, []);
+
+  // Deduplicate by lawyer ID ("to" field)
+const uniqueChatsMap = {};
+const uniqueChats = [];
+recentChats.forEach(chat => {
+  if (!uniqueChatsMap[chat.to]) {
+    uniqueChatsMap[chat.to] = true;
+    uniqueChats.push(chat);
+  }
+});
+
+
+
+  const iconStyle = { width: 22, height: 22, verticalAlign: 'middle' };
+
+
+
+const STATES = [
+  { value: '', label: 'Select State' },
+  { value: 'maharashtra', label: 'Maharashtra' },
+  { value: 'karnataka', label: 'Karnataka' },
+  { value: 'delhi', label: 'Delhi' },
+  { value: 'tamilnadu', label: 'Tamil Nadu' },
+  // ...add more
+];
+
+
+  const [lawyers, setLawyers] = useState([]);
+  const [chatLawyer, setChatLawyer] = useState(null);
+  const [onlineLawyers, setOnlineLawyers] = useState([]);
+  const [messages, setMessages] = useState([]);
+  const [messageMap, setMessageMap] = useState({});
+
+  const fetchlawyers = async () => {
+    try {
+      const resp = await api.get('api/lawyer/getalllawyerprofile');
+      setLawyers(resp.data.filter((item) => (item.status === "verified")));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchlawyers();
+  }, []);
+
+  const getLawyerById = (id) => lawyers.find(lawyer => lawyer._id === id);
+
+    // Filter lawyers based on search
+const filterLawyersAndChat = () => {
+   
+  if(!userData?.user._id)
+  {
+     return Swal.fire({
+      icon:"error",
+      title:"Login!!!",
+      text:"Please Login first",
+      showConfirmButton:"true"
+    })
+  }
+   setIsLoading(true)
+     setTimeout(() => {
+    setIsLoading(false);
+  
+      // Filter lawyers by specialization and state
+  let filtered = lawyers;
+
+  if (specialization) {
+    filtered = filtered.filter(lawyer =>
+      Array.isArray(lawyer.specializations)
+        ? lawyer.specializations.some(
+            spec =>
+              spec.label &&
+              spec.label.toLowerCase().includes(specialization.toLowerCase())
+          )
+        : (lawyer.specializations?.label || lawyer.specializations || '')
+            .toLowerCase()
+            .includes(specialization.toLowerCase())
+    );
+  }
+
+    if (language) {
+    filtered = filtered.filter(lawyer =>
+      Array.isArray(lawyer.languages)
+        ? lawyer.languages.some(
+            spec =>
+              spec.label &&
+              spec.label.toLowerCase().includes(language.toLowerCase())
+          )
+        : (lawyer.languages?.label || lawyer.languages || '')
+            .toLowerCase()
+            .includes(language.toLowerCase())
+    );
+  }
+
+  if (court) {
+    filtered = filtered.filter(lawyer =>
+      Array.isArray(lawyer.practicingcourts)
+        ? lawyer.practicingcourts.some(
+            spec =>
+              spec.label &&
+              spec.label.toLowerCase().includes(court.toLowerCase())
+          )
+        : (lawyer.practicingcourts?.label || lawyer.practicingcourts || '')
+            .toLowerCase()
+            .includes(court.toLowerCase())
+    );
+  }
+
+  // Try to find an online lawyer from filtered list, random order
+  let candidates = [...filtered];
+  while (candidates.length > 0) {
+    const idx = Math.floor(Math.random() * candidates.length);
+    const candidate = candidates[idx];
+    if (onlineLawyers.includes(candidate._id)) {
+      handleOpenChat(candidate);
+      return;
+    }
+    candidates.splice(idx, 1); // Remove tried candidate
+  }
+
+  // If no online lawyer found in filtered, pick any online lawyer
+  const onlineLawyerObjs = lawyers.filter(lawyer =>
+    onlineLawyers.includes(lawyer._id)
+  );
+  if (onlineLawyerObjs.length > 0) {
+    const randomLawyer =
+      onlineLawyerObjs[Math.floor(Math.random() * onlineLawyerObjs.length)];
+    handleOpenChat(randomLawyer);
+  } else {
+    Swal.fire({
+        icon:"info",
+        title:"Search result...",
+        text:"No lawyers available.",
+        showConfirmButton:"true"
+    })
+    
+  }
+
+  }, 2000);
+
+};
+
+
+
+
+
+    useEffect(() => {
+    if (!userData?.user._id) return;
+
+    if (!socket.connected) socket.connect();
+
+    socket.on('connect', () => {
+      console.log('✅ Connected (client):', socket.id);
+      socket.emit('clientOnline', userData.user._id);
+      socket.emit('getOnlineLawyers');
+    });
+
+    socket.on('onlineLawyersList', (ids) => {
+      console.log('✅ Received online lawyers:', ids);
+      setOnlineLawyers(ids);
+    });
+
+    socket.on('updateOnlineUsers', (ids) => {
+      setOnlineLawyers(ids);
+    });
+
+    socket.on('receiveMessage', ({ from, message }) => {
+      if (chatLawyer?._id === from) {
+        setMessages((prev) => [...prev, { text: message, isMe: false }]);
+      }
+    });
+
+    return () => {
+      socket.off('connect');
+      socket.off('receiveMessage');
+      socket.off('onlineLawyersList');
+      socket.off('updateOnlineUsers');
+    };
+  }, [userData?.user._id, chatLawyer]);
+
+  const handleSendMessage = (text) => {
+    if (!text.trim() || !chatLawyer?._id) return;
+
+    if (containsSensitiveInfo(text)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Not Allowed 🚫',
+        text: 'Sharing mobile numbers or emails is not permitted!',
+        timer: 3000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      });
+      return;
+    }
+    
+     const timestamp = new Date().toISOString();
+
+    socket.emit('privateMessage', {
+      toUserId: chatLawyer._id,
+      message: text,
+      fromUserType: 'client',
+      timestamp
+    });
+
+    setMessages((prev) => [...prev, { text, isMe: true,timestamp  }]);
+  };
+
+    const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file || !chatLawyer?._id) return;
+    setIsLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const res = await api.post('/api/admin/document', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      const fileUrl = res.data.url;
+      const fileType = file.type;
+
+      socket.emit('privateMessage', {
+        toUserId: chatLawyer._id,
+        message: '',
+        fileUrl,
+        fileName: file.name,
+        fileType,
+        fromUserType: 'client'
+      });
+
+      setMessages((prev) => [
+        ...prev,
+        { text: '', fileUrl, fileName: file.name, fileType, isMe: true }
+      ]);
+    } catch (err) {
+      alert('Upload failed');
+    }
+    setIsLoading(false);
+  };
+
+
+  
+  const handleOpenChat = async (lawyer) => {
+    const isOnline = onlineLawyers.includes(lawyer._id);
+    setChatLawyer({ ...lawyer, isOnline });
+
+    const clientId = userData.user._id;
+    const lawyerId = lawyer._id;
+
+    try {
+      const res = await api.get(`api/admin/chathistory/${clientId}/${lawyerId}`);
+      const data = await res.data;
+
+      let formatted = data.map(msg => ({
+        text: msg.message,
+        isMe: msg.from === clientId,
+        isSystem: false,
+        fileUrl:msg.fileUrl,
+        fileName:msg.fileName, 
+        fileType:msg.fileType
+      }));
+
+      if (formatted.length === 0) {
+        const systemMessage = {
+          text: `You are now connected to Advocate ${lawyer.firstName} ${lawyer.lastName} who practices in ${lawyer.practicingcourts.map((item)=>item.label).join(',')} Courts and specializes in ${lawyer.specializations.map((item)=>item.label).join(',')}, With ${lawyer.yearsOfExperience} of experience. Feel free to share your concern or upload documents securely`,
+          isSystem: true,
+          isMe: false,
+        };
+        formatted = [systemMessage];
+      }
+
+      setMessages(formatted);
+      setMessageMap(prev => ({ ...prev, [lawyerId]: formatted }));
+    } catch (err) {
+      console.error('❌ Error fetching chat history:', err);
+    }
+  };
+
+  function containsSensitiveInfo(text) {
+    const phoneRegex = /(?:\+91[\s-]?)?[6-9]\d{9}/g;
+    const emailRegex = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b/i;
+    return phoneRegex.test(text) || emailRegex.test(text);
+  }
+
+  const [isFlipping, setIsFlipping] = useState(false);
+
+const handleSwapLawyer = async () => {
+
+setIsLoading(true)
+  // Wait for the first half of the flip
+  setTimeout(async () => {
+      setIsFlipping(true); // Start flip
+      setIsLoading(false)
+    const availableOnlineLawyers = lawyers.filter(
+      (lawyer) => onlineLawyers.includes(lawyer._id) && lawyer._id !== chatLawyer._id
+    );
+
+    if (availableOnlineLawyers.length === 0) {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Other Lawyers Online',
+        text: 'Sorry, there are no other online lawyers to swap with right now.',
+        timer: 2500,
+        showConfirmButton: false,
+      });
+      setIsFlipping(false);
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * availableOnlineLawyers.length);
+    const newLawyer = availableOnlineLawyers[randomIndex];
+
+    await handleOpenChat(newLawyer);
+
+    // End flip after the second half
+    setTimeout(() => setIsFlipping(false), 300); // 300ms for the second half
+  }, 2000); // 300ms for the first half
+};
+
+
+
+
+//====================================================== chat end===================================================================
 
 
 
@@ -496,7 +868,24 @@ const Courts = [
         <div className="olc-banner-content">
           {/* Left: Headline and Benefits */}
           <div className="olc-banner-left">
-            <h1 className="olc-banner-title">Online Lawyer Consultation India</h1>
+         <div className="olc-process-desktop">
+              <p className="olc-process-title">Process</p>
+             <div className="olc-process-steps">
+  <div className="olc-process-step">
+     <span style={{ fontSize: '32px' }}>📝</span>
+    <span>Select details</span>
+  </div>
+  <div className="olc-process-step">
+    <span style={{ fontSize: '32px' }}>⏳</span>
+    <span>Wait for a few minutes</span>
+  </div>
+  <div className="olc-process-step">
+    <span style={{ fontSize: '32px' }}>💬</span>
+    <span>Chat with lawyer</span>
+  </div>
+</div>
+
+            </div>
 
             <div className="findlawyer">
   <div className="findlawyer-glass" />
@@ -526,10 +915,21 @@ const Courts = [
         </option>
       ))}
     </select>
+       <select
+      value={court}
+      onChange={e => setlanguage(e.target.value)}
+      className="findlawyer-select"
+    >
+      {languages.map(st => (
+        <option key={st.value} value={st.value}>
+          {st.label}
+        </option>
+      ))}
+    </select>
     <button
       className="action-btn findlawyer-btn"
       title="Chat Now"
-    //   onClick={filterLawyersAndChat}
+      onClick={filterLawyersAndChat}
     >
       Chat Now
     </button>
@@ -556,27 +956,7 @@ const Courts = [
               </li>
             </ul> */}
             {/* Process Steps (Desktop) */}
-            <div className="olc-process-desktop">
-              <p className="olc-process-title">Process</p>
-              <div className="olc-process-steps">
-                <div className="olc-process-step">
-                  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Fill Form" />
-                  <span>Select details</span>
-                </div>
-                <div className="olc-process-step">
-                  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Schedule" />
-                  <span>Wait for a few minutes</span>
-                </div>
-                <div className="olc-process-step">
-                  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Payment" />
-                  <span>chat with lawyer</span>
-                </div>
-                {/* <div className="olc-process-step">
-                  <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
-                  <span>Lawyer Will Call You</span>
-                </div> */}
-              </div>
-            </div>
+           
           </div>
           {/* Right: Lead Form */}
           {/* <div className="olc-banner-right" id="leadForm">
@@ -710,7 +1090,7 @@ const Courts = [
 </div>
 
 {/* We Cover Everything You Need Section */}
- <section className="olc-cover-section">
+ {/* <section className="olc-cover-section">
       <h2 className="olc-cover-title">We Cover Everything You Need</h2>
       <div className="olc-cover-slider">
         <button
@@ -755,9 +1135,9 @@ const Courts = [
           />
         </button>
       </div>
-    </section>
+    </section> */}
 
-      <section className="olc-overview-section">
+      {/* <section className="olc-overview-section">
     <div className="olc-overview-flex">
       <div className="olc-overview-content">
         <h2 className="olc-overview-title">Lawyer Consultation - Overview</h2>
@@ -780,9 +1160,9 @@ const Courts = [
         ></iframe>
       </div>
     </div>
-  </section>
+  </section> */}
 
-  <section className="olc-panel-section">
+  {/* <section className="olc-panel-section">
       <h2 className="olc-panel-title">Our Panel of Legal Consultants</h2>
       <div className="olc-panel-slider">
         <button
@@ -833,7 +1213,86 @@ const Courts = [
           />
         </button>
       </div>
-    </section>
+    </section> */}
+
+<section class="lawyer-help-section">
+  <h2 class="help-title">Not sure which type of lawyer you need?</h2>
+  <p class="help-desc">
+    No problem! <a href="https://www.google.com/" target="_blank" class="google-link">Click here</a> and type the following:<br></br>
+    <span class="help-template">"My legal issue is [your case]. What category of lawyer do I need — criminal, civil, family, corporate, consumer, labour, or cyber?"</span>
+  </p>
+  <div class="help-example">
+    <strong>Example:</strong><br></br>
+    My legal issue is my employer is not paying my salary. What category of lawyer do I need — criminal, civil, family, corporate, consumer, labour, or cyber?
+  </div>
+  {/* <div class="lawyer-types-table-responsive">
+    <table class="lawyer-types-table">
+      <thead>
+        <tr>
+          <th>Lawyer Type</th>
+          <th>What They Cover</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Criminal</td>
+          <td>Defending or prosecuting criminal charges (theft, assault, fraud, etc.)</td>
+        </tr>
+        <tr>
+          <td>Civil</td>
+          <td>Property disputes, breach of contract, damages, torts, general non-criminal matters</td>
+        </tr>
+        <tr>
+          <td>Family</td>
+          <td>Divorce, child custody, alimony, adoption, domestic violence</td>
+        </tr>
+        <tr>
+          <td>Corporate</td>
+          <td>Business formation, mergers, acquisitions, compliance, contracts, shareholder disputes</td>
+        </tr>
+        <tr>
+          <td>Consumer</td>
+          <td>Product/service complaints, consumer fraud, unfair trade practices, warranty issues</td>
+        </tr>
+        <tr>
+          <td>Labour</td>
+          <td>Employment disputes, unpaid salary, wrongful termination, workplace harassment</td>
+        </tr>
+        <tr>
+          <td>Cyber</td>
+          <td>Online fraud, hacking, data breaches, cyberbullying, digital privacy</td>
+        </tr>
+      </tbody>
+    </table>
+  </div> */}
+</section>
+
+ <section className="olc-expertise-section">
+    <h2 className="olc-expertise-title">Areas of Legal Expertise</h2>
+    <div className="olc-expertise-list">
+      {legalExpertise.map((area, idx) => (
+        <div className="olc-expertise-card" key={area.title}>
+          <img
+            src={area.img}
+            alt={area.alt}
+            className="olc-expertise-img"
+            loading="lazy"
+          />
+          <div className="olc-expertise-content">
+            <p className="olc-expertise-area">
+              <a href={area.link} target="_blank" rel="noopener noreferrer">
+                {area.title}
+              </a>
+            </p>
+            <p className="olc-expertise-desc">{area.description}</p>
+            {/* <a href={area.link} target="_blank" rel="noopener noreferrer">
+              <button className="olc-expertise-btn">{area.cta}</button>
+            </a> */}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
 
  <section className="olc-legalrep-section">
     <div className="olc-legalrep-container">
@@ -854,34 +1313,9 @@ const Courts = [
     </div>
   </section>
 
-  <section className="olc-expertise-section">
-    <h2 className="olc-expertise-title">Areas of Legal Expertise</h2>
-    <div className="olc-expertise-list">
-      {legalExpertise.map((area, idx) => (
-        <div className="olc-expertise-card" key={area.title}>
-          <img
-            src={area.img}
-            alt={area.alt}
-            className="olc-expertise-img"
-            loading="lazy"
-          />
-          <div className="olc-expertise-content">
-            <p className="olc-expertise-area">
-              <a href={area.link} target="_blank" rel="noopener noreferrer">
-                {area.title}
-              </a>
-            </p>
-            <p className="olc-expertise-desc">{area.description}</p>
-            <a href={area.link} target="_blank" rel="noopener noreferrer">
-              <button className="olc-expertise-btn">{area.cta}</button>
-            </a>
-          </div>
-        </div>
-      ))}
-    </div>
-  </section>
+ 
 
- <section className="olc-cta-section">
+ {/* <section className="olc-cta-section">
     <div className="olc-cta-container">
       <p className="olc-cta-text">
         Searching for experienced lawyers near me?
@@ -895,9 +1329,9 @@ const Courts = [
         Consult A Lawyer Now
       </button>
     </div>
-  </section>
+  </section> */}
 
-<section className="olc-expertservices-section">
+{/* <section className="olc-expertservices-section">
     <h2 className="olc-expertservices-title">
       Our Expert Services For Your Legal Needs
     </h2>
@@ -937,7 +1371,7 @@ const Courts = [
         </div>
       ))}
     </div>
-  </section>
+  </section> */}
 
    <section className="olc-benefits-section">
     <h2 className="olc-benefits-title">Benefits of Online Lawyer Consultation</h2>
@@ -962,10 +1396,10 @@ const Courts = [
  <section className="olc-whyzolvit-section">
     <div className="olc-whyzolvit-container">
       <h2 className="olc-whyzolvit-title">
-        Why Choose Zolvit For Online Legal Consultation?
+        Why Choose Counvo For Online Legal Consultation?
       </h2>
       <p className="olc-whyzolvit-lead">
-        Zolvit offers tailored legal support, ensuring that you are connected with experienced lawyers. Whether it be corporate, personal, business, or IP law, we provide access to a network of skilled Lawyers across various niches. Our platform simplifies the process, offering transparent communication, efficient legal counsel, and ongoing support throughout the legal process. Choose Zolvit for comprehensive legal solutions, personalised attention, and a hassle-free experience in securing the best legal consultation for your case.
+        Counvo offers tailored legal support, ensuring that you are connected with experienced lawyers. Whether it be corporate, personal, business, or IP law, we provide access to a network of skilled Lawyers across various niches. Our platform simplifies the process, offering transparent communication, efficient legal counsel, and ongoing support throughout the legal process. Choose Zolvit for comprehensive legal solutions, personalised attention, and a hassle-free experience in securing the best legal consultation for your case.
       </p>
       <div className="olc-whyzolvit-grid">
         {whyZolvitCards.map((card, idx) => (
@@ -993,7 +1427,7 @@ const Courts = [
   </section>
 
 
-<section className="olc-cities-section">
+{/* <section className="olc-cities-section">
     <h2 className="olc-cities-title">
       Online Lawyer Consultations Offered in Other Cities
     </h2>
@@ -1008,10 +1442,10 @@ const Courts = [
         </a>
       ))}
     </div>
-  </section>
+  </section> */}
 
 
-  <section className="olc-cta-banner-section">
+  {/* <section className="olc-cta-banner-section">
     <div className="olc-cta-banner-container">
       <h3 className="olc-cta-banner-title">
         Get legal advice online anywhere, anytime through Zolvit. Completely easy and online process with no hassles.
@@ -1023,10 +1457,10 @@ const Courts = [
         TALK TO A LAWYER NOW
       </button>
     </div>
-  </section>
+  </section> */}
 
 
-  <section className="olc-faqs-section">
+  {/* <section className="olc-faqs-section">
       <div className="olc-faqs-container">
         <h2 className="olc-faqs-title">FAQs on Lawyer Services</h2>
         <div className="olc-faqs-list">
@@ -1067,12 +1501,461 @@ const Courts = [
           ))}
         </div>
       </div>
-    </section>
+    </section> */}
+<section class="legal-queries-section">
+  <h2 class="section-title">Most Asked Legal Queries</h2>
+  <div class="queries-grid">
+    <div class="query-card">
+      <span class="query-icon">🚗</span>
+      <h3>Car Challan</h3>
+      <p>Information and help regarding traffic fines and challans.</p>
+    </div>
+    <div class="query-card">
+      <span class="query-icon">📄</span>
+      <h3>Legal Notice</h3>
+      <p>Drafting and responding to legal notices efficiently.</p>
+    </div>
+    <div class="query-card">
+      <span class="query-icon ">💸</span>
+      <h3>Cheque Bounce</h3>
+      <p>Guidance on cheque bounce cases and legal remedies.</p>
+    </div>
+    <div class="query-card">
+      <span class="query-icon">📦</span>
+      <h3>Product/Service Default</h3>
+      <p>Assistance for faulty products or unsatisfactory services.</p>
+    </div>
+    <div class="query-card">
+      <span class="query-icon">🕵️</span>
+      <h3>Online Fraud</h3>
+      <p>Support for victims of cyber fraud and scams.</p>
+    </div>
+  </div>
+</section>
 
+
+{/*========================================= chat section start============================================================= */}
+      <style>{`
+
+  .lawyers-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .lawyer-card {
+          background: #f9fafb;
+          border-radius: 12px;
+          padding: 1.5rem;
+          text-align: center;
+          transition: all 0.3s ease;
+          border: 1px solid #e5e7eb;
+        }
+
+        .lawyer-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.15);
+          background: white;
+        }
+
+        .lawyer-avatar {
+          width: 80px;
+          height: 80px;
+          border-radius: 50%;
+          object-fit: cover;
+          border: 3px solid #3b82f6;
+          margin: 0 auto 1rem;
+        }
+
+        .lawyer-name {
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: #1f2937;
+          margin-bottom: 0.5rem;
+        }
+
+        .lawyer-status {
+          font-size: 0.875rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .lawyer-details {
+          font-size: 0.875rem;
+          color: #6b7280;
+          margin-bottom: 1rem;
+        }
+
+        .lawyer-actions {
+          display: flex;
+          justify-content: center;
+          gap: 0.75rem;
+        }
+
+        .action-btn {
+          background: white;
+          color:blue;
+          border: 1px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 0.5rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .action-btn:hover {
+          background: #f3f4f6;
+          transform: translateY(-1px);
+        }
+        .chat-popup {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 380px;
+          height: 500px;
+          background: white;
+          border-radius: 16px;
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+          border: 1px solid #e5e7eb;
+          overflow: hidden;
+          z-index: 1000;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .chat-header {
+          background: linear-gradient(135deg, #3b82f6, #1e40af);
+          color: white;
+          padding: 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .chat-messages {
+          flex: 1;
+          padding: 1rem;
+          overflow-y: auto;
+          background: #f9fafb;
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .message {
+          max-width: 80%;
+          padding: 0.75rem 1rem;
+          border-radius: 18px;
+          font-size: 0.875rem;
+          line-height: 1.4;
+          word-wrap: break-word;
+        }
+
+        .message.sent {
+          align-self: flex-end;
+          background: #3b82f6;
+          color: white;
+        }
+
+        .message.received {
+          align-self: flex-start;
+          background: white;
+          color: #1f2937;
+          border: 1px solid #e5e7eb;
+        }
+
+        .message.system {
+          align-self: center;
+          background: #eff6ff;
+          color: #1e40af;
+          border: 1px solid #bfdbfe;
+          text-align: center;
+          font-style: italic;
+        }
+
+        .chat-input {
+          padding: 1rem;
+          border-top: 1px solid #e5e7eb;
+          background: white;
+        }
+
+        .chat-input input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border-radius: 20px;
+          border: 1px solid #e5e7eb;
+          font-size: 0.875rem;
+          outline: none;
+          transition: border-color 0.2s ease;
+        }
+
+        .chat-input input:focus {
+          border-color: #3b82f6;
+        }
+
+  
+    @media (max-width: 768px) {
+          .main-content {
+            margin-left: 0;
+            padding: 1rem;
+          }
+
+          .charts-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .time-info {
+            flex-direction: column;
+            gap: 0.5rem;
+          }
+
+          .lawyers-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .chat-popup {
+            width: calc(100vw - 20px);
+            height: calc(100vh - 100px);
+            bottom: 10px;
+            right: 10px;
+            left: 10px;
+          }
+              @media (max-width: 1024px) {
+    .lawyers-grid {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .chat-popup {
+      width: 320px;
+      height: 450px;
+    }
+  }
+
+  @media (max-width: 480px) {
+  .main1{
+      margin-left:0px
+      }
+    .lawyers-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .chat-popup {
+      width: 100vw;
+      height: 100vh;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      border-radius: 0;
+    }
+    .chat-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .chat-input input {
+      font-size: 1rem;
+    }
+    select {
+      min-width: 100% !important;
+    }
+    .action-btn {
+      width: 100%;
+      justify-content: center;
+    }
+    .main1 > div {
+      padding: 20px 16px !important;
+    }
+      
+        
+      `}</style>
+
+  {/* Chat Popup */}
+
+      {chatLawyer && (
+        <div className={`chat-popup${isFlipping ? ' flip' : ''}`}>
+          <div className="chat-header">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <img
+                src={chatLawyer.profilepic}
+                alt="profile"
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid white',
+                }}
+              />
+              <div>
+                <div style={{ fontWeight: 'bold', fontSize: '14px' }}>
+                  {chatLawyer.firstName} {chatLawyer.lastName}
+                  {/* <span style={{fontSize:"10px",color:"lightgray",fontWeight:"normal"}}>
+                    {chatLawyer.yearsOfExperience}years of experience</span> */}
+                 
+
+                </div>
+                <div style={{ fontSize: '12px', opacity: 0.9 }}>
+                  {chatLawyer.isOnline ? '🟢 Online' : '🔴 Offline'}
+                </div>
+              </div>
+            </div>
+            <div className="header-actions">
+        <button
+        onClick={handleSwapLawyer}
+           style={{
+                background: 'none',
+                border:"1px solid lightgray",
+                color: 'black',
+                fontSize: '12px',
+                cursor: 'pointer',
+              }}
+        
+          title="Switch Lawyer"
+        >
+          Switch
+          {/* <span style={{fontSize:"14px"}}>switch</span> */}
+        </button>
+        <button
+           style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                cursor: 'pointer',
+              }}
+          onClick={() => setChatLawyer(null)}
+          title="Close Chat"
+        >
+          ✖
+        </button>
+      </div>
+            {/* <button
+              onClick={() => setChatLawyer(null)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'white',
+                fontSize: '18px',
+                cursor: 'pointer',
+              }}
+            >✖</button> */}
+          </div>
+
+        <div className="chat-messages">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
+            {msg.text}
+            {msg.fileUrl && (
+              msg.fileType && msg.fileType.startsWith('image/') ? (
+                <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
+              ) : (
+                <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
+                  📄 {msg.fileName}
+                </a>
+              )
+            )}
+       <div style={{ fontSize: '10px', color: 'black', marginTop: '2px', textAlign: msg.isMe ? 'right' : 'left' }}>
+      {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
+    </div>
+  </div>
+))}
+      </div>
+
+          <div className="chat-input">
+            <input
+    type="file"
+    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+    ref={fileInputRef}
+    style={{ display: 'none' }}
+    onChange={handleFileChange}
+  />
+            <input
+              type="text"
+              placeholder="Type a message..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && e.target.value.trim()) {
+                  handleSendMessage(e.target.value.trim());
+                  e.target.value = '';
+                }
+              }}
+            />
+   <button
+  type="button"
+  onClick={() => fileInputRef.current.click()}
+  style={{
+    position: 'absolute',
+    right: '25px',
+    top: '93%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    color: 'gray',
+    fontSize: '20px',
+    cursor: 'pointer',
+    padding: 0,
+    margin: 0
+  }}
+  title="Attach Document"
+  tabIndex={-1}
+>
+  🗂️
+</button>
+
+          </div>
+        </div>
+      )}
 
     </section>
     <Footer/>
   </div>
+
+   {isLoading && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100vw",
+      height: "100vh",
+      background: "rgba(255,255,255,0.5)",
+      backdropFilter: "blur(8px)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        background: "rgba(255,255,255,0.9)",
+        padding: "40px 60px",
+        borderRadius: "20px",
+        boxShadow: "0 8px 32px rgba(80,120,220,0.10)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <div
+        style={{
+          border: "6px solid #e0e7ff",
+          borderTop: "6px solid #6366f1",
+          borderRadius: "50%",
+          width: 60,
+          height: 60,
+          animation: "spin 1s linear infinite",
+          marginBottom: 16,
+        }}
+      />
+      <span style={{ color: "#6366f1", fontSize: 18, fontWeight: 600 }}>
+        Connecting you to a lawyer...
+      </span>
+      <style>
+        {`@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }`}
+      </style>
+    </div>
+  </div>
+)}
 
   </div>
 )

@@ -12,6 +12,7 @@ import Lottie from "lottie-react";
 import Swal from 'sweetalert2';
 import { event } from 'jquery';
 import Clientsidebar from './clientsidebar';
+import Header from './header';
 
 
 
@@ -169,12 +170,16 @@ const handleChangeedit = (e) => {
           }
 
 return (  
-   <div className="profile-container">
-  <Clientsidebar />
 
+  <div>
+      <Header/>
+
+   <div className="profile-container">
+  {/* <Clientsidebar /> */}
      <style>{`
   
 .profile-container {
+
   display: flex;
   flex-direction: row;
   min-height: 100vh;
@@ -185,8 +190,8 @@ return (
 /* Main section */
 .main11 {
   flex: 1;
-  margin-left: 260px;
-  padding: 80px 40px 40px 40px;
+  margin-left: 160px;
+  padding: 10px 10px 10px 10px;
   display: flex;
   background: linear-gradient(to right, #f0f4ff, #e8f0ff);
   font-family: 'Poppins', 'Segoe UI', sans-serif;
@@ -313,10 +318,14 @@ return (
   </main> 
 
 <Offcanvas show={show} onHide={handleClose} placement="end" className="lawyer-offcanvas">
-        <Offcanvas.Header closeButton>
+        {/* <Offcanvas.Header closeButton>
           <Offcanvas.Title className="text-primary">Complete Your Profile</Offcanvas.Title>
-        </Offcanvas.Header>
+        </Offcanvas.Header> */}
       <Offcanvas.Body>
+                 <div className="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+    <h5 className="m-0 text-primary">Complete Your Profile</h5>
+    <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
+  </div>
  <div>
     <Tabs
       activeKey={activeTab1}
@@ -540,10 +549,14 @@ return (
 
 
   <Offcanvas show={show1} onHide={handleClose1} placement="end" className="lawyer-offcanvas">
-        <Offcanvas.Header closeButton>
+        {/* <Offcanvas.Header closeButton>
           <Offcanvas.Title className="text-primary">Edit Your Profile</Offcanvas.Title>
-        </Offcanvas.Header>
+        </Offcanvas.Header> */}
       <Offcanvas.Body>
+          <div className="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+    <h5 className="m-0 text-primary">Edit Your Profile</h5>
+    <button type="button" className="btn-close" aria-label="Close" onClick={handleClose1}></button>
+  </div>
  <div>
     <Tabs
       activeKey={activeTab2}
@@ -856,6 +869,7 @@ return (
           </>
 
 </div>
+  </div>
 
     );
 };
