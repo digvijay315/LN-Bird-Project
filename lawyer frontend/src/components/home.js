@@ -451,6 +451,149 @@ const faqs = [
   },
 ];
 
+const categories = [
+  {
+    title: "Property & Real Estate",
+    services: [
+      "Land Acquisition Matters",
+      "Property Registration",
+      "Property Verification",
+      "Estate Planning",
+      "Property Succession",
+      "Will Drafting and Registration",
+      "Landlord/Tenant Disputes",
+      "RERA Consultation",
+      "Relinquishment Deed",
+      "Power of Attorney",
+      "Gift Deed",
+      "Rental Tenant Notice",
+      "Mutation of Property",
+      "Partition Suit",
+    ],
+  },
+  {
+    title: "Family & Personal Law",
+    services: [
+      "Family Lawyer",
+      "Divorce & Matrimonial Consultation",
+      "Maintenance and Alimony",
+      "Child Custody and Guardianship",
+      "Muslim Personal Law Matters",
+      "Domestic Violence Cases",
+      "Legal Heir Certificate",
+      "Dowry Harassment Cases",
+      "Judicial Separation",
+      "Adoption & Guardianship Matters",
+    ],
+  },
+  {
+    title: "Civil Law",
+    services: [
+      "Civil Lawyer",
+      "Defamation Cases",
+      "Legal Notices",
+      "Cheque Bounce Cases",
+      "Money Recovery Issues",
+      "Mediation / Arbitration",
+      "Writ Petition / PIL",
+      "Loan Recovery / Bank Account Freeze-Unfreeze",
+      "E-Court Filing Procedures",
+      "National Green Tribunal Cases",
+      "Debt Recovery Tribunal (DRT)",
+      "Motor Accident Claims / Traffic Challans",
+      "MSME Samadhan / MSME Recovery",
+      "Insolvency & Bankruptcy Code (IBC)",
+      "Rent Control Matters",
+      "Legal Retainer Services",
+      "Partition Suits",
+      "Civil Injunctions",
+    ],
+  },
+  {
+    title: "Cyber Law",
+    services: [
+      "Cyber Lawyer",
+      "Cyber Crime Complaints",
+      "Online Fraud / Scam Complaints",
+      "IT Act Violations",
+      "Social Media Defamation",
+      "Hacking / Data Theft Cases",
+      "Phishing and Online Financial Frauds",
+      "Cyberbullying and Online Harassment",
+      "Unauthorized Access / Privacy Breach",
+      "Filing Cyber Complaints via Cyber Cells",
+    ],
+  },
+  {
+    title: "Criminal Law",
+    services: [
+      "Criminal Lawyer",
+      "Criminal Bail Application",
+      "NDPS (Drugs & Psychotropic Substances Act)",
+      "Criminal Trial Court Matters",
+      "File a Criminal Complaint",
+      "Quashing of FIR",
+      "Criminal Appeals and Revisions",
+      "Anticipatory Bail",
+      "White Collar Crimes",
+    ],
+  },
+  {
+    title: "Consumer Law",
+    services: [
+      "Consumer Lawyer",
+      "File a Consumer Case",
+      "Consumer Law Consultation",
+      "Misleading Advertisements Cases",
+      "Defective Product / Service Complaints",
+      "Legal Notices under Consumer Law",
+      "Delay in Service or Possession (e.g., real estate)",
+    ],
+  },
+  {
+    title: "Corporate & Business Law",
+    services: [
+      "Company Law & Corporate Compliance",
+      "Legal Retainer for Companies",
+      "Political Party Registration",
+      "Company / LLP / Startup Incorporation",
+      "ESOP & Fundraising Consultation",
+      "Business Debt Restructuring",
+      "Drug & Cosmetic License",
+      "Legal Metrology License",
+      "POSH Internal Committee Setup",
+      "Business Contracts & Documentation",
+      "Business Due Diligence",
+      "Barcode & BIS License",
+      "ROC Filings & MCA Compliance",
+    ],
+  },
+  {
+    title: "Labour & Employment Law",
+    services: [
+      "Labour Lawyer",
+      "Employment Disputes (Employee/Employer)",
+      "POSH Sexual Harassment at Workplace",
+      "CLRA (Contract Labour Regulation)",
+      "Gratuity / Provident Fund Disputes",
+      "Termination & Severance Advisory",
+      "Drafting Employment Contracts",
+    ],
+  },
+  {
+    title: "Legal Notices & Drafting",
+    services: [
+      "Legal Notice Drafting",
+      "Drafting & Sending Legal Notices",
+      "Legal Notice for Recovery of Dues",
+      "Cheque Bounce Legal Notice",
+      "Legal Notice under Consumer Protection",
+      "Contract Breach Notice",
+    ],
+  },
+];
+
+
  const [openIndex, setOpenIndex] = React.useState(null);
 
   const handleToggle = (idx) => {
@@ -875,6 +1018,45 @@ setIsLoading(true)
      <span style={{ fontSize: '32px' }}>📝</span>
     <span>Select details</span>
   </div>
+   <span style={{
+  fontSize: '32px',
+  background:"#2d3a5c",
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  fontWeight: 'bold'
+}}>
+  &gt;&gt;
+</span>
+  <div className="olc-process-step">
+    <span style={{ fontSize: '32px' }}>⏳</span>
+    <span>Wait for a few minutes</span>
+  </div>
+  <span style={{
+  fontSize: '32px',
+  background: "#2d3a5c",
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  fontWeight: 'bold'
+}}>
+  &gt;&gt;
+</span>
+  <div className="olc-process-step">
+    <span style={{ fontSize: '32px' }}>💬</span>
+    <span>Chat with lawyer</span>
+  </div>
+
+  
+</div>
+
+            </div>
+               {/* Process Steps (Mobile) */}
+        <div className="olc-process-mobile">
+          <p className="olc-process-title">Process</p>
+          <div className="olc-process-steps">
+           <div className="olc-process-step">
+     <span style={{ fontSize: '32px' }}>📝</span>
+    <span>Select details</span>
+  </div>
   <div className="olc-process-step">
     <span style={{ fontSize: '32px' }}>⏳</span>
     <span>Wait for a few minutes</span>
@@ -883,9 +1065,12 @@ setIsLoading(true)
     <span style={{ fontSize: '32px' }}>💬</span>
     <span>Chat with lawyer</span>
   </div>
-</div>
-
-            </div>
+            {/* <div className="olc-process-step">
+              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
+              <span>Lawyer Will Call You</span>
+            </div> */}
+          </div>
+        </div>
 
             <div className="findlawyer">
   <div className="findlawyer-glass" />
@@ -937,314 +1122,53 @@ setIsLoading(true)
 </div>
 
 
-            {/* <ul className="olc-benefits-list">
-              <li>
-                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick" width="20" height="20" />
-                <span>Consult a lawyer online and get expert legal service.</span>
-              </li>
-              <li>
-                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick" width="20" height="20" />
-                <span>Confidential and secure calls with complete data protection.</span>
-              </li>
-              <li>
-                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick" width="20" height="20" />
-                <span>Get expert consultations starting at ₹13/min.</span>
-              </li>
-              <li>
-                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Tick" width="20" height="20" />
-                <span>End-to-end legal notice drafting and documentation services.</span>
-              </li>
-            </ul> */}
-            {/* Process Steps (Desktop) */}
+
+          
            
           </div>
-          {/* Right: Lead Form */}
-          {/* <div className="olc-banner-right" id="leadForm">
-            <form className="olc-form">
-              <h2 className="olc-form-title">Get Expert Legal Advice</h2>
-              <label htmlFor="email">Email</label>
-              <input id="email" type="email" name="email" placeholder="Enter your email" />
-              <label htmlFor="phone">Mobile Number</label>
-              <input id="phone" type="tel" name="phone" maxLength="10" placeholder="Enter your mobile number" />
-              <label htmlFor="city">Select City</label>
-              <input id="city" type="text" placeholder="Enter your city" />
-              <label htmlFor="language">Language</label>
-              <input id="language" type="text" placeholder="Preferred language" />
-              <label htmlFor="problemType">Problem Type</label>
-              <input id="problemType" type="text" readOnly placeholder="Select problem type" />
-              <button type="submit" className="olc-form-btn">
-                Book An Appointment Now
-                <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" alt="Arrow" width="25" height="25" />
-              </button>
-              <div className="olc-form-price">
-                <span className="olc-form-price-old"><s>₹799</s></span>
-                <span className="olc-form-price-new">₹399</span>
-                for a 30 min Lawyer Consultation
-              </div>
-              <div className="olc-form-note">
-                <img src="https://cdn-icons-png.flaticon.com/512/1077/1077012.png" alt="Lawyer" width="18" height="18" />
-                <span>Experienced lawyers for all legal matters</span>
-              </div>
-            </form>
-          </div> */}
+        
         </div>
-        {/* Process Steps (Mobile) */}
-        <div className="olc-process-mobile">
-          <p className="olc-process-title">Process</p>
-          <div className="olc-process-steps">
-           <div className="olc-process-step">
-     <span style={{ fontSize: '32px' }}>📝</span>
-    <span>Select details</span>
-  </div>
-  <div className="olc-process-step">
-    <span style={{ fontSize: '32px' }}>⏳</span>
-    <span>Wait for a few minutes</span>
-  </div>
-  <div className="olc-process-step">
-    <span style={{ fontSize: '32px' }}>💬</span>
-    <span>Chat with lawyer</span>
-  </div>
-            {/* <div className="olc-process-step">
-              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
-              <span>Lawyer Will Call You</span>
-            </div> */}
-          </div>
-        </div>
-      </div>
+     
 
-      {/* Stats and Reviews Section */}
-<div className="olc-stats-section">
-  {/* Decorative Banner Image (right corner) */}
-
-
-  {/* Stats Grid */}
-  {/* <div className="olc-stats-bg">
-    <div className="olc-stats-grid">
-      <div className="olc-stat">
-        <p className="olc-stat-value">5,00,000+</p>
-        <p className="olc-stat-label">Happy Users</p>
-      </div>
-      <div className="olc-stat">
-        <p className="olc-stat-value">1,00,000+</p>
-        <p className="olc-stat-label">Cases Resolved</p>
-      </div>
-      <div className="olc-stat">
-        <p className="olc-stat-value">300+</p>
-        <p className="olc-stat-label">Expert Lawyers</p>
-      </div>
-      <div className="olc-stat">
-        <p className="olc-stat-value">50+</p>
-        <p className="olc-stat-label">Specialities</p>
-      </div>
-    </div>
-
-  
-    <div className="olc-reviews">
-      <div className="olc-review-logo">
-        <img
-          src="https://assets.vakilsearch.com/live-images/talk-to-expert/google-review-logo.svg"
-          alt="Google Reviews"
-          width="75"
-          height="75"
-        />
-      </div>
-      <div className="olc-review-details">
-        <p className="olc-review-title">Google Reviews</p>
-        <div className="olc-review-stars">
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/rating-star-full.svg"
-            alt="Full Star"
-            width="20"
-            height="20"
-          />
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/rating-star-full.svg"
-            alt="Full Star"
-            width="20"
-            height="20"
-          />
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/rating-star-full.svg"
-            alt="Full Star"
-            width="20"
-            height="20"
-          />
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/rating-star-full.svg"
-            alt="Full Star"
-            width="20"
-            height="20"
-          />
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/rating-star-half.svg"
-            alt="Half Star"
-            width="20"
-            height="20"
-          />
-          <span className="olc-review-score">4.5/5</span>
-          <span className="olc-review-count">18k+ Happy Reviews</span>
-        </div>
-      </div>
-    </div>
-  </div> */}
-</div>
-
-{/* We Cover Everything You Need Section */}
- {/* <section className="olc-cover-section">
-      <h2 className="olc-cover-title">We Cover Everything You Need</h2>
-      <div className="olc-cover-slider">
-        <button
-          className="olc-cover-arrow olc-cover-arrow-left"
-          aria-label="Scroll left"
-          onClick={handlePrev}
-          disabled={page === 0}
-          type="button"
-        >
-          <img
-            src="https://assets.vakilsearch.com/live-images/left-blue-icon.svg"
-            alt="Left arrow"
-            width="40"
-            height="44"
-          />
-        </button>
-        <div className="olc-cover-cards">
-          {visibleCards.map((card, idx) => (
-            <div className="olc-cover-card" key={start + idx}>
-              <img
-                src={card.img}
-                alt={card.title}
-                className="olc-cover-card-img"
-                loading="lazy"
-              />
-              <h3 className="olc-cover-card-title">{card.title}</h3>
-            </div>
-          ))}
-        </div>
-        <button
-          className="olc-cover-arrow olc-cover-arrow-right"
-          aria-label="Scroll right"
-          onClick={handleNext}
-          disabled={page === totalPages - 1}
-          type="button"
-        >
-          <img
-            src="https://assets.vakilsearch.com/live-images/right-blue-icon.svg"
-            alt="Right arrow"
-            width="40"
-            height="44"
-          />
-        </button>
-      </div>
-    </section> */}
-
-      {/* <section className="olc-overview-section">
-    <div className="olc-overview-flex">
-      <div className="olc-overview-content">
-        <h2 className="olc-overview-title">Lawyer Consultation - Overview</h2>
-        <p className="olc-overview-desc">
-          Zolvit offers comprehensive online legal services across India, providing simplified access to expert legal support for individuals and businesses alike. We cover a wide range of legal areas, including family law, property disputes, civil matters, business formation, criminal defense, consumer rights, labor law, constitutional issues, and intellectual property. From the initial consultation to the final resolution, Zolvit ensures a seamless, transparent experience, guiding clients through each step of the legal process. Our expert team offers clear advice, professional document preparation, and strong representation, all while eliminating the usual complexities and legal jargon.
-          <br /><br />
-          Lawyers, also known as legal representatives, are licensed professionals who specialise in various areas of law, such as advocacy, contract management, real estate transactions, criminal defense, and more. Their primary role is to uphold the law and protect the rights of their clients. Whether you're dealing with a family issue, property dispute, or business challenge, Zolvit's legal experts provide you with the best possible advice and representation, ensuring your legal matters are handled effectively and with care.
-        </p>
-      </div>
-      <div className="olc-overview-video">
-        <iframe
-          src="https://www.youtube.com/embed/JdczRMl5Cws?si=-XG_ErJmsRWLVXuK"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-          width="400"
-          height="226"
-          allowFullScreen
-        ></iframe>
-      </div>
-    </div>
-  </section> */}
-
-  {/* <section className="olc-panel-section">
-      <h2 className="olc-panel-title">Our Panel of Legal Consultants</h2>
-      <div className="olc-panel-slider">
-        <button
-          className="olc-panel-arrow olc-panel-arrow-left"
-          aria-label="Previous consultants"
-          onClick={handlePrev1}
-          disabled={page1 === 0}
-          type="button"
-        >
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/left-arrow.svg"
-            alt="Left arrow"
-            width="30"
-            height="14"
-          />
-        </button>
-        <div className="olc-panel-cards">
-          {visibleConsultants.map((c, idx) => (
-            <div className="olc-panel-card" key={c.name}>
-              <div className="olc-panel-card-top">
-                <img
-                  src={c.img}
-                  alt={c.name}
-                  className="olc-panel-card-img"
-                  loading="lazy"
-                />
-                <div className="olc-panel-card-info">
-                  <p className="olc-panel-card-name">{c.name}</p>
-                  <p className="olc-panel-card-desc">{c.desc}</p>
-                  <p className="olc-panel-card-exp">{c.experience}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <button
-          className="olc-panel-arrow olc-panel-arrow-right"
-          aria-label="Next consultants"
-          onClick={handleNext1}
-          disabled={page1 === totalPages1 - 1}
-          type="button"
-        >
-          <img
-            src="https://assets.vakilsearch.com/live-images/talk-to-expert/right-arrow.svg"
-            alt="Right arrow"
-            width="30"
-            height="14"
-          />
-        </button>
-      </div>
-    </section> */}
-
-    <section class="legal-queries-section">
+           <section class="legal-queries-section">
   <h2 class="section-title">Most Asked Legal Queries</h2>
   <div class="queries-grid">
     <div class="query-card">
-      <span class="query-icon">🚗</span>
+      {/* <span class="query-icon">🚗</span> */}
       <h3>Car Challan</h3>
       {/* <p>Information and help regarding traffic fines and challans.</p> */}
     </div>
-    <div class="query-card">
+    {/* <div class="query-card">
       <span class="query-icon">📄</span>
       <h3>Legal Notice</h3>
-      {/* <p>Drafting and responding to legal notices efficiently.</p> */}
-    </div>
+      {/* <p>Drafting and responding to legal notices efficiently.</p> 
+    </div> */}
     <div class="query-card">
-      <span class="query-icon ">💸</span>
+      {/* <span class="query-icon ">💸</span> */}
       <h3>Cheque Bounce</h3>
       {/* <p>Guidance on cheque bounce cases and legal remedies.</p> */}
     </div>
     <div class="query-card">
-      <span class="query-icon">📦</span>
+      {/* <span class="query-icon">📦</span> */}
       <h3>Product/Service Default</h3>
       {/* <p>Assistance for faulty products or unsatisfactory services.</p> */}
     </div>
     <div class="query-card">
-      <span class="query-icon">🕵️</span>
+      {/* <span class="query-icon">🕵️</span> */}
       <h3>Online Fraud</h3>
       {/* <p>Support for victims of cyber fraud and scams.</p> */}
     </div>
   </div>
 </section>
+
+      </div>
+
+ 
+
+
+     
+
+ 
 
 <section class="lawyer-help-section">
   <h2 class="help-title">Not sure which type of lawyer you need?</h2>
@@ -1299,7 +1223,7 @@ setIsLoading(true)
 </section>
 
  <section className="olc-expertise-section">
-    <h2 className="olc-expertise-title">Areas of Legal Expertise</h2>
+    <h2 className="olc-expertise-title">Legal Matter Categories</h2>
     <div className="olc-expertise-list">
       {legalExpertise.map((area, idx) => (
         <div className="olc-expertise-card" key={area.title}>
@@ -1324,6 +1248,23 @@ setIsLoading(true)
       ))}
     </div>
   </section>
+
+   <div className="legal-services-container">
+    <h2 className="legal-services-heading">Services Provided by Lawyers</h2>
+    <div className="service-card-grid">
+      {categories.map((cat) => (
+        <div key={cat.title} className="service-card">
+          <div className="category-title">{cat.title}</div>
+          <ul className="service-list">
+            {cat.services.map((srv) => (
+              <li key={srv}>{srv}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+ 
+  </div>
 
  <section className="olc-legalrep-section">
     <div className="olc-legalrep-container">
