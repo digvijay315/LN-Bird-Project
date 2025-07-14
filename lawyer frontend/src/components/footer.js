@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaLinkedin, FaTwitter, FaEnvelope } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const accent = "#1fa2ff"; // Brand accent color
 
@@ -115,7 +116,7 @@ const Footer = () => (
             <FaLinkedin />
           </a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={iconLinkStyles} title="Twitter">
-            <FaTwitter />
+            <FaXTwitter  />
           </a>
         </div>
       </div>

@@ -257,7 +257,7 @@
   }
   .olc-process-mobile {
     display: block;
-    background: #001d37;
+    background: linear-gradient(135deg, #106EBE, #0FFCBE);
     padding: 16px 0;
   }
   .olc-process-title {
@@ -850,7 +850,7 @@
   line-height: 1.2;
 }
 
-.olc-legalrep-lead {
+.olc-legalrep-d {
   color: #606162;
   font-size: 1.15rem;
   line-height: 1.7;
@@ -2058,7 +2058,7 @@
 
 @media (max-width: 500px) {
   .legal-queries-section {
-  background: #034681;
+  /* background: #034681; */
   padding: 60px 20px 40px 20px;
   border-radius: 18px;
   box-shadow: 0 6px 24px rgba(44, 123, 255, 0.08);

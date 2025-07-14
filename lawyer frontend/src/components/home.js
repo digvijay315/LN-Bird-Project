@@ -6,6 +6,8 @@ import Footer from "./footer";
 import socket from './socket';
 import Swal from 'sweetalert2';
 import api from '../api';
+import { HiOutlinePaperClip } from 'react-icons/hi';
+import { IoSend } from 'react-icons/io5';
 
 const Home = () => {
 
@@ -621,19 +623,21 @@ const categories = [
 const Courts = [
   { value: '', label: 'Select Courts' },
   { value: 'other', label: 'Other' },
-  { value: 'maharashtra', label: 'Maharashtra' },
-  { value: 'karnataka', label: 'Karnataka' },
-  { value: 'delhi', label: 'Delhi' },
-  { value: 'tamilnadu', label: 'Tamil Nadu' },
-  // ...add more
+  { value: 'tis_hazari_court', label: 'Tis Hazari Court' },
+  { value: 'saket_court', label: 'Saket Court' },
+  { value: 'karkardooma_court', label: 'Karkardooma Court' },
+  { value: 'patiala_house_court', label: 'Patiala House Court' },
+  { value: 'rohini_court', label: 'Rohini Court' },
+  { value: 'dwarka_court', label: 'Dwarka Court' },
+  { value: 'rouse_avenue_court', label: 'Rouse Avenue Court' },
+  { value: 'high_court', label: 'High Court' },
 ];
+
 const languages=[
   {value:'',label:'Select language'},
   {value:'hindi',label:'Hindi'},
   {value:'english',label:'English'},
-  {value:'marathi',label:'Marathi'},
-  {value:'tamil',label:'Tamil'},
-  {value:'bengali',label:'Bengali'},
+
 ]
 
 
@@ -698,11 +702,14 @@ const STATES = [
 ];
 
 
+//========================================= chat start=============================================================
+
   const [lawyers, setLawyers] = useState([]);
   const [chatLawyer, setChatLawyer] = useState(null);
   const [onlineLawyers, setOnlineLawyers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [messageMap, setMessageMap] = useState({});
+    const [message, setMessage] = useState('');
 
   const fetchlawyers = async () => {
     try {
@@ -1551,12 +1558,12 @@ setIsLoading(true)
           background: #f3f4f6;
           transform: translateY(-1px);
         }
-        .chat-popup {
+      .chat-popup {
           position: fixed;
-          bottom: 20px;
-          right: 20px;
-          width: 380px;
-          height: 500px;
+          bottom: 10px;
+          left:40%;
+          width: 480px;
+          height: 600px;
           background: white;
           border-radius: 16px;
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
@@ -1624,7 +1631,7 @@ setIsLoading(true)
         }
 
         .chat-input input {
-          width: 100%;
+          width: 85%;
           padding: 0.75rem 1rem;
           border-radius: 20px;
           border: 1px solid #e5e7eb;
@@ -1686,10 +1693,11 @@ setIsLoading(true)
       width: 100vw;
       height: 100vh;
       bottom: 0;
-      right: 0;
+      right: 100;
       left: 0;
       border-radius: 0;
     }
+      
     .chat-header {
       flex-direction: column;
       align-items: flex-start;
@@ -1746,7 +1754,7 @@ setIsLoading(true)
         <button
         onClick={handleSwapLawyer}
            style={{
-                background: 'none',
+                background: 'white',
                 border:"1px solid lightgray",
                 color: 'black',
                 fontSize: '12px',
@@ -1813,22 +1821,48 @@ setIsLoading(true)
     onChange={handleFileChange}
   />
             <input
+            value={message}
               type="text"
               placeholder="Type a message..."
+              onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.target.value.trim()) {
                   handleSendMessage(e.target.value.trim());
-                  e.target.value = '';
+                  setMessage('');
                 }
               }}
             />
+              <button
+    type="button"
+    onClick={()=>{handleSendMessage(message);
+       setMessage('')}
+      }
+    style={{
+      position: 'absolute',
+      right: '20px',
+      top: '92%',
+      transform: 'translateY(-50%)',
+      background: 'none',
+      border: 'none',
+      color: '#54656f',
+      fontSize: '24px',
+      cursor: 'pointer',
+      padding: 0,
+      margin: 0
+    }}
+    title="Send"
+    tabIndex={-1}
+  >
+    <IoSend />
+  </button>
+
    <button
   type="button"
   onClick={() => fileInputRef.current.click()}
   style={{
     position: 'absolute',
-    right: '25px',
-    top: '93%',
+    right: '20%',
+    top: '92%',
     transform: 'translateY(-50%)',
     background: 'none',
     border: 'none',
@@ -1841,7 +1875,7 @@ setIsLoading(true)
   title="Attach Document"
   tabIndex={-1}
 >
-  🗂️
+    <HiOutlinePaperClip />
 </button>
 
           </div>

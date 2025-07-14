@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [submenuOpen, setSubmenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const userData = JSON.parse(localStorage.getItem('userDetails'));
@@ -146,48 +147,38 @@ export default function Header() {
           >
             Contact
           </li>
-          {userData?.user && (
-            <>
-              <li style={{ fontWeight: 'bold', color: 'blue' }}>
-                {userData.user.fullName}
-              </li>
-              <li
-                className={isActive('/findlawyer') ? 'active' : ''}
-                onClick={() => { navigate('/findlawyer'); setMenuOpen(false); }}
-              >
-                Find Lawyer
-              </li>
-              <li
-                className={isActive('/clientprofile') ? 'active' : ''}
-                onClick={() => { navigate('/clientprofile'); setMenuOpen(false); }}
-              >
-                Profile
-              </li>
-              <li
-                className={isActive('/supports') ? 'active' : ''}
-                onClick={() => { navigate('/supports'); setMenuOpen(false); }}
-              >
-                Supports
-              </li>
-              <li
-                className={isActive('/clientchathistory') ? 'active' : ''}
-                onClick={() => { navigate('/clientchathistory'); setMenuOpen(false); }}
-              >
-                History
-              </li>
-              <li
-                className={isActive('/termsandconditions') ? 'active' : ''}
-                onClick={() => { navigate('/termsandconditions'); setMenuOpen(false); }}
-              >
-                Terms & Conditions
-              </li>
-              <li
-                onClick={() => { handleLogout(); setMenuOpen(false); }}
-              >
-                Logout
-              </li>
-            </>
-          )}
+{userData?.user && (
+  <li 
+    style={{ position: 'relative', cursor: 'pointer' }} 
+    onClick={() => setSubmenuOpen(!submenuOpen)}
+  >
+    <span style={{ fontWeight: 'bold', color: 'blue' }}>
+      {userData.user.fullName} &#9662; {/* ▼ icon */}
+    </span>
+   <ul style={{
+  width: "200px",
+  position: 'absolute',
+  top: '100%',
+  right: 0,                  // change this!
+  background: '#fff',
+  listStyle: 'none',
+  padding: '10px',
+  boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+  display: submenuOpen ? 'block' : 'none',
+  zIndex: 1000
+}}>
+
+      <li onClick={() => { navigate('/findlawyer'); setMenuOpen(false); setSubmenuOpen(false); }}>Find Lawyer</li>
+      <li onClick={() => { navigate('/clientprofile'); setMenuOpen(false); setSubmenuOpen(false); }}>Profile</li>
+      <li onClick={() => { navigate('/supports'); setMenuOpen(false); setSubmenuOpen(false); }}>Supports</li>
+      <li onClick={() => { navigate('/clientchathistory'); setMenuOpen(false); setSubmenuOpen(false); }}>History</li>
+      <li onClick={() => { navigate('/termsandconditions'); setMenuOpen(false); setSubmenuOpen(false); }}>Terms & Conditions</li>
+      <li onClick={() => { handleLogout(); setMenuOpen(false); setSubmenuOpen(false); }}>Logout</li>
+    </ul>
+  </li>
+)}
+
+
           <li
             onClick={() => { navigate('/login'); setMenuOpen(false); }}
             style={{ display: userData?.user ? "none" : "block" }}
