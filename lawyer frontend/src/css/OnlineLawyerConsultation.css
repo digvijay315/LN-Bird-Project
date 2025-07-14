@@ -6,7 +6,7 @@
 }
 
 .olc-banner-bg {
-  background: #001d37;
+  background: #034681;
   padding: 0;
 }
 
@@ -257,17 +257,26 @@
     background: #001d37;
     padding: 16px 0;
   }
+  .olc-process-title {
+  /* margin-left: 25%; */
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  margin-left: 1%;
+}
   .olc-process-steps {
     flex-direction: column;
     gap: 16px;
   }
   .olc-process-step {
     width: 100%;
-    font-size: 0.95rem;
+    font-size: 0.75rem;
   }
 }
 
 
+/* ===========================================process css end================================================================== */
 
 
 .olc-stats-section {
@@ -811,7 +820,7 @@
 }
 
 
-
+/* ================================Importance of Legal Representation ====================================================*/
 
 
 .olc-legalrep-section {
@@ -902,13 +911,13 @@
     padding: 18px 6px;
   }
   .olc-legalrep-title {
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
   .olc-legalrep-lead {
-    font-size: 0.97rem;
+    font-size: 0.77rem;
   }
   .olc-legalrep-listitem {
-    font-size: 0.97rem;
+    font-size: 0.77rem;
     padding-left: 22px;
   }
   .olc-legalrep-dot {
@@ -918,7 +927,7 @@
   }
 }
 
-
+/* =====================================legal area start===================================================== */
 
 
 .olc-expertise-section {
@@ -1041,15 +1050,22 @@
     padding: 12px 2px 24px 2px;
   }
   .olc-expertise-title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     margin-bottom: 18px;
   }
   .olc-expertise-img {
-    height: 60px;
+    height: 40px;
   }
   .olc-expertise-desc {
-    font-size: 0.97rem;
+    font-size: 0.77rem;
   }
+  .olc-expertise-area {
+  color: #243A4F;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
 }
 
 
@@ -1306,7 +1322,7 @@
   }
 }
 
-
+/*=============================== Benefits of Online Lawyer Consultation==================================================== */
 
 
 .olc-benefits-section {
@@ -1390,17 +1406,26 @@
   .olc-benefits-section {
     padding: 0 2px 24px 2px;
   }
+    .olc-benefits-lead {
+    font-size: 0.77rem;
+  }
   .olc-benefits-title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     padding-bottom: 14px;
   }
   .olc-benefits-list-bg {
     padding: 10px 4px;
   }
+    .olc-benefit-title {
+    font-size: 0.87rem;
+  }
+    .olc-benefit-desc {
+    font-size: 0.77rem;
+  }
 }
 
 
-
+/*================================= Why Choose Counvo For Online Legal Consultation?============================================ */
 
 .olc-whyzolvit-section {
   width: 100%;
@@ -1458,11 +1483,11 @@
     padding: 24px 2px 24px 2px;
   }
   .olc-whyzolvit-title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     padding-bottom: 12px;
   }
   .olc-whyzolvit-lead {
-    font-size: 0.97rem;
+    font-size: 0.77rem;
     margin-bottom: 18px;
   }
   .olc-whyzolvit-grid {
@@ -1527,8 +1552,8 @@
 
 @media (max-width: 600px) {
   .olc-whyzolvit-img-bg {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
   }
   .olc-whyzolvit-img {
     width: 70px;
@@ -1542,7 +1567,7 @@
     left: -16px;
   }
   .olc-whyzolvit-desc {
-    font-size: 0.98rem;
+    font-size: 0.77rem;
     padding: 4px 2px;
   }
 }
@@ -1946,7 +1971,7 @@
 
 
 
-
+/* ===================================Most Asked Legal Queries ==========================================================*/
 
 
 .legal-queries-section {
@@ -1960,7 +1985,7 @@
 
 .section-title {
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 2rem !important;
   color: #1956d2;
   font-weight: 700;
   margin-bottom: 36px;
@@ -1974,7 +1999,7 @@
 }
 
 .query-card {
-  background: #fff;
+  background: linear-gradient(135deg, #cadff5 0%, #e3f0ff 100%);
   border-radius: 14px;
   box-shadow: 0 2px 12px rgba(25, 86, 210, 0.07);
   padding: 32px 18px 26px 18px;
@@ -2024,16 +2049,35 @@
     grid-template-columns: 1fr;
   }
   .section-title {
-    font-size: 1.3rem;
+    font-size: 1rem !important
   }
   .query-card {
     padding: 22px 8px 18px 8px;
   }
+  .query-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 15px;
+}
+
+.query-card h3 {
+  font-size: 1rem;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.query-card p {
+  color: #5c6b7a;
+  font-size: 0.77rem;
+  margin: 0;
+}
+
 }
 
 
 
-
+/*================================ not sure which type of lawyer you nedd start =================================================*/
 
 
 .lawyer-help-section {
@@ -2127,11 +2171,17 @@
     padding: 24px 4px 18px 4px;
   }
   .help-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
+  .help-desc {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #374151;
+  margin-bottom: 16px;
+}
   .help-template,
   .help-example {
-    font-size: 0.93rem;
+    font-size: 0.73rem;
     padding: 8px 6px;
   }
   .lawyer-types-table th,

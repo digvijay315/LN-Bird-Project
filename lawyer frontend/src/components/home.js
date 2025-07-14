@@ -992,18 +992,18 @@ setIsLoading(true)
         <div className="olc-process-mobile">
           <p className="olc-process-title">Process</p>
           <div className="olc-process-steps">
-            <div className="olc-process-step">
-              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Fill Form" />
-              <span>Select details</span>
-            </div>
-            <div className="olc-process-step">
-              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Schedule" />
-              <span>Wait for a few minutes</span>
-            </div>
-            <div className="olc-process-step">
-              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Payment" />
-              <span>chat with lawyer</span>
-            </div>
+           <div className="olc-process-step">
+     <span style={{ fontSize: '32px' }}>📝</span>
+    <span>Select details</span>
+  </div>
+  <div className="olc-process-step">
+    <span style={{ fontSize: '32px' }}>⏳</span>
+    <span>Wait for a few minutes</span>
+  </div>
+  <div className="olc-process-step">
+    <span style={{ fontSize: '32px' }}>💬</span>
+    <span>Chat with lawyer</span>
+  </div>
             {/* <div className="olc-process-step">
               <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
               <span>Lawyer Will Call You</span>
@@ -1214,6 +1214,37 @@ setIsLoading(true)
         </button>
       </div>
     </section> */}
+
+    <section class="legal-queries-section">
+  <h2 class="section-title">Most Asked Legal Queries</h2>
+  <div class="queries-grid">
+    <div class="query-card">
+      <span class="query-icon">🚗</span>
+      <h3>Car Challan</h3>
+      {/* <p>Information and help regarding traffic fines and challans.</p> */}
+    </div>
+    <div class="query-card">
+      <span class="query-icon">📄</span>
+      <h3>Legal Notice</h3>
+      {/* <p>Drafting and responding to legal notices efficiently.</p> */}
+    </div>
+    <div class="query-card">
+      <span class="query-icon ">💸</span>
+      <h3>Cheque Bounce</h3>
+      {/* <p>Guidance on cheque bounce cases and legal remedies.</p> */}
+    </div>
+    <div class="query-card">
+      <span class="query-icon">📦</span>
+      <h3>Product/Service Default</h3>
+      {/* <p>Assistance for faulty products or unsatisfactory services.</p> */}
+    </div>
+    <div class="query-card">
+      <span class="query-icon">🕵️</span>
+      <h3>Online Fraud</h3>
+      {/* <p>Support for victims of cyber fraud and scams.</p> */}
+    </div>
+  </div>
+</section>
 
 <section class="lawyer-help-section">
   <h2 class="help-title">Not sure which type of lawyer you need?</h2>
@@ -1502,36 +1533,7 @@ setIsLoading(true)
         </div>
       </div>
     </section> */}
-<section class="legal-queries-section">
-  <h2 class="section-title">Most Asked Legal Queries</h2>
-  <div class="queries-grid">
-    <div class="query-card">
-      <span class="query-icon">🚗</span>
-      <h3>Car Challan</h3>
-      <p>Information and help regarding traffic fines and challans.</p>
-    </div>
-    <div class="query-card">
-      <span class="query-icon">📄</span>
-      <h3>Legal Notice</h3>
-      <p>Drafting and responding to legal notices efficiently.</p>
-    </div>
-    <div class="query-card">
-      <span class="query-icon ">💸</span>
-      <h3>Cheque Bounce</h3>
-      <p>Guidance on cheque bounce cases and legal remedies.</p>
-    </div>
-    <div class="query-card">
-      <span class="query-icon">📦</span>
-      <h3>Product/Service Default</h3>
-      <p>Assistance for faulty products or unsatisfactory services.</p>
-    </div>
-    <div class="query-card">
-      <span class="query-icon">🕵️</span>
-      <h3>Online Fraud</h3>
-      <p>Support for victims of cyber fraud and scams.</p>
-    </div>
-  </div>
-</section>
+
 
 
 {/*========================================= chat section start============================================================= */}
