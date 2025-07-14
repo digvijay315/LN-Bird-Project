@@ -17,6 +17,7 @@ import ClientProfileModal from './components/clientprofile';
 import OnlineLawyerConsultation from './components/landingpage';
 import Clientchathistory from './components/clientchathistory';
 import TermsAndConditions from './components/terms&condition';
+import ProtectedRoute from './components/authguard';
 
 
 
@@ -30,7 +31,7 @@ function App() {
       <Route path='/' element={<Home/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/home' element={<Home/>}></Route>
-      <Route path='/ClientDashboard' element={<ClientDashboard/>}></Route>
+      <Route path='/ClientDashboard' element={<ProtectedRoute><ClientDashboard/></ProtectedRoute>}></Route>
       <Route path='/LawyerDashboard' element={<LawyerDashboard/>}></Route>
       <Route path='/AdminPanel' element={<AdminPanel/>}></Route>
       <Route path='LawyerDashboard/completelawyerprofile' element={<LawyerProfileModal/>}></Route>
