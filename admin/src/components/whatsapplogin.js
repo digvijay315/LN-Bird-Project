@@ -138,7 +138,7 @@ function Whatsapplogin() {
           (
             <div style={{marginTop:"20px"}}>
             <p>user1(Bharat Properties) : <span style={{color:"blue"}}>{item.user1}</span></p>
-            <p>user2() : <span style={{color:"blue"}}>{item.user2}</span></p>
+            <p>user2(Bharat Properties2) : <span style={{color:"blue"}}>{item.user2}</span></p>
             </div>
           ))
         )

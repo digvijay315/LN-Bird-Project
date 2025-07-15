@@ -78,6 +78,8 @@ const sendWhatsAppTextMessage = async (req, res) => {
     return res.status(400).json({ status: 'error', message: 'Number and message are required' });
   }
 
+
+  
 const plainTextMessage = htmlToText(message1, {
   wordwrap: false, // or set to any value you prefer
 });

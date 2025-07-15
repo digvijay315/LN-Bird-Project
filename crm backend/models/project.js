@@ -64,6 +64,7 @@ const blockSchema = new mongoose.Schema({
     age_of_construction: {type: String},
     furnishing_details: {type: String},
     furnished_item: {type: String},
+    remarks: {type: String},
     location: {type: String},
     lattitude: {type: String},
     langitude: {type: String},

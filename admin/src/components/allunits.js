@@ -29,6 +29,7 @@ import { useDropzone } from 'react-dropzone';
 import ReactQuill from 'react-quill';  // Import ReactQuill
 import Lottie from "lottie-react";
 import deallogo from '../icons/deal.jpg'
+import { FeedRounded } from "@mui/icons-material";
 
 function Allunits() {
 
@@ -2606,7 +2607,7 @@ const [project,setproject]=useState({name:"",developer_name:"",joint_venture:"",
                                   direction:"",side_open:"",fornt_on_road:"",total_owner:"",facing:"",road:"",ownership:"",stage:"",builtup_type:"",floor:[''],
                                   cluter_details:[''],length:[''],bredth:[''],total_area:[''],measurment2:['sqfeet'],
                                   action3:[],ocupation_date:"",age_of_construction:"",furnishing_details:"",enter_furnishing_details:"",
-                                  furnished_item:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
+                                  furnished_item:"",remarks:"",location:"",lattitude:"",langitude:"",uaddress:"",ustreet:"",
                                   ulocality:"",ucity:"",uzip:"",ustate:"",ucountry:"",owner_details:[],associated_contact:[],
                                   relation:"",s_no:[],preview:[],descriptions:[],category:[],action10:[],s_no1:[],url:[],action11:[],
                                   document_name:[''],document_no:[''],document_Date:[''],linkded_contact:[''],image:[''],action12:[]})
@@ -4560,133 +4561,6 @@ useEffect(() => {
 // =================================================send details code end=======================================================
 
 
-//==========================================deal suggestion box for search code start================================================================
-
-React.useEffect(()=>{fetchalldealdata()},[])
-
-
-const[alldealdata,setalldealdata]=useState([])
-const fetchalldealdata=async(event)=>
-    {
-      
-      try {
-        const resp=await api.get('viewdeal')
-        const all=(resp.data.deal)
-        setalldealdata(all)
-      } catch (error) {
-        console.log(error);
-      }
-    
-    }
-
-
-const [searchTerm, setSearchTerm] = useState('');
-const [suggestions, setSuggestions] = useState([]);
-
-                const handleSearchChange = (e) => {
-                  const value = e.target.value;
-                  setSearchTerm(value);
-
-                  if (value.trim() === '') {
-                    setSuggestions([]);
-                    fetchdata()
-                    return;
-                  }
-
-                  const filtered = alldealdata.filter(item =>
-                    (item.project && item.project.toLowerCase().includes(value.toLowerCase())) ||
-                    (item.block && item.block.toLowerCase().includes(value.toLowerCase())) ||
-                    (item.unit_number && item.unit_number.toLowerCase().includes(value.toLowerCase()))
-                  );
-
-                  setSuggestions(filtered);
-                  setdata(filtered) // Limit to 5 suggestions
-                };
-
-                const handleSuggestionClickdeal = (item) => {
-                  setSearchTerm(`${item.project} - ${item.block} - ${item.unit_number}`);
-                  setSuggestions([]);
-                  setdata([item])
-                  // You can also do something with the selected item (e.g. set selectedDeal)
-                };
-                
-
-
-
-//==============================================deal suggestion box for search code end==================================================
-
-
-//========================================== project suggestion box code start=======================================================
-
-const [searchTermproject, setSearchTermproject] = useState('');
-const [suggestionsproject, setSuggestionsproject] = useState([]);
-
-                const handleSearchChangeproject = (e) => {
-                  const value = e.target.value;
-                  setSearchTermproject(value);
-
-                  if (value.trim() === '') {
-                    setSuggestionsproject([]);
-                    fetchcdata()
-                    return;
-                  }
-
-                  const filtered = allprojectforsearch.filter(item =>
-                  {
-                    const nameMatch =
-                      item.name && item.name.toLowerCase().includes(value.toLowerCase());
-
-                    const blockMatch =
-                      Array.isArray(item.add_block) &&
-                      item.add_block.some(block =>
-                        String(block.block_name).toLowerCase().includes(value.toLowerCase())
-                      );
-
-                    const unitMatch =
-                      Array.isArray(item.add_unit) &&
-                      item.add_unit.some(unit =>
-                        String(unit.unit_no).toLowerCase().includes(value.toLowerCase())
-                      );
-
-                    return nameMatch || blockMatch || unitMatch;
-                    
-                 } );
-
-                  setSuggestionsproject(filtered); // Limit to 5 suggestions
-                  setcdata(filtered)
-                };
-
-                const handleSuggestionClickproject = (item) => {
-                  const blockStr = Array.isArray(item.add_block) ? item.add_block.map(block=>block.block_name).join(", ") : "";
-                  const unitStr = Array.isArray(item.add_unit) ? item.add_unit.map(unit=>unit.unit_no).join(", ") : "";
-                
-                  setSearchTermproject(`${item.name} - ${blockStr} - ${unitStr}`);
-                  setSuggestionsproject([]);
-                  setcdata([item])
-
-                  // You can also do something with the selected item (e.g. set selectedDeal)
-                };
-
-                const wrapperRef = useRef(null);
-
-
-                useEffect(() => {
-                  function handleClickOutside(event) {
-                    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                      setSuggestionsproject([]); // 👈 close suggestions
-                      setSuggestions([])
-                    }
-                  }
-                
-                  document.addEventListener("mousedown", handleClickOutside);
-                  return () => {
-                    document.removeEventListener("mousedown", handleClickOutside);
-                  };
-                }, []);
-                
-
-// ============================================project suggestion box code end======================================================
-  
 
 //========================================= units suggestion box code start=============================================================
 
@@ -4798,7 +4672,8 @@ const [suggestionsunit, setSuggestionsunit] = useState([]);
         
 
           useEffect(() => {
-          if (feedbackform.owner_response==="Yes" || feedbackform.owner_response==="Yes -Sell this property but buy another") {
+          if (feedbackform.owner_response==="Yes" || feedbackform.owner_response==="Yes -Sell this property but buy another"
+            || feedbackform.owner_response==="Rent") {
             setfeedbackform(prev => ({
               ...prev,
               stage: "Active",
@@ -4853,7 +4728,7 @@ const addfeedback = async () => {
             const project=selectedItems3[0].project_name
             const block=selectedItems3[0].block
             const unit=selectedItems3[0].unit_no
-            let updatedUnits = { ...units, stage: feedbackform.stage };
+            let updatedUnits = { ...units, stage: feedbackform.stage,remarks:feedbackform.owner_response };
     const resp = await api.post('addfeedback', feedbackform);
     if (resp.status === 200) {
   
@@ -4863,7 +4738,24 @@ const addfeedback = async () => {
       switch (feedbackform.owner_response) {
         case "Yes":
         await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
+           htmlContent += `
+            <button id="createDealBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Create Deal
+            </button>
+          `;
+        break;
+
+            case "Rent":
+            await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
+          htmlContent += `
+            <button id="createDealBtn" style="${buttonStyle}">
+              <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Create Deal
+            </button>
+          `;
+          break;
+
         case "Sold -But Interested to sell Another Property":
+           await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
           htmlContent += `
             <button id="createDealBtn" style="${buttonStyle}">
               <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Create Deal
@@ -4872,6 +4764,7 @@ const addfeedback = async () => {
           break;
 
         case "Yes -Sell this property but buy another":
+                 await api.put(`updateprojectforinventories/${project}/${unit}/${block}`, updatedUnits, config)
           htmlContent += `
             <button id="createDealBtn" style="${buttonStyle}">
               <i class="bi bi-handshake-fill" style="margin-right: 6px;"></i>Create Deal
@@ -5210,109 +5103,223 @@ const buttonStyle = `
       const [activeTab, setActiveTab] = useState('profession');
   
   
-  const enhancedInputStyle = {
-    display: 'block',
-    marginTop: '6px',
-    marginLeft: '20px',
-    width: '85%',
-    padding: '8px 10px',
-    border: '1px solid #ccc',
-    borderRadius: '6px',
-    fontSize: '14px',
-    transition: '0.3s ease',
-    boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
-    background: '#fff',
-    color: '#333'
-  };
+  // const enhancedInputStyle = {
+  //   display: 'block',
+  //   marginTop: '6px',
+  //   marginLeft: '20px',
+  //   width: '85%',
+  //   padding: '8px 10px',
+  //   border: '1px solid #ccc',
+  //   borderRadius: '6px',
+  //   fontSize: '14px',
+  //   transition: '0.3s ease',
+  //   boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
+  //   background: '#fff',
+  //   color: '#333'
+  // };
   
   
   
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (filterRefunit.current && !filterRefunit.current.contains(event.target)) {
-          setShowDropdown(false); // close the filter box
-        }
-      };
+    // useEffect(() => {
+    //   const handleClickOutside = (event) => {
+    //     if (filterRefunit.current && !filterRefunit.current.contains(event.target)) {
+    //       setShowDropdown(false); // close the filter box
+    //     }
+    //   };
   
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    //   document.addEventListener("mousedown", handleClickOutside);
+    //   return () => document.removeEventListener("mousedown", handleClickOutside);
+    // }, []);
   
-    const handlefilterCheckboxChange = (profession) => {
-      const updatedSelections = selectedunitcategory.includes(profession)
-        ? selectedunitcategory.filter((p) => p !== profession)
-        : [...selectedunitcategory, profession];
-      setSelectedunitcategory(updatedSelections);
+    // const handlefilterCheckboxChange = (profession) => {
+    //   const updatedSelections = selectedunitcategory.includes(profession)
+    //     ? selectedunitcategory.filter((p) => p !== profession)
+    //     : [...selectedunitcategory, profession];
+    //   setSelectedunitcategory(updatedSelections);
       
-      // Filter the data based on selected professions
-     const newFilteredData = allunitsforsearch.filter((item) =>
-        updatedSelections.length === 0 ||  item.category?.some(cat => updatedSelections.includes(cat))
-      );
-      setFlattenedUnits(newFilteredData);
-    };
+    //   // Filter the data based on selected professions
+    //  const newFilteredData = allunitsforsearch.filter((item) =>
+    //     updatedSelections.length === 0 ||  item.category?.some(cat => updatedSelections.includes(cat))
+    //   );
+    //   setFlattenedUnits(newFilteredData);
+    // };
   
    
-    const unitfields = [
-      { label: 'City', field: 'ucity' },
-      { label: 'Location', field: 'location' },
-      { label: 'Project Name', field: 'project_name' },
-      { label: 'Block/Tower', field: 'block' },
-      { label: 'Category', field: 'category' },
-      { label: 'Sub Category', field: 'sub_category' },
-      { label: 'Unit Type', field: 'unit_type' },
-      { label: 'Size', field: 'size' },
-      { label: 'Stages/Status', field: 'stage' },
-      { label: 'Direction', field: 'direction' },
-      { label: 'Road', field: 'road' }, // Added field for from date
-      { label: 'Facing', field: 'facing' }
-    ];
+    // const unitfields = [
+    //   { label: 'City', field: 'ucity' },
+    //   { label: 'Location', field: 'location' },
+    //   { label: 'Project Name', field: 'project_name' },
+    //   { label: 'Block/Tower', field: 'block' },
+    //   { label: 'Category', field: 'category' },
+    //   { label: 'Sub Category', field: 'sub_category' },
+    //   { label: 'Unit Type', field: 'unit_type' },
+    //   { label: 'Size', field: 'size' },
+    //   { label: 'Stages/Status', field: 'stage' },
+    //   { label: 'Direction', field: 'direction' },
+    //   { label: 'Road', field: 'road' }, // Added field for from date
+    //   { label: 'Facing', field: 'facing' }
+    // ];
     
   
     const [showDropdown2, setShowDropdown2] = useState(false);
     const [selectfieldunit, setselectfieldunit] = useState([]);
   
      // Handle checkbox toggle
-     const handlefilterCheckboxChange1 = (field) => {
-      setselectfieldunit(prev => {
-        if (prev.hasOwnProperty(field)) {
-          // Remove the field
-          const { [field]: _, ...rest } = prev;
-          return rest;
-        } else {
-          // Add the field with empty value
-          return { ...prev, [field]: '' };
-        }
-      });
-    };
+    //  const handlefilterCheckboxChange1 = (field) => {
+    //   setselectfieldunit(prev => {
+    //     if (prev.hasOwnProperty(field)) {
+    //       // Remove the field
+    //       const { [field]: _, ...rest } = prev;
+    //       return rest;
+    //     } else {
+    //       // Add the field with empty value
+    //       return { ...prev, [field]: '' };
+    //     }
+    //   });
+    // };
   
       // Handle input change for filtering values
-      const handleFieldInputChange = (field, value) => {
-        setselectfieldunit((prev) => ({
-          ...prev,
-          [field]: value,
-        }));
-      };
+      // const handleFieldInputChange = (field, value) => {
+      //   setselectfieldunit((prev) => ({
+      //     ...prev,
+      //     [field]: value,
+      //   }));
+      // };
   
   
-      useEffect(() => {
+      // useEffect(() => {
     
-        const filtered = allunitsforsearch.filter(contact => {
-          const matchesTextFilters = Object.keys(selectfieldunit).every(field => {
-            const value = selectfieldunit[field]?.toLowerCase();
-            const contactValue = contact[field]?.toString().toLowerCase() || '';
-            return !value || contactValue.includes(value);
-          });
-          return matchesTextFilters
-        });
+      //   const filtered = allunitsforsearch.filter(contact => {
+      //     const matchesTextFilters = Object.keys(selectfieldunit).every(field => {
+      //       const value = selectfieldunit[field]?.toLowerCase();
+      //       const contactValue = contact[field]?.toString().toLowerCase() || '';
+      //       return !value || contactValue.includes(value);
+      //     });
+      //     return matchesTextFilters
+      //   });
       
-        setFlattenedUnits(filtered);
-      }, [selectfieldunit, allunitsforsearch]);
-      
-      
+      //   setFlattenedUnits(filtered);
+      // }, [allunitsforsearch]);
       
       
-    
-  
+      
+
+
+const unitfields = [
+  { label: 'City', field: 'ucity', values: ['Delhi', 'Mumbai', 'New York', 'London', 'San Francisco'] },
+  { label: 'Location', field: 'location', values: ['Downtown', 'Suburb', 'Industrial Area'] },
+  { label: 'Project Name', field: 'project_name' },
+  { label: 'Block/Tower', field: 'block' },
+  { label: 'Category', field: 'category', values: ['Residential', 'Commercial'] },
+  { label: 'Sub Category', field: 'sub_category' },
+  { label: 'Unit Type', field: 'unit_type' },
+  { label: 'Size', field: 'size' },
+  { label: 'Stages/Status', field: 'stage', values: ['Planning', 'Ongoing', 'Completed'] },
+  { label: 'Direction', field: 'direction', values: ['North', 'South', 'East', 'West'] },
+  { label: 'Road', field: 'road' },
+  { label: 'Facing', field: 'facing', values: ['Garden', 'Main Road'] }
+];
+
+
+const [showFieldDropdown, setShowFieldDropdown] = useState(false);
+const [activeFilters, setActiveFilters] = useState([]);
+// To track each filter's internal UI state (dropdown open, value selections etc.)
+const [openDropdownIdx, setOpenDropdownIdx] = useState(null);
+
+// Add new filter row
+function handleAddField(fieldObj) {
+  setActiveFilters([
+    ...activeFilters,
+    {
+      ...fieldObj,
+      radio: 'with',
+      input: '',
+      checked: [],
+    }
+  ]);
+  setShowFieldDropdown(false);
+  setOpenDropdownIdx(activeFilters.length);
+}
+
+// Remove filter
+function handleRemoveFilter(idx) {
+  setActiveFilters(activeFilters => activeFilters.filter((_, i) => i !== idx));
+  if (openDropdownIdx === idx) setOpenDropdownIdx(null);
+}
+
+// Toggle dropdown for a row
+function handleToggleDropdown(idx) {
+  setOpenDropdownIdx(openDropdownIdx === idx ? null : idx);
+}
+
+// Radio/checkbox/text handlers:
+function handleRadio(idx, value) {
+  setActiveFilters(filters =>
+    filters.map((f,i) => i === idx ? { ...f, radio: value } : f)
+  );
+}
+function handleInput(idx, value) {
+  setActiveFilters(filters =>
+    filters.map((f,i) => i === idx ? { ...f, input: value } : f)
+  );
+}
+function handleCheckbox(idx, val) {
+  setActiveFilters(filters =>
+    filters.map((f,i) => {
+      if (i !== idx) return f;
+      const checked = f.checked.includes(val)
+        ? f.checked.filter(v => v !== val)
+        : [...f.checked, val];
+      return { ...f, checked };
+    })
+  );
+}
+
+      
+useEffect(() => {
+  const filteredData = allunitsforsearch.filter(item =>
+    activeFilters.every(filter => {
+      const fieldVal = item[filter.field] || "";
+
+      // Checkbox logic
+      if (filter.checked && filter.checked.length > 0) {
+        if (filter.radio === 'with') {
+          if (!filter.checked.includes(fieldVal)) {
+            return false;
+          }
+        }
+        if (filter.radio === 'without') {
+          if (filter.checked.includes(fieldVal)) {
+            return false;
+          }
+        }
+      }
+
+      // Input logic
+      if (filter.input && typeof fieldVal === 'string') {
+        if (filter.radio === 'with') {
+          if (!fieldVal.toLowerCase().includes(filter.input.toLowerCase())) {
+            return false;
+          }
+        }
+        if (filter.radio === 'without') {
+          if (fieldVal.toLowerCase().includes(filter.input.toLowerCase())) {
+            return false;
+          }
+        }
+      }
+
+      // Pass if neither is specified
+      return true;
+    })
+  );
+  setFlattenedUnits(filteredData);
+}, [activeFilters, allunitsforsearch]);
+
+
+
+
+
   
   //================================================== filter code end==================================================================
 
@@ -5407,7 +5414,7 @@ const excelSerialToDateString = (serial) => {
                       </div>
                      </Tooltip>
         
-                         <div
+                         {/* <div
                     ref={toastRefunit}
                     className={`feedback-toast ${showunit ? (isClosingunit ? 'hide' : 'show') : ''}`}
                     style={{ zIndex: 9999 }}
@@ -5429,7 +5436,7 @@ const excelSerialToDateString = (serial) => {
                         overflow: 'hidden',
                       }}
                     >
-                      {/* Header */}
+                   
                       <h3 style={{
                         fontSize: '16px',
                         margin: 0,
@@ -5443,7 +5450,7 @@ const excelSerialToDateString = (serial) => {
                         🔍 Filter Units
                       </h3>
         
-                      {/* Tab Navigation */}
+                    
                       <div style={{
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -5474,9 +5481,9 @@ const excelSerialToDateString = (serial) => {
                         ))}
                       </div>
         
-                      {/* Tab Content */}
+                     
                       <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'auto' }}>
-                        {/* Profession Tab */}
+                       
                         {activeTab === 'profession' && (
                         <div style={{
                             display: 'grid',
@@ -5526,7 +5533,7 @@ const excelSerialToDateString = (serial) => {
         
                         )}
         
-                        {/* Custom Fields Tab */}
+                    
                         {activeTab === 'custom' && (
                         <div style={{
                             display: 'grid',
@@ -5601,7 +5608,7 @@ const excelSerialToDateString = (serial) => {
                                 )}
                               </div>
         
-                      {/* Cancel Button */}
+                 
                           <div style={{
                           padding: '14px',
                           borderTop: '1px solid #eee',
@@ -5644,8 +5651,166 @@ const excelSerialToDateString = (serial) => {
                         </div>
         
                     </div>
-                  </div>
+                  </div> */}
         
+ <div ref={toastRefunit}
+                    className={`feedback-toast ${showunit ? (isClosingunit ? 'hide' : 'show') : ''}`} 
+                    style={{marginTop:"6%", width: 400, background: "#fff", borderRadius: 14, boxShadow: "0 8px 24px rgba(0,0,0,0.10)", padding: 24,overflow:"auto",height:"100%" }}>
+     <h3 style={{
+                        fontSize: '16px',
+                        margin: 0,
+                        padding: '16px',
+                        textAlign: 'center',
+                        // background: 'linear-gradient(to right, #00b4db, #0083b0)',
+                        color: 'black',
+                        borderBottom: '1px solid #ddd',
+                        letterSpacing: '0.5px'
+                      }}>
+                        🔍 Filter Units
+                      
+                      <span>
+                          <button
+                            className="btn btn-danger"
+                            style={{
+                              backgroundColor:"white",
+                              padding: '6px 12px',
+                              fontSize: '14px',
+                              border:"none",
+                              marginLeft:"40%"
+                            }}
+                            onClick={handleCancelunit}
+                          >
+                            ❌
+                          </button>
+                      </span>
+                      </h3>
+                      
+  {/* Add Field Section */}
+  <button
+    style={{ padding: "7px 18px", background: "#007bff", color: "#fff", border: "none", borderRadius: 6, fontWeight: 600, marginBottom: 16, cursor: "pointer",marginTop:"20px"}}
+    onClick={() => setShowFieldDropdown(s => !s)}
+  >+ Add Field</button>
+  {showFieldDropdown && (
+    <div style={{ background: "#fff", border: "1px solid #eee", borderRadius: 7, marginBottom: 14,overflow:"auto",height:"200px" }}>
+      {unitfields.filter(f =>
+        !activeFilters.some(af => af.field === f.field)
+      ).map(fieldObj => (
+        <div key={fieldObj.field}
+          style={{ padding: 10, cursor: "pointer" }}
+          onClick={() => handleAddField(fieldObj)}
+        >{fieldObj.label}</div>
+      ))}
+    </div>
+  )}
+
+  {/* Active Filter Rows */}
+  {activeFilters.map((item, idx) => (
+    <div key={item.field} style={{
+      background: "#f7f9fb", borderRadius: 8, marginBottom: 14, padding: 12, position: "relative" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <b style={{ flex: 1 }}>{item.label}</b>
+        <button
+          style={{ background: "none", border: "none", color: "#f44", fontSize: 18, fontWeight: 700, cursor: "pointer" }}
+          onClick={() => handleRemoveFilter(idx)}
+        >×</button>
+      </div>
+      {/* Dropdown toggle */}
+      <button
+        style={{
+          display: "block", width: "100%",
+          background: "#fff", border: "1px solid #d6e0ef",
+          borderRadius: 7, marginTop: 8, padding: "7px 12px",
+          textAlign: "left", fontWeight: 500, cursor: "pointer"
+        }}
+        onClick={() => handleToggleDropdown(idx)}
+      >
+        Open Filter
+      </button>
+
+      {/* Dropdown contents */}
+      {openDropdownIdx === idx && (
+        <div style={{
+          background: "#fff", border: "1px solid #eee", boxShadow: "0 2px 9px rgba(0,0,0,0.08)",
+          borderRadius: 8, marginTop: 8, padding: 12
+        }}>
+          <div style={{ display: "flex", gap: 18, marginBottom: 10 }}>
+            <label>
+              <input type="radio" checked={item.radio === "with"} onChange={() => handleRadio(idx, "with")} />
+              {' '}With
+            </label>
+            <label>
+              <input type="radio" checked={item.radio === "without"} onChange={() => handleRadio(idx, "without")} />
+              {' '}Without
+            </label>
+          </div>
+          <input
+            type="text"
+            value={item.input}
+            onChange={e => handleInput(idx, e.target.value)}
+            placeholder={`Type for ${item.label}`}
+            style={{ width: "98%", marginBottom: 10, padding: "6px 8px", border: "1px solid #ccd", borderRadius: 6 }}
+          />
+          {item.values && item.values.length > 0 && (
+            <div style={{ maxHeight: 130, overflowY: "auto", background: "#fcfdff", padding: "6px 8px", borderRadius: 7 }}>
+              {item.values.map(val => (
+                <label key={val} style={{ display: "block", margin: "4px 0", fontSize: 15 }}>
+                  <input type="checkbox" checked={item.checked.includes(val)}
+                    onChange={() => handleCheckbox(idx, val)}
+                    style={{ marginRight: 8 }}
+                  />{val}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  ))}
+
+     {/* <div style={{
+                          padding: '14px',
+                          borderTop: '1px solid #eee',
+                          background: '#f9f9f9',
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                          gap: '10px'
+                        }}>
+                          <button
+                            className="btn btn-secondary"
+                            style={{
+                              width: '45%',
+                              padding: '6px 12px',
+                              fontSize: '14px',
+                              borderRadius: '6px',
+                              backgroundColor: '#6c757d',
+                              border: 'none',
+                              color: '#fff',
+                              boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
+                              transition: 'background 0.3s ease',
+                            }}
+                            onClick={handleResetFiltersunit}
+                          >
+                            🔄 Reset
+                          </button>
+        
+                          <button
+                            className="btn btn-danger"
+                            style={{
+                              width: '45%',
+                              padding: '6px 12px',
+                              fontSize: '14px',
+                              borderRadius: '6px',
+                              boxShadow: '0 3px 8px rgba(0,0,0,0.1)'
+                            }}
+                            onClick={handleCancelunit}
+                          >
+                            ❌ Cancel
+                          </button>
+                        </div> */}
+
+</div>
+
+
         
                     {/* <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button> */}
                     <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"3%"}}>Add Fields</button>
@@ -7597,6 +7762,7 @@ const excelSerialToDateString = (serial) => {
         <select className="form-control form-control-sm" name="owner_response" onChange={(e)=>setfeedbackform({...feedbackform,owner_response:e.target.value})}>
           <option>---select response---</option>
           <option>Yes</option>
+          <option>Rent</option>
           <option>Yes -Sell this property but buy another</option>
           <option>Sold</option>
           <option>No -But discussed about price</option>
@@ -7607,136 +7773,7 @@ const excelSerialToDateString = (serial) => {
           <option>Sold -But Interested to sell Another Property</option>
         </select>
       </div>
-      {/* {
-        feedbackform.owner_response==="Yes" && 
-        (
-            <div className="mb-2">
-              <button
-             onClick={() =>window.open(`/deal?unit=${encodeURIComponent(JSON.stringify(selectedItems3[0]))}`, '_blank')}
-
-              className="btn btn-sm"
-              style={{
-                background: "linear-gradient(135deg, #28a745, #218838)",
-                color: "white",
-                fontWeight: "600",
-                fontSize: "14px",
-                padding: "6px 16px",
-                borderRadius: "6px",
-                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                border: "none",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-                e.target.style.transform = "scale(1.03)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-                e.target.style.transform = "scale(1)";
-              }}
-            >
-              <i className="bi bi-handshake-fill me-2"></i> Create Deal
-            </button>
-           
-          </div>
-        )
-      } */}
-
-      {/* {
-        feedbackform.owner_response==="Yes -Sell this property but buy another" && 
-        (
-            <div className="mb-2">
-              <button
-             onClick={() =>window.open(`/deal?unit=${encodeURIComponent(JSON.stringify(selectedItems3[0]))}`, '_blank')}
-    className="btn btn-sm"
-    style={{
-      background: "linear-gradient(135deg, #28a745, #218838)",
-      color: "white",
-      fontWeight: "600",
-      fontSize: "14px",
-      padding: "6px 16px",
-      borderRadius: "6px",
-      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-      border: "none",
-      transition: "all 0.3s ease",
-    }}
-    onMouseEnter={(e) => {
-      e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-      e.target.style.transform = "scale(1.03)";
-    }}
-    onMouseLeave={(e) => {
-      e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-      e.target.style.transform = "scale(1)";
-    }}
-  >
-    <i className="bi bi-handshake-fill me-2"></i> Create Deal
-  </button>
-    <button
-    onClick={() => window.open(`/leadrequirment?owner=${feedbackform.owner}`, '_blank')}
-      className="btn btn-sm"
-      style={{
-        marginLeft: "10%",
-        background: "linear-gradient(135deg, #28a745, #218838)",
-        color: "white",
-        fontWeight: "600",
-        fontSize: "14px",
-        padding: "6px 16px",
-        borderRadius: "6px",
-        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-        border: "none",
-        transition: "all 0.3s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-        e.target.style.transform = "scale(1.03)";
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-        e.target.style.transform = "scale(1)";
-      }}
-    >
-      <i className="bi bi-handshake-fill me-2"></i> Lead Requirment
-    </button>
-          
-          </div>
-        )
-
-      } */}
-
-      {/* {
-        feedbackform.owner_response==="Sold" && 
-        (
-            <div className="mb-2">
-               <button
-               onClick={handleShow7}
-              className="btn btn-sm"
-              style={{
-                background: "linear-gradient(135deg, #28a745, #218838)",
-                color: "white",
-                fontWeight: "600",
-                fontSize: "14px",
-                padding: "6px 16px",
-                borderRadius: "6px",
-                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                border: "none",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-                e.target.style.transform = "scale(1.03)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-                e.target.style.transform = "scale(1)";
-              }}
-            >
-              <i className="bi bi-handshake-fill me-2"></i> Add New owner
-            </button>
-        
-          </div>
-        )
-
-      } */}
+   
 
   {
   feedbackform.owner_response === "No -But discussed about price" && (
@@ -7804,39 +7841,7 @@ const excelSerialToDateString = (serial) => {
       </div>
   )
 }
-   {/* {
-        feedbackform.owner_response==="No -But wants to buy another property" && 
-        (
-            <div className="mb-2">
-               <button
-              onClick={() => window.open(`/leadrequirment?owner=${feedbackform.owner}`, '_blank')}
-              className="btn btn-sm"
-              style={{
-                background: "linear-gradient(135deg, #28a745, #218838)",
-                color: "white",
-                fontWeight: "600",
-                fontSize: "14px",
-                padding: "6px 16px",
-                borderRadius: "6px",
-                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                border: "none",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-                e.target.style.transform = "scale(1.03)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-                e.target.style.transform = "scale(1)";
-              }}
-            >
-              <i className="bi bi-handshake-fill me-2"></i> Lead Requirment
-            </button>
-          </div>
-        )
 
-      } */}
         {
         feedbackform.owner_response==="Thinking may/be in future" && 
         (
@@ -7907,73 +7912,7 @@ const excelSerialToDateString = (serial) => {
     </div>
   )
 }
-  {/* {
-        feedbackform.owner_response==="Sold -But Interested to Buy Another Property" && 
-        (
-            <div className="mb-2">
-                <button
-                   onClick={() => window.open('/leadinfo', '_blank')}
-              className="btn btn-sm"
-              style={{
-                background: "linear-gradient(135deg, #28a745, #218838)",
-                color: "white",
-                fontWeight: "600",
-                fontSize: "14px",
-                padding: "6px 16px",
-                borderRadius: "6px",
-                boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-                border: "none",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-                e.target.style.transform = "scale(1.03)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-                e.target.style.transform = "scale(1)";
-              }}
-            >
-              <i className="bi bi-handshake-fill me-2"></i> Add Lead
-            </button>
-            </div>
-        )
 
-      } */}
-        {/* {
-        feedbackform.owner_response==="Sold -But Interested to sell Another Property" && 
-        (
-    <div className="mb-2">
-  <button
-       onClick={() =>window.open(`/deal?unit=${encodeURIComponent(JSON.stringify(selectedItems3[0]))}`, '_blank')}
-    className="btn btn-sm"
-    style={{
-      background: "linear-gradient(135deg, #28a745, #218838)",
-      color: "white",
-      fontWeight: "600",
-      fontSize: "14px",
-      padding: "6px 16px",
-      borderRadius: "6px",
-      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.2)",
-      border: "none",
-      transition: "all 0.3s ease",
-    }}
-    onMouseEnter={(e) => {
-      e.target.style.background = "linear-gradient(135deg, #218838, #1e7e34)";
-      e.target.style.transform = "scale(1.03)";
-    }}
-    onMouseLeave={(e) => {
-      e.target.style.background = "linear-gradient(135deg, #28a745, #218838)";
-      e.target.style.transform = "scale(1)";
-    }}
-  >
-    <i className="bi bi-handshake-fill me-2"></i> Create Deal
-  </button>
-    </div>
-
-        )
-
-      } */}
 
        <div className="mb-2">
         <label className="form-label">Stage</label>
