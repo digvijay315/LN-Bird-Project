@@ -8,6 +8,8 @@ import Swal from 'sweetalert2';
 import api from '../api';
 import { HiOutlinePaperClip } from 'react-icons/hi';
 import { IoSend } from 'react-icons/io5';
+import { FaRegCommentDots } from 'react-icons/fa';
+
 
 const Home = () => {
 
@@ -1022,7 +1024,7 @@ setIsLoading(true)
               <p className="olc-process-title">Process</p>
              <div className="olc-process-steps">
   <div className="olc-process-step">
-     <span style={{ fontSize: '32px' }}>📝</span>
+     <span style={{ fontSize: '32px' }} className="icons">📝</span>
     <span>Select details</span>
   </div>
    <span className="arrow"
@@ -1036,7 +1038,7 @@ setIsLoading(true)
   &gt;&gt;
 </span>
   <div className="olc-process-step">
-    <span style={{ fontSize: '32px' }}>⏳</span>
+    <span style={{ fontSize: '32px' }} className="icons">⏳</span>
     <span>Wait for a few minutes</span>
   </div>
   <span className="arrow"
@@ -1050,7 +1052,7 @@ setIsLoading(true)
   &gt;&gt;
 </span>
   <div className="olc-process-step">
-    <span style={{ fontSize: '32px' }}>💬</span>
+    <span style={{ fontSize: '32px' }} className="icons">💬</span>
     <span>Chat with lawyer</span>
   </div>
 

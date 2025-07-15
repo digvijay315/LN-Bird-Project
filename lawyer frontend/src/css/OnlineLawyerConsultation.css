@@ -86,7 +86,7 @@
 }
 
 .olc-process-steps {
-  
+  margin-left: -7%;
   display: flex;
   gap: 32px;
 }
@@ -260,27 +260,29 @@
     background: linear-gradient(135deg, #106EBE, #0FFCBE);
     padding: 16px 0;
   } */
-   .arrow
+   /* .arrow
    {
     margin-left: 45%;
-   }
+   } */
   .olc-process-title {
-  /* margin-left: 25%; */
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 500;
+
+  color: #2d3a5c;
+  font-size: 0.77rem;
+  font-weight: 800;
   margin-bottom: 8px;
-  margin-left: 1%;
+  margin-left: -6%;
 }
   .olc-process-steps {
-     margin-left: -30%;
-    flex-direction: column;
-    gap: 16px;
+    width: 80%;
+     margin-left: -1%;
+    /* flex-direction: column; */
+    gap: 0px;
   }
   .olc-process-step {
     width: 100%;
-    font-size: 0.75rem;
+    font-size: 0.55rem;
   }
+ 
 }
 
 
