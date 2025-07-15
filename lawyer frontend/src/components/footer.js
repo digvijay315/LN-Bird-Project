@@ -1,6 +1,6 @@
 import React from 'react';
-import { FaLinkedin, FaTwitter, FaEnvelope } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+import {  FaFacebook, FaInstagram, FaYoutube,FaEnvelope,FaLinkedin } from 'react-icons/fa';
+
 
 const accent = "#1fa2ff"; // Brand accent color
 
@@ -112,11 +112,17 @@ const Footer = () => (
           <FaEnvelope style={{ marginRight: 8 }} /> admin@counvo.in
         </a>
         <div style={{ marginTop: "1em" }}>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={iconLinkStyles} title="LinkedIn">
-            <FaLinkedin />
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={iconLinkStyles} title="Facebook">
+            <FaFacebook />
           </a>
           <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={iconLinkStyles} title="Twitter">
-            <FaXTwitter  />
+            <FaInstagram  />
+          </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={iconLinkStyles} title="Youtube">
+            <FaYoutube  />
+          </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" style={iconLinkStyles} title="Linkdin">
+            <FaLinkedin  />
           </a>
         </div>
       </div>

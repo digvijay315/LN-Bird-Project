@@ -252,14 +252,18 @@
   .olc-banner-right {
     padding: 12px 6px;
   }
-  .olc-process-desktop {
+  /* .olc-process-desktop {
     display: none;
-  }
-  .olc-process-mobile {
+  } */
+  /* .olc-process-mobile {
     display: block;
     background: linear-gradient(135deg, #106EBE, #0FFCBE);
     padding: 16px 0;
-  }
+  } */
+   .arrow
+   {
+    margin-left: 45%;
+   }
   .olc-process-title {
   /* margin-left: 25%; */
   color: #fff;
@@ -269,6 +273,7 @@
   margin-left: 1%;
 }
   .olc-process-steps {
+     margin-left: -30%;
     flex-direction: column;
     gap: 16px;
   }

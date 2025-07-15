@@ -1025,7 +1025,8 @@ setIsLoading(true)
      <span style={{ fontSize: '32px' }}>📝</span>
     <span>Select details</span>
   </div>
-   <span style={{
+   <span className="arrow"
+   style={{
   fontSize: '32px',
   background:"#2d3a5c",
   WebkitBackgroundClip: 'text',
@@ -1038,7 +1039,8 @@ setIsLoading(true)
     <span style={{ fontSize: '32px' }}>⏳</span>
     <span>Wait for a few minutes</span>
   </div>
-  <span style={{
+  <span className="arrow"
+  style={{
   fontSize: '32px',
   background: "#2d3a5c",
   WebkitBackgroundClip: 'text',
@@ -1057,7 +1059,7 @@ setIsLoading(true)
 
             </div>
                {/* Process Steps (Mobile) */}
-        <div className="olc-process-mobile">
+        {/* <div className="olc-process-mobile">
           <p className="olc-process-title">Process</p>
           <div className="olc-process-steps">
            <div className="olc-process-step">
@@ -1072,12 +1074,8 @@ setIsLoading(true)
     <span style={{ fontSize: '32px' }}>💬</span>
     <span>Chat with lawyer</span>
   </div>
-            {/* <div className="olc-process-step">
-              <img src="https://cdn-icons-png.flaticon.com/512/1828/1828817.png" width="45" height="45" alt="Call" />
-              <span>Lawyer Will Call You</span>
-            </div> */}
           </div>
-        </div>
+        </div> */}
 
             <div className="findlawyer">
   <div className="findlawyer-glass" />
