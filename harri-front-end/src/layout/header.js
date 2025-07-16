@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSelector } from "react-redux";
 // internal
 import Menus from "./menus";
+
 import logo from "@assets/img/logo/PP_New-Logo 1.svg";
 import { Cart, Heart, Search, User } from "@svg/index";
 import useSticky from "@hooks/use-sticky";

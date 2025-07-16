@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 //   autoConnect: false, // important: don't auto-connect immediately
 // });
 
-const socket = io('https://ln-bird-project.onrender.com', {
+const socket = io('https://api.counvo.in', {
   autoConnect: false, // important: don't auto-connect immediately
 });
 

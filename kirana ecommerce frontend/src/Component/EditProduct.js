@@ -468,9 +468,9 @@ setTimeout(() => setSuccessMessage(""), 3000);
                   </div>
                 </div>
 
-                <div className="box" style={{ height: "auto", padding: "15px" }}>
+                {/* <div className="box" style={{ height: "auto", padding: "15px" }}>
                   <ProductVariations />
-                </div>
+                </div> */}
 
                 <button type="submit" className="submit-button" style={{ marginTop: 20 }}>
                   Submit Product
