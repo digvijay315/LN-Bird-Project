@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo1 from '../components/counvoImg/Counvo - LOGO (1).png';
+import logo from '../components/counvoImg/image.png'
 import Swal from 'sweetalert2';
 
 export default function Header() {
@@ -46,6 +47,11 @@ export default function Header() {
         .logo {
           height: 50px;
           cursor: pointer;
+        }
+          .logo1 {
+          height: 50px;
+          cursor: pointer;
+          margin-left:-100
         }
 
         .nav-links {
@@ -121,12 +127,14 @@ export default function Header() {
       `}</style>
 
       <header className="header">
-        <img
-          src={logo1}
+            <img
+          src={logo}
           alt="Logo"
           className="logo"
           onClick={() => { navigate('/'); setMenuOpen(false); }}
         />
+      
+       
 
         <ul className={`nav-links ${menuOpen ? 'open' : ''}`}>
           <li
@@ -137,13 +145,13 @@ export default function Header() {
           </li>
           <li
             className={isActive('/about') ? 'active' : ''}
-            onClick={() => { navigate('/about'); setMenuOpen(false); }}
+            onClick={() => { navigate('/aboutus'); setMenuOpen(false); }}
           >
             About
           </li>
           <li
             className={isActive('/contact') ? 'active' : ''}
-            onClick={() => { navigate('/contact'); setMenuOpen(false); }}
+            onClick={() => { navigate('/contactus'); setMenuOpen(false); }}
           >
             Contact
           </li>

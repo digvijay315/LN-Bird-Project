@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../user/css/popularproducts.css";
+import { useCart } from "./context/cartcontext";
 
 const CATEGORIES = [
   { key: "topRated", label: "Top Rated" },
@@ -22,6 +23,12 @@ const Popularproducts = () => {
   const filteredProducts = products.filter(
     (prod) => prod.category === activeTab
   );
+  
+  const {setCartItems}=useCart()
+  const addtocart=(product)=>
+  {
+    setCartItems(product)
+  }
 
   return (
     <section className="popular-products-section">
@@ -51,7 +58,7 @@ const Popularproducts = () => {
                 <div className="product-price">${prod.price}</div>
             </div>
             <div className="buy-now-wrapper">
-                <button className="buy-now-btn">Add to cart</button>
+                <button className="buy-now-btn" onClick={addtocart(prod)}>Add to cart</button>
             </div>
             </div>
 

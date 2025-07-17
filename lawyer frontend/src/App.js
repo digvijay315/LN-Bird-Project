@@ -18,6 +18,8 @@ import OnlineLawyerConsultation from './components/landingpage';
 import Clientchathistory from './components/clientchathistory';
 import TermsAndConditions from './components/terms&condition';
 import ProtectedRoute from './components/authguard';
+import AboutUs from './components/aboutus';
+import ContactUs from './components/contactus';
 
 
 
@@ -42,6 +44,8 @@ function App() {
       <Route path='/clientprofile' element={<ClientProfileModal/>}></Route>
       <Route path='/clientchathistory' element={<Clientchathistory/>}></Route>
       <Route path='/termsandconditions' element={<TermsAndConditions/>}></Route>
+      <Route path='/aboutus' element={<AboutUs/>}></Route>
+      <Route path='/contactus' element={<ContactUs/>}></Route>
     </Routes> 
 {/* <OnlineLawyerConsultation/> */}
    </div>

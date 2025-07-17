@@ -9,9 +9,12 @@ import api from '../api';
 import { HiOutlinePaperClip } from 'react-icons/hi';
 import { IoSend } from 'react-icons/io5';
 import { FaRegCommentDots } from 'react-icons/fa';
+import { useNavigate } from "react-router-dom";
 
 
 const Home = () => {
+
+  const navigate=useNavigate()
 
   const coverCards = [
   { title: "Legal Notices", img: "https://assets.vakilsearch.com/consult_legal_notices.svg" },
@@ -733,12 +736,13 @@ const filterLawyersAndChat = () => {
    
   if(!userData?.user._id)
   {
-     return Swal.fire({
-      icon:"error",
-      title:"Login!!!",
-      text:"Please Login first",
-      showConfirmButton:"true"
-    })
+    //  return Swal.fire({
+    //   icon:"error",
+    //   title:"Login!!!",
+    //   text:"Please Login first",
+    //   showConfirmButton:"true"
+    // })
+    return navigate('/login')
   }
    setIsLoading(true)
      setTimeout(() => {
@@ -1108,7 +1112,7 @@ setIsLoading(true)
       ))}
     </select>
        <select
-      value={court}
+      value={language}
       onChange={e => setlanguage(e.target.value)}
       className="findlawyer-select"
     >
@@ -1140,7 +1144,7 @@ setIsLoading(true)
            <section class="legal-queries-section">
   <h2 class="section-title">Most Asked Legal Queries</h2>
   <div class="queries-grid">
-    <div class="query-card">
+    <div class="query-card" onClick={()=>setSpecialization('civil lawyer')}>
       {/* <span class="query-icon">🚗</span> */}
       <h3>Car Challan</h3>
       {/* <p>Information and help regarding traffic fines and challans.</p> */}
@@ -1150,17 +1154,17 @@ setIsLoading(true)
       <h3>Legal Notice</h3>
       {/* <p>Drafting and responding to legal notices efficiently.</p> 
     </div> */}
-    <div class="query-card">
+    <div class="query-card" onClick={()=>setSpecialization('legal notice drafting')}>
       {/* <span class="query-icon ">💸</span> */}
       <h3>Cheque Bounce</h3>
       {/* <p>Guidance on cheque bounce cases and legal remedies.</p> */}
     </div>
-    <div class="query-card">
+    <div class="query-card" onClick={()=>setSpecialization('consumer lawyer')}>
       {/* <span class="query-icon">📦</span> */}
       <h3>Product/Service Default</h3>
       {/* <p>Assistance for faulty products or unsatisfactory services.</p> */}
     </div>
-    <div class="query-card">
+    <div class="query-card" onClick={()=>setSpecialization('cyber lawyer')}>
       {/* <span class="query-icon">🕵️</span> */}
       <h3>Online Fraud</h3>
       {/* <p>Support for victims of cyber fraud and scams.</p> */}
