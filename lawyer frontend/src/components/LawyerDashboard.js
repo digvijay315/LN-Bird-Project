@@ -139,6 +139,10 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
 
 //=================================== chat code start============================================================================
 
+
+const [isMinimized, setIsMinimized] = useState(false);
+
+
   // Chat functionality (keeping your existing chat code)
   useEffect(() => {
     if (!lawyerdetails?.lawyer?._id) return;
@@ -167,7 +171,7 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
 
  const handleReceiveMessage = async ({ from, message, fileUrl, fileName, fileType }) => {
   setHasNewMessages(true);
-
+   showAcceptPopup(from); // 👈 Add this line
     // Play notification beep if chat is closed or tab is not visible
   if (
     typeof showChat === "undefined" ||
@@ -255,7 +259,7 @@ const showAcceptPopup = (clientId) => {
   setSelectedClient(client);
 
   // Show accept dialog if session is expired/missing
-  showAcceptPopup(client._id);
+  // showAcceptPopup(client._id);
 
   // If session is active, load chat history (as before)
   if (isSessionActive(client._id)) {
@@ -1294,199 +1298,385 @@ const showAcceptPopup = (clientId) => {
         </main>
       </div>
 
-     {/* Chat Popup with Accept/Reject and 30-Minute Session Logic */}
-{showChat && (
-  <div className="chat-popup">
-    <div className="chat-header">
-      <span>💬 Messages</span>
-      <style>
-        {`
-        .close-case-btn {
-          background: rgba(239, 68, 68, 0.1);
-          border: 1px solid rgba(239, 68, 68, 0.3);
-          color: #ef4444;
-          padding: 0.5rem 0.75rem;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          font-size: 0.75rem;
-          font-weight: 600;
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-        }
-        .close-case-btn:hover {
-          background: rgba(239, 68, 68, 0.2);
-          border-color: rgba(239, 68, 68, 0.5);
-          transform: scale(1.05);
-        }`
-        }
-      </style>
-      {/* <button 
-        className="close-case-btn"
-        title="Close case"
-      >
-        🔒 Close Case
-      </button> */}
-      <button 
-        onClick={() => setShowChat(false)} 
-        style={{ 
-          background: 'none', 
-          border: 'none', 
-          color: 'white', 
-          fontSize: '18px',
-          cursor: 'pointer'
-        }}
-      >
-        ✖
-      </button>
-    </div>
-
-    <div className="chat-tabs">
-      {chatClients?.map((client) => (
-        <div
-          key={client._id}
-          onClick={() => {
-            handleOpenChat(client);
-            setHasNewMessages(false);
-          }}
-          className={`chat-tab ${selectedClient?._id === client._id ? 'active' : ''}`}
-        >
-          {client.firstName}
-        </div>
-      ))}
-    </div>
-
-    {/* ACCEPT/REJECT POPUP */}
-    {selectedClient && needsAccept?.[selectedClient._id] && (
-      <div
+{Object.entries(needsAccept).map(([clientId, needed]) =>
+  needed && (
+    <div
+      key={clientId}
+      style={{
+        position: "fixed",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "#fff",
+        border: "2px solid #3b82f6",
+        borderRadius: 12,
+        padding: 24,
+        width: 320,
+        zIndex: 2500,
+        boxShadow: "0 8px 40px #0002"
+      }}
+    >
+      <h3 style={{ marginBottom: 10 }}>Chat Request</h3>
+      <div style={{ marginBottom: 18 }}>
+        This client  wants to chat.<br />
+        {messageMap[clientId]?.length > 0 && (
+          <span style={{ color: "#6b7280", fontSize: 13 }}>
+            Latest: {messageMap[clientId][messageMap[clientId].length - 1].text}
+          </span>
+        )}
+      </div>
+      <button
         style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "#fff",
-          border: "2px solid #3b82f6",
-          borderRadius: 12,
-          padding: 24,
-          width: 320,
-          zIndex: 2500,
-          boxShadow: "0 8px 40px #0002"
+          marginRight: 12,
+          background: "#22c55e",
+          color: "#fff",
+          border: 0,
+          padding: "0.5rem 1.2rem",
+          borderRadius: 18,
+          fontWeight: 600
+        }}
+        onClick={() => {
+          setNeedsAccept(prev => ({ ...prev, [clientId]: false }));
+          setSessionTimestamps(prev => ({ ...prev, [clientId]: Date.now() }));
+          fetchChatHistory(lawyerdetails.lawyer._id, clientId);
+          const messageArr = messageMap[clientId];
+          if (
+            messageArr && 
+            messageArr.length > 0 &&
+            (!selectedClient || selectedClient._id !== clientId || messages.length === 0)
+          ) {
+            setMessages([
+              { ...messageArr[messageArr.length - 1], isMe: false }
+            ]);
+          }
+          // If you want to auto-select the client after "Accept":
+          setSelectedClient(prev => prev && prev._id === clientId ? prev : chatClients.find(c => c._id === clientId));
         }}
       >
-        <h3 style={{ marginBottom: 10 }}>Chat Request</h3>
-        <div style={{ marginBottom: 18 }}>
-          This client wants to chat.<br />
-          {messageMap[selectedClient._id] && messageMap[selectedClient._id].length > 0 && (
-            <span style={{ color: "#6b7280", fontSize: 13 }}>
-              Latest: {messageMap[selectedClient._id][messageMap[selectedClient._id].length - 1].text}
-            </span>
-          )}
-        </div>
-        <button
-          style={{
-            marginRight: 12,
-            background: "#22c55e",
-            color: "#fff",
-            border: 0,
-            padding: "0.5rem 1.2rem",
-            borderRadius: 18,
-            fontWeight: 600
-          }}
-          onClick={() => {
-            setNeedsAccept(prev => ({ ...prev, [selectedClient._id]: false }));
-            setSessionTimestamps(prev => ({ ...prev, [selectedClient._id]: Date.now() }));
-            fetchChatHistory(lawyerdetails.lawyer._id, selectedClient._id);
-             const messageArr = messageMap[selectedClient._id];
-    if (
-      messageArr && 
-      messageArr.length > 0 &&
-      messages.length === 0
-    ) {
-      setMessages([
-        { ...messageArr[messageArr.length - 1], isMe: false }
-      ]);
-    }
-  
-          }}
-        >
-          Accept
-        </button>
-        <button
-          style={{
-            background: "#ef4444",
-            color: "#fff",
-            border: 0,
-            padding: "0.5rem 1.2rem",
-            borderRadius: 18,
-            fontWeight: 600
-          }}
-          onClick={() => {
-            setNeedsAccept(prev => ({ ...prev, [selectedClient._id]: false }));
+        Accept
+      </button>
+      <button
+        style={{
+          background: "#ef4444",
+          color: "#fff",
+          border: 0,
+          padding: "0.5rem 1.2rem",
+          borderRadius: 18,
+          fontWeight: 600
+        }}
+        onClick={() => {
+          setNeedsAccept(prev => ({ ...prev, [clientId]: false }));
+          if (selectedClient && selectedClient._id === clientId) {
             setMessages([]);
             setSelectedClient(null);
-
-          // SEND 'busy' message to client:
+          }
           socket.emit("privateMessage", {
-            toUserId: selectedClient._id,
+            toUserId: clientId,
             message: "Sorry, the lawyer is busy now. Please try again later.",
             fromUserType: "lawyer",
             timestamp: new Date().toISOString()
           });
-          }}
-        >
-          Reject
-        </button>
-      </div>
-    )}
-
-    <div className="chat-messages" style={{
-      filter: selectedClient && needsAccept?.[selectedClient._id] ? "blur(2px)" : "none",
-      pointerEvents: selectedClient && needsAccept?.[selectedClient._id] ? "none" : "auto"
-    }}>
-      {messages.map((msg, idx) => (
-        <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
-          {msg.text}
-          {msg.fileUrl && (
-            msg.fileType && msg.fileType.startsWith('image/') ? (
-              <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
-            ) : (
-              <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
-                📄 {msg.fileName}
-              </a>
-            )
-          )}
-          <div style={{
-            fontSize: '10px',
-            color: 'black',
-            marginTop: '2px',
-            textAlign: msg.isMe ? 'right' : 'left'
-          }}>
-            {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
-          </div>
-        </div>
-      ))}
+        }}
+      >
+        Reject
+      </button>
     </div>
-
-    <div className="chat-input">
-      <input
-        type="text"
-        placeholder={selectedClient ? "Type a message..." : "Select a client to start chatting"}
-        onKeyDown={handleSend}
-        disabled={
-          !selectedClient ||
-          (selectedClient && (needsAccept?.[selectedClient._id] || !isSessionActive(selectedClient._id)))
-        }
-      />
-      {/* Not active session / not accepted warning */}
-      {selectedClient && (needsAccept?.[selectedClient._id] || !isSessionActive(selectedClient._id)) && (
-        <div style={{ color: "red", marginTop: 8, fontSize: 13 }}>
-          Accept the chat request to start/continue chatting with this client.
-        </div>
-      )}
-    </div>
-  </div>
+  )
 )}
+
+
+
+     {/* Chat Popup with Accept/Reject and 30-Minute Session Logic */}
+// Place this code block directly inside your main component's return (NOT as a sub-component!).
+
+{showChat && (
+  isMinimized ? (
+    // Minimized state: Only blue bar shows
+    <div
+      style={{
+        position: "fixed",
+        bottom: 20,
+        right: 20,
+        background: "#2563eb",
+        color: "white",
+        borderRadius: 12,
+        minWidth: 180,
+        zIndex: 2000,
+        boxShadow: "0 8px 40px #0002",
+        padding: "10px 16px",
+        display: "flex",
+        alignItems: "center",
+        cursor: "pointer"
+      }}
+      onClick={() => setIsMinimized(false)}
+      title="Restore chat"
+    >
+      <span style={{ flex: 1, fontWeight: 500 }}>💬 Messages</span>
+      <span style={{ fontSize: "18px", marginLeft: 4 }}>🗖</span>
+      <button
+        onClick={e => { e.stopPropagation(); setShowChat(false); }}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'white',
+          fontSize: '18px',
+          cursor: 'pointer',
+          marginLeft: 8,
+          padding: 0
+        }}
+        title="Close"
+      >
+        ✖
+      </button>
+    </div>
+  ) : (
+    // Maximized state: Full chat popup
+    <div className="chat-popup" style={{
+      position: "fixed",
+      bottom: 20,
+      right: 20,
+      width: 380,
+      height: 500,
+      background: "white",
+      borderRadius: 16,
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+      border: "1px solid #e5e7eb",
+      overflow: "hidden",
+      zIndex: 1000,
+      display: "flex",
+      flexDirection: "column"
+    }}>
+      <div className="chat-header" style={{
+        background: "linear-gradient(135deg, #1e40af, #3b82f6)",
+        color: "white",
+        padding: "1rem",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center"
+      }}>
+        <span style={{ fontWeight: 600, fontSize: 17 }}>💬 Messages</span>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <button
+            onClick={() => setIsMinimized(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '18px',
+              cursor: 'pointer',
+              marginRight: '6px'
+            }}
+            title="Minimize"
+          >
+            ➖
+          </button>
+          <button
+            onClick={() => setShowChat(false)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '18px',
+              cursor: 'pointer'
+            }}
+            title="Close"
+          >
+            ✖
+          </button>
+        </div>
+      </div>
+
+      <div className="chat-tabs" style={{
+        display: "flex",
+        overflowX: "auto",
+        borderBottom: "1px solid #e5e7eb",
+        padding: "0.5rem",
+        gap: "0.5rem",
+        background: "#f9fafb"
+      }}>
+        {chatClients?.map((client) => (
+          <div
+            key={client._id}
+            onClick={() => {
+              handleOpenChat(client);
+              setHasNewMessages(false);
+            }}
+            className={`chat-tab ${selectedClient?._id === client._id ? 'active' : ''}`}
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "20px",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              background: selectedClient?._id === client._id ? "#1e40af" : "#e5e7eb",
+              color: selectedClient?._id === client._id ? "white" : "#374151"
+            }}
+          >
+            {client.firstName}
+          </div>
+        ))}
+      </div>
+
+      {/* Accept/Reject Popups for all clients needing accept */}
+      {Object.entries(needsAccept).map(
+        ([clientId, needed]) =>
+          needed && (
+            <div
+              key={clientId}
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                background: "#fff",
+                border: "2px solid #3b82f6",
+                borderRadius: 12,
+                padding: 24,
+                width: 320,
+                zIndex: 2500,
+                boxShadow: "0 8px 40px #0002"
+              }}
+            >
+              <h3 style={{ marginBottom: 10 }}>Chat Request</h3>
+              <div style={{ marginBottom: 18 }}>
+                This client wants to chat.<br />
+                {messageMap[clientId]?.length > 0 && (
+                  <span style={{ color: "#6b7280", fontSize: 13 }}>
+                    Latest: {messageMap[clientId][messageMap[clientId].length - 1].text}
+                  </span>
+                )}
+              </div>
+              <button
+                style={{
+                  marginRight: 12,
+                  background: "#22c55e",
+                  color: "#fff",
+                  border: 0,
+                  padding: "0.5rem 1.2rem",
+                  borderRadius: 18,
+                  fontWeight: 600
+                }}
+                onClick={() => {
+                  setNeedsAccept(prev => ({ ...prev, [clientId]: false }));
+                  setSessionTimestamps(prev => ({ ...prev, [clientId]: Date.now() }));
+                  fetchChatHistory(lawyerdetails.lawyer._id, clientId);
+                  const messageArr = messageMap[clientId];
+                  if (
+                    messageArr &&
+                    messageArr.length > 0 &&
+                    (!selectedClient || selectedClient._id !== clientId || messages.length === 0)
+                  ) {
+                    setMessages([{ ...messageArr[messageArr.length - 1], isMe: false }]);
+                  }
+                  setSelectedClient(prev => prev && prev._id === clientId ? prev : chatClients.find(c => c._id === clientId));
+                }}
+              >
+                Accept
+              </button>
+              <button
+                style={{
+                  background: "#ef4444",
+                  color: "#fff",
+                  border: 0,
+                  padding: "0.5rem 1.2rem",
+                  borderRadius: 18,
+                  fontWeight: 600
+                }}
+                onClick={() => {
+                  setNeedsAccept(prev => ({ ...prev, [clientId]: false }));
+                  if (selectedClient && selectedClient._id === clientId) {
+                    setMessages([]);
+                    setSelectedClient(null);
+                  }
+                  socket.emit("privateMessage", {
+                    toUserId: clientId,
+                    message: "Sorry, the lawyer is busy now. Please try again later.",
+                    fromUserType: "lawyer",
+                    timestamp: new Date().toISOString()
+                  });
+                }}
+              >
+                Reject
+              </button>
+            </div>
+          )
+      )}
+
+      <div className="chat-messages" style={{
+        flex: 1,
+        padding: "1rem",
+        overflowY: "auto",
+        background: "#f9fafb",
+        display: "flex",
+        flexDirection: "column",
+        gap: "0.75rem",
+        filter: selectedClient && needsAccept?.[selectedClient._id] ? "blur(2px)" : "none",
+        pointerEvents: selectedClient && needsAccept?.[selectedClient._id] ? "none" : "auto"
+      }}>
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}
+            style={{
+              maxWidth: "80%",
+              padding: "0.75rem 1rem",
+              borderRadius: "18px",
+              fontSize: "0.875rem",
+              lineHeight: 1.4,
+              background: msg.isMe ? "#1e40af" : "white",
+              color: msg.isMe ? "white" : "#1f2937",
+              border: msg.isMe ? "none" : "1px solid #e5e7eb",
+              alignSelf: msg.isMe ? "flex-end" : "flex-start",
+              wordWrap: "break-word"
+            }}>
+            {msg.text}
+            {msg.fileUrl && (
+              msg.fileType && msg.fileType.startsWith('image/')
+                ? <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150, marginTop: 8, borderRadius: 4 }} />
+                : <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">📄 {msg.fileName}</a>
+            )}
+            <div style={{
+              fontSize: '10px',
+              color: msg.isMe ? 'white' : 'black',
+              marginTop: '2px',
+              textAlign: msg.isMe ? 'right' : 'left'
+            }}>
+              {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="chat-input" style={{
+        padding: "1rem",
+        borderTop: "1px solid #e5e7eb",
+        background: "white"
+      }}>
+        <input
+          type="text"
+          placeholder={selectedClient ? "Type a message..." : "Select a client to start chatting"}
+          onKeyDown={handleSend}
+          disabled={
+            !selectedClient ||
+            (selectedClient && (needsAccept?.[selectedClient._id] || !isSessionActive(selectedClient._id)))
+          }
+          style={{
+            width: "100%",
+            padding: "0.75rem 1rem",
+            borderRadius: "20px",
+            border: "1px solid #e5e7eb",
+            fontSize: "0.875rem"
+          }}
+        />
+        {selectedClient && (needsAccept?.[selectedClient._id] || !isSessionActive(selectedClient._id)) && (
+          <div style={{ color: "red", marginTop: 8, fontSize: 13 }}>
+            Accept the chat request to start/continue chatting with this client.
+          </div>
+        )}
+      </div>
+    </div>
+  )
+)}
+
 
 
       {/* {showProfileModal && (
