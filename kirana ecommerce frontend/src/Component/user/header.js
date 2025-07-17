@@ -46,11 +46,11 @@ const Header = () => {
       <Link to="/login" className="icon-btn"><i className="fa-regular fa-user"></i></Link>
       <button className="icon-btn">
         <i className="fa-regular fa-heart"></i>
-        <span className="badge">0</span>
+        <span className="badge"></span>
       </button>
       <button className="icon-btn" onClick={()=>setIsCartOpen(true)}>
         <i className="fa-solid fa-cart-shopping"></i>
-        <span className="badge">0</span>
+        <span className="badge">{cartItems.length}</span>
       </button>
     </div>
   </div>

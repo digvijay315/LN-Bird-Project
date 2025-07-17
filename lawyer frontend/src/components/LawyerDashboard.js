@@ -30,6 +30,9 @@ const LawyerDashboard = () => {
   const fetchedClientsRef = useRef(new Set());
   const [messageMap, setMessageMap] = useState({});
   const [showChat, setShowChat] = useState(false);
+  const [needsAccept, setNeedsAccept] = useState({}); // { [clientId]: true/false }
+const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]: lastActiveTimestamp (number ms) }
+
 
   const lawyerdetails = JSON.parse(localStorage.getItem('lawyerDetails'));
 
@@ -134,7 +137,7 @@ const LawyerDashboard = () => {
   };
 }, []); 
 
-
+//=================================== chat code start============================================================================
 
   // Chat functionality (keeping your existing chat code)
   useEffect(() => {
@@ -147,8 +150,32 @@ const LawyerDashboard = () => {
       socket.emit('lawyerOnline', lawyerId);
     });
 
+    function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.value = 750; // Hz
+    oscillator.connect(ctx.destination);
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.15); // 150ms beep
+    oscillator.onended = () => ctx.close();
+  } catch (_) {}
+}
+
+
+
  const handleReceiveMessage = async ({ from, message, fileUrl, fileName, fileType }) => {
   setHasNewMessages(true);
+
+    // Play notification beep if chat is closed or tab is not visible
+  if (
+    typeof showChat === "undefined" ||
+    !showChat ||
+    document.visibilityState !== "visible"
+  ) {
+    playBeep();
+  }
 
   // Add message (with file info if present) to the message map
   setMessageMap((prev) => ({
@@ -211,12 +238,36 @@ const LawyerDashboard = () => {
     };
   }, [lawyerdetails?.lawyer?._id, selectedClient]);
 
-  const handleOpenChat = async(client) => {
-    setSelectedClient(client);
+  function isSessionActive(clientId) {
+  const last = sessionTimestamps[clientId];
+  if (!last) return false;
+  return Date.now() - last < 30 * 60 * 1000;
+}
+
+// On opening chat, check if new/expired session and trigger accept requirement:
+const showAcceptPopup = (clientId) => {
+  const shouldAccept = !isSessionActive(clientId);
+  setNeedsAccept(prev => ({ ...prev, [clientId]: shouldAccept }));
+};
+
+
+ const handleOpenChat = async (client) => {
+  setSelectedClient(client);
+
+  // Show accept dialog if session is expired/missing
+  showAcceptPopup(client._id);
+
+  // If session is active, load chat history (as before)
+  if (isSessionActive(client._id)) {
     const lawyerId = lawyerdetails.lawyer._id;
     const clientId = client._id;
-    await fetchChatHistory(lawyerId, clientId); 
-  };
+    await fetchChatHistory(lawyerId, clientId);
+    
+  } else {
+    setMessages([]); // Not showing messages until accepted
+  }
+};
+
 
   const handleSend = (e) => {
     if (e.key === 'Enter' && e.target.value.trim()) {
@@ -273,6 +324,8 @@ const LawyerDashboard = () => {
     return phoneRegex.test(text) || emailRegex.test(text);
   }
 
+
+  //===================================== chat code end==================================================================
   const handleLogout = () => {
     socket.disconnect();
     localStorage.removeItem('userDetails');
@@ -378,6 +431,7 @@ const LawyerDashboard = () => {
           padding: 2rem;
           overflow-y: auto;
           background: #f8fafc;
+        
         }
 
         .welcome-section {
@@ -872,11 +926,12 @@ const LawyerDashboard = () => {
             position: fixed;
             top: 70px;
             left: 0;
-            width: 280px;
+            width: 230px;
             height: calc(100vh - 70px);
             z-index: 200;
-            background: white;
+            background: black;
             box-shadow: 4px 0 6px -1px rgba(0, 0, 0, 0.1);
+            overflow-y: scroll !important; 
           }
 
           .hamburger {
@@ -957,6 +1012,10 @@ const LawyerDashboard = () => {
             align-items: flex-start;
             gap: 0.5rem;
           }
+          .main-content {
+          margin-left:-0px
+        
+        }
         }
       `}</style>
 
@@ -986,6 +1045,45 @@ const LawyerDashboard = () => {
                 <span>📊</span>
                 <span>Status: Online</span>
               </div>
+            </div>
+          </div>
+
+             {/* Quick Actions */}
+          <div className="content-section">
+            <div className="section-header">
+              {/* <h2 className="section-title">⚡ Quick Actions</h2> */}
+            </div>
+            <div className="quick-actions">
+              {menuItems.slice(1, 4).map((item) => (
+                <div
+                  key={item.label}
+                  className="quick-action-card"
+                  onClick={() => {
+                    if (item.label === 'Messages') {
+                      setHasNewMessages(false);
+                      setShowChat(true);
+                    } else {
+                      navigate(item.path);
+                    }
+                  }}
+                >
+                  <div className="quick-action-icon">{item.icon}</div>
+                  <div className="quick-action-label">
+                    {item.label}
+                    {item.label === 'Messages' && hasNewMessages && (
+                      <span className="new-message-indicator"></span>
+                    )}
+                  </div>
+                  <div className="quick-action-desc">
+                    {item.label === 'Profile' && 'Manage your profile'}
+                    {item.label === 'Clients' && 'View all clients'}
+                    {item.label === 'Messages' && 'Chat with clients'}
+                    {/* {item.label === 'My Cases' && 'Manage your cases'} */}
+                    {/* {item.label === 'Schedule' && 'View appointments'} */}
+                    {/* {item.label === 'Billing' && 'Manage invoices'} */}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -1192,143 +1290,204 @@ const LawyerDashboard = () => {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="content-section">
-            <div className="section-header">
-              <h2 className="section-title">⚡ Quick Actions</h2>
-            </div>
-            <div className="quick-actions">
-              {menuItems.slice(1, 7).map((item) => (
-                <div
-                  key={item.label}
-                  className="quick-action-card"
-                  onClick={() => {
-                    if (item.label === 'Messages') {
-                      setHasNewMessages(false);
-                      setShowChat(true);
-                    } else {
-                      navigate(item.path);
-                    }
-                  }}
-                >
-                  <div className="quick-action-icon">{item.icon}</div>
-                  <div className="quick-action-label">
-                    {item.label}
-                    {item.label === 'Messages' && hasNewMessages && (
-                      <span className="new-message-indicator"></span>
-                    )}
-                  </div>
-                  <div className="quick-action-desc">
-                    {item.label === 'Profile' && 'Manage your profile'}
-                    {item.label === 'Clients' && 'View all clients'}
-                    {item.label === 'Messages' && 'Chat with clients'}
-                    {item.label === 'My Cases' && 'Manage your cases'}
-                    {item.label === 'Schedule' && 'View appointments'}
-                    {item.label === 'Billing' && 'Manage invoices'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+       
         </main>
       </div>
 
-      {/* Chat Popup */}
-      {showChat && (
-        <div className="chat-popup">
-          <div className="chat-header">
-            <span>💬 Messages</span>
-         <style>
-          {`
-          .close-case-btn {
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        color: #ef4444;
-        padding: 0.5rem 0.75rem;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 0.75rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-      }
+     {/* Chat Popup with Accept/Reject and 30-Minute Session Logic */}
+{showChat && (
+  <div className="chat-popup">
+    <div className="chat-header">
+      <span>💬 Messages</span>
+      <style>
+        {`
+        .close-case-btn {
+          background: rgba(239, 68, 68, 0.1);
+          border: 1px solid rgba(239, 68, 68, 0.3);
+          color: #ef4444;
+          padding: 0.5rem 0.75rem;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          font-size: 0.75rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        .close-case-btn:hover {
+          background: rgba(239, 68, 68, 0.2);
+          border-color: rgba(239, 68, 68, 0.5);
+          transform: scale(1.05);
+        }`
+        }
+      </style>
+      {/* <button 
+        className="close-case-btn"
+        title="Close case"
+      >
+        🔒 Close Case
+      </button> */}
+      <button 
+        onClick={() => setShowChat(false)} 
+        style={{ 
+          background: 'none', 
+          border: 'none', 
+          color: 'white', 
+          fontSize: '18px',
+          cursor: 'pointer'
+        }}
+      >
+        ✖
+      </button>
+    </div>
 
-      .close-case-btn:hover {
-        background: rgba(239, 68, 68, 0.2);
-        border-color: rgba(239, 68, 68, 0.5);
-        transform: scale(1.05);
-      }`
-          }
-         </style>
-          <button 
-            className="close-case-btn"
-           
-            title="Close case"
-          >
-            🔒 Close Case
-          </button>
-      
-            <button 
-              onClick={() => setShowChat(false)} 
-              style={{ 
-                background: 'none', 
-                border: 'none', 
-                color: 'white', 
-                fontSize: '18px',
-                cursor: 'pointer'
-              }}
-            >
-              ✖
-            </button>
-          </div>
-
-          <div className="chat-tabs">
-            {chatClients?.map((client) => (
-              <div
-                key={client._id}
-                onClick={() => {
-                  handleOpenChat(client);
-                  setHasNewMessages(false);
-                }}
-                className={`chat-tab ${selectedClient?._id === client._id ? 'active' : ''}`}
-              >
-                {client.firstName}
-              </div>
-            ))}
-          </div>
-
-       <div className="chat-messages">
-        {messages.map((msg, idx) => (
-          <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
-            {msg.text}
-            {msg.fileUrl && (
-              msg.fileType && msg.fileType.startsWith('image/') ? (
-                <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
-              ) : (
-                <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
-                  📄 {msg.fileName}
-                </a>
-              )
-            )}
-            <div style={{ fontSize: '10px', color: 'black', marginTop: '2px', textAlign: msg.isMe ? 'right' : 'left' }}>
-      {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
+    <div className="chat-tabs">
+      {chatClients?.map((client) => (
+        <div
+          key={client._id}
+          onClick={() => {
+            handleOpenChat(client);
+            setHasNewMessages(false);
+          }}
+          className={`chat-tab ${selectedClient?._id === client._id ? 'active' : ''}`}
+        >
+          {client.firstName}
         </div>
-      </div>
-    ))}
-      </div>
+      ))}
+    </div>
 
-          <div className="chat-input">
-            <input
-              type="text"
-              placeholder={selectedClient ? "Type a message..." : "Select a client to start chatting"}
-              onKeyDown={handleSend}
-              disabled={!selectedClient}
-            />
+    {/* ACCEPT/REJECT POPUP */}
+    {selectedClient && needsAccept?.[selectedClient._id] && (
+      <div
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "#fff",
+          border: "2px solid #3b82f6",
+          borderRadius: 12,
+          padding: 24,
+          width: 320,
+          zIndex: 2500,
+          boxShadow: "0 8px 40px #0002"
+        }}
+      >
+        <h3 style={{ marginBottom: 10 }}>Chat Request</h3>
+        <div style={{ marginBottom: 18 }}>
+          This client wants to chat.<br />
+          {messageMap[selectedClient._id] && messageMap[selectedClient._id].length > 0 && (
+            <span style={{ color: "#6b7280", fontSize: 13 }}>
+              Latest: {messageMap[selectedClient._id][messageMap[selectedClient._id].length - 1].text}
+            </span>
+          )}
+        </div>
+        <button
+          style={{
+            marginRight: 12,
+            background: "#22c55e",
+            color: "#fff",
+            border: 0,
+            padding: "0.5rem 1.2rem",
+            borderRadius: 18,
+            fontWeight: 600
+          }}
+          onClick={() => {
+            setNeedsAccept(prev => ({ ...prev, [selectedClient._id]: false }));
+            setSessionTimestamps(prev => ({ ...prev, [selectedClient._id]: Date.now() }));
+            fetchChatHistory(lawyerdetails.lawyer._id, selectedClient._id);
+             const messageArr = messageMap[selectedClient._id];
+    if (
+      messageArr && 
+      messageArr.length > 0 &&
+      messages.length === 0
+    ) {
+      setMessages([
+        { ...messageArr[messageArr.length - 1], isMe: false }
+      ]);
+    }
+  
+          }}
+        >
+          Accept
+        </button>
+        <button
+          style={{
+            background: "#ef4444",
+            color: "#fff",
+            border: 0,
+            padding: "0.5rem 1.2rem",
+            borderRadius: 18,
+            fontWeight: 600
+          }}
+          onClick={() => {
+            setNeedsAccept(prev => ({ ...prev, [selectedClient._id]: false }));
+            setMessages([]);
+            setSelectedClient(null);
+
+          // SEND 'busy' message to client:
+          socket.emit("privateMessage", {
+            toUserId: selectedClient._id,
+            message: "Sorry, the lawyer is busy now. Please try again later.",
+            fromUserType: "lawyer",
+            timestamp: new Date().toISOString()
+          });
+          }}
+        >
+          Reject
+        </button>
+      </div>
+    )}
+
+    <div className="chat-messages" style={{
+      filter: selectedClient && needsAccept?.[selectedClient._id] ? "blur(2px)" : "none",
+      pointerEvents: selectedClient && needsAccept?.[selectedClient._id] ? "none" : "auto"
+    }}>
+      {messages.map((msg, idx) => (
+        <div key={idx} className={`message ${msg.isMe ? 'sent' : 'received'}`}>
+          {msg.text}
+          {msg.fileUrl && (
+            msg.fileType && msg.fileType.startsWith('image/') ? (
+              <img src={msg.fileUrl} alt={msg.fileName} style={{ maxWidth: 150, maxHeight: 150 }} />
+            ) : (
+              <a href={msg.fileUrl} target="_blank" rel="noopener noreferrer">
+                📄 {msg.fileName}
+              </a>
+            )
+          )}
+          <div style={{
+            fontSize: '10px',
+            color: 'black',
+            marginTop: '2px',
+            textAlign: msg.isMe ? 'right' : 'left'
+          }}>
+            {msg.timestamp ? new Date(msg.timestamp).toLocaleString() : ''}
           </div>
+        </div>
+      ))}
+    </div>
+
+    <div className="chat-input">
+      <input
+        type="text"
+        placeholder={selectedClient ? "Type a message..." : "Select a client to start chatting"}
+        onKeyDown={handleSend}
+        disabled={
+          !selectedClient ||
+          (selectedClient && (needsAccept?.[selectedClient._id] || !isSessionActive(selectedClient._id)))
+        }
+      />
+      {/* Not active session / not accepted warning */}
+      {selectedClient && (needsAccept?.[selectedClient._id] || !isSessionActive(selectedClient._id)) && (
+        <div style={{ color: "red", marginTop: 8, fontSize: 13 }}>
+          Accept the chat request to start/continue chatting with this client.
         </div>
       )}
+    </div>
+  </div>
+)}
+
 
       {/* {showProfileModal && (
         <LawyerProfileModal
