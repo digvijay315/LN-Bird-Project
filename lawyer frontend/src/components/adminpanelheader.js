@@ -6,9 +6,9 @@ function Adminpanelheader() {
       <header className="header">
         <h1 style={{ color: 'white' }}>⚖️ LawFirm Admin Panel</h1>
         <div className="user-menu">
-          <span>Welcome, Admin</span>
-          <button className="logout-btn">Logout</button>
-          <div className="avatar">A</div>
+          {/* <span>Welcome, Admin</span> */}
+          {/* <button className="logout-btn">Logout</button> */}
+          {/* <div className="avatar">A</div> */}
         </div>
       </header>
 

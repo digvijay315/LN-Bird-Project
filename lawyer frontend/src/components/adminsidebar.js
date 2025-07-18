@@ -40,10 +40,10 @@ const Adminsidebar = () => {
 
   const menuItems = [
     { icon: <FaUserTie />, label: 'Dashboard',route:'/Adminpanel' },
-    { icon: <FaGavel />, label: 'Cases' },
+    // { icon: <FaGavel />, label: 'Cases' },
     { icon: <FaUsers />, label: 'Clients', route: '/allclients', },
-    { icon: <FaFolderOpen />, label: 'Documents' },
-    { icon: <FaCalendarAlt />, label: 'Appointments' },
+    // { icon: <FaFolderOpen />, label: 'Documents' },
+    // { icon: <FaCalendarAlt />, label: 'Appointments' },
     { icon: <FaDollarSign />, label: 'Payments' },
     { icon: <FaCog />, label: 'Settings' },
     {
@@ -53,7 +53,7 @@ const Adminsidebar = () => {
       badge: pendingLawyers.length
     },
     { icon: <FaBell />, label: 'Notifications' },
-    { icon: <FaEnvelope />, label: 'Messages' },
+    { icon: <FaEnvelope />, label: 'Messages',route: '/allchat', },
     { icon: <FaChartBar />, label: 'Reports' },
     { icon: <FaSignOutAlt />, label: 'Logout' }
   ];
@@ -61,10 +61,10 @@ const Adminsidebar = () => {
 
 
   return (
-    <div className={`sidebar-modern ${isOpen ? 'open' : 'closed'}`}>
+    <div className={`sidebar-modern ${isOpen ? 'open' : 'closed'}`} style={{zIndex:"9999"}}>
       {/* Header */}
-      <div className="sidebar-header" style={{marginTop:"55px"}}>
-        {/* <h2>{isOpen ? 'Admin Panel' : 'AP'}</h2> */}
+      <div className="sidebar-header" style={{marginTop:"5px"}}>
+        <h2 style={{color:"white"}}>{isOpen ? 'Admin Panel' : 'AP'}</h2>
         <FaBars className="toggle-icon" onClick={toggleSidebar} />
       </div>
 

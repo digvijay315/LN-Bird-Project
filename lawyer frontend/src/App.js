@@ -20,6 +20,7 @@ import TermsAndConditions from './components/terms&condition';
 import ProtectedRoute from './components/authguard';
 import AboutUs from './components/aboutus';
 import ContactUs from './components/contactus';
+import Allchat from './components/allchat';
 
 
 
@@ -46,6 +47,7 @@ function App() {
       <Route path='/termsandconditions' element={<TermsAndConditions/>}></Route>
       <Route path='/aboutus' element={<AboutUs/>}></Route>
       <Route path='/contactus' element={<ContactUs/>}></Route>
+      <Route path='/allchat' element={<Allchat/>}></Route>
     </Routes> 
 {/* <OnlineLawyerConsultation/> */}
    </div>

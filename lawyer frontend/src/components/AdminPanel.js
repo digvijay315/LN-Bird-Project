@@ -481,14 +481,14 @@ const AdminPanel = () => {
         }
       `}</style>
 
-      <Adminpanelheader />
+      {/* <Adminpanelheader /> */}
       <div>
         <nav>
           <Adminsidebar />
         </nav>
       </div>
 
-      <main className="content enhanced-admin-panel" style={{ marginLeft: "15%", marginTop: "1%" }}>
+      <main className="content enhanced-admin-panel" style={{ marginLeft: "15%", marginTop: "0%" }}>
         {/* Enhanced Header Section */}
         <div className="admin-header-info">
           <h1 className="admin-title">

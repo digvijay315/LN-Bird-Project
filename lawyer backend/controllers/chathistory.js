@@ -28,7 +28,7 @@ const getallchathistory=async(req,res)=>
 {
    try {
 
-    const messages = await Message.find()
+    const messages = await Message.find().populate('from').populate('to')
     res.status(200).send(messages);
   } catch (error) {
     res.status(500).send({ error: 'Failed to fetch messages' });
