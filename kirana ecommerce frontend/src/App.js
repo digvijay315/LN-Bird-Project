@@ -19,14 +19,18 @@ import DeleteProduct from "./Component/DeleteProduct";
 import SetNewPassword from "./Component/SetNewPassword";
 import Header from "./Component/user/header";
 import Userhomepage from "./Component/user/userhomepage";
+import ViewCart from "./Component/user/viewcart";
+import Checkout from "./Component/user/checkout";
+import Sidebar from "./Component/sidebar";
 
 
 function App() {
   return (
     <div>
       <BrowserRouter>
-        {/* <Routes>
-          <Route path="/" element={<RegisterForm />}></Route>
+          <Routes>
+          <Route path="/" element={<Userhomepage />}></Route>
+           <Route path="/registration" element={<RegisterForm />}></Route>
           <Route path="/Dashboard" element={<Dashboard />}></Route>
           <Route path="/Addproduct" element={<Addproduct />}></Route>
           <Route path="/Productlist" element={<Productlist />}></Route>
@@ -44,10 +48,10 @@ function App() {
           <Route path="/EditProduct" element={<EditProduct />}></Route>
           <Route path="/DeleteProduct" element={<DeleteProduct />}></Route>
           <Route path="/Setpassword" element={<SetNewPassword />} />
-
-           
-        </Routes> */}
-        <Userhomepage/>
+          <Route path="/viewcart" element={<ViewCart />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>  
+  
       </BrowserRouter>
     </div>
   );

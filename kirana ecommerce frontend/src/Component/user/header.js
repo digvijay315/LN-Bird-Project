@@ -43,11 +43,11 @@ const Header = () => {
       <i className="fa fa-search"></i>
     </div>
     <div className="header-icons">
-      <Link to="/login" className="icon-btn"><i className="fa-regular fa-user"></i></Link>
-      <button className="icon-btn">
+      <Link to="/registration" className="icon-btn"><i className="fa-regular fa-user"></i></Link>
+      {/* <button className="icon-btn">
         <i className="fa-regular fa-heart"></i>
         <span className="badge"></span>
-      </button>
+      </button> */}
       <button className="icon-btn" onClick={()=>setIsCartOpen(true)}>
         <i className="fa-solid fa-cart-shopping"></i>
         <span className="badge">{cartItems.length}</span>
@@ -60,7 +60,7 @@ const Header = () => {
 
       {/* Sidebars */}
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
-      <WishlistSidebar isWishlistOpen={isWishlistOpen} onClose={() => setIsWishlistOpen(false)} />
+      {/* <WishlistSidebar isWishlistOpen={isWishlistOpen} onClose={() => setIsWishlistOpen(false)} /> */}
     </>
   );
 };

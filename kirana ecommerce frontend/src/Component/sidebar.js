@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import logo1 from "../MR.KIRANA LOGO.png";
 import { useNavigate } from "react-router-dom";
 
+
 function Sidebar() {
   const [productsOpen, setProductsOpen] = useState(false);
   const [pagesOpen, setPagesOpen] = useState(false);
@@ -17,10 +18,10 @@ function Sidebar() {
   };
 
   return (
-    <div>
+ 
       <div
         className="sidebar d-flex flex-column p-3"
-        style={{ width: "270px", backgroundColor: "white" }}
+        style={{ width: "270px", backgroundColor: "black" }}
       >
         <img
           src={logo1}
@@ -205,7 +206,7 @@ function Sidebar() {
 
 
       </div>
-    </div>
+
   );
 }
 

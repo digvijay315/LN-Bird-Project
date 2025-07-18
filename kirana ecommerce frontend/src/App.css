@@ -45,13 +45,30 @@ body, html, #root {
 }
 
 .sidebar {
-  width: 250px;
-  height: 100vh;
-  overflow-y: auto;
-  background-color: #ebeff3;
-  color: rgb(15, 9, 9);
-  position: fixed;
+  /* width: 250px; */
+  /* height: 100vh; */
+  /* overflow-y: auto; */
+  /* background-color: #ebeff3; */
+  /* color: rgb(15, 9, 9); */
+  /* position: fixed; */
   
+}
+
+.sidebar {
+  height: 100vh;
+  min-height: 100vh;
+  background: #ebeff3 !important;
+  color: #fff;
+  width: 270px;
+  box-shadow: 2px 0 16px 0 rgba(0,0,0,0.09);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: all 0.22s;
 }
 
 .sidebar .nav-link {
@@ -338,3 +355,19 @@ body, html, #root {
   font-size: 23px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

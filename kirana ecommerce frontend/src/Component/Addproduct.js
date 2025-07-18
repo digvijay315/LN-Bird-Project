@@ -8,6 +8,7 @@ import Uploadimage from "../Uploadimage.png";
 import ProductVariations from "./Addimage";
 import Lottie from "lottie-react";
 import axios from "axios";
+import api from './api'
 
 function Addproduct() {
 
@@ -29,7 +30,7 @@ function Addproduct() {
   const [categories,setCategories]=useState([])
   const fetchCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/category/getcategory");
+      const response = await api.get("api/category/getcategory");
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -38,23 +39,21 @@ function Addproduct() {
 
     const [brands, setBrands] = useState([]);
   
-    useEffect(() => {
-      const url = "http://localhost:5000/api/brand/getbrands";
-  
-      fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setBrands(data);
-        })
-        .catch((error) => {
-          console.error("Failed to fetch brands:", error);
-        });
-    }, []);
+ 
+
+useEffect(() => {
+  const fetchBrands = async () => {
+    try {
+      const response = await api.get("api/brand/getbrands");
+      setBrands(response.data);  // assuming your API returns data in response.data
+    } catch (error) {
+      console.error("Failed to fetch brands:", error);
+    }
+  };
+
+  fetchBrands();
+}, []);
+
 
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -160,10 +159,7 @@ function Addproduct() {
   }
 
     try {
-      const response = await fetch("http://localhost:5000/api/product", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await api.post("api/product",formData);
 
       if (!response.ok) throw new Error("Failed to submit product");
 

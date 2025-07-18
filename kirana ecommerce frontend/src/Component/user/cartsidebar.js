@@ -2,8 +2,11 @@ import React from "react";
 import { useCart } from "../user/context/cartcontext";
 import emptyCartImg from "../user/empty-cart.png";
 import '../user/css/cartsidebar.css'
+import { useNavigate } from "react-router-dom";
 
 const CartSidebar = ({ isOpen, onClose }) => {
+
+  const navigate=useNavigate()
   const { cartItems,removeFromCart} = useCart();
 
   // Calculate subtotal
@@ -54,9 +57,9 @@ const CartSidebar = ({ isOpen, onClose }) => {
                     <img className="cart-item-img" src={item.image} alt={item.name} />
                     <div className="cart-item-info">
                       <span className="cart-item-name">{item.name}</span>
-                      <span className="cart-item-qty">x{1}</span>
+                      <span className="cart-item-qty">x{item.quantity}</span>
                     </div>
-                    <div className="cart-item-price">${(item.price * 1).toFixed(2)}</div>
+                    <div className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</div>
                         <button
                       className="cart-remove-btn"
                       onClick={() => removeFromCart(item._id)}
@@ -72,8 +75,8 @@ const CartSidebar = ({ isOpen, onClose }) => {
                   <span>Subtotal:</span>
                   <span className="subtotal-amount">${subtotal.toFixed(2)}</span>
                 </div>
-                <a href="/cart">
-                  <button className="cart-action-btn">View Cart</button>
+                <a >
+                  <button className="cart-action-btn" onClick={()=>navigate('/viewcart')}>View Cart</button>
                 </a>
                 <a href="/checkout">
                   <button className="cart-action-btn">Checkout</button>

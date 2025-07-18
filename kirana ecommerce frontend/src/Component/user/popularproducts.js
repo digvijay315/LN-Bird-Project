@@ -25,16 +25,31 @@ const Popularproducts = () => {
     (prod) => prod.category === activeTab
   );
   
-  const {setCartItems,cartItems}=useCart()
- const addtocart = (product) => {
-  setCartItems([...cartItems, product]);
+const { setCartItems, cartItems } = useCart();
+
+const addtocart = (product) => {
+  const existingItem = cartItems.find((item) => item._id === product._id);
+  if (existingItem) {
+    // If already in cart, increment quantity
+    setCartItems(
+      cartItems.map((item) =>
+        item._id === product._id
+          ? { ...item, quantity: (item.quantity || 1) + 1 }
+          : item
+      )
+    );
+  } else {
+    // If not in cart, add with quantity 1
+    setCartItems([...cartItems, { ...product, quantity: 1 }]);
+  }
   Swal.fire({
     title: 'Added to Cart!',
     text: `${product.name} has been added to your cart.`,
     icon: 'success',
     confirmButtonText: 'OK'
   });
-}
+};
+
 
 
   

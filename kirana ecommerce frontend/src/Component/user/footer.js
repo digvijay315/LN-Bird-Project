@@ -58,7 +58,7 @@ const Footer = () => {
           <p>Find a location nearest you.<br /><span className="footer-link">See Our Stores</span></p>
           <div className="footer-contact">
             <div className="phone">+624 423 26 72</div>
-            <div className="email">support@harry.com</div>
+            <div className="email">support@mrkirana.com</div>
           </div>
         </div>
       </div>

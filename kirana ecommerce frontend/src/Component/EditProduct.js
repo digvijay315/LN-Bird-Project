@@ -10,7 +10,7 @@ import Cube from "../Cube.png";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
 import Uploadimage from "../Uploadimage.png";
-
+import api from './api'
 import ProductVariations from "./Addimage";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
@@ -135,16 +135,14 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    const response = await fetch(`http://localhost:5000/api/product/products/${product._id}`, {
-  method: "PUT",
-  body: formData,
-});
+    const response = await api.put(`api/product/products/${product._id}`,formData);
+console.log(response);
 
-    if (!response.ok) {
-      throw new Error("Failed to submit product");
-    }
+    // if (!response.ok) {
+    //   throw new Error("Failed to submit product");
+    // }
 
-    const data = await response.json();
+    const data = await response.data;
     console.log("Product saved:", data);
    
 

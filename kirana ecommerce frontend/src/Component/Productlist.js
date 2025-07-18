@@ -3,7 +3,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { useNavigate } from "react-router-dom";
-
+import api from './api'
 import Header from "./Header";
 import Sidebar from "./sidebar";
 
@@ -24,7 +24,7 @@ function Productlist() {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/product/getproduct");
+      const response = await api.get("api/product/getproduct");
       setProducts(response.data);
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -40,16 +40,11 @@ function Productlist() {
     if (!productToDelete) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/product/products/${productToDelete._id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await api.delete(`api/product/products/${productToDelete._id}`);
 
-      if (!response.ok) {
-        throw new Error("Failed to delete product");
-      }
+      // if (!response.ok) {
+      //   throw new Error("Failed to delete product");
+      // }
 
       // Update UI
       setProducts((prev) => prev.filter((p) => p._id !== productToDelete._id));
