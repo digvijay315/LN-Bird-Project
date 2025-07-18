@@ -47,6 +47,7 @@ function Lawyersidebar() {
 
   const handleMenuClick = (item) => {
     if (item.logout) {
+      localStorage.removeItem('lawyerDetails');
       navigate('/login');
       return;
     }
@@ -54,6 +55,12 @@ function Lawyersidebar() {
     if (item.path) navigate(item.path);
     if (screenWidth < 769) setSidebarOpen(false);
   };
+
+    // const handleLogout = () => {
+    //   socket.disconnect();
+    //   localStorage.removeItem('userDetails');
+    //   navigate('/login');
+    // };
 
   // Backdrop for mobile sidebar
   const renderBackdrop = () =>

@@ -330,11 +330,11 @@ const showAcceptPopup = (clientId) => {
 
 
   //===================================== chat code end==================================================================
-  const handleLogout = () => {
-    socket.disconnect();
-    localStorage.removeItem('userDetails');
-    navigate('/login');
-  };
+  // const handleLogout = () => {
+  //   socket.disconnect();
+  //   localStorage.removeItem('userDetails');
+  //   navigate('/login');
+  // };
 
   const menuItems = [
     { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
