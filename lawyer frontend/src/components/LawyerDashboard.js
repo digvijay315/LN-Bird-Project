@@ -1119,11 +1119,11 @@ const showAcceptPopup = (clientId) => {
 
           {/* Analytics Section */}
           <div className="analytics-grid">
-         <div className="chart-container">
+         {/* <div className="chart-container">
   <h3 className="chart-title">📊 Weekly Time Distribution</h3>
   <ResponsiveContainer width="100%" height={250}>
   <PieChart>
-    {/* Check if there's any data with hours > 0 */}
+ 
     {weeklyData.some(day => day.hours > 0) ? (
       <>
         <Pie
@@ -1164,10 +1164,10 @@ const showAcceptPopup = (clientId) => {
   </PieChart>
 </ResponsiveContainer>
 
-</div>
+</div> */}
 
 
-         <div className="chart-container">
+         {/* <div className="chart-container">
   <h3 className="chart-title">📊 Case Status Trend</h3>
   <ResponsiveContainer width="100%" height={250}>
     <AreaChart
@@ -1211,7 +1211,7 @@ const showAcceptPopup = (clientId) => {
       <Area type="monotone" dataKey="Closed" stackId="1" stroke="#ef4444" fill="url(#colorClosed)" />
     </AreaChart>
   </ResponsiveContainer>
-</div>
+</div> */}
 
           </div>
 

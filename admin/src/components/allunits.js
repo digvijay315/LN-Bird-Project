@@ -4215,6 +4215,20 @@ const buttonStyle = `
           setrelation(e.target.value);
         };
 
+        const relations = ["Self","Broker","Booked","Father","Mother","Son","Daughter","Brother","Sister","Husband","Wife","Grand Father",
+                            "Grand Mother",  "Grand Son","Uncle","Aunt","Mama","Mami","Nephew","Niece","Cousin","Father in Law",
+                          "Mother in Law","Son in Law","Daughter in Law","Brother in Law","Sister in Law","Friend","Neighbor","Business Partner",
+                           "Teacher","Student","Owner’ Employee","Other"];
+
+                           const otherrelatons = [
+                              "Broker", "Booked", "Father", "Mother", "Son", "Daughter",
+                              "Brother", "Sister", "Husband", "Wife", "Grand Father", "Grand Mother",
+                              "Grand Son", "Uncle", "Aunt", "Mama", "Mami", "Nephew", "Niece", "Cousin",
+                              "Father in Law", "Mother in Law", "Son in Law", "Daughter in Law",
+                              "Brother in Law", "Sister in Law", "Friend", "Neighbor", "Business Partner",
+                              "Teacher", "Student", "Owner’ Employee", "Other"
+                            ];
+
         const [relation1,setrelation1]=useState("")
         React.useEffect(() => {
           
@@ -4235,7 +4249,7 @@ const buttonStyle = `
             }));
            
           }
-           else if(relation==="Son" || relation==="Father" || relation==="Mother" || relation==="Other" || relation==="Uncle") {
+           else if(otherrelatons.includes(relation)) {
             
             setselectedcontact2(prevContacts => [
               ...prevContacts,
@@ -6309,8 +6323,8 @@ const excelSerialToDateString = (serial) => {
                                         permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
-                                    <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
+                                     <StyledTableCell style={{ cursor: 'pointer',fontSize:"10px" }}>
+                                    <span style={{color:"orange",fontWeight:"bolder"}}>{relation1}</span>
                                     </StyledTableCell>
                                         
                                     <StyledTableCell>
@@ -6767,36 +6781,36 @@ const excelSerialToDateString = (serial) => {
                         ).map(contact => (
                               <StyledTableRow>
                                 <img style={{height:"50px",width:"60px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{   cursor: 'pointer',fontSize:"12px" }}>
+                                <StyledTableCell  style={{   cursor: 'pointer',fontSize:"10px" }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
-                                    <SvgIcon component={EmailIcon} />
+                                    <SvgIcon component={EmailIcon} style={{fontSize:"10px"}}/>
                                     <span>{contact.email}</span>
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer' ,fontSize:"10px"}}>
                                   {contact?.mobile_no?.map((number, index) => (
                                     <span key={index}>
-                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"10px"}}/>
                                       {number}<br></br>
                                     </span>
                                   ))}
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{ cursor: 'pointer' }}>
+                                <StyledTableCell  style={{ cursor: 'pointer',fontSize:"10px" }}>
                                   S/W/O <br></br>{contact.father_husband_name}
                                   </StyledTableCell>
 
-                                  <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                  <StyledTableCell  style={{   cursor: 'pointer' ,fontSize:"10px"}}>
                                   permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
                                   {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
                                   </StyledTableCell>
 
-                                  <StyledTableCell style={{  cursor: 'pointer' }}>
+                                  <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
                                     </StyledTableCell>
 
                                 <StyledTableCell>
-                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                  <img style={{height:"20px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
                                    </StyledTableCell>
                                 
                               </StyledTableRow>
@@ -6821,38 +6835,38 @@ const excelSerialToDateString = (serial) => {
                                   index === self.findIndex((c) => c._id === contact._id)
                                 ).map(contact => (
                                 <StyledTableRow>
-                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <img style={{ height: "50px", width: "60px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         {contact.title} {contact.first_name} {contact.last_name}<br />
-                                        <SvgIcon component={EmailIcon} />
+                                        <SvgIcon component={EmailIcon} style={{fontSize:"10px"}}/>
                                         <span>{contact.email}</span>
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         {
                                         Array.isArray(contact.mobile_no) ?
                                         contact.mobile_no.map((number, index) => (
                                             <span key={index}>
-                                                <SvgIcon component={PhoneIphoneIcon} />
+                                                <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"10px"}} />
                                                 {number}<br />
                                             </span>
                                         )):[]}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' ,fontSize:"10px"}}>
                                         S/W/O <br />{contact.father_husband_name}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer' ,fontSize:"10px"}}>
                                         permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{ cursor: 'pointer' }}>
+                                    <StyledTableCell style={{ cursor: 'pointer',fontSize:"10px" }}>
                                     <span style={{color:"orange",fontWeight:"bolder"}}>{relation1}</span>
                                     </StyledTableCell>
                                         
                                     <StyledTableCell>
-                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                        <img style={{ height: "20px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
                                     </StyledTableCell>
                                 </StyledTableRow>
                             ))} 
@@ -7096,13 +7110,14 @@ const excelSerialToDateString = (serial) => {
             <div style={{width:"100%"}}>
             <div className="row">
                     <div className="col-md-4"><label className="labels">Relation</label><select className="form-control form-control-sm" required="true" onChange={handlerelationchange}>
-                              <option>Select</option>
-                              <option value="Self">Self</option>
-                              <option value="Son">Son</option>
-                              <option value="Father">Father</option>
-                              <option value="Mother">Mother</option>
-                              <option value="Uncle">Uncle</option>
-                              <option value="Other">Other</option>
+                              <option>---Select---</option>
+                             
+                          {
+                            relations.map((item)=>
+                            (
+                              <option>{item}</option>
+                            ))
+                          }
                         </select>
                   </div>
                </div>

@@ -41,7 +41,7 @@ function Lawyersidebar() {
     // { label: 'Billing', icon: '▦', path: '/billing' },
     // { label: 'Documents', icon: '▤', path: '/documents' },
     // { label: 'Settings', icon: '⚙', path: '/settings' },
-    { label: 'Support', icon: '◐', path: '/support' },
+    { label: 'Support', icon: '◐', path: '/supports' },
     { label: 'Notifications', icon: '🔔', path: '/notifications', badge: 3 },
     { label: 'Logout', icon: '🔒', logout: true },
   ];
@@ -157,7 +157,7 @@ function Lawyersidebar() {
           margin: 0.25rem 0;
         }
         .sidebar-item:hover, .sidebar-item.active {
-          background: linear-gradient(90deg,rgba(255,255,255,.13),rgba(255,255,255,0.05));
+          background: linear-gradient(90deg,rgba(4, 0, 0, 1),rgba(0, 0, 0, 0.05));
           color: #fff;
           border-left-color: #fff;
           font-weight: 600;
