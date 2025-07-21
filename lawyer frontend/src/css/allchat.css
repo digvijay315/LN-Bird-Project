@@ -1,256 +1,215 @@
-/* Allchat Card Layout */
-.allchat-main {
-    margin-left: 20%;
-  flex: 1 1 auto;
-  padding: 38px 24px 24px 24px;
-  background: #f9faff;
+.allchat-listview {
+  margin-left: 20%;
+  width: 340px;
+  min-width: 230px;
+  max-width: 100vw;
+  border-right: 1.5px solid #ecedfc;
+  background: #fafdff;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: width .18s;
 }
-
-.allchat-main h2 {
-  font-size: 2rem;
+.allchat-list-title {
+  padding: 23px 18px 10px 22px;
+  font-size: 22px;
   font-weight: 700;
-  color: #22234e;
-  margin-bottom: 18px;
+  color: #225;
+  background: #fafdff;
+  border-bottom: 1px solid #e0e9f9;
 }
-
-.allchat-card-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 24px;
-  margin-top: 14px;
+.allchat-list-items {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 32px;
 }
-
-.chat-card {
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 16px 0 rgba(20, 28, 39, 0.10);
-  padding: 18px 24px 18px 22px;
+.allchat-empty {
+  color: #888;
+  text-align: center;
+  margin-top: 40px;
+}
+.allchat-list-item {
   display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: box-shadow 0.19s;
-  min-height: 90px;
+  align-items: flex-start;
+  gap: 14px;
+  border-radius: 12px;
   cursor: pointer;
-  position: relative;
-  border: 2px solid transparent;
+  margin: 0 9px 5px 9px;
+  padding: 12px 10px 11px 10px;
+  background: #fff;
+  border: 1px solid transparent;
+  transition: box-shadow .11s, border .11s, background .14s;
 }
-.chat-card:hover {
-  box-shadow: 0 8px 24px 0 rgba(255,8,121,.09), 0 1.5px 7px 0 rgba(20, 28, 39, 0.09);
-  border: 2px solid #ff087940;
-}
-
-.chat-profile {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
+.allchat-list-item:hover,
+.allchat-selected {
+  border: 1.5px solid #6689ee;
+  box-shadow: 0 2px 17px #e1eefd18;
+  background: #f2f7fe;
 }
 .profile-pic {
   width: 44px;
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  background: #eee;
-  border: 2px solid #ededf6;
-  box-shadow: 0 1.5px 7px 0 #e1e1ee25;
+  border: 2px solid #e3eaff;
+  background: #f3f3fd;
 }
-.chat-profile div {
-  font-weight: 600;
-  color: #202346;
-  font-size: 15px;
-  max-width: 90px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.allchat-item-content {
+  flex:1;
+  min-width: 0;
 }
-.total-msg {
-  margin-left: auto;
-  margin-right: 16px;
-  text-align: center;
-  font-size: 15px;
-  color: #636387;
-  background: #f7f1f9;
-  padding: 7px 16px;
-  border-radius: 8px;
-}
-
-/* View button on card */
-.view-btn {
-  background: #ff0879;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  padding: 9px 22px;
-  font-weight: 600;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background 0.14s;
-  position: relative;
-  z-index: 1;
-  letter-spacing: 0.02em;
-  box-shadow: 0 2px 14px 0 #ff087930, 0 1.5px 7px 0 #e1e1ee18;
-}
-.view-btn:hover {
-  background: #e2056e;
-}
-
-/* ========== Chat Modal ========== */
-.chat-modal-overlay {
-  background: rgba(32,24,44,0.14);
-  position: fixed;
-  left:0; top:0; right:0; bottom:0;
-  z-index: 4000;
+.allchat-names {
+  font-size: 15.1px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  animation: overlayFadeIn 0.13s;
+  gap: 5px;
+  margin-bottom: 3px;
+  flex-wrap: wrap;
 }
-@keyframes overlayFadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.chat-modal {
-  max-width: 480px;
-  width: 97vw;
-  background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 8px 32px 0 #111c2424;
-  padding: 0;
+.allchat-preview {
+  font-size: 13.5px;
+  color: #727c8e;
+  margin-bottom: 3px;
+  max-width: 170px;
+  white-space: nowrap;
   overflow: hidden;
-  animation: modalIn .18s cubic-bezier(.4,2,.6,1);
-  max-height: 92vh;
+  text-overflow: ellipsis;
+}
+.allchat-msgcount {
+  background: #f6f9fd;
+  color: #104e96;
+  font-weight: 600;
+  font-size: 11px;
+  border-radius: 8px;
+  padding: 1px 10px 1px 9px;
+  float: right;
+}
+
+.allchat-detailsview {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
+  background: #f8f9fd;
+  min-height: 100vh;
+  position: relative;
+  transition: width .18s;
 }
-@keyframes modalIn {
-  from { opacity:0; transform: translateY(18%);}
-  to { opacity:1; transform: translateY(0);}
+.allchat-welcome {
+  margin: auto;
+  color: #888;
+  font-size: 20px;
+  text-align: center;
 }
-
-.modal-header {
-  padding: 17px 28px;
-  background: #f7f4f9;
-  color: #222234;
-  font-size: 1.09em;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom: 1px solid #f0ecf3;
-}
-.close-btn {
-  background: none;
-  border: none;
-  color: #ff0879;
-  font-size: 2.1rem;
-  cursor: pointer;
-  margin-left: 28px;
-  line-height: 1;
-}
-
-.modal-body {
-  flex: 1 1 auto;
-  padding: 16px 20px;
-  background: #fff;
-  overflow-y: auto;
-  min-height: 120px;
-  max-height: 53vh;
-}
-
-.msg-row {
+.allchat-chatbox {
   display: flex;
-  margin-bottom: 14px;
-  align-items: flex-end;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+}
+.allchat-chatbox-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 22px 14px 12px 19px;
+  background: #fff;
+  border-bottom: 1.5px solid #e6eaf3;
+  min-height: 68px;
+}
+.allchat-messages-area {
+  flex: 1;
+  padding: 33px 32px 80px 24px;
+  overflow-y: auto;
+}
+.msg-row {
+  margin-bottom: 13px;
+  display: flex;
+}
+.msg-client {
+  justify-content: flex-start;
+}
+.msg-lawyer {
+  justify-content: flex-end;
 }
 .msg-bubble {
-  background: #f7f7fa;
-  border-radius: 13px;
-  padding: 11px 17px;
-  font-size: 15px;
-  color: #342455;
-  max-width: 80%;
+  background: linear-gradient(90deg,#eaf5fd,#d8edff 60%,#dee9ff);
+  color: #204078;
+  padding: 13px 16px 13px 16px;
+  border-radius: 17px;
+  min-width: 52px;
+  max-width: 340px;
+  font-size: 14.7px;
+  display: inline-block;
   position: relative;
+  margin-left: 9px; margin-right: 9px;
+  box-shadow: 0 2px 16px #8cd4ff14;
   word-break: break-word;
 }
-.msg-row.msg-client .msg-bubble {
-  background: #def3fd;
-  color: #215a74;
-  margin-right: auto;
+.msg-lawyer .msg-bubble {
+  background: linear-gradient(90deg,#ebedfc 10%,#f7f9fd 90%);
+  color: #233;
 }
-.msg-row.msg-lawyer .msg-bubble {
-  background: #ffe5f5;
-  color: #7f1559;
-  margin-left: auto;
-}
-
 .msg-time {
-  font-size: 10px;
-  color: #b19aa6;
-  margin-left: 12px;
-  vertical-align: middle;
+  display: block;
+  font-size: 11px;
+  color: #888;
+  margin-top: 3px;
+  padding-top: 2px;
+  text-align: right;
+}
+.close-btn {
+  margin-left: auto;
+  border: none;
+  background: none;
+  color: #778;
+  font-size: 23px;
+  padding: 0 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background .12s;
+}
+.close-btn:hover {
+  color: #b11;
 }
 
-.no-chat {
-  text-align: center;
-  width: 100%;
-  color: #bbb;
-  letter-spacing: .05em;
+/* --- RESPONSIVE DESIGN --- */
+@media (max-width: 950px) {
+  .allchat-listview {
+    width: 220px;
+    min-width: 140px;
+  }
+  .profile-pic { width: 34px; height: 34px; }
+  .msg-bubble { max-width: 200px; font-size: 13.9px;}
+  .allchat-item-content .allchat-preview { max-width: 90px; }
+  .allchat-messages-area { padding: 22px 10px 60px 10px; }
+  .allchat-chatbox-header { padding: 12px 10px 10px 10px;}
 }
-
-/* ========== Responsive ========== */
-@media (max-width: 1000px) {
-  .allchat-main {
-    padding: 20px 7vw;
+@media (max-width: 700px) {
+  .allchat-listview {
+    width: 68px;
+    min-width: 58px;
   }
-  .modal-header, .modal-body {
-    padding-left: 8vw;
-    padding-right: 8vw;
+  .allchat-list-title,
+  .allchat-names,
+  .allchat-preview,
+  .allchat-msgcount {
+    display: none !important;
   }
-  .allchat-card-list {
-    gap: 14px;
+  .allchat-list-item {
+    flex-direction: column; align-items: center; gap: 3px;
+    padding: 11px 1px 7px 1px;
+    margin: 0 4px 2.5px 4px;
   }
-  .chat-card {
-    padding: 10px 6vw 10px 4vw;
-  }
+  .profile-pic { width: 30px; height: 30px; }
+  .allchat-item-content { display: none !important; }
+  .allchat-detailsview,
+  .allchat-messages-area { padding: 8px !important; }
 }
-@media (max-width: 650px) {
-  .allchat-card-list {
-    grid-template-columns: 1fr;
-    gap: 13px;
-  }
-  .chat-card {
-    padding: 7px 12px;
-    border-radius: 10px;
-  }
-  .profile-pic {
-    width: 34px;
-    height: 34px;
-  }
-  .total-msg {
-    padding: 4px 9px;
-    font-size: 13px;
-  }
-  .view-btn {
-    padding: 7px 12px;
-    font-size: 13px;
-  }
-}
-@media (max-width: 500px) {
-  .allchat-main {
-    padding: 8px 3vw;
-  }
-  .chat-modal {
-    max-width: 99vw;
-    padding: 0;
-    border-radius: 7px;
-  }
-  .modal-header, .modal-body {
-    padding-left: 2vw;
-    padding-right: 2vw;
-  }
-  .modal-header {
-    font-size: .99em;
-    padding: 15px 4vw;
-  }
-  .modal-body {
-    font-size: 13px;
-  }
+@media (max-width:480px) {
+  .allchat-listview { 
+    margin-left: 10% !important;
+     min-width: 140px;
+   }
+  .allchat-detailsview { width: 100vw; min-width: 0; }
+  .allchat-messages-area, .allchat-chatbox-header { padding: 9px 2vw 32px 2vw !important;}
 }

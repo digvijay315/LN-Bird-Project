@@ -863,6 +863,7 @@ const filterLawyersAndChat = () => {
       socket.off('receiveMessage');
       socket.off('onlineLawyersList');
       socket.off('updateOnlineUsers');
+      socket.disconnect();
     };
   }, [userData?.user._id, chatLawyer]);
 

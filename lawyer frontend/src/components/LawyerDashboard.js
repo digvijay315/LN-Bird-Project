@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { LineChart, Line, Tooltip, ResponsiveContainer, BarChart, Bar,PieChart, Pie, Cell, Legend } from 'recharts';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts'
 import Lawyersidebar from './lawyersidebar';
+import logo from '../components/counvoImg/image.png'
 
 const LawyerDashboard = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -1025,9 +1026,10 @@ const showAcceptPopup = (clientId) => {
 
       <div className="dashboard-container">
        <Lawyersidebar/>
-
+       
         {/* MAIN CONTENT */}
         <main className="main-content">
+       
           {/* Welcome Section */}
           <div className="welcome-section">
             <h1 className="welcome-title">
@@ -1386,8 +1388,7 @@ const showAcceptPopup = (clientId) => {
 
 
 
-     {/* Chat Popup with Accept/Reject and 30-Minute Session Logic */}
-// Place this code block directly inside your main component's return (NOT as a sub-component!).
+
 
 {showChat && (
   isMinimized ? (

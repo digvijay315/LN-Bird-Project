@@ -21,6 +21,8 @@ import ProtectedRoute from './components/authguard';
 import AboutUs from './components/aboutus';
 import ContactUs from './components/contactus';
 import Allchat from './components/allchat';
+import { LawyerFeedbackForm } from './components/lawyerfeedback';
+import CustomerFeedbackForm from './components/customerfeedback';
 
 
 
@@ -30,7 +32,7 @@ function App() {
   return (
     <BrowserRouter>
     <div>
-      <Routes>
+     <Routes>
       <Route path='/' element={<Home/>}></Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/home' element={<Home/>}></Route>
@@ -48,8 +50,8 @@ function App() {
       <Route path='/aboutus' element={<AboutUs/>}></Route>
       <Route path='/contactus' element={<ContactUs/>}></Route>
       <Route path='/allchat' element={<Allchat/>}></Route>
-    </Routes> 
-{/* <OnlineLawyerConsultation/> */}
+    </Routes>  
+
    </div>
    </BrowserRouter>
   );

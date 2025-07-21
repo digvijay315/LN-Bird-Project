@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import socket from './socket';
-import logo from '../components/counvoImg/Counvo - LOGO.png';
+import logo from '../components/counvoImg/image.png'
+import Swal from 'sweetalert2';
 
 function Lawyersidebar() {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -49,6 +50,12 @@ function Lawyersidebar() {
     if (item.logout) {
       localStorage.removeItem('lawyerDetails');
       navigate('/login');
+        Swal.fire({
+            icon: 'success',
+            title: 'Logout Successfull',
+            text: 'You are Successfully Logout..!',
+            showConfirmButton: true,
+          });
       return;
     }
     if (item.label === 'Messages') setHasNewMessages(false);
@@ -92,15 +99,14 @@ function Lawyersidebar() {
         }
         header {
           grid-area: header;
-          background: #000;
-          color: white;
+          background: white;
+          color: black;
           display: flex;
           justify-content: space-between;
           align-items: center;
           padding: 0 2rem;
           position: fixed;
           top: 0; left: 0; right: 0; height: 70px; z-index:1001;
-          border-bottom: 1px solid #333;
           width: 100%;
         }
         .logo-text {
@@ -109,28 +115,27 @@ function Lawyersidebar() {
           display:flex;
           align-items:center;
           gap:.75rem;
-          color: #fff;
+          color: black;
         }
         .hamburger {
           display: none;
           font-size: 2rem;
           cursor: pointer;
-          color: #fff;
-          background:none;
+          color: black;
+          background:white;
           border:none;
         }
 
         aside {
           grid-area: sidebar;
-          background: linear-gradient(180deg,#000 0%,#000 100%);
-          border-right: 1px solid #333;
+          background: white;
           overflow-y: auto;
           box-shadow: 4px 0 6px -1px rgba(108,104,104,.5);
           position: fixed;
-          top: 70px;
+          top: 40px;
           left: 0;
           width: 250px;
-          height: calc(100vh - 70px);
+          height: calc(100vh - 40px);
           z-index: 999;
           transition: transform 0.25s;
           transform: translateX(0);
@@ -142,7 +147,7 @@ function Lawyersidebar() {
         .sidebar-item {
           padding: 0.75rem 1.5rem;
           cursor: pointer;
-          color: #fff;
+          color: black;
           font-weight: 500;
           transition: all 0.3s;
           border-left: 3px solid transparent;
@@ -180,6 +185,8 @@ function Lawyersidebar() {
         @media (max-width: 768px) {
           .dashboard-container { grid-template-columns: 0 1fr;}
           aside {
+          color:black;
+         background: white;
             left: 0;
             width: 75vw; max-width: 280px;
             height: calc(100vh - 70px);
@@ -189,6 +196,7 @@ function Lawyersidebar() {
           }
           aside.mobile-open {
             display: block;
+            background:white;
             transform: translateX(0);
             z-index: 999;
           }
@@ -196,13 +204,13 @@ function Lawyersidebar() {
         }
         @media (max-width: 600px) {
           .logo-text { font-size: 1.09rem;}
-          aside { width: 80vw; }
+          aside { width: 80vw;color:black; background: white; }
         }
       `}</style>
       <header>
         <div className="logo-text">
           <img src={logo} style={{ height: "50px" }} alt="logo" />
-          Lawyer Portal
+         
         </div>
         {screenWidth < 769 && (
           <button
@@ -216,6 +224,9 @@ function Lawyersidebar() {
       </header>
       {renderBackdrop()}
       <aside className={sidebarOpen && screenWidth < 769 ? 'mobile-open' : ''}>
+         {/* <div className="logo-text">
+                  <img src={logo} style={{ height: "50px" }} alt="logo" />
+                </div> */}
         <ul className="sidebar-menu">
           {menuItems.map((item) => (
             <li

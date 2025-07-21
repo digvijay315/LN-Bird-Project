@@ -62,30 +62,8 @@ function Allunits() {
 
       
 
-
-    
-
-      
-    // ===================================search deal via search box start========================================================
-
-
-
-    //=========================================== search deal via search box end===============================================
-
-       
-         
 /*-------------------------------------------------------------------update inventory start---------------------------------------------------------------------------- */
-
-        
-     
-        
-        
-      
-      
-       
-       
-
- /*-------------------------------------------------------------------update updatecontactdata end---------------------------------------------------------------------------- */                                                     
+                                                    
  const exportToExcel = () => {
   const filteredData = data.map(({ developer,block_tower, project,unit_number,location,linkded_contact,ownership,facing}) => ({ developer,block_tower, project,unit_number,location,linkded_contact,ownership,facing }));
   // Create a new workbook
@@ -221,12 +199,7 @@ function Allunits() {
         );
       };
       
-    //   ({:"",stage:"",project:"",block:"",unit_number:"",floors:"",
-    //     expected_price:"",quote_price:"",security_deposite:"",
-    //  maintainence_charge:"",rent_escltion:"",rent_period:"",fitout_perioud:"",
-    //  deal_type:"",transaction_type:"",source:"",white_portion:"",team:"",user:"",visible_to:"",
-    //  owner_details:[],document_details:[],s_no:[],preview:[],descriptions:[],category:[],action:[],s_no1:[],url:[],action1:[],
-    //  website:"",social_media:"",send_matchedlead:""})
+
       const allColumns = [
         { id: 'sno', name: '#' },
         { id: 'details', name: 'Details' },
@@ -297,39 +270,11 @@ function Allunits() {
       const [visibleColumns, setVisibleColumns] = useState(allColumns.slice(1, 11));
       const [showColumnList, setShowColumnList] = useState(false);
 
-      const handleAddColumnClick = () => {
-        setShowColumnList(!showColumnList);
-      };
     
-      const handleCheckboxChange = (column) => {
-        if (visibleColumns.some((col) => col.id === column.id)) {
-          // Remove column from visibleColumns if it's already present
-          setVisibleColumns(visibleColumns.filter((col) => col.id !== column.id));
-        } else {
-          // Add column to visibleColumns
-          setVisibleColumns([...visibleColumns, column]);
-        }
-      };
-      const handleSelectAll = () => {
-        setSelectAll(!selectAll);
-        if (!selectAll) {
-          // Add all current page item IDs to selectedItems
-          setSelectedItems(currentItems.map((item) => item._id));
-        } else {
-          // Deselect all
-          setSelectedItems([]);
-        }
-      };
+  
     
-      const handleRowSelect = (id) => {
     
-        if (selectedItems.includes(id)) {
-          setSelectedItems(selectedItems.filter((itemId) => itemId !== id));
-        } else {
-          setSelectedItems([...selectedItems, id]);
-        
-        }
-      };
+    
 
 
       const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
@@ -349,143 +294,7 @@ function Allunits() {
         setdata(sortedData)
       };
 
-      const fetchdatabystage_open=async()=>
-        {
-          
-          try {
-            const resp=await api.get(`viewdealbystage/Open`);
-            setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        const[countopen,setcountopen]=useState('')
-        const fetchdatabystage_opencount=async()=>
-          {
-            
-            try {
-              const resp=await api.get(`viewdealbystage/Open`);
-              const incoming=(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
-              setcountopen(incoming.length);
-            } catch (error) {
-              console.log(error);
-            }
-          }
-         
-        const fetchdatabystage_quote=async(e)=>
-          {
-            e.preventDefault()
-            try {
-              const resp=await api.get(`viewdealbystage/Quote`);
-               setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
-            } catch (error) {
-              console.log(error);
-            }
-          }
-          const[countquote,setcountquote]=useState('')
-          const fetchdatabystage_quotecount=async()=>
-            {
-              
-              try {
-                const resp=await api.get(`viewdealbystage/Quote`);
-                const quote=(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]);
-                setcountquote(quote.length);
-                
-              } catch (error) {
-                console.log(error);
-              }
-            }
-          
-          const fetchdatabystage_Negotiation=async()=>
-            {
-              
-              try {
-                const resp=await api.get(`viewdealbystage/Negotiation`);
-                setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal])
-              } catch (error) {
-                console.log(error);
-              }
-            }
-            const[countnegotiation,setcountnegotiation]=useState('')
-            const fetchdatabystage_Negotiationcount=async()=>
-              {
-                
-                try {
-                  const resp=await api.get(`viewdealbystage/Negotiation`);
-                  const negotiation=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
-                  setcountnegotiation(negotiation.length)
-                } catch (error) {
-                  console.log(error);
-                }
-              }
-
-              const fetchdatabystage_booked=async()=>
-                {
-                  
-                  try {
-                    const resp=await api.get(`viewdealbystage/Booked`);
-                    setdata(Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal])
-                  } catch (error) {
-                    console.log(error);
-                  }
-                }
-                const[countbooked,setcountbooked]=useState('')
-                const fetchdatabystage_bookedcount=async()=>
-                  {
-                    
-                    try {
-                      const resp=await api.get(`viewdealbystage/Booked`);
-                      const booked=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
-                      setcountbooked(booked.length)
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }
-              const[countwon,setcountwon]=useState('')
-              const fetchdatabystage_woncount=async()=>
-                {
-                  
-                  try {
-                    const resp=await api.get(`viewdealbystage/Won`);
-                    const Won=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
-                    setcountwon(Won.length)
-                  } catch (error) {
-                    console.log(error);
-                  }
-                }
-                const[countlost,setcountlost]=useState('')
-                const fetchdatabystage_lostcount=async()=>
-                  {
-                    
-                    try {
-                      const resp=await api.get(`viewdealbystage/Lost`);
-                      const Lost=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
-                      setcountlost(Lost.length)
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }
-
-                  const[countreject,setcountreject]=useState('')
-                  const fetchdatabystage_rejectcount=async()=>
-                    {
-                      
-                      try {
-                        const resp=await api.get(`viewdealbystage/Lost`);
-                        const reject=Array.isArray(resp.data.deal) ? resp.data.deal : [resp.data.deal]
-                        setcountreject(reject.length)
-                      } catch (error) {
-                        console.log(error);
-                      }
-                    }
-  
-                   React.useEffect(()=>{fetchdatabystage_opencount()},[])  
-                  React.useEffect(()=>{fetchdatabystage_quotecount()},[]) 
-                  React.useEffect(()=>{fetchdatabystage_Negotiationcount()},[]) 
-                  React.useEffect(()=>{fetchdatabystage_bookedcount()},[])
-                  React.useEffect(()=>{fetchdatabystage_woncount()},[]) 
-                  React.useEffect(()=>{fetchdatabystage_lostcount()},[])
-                  React.useEffect(()=>{fetchdatabystage_rejectcount()},[])
+   
 
 
   //=========================================== matched lead code start=========================================================
@@ -547,441 +356,16 @@ function Allunits() {
 
                  const [isLoading,setIsLoading] = useState(false);
 
-              const handleMatchLeadClick = async (item) => {
-                    try {
-                      setIsLoading(true)
-                      handleShow1();
-                      setMatchedLeads([]);
-
-                      setdeal1([item]);
-                      setdeallocation(item.location);
-                      setlead1(item.matchedleads);
-
-                      const response = await api.get(`viewprojectforinventories/${item.project}/${item.unit_number}/${item.block}`);
-                      setfeatchingdeal(response.data.project.add_unit[0]);
-
-                      if (!item.matchedleads || item.matchedleads.length === 0) return;
-
-                      const project = item.project;
-                      const block = item.block;
-                      const unit = item.unit_number;
-                      const price = item.expected_price;
-                      const propertytype = Array.isArray(response.data.project.add_unit[0].category) 
-                        ? response.data.project.add_unit[0].category 
-                        : [response.data.project.add_unit[0].category];
-                      const subtype = Array.isArray(response.data.project.add_unit[0].sub_category) 
-                        ? response.data.project.add_unit[0].sub_category 
-                        : [response.data.project.add_unit[0].sub_category];
-                      const unittype = response.data.project.add_unit[0].unit_type;
-                      const facing = response.data.project.add_unit[0].facing;
-                      const road = response.data.project.add_unit[0].road;
-                      const city = response.data.project.add_unit[0].ucity;
-                      const direction = response.data.project.add_unit[0].direction;
-
-                      const deallat = parseFloat(response.data.project.add_unit[0].lattitude);
-                      const deallang = parseFloat(response.data.project.add_unit[0].langitude);
-
-                      const unitsize=response.data.project.add_unit[0].size
-                      const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
-      
-                        // Default values
-                        let unittypeofsize = '';
-                        let size = 0;
-      
-                        if (match) {
-                          unittypeofsize = match[1] + " " + match[2].trim(); // "2 Kanal"
-                          size = parseFloat(match[3]); // 4840.00
-                        }
-                      
-
-                      const getDistanceInKm = (lat1, lon1, lat2, lon2) => {
-                        const R = 6371; // Radius of the earth in km
-                        const dLat = (lat2 - lat1) * Math.PI / 180;
-                        const dLon = (lon2 - lon1) * Math.PI / 180;
-                        const a =
-                          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                          Math.cos(lat1 * Math.PI / 180) *
-                          Math.cos(lat2 * Math.PI / 180) *
-                          Math.sin(dLon / 2) * Math.sin(dLon / 2);
-                  
-                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                        return R * c;
-                      };
-
-                      const updatedLeads = item.matchedleads.map((lead) => {
-                        let matchScore = 0;
-                        let score=0;
-
-                        if (lead.city3 === city) matchScore += 5;
-
-                        if (lead.area_project.includes(project)) matchScore += 5;
-                        if (
-                          Array.isArray(lead.area_project) &&
-                          lead.area_project.length > 0 &&
-                          !(lead.area_project.length === 1 && lead.area_project[0].trim() === '')
-                        ) {
-                          score += 2;
-                        }
-
-                        if (lead.block3.includes(block)) matchScore += 5;
-
-                        if (lead.specific_unit && lead.specific_unit.trim() === unit) matchScore += 10;
-
-                        if (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) matchScore += 5;
-                            const twentyFivePercent = 1.25 * parseFloat(lead.budget_max);
-                            if (price === lead.budget_max || price === lead.budget_min) {
-                              score += 10;
-                            } else if (price >= twentyFivePercent) {
-                              score += 2;
-                            } else if (
-                              price <= twentyFivePercent) {
-                              score += 6;
-                            }
-
-                        if (size >= parseFloat(lead.minimum_area) && size <= parseFloat(lead.maximum_area)) matchScore += 5;
-
-                        if (lead.unit_type.includes(unittypeofsize)) matchScore += 5;
-                        if (
-                          Array.isArray(lead.unit_type) &&
-                          lead.unit_type.length > 0 &&
-                          !(lead.unit_type.length === 1 && lead.unit_type[0].trim() === '')
-                        ) {
-                          score += 2;
-                        }
-
-                        if (
-                          Array.isArray(lead.property_type) &&
-                          propertytype.some(type =>
-                            lead.property_type.some(leadType =>
-                              leadType.toLowerCase().includes(type.toLowerCase())
-                            )
-                          )
-                        ) {
-                          matchScore += 10;
-                        }
-                        if (
-                          Array.isArray(lead.property_type) &&
-                          lead.property_type.length > 0 &&
-                          !(lead.property_type.length === 1 && lead.property_type[0].trim() === '')
-                        ) {
-                          score += 2;
-                        }
-                        
-
-                        
-                        if (
-                          Array.isArray(lead.sub_type) &&
-                          subtype.some(type =>
-                            lead.sub_type.some(leadType =>
-                              leadType.toLowerCase().includes(type.toLowerCase())
-                            )
-                          )
-                        ) {
-                          matchScore += 10;
-                        }
-                        if (
-                          Array.isArray(lead.sub_type) &&
-                          lead.sub_type.length > 0 &&
-                          !(lead.sub_type.length === 1 && lead.sub_type[0].trim() === '')
-                        ) {
-                          score += 2;
-                        }
-                        
-                        // if (unittype === lead.unit_type2) matchScore += 10;
-                         if (lead.unit_type2.includes(unittype)) matchScore += 10;
-                        if (lead.unit_type2 && lead.unit_type2.length !=0) score += 1;
-
-                        if (lead.facing.includes(facing)) matchScore += 5;
-                        if (
-                          Array.isArray(lead.facing) &&
-                          lead.facing.length > 0 &&
-                          !(lead.facing.length === 1 && lead.facing[0].trim() === '')
-                        ) {
-                          score += 1;
-                        }
-
-                        if (lead.road.includes(road)) matchScore += 5;
-                        if (
-                          Array.isArray(lead.road) &&
-                          lead.road.length > 0 &&
-                          !(lead.road.length === 1 && lead.road[0].trim() === '')
-                        ) {
-                          score += 1;
-                        }
-                        
-                        if (lead.direction.includes(direction)) matchScore += 10;
-                        // if (lead.direction && lead.direction === direction) matchScore += 10;
-                        if (lead.direction && lead.direction.length !=0) score += 1;
-
-                        if (lead.timeline) {
-                          switch (lead.timeline) {
-                            case "Urgent":
-                              matchScore += 10;
-                              score +=10;
-                              break;
-                            case "Within 15 days":
-                              matchScore += 7.5;
-                              score +=7;
-                              break;
-                            case "More then 1 month":
-                              matchScore += 5;
-                              score +=5;
-                              break;
-                            case "Not Confirmed":
-                              matchScore += 2.5;
-                              break;
-                            default:
-                              // optional: no points if timeline is unknown or empty
-                              break;
-                          }
-                        }
-
-                        if (lead.funding) {
-                          switch (lead.funding) {
-                            case "Self Funding":
-                              score +=5;
-                              break;
-                              case "Home Loan":
-                              case "Loan Against Property":
-                              case "Personal Loan":
-                              case "Business Loan":
-                              score +=3;
-                              break;
-                            default:
-                              // optional: no points if timeline is unknown or empty
-                              break;
-                          }
-                        }
-
-                        if (lead.transaction_type) {
-                          switch (lead.transaction_type) {
-                            case "Full White":
-                              score +=2;
-                              break;
-                              case "Collecter Rate":
-                              score +=5;
-                              break;
-                              case "Flexiable":
-                              score +=5;
-                              break;
-                              default:
-                              // optional: no points if timeline is unknown or empty
-                              break;
-                          }
-                        }
-
-                        
-                        if (lead.source) {
-                          switch (lead.source) {
-                            case "Old Client":
-                              score +=5;
-                              break;
-                            case "Walk-In":
-                              score +=5;
-                              break;
-                            case "Friends":
-                              score +=5;
-                              break;
-                            case "Relative":
-                              score +=5;
-                              break;
-                            case "Hoarding":
-                              score +=4;
-                              break;
-                            case "Channel Partner":
-                              score +=5;
-                              break;
-                            case "SMS":
-                              score +=2;
-                              break;
-                            case "News Paper":
-                              score +=3;
-                              break;
-                            case "Whatsapp":
-                              score +=3;
-                              break;
-                            case "Website":
-                              score +=4;
-                              break;
-                            case "Cold Calling":
-                              score +=3;
-                              break;
-                            case "Facebook":
-                              score +=1;
-                              break;
-                            case "Instagram":
-                              score +=1;
-                              break;
-                            case "Google":
-                              score +=2;
-                              break;
-                            case "X":
-                              score +=1;
-                              break;
-                            case "Linkedin":
-                              score +=2;
-                              break;
-                            case "99 Acre":
-                              score +=3;
-                              break;
-                            case "Magicbricks":
-                              score +=3;
-                              break;
-                            case "Common Floor":
-                              score +=3;
-                              break;
-                            case "Sulekha":
-                              score +=3;
-                              break;
-                            case "Housing":
-                              score +=3;
-                              break;
-                            case "Square Yard":
-                              score +=3;
-                              break;
-                            case "OLX":
-                              score +=3;
-                              break;
-                            case "Real Estate India":
-                              score +=3;
-                              break;
-                              default:
-                              // optional: no points if timeline is unknown or empty
-                              break;
-                          }
-                        }
-                 
-
-
-                        let locationMatch = 0;
-                        let locationscore=0
-                    if (lead.lattitude && lead.longitude) {
-                      const leadLat = parseFloat(lead.lattitude);
-                      const leadLng = parseFloat(lead.longitude);
-                      
-                      const distance = getDistanceInKm(deallat, deallang, leadLat, leadLng);
-
-                  
-                      
-                      if (distance <= 1) locationMatch = 25;
-                      else if (distance <= 2) locationMatch = 17;
-                      else if (distance <= 3) locationMatch = 15;
-                      else if (distance <= 4) locationMatch = 12;
-                      else if (distance <= 5) locationMatch = 10;
-                      else if (distance <= 8) locationMatch = 7;
-                      else if (distance <= 11) locationMatch = 5;
-
-                    // Second set of scores (locationscore)
-                        if (distance <= 1) locationscore = 10;
-                        else if (distance <= 3) locationscore = 8;
-                        else if (distance <= 6) locationscore = 5;
-                        else if (distance > 6) locationscore = 2;
-
-                      matchScore += locationMatch;
-                      score+=locationscore
-                    }
-
-
-                        return { ...lead, matchPercentage: matchScore,leadscore:score };
-                      });
-
-                      setMatchedLeads(updatedLeads);
-
-                    } catch (error) {
-                      console.error("Error fetching project details:", error);
-                      Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Failed to fetch project details. Please try again later.',
-                        confirmButtonColor: '#d33',
-                        confirmButtonText: 'OK',
-                      });
-                    
-                    } finally
-                    {
-                      setIsLoading(false)
-                    }
-                  };
-
-                  
-              
-                  
-                  // useEffect(() => {
-                  //   if (!lead1 || lead1.length === 0) return; // Exit if no leads
-                    
-                  //   const project = deal1[0].project;
-                  //   const block = deal1[0].block;
-                  //   const unit = deal1[0].unit_number;
-                  //   const price = deal1[0].expected_price;
-                  //   const propertytype = Array.isArray(fetchingdeal.category) ? fetchingdeal.category : [fetchingdeal.category];
-                  //   const unittype = fetchingdeal.unit_type;
-                  //   const facing = fetchingdeal.facing;
-                  //   const road = fetchingdeal.road;
-                  //   const city = fetchingdeal.ucity;
-                  //   const direction = fetchingdeal.direction;
-                  
-                  
-                  //   // Process each lead
-                  //   const updatedLeads = lead1.map((item) => {
-                  //     let matchScore = 0;
-                  
-                  //     // **Matching Conditions (Total: 100%)**
-                      
-                  //     // **Major Matches (50%)**
-                  //     if (item.city2 === city) matchScore += 15; // 15%
-                  //     if (item.area2.includes(project)) matchScore += 15; // 15%
-                  //     if (item.block.includes(block)) matchScore += 10; // 10%
-                  //     if (item.specific_unit && item.specific_unit.trim() !== "" ? item.specific_unit === unit : true) matchScore += 10; // 10%
-                  
-                  //     // **Other Conditions (50%)**
-          
-                  //     if (price >= parseFloat(item.budget_min) && price <= parseFloat(item.budget_max)) matchScore += 10; // 10%
-                  //     if (Array.isArray(item.property_type) && propertytype.some(type => item.property_type.includes(type))) matchScore += 10; // 10%
-                  //     if (unittype === item.unit_type2) matchScore += 10; // 10%
-                  //     if (item.facing.includes(facing)) matchScore += 5; // 5%
-                  //     if (item.road.includes(road)) matchScore += 5; // 5%
-                  //     if (item.direction === direction) matchScore += 10; // **Now 10% instead of 5%**
-
-                  
-                  //     // **Final Match Percentage**
-                  //     const matchPercentage = matchScore;
-                  //     return { ...item, matchPercentage };
-                  //   });
-                  
-                  //   setMatchedLeads(updatedLeads);
-                  
-                  // }, [lead1, deal1, fetchingdeal]);
-                  
-                  
-
-
-
+             
                
                   const [selectedItems1, setSelectedItems1] = useState([]); // To track selected rows
                   const [selectAll1, setSelectAll1] = useState(false);
-                  const handleSelectAll1 = () => {
+               
                    
                     
-                    setSelectAll1(!selectAll1);
-                    if (!selectAll1) {
-                      // Add all current page item IDs to selectedItems
-                      setSelectedItems1(lead1.map((item) => item._id));
-                    } else {
-                      // Deselect all
-                      setSelectedItems1([]);
-                   
-                    }
-                  };
+               
                 
-                  const handleRowSelect1 = (id) => {
-                   
-                    if (selectedItems1.includes(id)) {
-                      setSelectedItems1(selectedItems1.filter((itemId) => itemId !== id));
-                    } else {
-                      setSelectedItems1([...selectedItems1, id]); 
-                    
-                    }
-                  };
+              
 
                   const [removedColumns, setRemovedColumns] = useState([]);
 
@@ -1021,40 +405,7 @@ function Allunits() {
                   
                   
 
-                 
-                  // useEffect(() => {
-                  //   const filterLeadsByRemovedColumns = () => {
-                  //      let newFilteredLeads = [...leaddata];
-                  //      const price = deal1[0]?.expected_price;
-                  //      const availableFor = deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
-                  //     if(lead1.length!==0){
-                  //     // If the 'price' column is removed, don't filter based on price
-                  //     newFilteredLeads = !removedColumns.includes('price')
-                  //       ? leaddata.filter((item) => item.requirment === availableFor)
-                  //       : leaddata.filter(
-                  //           (item) =>
-                  //             item.requirment === availableFor &&
-                  //             price >= parseFloat(item.budget_min) &&
-                  //             price <= parseFloat(item.budget_max)
-                  //         );
-                      
-                
-                  //     setlead1(newFilteredLeads); // Update filtered leads
-                  //   };
-                  // }
-
-                  // if(lead1.length==0){
-                  //   let newFilteredLeads = [...leaddata];
-                  //   const availableForFallback =deal1[0]?.available_for === "Sale" ? "Buy" : deal1[0]?.available_for;
-                  //   newFilteredLeads = leaddata.filter((item) =>
-                  //     item.requirment === availableForFallback // Use availableFor as fallback
-                  //   );
-                  //   setlead1(newFilteredLeads);
-                  // }
               
-                  //   filterLeadsByRemovedColumns(); // Trigger filtering when removedColumns change
-                
-                  // }, [removedColumns]);
                 
 
 // =================================matched lead code end=======================================================================
@@ -1130,9 +481,98 @@ function Allunits() {
      setallcitis([...new Set(result)]);
      
      },[flattenedUnits])
-     // console.log(allcitis);
 
+     const [allcategories,setallcategories]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.flatMap((item)=>item.category)
+     setallcategories([...new Set(result)]);
+     
+     },[flattenedUnits])
 
+     
+     const [allsubcategories,setallsubcategories]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.flatMap((item)=>item.sub_category)
+     setallsubcategories([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+        const [allfacing,setallfacing]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.facing)
+     setallfacing([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+       const [allroad,setallroad]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.road)
+     setallroad([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+         const [alldirection,setalldirection]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.direction)
+     setalldirection([...new Set(result)]);
+     
+     },[flattenedUnits])
+   
+         const [allstage,setallstage]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.stage)
+     setallstage([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+            const [allsize,setallsize]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.size)
+     setallsize([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+            const [allunittype,setallunittype]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.unit_type)
+     setallunittype([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+               const [allblock,setallblock]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.block)
+     setallblock([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+                 const [alllocation,setalllocation]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.location)
+     setalllocation([...new Set(result)]);
+     
+     },[flattenedUnits])
+
+                    const [all_project,setall_project]=useState([])
+      useEffect(()=>
+      {
+     const result=flattenedUnits.map((item)=>item.project_name)
+     setall_project([...new Set(result)]);
+     
+     },[flattenedUnits])
+  
+   
+  
                   const[activeunits,setactiveunits]=useState([])
                   const[inactiveunits,setinactiveunits]=useState([])
                   useEffect(()=>
@@ -3941,222 +3381,20 @@ const handleallblockchange = (event) => {
 // ===================================================edit deal end====================================================================
 
 
-// useEffect(() => {
-//   const updateDealsWithMatchedLeads = async () => {
-//     if (deals.length > 0 && leads.length > 0) {
-//       const updatedDeals = deals.map((deal) => {
-//         const dealType = deal.available_for === 'Sale' ? 'Buy' : deal.available_for;
 
-//         const matchingLeads = leads.filter(
-//           (lead) => lead.requirment === dealType
-//         );
-
-//         const matchedLeadIds = matchingLeads.map((lead) => lead._id);
-
-//         return {
-//           ...deal,
-//           matchedleads: matchedLeadIds,
-//           matchinglead: matchedLeadIds.length,
-//         };
-//       });
-
-//       setDeals(updatedDeals); // or however you're updating all deal state
-//     }
-//   };
-
-//   updateDealsWithMatchedLeads();
-// }, [deals, leads]);
 
 
 
 
 // ===================================update deal each time while adding or delete lead start================================================
 
-// const[unitData,setunitData]=useState([])
-// const fetchunitfordeal=async(item)=>
-// {
-//   try {
-//     console.log(item);
-    
-//     const response = await api.get(`viewprojectforinventories/${item.project}/${item.unit_number}/${item.block}`);
-//     setunitData(response?.data?.project?.add_unit?.[0]);
-    
-//   } catch (error) {
-//     console.log(error);
-    
-//   }
-// }
 
 
-// useEffect(() => {
-//   if (leaddata.length > 0 && data.length > 0) {
-//     const updatedDeals = data.map((singleDeal) => {
-//       fetchunitfordeal(singleDeal)
-//       const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
-//       const price=singleDeal.expected_price;
-//       const propertytype=unitData.category
-//      console.log(propertytype);
-     
-
-//       const matchedLeads = leaddata.filter(
-//         (lead) => lead.requirment === availableFor
-//       );
-
-//       return {
-//         ...singleDeal,
-//         matchedleads: matchedLeads.map((lead) => lead._id),
-//         matchinglead: matchedLeads.length,
-//       };
-//     });
 
   
     
-//     updatedDeals.forEach(async (deal) => {
-//       try {
-//         const response = await api.put(`updatedeal/${deal._id}`,deal);
-
-//         // if (!response.status===200) {
-//         //   console.error(`Failed to update deal ${deal._id}`);
-//         // }
-//         // else {
-//         //   console.log(`Successfully updated deal ${deal._id}`);
-//         // }
-//       } catch (err) {
-//         console.error(`Error updating deal ${deal._id}:`, err);
-//       }
-//     });
-//   }
-// }, [data,leaddata]);
-
-function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
- 
-
-  
-  const R = 6371; // Radius of the Earth in km
-  const dLat = (lat2 - lat1) * (Math.PI / 180);
-  const dLon = (lon2 - lon1) * (Math.PI / 180);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) *
-    Math.cos(lat2 * (Math.PI / 180)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const distance = R * c; // in kilometers
-  return distance;
-}
 
 
-useEffect(() => {
-  const fetchMatchingLeads = async () => {
-    if (leaddata.length > 0 && data.length > 0) {
-      try {
-        setIsLoading(true)
-        const updatedDeals = await Promise.all(
-          data.map(async (singleDeal) => {
-            try {
-              // const response = await api.get(
-              //   `viewprojectforinventories/${singleDeal.project}/${singleDeal.unit_number}/${singleDeal.block}`
-              // );
-
-              const unitData =flattenedUnits.find((unit)=>
-              (
-                unit.project_name==singleDeal.project &&
-                unit.unit_no==singleDeal.unit_number &&
-                unit.block==singleDeal.block
-              ))
-             
-              const availableFor = singleDeal.available_for === 'Sale' ? 'Buy' : singleDeal.available_for;
-              const price=unitData?.expected_price;
-
-              const propertytype = unitData?.category;
-              const subtype=unitData?.sub_category;
-
-              const facing=unitData?.facing;
-              const road=unitData?.road;
-              const direction=unitData?.direction;
-              
-              const unitlat= parseFloat(unitData?.lattitude) || 0;
-              const unitlang= parseFloat(unitData?.langitude || 0);
-
-
-              const matchedLeads = leaddata.filter((lead) => {
-                const leadLat = parseFloat(lead.lattitude || 0);
-                const leadLng = parseFloat(lead.longitude || 0);
-              
-                const distance = getDistanceFromLatLonInKm(unitlat, unitlang, leadLat, leadLng);
-            
-                const unitsize=unitData.size
-                const match = unitsize.match(/^([\d.]+)\s+([^\(]+)\s+\(([\d.]+)\s+Sq\s+Yard\)/);
-
-                  // Default values
-                  let unittype = '';
-                  let size = 0;
-
-                  if (match) {
-                    unittype = match[1] + " " + match[2].trim(); // "2 Kanal"
-                    size = parseFloat(match[3]); // 4840.00
-                  }
-                 
-              
-                return (
-                  
-                  lead.requirment === availableFor &&
-                  (
-                    lead.facing.includes(facing) ||
-                    lead.road.includes(road) ||
-                    lead.direction == direction ||
-                    (price >= parseFloat(lead.budget_min) && price <= parseFloat(lead.budget_max)) ||
-                    lead.property_type.some(pt => propertytype.includes(pt)) ||
-                    lead.sub_type.some(st => subtype.includes(st)) || 
-                    lead.area_project.includes(singleDeal.project) ||
-                    lead.block3.includes(singleDeal.block) ||
-                    lead.specific_unit == singleDeal.unit_number || 
-                    lead.unit_type.includes(unittype) || 
-                    (size >= parseFloat(lead.minimum_area) && size <= parseFloat(lead.maximum_area)) ||
-                    distance <= lead.range
-                  )
-                );
-              });
-            
-              
-              return {
-                ...singleDeal,
-                matchedleads: matchedLeads.map((lead) => lead._id),
-                matchinglead: matchedLeads.length,
-              };
-            } catch (err) {
-              console.error(`Error fetching unit data for deal ${singleDeal._id}:`, err);
-              return singleDeal; // return as-is if there's an error
-            }
-          })
-        );
-
-     
-
-   
-    
-          try {
-            const response = await api.put(`dealbulkupdate`, {deals:updatedDeals});
-            console.log('all dealupdated');
-            
-          } catch (err) {
-            console.error(`Error updating deal :`, err);
-          }
-        
-
-      } catch (error) {
-        console.error("Error in fetchMatchingLeads:", error);
-      }
-      finally
-      {
-        setIsLoading(false)
-      }
-    }
-  };
-
-  fetchMatchingLeads();
-}, [data, leaddata]);
 
 
 
@@ -5067,7 +4305,8 @@ const buttonStyle = `
                   const toastRefunit = useRef(null);
   
                       const toggleToastunit = async() => {
-                        setShowunit(true);
+                        // setShowunit(true);
+                        openFilterWithDefaults()
                       };
   
   
@@ -5085,145 +4324,58 @@ const buttonStyle = `
               };
   
   
-  const unitcategory = [
-    'Residential', 
-    'Commercial', 
-    'Agricultural', 
-    'Institutional', 
-    'Industrial', 
-  ];
-  
           
     const [selectedunitcategory, setSelectedunitcategory] = useState([]);
-    const [showDropdown, setShowDropdown] = useState(false);
-    const [showDropdown1, setShowDropdown1] = useState(false);
-   
       const filterRefunit = useRef();
-  
-      const [activeTab, setActiveTab] = useState('profession');
-  
-  
-  // const enhancedInputStyle = {
-  //   display: 'block',
-  //   marginTop: '6px',
-  //   marginLeft: '20px',
-  //   width: '85%',
-  //   padding: '8px 10px',
-  //   border: '1px solid #ccc',
-  //   borderRadius: '6px',
-  //   fontSize: '14px',
-  //   transition: '0.3s ease',
-  //   boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.1)',
-  //   background: '#fff',
-  //   color: '#333'
-  // };
-  
-  
-  
-    // useEffect(() => {
-    //   const handleClickOutside = (event) => {
-    //     if (filterRefunit.current && !filterRefunit.current.contains(event.target)) {
-    //       setShowDropdown(false); // close the filter box
-    //     }
-    //   };
-  
-    //   document.addEventListener("mousedown", handleClickOutside);
-    //   return () => document.removeEventListener("mousedown", handleClickOutside);
-    // }, []);
-  
-    // const handlefilterCheckboxChange = (profession) => {
-    //   const updatedSelections = selectedunitcategory.includes(profession)
-    //     ? selectedunitcategory.filter((p) => p !== profession)
-    //     : [...selectedunitcategory, profession];
-    //   setSelectedunitcategory(updatedSelections);
-      
-    //   // Filter the data based on selected professions
-    //  const newFilteredData = allunitsforsearch.filter((item) =>
-    //     updatedSelections.length === 0 ||  item.category?.some(cat => updatedSelections.includes(cat))
-    //   );
-    //   setFlattenedUnits(newFilteredData);
-    // };
-  
-   
-    // const unitfields = [
-    //   { label: 'City', field: 'ucity' },
-    //   { label: 'Location', field: 'location' },
-    //   { label: 'Project Name', field: 'project_name' },
-    //   { label: 'Block/Tower', field: 'block' },
-    //   { label: 'Category', field: 'category' },
-    //   { label: 'Sub Category', field: 'sub_category' },
-    //   { label: 'Unit Type', field: 'unit_type' },
-    //   { label: 'Size', field: 'size' },
-    //   { label: 'Stages/Status', field: 'stage' },
-    //   { label: 'Direction', field: 'direction' },
-    //   { label: 'Road', field: 'road' }, // Added field for from date
-    //   { label: 'Facing', field: 'facing' }
-    // ];
-    
-  
-    const [showDropdown2, setShowDropdown2] = useState(false);
     const [selectfieldunit, setselectfieldunit] = useState([]);
-  
-     // Handle checkbox toggle
-    //  const handlefilterCheckboxChange1 = (field) => {
-    //   setselectfieldunit(prev => {
-    //     if (prev.hasOwnProperty(field)) {
-    //       // Remove the field
-    //       const { [field]: _, ...rest } = prev;
-    //       return rest;
-    //     } else {
-    //       // Add the field with empty value
-    //       return { ...prev, [field]: '' };
-    //     }
-    //   });
-    // };
-  
-      // Handle input change for filtering values
-      // const handleFieldInputChange = (field, value) => {
-      //   setselectfieldunit((prev) => ({
-      //     ...prev,
-      //     [field]: value,
-      //   }));
-      // };
-  
-  
-      // useEffect(() => {
-    
-      //   const filtered = allunitsforsearch.filter(contact => {
-      //     const matchesTextFilters = Object.keys(selectfieldunit).every(field => {
-      //       const value = selectfieldunit[field]?.toLowerCase();
-      //       const contactValue = contact[field]?.toString().toLowerCase() || '';
-      //       return !value || contactValue.includes(value);
-      //     });
-      //     return matchesTextFilters
-      //   });
-      
-      //   setFlattenedUnits(filtered);
-      // }, [allunitsforsearch]);
-      
-      
-      
-
 
 const unitfields = [
-  { label: 'City', field: 'ucity', values: ['Delhi', 'Mumbai', 'New York', 'London', 'San Francisco'] },
-  { label: 'Location', field: 'location', values: ['Downtown', 'Suburb', 'Industrial Area'] },
-  { label: 'Project Name', field: 'project_name' },
-  { label: 'Block/Tower', field: 'block' },
-  { label: 'Category', field: 'category', values: ['Residential', 'Commercial'] },
-  { label: 'Sub Category', field: 'sub_category' },
-  { label: 'Unit Type', field: 'unit_type' },
-  { label: 'Size', field: 'size' },
-  { label: 'Stages/Status', field: 'stage', values: ['Planning', 'Ongoing', 'Completed'] },
-  { label: 'Direction', field: 'direction', values: ['North', 'South', 'East', 'West'] },
-  { label: 'Road', field: 'road' },
-  { label: 'Facing', field: 'facing', values: ['Garden', 'Main Road'] }
+  { label: 'City', field: 'ucity', values: allcitis },
+  { label: 'Location', field: 'location', values: alllocation },
+  { label: 'Project Name', field: 'project_name',values: all_project },
+  { label: 'Block/Tower', field: 'block',values: allblock },
+  { label: 'Category', field: 'category', values: allcategories},
+  { label: 'Sub Category', field: 'sub_category', values: allsubcategories },
+  { label: 'Unit Type', field: 'unit_type',values: allunittype },
+  { label: 'Size', field: 'size' , values: allsize},
+  { label: 'Stages/Status', field: 'stage', values: allstage },
+  { label: 'Direction', field: 'direction', values: alldirection },
+  { label: 'Road', field: 'road' ,values: allroad},
+  { label: 'Facing', field: 'facing', values: allfacing }
 ];
 
 
+
+const defaultFields = [
+  unitfields.find(f => f.field === 'ucity'),
+  unitfields.find(f => f.field === 'location')
+];
+
 const [showFieldDropdown, setShowFieldDropdown] = useState(false);
-const [activeFilters, setActiveFilters] = useState([]);
-// To track each filter's internal UI state (dropdown open, value selections etc.)
+ const [activeFilters, setActiveFilters] = useState(
+    defaultFields.map(f => ({
+      ...f,
+      radio: "with",
+      input: "",
+      checked: [],
+    }))
+  );
+
+
+   // Open filter panel, regenerating the defaults (with current city list)
+  function openFilterWithDefaults() {
+    setActiveFilters(
+      defaultFields.map((f) => ({
+        ...f,
+        radio: "with",
+        input: "",
+        checked: []
+      }))
+    );
+    setShowunit(true);
+  }
+
+
 const [openDropdownIdx, setOpenDropdownIdx] = useState(null);
 
 // Add new filter row
@@ -5279,42 +4431,76 @@ function handleCheckbox(idx, val) {
 useEffect(() => {
   const filteredData = allunitsforsearch.filter(item =>
     activeFilters.every(filter => {
-      const fieldVal = item[filter.field] || "";
+      const fieldVal = item[filter.field] ?? "";
 
       // Checkbox logic
       if (filter.checked && filter.checked.length > 0) {
-        if (filter.radio === 'with') {
-          if (!filter.checked.includes(fieldVal)) {
-            return false;
+        if (Array.isArray(fieldVal)) {
+          if (filter.radio === 'with') {
+            // keep only if at least one value in fieldVal is in filter.checked
+            if (!fieldVal.some(val => filter.checked.includes(val))) {
+              return false;
+            }
           }
-        }
-        if (filter.radio === 'without') {
-          if (filter.checked.includes(fieldVal)) {
-            return false;
+          if (filter.radio === 'without') {
+            // remove if any value in fieldVal is in filter.checked
+            if (fieldVal.some(val => filter.checked.includes(val))) {
+              return false;
+            }
+          }
+        } else {
+          // fieldVal is string or other single value
+          if (filter.radio === 'with') {
+            if (!filter.checked.includes(fieldVal)) {
+              return false;
+            }
+          }
+          if (filter.radio === 'without') {
+            if (filter.checked.includes(fieldVal)) {
+              return false;
+            }
           }
         }
       }
 
       // Input logic
-      if (filter.input && typeof fieldVal === 'string') {
-        if (filter.radio === 'with') {
-          if (!fieldVal.toLowerCase().includes(filter.input.toLowerCase())) {
-            return false;
+      if (filter.input) {
+        const inputVal = filter.input.toLowerCase();
+
+        if (Array.isArray(fieldVal)) {
+          if (filter.radio === 'with') {
+            // keep if any item in array includes the input
+            if (!fieldVal.some(val => String(val).toLowerCase().includes(inputVal))) {
+              return false;
+            }
           }
-        }
-        if (filter.radio === 'without') {
-          if (fieldVal.toLowerCase().includes(filter.input.toLowerCase())) {
-            return false;
+          if (filter.radio === 'without') {
+            // remove if any item in array includes the input
+            if (fieldVal.some(val => String(val).toLowerCase().includes(inputVal))) {
+              return false;
+            }
+          }
+        } else if (typeof fieldVal === 'string') {
+          if (filter.radio === 'with') {
+            if (!fieldVal.toLowerCase().includes(inputVal)) {
+              return false;
+            }
+          }
+          if (filter.radio === 'without') {
+            if (fieldVal.toLowerCase().includes(inputVal)) {
+              return false;
+            }
           }
         }
       }
 
-      // Pass if neither is specified
+      // Pass if neither checkbox nor input logic applies
       return true;
     })
   );
   setFlattenedUnits(filteredData);
 }, [activeFilters, allunitsforsearch]);
+
 
 
 
@@ -5373,46 +4559,8 @@ const excelSerialToDateString = (serial) => {
                     </ul>
                     
         
-        <Tooltip title="Filter here.." arrow>
-                     <div   style={{marginLeft:"65%",border:"none",cursor:"pointer"}}>
-                      <button
-                        // onClick={() => setShowDropdown(!showDropdown)}
-                          onClick={toggleToastunit}
-                        style={{
-                          position: "relative",
-                          marginLeft: '65%',
-                          width: "50px",
-                          padding: '8px',
-                          backgroundColor: '#6366f1', // modern indigo color
-                          color: 'white',
-                          border: 'none',
-                          borderRadius: '6px',
-                          cursor: 'pointer',
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                          transition: 'all 0.3s ease',
-                        }}
-                      >
-                        {/* Funnel Icon - SVG (modern look) */}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="24"
-                          width="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="white"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M3 4h18" />
-                          <path d="M6 8h12" />
-                          <path d="M10 12h4" />
-                          <path d="M12 16v4" />
-                        </svg>
-                      </button>
-        
-                      </div>
-                     </Tooltip>
+
+
         
                          {/* <div
                     ref={toastRefunit}
@@ -5655,7 +4803,7 @@ const excelSerialToDateString = (serial) => {
         
  <div ref={toastRefunit}
                     className={`feedback-toast ${showunit ? (isClosingunit ? 'hide' : 'show') : ''}`} 
-                    style={{marginTop:"6%", width: 400, background: "#fff", borderRadius: 14, boxShadow: "0 8px 24px rgba(0,0,0,0.10)", padding: 24,overflow:"auto",height:"100%" }}>
+                    style={{marginTop:"2%", width: 400, background: "#fff", borderRadius: 14,boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)", padding: 10,overflow:"auto",height:"90%",overflowX:"auto"}}>
      <h3 style={{
                         fontSize: '16px',
                         margin: 0,
@@ -5706,9 +4854,9 @@ const excelSerialToDateString = (serial) => {
   {/* Active Filter Rows */}
   {activeFilters.map((item, idx) => (
     <div key={item.field} style={{
-      background: "#f7f9fb", borderRadius: 8, marginBottom: 14, padding: 12, position: "relative" }}>
+      background: "#e8ebeeff", borderRadius: 8, marginBottom: 14, padding: 12, position: "relative" }}>
       <div style={{ display: "flex", alignItems: "center" }}>
-        <b style={{ flex: 1 }}>{item.label}</b>
+        <p style={{ flex: 1 }}>{item.label}</p>
         <button
           style={{ background: "none", border: "none", color: "#f44", fontSize: 18, fontWeight: 700, cursor: "pointer" }}
           onClick={() => handleRemoveFilter(idx)}
@@ -5720,7 +4868,7 @@ const excelSerialToDateString = (serial) => {
           display: "block", width: "100%",
           background: "#fff", border: "1px solid #d6e0ef",
           borderRadius: 7, marginTop: 8, padding: "7px 12px",
-          textAlign: "left", fontWeight: 500, cursor: "pointer"
+          textAlign: "left", cursor: "pointer"
         }}
         onClick={() => handleToggleDropdown(idx)}
       >
@@ -5767,56 +4915,17 @@ const excelSerialToDateString = (serial) => {
     </div>
   ))}
 
-     {/* <div style={{
-                          padding: '14px',
-                          borderTop: '1px solid #eee',
-                          background: '#f9f9f9',
-                          display: 'flex',
-                          justifyContent: 'space-around',
-                          gap: '10px'
-                        }}>
-                          <button
-                            className="btn btn-secondary"
-                            style={{
-                              width: '45%',
-                              padding: '6px 12px',
-                              fontSize: '14px',
-                              borderRadius: '6px',
-                              backgroundColor: '#6c757d',
-                              border: 'none',
-                              color: '#fff',
-                              boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
-                              transition: 'background 0.3s ease',
-                            }}
-                            onClick={handleResetFiltersunit}
-                          >
-                            🔄 Reset
-                          </button>
-        
-                          <button
-                            className="btn btn-danger"
-                            style={{
-                              width: '45%',
-                              padding: '6px 12px',
-                              fontSize: '14px',
-                              borderRadius: '6px',
-                              boxShadow: '0 3px 8px rgba(0,0,0,0.1)'
-                            }}
-                            onClick={handleCancelunit}
-                          >
-                            ❌ Cancel
-                          </button>
-                        </div> */}
+    
 
 </div>
 
 
         
                     {/* <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button> */}
-                    <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"3%"}}>Add Fields</button>
+                    <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{ padding: "5px", background: "#007bff", color: "#fff", border: "none", borderRadius: 6, fontWeight: 600, marginBottom: 16, cursor: "pointer",marginTop:"20px",marginLeft:"70%",width:"100px"}}>Add Fields</button>
                 
                
-               
+              
                   
               </div> 
         
@@ -5890,7 +4999,42 @@ const excelSerialToDateString = (serial) => {
                   })}
                 </ul>
               )} */}
-        
+               <Tooltip title="Filter here.." arrow>
+  <div style={{marginLeft:"60%", border:"none", cursor:"pointer",position:"absolute",marginTop:"10px"}}>
+    <button
+      onClick={toggleToastunit}
+      style={{
+        position: "relative",
+        marginLeft: '65%',
+        width: "50px",
+        padding: '8px',
+        backgroundColor: '#fff',   // white background for contrast
+        color: 'black',            // sets SVG to black
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        // boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      {/* Modern black funnel icon */}
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.5}
+        stroke="currentColor"
+        width="24"
+        height="24"
+        style={{ color: 'black' }}   // ensure icon is black
+      >
+        <path strokeLinecap="round" strokeLinejoin="round"
+          d="M3 4.5h18M6.75 9.75h10.5m-3.75 5.25h-3"/>
+      </svg>
+    </button>
+  </div>
+</Tooltip>
         
         <div id="action" style={{position:"absolute",marginLeft:"1%",gap:"20px"}}>
         
@@ -7059,10 +6203,10 @@ const excelSerialToDateString = (serial) => {
                
                         <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
                         {showSuggestions && input && filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-list">
+                            <ul className="suggestion-list" style={{width:"100%"}}>
                               {filteredSuggestions.map((suggestion, index) => (
                                 <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                                  {suggestion.first_name}
+                                  {suggestion.first_name} {suggestion.last_name}({suggestion.mobile_no})
                                 </li>
                               ))}
                             </ul>
@@ -7083,38 +6227,38 @@ const excelSerialToDateString = (serial) => {
               index === self.findIndex((c) => c._id === contact._id)
             ).map(contact => (
                               <StyledTableRow>
-                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                <img style={{height:"50px",width:"60px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                <StyledTableCell  style={{   cursor: 'pointer',fontSize:"10px" }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
-                                    <SvgIcon component={EmailIcon} />
+                                    <SvgIcon component={EmailIcon}  style={{fontSize:"10px"}}/>
                                     <span>{contact.email}</span>
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer',fontSize:"10px" }}>
                                   {Array.isArray(contact.mobile_no)?
                                   contact.mobile_no.map((number, index) => (
                                     <span key={index}>
-                                      <SvgIcon component={PhoneIphoneIcon} />
+                                      <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"10px"}} />
                                       {number}<br></br>
                                     </span>
                                   )):[]}
                                 </StyledTableCell>
 
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                <StyledTableCell  style={{   cursor: 'pointer',fontSize:"10px" }}>
                                   S/W/O <br></br>{contact.father_husband_name}
                                   </StyledTableCell>
 
-                                  <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                  <StyledTableCell  style={{   cursor: 'pointer',fontSize:"10px" }}>
                                   permanent address: <br></br>{contact.h_no}<br></br>{contact.area1}
                                   {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1} 
                                   </StyledTableCell>
 
-                                  <StyledTableCell style={{  cursor: 'pointer' }}>
+                                  <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         <span style={{color:"orange",fontWeight:"bolder"}}>Owner</span>
                                     </StyledTableCell>
 
                                 <StyledTableCell>
-                                  <img style={{height:"40px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
+                                  <img style={{height:"20px",cursor:"pointer"}} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" alt="" onClick={() => removeContact(contact._id)}></img>
                                    </StyledTableCell>
                                 
                               </StyledTableRow>
@@ -7139,14 +6283,14 @@ const excelSerialToDateString = (serial) => {
                                   index === self.findIndex((c) => c._id === contact._id)
                                 ).map(contact => (
                                 <StyledTableRow>
-                                    <img style={{ height: "70px", width: "80px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <img style={{ height: "50px", width: "60px" }} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt="Contact" />
+                                    <StyledTableCell style={{  cursor: 'pointer' , fontSize:"10px"}}>
                                         {contact.title} {contact.first_name} {contact.last_name}<br />
-                                        <SvgIcon component={EmailIcon} />
+                                        <SvgIcon component={EmailIcon} style={{fontSize:"10px"}} />
                                         <span>{contact.email}</span>
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         {
                                         Array.isArray(contact.mobile_no) ?
                                         contact.mobile_no.map((number, index) => (
@@ -7157,20 +6301,20 @@ const excelSerialToDateString = (serial) => {
                                         )):[]}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         S/W/O <br />{contact.father_husband_name}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                         permanent address: <br />{contact.h_no}<br />{contact.area1} {contact.location1} {contact.city1} {contact.state1} {contact.country1} {contact.pincode1}
                                     </StyledTableCell>
 
-                                    <StyledTableCell style={{  cursor: 'pointer' }}>
+                                    <StyledTableCell style={{  cursor: 'pointer',fontSize:"10px" }}>
                                     <span style={{color:"orange",fontWeight:"bolder"}}>{units.relation}</span>
                                     </StyledTableCell>
                                         
                                     <StyledTableCell>
-                                        <img style={{ height: "40px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
+                                        <img style={{ height: "20px", cursor: "pointer" }} src="https://cdn-icons-png.flaticon.com/512/6861/6861362.png" onClick={() => removeContact(contact._id)} alt="Remove" />
                                     </StyledTableCell>
                                 </StyledTableRow>
                             ))} 
@@ -7392,7 +6536,7 @@ const excelSerialToDateString = (serial) => {
                     }
                     </div>
 
-                    <div className='col-md-2' ><label className='labels'>Document No</label>
+                    <div className='col-md-2' ><label className='labels'>Doc. No.</label>
                     {
                       Array.isArray(units.document_no) ?
                       units.document_no.map((item,index)=>
@@ -7443,36 +6587,45 @@ const excelSerialToDateString = (serial) => {
                                )):[]}
                        </div>
 
-                       <div className="col-md-1" style={{ marginTop: "70px" }}>
+                        {/* <div className="col-md-1" style={{ marginTop: "70px" }}> 
     {
       Array.isArray(units.document_name) ?
         units.document_name.map((item, index) => (
           <div key={index} style={{ marginTop: "10px" }}>
-            {units.document_name[index] && ( // Show delete button only if document name exists
+            {units.document_name[index] && ( 
               <img
                 src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg"
                 alt="delete button"
-                onClick={() => deleteall12(index)} // Call deleteDocument for the selected index
+                onClick={() => deleteall12(index)} 
                 style={{ height: "40px", cursor: "pointer" }}
               />
             )}
           </div>
-        )) : null
+        )) :    Array.isArray(units.action12)?
+                       units.action12.map((name, index) => (
+                                 <div key={index}className="col-md-12" style={{marginTop:"10px"}}>
+                                 
+                                   <div><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button"   onClick={() => deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                                 </div>
+                               )):[]
     }
-  </div>
+                       </div>   */}
 
 
-                    {/* <div className="col-md-1" style={{marginTop:"70px"}}>
+                    <div className="col-md-1" style={{marginTop:"70px"}}>
                     {
                       Array.isArray(units.action12)?
                        units.action12.map((item,index)=>
                         (
-                          <div style={{marginTop:"10px"}}><img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/></div>
+                          <div style={{marginTop:"10px"}}>
+                            {/* <img  src="https://t4.ftcdn.net/jpg/03/46/38/39/360_F_346383913_JQecl2DhpHy2YakDz1t3h0Tk3Ov8hikq.jpg" alt="delete button" onClick={()=>deleteall12(index)} style={{height:"40px",cursor:"pointer"}}/> */}
+                            <span class="material-icons" style={{color: "red", fontSize: "24px",cursor:"pointer"}} onClick={()=>deleteall12(index)}>delete</span>
+                            </div>
                                   
                           
                         )):[]
                     }
-                    </div> */}
+                    </div>
 
                         <div className="col-md-1"><label className="labels" style={{visibility:"hidden"}}>Add</label><button className="form-control form-control-sm" onClick={addFn12}>+</button></div>
                        
@@ -7589,10 +6742,10 @@ const excelSerialToDateString = (serial) => {
                
                         <div className="col-md-9" id="suggestion-box" style={{ position: 'relative' }}><label className="labels" style={{visibility:"hidden"}}>Search</label><input type="search"className="form-control form-control-sm" value={input} placeholder="Type here For Search in Contact" required="true" onChange={handleInputChange}/></div>
                         {showSuggestions && input && filteredSuggestions.length > 0 && (
-                            <ul className="suggestion-list">
+                            <ul className="suggestion-list" style={{width:"35%"}}>
                               {filteredSuggestions.map((suggestion, index) => (
                                 <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                                  {suggestion.first_name}
+                                  {suggestion.first_name} {suggestion.last_name}({suggestion.mobile_no})
                                 </li>
                               ))}
                             </ul>
@@ -7613,8 +6766,8 @@ const excelSerialToDateString = (serial) => {
                           index === self.findIndex((c) => c._id === contact._id)
                         ).map(contact => (
                               <StyledTableRow>
-                                <img style={{height:"70px",width:"80px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
-                                <StyledTableCell  style={{   cursor: 'pointer' }}>
+                                <img style={{height:"50px",width:"60px"}} src="https://cdn-icons-png.flaticon.com/512/7084/7084424.png" alt=""></img>
+                                <StyledTableCell  style={{   cursor: 'pointer',fontSize:"12px" }}>
                                     {contact.title} {contact.first_name} {contact.last_name}<br></br>
                                     <SvgIcon component={EmailIcon} />
                                     <span>{contact.email}</span>
