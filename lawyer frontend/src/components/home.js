@@ -947,7 +947,8 @@ const filterLawyersAndChat = () => {
         isSystem: false,
         fileUrl:msg.fileUrl,
         fileName:msg.fileName, 
-        fileType:msg.fileType
+        fileType:msg.fileType,
+        timestamp: msg.timestamp
       }));
 
       if (formatted.length === 0) {
@@ -1006,6 +1007,69 @@ setIsLoading(true)
     setTimeout(() => setIsFlipping(false), 300); // 300ms for the second half
   }, 2000); // 300ms for the first half
 };
+
+
+//===================== for typing indicator================================================
+
+const handleTyping = () => {
+  if (!chatLawyer?._id) return;
+  socket.emit('typing', {
+    toUserId: chatLawyer._id,
+    fromUserType: 'client',
+    name: userData.user.fullName || 'Client',
+    fromUserId: userData.user._id
+  });
+};
+
+const [typingStatus, setTypingStatus] = useState('');
+const typingTimeout = useRef();
+
+useEffect(() => {
+  socket.on('typing', ({ fromUserType, name, fromUserId }) => {
+    if (chatLawyer?._id === fromUserId) { // Only current chat
+      setTypingStatus(`${name} is typing...`);
+      clearTimeout(typingTimeout.current);
+      typingTimeout.current = setTimeout(() => setTypingStatus(''), 1500); // hides after 1.5s
+    }
+  });
+  return () => socket.off('typing');
+}, [chatLawyer]);
+
+
+useEffect(() => {
+  socket.on('missedMessagesNotification', async (notifications) => {
+    // Get unique client IDs to fetch
+    const clientIds = [...new Set(notifications.map(n => n._id))];
+console.log(clientIds);
+
+    // Fetch clients data from API 
+    const clientIdNameMap = {};
+    await Promise.all(clientIds.map(async (id) => {
+      try {
+        const res = await api.get(`api/lawyer/getlawyer/${id}`);
+        console.log(res);
+        
+        clientIdNameMap[id] = res.data.firstName || 'Lawyer';
+      } catch {
+        clientIdNameMap[id] = 'Lawyer'; // fallback
+      }
+    }));
+
+    // Show notifications with correct names
+    notifications.forEach(({ _id: clientId, count }) => {
+      const name = clientIdNameMap[clientId] || clientId;
+      Swal.fire({
+        icon: 'info',
+        title: 'Unread Messages',
+        text: `You have ${count} unread message${count > 1 ? 's' : ''} from ${name}.`,
+        timer: 4000,
+        showConfirmButton: true,
+      });
+    });
+  });
+
+  return () => socket.off('missedMessagesNotification');
+}, [userData?.user?._id]);
 
 
 
@@ -1630,21 +1694,32 @@ setIsLoading(true)
           font-style: italic;
         }
 
-        .chat-input {
-          padding: 1rem;
-          border-top: 1px solid #e5e7eb;
-          background: white;
-        }
+     .chat-input {
+       width:85%;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  gap: 0.5rem;
+}
 
-        .chat-input input {
-          width: 85%;
-          padding: 0.75rem 1rem;
-          border-radius: 20px;
-          border: 1px solid #e5e7eb;
-          font-size: 0.875rem;
-          outline: none;
-          transition: border-color 0.2s ease;
-        }
+
+      .chat-input input {
+  flex: 1 1 auto;
+
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background: #fff;
+}
+  .actionbutton{
+        margin-top:10px !important;
+  }
+
 
         .chat-input input:focus {
           border-color: #3b82f6;
@@ -1687,41 +1762,59 @@ setIsLoading(true)
     }
   }
 
-  @media (max-width: 480px) {
-  .main1{
-      margin-left:0px
-      }
-    .lawyers-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+@media (max-width: 480px) {
+  .main1 {
+    margin-left: 0px;
+  }
+  .lawyers-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .chat-popup {
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .chat-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    height: 56px;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+  .header-actions {
+    margin-left: 0;
+    margin-top: 0;
+    display: flex;
+    gap: 0.5rem;
+  }
+ .chat-input {
+    padding-bottom: 2.5rem;
+    gap: 0.25rem;
+  }
+  .chat-input input {
+    font-size: 1rem;
+    padding: 0.65rem 1rem;
+    width:70%
+  }
+    .actionbutton
+    {
+    margin-top:-10px !important;
     }
-    .chat-popup {
-      width: 100vw;
-      height: 100vh;
-      bottom: 0;
-      right: 100;
-      left: 0;
-      border-radius: 0;
-    }
-      
-    .chat-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .chat-input input {
-      font-size: 1rem;
-    }
-    select {
-      min-width: 100% !important;
-    }
-    .action-btn {
-      width: 100%;
-      justify-content: center;
-    }
-    .main1 > div {
-      padding: 20px 16px !important;
-    }
+
+  select {
+    min-width: 100% !important;
+  }
+  .main1 > div {
+    padding: 20px 8px !important;
+  }
+    
+}
+
       
         
       `}</style>
@@ -1832,6 +1925,7 @@ setIsLoading(true)
               placeholder="Type a message..."
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
+                handleTyping()
                 if (e.key === 'Enter' && e.target.value.trim()) {
                   handleSendMessage(e.target.value.trim());
                   setMessage('');
@@ -1839,6 +1933,7 @@ setIsLoading(true)
               }}
             />
               <button
+              className="actionbutton"
     type="button"
     onClick={()=>{handleSendMessage(message);
        setMessage('')}
@@ -1863,6 +1958,7 @@ setIsLoading(true)
   </button>
 
    <button
+     className="actionbutton"
   type="button"
   onClick={() => fileInputRef.current.click()}
   style={{
@@ -1883,9 +1979,11 @@ setIsLoading(true)
 >
     <HiOutlinePaperClip />
 </button>
-
           </div>
+          {typingStatus && <div className="typing-indicator">{typingStatus}</div>}
+
         </div>
+        
       )}
 
     </section>

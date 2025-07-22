@@ -10,7 +10,7 @@ const {
 
 const chatupload=require('../middlewares/chatupload')
 const { getAdminDashboard } = require('../controllers/adminController');
-const  {getchathistory,getallchathistory, uploaddocument}  = require('../controllers/chathistory');
+const  {getchathistory,getallchathistory, uploaddocument, getallchathistoryforrecentchat}  = require('../controllers/chathistory');
 
 // Admin dashboard route
 router.get('/dashboard', getAdminDashboard);
@@ -22,6 +22,7 @@ router.post('/lawyers/:id/verify', verifyLawyer);
 
 router.get('/chathistory/:user1Id/:user2Id',getchathistory);
 router.get('/chathistory',getallchathistory);
+router.get('/chathistoryforrecentchat',getallchathistoryforrecentchat);
 router.post('/document', chatupload.single('file'),uploaddocument)
 
 

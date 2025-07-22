@@ -40,7 +40,7 @@ function Clientchathistory() {
       const fetchChatHistory=async()=>
       {
         try {
-            const res=await api.get('api/admin/chathistory')
+            const res=await api.get('api/admin/chathistoryforrecentchat')
             const result=res.data
             const clientChats = result.filter(
                 chat => chat.from === userData.user._id && chat.fromModel === "User"
@@ -69,9 +69,22 @@ function Clientchathistory() {
     });
 
 
+    const markMessagesRead = async (clientId) => {
+      try {
+        const userid = userData.user._id;
+        socket.emit('markMessagesRead', {
+          readerId: userid,
+          senderId: clientId,
+          readerModel: 'User'
+        });
+      } catch (err) {
+        console.error('Failed to mark messages read', err);
+      }
+    };
+
       // Your existing chat functionality...
       useEffect(() => {
-        if (!userData.user._id) return;
+        if (!userData?.user?._id) return;
     
         if (!socket.connected) socket.connect();
     
@@ -92,7 +105,7 @@ function Clientchathistory() {
     
         socket.on('receiveMessage', ({ from, message }) => {
           if (chatLawyer?._id === from) {
-            setMessages((prev) => [...prev, { text: message, isMe: false }]);
+            setMessages((prev) => [...prev, { text: message, isMe: false, }]);
           }
         });
     
@@ -101,8 +114,9 @@ function Clientchathistory() {
           socket.off('receiveMessage');
           socket.off('onlineLawyersList');
           socket.off('updateOnlineUsers');
+          socket.disconnect();
         };
-      }, [userData.user._id, chatLawyer]);
+      }, [userData?.user?._id, chatLawyer]);
     
       const handleSendMessage = (text) => {
         if (!text.trim() || !chatLawyer?._id) return;
@@ -169,6 +183,7 @@ function Clientchathistory() {
       
       const handleOpenChat = async (lawyer) => {
     const isOnline = onlineLawyers.includes(lawyer._id);
+    markMessagesRead(lawyer._id)
     setChatLawyer({ ...lawyer, isOnline });
 
     const clientId = userData.user._id;
@@ -184,7 +199,8 @@ function Clientchathistory() {
         isSystem: false,
         fileUrl:msg.fileUrl,
         fileName:msg.fileName, 
-        fileType:msg.fileType
+        fileType:msg.fileType,
+        timestamp: msg.timestamp
       }));
 
       if (formatted.length === 0) {
@@ -204,6 +220,7 @@ function Clientchathistory() {
   };
 
 
+    console.log(messages);
     
 
       const handleSwapLawyer = async () => {
@@ -721,6 +738,11 @@ function Clientchathistory() {
                 className={`message ${msg.isMe ? 'sent' : msg.isSystem ? 'system' : 'received'}`}
               >
                 {msg.text}
+                 <div style={{ fontSize: "10px", marginTop: 2 }}>
+                      {msg.timestamp
+                        ? new Date(msg.timestamp).toLocaleString()
+                        : ""}
+                    </div>
               </div>
             ))}
           </div>

@@ -235,6 +235,14 @@ function Users() {
                                             }
                                     },[selectedItems])
 
+                                             const [show1, setshow1] = useState(false);
+                                                   
+                                                    const handleClose1 = () => setshow1(false);
+                                             
+                                                    const handleShow1=async()=>setshow1(true);
+
+
+
          const [isHoveringDelete, setIsHoveringDelete] = useState(false);
 
   return (
@@ -261,7 +269,7 @@ function Users() {
                        </ul>
         
                          <Tooltip title="Add New User..." arrow>
-                                   <button   style={{ position:"relative",marginLeft: '40%',width:"50px",padding: '8px',color: 'white',border: 'none', borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center'}} className="form-control form-control-sm form-control form-control-sm-sm"  >
+                                   <button onClick={handleShow1}   style={{ position:"relative",marginLeft: '40%',width:"50px",padding: '8px',color: 'white',border: 'none', borderRadius: '4px',cursor: 'pointer',fontWeight: 'bold',textAlign: 'center'}} className="form-control form-control-sm form-control form-control-sm-sm"  >
                                           <img src="https://png.pngtree.com/png-clipart/20191122/original/pngtree-vector-plus-icon-png-image_5169416.jpg" style={{height:"25px"}}></img>
                                    </button>
                         </Tooltip>
@@ -305,6 +313,249 @@ function Users() {
                           }}
                         />
                       </Tooltip>
+
+                      <Modal  show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+                                          <Modal.Header>
+                                            <Modal.Title>Add New User<br></br>
+                                            </Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                     
+                             <div>
+                              <div>
+                                     <div className="mb-3">
+                                      <h6>Full Name</h6>
+                              {/* <label htmlFor="name" className="form-label">Full Name</label> */}
+                              <input type="text" className="form-control" id="name" required />
+                            </div>
+                      
+                             <div className="mb-3">
+                              <h6>Email</h6>
+                              <label htmlFor="email" className="form-label">Activation Instructions will be emailed to this address.</label>
+                              <input type="email" className="form-control" id="email" required />
+                            </div>
+                      
+                             <div className="mb-3">
+                               <h6>Mobile</h6>
+                              {/* <label htmlFor="email" className="form-label">Mobile</label> */}
+                              <input type="email" className="form-control" id="email" required placeholder='Verified by OTP' />
+                            </div>
+                      
+                             <div className="mb-3">
+                              <h6>Manager</h6>
+                              {/* <label htmlFor="email" className="form-label">Manager</label> */}
+                              <input type="email" className="form-control" id="email" required />
+                            </div>
+                      
+                             <div className="mb-3">
+                              <h6>Team</h6>
+                              <label htmlFor="email" className="form-label">Team help you filter your reports.</label>
+                              <input type="email" className="form-control" id="email" required />
+                            </div>
+                      
+                          
+                            <h6 > <input type='checkbox'style={{ transform: "scale(1.4)", marginRight: "8px" }}></input>Permissions(ADMIN)</h6>
+                          <p>Permissions specify how Users can work with leads, contact , and deals.</p>
+                          <h6>Assign Permissions</h6>
+                          <p>Permission settings specify how users can work with leads, contacts, and deals.
+                            Assign an access level to give users to specific Permissions in Sell Learn more
+                          </p>
+                          <h6><input type='radio' name='access'></input>Full access (Formerly Manager) </h6>
+                          <p>A user with full access can view, update, delete, and convert any lead, contact,
+                            and deals in the account.They can also manage goals, task, and appointments
+                            and share document.
+                          </p>
+                          <h6><input type='radio' name='access'></input> Limited access (Formerly Users)</h6>
+                          <p>A user with Limited access can view, update, delete and convert their own leads,
+                            contacts and deals.You can add assitional by customizing </p>
+                            </div>
+                      
+                      
+                      
+                      <div>
+                        <p style={{borderTop: "1px solid ", borderBottom: "1px solid #000"}} >Create a new role</p>
+                                   <div className="mb-3">
+                            <label htmlFor="name" className="form-label">Role name</label>
+                              <input type="text" className="form-control" id="name" required placeholder='Manager (Sales)' />
+                      
+                      
+                                    <label htmlFor="name" className="form-label">Description</label>
+                                    <textarea type="text" style={{height:'100px'}} className="form-control" id="name" placeholder='Lets people know how this role should be used. '/>
+                                    <h6>Configure Setting Permission</h6>
+                                  <h8>Manage</h8><br></br>
+                              <div style={{ display: "flex", gap: "80px", alignItems: "center" }}>
+                        <label>
+                          <input type="checkbox" /> Profile
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Users
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Notification
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Sales Goal
+                        </label>
+                      </div>
+                          
+                      
+                           <h8 style={{ textDecoration: "underline" }}>Data</h8><br></br>
+                              <div style={{ display: "flex", gap: "40px", alignItems: "center", marginTop:'10px' }}>
+                        <label>
+                          <input type="checkbox" /> Import
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Export
+                        </label>
+                        <label>
+                          <input type="checkbox" />Bulk Update
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Duplicate Managment
+                        </label>
+                         <label>
+                          <input type="checkbox" />Prospecting and Enrich
+                        </label>
+                        <label>
+                          <input type="checkbox" />Lead Capture
+                            </label>
+                      </div>
+                                  <h8 style={{ textDecoration: "underline" }}>Communication Channels</h8><br></br>
+                              <div style={{ display: "flex", gap: "80px", alignItems: "center" , marginTop:'10px' }}>
+                        <label>
+                          <input type="checkbox" /> Email
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Voice(vertual Call)
+                        </label>
+                        <label>
+                          <input type="checkbox" />Text(SMS)
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Sales Goal
+                        </label>
+                      </div>
+                      
+                      <h8 style={{ textDecoration: "underline" }}>Customize</h8><br></br>
+                              <div style={{ display: "flex", gap: "40px", alignItems: "center", marginTop:'10px' }}>
+                        <label>
+                          <input type="checkbox" />Lead
+                        </label>
+                        <label>
+                          <input type="checkbox" />Contact
+                        </label>
+                        <label>
+                          <input type="checkbox" />Task
+                        </label>
+                        <label>
+                          <input type="checkbox" /> Properties
+                        </label>
+                         <label>
+                          <input type="checkbox" />Notes
+                        </label>
+                        <label>
+                          <input type="checkbox" />Templplates
+                            </label>
+                       <label>
+                          <input type="checkbox" />Layout
+                            </label>
+                             <label>
+                          <input type="checkbox" />Post Sales
+                            </label>
+                            </div>
+                      
+                      <h8 style={{ textDecoration: "underline" }}>Intergration</h8><br></br>
+                              <div style={{ display: "flex", gap: "40px", alignItems: "center" , marginTop:'10px'}}>
+                        <label>
+                          <input type="checkbox" />Intergration
+                        </label>
+                        <label>
+                          <input type="checkbox" />API
+                        </label>
+                        </div>
+                      
+                        <h8 style={{ textDecoration: "underline" }}>Business Rule</h8><br></br>
+                              <div style={{ display: "flex", gap: "40px", alignItems: "center", marginTop:'10px' }}>
+                        <label>
+                          <input type="checkbox" />Field Rules
+                        </label>
+                        <label>
+                          <input type="checkbox" />Distributions
+                        </label>
+                        <label>
+                          <input type="checkbox" />Post Sales
+                        </label>
+                         <label>
+                          <input type="checkbox" />Automated Actions
+                        </label>
+                         <label>
+                          <input type="checkbox" />Triggers
+                        </label>
+                         <label>
+                          <input type="checkbox" />Scoring
+                        </label>
+                        </div>
+                      </div>
+                      
+                       <div style={{ display: "flex", gap: "70px", marginTop:'25px',  borderTop: "1px solid #000",borderBottom: "1px solid #000"}}>
+                         <label>Leads</label>
+                          <label>Contacts</label>
+                           <label>Properties</label>
+                            <label>Task</label>
+                             <label>Booking</label>
+                              <label>Reports</label>
+                       </div>
+                       <div  style={{marginTop:'15px'}}>
+                       <h8>Can view Properties</h8> <br></br>
+                       <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view'></input> Their and subordinates' deals <br></br>
+                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view'></input>Their subordinates' and peers' deals<br></br>
+                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view'></input>Their subordinates'  peers and manager deals<br></br>
+                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view' ></input> Same deals as thier manager<br></br>
+                      </div>
+                             <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px" }} type="checkbox" />Can add Properties<br></br>
+                      
+                              <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px"}} type="checkbox" />Can update Properties<br></br>
+                               <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='update' ></input> Only thier and subordinates deals<br></br>
+                                <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='update' ></input> All deals they can view<br></br>
+                      
+                                <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px"}} type="checkbox" />Can reassign ownership of Properties<br></br>
+                               <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='reassing' ></input>Only thier and subordinates deals<br></br>
+                                <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='reassing' ></input>  All deals they can view<br></br>
+                      
+                                  <input style={{marginTop:'30px', transform: "scale(1.4)", marginRight: "8px"}} type="checkbox" />Can delete Properties<br></br>
+                               <input style={{marginTop:'10px'}} type='radio' name=' delete' ></input>Only thier and subordinates deals<br></br>
+                                <input style={{marginTop:'10px'}} type='radio' name=' delete' ></input>  All deals they can view<br></br>
+                      
+                               <div  style={{marginTop:'15px'}}>
+                                <h8 >Can view Properties Owner</h8> <br></br>
+                       <input style={{marginTop:'10px'}} type='radio' name='Owner'></input> Their and subordinates' deals <br></br>
+                        <input style={{marginTop:'10px'}} type='radio' name='Owner'></input>Their subordinates' and peers' deals<br></br>
+                        <input style={{marginTop:'10px'}} type='radio' name='Owner'></input>Their subordinates'  peers and manager deals<br></br>
+                        <input style={{marginTop:'10px'}} type='radio' name='Owner' ></input> Same deals as thier manager<br></br>
+                           </div>
+                      </div>
+                      
+                      
+                            
+                          </div>
+                                      
+                              
+                                
+                              
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                       
+                                            <Button variant="secondary" onClick={handleClose1}>
+                                              Cancel
+                                            </Button>
+                                            <Button variant="secondary" style={{display:selectedItems.length===0?"block":"none"}}>
+                                              Add user
+                                            </Button>
+                                         
+                                          </Modal.Footer>
+                                        </Modal>
+
+
                    </div>
         
       

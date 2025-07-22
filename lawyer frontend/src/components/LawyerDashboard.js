@@ -10,6 +10,9 @@ import { LineChart, Line, Tooltip, ResponsiveContainer, BarChart, Bar,PieChart, 
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts'
 import Lawyersidebar from './lawyersidebar';
 import logo from '../components/counvoImg/image.png'
+import '../css/lawyerdashboard.css'
+import { HiOutlinePaperClip } from 'react-icons/hi';
+import { IoSend } from 'react-icons/io5';
 
 const LawyerDashboard = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -141,7 +144,7 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
 //=================================== chat code start============================================================================
 
 
-const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
 
 
   // Chat functionality (keeping your existing chat code)
@@ -197,6 +200,7 @@ const [isMinimized, setIsMinimized] = useState(false);
       ...prev,
       { text: message, fileUrl, fileName, fileType, isMe: false }
     ]);
+     markMessagesRead(from);
   }
 
   // Fetch client info if not already fetched
@@ -255,9 +259,22 @@ const showAcceptPopup = (clientId) => {
   setNeedsAccept(prev => ({ ...prev, [clientId]: shouldAccept }));
 };
 
+const markMessagesRead = async (clientId) => {
+  try {
+    const lawyerId = lawyerdetails.lawyer._id;
+    socket.emit('markMessagesRead', {
+      readerId: lawyerId,
+      senderId: clientId,
+      readerModel: 'Lawyer'
+    });
+  } catch (err) {
+    console.error('Failed to mark messages read', err);
+  }
+};
 
  const handleOpenChat = async (client) => {
   setSelectedClient(client);
+    markMessagesRead(client._id);
 
   // Show accept dialog if session is expired/missing
   // showAcceptPopup(client._id);
@@ -275,6 +292,7 @@ const showAcceptPopup = (clientId) => {
 
 
   const handleSend = (e) => {
+    handleLawyerTyping()
     if (e.key === 'Enter' && e.target.value.trim()) {
       const msg = e.target.value.trim();
       e.target.value = '';
@@ -313,6 +331,7 @@ const showAcceptPopup = (clientId) => {
         const formatted = data.map(msg => ({
           text: msg.message,
           isMe: msg.from === user1Id,
+          timestamp: msg.timestamp
         }));
         setMessages(formatted);
       } else {
@@ -329,6 +348,71 @@ const showAcceptPopup = (clientId) => {
     return phoneRegex.test(text) || emailRegex.test(text);
   }
 
+  //==================================== typing indicaton==============================================
+
+  const handleLawyerTyping = () => {
+  if (!selectedClient?._id) return;
+  socket.emit('typing', {
+    toUserId: selectedClient._id,
+    fromUserType: 'lawyer',
+    name: lawyerdetails.lawyer.firstName || 'Lawyer',
+    fromUserId: lawyerdetails.lawyer._id
+  });
+};
+
+const [typingStatus, setTypingStatus] = useState('');
+const typingTimeout = useRef();
+
+useEffect(() => {
+  socket.on('typing', ({ fromUserType, name, fromUserId }) => {
+    if (selectedClient?._id === fromUserId) { // Only show for current client
+      setTypingStatus(`${name} is typing...`);
+      clearTimeout(typingTimeout.current);
+      typingTimeout.current = setTimeout(() => setTypingStatus(''), 1500);
+    }
+  });
+  return () => socket.off('typing');
+}, [selectedClient]);
+
+const [clientMap, setClientMap] = useState({}); // { clientId: clientName, ... }
+
+
+
+
+useEffect(() => {
+  socket.on('missedMessagesNotification', async (notifications) => {
+    // Get unique client IDs to fetch
+    const clientIds = [...new Set(notifications.map(n => n._id))];
+
+    // Fetch clients data from API 
+    const clientIdNameMap = {};
+    await Promise.all(clientIds.map(async (id) => {
+      try {
+        const res = await api.get(`/api/user/${id}`);
+        clientIdNameMap[id] = res.data.fullName || 'Client';
+      } catch {
+        clientIdNameMap[id] = 'Client'; // fallback
+      }
+    }));
+
+    // Show notifications with correct names
+    notifications.forEach(({ _id: clientId, count }) => {
+      const name = clientIdNameMap[clientId] || clientId;
+      Swal.fire({
+        icon: 'info',
+        title: 'Unread Messages',
+        text: `You have ${count} unread message${count > 1 ? 's' : ''} from ${name}.`,
+        timer: 4000,
+        showConfirmButton: true,
+      });
+    });
+  });
+
+  return () => socket.off('missedMessagesNotification');
+}, []);
+
+
+
 
   //===================================== chat code end==================================================================
   // const handleLogout = () => {
@@ -340,7 +424,7 @@ const showAcceptPopup = (clientId) => {
   const menuItems = [
     { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
     { label: 'Profile', icon: '👤', path: './completelawyerprofile' },
-    { label: 'Clients', icon: '👥', path: '/clients' },
+    { label: 'Clients', icon: '👥', path: '/lawyerchathistory' },
     { label: 'Messages', icon: '💬' },
     { label: 'My Cases', icon: '📂', path: '/cases' },
     { label: 'Schedule', icon: '📅', path: '/schedule' },
@@ -1650,7 +1734,8 @@ const showAcceptPopup = (clientId) => {
       <div className="chat-input" style={{
         padding: "1rem",
         borderTop: "1px solid #e5e7eb",
-        background: "white"
+        background: "white",
+        width:"90%"
       }}>
         <input
           type="text"
@@ -1673,7 +1758,57 @@ const showAcceptPopup = (clientId) => {
             Accept the chat request to start/continue chatting with this client.
           </div>
         )}
+
+                 <button
+                      className="actionbutton"
+            type="button"
+            // onClick={()=>{handleSendMessage(message);
+            //    setMessage('')}
+            //   }
+            style={{
+              position: 'absolute',
+              right: '20px',
+              top: '92%',
+              transform: 'translateY(-50%)',
+              background: 'none',
+              border: 'none',
+              color: '#54656f',
+              fontSize: '24px',
+              cursor: 'pointer',
+              padding: 0,
+              margin: 0
+            }}
+            title="Send"
+            tabIndex={-1}
+          >
+            <IoSend />
+          </button>
+        
+           <button
+             className="actionbutton"
+          type="button"
+          // onClick={() => fileInputRef.current.click()}
+          style={{
+            position: 'absolute',
+            right: '20%',
+            top: '92%',
+            transform: 'translateY(-50%)',
+            background: 'none',
+            border: 'none',
+            color: 'gray',
+            fontSize: '20px',
+            cursor: 'pointer',
+            padding: 0,
+            margin: 0
+          }}
+          title="Attach Document"
+          tabIndex={-1}
+        >
+            <HiOutlinePaperClip />
+        </button>
+
       </div>
+      {typingStatus && <div className="typing-indicator">{typingStatus}</div>}
     </div>
   )
 )}

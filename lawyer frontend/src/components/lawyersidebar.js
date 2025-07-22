@@ -34,8 +34,8 @@ function Lawyersidebar() {
   const menuItems = [
     { label: 'Dashboard', icon: '■', path: '/Lawyerdashboard' },
     { label: 'Profile', icon: '◉', path: '/LawyerDashboard/completelawyerprofile' },
-    { label: 'Clients', icon: '◎', path: '/clients' },
-    { label: 'Messages', icon: '✉', path: '/messages' },
+    { label: 'Clients', icon: '◎', path: '/lawyerchathistory' },
+    // { label: 'Messages', icon: '✉', path: '/messages' },
     // { label: 'My Cases', icon: '▣', path: '/cases' },
     // { label: 'Schedule', icon: '◈', path: '/schedule' },
     // { label: 'Billing', icon: '▦', path: '/billing' },

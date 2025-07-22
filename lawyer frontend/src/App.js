@@ -23,6 +23,7 @@ import ContactUs from './components/contactus';
 import Allchat from './components/allchat';
 import { LawyerFeedbackForm } from './components/lawyerfeedback';
 import CustomerFeedbackForm from './components/customerfeedback';
+import LawyerChatHistory from './components/lawyerchathistory';
 
 
 
@@ -50,6 +51,7 @@ function App() {
       <Route path='/aboutus' element={<AboutUs/>}></Route>
       <Route path='/contactus' element={<ContactUs/>}></Route>
       <Route path='/allchat' element={<Allchat/>}></Route>
+      <Route path='/lawyerchathistory' element={<LawyerChatHistory/>}></Route>
     </Routes>  
 
    </div>

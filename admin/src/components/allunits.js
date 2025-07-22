@@ -4559,262 +4559,24 @@ const excelSerialToDateString = (serial) => {
           <Header1/>
             <Sidebar1/>
           <div id="unitlistview" className="flip-card-back1">
-                  <div style={{marginTop:"53px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px"}}>
+                  <div style={{marginTop:"53px",paddingLeft:"80px",backgroundColor:"white",display:"flex",paddingTop:"10px",paddingBottom:"10px",height:"70px"}}>
                 
                 <h3 style={{marginLeft:"10px",cursor:"pointer"}}>Inventories</h3>
                 <Tooltip title="Export Data.." arrow>
-                    <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none"}}>
+                    <button  class="btn btn-secondary " type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{color:"black",backgroundColor:"transparent",border:"none",marginBottom:"10px"}}>
                     <img src="https://static.thenounproject.com/png/61783-200.png" style={{height:"25px"}} alt=""/>
-                </button></Tooltip>
+                </button>
+                </Tooltip>
                     <ul class="dropdown-menu" id="exporttoexcel"> 
                     
                     <li  onClick={exportToExcel} >Export Data</li>
                       
                     </ul>
-                    
-        
+                    {/* <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button> */}
+                    <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{ padding: "5px", background: "#007bff", color: "#fff", border: "none", borderRadius: 6, fontWeight: 600, marginBottom: 16, cursor: "pointer",marginTop:"0px",marginLeft:"75%",width:"100px"}}>Add Fields</button>
+              </div>
 
-
-        
-                         {/* <div
-                    ref={toastRefunit}
-                    className={`feedback-toast ${showunit ? (isClosingunit ? 'hide' : 'show') : ''}`}
-                    style={{ zIndex: 9999 }}
-                  >
-                    <div
-                      ref={filterRefunit}
-                      style={{
-                        position: 'absolute',
-                        top: '60px',
-                        right: '25px',
-                        width: '380px',
-                        background: 'linear-gradient(135deg, #ffffff, #f7f9fb)',
-                        border: '1px solid #e0e0e0',
-                        borderRadius: '16px',
-                        padding: 0,
-                        boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)',
-                        zIndex: 1000,
-                        fontFamily: 'Segoe UI, sans-serif',
-                        overflow: 'hidden',
-                      }}
-                    >
-                   
-                      <h3 style={{
-                        fontSize: '16px',
-                        margin: 0,
-                        padding: '16px',
-                        textAlign: 'center',
-                        background: 'linear-gradient(to right, #00b4db, #0083b0)',
-                        color: '#fff',
-                        borderBottom: '1px solid #ddd',
-                        letterSpacing: '0.5px'
-                      }}>
-                        🔍 Filter Units
-                      </h3>
-        
-                    
-                      <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        background: '#f2f4f7',
-                        borderBottom: '1px solid #ccc'
-                      }}>
-                        {[
-                          { id: 'profession', label: '🗂️ Category' },
-                          { id: 'custom', label: '📋 Custom Fields' }
-                        ].map(tab => (
-                          <div
-                            key={tab.id}
-                            style={{
-                              flex: 1,
-                              textAlign: 'center',
-                              cursor: 'pointer',
-                              padding: '10px 0',
-                              fontWeight: 'bold',
-                              color: activeTab === tab.id ? '#007bff' : '#555',
-                              background: activeTab === tab.id ? '#fff' : '#f2f4f7',
-                              borderBottom: activeTab === tab.id ? '3px solid #007bff' : '3px solid transparent',
-                              transition: 'all 0.3s ease'
-                            }}
-                            onClick={() => setActiveTab(tab.id)}
-                          >
-                            {tab.label}
-                          </div>
-                        ))}
-                      </div>
-        
-                     
-                      <div style={{ padding: '20px', maxHeight: '400px', overflowY: 'auto' }}>
-                       
-                        {activeTab === 'profession' && (
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr 1fr',
-                            gap: '12px',
-                          }}>
-                            {unitcategory.map((profession) => (
-                              <label
-                                key={profession}
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  background: '#fff',
-                                  border: '1px solid #ddd',
-                                  borderRadius: '10px',
-                                  padding: '10px 14px',
-                                  fontSize: '14px',
-                                  color: '#333',
-                                  cursor: 'pointer',
-                                  boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                                  transition: 'all 0.3s ease',
-                                }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = '#f0f8ff';
-                                  e.currentTarget.style.borderColor = '#007bff';
-                                  e.currentTarget.style.boxShadow = '0 3px 8px rgba(0, 123, 255, 0.2)';
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = '#fff';
-                                  e.currentTarget.style.borderColor = '#ddd';
-                                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
-                                }}
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedunitcategory.includes(profession)}
-                                  onChange={() => handlefilterCheckboxChange(profession)}
-                                  style={{
-                                    marginRight: '10px',
-                                    accentColor: '#007bff'
-                                  }}
-                                />
-                                {profession}
-                              </label>
-                            ))}
-                          </div>
-        
-                        )}
-        
-                    
-                        {activeTab === 'custom' && (
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1fr',
-                            gap: '14px',
-                          }}>
-                            {unitfields.map(({ label, field }) => (
-                              <div
-                                key={field}
-                                style={{
-                                  background: '#fff',
-                                  border: '1px solid #ddd',
-                                  borderRadius: '10px',
-                                  padding: '14px 16px',
-                                  boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                                  transition: 'all 0.3s ease',
-                                  position: 'relative'
-                                }}
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = '#f9fdfc';
-                                  e.currentTarget.style.borderColor = '#28a745';
-                                  e.currentTarget.style.boxShadow = '0 3px 10px rgba(40,167,69,0.2)';
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = '#fff';
-                                  e.currentTarget.style.borderColor = '#ddd';
-                                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
-                                }}
-                              >
-                                <label style={{
-                                  fontSize: '14px',
-                                  color: '#333',
-                                  fontWeight: 500,
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  marginBottom: field in selectfieldunit ? '10px' : 0
-                                }}>
-                                  <input
-                                    type="checkbox"
-                                    checked={field in selectfieldunit}
-                                    onChange={() => handlefilterCheckboxChange1(field)}
-                                    style={{
-                                      marginRight: '10px',
-                                      accentColor: '#28a745'
-                                    }}
-                                  />
-                                  {label}
-                                </label>
-        
-                                {field in selectfieldunit && (
-                                  field.includes('date') ? (
-                                    <input
-                                      type="date"
-                                      value={selectfieldunit[field]}
-                                      onChange={(e) => handleFieldInputChange(field, e.target.value)}
-                                      style={enhancedInputStyle}
-                                    />
-                                  ) : (
-                                    <input
-                                      type="text"
-                                      placeholder={`Search by ${label}`}
-                                      value={selectfieldunit[field]}
-                                      onChange={(e) => handleFieldInputChange(field, e.target.value)}
-                                      style={enhancedInputStyle}
-                                    />
-                                  )
-                                )}
-                              </div>
-                            ))}
-                          </div>
-        
-                                )}
-                              </div>
-        
-                 
-                          <div style={{
-                          padding: '14px',
-                          borderTop: '1px solid #eee',
-                          background: '#f9f9f9',
-                          display: 'flex',
-                          justifyContent: 'space-around',
-                          gap: '10px'
-                        }}>
-                          <button
-                            className="btn btn-secondary"
-                            style={{
-                              width: '45%',
-                              padding: '6px 12px',
-                              fontSize: '14px',
-                              borderRadius: '6px',
-                              backgroundColor: '#6c757d',
-                              border: 'none',
-                              color: '#fff',
-                              boxShadow: '0 3px 8px rgba(0,0,0,0.1)',
-                              transition: 'background 0.3s ease',
-                            }}
-                            onClick={handleResetFiltersunit}
-                          >
-                            🔄 Reset
-                          </button>
-        
-                          <button
-                            className="btn btn-danger"
-                            style={{
-                              width: '45%',
-                              padding: '6px 12px',
-                              fontSize: '14px',
-                              borderRadius: '6px',
-                              boxShadow: '0 3px 8px rgba(0,0,0,0.1)'
-                            }}
-                            onClick={handleCancelunit}
-                          >
-                            ❌ Cancel
-                          </button>
-                        </div>
-        
-                    </div>
-                  </div> */}
-        
+                      
  <div ref={toastRefunit}
                     className={`feedback-toast ${showunit ? (isClosingunit ? 'hide' : 'show') : ''}`} 
                     style={{marginTop:"2%", width: 400, background: "#fff", borderRadius: 14,boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)", padding: 10,overflow:"auto",height:"90%",overflowX:"auto"}}>
@@ -4931,17 +4693,7 @@ const excelSerialToDateString = (serial) => {
 
     
 
-</div>
-
-
-        
-                    {/* <button  className="form-control form-control-sm form-control form-control-sm-sm" style={{width:"150px",marginLeft:"65%"}}>Filter</button> */}
-                    <button onClick={handleAddColumnClick1} className="form-control form-control-sm form-control form-control-sm-sm" style={{ padding: "5px", background: "#007bff", color: "#fff", border: "none", borderRadius: 6, fontWeight: 600, marginBottom: 16, cursor: "pointer",marginTop:"20px",marginLeft:"70%",width:"100px"}}>Add Fields</button>
-                
-               
-              
-                  
-              </div> 
+</div> 
         
               <div style={{marginTop:"2px",backgroundColor:"white",height:"60px",paddingLeft:"80px",display:"flex",gap:"20px"}}>
                 <div className="lead" style={{width:"200px",padding:"10px",borderRadius:"10px"}} onClick={()=>setFlattenedUnits(activeunits)}>
@@ -5014,7 +4766,7 @@ const excelSerialToDateString = (serial) => {
                 </ul>
               )} */}
                <Tooltip title="Filter here.." arrow>
-  <div style={{marginLeft:"60%", border:"none", cursor:"pointer",position:"absolute",marginTop:"10px"}}>
+  <div style={{marginLeft:"62%", border:"none", cursor:"pointer",position:"absolute",marginTop:"10px"}}>
     <button
       onClick={toggleToastunit}
       style={{

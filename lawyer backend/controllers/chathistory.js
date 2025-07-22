@@ -37,6 +37,19 @@ const getallchathistory=async(req,res)=>
   }
 }
 
+const getallchathistoryforrecentchat=async(req,res)=>
+{
+   try {
+
+     const messages = await Message.find()
+    res.status(200).send(messages);
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to fetch messages' });
+    console.log(error);
+    
+  }
+}
+
 
 
 
@@ -67,4 +80,4 @@ const uploaddocument= async (req, res) => {
 
 
 
-module.exports={getchathistory,getallchathistory,uploaddocument}
+module.exports={getchathistory,getallchathistory,uploaddocument,getallchathistoryforrecentchat}

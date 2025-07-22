@@ -26,6 +26,7 @@ const { add_leadscore, view_leadscore, delete_leadscore, updateleadscore } = req
 const { add_templete, view_templete } = require('../controllers/addtemplets');
 const { add_instanceid, view_instanceid } = require('../controllers/whatsappinstanceid');
 const { add_feedback } = require('../controllers/feedbackform');
+const { add_user, view_user, update_user, remove_user } = require('../controllers/adduser');
 
 
 
@@ -194,5 +195,11 @@ router.post('/addinstanceid',add_instanceid)
 router.get('/viewinstanceid',view_instanceid)
 
 router.post('/addfeedback',add_feedback)
+
+
+router.post('/adduser',add_user)
+router.get('/viewuser',view_user)
+router.put('/updateuser/:_id',update_user)
+router.delete('/deleteuser/:_id',remove_user)
 
 module.exports=router;

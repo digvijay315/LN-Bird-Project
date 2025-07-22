@@ -635,3 +635,15 @@ tr:hover {
     transform: rotateY(0deg);
   }
 }
+
+
+
+
+
+.typing-indicator {
+  color: #888;
+  font-size: 0.94em;
+  margin: 14px 10px 8px 0;
+  /* font-style: italic; */
+  height: 22px;
+}
