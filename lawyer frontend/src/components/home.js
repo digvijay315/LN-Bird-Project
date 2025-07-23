@@ -1027,7 +1027,7 @@ const typingTimeout = useRef();
 useEffect(() => {
   socket.on('typing', ({ fromUserType, name, fromUserId }) => {
     if (chatLawyer?._id === fromUserId) { // Only current chat
-      setTypingStatus(`${name} is typing...`);
+      setTypingStatus(`typing...`);
       clearTimeout(typingTimeout.current);
       typingTimeout.current = setTimeout(() => setTypingStatus(''), 1500); // hides after 1.5s
     }
@@ -1772,7 +1772,7 @@ console.log(clientIds);
   }
   .chat-popup {
     width: 100vw;
-    height: 100vh;
+    height: 100% !important;
     bottom: 0;
     left: 0;
     right: 0;
@@ -1812,6 +1812,12 @@ console.log(clientIds);
   .main1 > div {
     padding: 20px 8px !important;
   }
+    .typing-indicator
+    {
+        position:absolute;
+        padding-left:40%;
+        margin-top:-10px;
+    }
     
 }
 
@@ -1849,6 +1855,7 @@ console.log(clientIds);
                 </div>
               </div>
             </div>
+                 {typingStatus && <div className="typing-indicator" style={{color:"white",paddingRight:"80px",paddingTop:"20px"}}>{typingStatus}</div>}
             <div className="header-actions">
         <button
         onClick={handleSwapLawyer}
@@ -1879,6 +1886,7 @@ console.log(clientIds);
           ✖
         </button>
       </div>
+    
             {/* <button
               onClick={() => setChatLawyer(null)}
               style={{
@@ -1980,7 +1988,7 @@ console.log(clientIds);
     <HiOutlinePaperClip />
 </button>
           </div>
-          {typingStatus && <div className="typing-indicator">{typingStatus}</div>}
+       
 
         </div>
         

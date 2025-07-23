@@ -4,6 +4,8 @@ import socket from './socket';
 import Swal from 'sweetalert2';
 import api from '../api';
 import Header from './header';
+import { HiOutlinePaperClip } from 'react-icons/hi';
+import { IoSend } from 'react-icons/io5';
 
 function Clientchathistory() {
 
@@ -14,6 +16,7 @@ function Clientchathistory() {
        const [lawyers, setLawyers] = useState([]);
          const [chatLawyer, setChatLawyer] = useState(null);
          const [messages, setMessages] = useState([]);
+             const [message, setMessage] = useState('');
          const [messageMap, setMessageMap] = useState({});
          const [isFlipping, setIsFlipping] = useState(false);
              const [isLoading, setIsLoading] = useState(false);
@@ -556,40 +559,60 @@ function Clientchathistory() {
     }
   }
 
-  @media (max-width: 480px) {
-  .main1{
-      margin-left:0px
-      }
-    .lawyers-grid {
-      grid-template-columns: 1fr;
-      gap: 1rem;
+ @media (max-width: 480px) {
+  .main1 {
+    margin-left: 0px;
+  }
+  .lawyers-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .chat-popup {
+    width: 100vw;
+    height: 100% !important;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
+  }
+  .chat-header {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    height: 56px;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+  }
+  .header-actions {
+    margin-left: 0;
+    margin-top: 0;
+    display: flex;
+    gap: 0.5rem;
+
+  }
+ .chat-input {
+    padding-bottom: 2.5rem;
+    gap: 0.25rem;
+  }
+  .chat-input input {
+    font-size: 1rem;
+    padding: 0.65rem 1rem;
+    width:85%;
+  }
+    .actionbutton
+    {
+    margin-top:-10px !important;
     }
-    .chat-popup {
-      width: 100vw;
-      height: 100vh;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      border-radius: 0;
-    }
-    .chat-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .chat-input input {
-      font-size: 1rem;
-    }
-    select {
-      min-width: 100% !important;
-    }
-    .action-btn {
-      width: 100%;
-      justify-content: center;
-    }
-    .main1 > div {
-      padding: 20px 16px !important;
-    }
+
+  select {
+    min-width: 100% !important;
+  }
+  .main1 > div {
+    padding: 20px 8px !important;
+  }
+    
+}
+
       
         
       `}</style>
@@ -866,6 +889,7 @@ function Clientchathistory() {
             <input
               type="text"
               placeholder="Type a message..."
+               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && e.target.value.trim()) {
                   handleSendMessage(e.target.value.trim());
@@ -873,7 +897,7 @@ function Clientchathistory() {
                 }
               }}
             />
-   <button
+   {/* <button
   type="button"
   onClick={() => fileInputRef.current.click()}
   style={{
@@ -893,6 +917,53 @@ function Clientchathistory() {
   tabIndex={-1}
 >
   🗂️
+</button> */}
+           <button
+              className="actionbutton"
+    type="button"
+    onClick={()=>{handleSendMessage(message);
+       setMessage('')}
+      }
+    style={{
+      position: 'absolute',
+      right: '20px',
+      top: '92%',
+      transform: 'translateY(-50%)',
+      background: 'none',
+      border: 'none',
+      color: '#54656f',
+      fontSize: '24px',
+      cursor: 'pointer',
+      padding: 0,
+      margin: 0
+    }}
+    title="Send"
+    tabIndex={-1}
+  >
+    <IoSend />
+  </button>
+
+   <button
+     className="actionbutton"
+  type="button"
+  onClick={() => fileInputRef.current.click()}
+  style={{
+    position: 'absolute',
+    right: '20%',
+    top: '92%',
+    transform: 'translateY(-50%)',
+    background: 'none',
+    border: 'none',
+    color: 'gray',
+    fontSize: '20px',
+    cursor: 'pointer',
+    padding: 0,
+    margin: 0
+  }}
+  title="Attach Document"
+  tabIndex={-1}
+>
+    <HiOutlinePaperClip />
 </button>
 
           </div>

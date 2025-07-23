@@ -13,6 +13,7 @@ import logo from '../components/counvoImg/image.png'
 import '../css/lawyerdashboard.css'
 import { HiOutlinePaperClip } from 'react-icons/hi';
 import { IoSend } from 'react-icons/io5';
+import { FiMinus } from 'react-icons/fi';
 
 const LawyerDashboard = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -366,7 +367,7 @@ const typingTimeout = useRef();
 useEffect(() => {
   socket.on('typing', ({ fromUserType, name, fromUserId }) => {
     if (selectedClient?._id === fromUserId) { // Only show for current client
-      setTypingStatus(`${name} is typing...`);
+      setTypingStatus(`typing...`);
       clearTimeout(typingTimeout.current);
       typingTimeout.current = setTimeout(() => setTypingStatus(''), 1500);
     }
@@ -1083,6 +1084,14 @@ useEffect(() => {
         }
 
         @media (max-width: 480px) {
+          .chat-popup {
+            width: calc(100vw - 0px);
+            height:98% !important;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
+            top:0px;
+          }
           .stats-grid {
             grid-template-columns: 1fr;
           }
@@ -1102,7 +1111,7 @@ useEffect(() => {
             gap: 0.5rem;
           }
           .main-content {
-          margin-left:-0px
+          margin-left:0px
         
         }
         }
@@ -1302,7 +1311,7 @@ useEffect(() => {
           {/* Content Grid */}
           <div className="content-grid">
             {/* Cases Section */}
-            <div className="content-section">
+            {/* <div className="content-section">
               <div className="section-header">
                 <h2 className="section-title">
                   📂 Recent Cases
@@ -1342,7 +1351,7 @@ useEffect(() => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Clients Section */}
             <div className="content-section">
@@ -1540,6 +1549,9 @@ useEffect(() => {
         alignItems: "center"
       }}>
         <span style={{ fontWeight: 600, fontSize: 17 }}>💬 Messages</span>
+
+        {typingStatus && <div className="typing-indicator" style={{color:"white",paddingRight:"0px",paddingTop:"20px"}}>{typingStatus}</div>}
+
         <div style={{ display: "flex", alignItems: "center" }}>
           <button
             onClick={() => setIsMinimized(true)}
@@ -1553,7 +1565,7 @@ useEffect(() => {
             }}
             title="Minimize"
           >
-            ➖
+            <FiMinus />
           </button>
           <button
             onClick={() => setShowChat(false)}
@@ -1569,6 +1581,7 @@ useEffect(() => {
             ✖
           </button>
         </div>
+              
       </div>
 
       <div className="chat-tabs" style={{
@@ -1808,7 +1821,7 @@ useEffect(() => {
         </button>
 
       </div>
-      {typingStatus && <div className="typing-indicator">{typingStatus}</div>}
+
     </div>
   )
 )}

@@ -4,6 +4,8 @@ import socket from './socket';
 import Swal from 'sweetalert2';
 import api from '../api';
 import Header from './header';
+import { HiOutlinePaperClip } from 'react-icons/hi';
+import { IoSend } from 'react-icons/io5';
 
 function LawyerChatHistory() {
   const lawyerdetails = JSON.parse(localStorage.getItem('lawyerDetails')); // should be lawyer info
@@ -231,12 +233,12 @@ function LawyerChatHistory() {
                       </span>
                     </div>
                     <div className="lawyer-details">
-                      <div>
+                      {/* <div>
                         <strong>Mobile:</strong> {client.contact_no}
-                      </div>
-                      <div>
+                      </div> */}
+                      {/* <div>
                         <strong>Email:</strong> {client.email}
-                      </div>
+                      </div> */}
                     </div>
                     {/* <div className="chat-message">
                       <strong>Last Message:</strong> {chat.message}
@@ -307,8 +309,9 @@ function LawyerChatHistory() {
                     }
                   }}
                 />
-                <button
-                  className="action-btn"
+                  
+                {/* <button
+                  className="actionbutton"
                   style={{ width: 38 }}
                   onClick={() => {
                     if (inputRef.current && inputRef.current.value.trim()) {
@@ -318,7 +321,59 @@ function LawyerChatHistory() {
                   }}
                 >
                   ➤
-                </button>
+                </button> */}
+
+              <button
+                                className="actionbutton"
+                      type="button"
+                      onClick={() => {
+                        if (inputRef.current && inputRef.current.value.trim()) {
+                          handleSendMessage(inputRef.current.value.trim());
+                          inputRef.current.value = '';
+                        }
+                      }}
+                      style={{
+                        position: 'absolute',
+                        right: '20px',
+                        top: '92%',
+                        transform: 'translateY(-50%)',
+                        background: 'none',
+                        border: 'none',
+                        color: '#54656f',
+                        fontSize: '24px',
+                        cursor: 'pointer',
+                        padding: 0,
+                        margin: 0
+                      }}
+                      title="Send"
+                      tabIndex={-1}
+                    >
+                      <IoSend />
+                    </button>
+                        
+                           <button
+                             className="actionbutton"
+                          type="button"
+                          // onClick={() => fileInputRef.current.click()}
+                          style={{
+                            position: 'absolute',
+                            right: '20%',
+                            top: '92%',
+                            transform: 'translateY(-50%)',
+                            background: 'none',
+                            border: 'none',
+                            color: 'gray',
+                            fontSize: '20px',
+                            cursor: 'pointer',
+                            padding: 0,
+                            margin: 0
+                          }}
+                          title="Attach Document"
+                          tabIndex={-1}
+                        >
+                            <HiOutlinePaperClip />
+                        </button>
+
               </div>
             </div>
           )}
@@ -506,6 +561,7 @@ function LawyerChatHistory() {
 }
   .actionbutton{
         margin-top:10px !important;
+      
   }
 
 
@@ -560,7 +616,7 @@ function LawyerChatHistory() {
   }
   .chat-popup {
     width: 100vw;
-    height: 100vh;
+    height: 100% !important;
     bottom: 0;
     left: 0;
     right: 0;
@@ -583,11 +639,12 @@ function LawyerChatHistory() {
  .chat-input {
     padding-bottom: 2.5rem;
     gap: 0.25rem;
+     width:90%;
   }
   .chat-input input {
     font-size: 1rem;
     padding: 0.65rem 1rem;
-    width:70%
+ 
   }
     .actionbutton
     {
