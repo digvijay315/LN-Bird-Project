@@ -122,7 +122,7 @@ function Clients() {
   return (
     <div>
         <Adminsidebar/>
-        <Adminpanelheader/>
+        {/* <Adminpanelheader/> */}
         <main style={{marginLeft:"15%",marginTop:"1%"}}>
              <div style={{padding:"50px"}}>
             <Box sx={{ height: 500, width: '100%', p: 2 }}>

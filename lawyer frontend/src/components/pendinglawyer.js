@@ -137,7 +137,7 @@ const PendingLawyersTable = () => {
   return (
     <div>
         <Adminsidebar/>
-        <Adminpanelheader/>
+        {/* <Adminpanelheader/> */}
         <div style={{marginLeft:"15%",marginTop:"5%",padding:"50px"}}>
     <Box sx={{ height: 500, width: '100%', p: 2 }}>
       <Typography variant="h5" gutterBottom>

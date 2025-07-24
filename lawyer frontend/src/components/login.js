@@ -212,6 +212,37 @@ const handleRegister = async (e) => {
 const handleLogin = async (e) => {
   e.preventDefault();
 
+     const credentialsadmin = loginRole === 'admin' ? 
+           { email: loginData.email, password: loginData.password }:""
+
+           if(credentialsadmin)
+           {
+            if(credentialsadmin.email==="admin@gmail.com" && credentialsadmin.password==="admin123")
+            {
+               Swal.fire({
+                icon: 'success',
+                title: 'Login Successful!',
+                text: "Welcome Admin...",
+                showConfirmButton: true,
+              });
+              navigate('/adminpanel')
+            }
+            else
+            {
+                 Swal.fire({
+                icon: 'error',
+                title: 'Login Error!',
+                text: "invalid admin id",
+                showConfirmButton: true,
+              });
+              
+            }
+            
+           }
+           
+
+if(!credentialsadmin)
+{
   try {
     setIsLoading(true);
     const endpoint = loginRole === 'user'
@@ -222,10 +253,11 @@ const handleLogin = async (e) => {
       ? { username: loginData.username, password: loginData.password }
       : { email: loginData.email, password: loginData.password };
 
+       
+
     const response = await api.post(endpoint, credentials);
     const data = response.data;
-    console.log(data);
-    
+ 
     if(response.status === 200) {
       // Set current login time BEFORE showing success message
       const currentLoginTime = new Date().toISOString();
@@ -281,7 +313,8 @@ const handleLogin = async (e) => {
   } finally {
     setIsLoading(false);
   }
-};
+}
+}
 
 
 
@@ -309,6 +342,7 @@ const handleLogin = async (e) => {
               >
                 <option value="user">Login as User</option>
                 <option value="lawyer">Login as Lawyer</option>
+                <option value="admin">Login as Admin</option>
               </select>
 
               {loginRole === 'user' ? (
@@ -343,7 +377,7 @@ const handleLogin = async (e) => {
                 style={inputStyle} 
               />
               <button type="submit" style={buttonStyle}>
-                {loginRole === 'user' ? 'Login as User' : 'Login as Lawyer'}
+                {loginRole === 'user' ? 'Login as User' : loginRole === 'lawyer'?'Login as Lawyer':"Login as Admin"}
               </button>
             </form>
           ) : (

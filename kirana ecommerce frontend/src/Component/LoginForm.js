@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from './api'
 
 function LoginForm() {
   const [formData, setFormData] = useState({
@@ -25,7 +26,7 @@ function LoginForm() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/api/user/login", {
+      const response = await api.post("api/user/login", {
         email: formData.email,
         password: formData.password,
       });
@@ -38,7 +39,7 @@ function LoginForm() {
 
         setTimeout(() => {
           setSuccessMessage("");
-          navigate("/dashboard");
+          navigate("/");
         }, 2000);
       }
     } catch (error) {

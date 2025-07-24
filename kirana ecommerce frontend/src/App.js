@@ -22,6 +22,8 @@ import Userhomepage from "./Component/user/userhomepage";
 import ViewCart from "./Component/user/viewcart";
 import Checkout from "./Component/user/checkout";
 import Sidebar from "./Component/sidebar";
+import UserProfileUpdate from "./Component/user/userprofileupdate";
+import MyOrders from "./Component/user/myorders";
 
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
           <Route path="/Setpassword" element={<SetNewPassword />} />
           <Route path="/viewcart" element={<ViewCart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/updateuserprofile" element={<UserProfileUpdate />} />
+          <Route path="/myorders" element={<MyOrders />} />
         </Routes>  
   
       </BrowserRouter>

@@ -233,7 +233,7 @@ const[data1,setdata1]=useState([]);
     console.log(sizeValue);
     
     const regex = /\((\d+(\.\d+)?)\s*(\w+\s\w+)\)/;
-  const match = sizeValue.match(regex);
+  const match = sizeValue?.match(regex);
 
   if (match) {
     setNumericValue(parseFloat(match[1]));

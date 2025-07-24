@@ -856,6 +856,7 @@ const filterLawyersAndChat = () => {
       if (chatLawyer?._id === from) {
         setMessages((prev) => [...prev, { text: message, isMe: false }]);
       }
+       markMessagesRead(from);
     });
 
     return () => {
@@ -928,11 +929,26 @@ const filterLawyersAndChat = () => {
     setIsLoading(false);
   };
 
+const markMessagesRead = async (lawyerid) => {
+  try {
+    const userid = userData.user._id;
+    socket.emit('markMessagesRead', {
+      readerId: userid,
+      senderId: lawyerid,
+      readerModel: 'User'
+    });
+  } catch (err) {
+    console.error('Failed to mark messages read', err);
+  }
+};
+
 
   
   const handleOpenChat = async (lawyer) => {
     const isOnline = onlineLawyers.includes(lawyer._id);
     setChatLawyer({ ...lawyer, isOnline });
+    
+    markMessagesRead(lawyer._id);
 
     const clientId = userData.user._id;
     const lawyerId = lawyer._id;
@@ -1040,7 +1056,7 @@ useEffect(() => {
   socket.on('missedMessagesNotification', async (notifications) => {
     // Get unique client IDs to fetch
     const clientIds = [...new Set(notifications.map(n => n._id))];
-console.log(clientIds);
+
 
     // Fetch clients data from API 
     const clientIdNameMap = {};

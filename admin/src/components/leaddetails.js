@@ -3700,23 +3700,40 @@ const handlepropertyunitstypesChange = (event) => {
                       size = parseFloat(match[3]);
                     }
         
-                    if (
-                      deal.available_for === availableFor &&
+                    // if (
+                    //   deal.available_for === availableFor &&
+                    //   (
+                    //     (facing && unitData.facing && facing.includes(unitData.facing)) ||
+                    //     (road && unitData.road && road.includes(unitData.road)) ||
+                    //     (direction && unitData.direction && direction === unitData.direction) ||
+                    //     (deal.expected_price >= minprice && deal.expected_price <= maxprice) ||
+                    //     (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt))) ||
+                    //     (subtype && unitData.sub_category && subtype.includes(unitData.sub_category)) ||
+                    //     (areaproject && unitData.project_name && areaproject.includes(unitData.project_name)) ||
+                    //     (block && unitData.block && block.includes(unitData.block)) ||
+                    //     (specificunit && unitData.unit_no && specificunit === unitData.unit_no) ||
+                    //     (unit_type.includes(unittype)) ||
+                    //     (size >= minsize && size <= maxsize) ||
+                    //     (distance <= range)
+                    //   )
+                    // ) 
+                      if (
+                      deal.available_for === availableFor &&  (unit_type.includes(unittype)) && 
+                       (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt))) &&
+                        (subtype && unitData.sub_category && subtype.includes(unitData.sub_category))
                       (
                         (facing && unitData.facing && facing.includes(unitData.facing)) ||
                         (road && unitData.road && road.includes(unitData.road)) ||
                         (direction && unitData.direction && direction === unitData.direction) ||
                         (deal.expected_price >= minprice && deal.expected_price <= maxprice) ||
-                        (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt))) ||
-                        (subtype && unitData.sub_category && subtype.includes(unitData.sub_category)) ||
                         (areaproject && unitData.project_name && areaproject.includes(unitData.project_name)) ||
                         (block && unitData.block && block.includes(unitData.block)) ||
                         (specificunit && unitData.unit_no && specificunit === unitData.unit_no) ||
-                        (unit_type.includes(unittype)) ||
                         (size >= minsize && size <= maxsize) ||
                         (distance <= range)
                       )
-                    ) {
+                    )
+                    {
                       matcheddeals.push(deal);
                      
                     }

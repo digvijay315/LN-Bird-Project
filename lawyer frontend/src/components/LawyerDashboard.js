@@ -14,6 +14,7 @@ import '../css/lawyerdashboard.css'
 import { HiOutlinePaperClip } from 'react-icons/hi';
 import { IoSend } from 'react-icons/io5';
 import { FiMinus } from 'react-icons/fi';
+import LawyerChatHistory from './lawyerchathistory';
 
 const LawyerDashboard = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -41,18 +42,7 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
 
   const lawyerdetails = JSON.parse(localStorage.getItem('lawyerDetails'));
 
-  const COLORS = ['#1e40af', '#3b82f6', '#60a5fa', '#93c5fd', '#dbeafe', '#f3f4f6', '#e5e7eb'];
-
-  // Analytics data
-  //  const weeklyData = [
-  //   { day: 'Mon', hours: 0 },
-  //   { day: 'Tue', hours: 0.1 },
-  //   { day: 'Wed', hours: 0 },
-  //   { day: 'Thu', hours: 0 },
-  //   { day: 'Fri', hours: 0 },
-  //   { day: 'Sat', hours: 0 },
-  //   { day: 'Sun', hours: 0 },
-  //  ];
+ 
 
    const getWeeklyData = () => {
     const today = new Date();
@@ -147,6 +137,7 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
 
   const [isMinimized, setIsMinimized] = useState(false);
 
+    const [onlineClients, setOnlineClients] = useState([]);
 
   // Chat functionality (keeping your existing chat code)
   useEffect(() => {
@@ -157,7 +148,11 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
     socket.on('connect', () => {
       const lawyerId = lawyerdetails.lawyer._id;
       socket.emit('lawyerOnline', lawyerId);
+      socket.emit('getOnlineClients');
     });
+      socket.on('onlineClientsList', ids => {
+          setOnlineClients(ids);
+        });
 
     function playBeep() {
   try {
@@ -176,6 +171,7 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
 
  const handleReceiveMessage = async ({ from, message, fileUrl, fileName, fileType }) => {
   setHasNewMessages(true);
+    markMessagesRead(from);
    showAcceptPopup(from); // 👈 Add this line
     // Play notification beep if chat is closed or tab is not visible
   if (
@@ -201,7 +197,7 @@ const [sessionTimestamps, setSessionTimestamps] = useState({}); // { [clientId]:
       ...prev,
       { text: message, fileUrl, fileName, fileType, isMe: false }
     ]);
-     markMessagesRead(from);
+   
   }
 
   // Fetch client info if not already fetched
@@ -416,11 +412,60 @@ useEffect(() => {
 
 
   //===================================== chat code end==================================================================
-  // const handleLogout = () => {
-  //   socket.disconnect();
-  //   localStorage.removeItem('userDetails');
-  //   navigate('/login');
-  // };
+
+
+  //=================================== clients details code start=======================================================
+
+  const [recentChats, setRecentChats] = useState([]);
+    const [allclients, setallclients] = useState([]); 
+  const fetchRecentChats = async () => {
+    try {
+      const res = await api.get('api/admin/chathistoryforrecentchat');
+      const result = res.data;
+      const lawyerChats = result.filter(
+        chat =>
+          chat.to === lawyerdetails.lawyer._id && chat.toModel === "Lawyer"
+      );
+      setRecentChats(lawyerChats);
+    } catch (err) {
+      console.error('Error fetching lawyer chats:', err);
+    }
+  };
+
+  // Get unique client IDs from history
+  const uniqueClientMap = {};
+  const uniqueChatClients = [];
+  recentChats.forEach(chat => {
+    if (!uniqueClientMap[chat.from]) {
+      uniqueClientMap[chat.from] = true;
+      uniqueChatClients.push(chat);
+    }
+  });
+
+  // Fetch all user data for clients lawyer chatted with
+  const fetchClientsData = async () => {
+    const ids = uniqueChatClients.map(chat => chat.from);
+    const allClients = [];
+    for (let id of ids) {
+      try {
+        const res = await api.get('/api/user/' + id);
+        allClients.push(res.data);
+      } catch {}
+    }
+    setallclients(allClients);
+  };
+
+  useEffect(() => {
+    fetchRecentChats();
+  }, []);
+
+  useEffect(() => {
+    fetchClientsData();
+  }, [recentChats.length]);
+
+
+
+  // ==============================================clients details end========================================
 
   const menuItems = [
     { label: 'Dashboard', icon: '🏠', path: '/Lawyerdashboard' },
@@ -1210,183 +1255,53 @@ useEffect(() => {
             </div>
           </div>
 
-          {/* Analytics Section */}
-          <div className="analytics-grid">
-         {/* <div className="chart-container">
-  <h3 className="chart-title">📊 Weekly Time Distribution</h3>
-  <ResponsiveContainer width="100%" height={250}>
-  <PieChart>
- 
-    {weeklyData.some(day => day.hours > 0) ? (
-      <>
-        <Pie
-          data={weeklyData.filter(day => day.hours > 0)} // Only show days with time > 0
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={({ day, hours, percent }) => `${day}: ${hours}h (${(percent * 100).toFixed(0)}%)`}
-          outerRadius={80}
-          innerRadius={20} // Add inner radius to create donut chart (better spacing)
-          fill="#8884d8"
-          dataKey="hours"
-        >
-          {weeklyData.filter(day => day.hours > 0).map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-        <Tooltip 
-          contentStyle={{
-            backgroundColor: 'white',
-            border: '1px solid #e5e7eb',
-            borderRadius: '8px',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-          }}
-          formatter={(value) => [`${value.toFixed(1)} hours`, 'Time Spent']}
-        />
-        <Legend />
-      </>
-    ) : (
-      // Show placeholder when no data
-      <g>
-        <circle cx="50%" cy="50%" r="80" fill="#f3f4f6" stroke="#e5e7eb" strokeWidth="2" />
-        <text x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" fill="#6b7280" fontSize="14">
-          No time data available
-        </text>
-      </g>
-    )}
-  </PieChart>
-</ResponsiveContainer>
+      
 
-</div> */}
-
-
-         {/* <div className="chart-container">
-  <h3 className="chart-title">📊 Case Status Trend</h3>
-  <ResponsiveContainer width="100%" height={250}>
-    <AreaChart
-      data={[
-        { month: 'Jan', Active: 12, Pending: 8, Closed: 15 },
-        { month: 'Feb', Active: 15, Pending: 6, Closed: 18 },
-        { month: 'Mar', Active: 18, Pending: 4, Closed: 22 },
-        { month: 'Apr', Active: cases.filter(c => c.status === 'Active').length, 
-          Pending: cases.filter(c => c.status === 'Pending').length, 
-          Closed: cases.filter(c => c.status === 'Closed').length }
-      ]}
-      margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-    >
-      <defs>
-        <linearGradient id="colorActive" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stopColor="#10b981" stopOpacity={0.8}/>
-          <stop offset="95%" stopColor="#10b981" stopOpacity={0.1}/>
-        </linearGradient>
-        <linearGradient id="colorPending" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.8}/>
-          <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.1}/>
-        </linearGradient>
-        <linearGradient id="colorClosed" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8}/>
-          <stop offset="95%" stopColor="#ef4444" stopOpacity={0.1}/>
-        </linearGradient>
-      </defs>
-      <XAxis dataKey="month" stroke="#6b7280" />
-      <YAxis stroke="#6b7280" />
-      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-      <Tooltip 
-        contentStyle={{
-          backgroundColor: 'white',
-          border: '1px solid #e5e7eb',
-          borderRadius: '8px',
-          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-        }}
-      />
-      <Area type="monotone" dataKey="Active" stackId="1" stroke="#10b981" fill="url(#colorActive)" />
-      <Area type="monotone" dataKey="Pending" stackId="1" stroke="#f59e0b" fill="url(#colorPending)" />
-      <Area type="monotone" dataKey="Closed" stackId="1" stroke="#ef4444" fill="url(#colorClosed)" />
-    </AreaChart>
-  </ResponsiveContainer>
-</div> */}
-
-          </div>
-
-          {/* Content Grid */}
+    
           <div className="content-grid">
-            {/* Cases Section */}
-            {/* <div className="content-section">
-              <div className="section-header">
-                <h2 className="section-title">
-                  📂 Recent Cases
-                </h2>
-                <a href="/cases" className="view-all-btn">View All →</a>
-              </div>
-              {cases.slice(0, 3).map((case_) => (
-                <div className="case-card" key={case_.id}>
-                  <div className="case-header">
-                    <div>
-                      <div className="case-title">{case_.title}</div>
-                      <div className="case-client">{case_.client}</div>
-                    </div>
-                  </div>
-                  <div className="case-meta">
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <span 
-                        className="case-status" 
-                        style={{ 
-                          backgroundColor: statusColor(case_.status),
-                          color: 'white'
-                        }}
-                      >
-                        {case_.status}
+      
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '16px' }}>
+          <thead>
+            <tr style={{ background: '#f9fafb', textAlign: 'left' }}>
+               <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Date</th>
+              <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Client Name</th>
+              <th style={{ padding: '8px', borderBottom: '1px solid #ddd' }}>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {uniqueChatClients.length === 0 ? (
+              <tr>
+                <td colSpan="2" style={{ padding: '8px', textAlign: 'center' }}>
+                  No clients you have chatted with yet.
+                </td>
+              </tr>
+            ) : (
+              uniqueChatClients.slice(-3).map((chat, idx) => {
+                const client = allclients.find(ci => ci._id === chat.from);
+                if (!client) return null;
+                const isOnline = onlineClients.includes(client._id);
+                return (
+                  <tr key={chat._id}>
+                         <td style={{ padding: '8px', borderBottom: '1px solid #eee' }}>
+                            {new Date(client.createdAt).toLocaleString()}
+                          </td>
+                    <td style={{ padding: '8px', borderBottom: '1px solid #eee' }}>
+                      {client.fullName}
+                    </td>
+                    <td style={{ padding: '8px', borderBottom: '1px solid #eee' }}>
+                      <span style={{ color: isOnline ? '#10b981' : '#ef4444' }}>
+                        {isOnline ? '🟢 Online' : '🔴 Offline'}
                       </span>
-                      <span 
-                        className="case-priority" 
-                        style={{ 
-                          backgroundColor: priorityColor(case_.priority),
-                          color: 'white'
-                        }}
-                      >
-                        {case_.priority}
-                      </span>
-                    </div>
-                    <div className="case-due">Due: {case_.dueDate}</div>
-                  </div>
-                </div>
-              ))}
-            </div> */}
-
-            {/* Clients Section */}
-            <div className="content-section">
-              <div className="section-header">
-                <h2 className="section-title">
-                  👥 Recent Clients
-                </h2>
-                <a href="/clients" className="view-all-btn">View All →</a>
-              </div>
-              <table className="client-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Status</th>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {clients.slice(0, 3).map((client) => (
-                    <tr key={client.id}>
-                      <td>
-                        <div>
-                          <div style={{ fontWeight: '600' }}>{client.name}</div>
-                          <div style={{ fontSize: '0.875rem', color: '#6b7280' }}>{client.email}</div>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`client-status ${client.status.toLowerCase()}`}>
-                          {client.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+
+       
+         
           </div>
 
        

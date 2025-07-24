@@ -31,34 +31,34 @@ const slider_data = [
     ),
     img: "https://static.vecteezy.com/system/resources/previews/045/913/392/non_2x/full-shopping-cart-with-groceries-cut-out-stock-png.png",
   },
-  // {
-  //   id: 2,
-  //   pre_title: (
-  //     <>
-  //       Best Ear <br /> Headphones
-  //     </>
-  //   ),
-  //   title: (
-  //     <>
-  //       Find your <br /> Beats Studio.
-  //     </>
-  //   ),
-  //   img: "https://static.vecteezy.com/system/resources/previews/051/960/680/non_2x/an-assortment-of-various-grocery-items-including-fruits-bread-cereals-and-jars-arranged-neatly-for-display-perfect-for-food-related-projects-png.png",
-  // },
-  // {
-  //   id: 3,
-  //   pre_title: (
-  //     <>
-  //       Best Ear <br /> Headphones
-  //     </>
-  //   ),
-  //   title: (
-  //     <>
-  //       Music To <br /> Fill Your Heart
-  //     </>
-  //   ),
-  //   img: slider_img_3,
-  // },
+  {
+    id: 2,
+    pre_title: (
+      <>
+        Best Ear <br /> Headphones
+      </>
+    ),
+    title: (
+      <>
+        Find your <br /> Beats Studio.
+      </>
+    ),
+    img: "https://static.vecteezy.com/system/resources/previews/051/960/680/non_2x/an-assortment-of-various-grocery-items-including-fruits-bread-cereals-and-jars-arranged-neatly-for-display-perfect-for-food-related-projects-png.png",
+  },
+  {
+    id: 3,
+    pre_title: (
+      <>
+        Best Ear <br /> Headphones
+      </>
+    ),
+    title: (
+      <>
+        Music To <br /> Fill Your Heart
+      </>
+    ),
+    img: slider_img_3,
+  },
 ];
 
 const HeroBanner = () => {

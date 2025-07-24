@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../user/context/cartcontext";
 import { useWishlist } from "../user/context/wishlistcontext";
 import '../user/css/header.css'
@@ -10,6 +10,7 @@ import WishlistSidebar from "../user/wishlistsidebar";
 import Menus from "../user/menus";
 import useSticky from "../user/sticky";
 import HeroBanner from "./hero";
+import Swal from "sweetalert2";
 
 const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -17,6 +18,21 @@ const Header = () => {
   const { cartItems } = useCart();
   const { wishlist } = useWishlist();
   const { sticky } = useSticky();
+
+  const navigate=useNavigate()
+     const user= localStorage.getItem("userEmail");
+
+  const handlelogout=()=>
+  {
+    Swal.fire({
+      icon:"success",
+      title:"Logout Successfull",
+      text:"you are log out successfully",
+      showConfirmButton:"true"
+    })
+    localStorage.removeItem('userEmail')
+    navigate('/')
+  }
 
   return (
     <>
@@ -35,6 +51,17 @@ const Header = () => {
         <li><Link to="/shop">Shop</Link></li>
         <li><Link to="/pages">Pages</Link></li>
         <li><Link to="/contact">Contact us</Link></li>
+          {user && (
+        <li className="dropdown">
+          <span>{user} ▾</span>
+          <ul className="dropdown-menu">
+            <li><Link to="/updateuserprofile">Profile</Link></li>
+            <li><Link to="/myorders">My Orders</Link></li>
+            <li><Link onClick={handlelogout}>Logout</Link></li>
+          </ul>
+        </li>
+      )}
+
       </ul>
     </nav>
  

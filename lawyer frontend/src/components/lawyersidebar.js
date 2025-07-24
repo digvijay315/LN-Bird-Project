@@ -35,15 +35,9 @@ function Lawyersidebar() {
     { label: 'Dashboard', icon: '■', path: '/Lawyerdashboard' },
     { label: 'Profile', icon: '◉', path: '/LawyerDashboard/completelawyerprofile' },
     { label: 'Clients', icon: '◎', path: '/lawyerchathistory' },
-    // { label: 'Messages', icon: '✉', path: '/messages' },
-    // { label: 'My Cases', icon: '▣', path: '/cases' },
-    // { label: 'Schedule', icon: '◈', path: '/schedule' },
-    // { label: 'Billing', icon: '▦', path: '/billing' },
-    // { label: 'Documents', icon: '▤', path: '/documents' },
-    // { label: 'Settings', icon: '⚙', path: '/settings' },
     { label: 'Support', icon: '◐', path: '/supports' },
-    { label: 'Notifications', icon: '🔔', path: '/notifications', badge: 3 },
-    { label: 'Logout', icon: '🔒', logout: true },
+    { label: 'Notifications', icon: '◍', path: '/notifications', badge: 3 },
+    { label: 'Logout', icon: '◌', logout: true },
   ];
 
   const handleMenuClick = (item) => {
