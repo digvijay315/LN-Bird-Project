@@ -8,6 +8,7 @@ const nodemailer = require('nodemailer');
 
 const registerUser=async (req,res) => {
     try {
+  
         const {name,email,password}=req.body;
         if(!name || !email || !password){
             return res.status(400).send({message:"All Fields are mandatory"})

@@ -3,7 +3,7 @@ const { registerUser, loginUser, resetPassword,sendResetEmail,setNewPassword } =
 const router = express.Router();
 
 // Register route
-router.post('/', registerUser);
+router.post('/registration', registerUser);
 
 // Reset password route (forget password)
 router.put('/password', resetPassword);

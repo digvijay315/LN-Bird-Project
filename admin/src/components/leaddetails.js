@@ -3720,7 +3720,7 @@ const handlepropertyunitstypesChange = (event) => {
                       if (
                       deal.available_for === availableFor &&  (unit_type.includes(unittype)) && 
                        (propertytype && unitData.category && propertytype.some(pt => unitData.category.includes(pt))) &&
-                        (subtype && unitData.sub_category && subtype.includes(unitData.sub_category))
+                        (subtype && unitData.sub_category && subtype.includes(unitData.sub_category)) &&
                       (
                         (facing && unitData.facing && facing.includes(unitData.facing)) ||
                         (road && unitData.road && road.includes(unitData.road)) ||
@@ -6111,14 +6111,15 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
                     )
                     
                     : col.id === 'matchingdeal' ? (
-                  (() => {
-                    const { showCount } = calculateShowAndRelatedDeals(item);
-                    return (
-                      <span style={{ fontWeight: "bold", color: "green", fontSize: "14px" }}>
-                        {showCount}
-                      </span>
-                    );
-                  })()
+                  // (() => {
+                  //   const { showCount } = calculateShowAndRelatedDeals(item);
+                  //   return (
+                  //     <span style={{ fontWeight: "bold", color: "green", fontSize: "14px" }}>
+                  //       {showCount}
+                  //     </span>
+                  //   );
+                  // })()
+                  <span>{item.matchingdeal}</span>
                 ) : col.id === 'requirment' 
                     ?(
                       <>
@@ -8075,8 +8076,8 @@ const [isHoveringsendmail, setIsHoveringsendmail] = useState(false);
         {
           
 
-        //  matcheddeals
-        showdeals
+         matcheddeals
+        // showdeals
          .sort((a, b) => b.matchPercentage - a.matchPercentage).map ((item, index) => (
           <StyledTableRow key={index}>
             <StyledTableCell >

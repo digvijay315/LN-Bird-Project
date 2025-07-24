@@ -32,7 +32,7 @@ function RegisterForm() {
     }
 
     try {
-      const response = await api.post("api/user", {
+      const response = await api.post("api/user/registration", {
         name: formData.name,
         email: formData.email,
         password: formData.password,
@@ -46,7 +46,7 @@ function RegisterForm() {
 
         setTimeout(() => {
           setSuccessMessage("");
-          navigate("/dashboard");
+          navigate("/LoginForm");
         }, 2000);
       }
     } catch (error) {
