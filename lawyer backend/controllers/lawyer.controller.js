@@ -77,6 +77,19 @@ const addLawyer = async (req, res) => {
   }
 };
 
+const remove_lawyer=async(req,res)=>
+{
+  try {
+    const id=req.params._id
+    const lawyer= await LawyerModel.findByIdAndDelete({_id:id})
+    res.status(200).send("lawyer delete successfully")
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
 const loginLawyer = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -549,5 +562,6 @@ module.exports = {
   getallProfile,
   approveProfile,
   getallProfilebyid,
-  updatelawyerprofile
+  updatelawyerprofile,
+  remove_lawyer
 };

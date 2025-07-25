@@ -14,37 +14,49 @@ import Paper from '@mui/material/Paper';
 import api from "../api";
 import Swal from 'sweetalert2';
 import { ToastContainer,toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
+import {  SvgIcon } from "@mui/material";
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 
 function Users() {
 
-
+const navigate=useNavigate()
     
-        useEffect(()=>{fetchdata()},[])
-        const[data,setdata]=useState([]);
-        const fetchdata=async(event)=>
-          {
-            
-            try {
-              const resp=await api.get('viewleadscore')
-              setdata(resp.data.score)
-            } catch (error) {
-              console.log(error);
-            }
-          
-          }
+  //===================================== get user and table code start========================================================
+
+    const[data,setdata]=useState([])
+
+    const getalluserdata=async()=>
+    {
+      try {
+        const resp=await api.get('viewuser')
+        setdata(resp.data.user)
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+
+    useEffect(()=>
+    {
+      getalluserdata()
+    },[])
+ 
+    
+  //=================================== get user and table code end==============================================================
 
     const allColumns = [
         { id: 'sno', name: '#' },
-        { id: 'available_for', name: 'Type' },
-        { id: 'reason', name: 'Call Reason/Email Subject' },
-        { id: 'direction', name: 'Direction' },
-        { id: 'status', name: 'Status' },
-        { id: 'result', name: 'Result/Email_Subject' },
-        { id: 'score', name: 'Score' },
-        { id: 'stagerequirment', name: 'Stage_changed_Requirment' },
-    
+        { id: 'full_name', name: 'Full Name' },
+        { id: 'email', name: 'Email' },
+        { id: 'manager', name: 'Manager' },
+        { id: 'team', name: 'Team' },
+        { id: 'role_name', name: 'Role Name' },
+        { id: 'bussiness_rule', name: 'Bussiness Rule' },
+        { id: 'communication_channels', name: 'Communication' },
       ];
-    
+
     
       const [currentPage, setCurrentPage] = useState(1);
       const [itemsPerPage, setItemsPerPage] = useState(7); // User-defined items per page
@@ -174,6 +186,25 @@ function Users() {
                   }
                 };
 
+
+                   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+                      const handleSort = (key) => {
+                        let direction = 'asc';
+                        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+                          direction = 'desc';
+                        }
+                        
+                        const sortedData = [...data].sort((a, b) => {
+                          if (a[key] < b[key]) return direction === 'asc' ? -1 : 1;
+                          if (a[key] > b[key]) return direction === 'asc' ? 1 : -1;
+                          return 0;
+                        });
+                      
+                        setSortConfig({ key, direction });
+                        setdata(sortedData)
+                      };
+                
+
           
                             const deleteSelectedItems = async () => {
                                     try {
@@ -199,12 +230,12 @@ function Users() {
                                       }
                           
                                       const resp = selectedItems.map(async (itemId) => {
-                                        await api.delete(`deleteleadscore/${itemId}`);
+                                        await api.delete(`deleteuser/${itemId}`);
                                       });
                                       
                                         Swal.fire({
                                                     icon: 'success',
-                                                    title: 'Lead Score Criteria Deleted',
+                                                    title: 'User Deleted',
                                                     text: 'Selected items deleted successfully!',
                                                   });
                                       setTimeout(() => {
@@ -240,6 +271,79 @@ function Users() {
                                                     const handleClose1 = () => setshow1(false);
                                              
                                                     const handleShow1=async()=>setshow1(true);
+
+
+  //===================================================== save user start========================================================
+
+        const [user,setuser]=useState({full_name:"",email:"",mobile:"",manager:"",team:"",role_name:"",descriptions:"",permission:"",
+                                        assign_permission:"",manage:[],data:[],communication_channels:[],cutomize:[],integration:[],
+                                        bussiness_rule:[],canview_properties:"",canadd_properties:"",canupdate_properties:"",
+                                        canreassign_properties:"",candeletproperties:"",canview_properties_owner:""
+                                      })  
+
+
+        const handlechange = (e) => {
+        const { name, type, value, checked } = e.target;
+
+        setuser((prev) => ({
+          ...prev,
+          [name]: type === 'checkbox' ? (checked ? 'yes' : 'no') : value
+        }));
+      };
+
+                               
+const handleCheckboxChange = (e) => {
+  const { name, value, checked } = e.target;
+
+  setuser((prev) => {
+    if (checked) {
+      // Add the value to array
+      return { 
+        ...prev, 
+        [name]: [...prev[name], value] 
+      };
+    } else {
+      // Remove the value from array
+      return { 
+        ...prev, 
+        [name]: prev[name].filter((v) => v !== value) 
+      };
+    }
+  });
+};
+
+    const adduser=async()=>
+    {
+      try {
+        const resp=await api.post('adduser',user)
+        if(resp.status===200)
+        {
+          Swal.fire({
+            icon:"success",
+            title:"New User Added",
+            text:"new user added successfully...",
+            showConfirmButton:"true"
+          }).then(()=>
+          {
+            window.location.reload()
+          }
+        )
+        }
+        
+      } catch (error) {
+        console.log(error);
+          Swal.fire({
+            icon:"error",
+            title:"Error while adding user",
+            text:error?.message,
+            showConfirmButton:"true"
+          })
+      }
+    }
+
+
+
+  // ================================================save user end===============================================================
 
 
 
@@ -314,7 +418,80 @@ function Users() {
                         />
                       </Tooltip>
 
-                      <Modal  show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
+                   </div>
+
+                    <div style={{marginLeft:"60px",marginTop:"2px",backgroundColor:"white"}}>
+                                     <TableContainer component={Paper}>
+                               <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                                 <TableHead>
+                                   <TableRow>
+                                     <StyledTableCell style={{ backgroundColor:"gray"}}>
+                                       <input
+                                         type="checkbox"
+                                         checked={selectAll}
+                                         onChange={handleSelectAll}
+                                       />
+                                     </StyledTableCell>
+                                     {visibleColumns.map((col) => (
+                                       <StyledTableCell
+                                         key={col.id}
+                                         style={{   cursor: 'pointer',backgroundColor:"gray" }}
+                                         onClick={() => handleSort(col.id)}
+                                       >
+                                         {col.name}
+                                         {sortConfig.key === col.id ? (sortConfig.direction === 'asc' ? ' ↑' : ' ↓') : ''}
+                                       </StyledTableCell>
+                                     ))}
+                                   </TableRow>
+                                 </TableHead>
+                                 <tbody>
+                                   {
+                                currentItems
+                                 .map ((item, index) => (
+                                     <StyledTableRow key={index}>
+                                       <StyledTableCell>
+                                         <input 
+                                           type="checkbox"
+                                           checked={selectedItems.includes(item._id)}
+                                           onChange={() => handleRowSelect(item._id)}
+                                         />
+                                         {index + 1}
+                                       </StyledTableCell>
+                                 
+                           
+                                       {visibleColumns
+                                         .filter((col) => col.id !== 'sno')
+                                         .map((col) => (
+                                           <StyledTableCell 
+                                             key={col.id} 
+                                             style={{ padding: "10px",fontSize:"12px" }}
+                                           >
+                                           {item[col.id]}
+                                             
+                                           </StyledTableCell>
+                                         ))}
+                                     </StyledTableRow>
+                                   ))}
+                                 </tbody>
+                               </Table>
+                             </TableContainer>
+                               {/* <footer style={{height:"50px",width:"100%",position:"sticky",display:"flex",gap:"50px",bottom:"0",backgroundColor:"#f8f9fa",marginLeft:"10px"}}>
+                                     <h6 style={{lineHeight:"50px",color:"GrayText"}}>Summary</h6>
+                                     <h6 style={{lineHeight:"50px"}}>Total Inventories <span style={{color:"black",fontSize:"20px"}}>{totalinventories}</span></h6>
+                                     <h6 style={{lineHeight:"50px"}}> Residential <span style={{color:"green",fontSize:"20px"}}>{totalResidential}</span></h6>
+                                     <h6 style={{lineHeight:"50px"}}> Commercial <span style={{color:"blue",fontSize:"20px"}}>{totalcommercial}</span></h6>
+                                     <h6 style={{lineHeight:"50px"}}> Agriculture <span style={{color:"orange",fontSize:"20px"}}>{totalagriculture}</span></h6>
+                                     <h6 style={{lineHeight:"50px"}}> Industrial <span style={{color:"red",fontSize:"20px"}}>{totalindustrial}</span></h6>
+                                     <h6 style={{lineHeight:"50px"}}> Institutional <span style={{color:"gray",fontSize:"20px"}}>{totalinstitutional}</span></h6>
+                                   </footer> */}
+                                 </div>
+        
+      
+
+
+      {/* ====================================add user modal start========================================================== */}
+
+         <Modal  show={show1} onHide={handleClose1} size='lg' style={{transition:"0.5s ease-in"}}>
                                           <Modal.Header>
                                             <Modal.Title>Add New User<br></br>
                                             </Modal.Title>
@@ -326,46 +503,46 @@ function Users() {
                                      <div className="mb-3">
                                       <h6>Full Name</h6>
                               {/* <label htmlFor="name" className="form-label">Full Name</label> */}
-                              <input type="text" className="form-control" id="name" required />
+                              <input type="text" className="form-control" id="name" name='full_name' required onChange={handlechange} />
                             </div>
                       
                              <div className="mb-3">
                               <h6>Email</h6>
                               <label htmlFor="email" className="form-label">Activation Instructions will be emailed to this address.</label>
-                              <input type="email" className="form-control" id="email" required />
+                              <input type="email" className="form-control" id="email" name='email' required onChange={handlechange} />
                             </div>
                       
                              <div className="mb-3">
                                <h6>Mobile</h6>
                               {/* <label htmlFor="email" className="form-label">Mobile</label> */}
-                              <input type="email" className="form-control" id="email" required placeholder='Verified by OTP' />
+                              <input type="text" className="form-control" id="mobile" name='mobile' required placeholder='Verified by OTP' onChange={handlechange}/>
                             </div>
                       
                              <div className="mb-3">
                               <h6>Manager</h6>
                               {/* <label htmlFor="email" className="form-label">Manager</label> */}
-                              <input type="email" className="form-control" id="email" required />
+                              <input type="text" className="form-control" id="manager" name='manager' required onChange={handlechange}/>
                             </div>
                       
                              <div className="mb-3">
                               <h6>Team</h6>
-                              <label htmlFor="email" className="form-label">Team help you filter your reports.</label>
-                              <input type="email" className="form-control" id="email" required />
+                              <label htmlFor="team" className="form-label">Team help you filter your reports.</label>
+                              <input type="text" className="form-control" id="team" name='team' required onChange={handlechange}/>
                             </div>
                       
                           
-                            <h6 > <input type='checkbox'style={{ transform: "scale(1.4)", marginRight: "8px" }}></input>Permissions(ADMIN)</h6>
+                            <h6 > <input type='checkbox'style={{ transform: "scale(1.4)", marginRight: "8px" }} name='permission' onChange={handlechange}></input>Permissions(ADMIN)</h6>
                           <p>Permissions specify how Users can work with leads, contact , and deals.</p>
                           <h6>Assign Permissions</h6>
                           <p>Permission settings specify how users can work with leads, contacts, and deals.
                             Assign an access level to give users to specific Permissions in Sell Learn more
                           </p>
-                          <h6><input type='radio' name='access'></input>Full access (Formerly Manager) </h6>
+                          <h6><input type='radio' name='assign_permission' onChange={handlechange} value="Full access (Formerly Manager)"></input>Full access (Formerly Manager) </h6>
                           <p>A user with full access can view, update, delete, and convert any lead, contact,
                             and deals in the account.They can also manage goals, task, and appointments
                             and share document.
                           </p>
-                          <h6><input type='radio' name='access'></input> Limited access (Formerly Users)</h6>
+                          <h6><input type='radio' name='assign_permission' onChange={handlechange} value="Limited access (Formerly Users)"></input> Limited access (Formerly Users)</h6>
                           <p>A user with Limited access can view, update, delete and convert their own leads,
                             contacts and deals.You can add assitional by customizing </p>
                             </div>
@@ -376,25 +553,25 @@ function Users() {
                         <p style={{borderTop: "1px solid ", borderBottom: "1px solid #000"}} >Create a new role</p>
                                    <div className="mb-3">
                             <label htmlFor="name" className="form-label">Role name</label>
-                              <input type="text" className="form-control" id="name" required placeholder='Manager (Sales)' />
+                              <input type="text" className="form-control" id="name" name='role_name' onChange={handlechange} required placeholder='Manager (Sales)' />
                       
                       
                                     <label htmlFor="name" className="form-label">Description</label>
-                                    <textarea type="text" style={{height:'100px'}} className="form-control" id="name" placeholder='Lets people know how this role should be used. '/>
+                                    <textarea type="text" style={{height:'100px'}} name='descriptions' onChange={handlechange} className="form-control" id="name" placeholder='Lets people know how this role should be used. '/>
                                     <h6>Configure Setting Permission</h6>
                                   <h8>Manage</h8><br></br>
                               <div style={{ display: "flex", gap: "80px", alignItems: "center" }}>
                         <label>
-                          <input type="checkbox" /> Profile
+                          <input type="checkbox" name='manage' value="profile" onChange={handleCheckboxChange}/> Profile
                         </label>
                         <label>
-                          <input type="checkbox" /> Users
+                          <input type="checkbox" name='manage' value="users" onChange={handleCheckboxChange}/> Users
                         </label>
                         <label>
-                          <input type="checkbox" /> Notification
+                          <input type="checkbox" name='manage' value="notification" onChange={handleCheckboxChange}/> Notification
                         </label>
                         <label>
-                          <input type="checkbox" /> Sales Goal
+                          <input type="checkbox" name='manage' value="salesgoal" onChange={handleCheckboxChange}/> Sales Goal
                         </label>
                       </div>
                           
@@ -402,97 +579,97 @@ function Users() {
                            <h8 style={{ textDecoration: "underline" }}>Data</h8><br></br>
                               <div style={{ display: "flex", gap: "40px", alignItems: "center", marginTop:'10px' }}>
                         <label>
-                          <input type="checkbox" /> Import
+                          <input type="checkbox" name='data' value="import" onChange={handleCheckboxChange} /> Import
                         </label>
                         <label>
-                          <input type="checkbox" /> Export
+                          <input type="checkbox" name='data' value="export" onChange={handleCheckboxChange}/> Export
                         </label>
                         <label>
-                          <input type="checkbox" />Bulk Update
+                          <input type="checkbox" name='data' value="bulkupdate" onChange={handleCheckboxChange}/>Bulk Update
                         </label>
                         <label>
-                          <input type="checkbox" /> Duplicate Managment
+                          <input type="checkbox" name='data' value="duplicatemanagement" onChange={handleCheckboxChange}/> Duplicate Managment
                         </label>
                          <label>
-                          <input type="checkbox" />Prospecting and Enrich
+                          <input type="checkbox" name='data' value="prospectingandenrich" onChange={handleCheckboxChange}/>Prospecting and Enrich
                         </label>
                         <label>
-                          <input type="checkbox" />Lead Capture
+                          <input type="checkbox" name='data' value="leadcapture" onChange={handleCheckboxChange}/>Lead Capture
                             </label>
                       </div>
                                   <h8 style={{ textDecoration: "underline" }}>Communication Channels</h8><br></br>
                               <div style={{ display: "flex", gap: "80px", alignItems: "center" , marginTop:'10px' }}>
                         <label>
-                          <input type="checkbox" /> Email
+                          <input type="checkbox" name='communication_channels' value="email" onChange={handleCheckboxChange} /> Email
                         </label>
                         <label>
-                          <input type="checkbox" /> Voice(vertual Call)
+                          <input type="checkbox"  name='communication_channels' value="voice" onChange={handleCheckboxChange}/> Voice(vertual Call)
                         </label>
                         <label>
-                          <input type="checkbox" />Text(SMS)
+                          <input type="checkbox"  name='communication_channels' value="text" onChange={handleCheckboxChange}/>Text(SMS)
                         </label>
                         <label>
-                          <input type="checkbox" /> Sales Goal
+                          <input type="checkbox"  name='communication_channels' value="salesgoal" onChange={handleCheckboxChange}/> Sales Goal
                         </label>
                       </div>
                       
                       <h8 style={{ textDecoration: "underline" }}>Customize</h8><br></br>
                               <div style={{ display: "flex", gap: "40px", alignItems: "center", marginTop:'10px' }}>
                         <label>
-                          <input type="checkbox" />Lead
+                          <input type="checkbox" name='cutomize' value="lead" onChange={handleCheckboxChange} />Lead
                         </label>
                         <label>
-                          <input type="checkbox" />Contact
+                          <input type="checkbox" name='cutomize' value="contact" onChange={handleCheckboxChange}  />Contact
                         </label>
                         <label>
-                          <input type="checkbox" />Task
+                          <input type="checkbox" name='cutomize' value="task" onChange={handleCheckboxChange}  />Task
                         </label>
                         <label>
-                          <input type="checkbox" /> Properties
+                          <input type="checkbox" name='cutomize' value="properties" onChange={handleCheckboxChange} /> Properties
                         </label>
                          <label>
-                          <input type="checkbox" />Notes
+                          <input type="checkbox" name='cutomize' value="notes" onChange={handleCheckboxChange} />Notes
                         </label>
                         <label>
-                          <input type="checkbox" />Templplates
+                          <input type="checkbox" name='cutomize' value="templates" onChange={handleCheckboxChange} />Templates
                             </label>
                        <label>
-                          <input type="checkbox" />Layout
+                          <input type="checkbox" name='cutomize' value="layout" onChange={handleCheckboxChange} />Layout
                             </label>
                              <label>
-                          <input type="checkbox" />Post Sales
+                          <input type="checkbox" name='cutomize' value="postsales" onChange={handleCheckboxChange} />Post Sales
                             </label>
                             </div>
                       
                       <h8 style={{ textDecoration: "underline" }}>Intergration</h8><br></br>
                               <div style={{ display: "flex", gap: "40px", alignItems: "center" , marginTop:'10px'}}>
                         <label>
-                          <input type="checkbox" />Intergration
+                          <input type="checkbox" name='integration' value="integration" onChange={handleCheckboxChange} />Intergration
                         </label>
                         <label>
-                          <input type="checkbox" />API
+                          <input type="checkbox" name='integration' value="api" onChange={handleCheckboxChange}/>API
                         </label>
                         </div>
                       
                         <h8 style={{ textDecoration: "underline" }}>Business Rule</h8><br></br>
                               <div style={{ display: "flex", gap: "40px", alignItems: "center", marginTop:'10px' }}>
                         <label>
-                          <input type="checkbox" />Field Rules
+                          <input type="checkbox" name='bussiness_rule' value="fieldrules" onChange={handleCheckboxChange} />Field Rules
                         </label>
                         <label>
-                          <input type="checkbox" />Distributions
+                          <input type="checkbox" name='bussiness_rule' value="distributions" onChange={handleCheckboxChange}/>Distributions
                         </label>
                         <label>
-                          <input type="checkbox" />Post Sales
+                          <input type="checkbox" name='bussiness_rule' value="postsales" onChange={handleCheckboxChange}/>Post Sales
                         </label>
                          <label>
-                          <input type="checkbox" />Automated Actions
+                          <input type="checkbox" name='bussiness_rule' value="automatedactions" onChange={handleCheckboxChange}/>Automated Actions
                         </label>
                          <label>
-                          <input type="checkbox" />Triggers
+                          <input type="checkbox" name='bussiness_rule' value="triggers" onChange={handleCheckboxChange}/>Triggers
                         </label>
                          <label>
-                          <input type="checkbox" />Scoring
+                          <input type="checkbox" name='bussiness_rule' value="scoring" onChange={handleCheckboxChange}/>Scoring
                         </label>
                         </div>
                       </div>
@@ -507,31 +684,31 @@ function Users() {
                        </div>
                        <div  style={{marginTop:'15px'}}>
                        <h8>Can view Properties</h8> <br></br>
-                       <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view'></input> Their and subordinates' deals <br></br>
-                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view'></input>Their subordinates' and peers' deals<br></br>
-                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view'></input>Their subordinates'  peers and manager deals<br></br>
-                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='view' ></input> Same deals as thier manager<br></br>
+                       <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='canview_properties' value='Their and subordinates deals' onChange={handlechange}></input> Their and subordinates' deals <br></br>
+                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='canview_properties' onChange={handlechange} value='Their subordinates and peers deals'></input>Their subordinates' and peers' deals<br></br>
+                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='canview_properties' onChange={handlechange} value='Their subordinates peers and manager deals'></input>Their subordinates'  peers and manager deals<br></br>
+                        <input style={{marginTop:'10px', gap:'20px'}} type='radio' name='canview_properties' onChange={handlechange} value='Same deals as thier manager'></input> Same deals as thier manager<br></br>
                       </div>
-                             <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px" }} type="checkbox" />Can add Properties<br></br>
+                             <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px" }} type="checkbox" name='canadd_properties' onChange={handlechange} />Can add Properties<br></br>
                       
                               <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px"}} type="checkbox" />Can update Properties<br></br>
-                               <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='update' ></input> Only thier and subordinates deals<br></br>
-                                <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='update' ></input> All deals they can view<br></br>
+                               <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='canupdate_properties' onChange={handlechange} value='Only thier and subordinates deals'></input> Only thier and subordinates deals<br></br>
+                                <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='canupdate_properties' onChange={handlechange} value='All deals they can view'></input> All deals they can view<br></br>
                       
                                 <input style={{marginTop:'30px', gap:'10px', transform: "scale(1.4)", marginRight: "8px"}} type="checkbox" />Can reassign ownership of Properties<br></br>
-                               <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='reassing' ></input>Only thier and subordinates deals<br></br>
-                                <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='reassing' ></input>  All deals they can view<br></br>
+                               <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='canreassign_properties' onChange={handlechange} value='Only thier and subordinates deals'></input>Only thier and subordinates deals<br></br>
+                                <input style={{marginTop:'10px', gap:'10px'}} type='radio' name='canreassign_properties' onChange={handlechange} value='All deals they can view'></input>  All deals they can view<br></br>
                       
                                   <input style={{marginTop:'30px', transform: "scale(1.4)", marginRight: "8px"}} type="checkbox" />Can delete Properties<br></br>
-                               <input style={{marginTop:'10px'}} type='radio' name=' delete' ></input>Only thier and subordinates deals<br></br>
-                                <input style={{marginTop:'10px'}} type='radio' name=' delete' ></input>  All deals they can view<br></br>
+                               <input style={{marginTop:'10px'}} type='radio' name='candeletproperties' onChange={handlechange} value='Only thier and subordinates deals'></input>Only thier and subordinates deals<br></br>
+                                <input style={{marginTop:'10px'}} type='radio' name='candeletproperties' onChange={handlechange} value='All deals they can view'></input>  All deals they can view<br></br>
                       
                                <div  style={{marginTop:'15px'}}>
                                 <h8 >Can view Properties Owner</h8> <br></br>
-                       <input style={{marginTop:'10px'}} type='radio' name='Owner'></input> Their and subordinates' deals <br></br>
-                        <input style={{marginTop:'10px'}} type='radio' name='Owner'></input>Their subordinates' and peers' deals<br></br>
-                        <input style={{marginTop:'10px'}} type='radio' name='Owner'></input>Their subordinates'  peers and manager deals<br></br>
-                        <input style={{marginTop:'10px'}} type='radio' name='Owner' ></input> Same deals as thier manager<br></br>
+                       <input style={{marginTop:'10px'}} type='radio' name='canview_properties_owner' onChange={handlechange} value='Their and subordinates deals'></input> Their and subordinates' deals <br></br>
+                        <input style={{marginTop:'10px'}} type='radio' name='canview_properties_owner' onChange={handlechange} value='Their subordinates and peers deals'></input>Their subordinates' and peers' deals<br></br>
+                        <input style={{marginTop:'10px'}} type='radio' name='canview_properties_owner' onChange={handlechange} value='Their subordinates peers and manager deals'></input>Their subordinates'  peers and manager deals<br></br>
+                        <input style={{marginTop:'10px'}} type='radio' name='canview_properties_owner' onChange={handlechange} value='Same deals as thier manager'></input> Same deals as thier manager<br></br>
                            </div>
                       </div>
                       
@@ -548,17 +725,14 @@ function Users() {
                                             <Button variant="secondary" onClick={handleClose1}>
                                               Cancel
                                             </Button>
-                                            <Button variant="secondary" style={{display:selectedItems.length===0?"block":"none"}}>
+                                            <Button variant="secondary" onClick={adduser}>
                                               Add user
                                             </Button>
                                          
                                           </Modal.Footer>
                                         </Modal>
 
-
-                   </div>
-        
-      
+      {/*================================== add user modal end===================================================================== */}
     </div>
   )
 }

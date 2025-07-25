@@ -31,6 +31,11 @@ import ReactQuill from 'react-quill';  // Import ReactQuill
 import Lottie from "lottie-react";
 import deallogo from '../icons/deal.jpg'
 import { Percent } from "@mui/icons-material";
+import numWords from 'num-words';
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+
+
+
 
 function Alldeals() {
 
@@ -65,6 +70,37 @@ function Alldeals() {
               }
             
             }
+
+
+const numberToIndianWords = (num) => {
+  return numWords(num, { lang: 'en-in' }).charAt(0).toUpperCase() + numWords(num, { lang: 'en-in' }).slice(1) + ' Only';
+};
+
+  const [sortField, setSortField] = React.useState('');
+
+   // Whenever sortField changes (e.g., in a useEffect)
+React.useEffect(() => {
+  if (!sortField) return; // Or reset original data if needed
+
+  const sorted = [...data];
+  sorted.sort((a, b) => {
+    if (sortField === 'price') {
+      return (a.expected_price || 0) - (b.expected_price || 0);
+    } else if (sortField === 'matchinglead') {
+      return (a.matchinglead || '').localeCompare(b.matchinglead || '');
+    } else if (sortField === 'unit_number') {
+      return (a.unit_number || '').localeCompare(b.unit_number || '');
+    } else if (sortField === 'usize') {
+      return (a.usize || 0) - (b.usize || 0);
+    } else if (sortField === 'project') {
+      return (a.project || 0) - (b.project || 0);
+    }
+    return 0;
+  });
+
+  setdata(sorted);
+}, [sortField]);
+
 
 
     //============================================= fetch deal data end=========================================================
@@ -662,7 +698,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         { id: 'expected_price', name: 'Expectation' },
         { id: 'matchinglead', name: 'Matched_Lead' },
         { id: 'stage', name: 'Status' },
-        { id: 'user', name: 'Assigned To' },
+        { id: 'user', name: 'Assigned_To' },
         { id: 'remarks', name: 'Remarks' },
         { id: 'follow_up', name: 'Follow_Up' },
         { id: 'last_contacted', name: 'Last_Contacted_Date_&_Time' },
@@ -3639,10 +3675,38 @@ const handleTimeChangemail = (e) => {
             {renderPageNumbers()}
             </div>  */}
         
-            <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"75%",position:"absolute"}}>
+            <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"60%",position:"absolute"}}>
+      <div style={{lineHeight:"30px"}}>
+        <FormControl
+      variant="outlined"
+      size="small"
+      sx={{ minWidth: 200, backgroundColor: "white", borderRadius: 1, boxShadow: 1 }}
+    >
+      <InputLabel id="sort-select-label">Sort By</InputLabel>
+      <Select
+        labelId="sort-select-label"
+        id="sort-select"
+        value={sortField}
+        label="Sort By"
+        onChange={(e) => setSortField(e.target.value)}
+        sx={{
+          "& .MuiSelect-icon": { color: "#1976d2" }, // Blue icon color
+        }}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        <MenuItem value="price">Price</MenuItem>
+        <MenuItem value="matchinglead">Matched Lead</MenuItem>
+        <MenuItem value="unit_number">Unit Number</MenuItem>
+        <MenuItem value="usize">Unit Size</MenuItem>
+        <MenuItem value="project">Project</MenuItem>
+      </Select>
+    </FormControl>
+    </div>
               
-              <label htmlFor="itemsPerPage" style={{fontSize:"16px"}}>Items: </label>
-              <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",height:"30px"}}>
+              <label htmlFor="itemsPerPage" style={{fontSize:"16px",paddingTop:"10px"}}>Items: </label>
+              <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",height:"40px"}}>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -3759,7 +3823,19 @@ const handleTimeChangemail = (e) => {
                                 <li><a className="dropdown-item" href="#">Delete</a></li>
                               </ul>
                             </div>
-                          ) :   col.id === 'matchinglead' ? (
+                          ) :   col.id === 'expected_price' ? (
+                            <>
+                            <span>₹{Number(item.expected_price).toLocaleString('en-IN')}/-</span><br></br>
+                        <span style={{ fontSize: "12px", color: "#333" }}>
+                            {
+                              !isNaN(Number(item.expected_price))
+                                ? numberToIndianWords(Number(item.expected_price))
+                                : 'Invalid amount'
+                            }
+                          </span>
+
+                            </>
+                          ) :  col.id === 'matchinglead' ? (
                             <>
                             <span style={{fontWeight:"bold",color:"green",fontSize:"14px"}}>{item.matchinglead}</span>
                             </>

@@ -55,9 +55,11 @@ router.put('/updatelawyerprofile/:_id',uploadFields,lawyerController.updatelawye
 
 
 
-const { getProfile } = require('../controllers/lawyer.controller');
+const { getProfile,remove_lawyer } = require('../controllers/lawyer.controller');
 const authenticateLawyer = require('../middlewares/auth');
 
 router.get('/profile', authenticateLawyer, getProfile);
+
+router.delete('/removelawyer/:_id', remove_lawyer);
 
 module.exports = router;

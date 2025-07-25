@@ -5,6 +5,10 @@ import Adminpanelheader from './adminpanelheader';
 import { Visibility, CheckCircle, Cancel } from '@mui/icons-material';
 import { Box, Button, IconButton, Typography, Chip, Stack } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Swal from 'sweetalert2';
+
+
 
 function Clients() {
 
@@ -41,6 +45,40 @@ function Clients() {
   useEffect(() => {
     fetchusers();
   }, []);
+
+      const handledeletelawyer = async (id) => {
+        try {
+          const confirmResult = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+          });
+
+          if (confirmResult.isConfirmed) {
+            const resp = await api.delete(`api/lawyer/removelawyer/${id}`);
+            if (resp.status === 200) {
+              Swal.fire(
+                'Deleted!',
+                'Lawyer has been deleted.',
+                'success'
+              );
+
+       
+            }
+          }
+        } catch (error) {
+          console.log(error);
+          Swal.fire(
+            'Error!',
+            'Something went wrong while deleting.',
+            'error'
+          );
+        }
+      };
 
 
           const columns = [
@@ -81,6 +119,21 @@ function Clients() {
               width: 130,
               valueGetter: (params) => new Date(params.row.createdAt).toLocaleString(),
             },
+            {
+              field: 'actions',
+              headerName: 'Actions',
+              width: 100,
+              renderCell: (params) => (
+             <DeleteIcon
+              onClick={() => handledeletelawyer(params.row._id)}
+              style={{ 
+                color: '#d32f2f', 
+                cursor: 'pointer' 
+              }}
+            />
+              ),
+            }
+
           
             
           ];
@@ -121,12 +174,26 @@ function Clients() {
 
   return (
     <div>
+       <style>{`
+        @media (max-width: 480px) 
+        {
+          main
+          {
+            margin-left:5px !important;
+            width:115% !important;
+          }
+            .tablename
+            {
+              font-size:16px !important;
+            }
+        }
+           `}</style>
         <Adminsidebar/>
         {/* <Adminpanelheader/> */}
         <main style={{marginLeft:"15%",marginTop:"1%"}}>
              <div style={{padding:"50px"}}>
             <Box sx={{ height: 500, width: '100%', p: 2 }}>
-              <Typography variant="h5" gutterBottom>
+              <Typography variant="h5" gutterBottom className='tablename'>
                 🕵️‍♂️ All Verified Lawyers
               </Typography>
                <DataGrid
@@ -154,7 +221,7 @@ function Clients() {
 
                <div style={{padding:"50px"}}>
             <Box sx={{ height: 500, width: '100%', p: 2 }}>
-              <Typography variant="h5" gutterBottom>
+              <Typography variant="h5" gutterBottom className='tablename'>
                 🕵️‍♂️ All Verified Users
               </Typography>
                <DataGrid
