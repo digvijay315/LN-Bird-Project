@@ -21,12 +21,12 @@ const slider_data = [
     id: 1,
     pre_title: (
       <>
-        Freshness & Savings  <br /> at Your Fingertips
+       Authentic Indian Groceries Delivered Fresh  <br /> Traditional Flavors &Premium Qualityat Your Fingertips
       </>
     ),
     title: (
       <>
-        Your Local Store <br />  Now Online!.
+        Your Trusted Kirana StoreNow Online! <br />
       </>
     ),
     img: "https://static.vecteezy.com/system/resources/previews/045/913/392/non_2x/full-shopping-cart-with-groceries-cut-out-stock-png.png",

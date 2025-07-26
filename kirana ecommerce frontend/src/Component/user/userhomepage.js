@@ -5,6 +5,7 @@ import Popularproducts from './popularproducts'
 import DealOfTheDay from './dealofthedayproducts'
 import HeroProcessSection from './heroprocess'
 import Footer from './footer'
+import ProductCategories from './categoriesproduct'
 
 function Userhomepage() {
   return (
@@ -12,6 +13,7 @@ function Userhomepage() {
         <Header/>
         <HeroBanner/>
         <Popularproducts/>
+        <ProductCategories/>
         {/* <DealOfTheDay/> */}
         <HeroProcessSection/>
         <Footer/>

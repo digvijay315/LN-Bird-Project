@@ -35,13 +35,15 @@ function HeroProcessSection() {
        
         <div className="hero-img">
              <div className="hero-content">
-          <div className="hero-subtitle">Apple iPhone 12 Pro</div>
+          <div className="hero-subtitle">Stock Up on Essentials</div>
           <h1 className="hero-title">
-            The wait is on: <br />
-            iphone 12 max pro
+            The wait is over: 
+ <br />
+            Premium grocery collection
+
           </h1>
           <div className="hero-desc">
-            Last call for up to <strong>32%</strong> off!
+            Last call for up to <strong>25%</strong> off on bulk orders!
           </div>
           <button className="hero-btn">
             Buy Now <FaArrowRight style={{ marginLeft: 8 }} />

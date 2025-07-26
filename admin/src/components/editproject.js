@@ -2723,6 +2723,8 @@ const [pendingContacts, setPendingContacts] = useState([]);
 // 🔹 Step 1: Extract Headers from Excel File
 const handleFileChange = (event) => {
   const file = event.target.files[0];
+ 
+  
   if (!file) return;
 
   setIsLoading(true); // Start loading
@@ -2737,8 +2739,9 @@ const handleFileChange = (event) => {
       const sheet = workbook.Sheets[sheetName];
       const data = XLSX.utils.sheet_to_json(sheet,{ header: 1 });
 
+
       if (data.length > 0) {
-        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`).slice(0,-32);
+        const headers = data[0].map((cell, index) => cell || `Column${index + 1}`);
         setExcelHeaders(headers); // Set headers manually
       } else {
         toast.error("No data found in the Excel file.");

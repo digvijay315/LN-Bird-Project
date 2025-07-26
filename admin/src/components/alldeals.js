@@ -32,7 +32,9 @@ import Lottie from "lottie-react";
 import deallogo from '../icons/deal.jpg'
 import { Percent } from "@mui/icons-material";
 import numWords from 'num-words';
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem,IconButton} from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
 
 
@@ -73,33 +75,107 @@ function Alldeals() {
 
 
 const numberToIndianWords = (num) => {
-  return numWords(num, { lang: 'en-in' }).charAt(0).toUpperCase() + numWords(num, { lang: 'en-in' }).slice(1) + ' Only';
+  const n = Number(String(num).replace(/,/g, ''));
+  if (isNaN(n) || !isFinite(n) || n > 9999999999 || n < 0) {
+    return 'Invalid amount';
+  }
+
+  if (n === 0) return 'Zero Only';
+
+  const units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+  const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+                 'seventeen', 'eighteen', 'nineteen'];
+  const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+  const numToWords = (n) => {
+    let str = '';
+
+    if (Math.floor(n / 10000000) > 0) {
+      str += numToWords(Math.floor(n / 10000000)) + ' crore ';
+      n %= 10000000;
+    }
+
+    if (Math.floor(n / 100000) > 0) {
+      str += numToWords(Math.floor(n / 100000)) + ' lakh ';
+      n %= 100000;
+    }
+
+    if (Math.floor(n / 1000) > 0) {
+      str += numToWords(Math.floor(n / 1000)) + ' thousand ';
+      n %= 1000;
+    }
+
+    if (Math.floor(n / 100) > 0) {
+      str += numToWords(Math.floor(n / 100)) + ' hundred ';
+      n %= 100;
+    }
+
+    if (n > 0) {
+      if (str !== '') str += 'and ';
+      if (n < 10) str += units[n];
+      else if (n < 20) str += teens[n - 10];
+      else {
+        str += tens[Math.floor(n / 10)];
+        if (n % 10 > 0) str += '-' + units[n % 10];
+      }
+    }
+
+    return str.trim();
+  };
+
+  const words = numToWords(n);
+  return words.charAt(0).toUpperCase() + words.slice(1) + ' Only';
 };
 
+
+
+
   const [sortField, setSortField] = React.useState('');
+    const [sortOrder, setSortOrder] = useState("asc");
 
    // Whenever sortField changes (e.g., in a useEffect)
-React.useEffect(() => {
-  if (!sortField) return; // Or reset original data if needed
+  useEffect(() => {
+    if (!sortField) return; // Or reset original data if needed
 
-  const sorted = [...data];
-  sorted.sort((a, b) => {
-    if (sortField === 'price') {
-      return (a.expected_price || 0) - (b.expected_price || 0);
-    } else if (sortField === 'matchinglead') {
-      return (a.matchinglead || '').localeCompare(b.matchinglead || '');
-    } else if (sortField === 'unit_number') {
-      return (a.unit_number || '').localeCompare(b.unit_number || '');
-    } else if (sortField === 'usize') {
-      return (a.usize || 0) - (b.usize || 0);
-    } else if (sortField === 'project') {
-      return (a.project || 0) - (b.project || 0);
-    }
-    return 0;
-  });
+    const sorted = [...data].sort((a, b) => {
+      let aVal, bVal;
 
-  setdata(sorted);
-}, [sortField]);
+      switch (sortField) {
+        case "price":
+          aVal = a.expected_price || 0;
+          bVal = b.expected_price || 0;
+          break;
+        case "matchinglead":
+          aVal = a.matchinglead || "";
+          bVal = b.matchinglead || "";
+          break;
+        case "unit_number":
+          aVal = a.unit_number || "";
+          bVal = b.unit_number || "";
+          break;
+        case "usize":
+          aVal = a.usize || 0;
+          bVal = b.usize || 0;
+          break;
+        case "project":
+          aVal = a.project || 0;
+          bVal = b.project || 0;
+          break;
+        default:
+          return 0;
+      }
+
+      if (typeof aVal === "string" && typeof bVal === "string") {
+        const cmp = aVal.localeCompare(bVal);
+        return sortOrder === "asc" ? cmp : -cmp;
+      } else {
+        const cmp = aVal - bVal;
+        return sortOrder === "asc" ? cmp : -cmp;
+      }
+    });
+
+    setdata(sorted);
+  }, [sortField, sortOrder]);
 
 
 
@@ -657,7 +733,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
           >
             {/* Previous Button */}
             {currentPage > 1 && (
-              <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+              <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px',height:"30px" }}>
                 Prev
               </button>
             )}
@@ -670,6 +746,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
                 style={{
                   width: '30px',
                   borderRadius: '5px',
+                  height:"30px",
                   marginRight: '5px',
                   flexShrink: 0, // Prevent buttons from shrinking
                   backgroundColor: number === currentPage ? 'lightblue' : 'white',
@@ -681,7 +758,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
       
             {/* Next Button */}
             {currentPage < totalPages && (
-              <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+              <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px',height:"30px" }}>
                 Next
               </button>
             )}
@@ -3676,37 +3753,89 @@ const handleTimeChangemail = (e) => {
             </div>  */}
         
             <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"60%",position:"absolute"}}>
-      <div style={{lineHeight:"30px"}}>
-        <FormControl
-      variant="outlined"
-      size="small"
-      sx={{ minWidth: 200, backgroundColor: "white", borderRadius: 1, boxShadow: 1 }}
+      <div style={{height:"10px"}}>
+       <Box
+      sx={{
+        display: "flex",
+        gap: 1,
+        alignItems: "center",
+        fontSize: "0.85rem",
+        lineHeight: 1,         
+        py: 0.25,  
+        marginTop:"-10px"           
+      }}
     >
-      <InputLabel id="sort-select-label">Sort By</InputLabel>
-      <Select
-        labelId="sort-select-label"
-        id="sort-select"
-        value={sortField}
-        label="Sort By"
-        onChange={(e) => setSortField(e.target.value)}
+      <FormControl
+        variant="outlined"
+        size="small"
         sx={{
-          "& .MuiSelect-icon": { color: "#1976d2" }, // Blue icon color
+          minWidth: 140,
+          backgroundColor: "white",
+          borderRadius: 1,
+          boxShadow: 1,
+          "& .MuiInputLabel-root": { fontSize: "0.8rem", lineHeight: 1 },
+          "& .MuiSelect-root": {
+            fontSize: "0.85rem",
+            py: "2px",             // smaller vertical padding in select field
+            lineHeight: 1,
+            height: 30,            // explicitly reduce height of select input
+          },
+          "& .MuiSelect-icon": { color: "#1976d2", fontSize: "1.1rem" },
         }}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
-        <MenuItem value="price">Price</MenuItem>
-        <MenuItem value="matchinglead">Matched Lead</MenuItem>
-        <MenuItem value="unit_number">Unit Number</MenuItem>
-        <MenuItem value="usize">Unit Size</MenuItem>
-        <MenuItem value="project">Project</MenuItem>
-      </Select>
-    </FormControl>
+        <InputLabel id="sort-select-label">Sort By</InputLabel>
+        <Select
+          labelId="sort-select-label"
+          id="sort-select"
+          value={sortField}
+          label="Sort By"
+          onChange={(e) => setSortField(e.target.value)}
+          size="small"
+          MenuProps={{
+            PaperProps: {
+              style: {
+                fontSize: "0.8rem",
+              },
+            },
+          }}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="price">Price</MenuItem>
+          <MenuItem value="matchinglead">Matched Lead</MenuItem>
+          <MenuItem value="unit_number">Unit Number</MenuItem>
+          <MenuItem value="usize">Unit Size</MenuItem>
+          <MenuItem value="project">Project</MenuItem>
+        </Select>
+      </FormControl>
+
+      <Tooltip title={`Sort ${sortOrder === "asc" ? "descending" : "ascending"}`}>
+        <IconButton
+          onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
+          sx={{
+            backgroundColor: "white",
+            boxShadow: 1,
+            p: "4px",       // reduce padding around icon button
+            "& svg": { fontSize: "1.2rem" }, // slightly smaller icon
+            height: 32,
+            width: 32,
+          }}
+          size="small"
+          aria-label="Toggle sort order"
+        >
+          {sortOrder === "asc" ? (
+            <ArrowUpwardIcon color="primary" />
+          ) : (
+            <ArrowDownwardIcon color="primary" />
+          )}
+        </IconButton>
+      </Tooltip>
+    </Box>
     </div>
               
-              <label htmlFor="itemsPerPage" style={{fontSize:"16px",paddingTop:"10px"}}>Items: </label>
-              <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",height:"40px"}}>
+              <label htmlFor="itemsPerPage" style={{fontSize:"16px",paddingTop:"0px"}}>Items: </label>
+              <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",height:"30px"}}>
                 <option value="5">5</option>
                 <option value="10">10</option>
                 <option value="20">20</option>
@@ -3826,13 +3955,10 @@ const handleTimeChangemail = (e) => {
                           ) :   col.id === 'expected_price' ? (
                             <>
                             <span>₹{Number(item.expected_price).toLocaleString('en-IN')}/-</span><br></br>
-                        <span style={{ fontSize: "12px", color: "#333" }}>
-                            {
-                              !isNaN(Number(item.expected_price))
-                                ? numberToIndianWords(Number(item.expected_price))
-                                : 'Invalid amount'
-                            }
-                          </span>
+                      <span style={{ fontSize: "12px", color: "#333" }}>
+  { numberToIndianWords(item.expected_price) }
+</span>
+
 
                             </>
                           ) :  col.id === 'matchinglead' ? (
