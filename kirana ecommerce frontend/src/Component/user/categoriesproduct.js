@@ -1,47 +1,79 @@
 import React, { useState } from "react";
+import { useCart } from "./context/cartcontext";
+import Swal from 'sweetalert2';
+import '../user/css/categoryproduct.css'
 
 const ProductCategories = () => {
+
+
+  const { setCartItems, cartItems } = useCart();
+  
+  const addtocart = (product) => {
+    const existingItem = cartItems.find((item) => item._id === product._id);
+    if (existingItem) {
+      // If already in cart, increment quantity
+      setCartItems(
+        cartItems.map((item) =>
+          item._id === product._id
+            ? { ...item, quantity: (item.quantity || 1) + 1 }
+            : item
+        )
+      );
+    } else {
+      // If not in cart, add with quantity 1
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
+    }
+    Swal.fire({
+      title: 'Added to Cart!',
+      text: `${product.name} has been added to your cart.`,
+      icon: 'success',
+      confirmButtonText: 'OK'
+    });
+  };
+
+
   const dummyProducts = [
     {
-      productname: "Basmati Rice",
+      _id: 7,
+      name: "Basmati Rice",
       price: 250,
-      image: "https://via.placeholder.com/220x140?text=Basmati+Rice",
+      image: "https://www.jiomart.com/images/product/original/rvbzowg7fl/ahaar-2kg-basmati-rice-1kg-x-2-pack-product-images-orvbzowg7fl-p596097266-1-202308042139.jpg?im=Resize=(420,420)",
       category: "Rice & Grains",
     },
     {
-      productname: "Sona Masoori",
+      name: "Sona Masoori",
       price: 180,
-      image: "https://via.placeholder.com/220x140?text=Sona+Masoori",
+      image: "https://images-cdn.ubuy.co.in/65451a48cd701572c400b259-royal-sona-masoori-medium-grain-white.jpg",
       category: "Rice & Grains",
     },
     {
-      productname: "Red Rajma",
+      name: "Red Rajma",
       price: 120,
-      image: "https://via.placeholder.com/220x140?text=Red+Rajma",
+      image: "https://m.media-amazon.com/images/I/81IYVJJJJtL.jpg",
       category: "Pulses & Lentils",
     },
     {
-      productname: "Organic Turmeric Powder",
+      name: "Organic Turmeric Powder",
       price: 150,
-      image: "https://via.placeholder.com/220x140?text=Turmeric+Powder",
+      image: "https://organicindia.com/cdn/shop/products/492579990_Image1.jpg?v=1667894141",
       category: "Spices & Masalas",
     },
     {
-      productname: "Pure Desi Ghee",
+      name: "Pure Desi Ghee",
       price: 450,
-      image: "https://via.placeholder.com/220x140?text=Desi+Ghee",
+      image: "https://www.chandigarhorganics.com/wp-content/uploads/2022/01/IMG-20250208-WA0003.jpg",
       category: "Oil & Ghee",
     },
     {
-      productname: "Premium Green Tea",
+      name: "Premium Green Tea",
       price: 350,
-      image: "https://via.placeholder.com/220x140?text=Green+Tea",
+      image: "https://marveltea.com/cdn/shop/files/Lemon_Green_Tea_Bagt_940x-min_1e8ad299-685c-4133-ab92-44f68033296d_grande.webp?v=1724847740",
       category: "Tea & Coffee",
     },
     {
-      productname: "Dry Fruit Mix",
+      name: "Dry Fruit Mix",
       price: 500,
-      image: "https://via.placeholder.com/220x140?text=Dry+Fruit+Mix",
+      image: "https://rukminim2.flixcart.com/image/704/844/xif0q/nut-dry-fruit/k/o/j/425-dry-fruit-mix-panchmeva-superfood-1-mason-jar-farmley-original-imah3pwtubhwggza.jpeg?q=90&crop=false",
       category: "Snacks & Namkeen",
     },
   ];
@@ -62,107 +94,14 @@ const ProductCategories = () => {
 
   return (
     <>
-      <style>{`
-        .tabs {
-          display: flex;
-          gap: 1rem;
-          border-bottom: 2px solid #ccc;
-          margin-bottom: 1rem;
-          flex-wrap: wrap;
-        }
-        .tab {
-          padding: 0.5rem 1rem;
-          cursor: pointer;
-          border-radius: 4px 4px 0 0;
-          background-color: #eee;
-          font-weight: 600;
-          transition: background-color 0.3s ease;
-        }
-        .tab.active {
-          background-color: #007600;
-          color: white;
-          border-bottom: 2px solid white;
-        }
-        .products-grid {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 1.5rem;
-          justify-content: flex-start;
-        }
-        .product-card {
-          position: relative;
-          flex: 1 1 220px;
-          max-width: 220px;
-          background: #f8f8f8;
-          border-radius: 8px;
-          box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-          padding: 1rem;
-          text-align: center;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          overflow: hidden;
-          cursor: pointer;
-          transition: transform 0.2s ease;
-        }
-        .product-card:hover {
-          transform: translateY(-5px);
-        }
-        .product-image {
-          width: 100%;
-          height: 140px;
-          object-fit: contain;
-          margin-bottom: 1rem;
-          border-radius: 4px;
-          background-color: white;
-        }
-        .product-name {
-          font-weight: 600;
-          margin-bottom: 0.5rem;
-          font-size: 1.1rem;
-          color: #333;
-        }
-        .product-price {
-          color: #007600;
-          font-weight: 700;
-          font-size: 1rem;
-          margin-bottom: 0.5rem;
-        }
-        .add-to-cart-btn {
-          position: absolute;
-          bottom: 1rem;
-          left: 50%;
-          transform: translateX(-50%);
-          padding: 0.5rem 1rem;
-          background-color: #007600;
-          color: white;
-          border: none;
-          border-radius: 20px;
-          font-weight: 700;
-          font-size: 0.95rem;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.3s ease;
-        }
-        .product-card:hover .add-to-cart-btn {
-          opacity: 1;
-          pointer-events: auto;
-        }
-        @media (max-width: 768px) {
-          .products-grid {
-            justify-content: center;
-          }
-          .product-card {
-            max-width: 100%;
-            flex: 1 1 100%;
-          }
-          .tabs {
-            justify-content: center;
-          }
-        }
-      `}</style>
-
+     
+       <section className="popular-products-section">
+      <h2>
+        <span className="section-accent"></span>
+        Popular Products
+      </h2>
       <div className="tabs" role="tablist">
+     
         {categories.map((category) => (
           <div
             key={category}
@@ -184,21 +123,19 @@ const ProductCategories = () => {
 
       {selectedCategory ? (
         <div className="products-grid">
-          {categoriesMap[selectedCategory].map(({ productname, price, image }, index) => (
+          {categoriesMap[selectedCategory].map((prod, index) => (
             <div className="product-card" key={index}>
               <img
                 className="product-image"
-                src={image}
-                alt={productname}
+                src={prod.image}
+                alt={prod.productname}
                 loading="lazy"
               />
-              <div className="product-name">{productname}</div>
-              <div className="product-price">₹{price.toFixed(2)}</div>
+              <div className="product-name">{prod.name}</div>
+              <div className="product-price">₹{prod.price.toFixed(2)}</div>
               <button
                 className="add-to-cart-btn"
-                onClick={() =>
-                  handleAddToCart({ productname, price, image, category: selectedCategory })
-                }
+                onClick={()=>addtocart(prod)}
               >
                 Add to Cart
               </button>
@@ -208,6 +145,7 @@ const ProductCategories = () => {
       ) : (
         <p>No category selected.</p>
       )}
+      </section>
     </>
   );
 };
