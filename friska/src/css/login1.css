@@ -1,0 +1,28 @@
+body {
+    background-color:#783894;
+}
+
+/* Circle spinner container */
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  /* Create the spinner */
+  .spinner {
+    border: 8px solid #f3f3f3; /* Light grey color */
+    border-top: 8px solid #3498db; /* Blue color for the spinning part */
+    border-radius: 50%;
+    width: 50px; /* Size of the circle */
+    height: 50px; /* Size of the circle */
+    animation: spin 1.5s linear infinite; /* Apply the spin animation */
+  }
+  
+  /* Keyframes for spinning effect */
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

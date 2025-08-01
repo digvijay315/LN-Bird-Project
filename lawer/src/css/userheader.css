@@ -1,0 +1,51 @@
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  /* background: linear-gradient(to right, #4a00e0, #8e2de2); */
+  color:black;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
+}
+
+.left-section {
+  font-size: 18px;
+  font-weight: bold;
+  /* Optional: add logo or title */
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.notification {
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.notification:hover {
+  transform: scale(1.2);
+}
+
+.username {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.profile-pic {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.profile-pic:hover {
+  transform: scale(1.1);
+}

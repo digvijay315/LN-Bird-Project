@@ -1,0 +1,47 @@
+.carousel-indicators {
+  display: none !important;
+}
+
+.feedback-toast {
+  position: fixed;
+  top: 20px;
+  right: 5px;
+  width: 350px;
+  display: none;
+  animation: none;
+  z-index: 9999;
+}
+
+/* When opening */
+.feedback-toast.show {
+  display: block;
+  animation: slideInRight 0.5s ease forwards;
+}
+
+/* When closing */
+.feedback-toast.hide {
+  display: block;
+  animation: slideOutRight 0.5s ease forwards;
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  0% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

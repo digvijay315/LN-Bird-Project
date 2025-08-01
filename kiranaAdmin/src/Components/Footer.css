@@ -1,0 +1,130 @@
+/* General Footer Styling */
+.footer {
+    color: white;
+    padding: 40px 20px; /* Added padding for smaller screens */
+    background: linear-gradient(to right, #fc2779, #ff79b0);
+    height: fit-content;
+  }
+  
+  .footer-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .footer .footer-column {
+    margin-bottom: 20px;
+  }
+  
+  .footer h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffffff;
+  }
+  
+  .footer ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .footer ul li {
+    margin: 8px 0;
+    font-size: 0.95rem;
+  }
+  
+  .footer ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .footer ul li a:hover {
+    color: #ffcc00;
+  }
+  
+  /* Contact Section Styling */
+  .footer .contact p {
+    margin: 5px 0;
+  }
+  
+  .footer .contact a {
+    color: #ffcc00;
+    text-decoration: underline;
+  }
+  
+  /* App Links Styling */
+  .footer .app-links img {
+    width: 120px;
+    margin-right: 10px;
+    transition: transform 0.3s;
+  }
+  
+  .footer .app-links img:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Footer Bottom Styling */
+  .footer-bottom {
+    background: linear-gradient(to right, #dcdcdc, #f2f2f2);
+    color: black;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.85rem;
+  }
+
+
+
+
+
+
+  /* Social Media Icons Container */
+.social-media-icons {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Space between icons */
+  margin-top: 20px;
+}
+
+/* Icon Links */
+.social-media-icons .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Circular shape */
+  background-color: #f1f1f1; /* Light background */
+  color: #333; /* Default icon color */
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: all 0.3s ease; /* Smooth transition */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Hover Effects */
+.social-media-icons .icon:hover {
+  transform: scale(1.1); /* Slight zoom effect */
+  color: #fff; /* White icon color */
+}
+
+/* Individual Icon Colors */
+.icon.facebook:hover {
+  background-color: #1877f2; /* Facebook Blue */
+}
+.icon.twitter:hover {
+  background-color: #1da1f2; /* Twitter Blue */
+}
+.icon.instagram:hover {
+  background-color: #e4405f; /* Instagram Pinkish */
+}
+.icon.linkedin:hover {
+  background-color: #0077b5; /* LinkedIn Blue */
+}
+
+@media (max-width: 576px) {
+  .social-media-icons .icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
