@@ -79,48 +79,14 @@ function Fetchcontact() {
         "Wallis and Futuna +681","Western Sahara +212","Yemen +967","Zambia +260","Zimbabwe +263"]
 
     const navigate=useNavigate()
-    React.useEffect(()=>{fetchdata()},[])
-    React.useEffect(()=>{fetchcdata()},[])
-
+  
     const [isLoading, setIsLoading] = useState(false);
 /*-------------------------------------------------------------------fetching all contact data start---------------------------------------------------------------------------- */                                                     
     const[data,setdata]=useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const[totalcontact,settotalcontact]=useState()
     const[contactforsearch,setcontactforsearch]=useState([])
-    const fetchdata=async(event)=>
-    {
-      
-      try {
-        const resp=await api.get('viewcontact')
-        setdata(resp.data.contact)
-        setcontactforsearch(resp.data.contact)
-        const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
-        settotalcontact(countcontact.length)
-        setFilteredData(countcontact);
-      } catch (error) {
-        console.log(error);
-      }
-    
-    }
-
-    const[cdata,setcdata]=useState([]);
-    // const [filteredData, setFilteredData] = useState([]);
-    const[totalcompany,settotalcompany]=useState()
-    const fetchcdata=async(event)=>
-    {
-      
-      try {
-        const resp=await api.get('viewcompany')
-        setcdata(resp.data.developer)
-        const countcompany=Array.isArray(resp.data.developer) ? resp.data.developer : [resp.data.developer]
-        settotalcompany(countcompany.length)
-        // setFilteredData(countcontact);
-      } catch (error) {
-        console.log(error);
-      }
-    
-    }
+ 
   /*-------------------------------------------------------------------fetching all contact data end---------------------------------------------------------------------------- */                                                     
 
   /*-------------------------------------------------------------------delete  contact data start---------------------------------------------------------------------------- */                                                     
@@ -240,15 +206,71 @@ const [currentPage, setCurrentPage] = useState(1);
 const [itemsPerPage, setItemsPerPage] = useState(10); // User-defined items per page
 const indexOfLastItem = currentPage * itemsPerPage;
 const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-const filteredDatas = data.filter(item => item.createdAt && !isNaN(new Date(item.createdAt)));
-const sortedData = [...filteredDatas].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+// const filteredDatas = data.filter(item => item.createdAt && !isNaN(new Date(item.createdAt)));
+// const sortedData = [...filteredDatas].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+// const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+const currentItems = data;
 const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  // Handle items per page change
-  const handleItemsPerPageChange = (e) => {
+  const [windowStartPage, setWindowStartPage] = useState(1);
+    const maxPageNumbersToShow = 3;
+
+
+ const [contacttotalPages, setcontacttotalPages] = useState(0);
+   const fetchdata=async(page, limit)=>
+    {
+      try {
+        const resp=await api.get(`/viewcontact?page=${page}&limit=${limit}`)
+        setdata(resp.data.contact)
+        setcontacttotalPages(resp.data.totalPages);
+        setcontactforsearch(resp.data.contact)
+        const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
+        settotalcontact(countcontact.length)
+        setFilteredData(countcontact);
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+    const[cdata,setcdata]=useState([]);
+    // const [filteredData, setFilteredData] = useState([]);
+    const[totalcompany,settotalcompany]=useState()
+    const fetchcdata=async(event)=>
+    {
+      
+      try {
+        const resp=await api.get('viewcompany')
+        setcdata(resp.data.developer)
+        const countcompany=Array.isArray(resp.data.developer) ? resp.data.developer : [resp.data.developer]
+        settotalcompany(countcompany.length)
+        // setFilteredData(countcontact);
+      } catch (error) {
+        console.log(error);
+      }
+    
+    }
+
+
+ useEffect(() => {
+    fetchdata(currentPage, itemsPerPage);
+
+    // If current page moves outside window, adjust windowStartPage
+    if (currentPage < windowStartPage) {
+      setWindowStartPage(currentPage);
+    } else if (currentPage >= windowStartPage + maxPageNumbersToShow) {
+      setWindowStartPage(currentPage - maxPageNumbersToShow + 1);
+    }
+  }, [currentPage, itemsPerPage]);
+
+
+    React.useEffect(()=>{fetchcdata()},[])
+
+
+    const handleItemsPerPageChange = (e) => {
     setItemsPerPage(Number(e.target.value));
-    setCurrentPage(1); // Reset to first page whenever items per page changes
+    setCurrentPage(1);
+    setWindowStartPage(1);
   };
 
 // Function to handle page changes
@@ -256,7 +278,7 @@ const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
 // Function to handle "Next" and "Previous" page changes
 const goToNextPage = () => {
-  if (currentPage < totalPages) {
+  if (currentPage < contacttotalPages) {
     setCurrentPage(currentPage + 1);
   }
 };
@@ -267,56 +289,60 @@ const goToPreviousPage = () => {
   }
 };
 
-const renderPageNumbers = () => {
-  // Define the range of page numbers to display
-  const maxPageNumbersToShow = 5;
-  const startPage = Math.max(1, currentPage - Math.floor(maxPageNumbersToShow / 2));
-  const endPage = Math.min(totalPages, startPage + maxPageNumbersToShow - 1);
-  
-  return (
-    <div
-      style={{
-        display: 'flex',
-       
-        whiteSpace: 'nowrap',
-        padding: '10px-15px',
-        width: '100%', 
-        position: 'relative'
-      }}
-    >
-      {/* Previous Button */}
-      {currentPage > 1 && (
-        <button onClick={goToPreviousPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
-          Prev
-        </button>
-      )}
+  const renderPageNumbers = () => {
+    const endPage = Math.min(windowStartPage + maxPageNumbersToShow - 1, contacttotalPages);
+    const pages = [];
 
-      {/* Page Numbers */}
-      {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((number) => (
+    for (let number = windowStartPage; number <= endPage; number++) {
+      pages.push(
         <button
           key={number}
           onClick={() => paginate(number)}
           style={{
-            width: '30px',
-            borderRadius: '5px',
-            marginRight: '5px',
-            flexShrink: 0, // Prevent buttons from shrinking
-            backgroundColor: number === currentPage ? 'lightblue' : 'white',
+            minWidth: 30,
+            marginRight: 10,
+            borderRadius: 4,
+            cursor: 'pointer',
+            backgroundColor: number === currentPage ? '#1976d2' : '#e0e0e0',
+            color: number === currentPage ? 'white' : 'black',
+            border: 'none',
+            // padding: '0px 10px',
           }}
         >
           {number}
         </button>
-      ))}
+      );
+    }
 
-      {/* Next Button */}
-      {currentPage < totalPages && (
-        <button onClick={goToNextPage} style={{ width: '50px', borderRadius: '5px', marginRight: '5px' }}>
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginTop: 0 }}>
+        {/* Previous Button */}
+        <button
+          onClick={() => {
+            goToPreviousPage();
+          }}
+          disabled={currentPage === 1}
+          style={{ minWidth: 60, padding: '5px 10px',borderRadius:"5px" }}
+        >
+          Prev
+        </button>
+
+        {/* Page Number Buttons */}
+        {pages}
+
+        {/* Next Button */}
+        <button
+          onClick={() => {
+            goToNextPage();
+          }}
+          disabled={currentPage === contacttotalPages}
+          style={{ minWidth: 60, padding: '5px 10px',borderRadius:"5px" }}
+        >
           Next
         </button>
-      )}
-    </div>
-  );
-};
+      </div>
+    );
+  };
 
     const StyledTableCell = styled(TableCell)(({ theme }) => ({
       [`&.${tableCellClasses.head}`]: {
@@ -3295,54 +3321,88 @@ const[isloading3,setisloading3]=useState(false)
 
                           const [searchTermcontact, setSearchTermcontact] = useState('');
                           const [suggestionscontact, setSuggestionscontact] = useState([]);
+                      
                           
-                                          const handleSearchChangecontact = (e) => {
-                                            const value = e.target.value;
-                                            setSearchTermcontact(value);
-                          
-                                            if (value.trim() === '') {
-                                              setSuggestionscontact([]);
-                                              fetchdata()
-                                              return;
-                                            }
-                          
-                                            const filtered = contactforsearch.filter(item =>
-                                            {
-                                              const titlematch=item.title && item.title.toLowerCase().includes(value.toLowerCase())
-                                              const firstnamematch =item.first_name && item.first_name.toLowerCase().includes(value.toLowerCase());
-                                              const lastnamematch =item.last_name && item.last_name.toLowerCase().includes(value.toLowerCase());
-                          
-                                              const mobile_no =
-                                                Array.isArray(item.mobile_no) &&
-                                                item.mobile_no.some(mobile =>
-                                                  String(mobile).toLowerCase().includes(value.toLowerCase())
-                                                );
+                          const fetchsearchdata = async (page, limit, search) => {
+  try {
+    // Call backend with search param
+    const resp = await api.get(`/searchcontact?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`);
+    const contacts = resp.data.contact || [];
 
-                                                const email =
-                                                Array.isArray(item.email) &&
-                                                item.email.some(emailid =>
-                                                  String(emailid).toLowerCase().includes(value.toLowerCase())
-                                                );
+    setdata(contacts);
+    setSuggestionscontact(contacts); // suggestions can be the current filtered page
+
+    setcontacttotalPages(resp.data.totalPages || 0);
+    settotalcontact(resp.data.total || 0);
+
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const handleSearchChangecontact = async (e) => {
+  const value = e.target.value;
+  setSearchTermcontact(value);
+  setCurrentPage(1); // reset to first page on new search
+
+  if (value.trim() === '') {
+    // Empty search - fetch default data (first page, no search)
+    await fetchdata(1, itemsPerPage, '');
+    setSuggestionscontact([]); // clear suggestions
+    return;
+  }
+
+  // Fetch contacts filtered by search term from backend
+  await fetchsearchdata(currentPage, itemsPerPage, value);
+};
+
+                                          // const handleSearchChangecontact = (e) => {
+                                          //   const value = e.target.value;
+                                          //   setSearchTermcontact(value);
+                          
+                                          //   if (value.trim() === '') {
+                                          //     setSuggestionscontact([]);
+                                          //     fetchdata()
+                                          //     return;
+                                          //   }
+                          
+                                          //   const filtered = contactforsearch.filter(item =>
+                                          //   {
+                                          //     const titlematch=item.title && item.title.toLowerCase().includes(value.toLowerCase())
+                                          //     const firstnamematch =item.first_name && item.first_name.toLowerCase().includes(value.toLowerCase());
+                                          //     const lastnamematch =item.last_name && item.last_name.toLowerCase().includes(value.toLowerCase());
+                          
+                                          //     const mobile_no =
+                                          //       Array.isArray(item.mobile_no) &&
+                                          //       item.mobile_no.some(mobile =>
+                                          //         String(mobile).toLowerCase().includes(value.toLowerCase())
+                                          //       );
+
+                                          //       const email =
+                                          //       Array.isArray(item.email) &&
+                                          //       item.email.some(emailid =>
+                                          //         String(emailid).toLowerCase().includes(value.toLowerCase())
+                                          //       );
                           
                                               
                           
-                                              return titlematch || firstnamematch || lastnamematch || mobile_no || email;
+                                          //     return titlematch || firstnamematch || lastnamematch || mobile_no || email;
                                               
-                                           } );
+                                          //  } );
                           
-                                            setSuggestionscontact(filtered);
-                                            setdata(filtered) // Limit to 5 suggestions
-                                          };
+                                          //   setSuggestionscontact(filtered);
+                                          //   setdata(filtered) // Limit to 5 suggestions
+                                          // };
                           
-                                          const handleSuggestionClickcontact = (item) => {
+                                          // const handleSuggestionClickcontact = (item) => {
                                 
                                           
-                                            setSearchTermcontact(`${item.title} ${item.first_name} ${item.last_name} -${item.mobile_no.join(',')} -${item.email.join(',')}`);
-                                            setSuggestionscontact([]);
-                                            setdata([item])
+                                          //   setSearchTermcontact(`${item.title} ${item.first_name} ${item.last_name} -${item.mobile_no.join(',')} -${item.email.join(',')}`);
+                                          //   setSuggestionscontact([]);
+                                          //   setdata([item])
                           
-                                            // You can also do something with the selected item (e.g. set selectedDeal)
-                                          };
+                                          //   // You can also do something with the selected item (e.g. set selectedDeal)
+                                          // };
                           
   
                                           
@@ -3968,7 +4028,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
       </div>
     
     
-      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"70%",position:"absolute"}}>
+      <div style={{display:"flex",fontSize:"14px",gap:"5px", marginTop:"10px",marginLeft:"65%",position:"absolute"}}>
       
       <label htmlFor="itemsPerPage" style={{fontSize:"16px",fontFamily:"times new roman"}}>Items: </label>
       <select id="itemsPerPage" value={itemsPerPage} onChange={handleItemsPerPageChange} style={{fontSize:"16px",fontFamily:"times new roman",height:"30px"}}>
@@ -4065,7 +4125,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
               <span style={{color:"#0086b3",fontWeight:"bold",fontSize:"13px"}}>{item.title} {item.first_name} {item.last_name}</span>
               <br />
               {
-                item.mobile_no.map((item1)=>
+                item?.mobile_no?.map((item1)=>
                 (
                   <>
                   <SvgIcon component={PhoneIphoneIcon} style={{fontSize:"12px"}} />
@@ -4113,7 +4173,7 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
                   formatDate(item[col.id]) // Format createdAt date
                 ) : col.id === "ownership" ? (
                   <>
-                    {item.owner.map((owner, index) => (
+                    {item?.owner?.map((owner, index) => (
                       <span key={index}>
                         {owner} ({item.team || ""})
                         <br />
@@ -5670,8 +5730,8 @@ const [isHoveringaddtotask, setIsHoveringaddtotask] = useState(false);
             </StyledTableCell>
            
                 <StyledTableCell >
-                {item.mobile_no.join(',')}<br></br>
-                {item.email.join(',')}
+                {item?.mobile_no?.join(',')}<br></br>
+                {item?.email?.join(',')}
                 </StyledTableCell>
               
           </StyledTableRow>

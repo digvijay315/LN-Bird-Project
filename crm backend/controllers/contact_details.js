@@ -90,14 +90,81 @@ const add_contact = async (req, res) => {
 
     const view_contact=async(req,res)=>
         {
-            try {
-                const resp=await addcontact.find()
-                res.status(200).send({message:"contact details fetch successfully",contact:resp})
-            } catch (error) {
-                console.log(error)
-            }
+          try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    
+    // Fetch contacts with pagination and sorting by createdAt descending
+    const contacts = await addcontact.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      // .select('name phone email createdAt');
+
+    // Get total count of documents to calculate total pages on frontend
+    const total = await addcontact.countDocuments();
+
+    res.status(200).json({
+      message: "Contacts fetched successfully",
+      contact: contacts,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
         }
         
+
+        // /viewcontact route with search + pagination
+const searchcontact=async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page)) || 1;
+    const limit = Math.max(1, parseInt(req.query.limit)) || 100;
+    const search = req.query.search || '';
+    const skip = (page - 1) * limit;
+
+    const searchRegex = new RegExp(search, 'i'); // case-insensitive partial match
+
+    // Build filter for searching across fields
+    const filter = search
+      ? {
+          $or: [
+            { title: searchRegex },
+            { first_name: searchRegex },
+            { last_name: searchRegex },
+            { mobile_no: { $elemMatch: { $regex: searchRegex } } },
+            { email: { $elemMatch: { $regex: searchRegex } } },
+          ],
+        }
+      : {};
+
+    // Fetch paginated & searched
+    const contacts = await addcontact.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    // Get total for filtered result
+    const total = await addcontact.countDocuments(filter);
+
+    res.status(200).json({
+      message: 'Contacts fetched successfully',
+      contact: contacts,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
+
     
     const view_contact_Byid=async(req,res)=>
         {
@@ -583,4 +650,4 @@ const add_contact = async (req, res) => {
     module.exports={add_contact,view_contact,view_contact_Byid,remove_contact,update_contact,
                     view_contact_Byemail,view_contact_Bymobile,view_contact_Bytags,view_contact_Bycompany,
                 view_contact_ByName,update_contactsingledocument,delete_contactsingledocument,add_contactdocument,addbulkcontacts,
-            update_contactforbulkupload};
+            update_contactforbulkupload,searchcontact};
