@@ -236,9 +236,12 @@ function LoginForm() {
             flex-direction: column;
             width: 100%;
             max-width: 400px;
+<<<<<<< HEAD
             margin-top:-320px
            
        
+=======
+>>>>>>> 360dcc1d5 (responsive done)
           }
 
           .left-section {
@@ -247,7 +250,12 @@ function LoginForm() {
 
           .right-section {
             width: 100%;
+<<<<<<< HEAD
             padding: 40px 20px;
+=======
+            padding: 30px 20px;
+            margin-bottom: 350px;
+>>>>>>> 360dcc1d5 (responsive done)
           }
         }
 

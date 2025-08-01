@@ -202,6 +202,7 @@ function RegisterForm() {
 
         /* Responsive adjustments */
 
+<<<<<<< HEAD
       @media (max-width: 900px) {
   .register-container {
     flex-direction: column;
@@ -237,6 +238,31 @@ function RegisterForm() {
           margin-bottom: 100px;
           min-width: 0;
         }
+=======
+        @media (max-width: 900px) {
+          .register-container {
+            flex-direction: column;
+            padding: 20px 10px;
+            margin-bottom: 30px;
+          }
+          .left-section
+          {
+          display:none;
+          }
+        .right-section {
+            width: 100%;
+            margin-bottom: 30px;
+            padding-bottom: 40px;
+            margin-bottom: 320px;
+          }
+
+          form {
+            max-width: 100%;
+          }
+        }
+
+        @media (max-width: 500px) {
+>>>>>>> 360dcc1d5 (responsive done)
           h2 {
             font-size: 24px;
           }
