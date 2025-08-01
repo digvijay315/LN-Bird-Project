@@ -1,0 +1,127 @@
+.patient-testimonials-container {
+  width: 60%;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f8f9ff;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.testimonial-header h2 {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: left;
+  color: #111;
+}
+
+.testimonial-header p {
+  font-size: 14px;
+  color: #666;
+  text-align: left;
+  margin-bottom: 15px;
+}
+
+/* Card */
+.testimonial-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #eef0ff;
+  padding: 15px;
+  border-radius: 10px;
+  gap: 20px;
+}
+
+.testimonial-text {
+  flex: 1;
+  text-align: left;
+}
+
+.quote-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.testimonial-text h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.testimonial-text span {
+  font-size: 13px;
+  color: #666;
+}
+
+/* Image */
+.testimonial-image img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Dots */
+.dots-container {
+  margin-top: 12px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active {
+  background-color: #2563eb;
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .testimonial-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .testimonial-text {
+    text-align: center;
+  }
+
+  .testimonial-image img {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-testimonials-container {
+    padding: 12px;
+  }
+
+  .quote-text {
+    font-size: 14px;
+  }
+
+  .testimonial-text h4 {
+    font-size: 14px;
+  }
+
+  .testimonial-text span {
+    font-size: 12px;
+  }
+
+  .testimonial-image img {
+    width: 120px;
+    height: 120px;
+  }
+}

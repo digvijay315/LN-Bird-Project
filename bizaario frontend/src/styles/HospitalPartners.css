@@ -1,0 +1,181 @@
+.hospital-page {
+  font-family: Arial, sans-serif;
+  color: #222;
+  overflow-x: hidden;
+}
+
+/* ✅ Banner Section */
+.hospital-banner {
+  width: 100%;
+  height: 250px;
+  background-image: url("../assets/article1.png");
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px 50px;
+}
+
+.banner-overlay {
+  padding: 20px 30px;
+  border-radius: 8px;
+  max-width: 750px;
+  width: 90%;
+}
+
+.banner-content {
+  color: #000;
+  text-align: left;
+}
+
+.banner-content h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.banner-content p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ✅ Header Section */
+.partners-header {
+  width: 90%;
+  max-width: 1100px;
+  margin: 30px auto;
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.partners-header div {
+  flex: 1;
+  padding-right: 120px;
+}
+
+.partners-header h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.partners-header p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.filter-btn {
+  position: absolute;
+  right: 0;
+  top: 5px;
+  padding: 10px 20px;
+  background-color: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* ✅ Hospitals Grid */
+.hospitals-grid {
+  width: 90%;
+  max-width: 1100px;
+  margin: 20px auto 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* ✅ 3 cards per row */
+  gap: 20px;
+}
+
+.hospital-card {
+  background: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.hospital-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.hospital-info {
+  padding: 10px 15px;
+}
+
+.hospital-info h3 {
+  margin: 5px 0;
+  font-size: 18px;
+}
+
+.hospital-info p {
+  font-size: 14px;
+  margin: 3px 0;
+  color: #555;
+}
+
+.hospital-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.card-buttons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn-appointment,
+.btn-profile {
+  background-color: #ff6b35;
+  color: #fff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 1024px) {
+  .hospitals-grid {
+    grid-template-columns: repeat(2, 1fr); /* ✅ 2 per row for tablet */
+  }
+  .banner-content h1 {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hospital-banner {
+    padding: 20px;
+    text-align: center;
+  }
+  .banner-content {
+    max-width: 100%;
+  }
+  .partners-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .filter-btn {
+    position: static;
+    margin-top: 10px;
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hospitals-grid {
+    grid-template-columns: 1fr; /* ✅ Mobile - 1 card per row */
+  }
+  .banner-content h1 {
+    font-size: 22px;
+  }
+  .banner-content p {
+    font-size: 13px;
+  }
+}

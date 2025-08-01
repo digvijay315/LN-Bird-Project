@@ -1,0 +1,137 @@
+.collab-container {
+  width: 90%;
+  margin: 30px auto;
+  background: #f8f9ff;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.collab-header {
+  margin-bottom: 15px;
+}
+
+.collab-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.collab-subtitle {
+  font-size: 14px;
+  color: #555;
+}
+
+.collab-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.collab-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.collab-tab-btn {
+  padding: 6px 14px;
+  background: #d6d6ff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.collab-tab-btn.active {
+  background: #5561ff;
+  color: white;
+}
+
+/* ✅ Country dropdown with circular flag */
+.collab-country-select {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.flag-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.collab-country-select select {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-weight: 500;
+  font-size: 14px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 22px;   /* space for icon */
+  min-width: 70px;       /* ✅ ensures full word "India" is visible */
+  text-align: left;
+}
+
+.collab-dropdown-icon {
+  position: absolute;
+  right: 8px;
+  pointer-events: none;
+  font-size: 12px;
+}
+
+/* ✅ Logos full width */
+.collab-logo-wrapper {
+  width: 100%;
+}
+
+.full-width {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.collab-logo-box {
+  flex: 1 1 18%;
+  max-width: 150px;
+  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.collab-logo-box img {
+  max-width: 100%;
+  max-height: 50px;
+  object-fit: contain;
+}
+
+/* ✅ Responsiveness */
+@media (max-width: 992px) {
+  .full-width {
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .collab-country-select {
+    margin-top: 10px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .collab-logo-box {
+    flex: 1 1 45%;
+  }
+}
