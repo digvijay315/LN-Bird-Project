@@ -96,19 +96,19 @@ const Header = () => {
               </li>
               <li>
                 <Link to="/shop" onClick={handleNavLinkClick}>
-                  Shop
+                  Categories
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/pages" onClick={handleNavLinkClick}>
                   Pages
                 </Link>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <Link to="/contact" onClick={handleNavLinkClick}>
                   Contact us
                 </Link>
-              </li>
+              </li> */}
 
               {user && (
                 <li
