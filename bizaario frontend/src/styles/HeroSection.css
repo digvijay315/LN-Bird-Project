@@ -1,14 +1,28 @@
 .hero-container {
   position: relative;
   width: 100%;
-  height: 70vh;
-  background-size: cover;
+  height: 834px;
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.51) 0%, #000 100%);
+  background-size: contain;
   background-position: center;
   display: flex;
   align-items: flex-end;
   color: #fff;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
+.hero-image {
+  position: relative;
+  width: 100%;
+  height: 834px;
+  background: linear-gradient(270deg, rgba(0, 0, 0, 0.51) 0%, #000 100%);
+  background-size: contain;
+  background-position: center;
+  display: flex;
+  align-items: flex-end;
+  color: #fff;
+  /* overflow: hidden; */
+}
+
 
 /* Overlay */
 .hero-overlay {

@@ -1,16 +1,18 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";  // ✅ Import Link for navigation
-import "../styles/Navbar.css";
-import logo from "../assets/Bizzario.png"; // Replace with your logo path
+import { Link, useLocation } from "react-router-dom";
+import logo from '../assets/Bizzario.png'
+import '../styles/Navbar.css'
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
 
   return (
     <nav className="navbar">
       {/* Left Logo */}
       <div className="nav-left">
-        <Link to="/"> {/* ✅ Clicking logo goes to Home */}
+        <Link to="/">
           <img src={logo} alt="Bizaario Care Logo" className="logo" />
         </Link>
       </div>
@@ -27,12 +29,24 @@ export default function Navbar() {
 
       {/* Center Navigation Links */}
       <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
-        <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-        <li><Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link></li>
-        <li><Link to="/hospital-partners" onClick={() => setMenuOpen(false)}>Hospital Partners</Link></li>
-        <li><Link to="/medical-board" onClick={() => setMenuOpen(false)}>Medical Board</Link></li>
-        <li><Link to="/news-articles" onClick={() => setMenuOpen(false)}>News & Articles</Link></li>
-        <li><Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link></li>
+        <li className={currentPath === "/" ? "active" : ""}>
+          <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+        </li>
+        <li className={currentPath === "/about" ? "active" : ""}>
+          <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+        </li>
+        <li className={currentPath === "/hospital-partners" ? "active" : ""}>
+          <Link to="/hospital-partners" onClick={() => setMenuOpen(false)}>Hospital Partners</Link>
+        </li>
+        <li className={currentPath === "/medical-board" ? "active" : ""}>
+          <Link to="/medical-board" onClick={() => setMenuOpen(false)}>Medical Board</Link>
+        </li>
+        <li className={currentPath === "/news-articles" ? "active" : ""}>
+          <Link to="/news-articles" onClick={() => setMenuOpen(false)}>News & Articles</Link>
+        </li>
+        <li className={currentPath === "/contact" ? "active" : ""}>
+          <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link>
+        </li>
       </ul>
 
       {/* Right Section */}

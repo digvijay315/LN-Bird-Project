@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/HeroSection.css";
 import doctorsImage from "../assets/doctors.png";
-import bgImage from "../assets/hero-bg.png"; // Replace with your background image
+import bgImage from "../assets/Component 13.png"; // Replace with your background image
 
 const HeroSection = () => {
   return (
@@ -9,9 +9,10 @@ const HeroSection = () => {
       className="hero-container"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
+     <img className="hero-image" src={bgImage}></img>
       <div className="hero-overlay">
         {/* Left Content */}
-        <div className="hero-content">
+        {/* <div className="hero-content">
           <h1 className="hero-title">
             Where Doctors Collaborate,<br /> Patients Thrive
           </h1>
@@ -36,12 +37,12 @@ const HeroSection = () => {
               <p>Doctors connected</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Right Image */}
-        <div className="hero-image">
+        {/* <div className="hero-image">
           <img src={doctorsImage} alt="Doctors" />
-        </div>
+        </div> */}
       </div>
     </section>
   );

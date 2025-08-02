@@ -8,10 +8,12 @@
   position: sticky;
   top: 0;
   z-index: 1000;
+  overflow: hidden;
 }
 
+
 .logo {
-  height: 40px;
+  height: 60px;
 }
 
 .nav-links {
@@ -23,25 +25,34 @@
 }
 
 .nav-links li {
+  font-family:Arial, Helvetica, sans-serif;
   cursor: pointer;
   color: #666;
-  font-weight: 500;
+  font-weight: 700;
+  font-size: 14px;
   transition: color 0.3s;
 }
 
-.nav-links li:hover,
+.nav-links .active {
+  color: #0056ff !important;
+}
+.nav-links li.active a {
+  color: #0056ff !important;
+}
+
+/* .nav-links li:hover,
 .nav-links .active {
   color: #0056ff;
-}
+} */
 .nav-links li a {
   text-decoration: none;
   color: inherit; /* Text ka color same rakhe */
 }
 
-.nav-links li a:hover {
-  color: #007bff; /* Hover color chahe to add kare */
-  text-decoration: none; /* Hover pe bhi underline na aaye */
-}
+/* .nav-links li a:hover {
+  color: #007bff; 
+  text-decoration: none; 
+} */
 .nav-right {
   display: flex;
   align-items: center;
