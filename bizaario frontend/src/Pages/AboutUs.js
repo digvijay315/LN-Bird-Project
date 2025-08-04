@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/AboutUs.css";
-import aboutBanner from "../assets/about-banner.png"; // apna image yaha dalein
 import team1 from "../assets/team1.png";
 import team2 from "../assets/team2.png";
 import team3 from "../assets/team3.png";
@@ -10,13 +9,27 @@ import news2 from "../assets/article2.png";
 import news3 from "../assets/article3.png";
 
 function AboutUs() {
+  const [expandedIndex, setExpandedIndex] = useState(null);
+
+  const newsData = [
+    {
+      img: news1,
+      text: "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, there can be a lot of things ranging from personality traits, values, and lifestyle choices to specific boundaries you won't compromise on.",
+    },
+    {
+      img: news2,
+      text: "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, these may include honesty, communication, shared values, and respect for your personal boundaries.",
+    },
+    {
+      img: news3,
+      text: "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, you might think about things that truly matter to you such as trust, kindness, mutual support, and similar life goals.",
+    },
+  ];
+
   return (
     <div className="about-page">
-      {/* Banner Section */}
-      <div
-        className="about-banner"
-        style={{ backgroundImage: `url(${aboutBanner})` }}
-      >
+      {/* ✅ Banner Section */}
+      <div className="about-banner">
         <div className="banner-content">
           <h1>About US</h1>
           <p>
@@ -79,7 +92,7 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* News and Articles */}
+      {/* ✅ News and Articles with only 'Read More' clickable */}
       <div className="news-section">
         <h2>News And Articles</h2>
         <p>
@@ -87,22 +100,48 @@ function AboutUs() {
           video content.
         </p>
         <div className="news-grid">
-          {[news1, news2, news3].map((img, index) => (
-            <div className="news-card" key={index}>
-              <img src={img} alt="news" />
-              <div className="news-content">
-                <h4>The trend was noticed during a survey by Bumble</h4>
-                <p>
-                  If you avoid meat, do some of your plant-based meals lack iron
-                  and zinc? Read More
-                </p>
+          {newsData.map((item, index) => {
+            const isExpanded = expandedIndex === index;
+
+            return (
+              <div className="news-card" key={index}>
+                <img src={item.img} alt="news" />
+                <div className="news-content">
+                  <h4>The trend was noticed during a survey by Bumble</h4>
+                  <p>
+                    {isExpanded
+                      ? item.text
+                      : item.text.slice(0, 100)}
+                    {!isExpanded && (
+                      <>
+                        {" ... "}
+                        <span
+                          className="read-more"
+                          onClick={() =>
+                            setExpandedIndex(isExpanded ? null : index)
+                          }
+                        >
+                          Read More
+                        </span>
+                      </>
+                    )}
+                  </p>
+                  {isExpanded && (
+                    <span
+                      className="read-more"
+                      onClick={() => setExpandedIndex(null)}
+                    >
+                      Read Less
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
   );
 }
 
-export default AboutUs;
+export default AboutUs;
