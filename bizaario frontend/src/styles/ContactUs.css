@@ -8,7 +8,8 @@
 .contactus-banner {
   width: 100%;
   height: 250px;
-  background-image: url("../assets/about-banner.png"); /* Replace with your banner */
+   background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+              url("../assets/ggg.png");
   background-size: cover;
   background-position: center;
   display: flex;
@@ -70,7 +71,10 @@
 .contactus-help-card {
   flex: 1;
   min-width: 280px;
-  background-color: #111;
+   background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+              url("../assets/Rectangle\ 40322.png");
+               background-size: cover;
+          
   color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -115,7 +119,10 @@
 .contactus-form-card {
   flex: 1;
   min-width: 280px;
-  background-color: #111;
+  background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+              url("../assets/Rectangle\ 40320.png");
+               background-size: cover;
+              
   color: #fff;
   padding: 35px 40px; /* ✅ Increased padding from all sides */
   border-radius: 10px;
@@ -138,8 +145,10 @@
   padding: 14px 16px;
   border-radius: 6px;
   border: none;
+  border: 1px solid white;
   outline: none;
   margin-bottom: 5px;
+  background-color: transparent;
 }
 
 .contactus-send-btn {
@@ -162,44 +171,54 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ✅ FAQ Section */
-.contactus-faq-section {
-  width: 90%;
-  max-width: 1000px;
+.contactus-faq-section
+{
+    width: 90%;
+  max-width: 1200px;
   margin: 30px auto;
 }
-
-.contactus-faq-section h3 {
-  font-size: 20px;
-  margin-bottom: 8px;
-}
-
-.contactus-faq-section p {
-  font-size: 14px;
-  color: #666;
-}
-
-.contactus-faq-list {
-  margin-top: 15px;
-}
-
-.contactus-faq-list details {
-  background-color: #f1f1f1;
-  margin-bottom: 8px;
-  padding: 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
+/* ✅ FAQ Section */
 .contactus-faq-list summary {
+  
+  list-style: none; /* removes the default arrow */
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #f4f4f4;
+  border-radius: 6px;
+  margin-bottom: 10px;
   font-weight: 500;
+  transition: background 0.3s;
 }
 
-.contactus-faq-list p {
-  font-size: 13px;
-  margin-top: 5px;
-  color: #444;
+.contactus-faq-list summary::-webkit-details-marker {
+  display: none; /* for Chrome/Safari */
 }
+
+.faq-icon {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+/* When <details> is open, change "+" to "-" */
+details[open] .faq-icon::before {
+  content: "-";
+}
+
+/* Hide the original "+" */
+details[open] .faq-icon {
+  visibility: hidden;
+  position: relative;
+}
+details[open] .faq-icon::before {
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 
 /* ✅ Responsive Design */
 

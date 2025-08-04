@@ -77,37 +77,53 @@ export default function ContactUs() {
       </div>
 
       {/* ✅ FAQs Section */}
-      <div className="contactus-faq-section">
-        <h3>FAQs (Frequently Asked Questions)</h3>
-        <p>
-          Here are some sample FAQs for a Doctor Portal, suitable for a website
-          or app used by doctors for managing appointments, patients, records,
-          collaborations, etc.
-        </p>
+    <div className="contactus-faq-section">
+  <h3>FAQs (Frequently Asked Questions)</h3>
+  <p>
+    Here are some sample FAQs for a Doctor Portal, suitable for a website
+    or app used by doctors for managing appointments, patients, records,
+    collaborations, etc.
+  </p>
 
-        <div className="contactus-faq-list">
-          <details>
-            <summary>How do I register as a doctor on the portal?</summary>
-            <p>Click on the sign-up button and fill in the required details.</p>
-          </details>
-          <details>
-            <summary>Is my data and patient information secure?</summary>
-            <p>Yes, we use encryption and secure storage for all your data.</p>
-          </details>
-          <details>
-            <summary>Can I manage my appointments through the portal?</summary>
-            <p>Yes, you can book, reschedule, and manage appointments easily.</p>
-          </details>
-          <details>
-            <summary>Can I access the portal on my mobile phone?</summary>
-            <p>Our portal is fully responsive and works on all devices.</p>
-          </details>
-          <details>
-            <summary>How can I collaborate with other doctors or specialists?</summary>
-            <p>Use our in-app chat or video call feature to connect with peers.</p>
-          </details>
-        </div>
-      </div>
+  <div className="contactus-faq-list">
+    <details>
+      <summary>
+        <span>How do I register as a doctor on the portal?</span>
+        <span className="faq-icon">+</span>
+      </summary>
+      <p>Click on the sign-up button and fill in the required details.</p>
+    </details>
+    <details>
+      <summary>
+        <span>Is my data and patient information secure?</span>
+        <span className="faq-icon">+</span>
+      </summary>
+      <p>Yes, we use encryption and secure storage for all your data.</p>
+    </details>
+    <details>
+      <summary>
+        <span>Can I manage my appointments through the portal?</span>
+        <span className="faq-icon">+</span>
+      </summary>
+      <p>Yes, you can book, reschedule, and manage appointments easily.</p>
+    </details>
+    <details>
+      <summary>
+        <span>Can I access the portal on my mobile phone?</span>
+        <span className="faq-icon">+</span>
+      </summary>
+      <p>Our portal is fully responsive and works on all devices.</p>
+    </details>
+    <details>
+      <summary>
+        <span>How can I collaborate with other doctors or specialists?</span>
+        <span className="faq-icon">+</span>
+      </summary>
+      <p>Use our in-app chat or video call feature to connect with peers.</p>
+    </details>
+  </div>
+</div>
+
     </div>
   );
 }

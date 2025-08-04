@@ -12,6 +12,16 @@ code {
     monospace;
 }
 body, html {
+ 
   overflow-x: hidden;
   height: 100%;
+}
+
+
+/* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
 }
