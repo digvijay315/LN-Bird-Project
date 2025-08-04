@@ -60,10 +60,8 @@ export default function Articles() {
             />
             <div className="articles-info">
               <h3>{article.title}</h3>
-              <p>{article.description}</p>
-              <button className="articles-readmore">
-                Read More
-              </button>
+              <p>{article.description}  <span style={{color:"#F86F03;"}}> ...Read More</span></p>
+             
             </div>
           </div>
         ))}
