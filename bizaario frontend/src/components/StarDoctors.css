@@ -50,10 +50,12 @@
 }
 
 .doctor-card {
-  width: 220px;
+  padding: 20px;
+  height: 480px !important;
+  width: 352px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  overflow: hidden;
+  /* overflow: hidden; */
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -64,6 +66,7 @@
 }
 
 .doctor-img {
+  border-radius: 5px;
   width: 100%;
   height: 220px;
   object-fit: cover;
@@ -93,6 +96,7 @@
 }
 
 .buttons {
+ margin-top: 30px; 
   display: flex;
   gap: 5px;
 }
@@ -132,6 +136,28 @@
 
 .view-all-btn .arrow {
   margin-left: 5px;
+}
+
+.carousel-indicators button {
+  background-color: #3148ca !important;
+  opacity: 0.8 !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  margin: 0 4px !important;
+}
+
+.carousel-indicators .active {
+  background-color: #3216eb !important;
+  width: 14px !important;
+  height: 14px !important;
+  opacity: 1 !important;
+}
+
+/* Adjust indicator position if needed */
+.carousel-indicators {
+  bottom: -40px !important;
 }
 
 /* ✅ Laptops (1025px - 1366px) */

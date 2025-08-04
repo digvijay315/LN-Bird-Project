@@ -13,6 +13,7 @@
 
 
 .logo {
+  padding-left: 70px;
   height: 60px;
 }
 
@@ -54,6 +55,7 @@
   text-decoration: none; 
 } */
 .nav-right {
+  padding-right: 50px;
   display: flex;
   align-items: center;
   gap: 10px;

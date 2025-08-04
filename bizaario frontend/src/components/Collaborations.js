@@ -29,10 +29,23 @@ const Collaborations = () => {
     <div className="collab-container">
       {/* ✅ Heading Section */}
       <div className="collab-header">
+        <div>
         <h2 className="collab-title">International Collaborations</h2>
         <p className="collab-subtitle">
           Learn from leading doctors and specialists through focused, digestible video content.
         </p>
+        </div>
+
+          {/* ✅ Dropdown with flag icon */}
+        <div className="collab-country-select">
+          <img src={indiaFlag} alt="India flag" className="flag-icon" />
+          <select value={country} onChange={(e) => setCountry(e.target.value)}>
+            <option value="India">India</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+          </select>
+          <FaChevronDown className="collab-dropdown-icon" />
+        </div>
       </div>
 
       {/* ✅ Tabs + Country Selector */}
@@ -52,16 +65,7 @@ const Collaborations = () => {
           </button>
         </div>
 
-        {/* ✅ Dropdown with flag icon */}
-        <div className="collab-country-select">
-          <img src={indiaFlag} alt="India flag" className="flag-icon" />
-          <select value={country} onChange={(e) => setCountry(e.target.value)}>
-            <option value="India">India</option>
-            <option value="USA">USA</option>
-            <option value="UK">UK</option>
-          </select>
-          <FaChevronDown className="collab-dropdown-icon" />
-        </div>
+      
       </div>
 
       {/* ✅ Logos Grid Full Width */}

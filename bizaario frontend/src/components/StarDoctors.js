@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import Carousel from "react-bootstrap/Carousel";
 import "./StarDoctors.css";
-import doctorImg from "../assets/dr.dominic.jpg"; 
+import doctorImg from "../assets/dr.dominic.jpg";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 const StarDoctors = () => {
@@ -32,11 +33,11 @@ const StarDoctors = () => {
         hospital: "Medanta Hospital, Gurgaon",
         expertise: "Ear Surgery, Sinus Treatment, Hearing Problems",
       },
-       {
-        name: "Dr. Dominic Stonehart",
-        specialty: "Cardiologist | 15+ Years Experience",
-        hospital: "Fortis Hospital, Mumbai",
-        expertise: "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
+      {
+        name: "Dr. Kavita Patel",
+        specialty: "Gynecologist | 10+ Years Experience",
+        hospital: "Apollo Hospital, Pune",
+        expertise: "Pregnancy Care, Women Health, Fertility Treatment",
       },
     ],
     partners: [
@@ -59,12 +60,6 @@ const StarDoctors = () => {
         expertise: "Family Medicine, Chronic Diseases, Preventive Care",
       },
       {
-        name: "Dr. Kavita Patel",
-        specialty: "Gynecologist | 10+ Years Experience",
-        hospital: "Apollo Hospital, Pune",
-        expertise: "Pregnancy Care, Women Health, Fertility Treatment",
-      },
-       {
         name: "Dr. Dominic Stonehart",
         specialty: "Cardiologist | 15+ Years Experience",
         hospital: "Fortis Hospital, Mumbai",
@@ -73,9 +68,19 @@ const StarDoctors = () => {
     ],
   };
 
+  const chunkArray = (arr, size) => {
+    const result = [];
+    for (let i = 0; i < arr.length; i += size) {
+      result.push(arr.slice(i, i + size));
+    }
+    return result;
+  };
+
+  const chunkedDoctors = chunkArray(doctorsData[activeTab], 3);
+
   return (
     <div className="star-container">
-      {/* ✅ Tabs Box */}
+      {/* Tabs */}
       <div className="header-row">
         <div className="tabs">
           <button
@@ -93,35 +98,34 @@ const StarDoctors = () => {
         </div>
       </div>
 
-      {/* ✅ Doctors Cards + View All Button */}
-      <div className="cards-wrapper">
-        <div className="cards-container">
-          {doctorsData[activeTab].map((doc, index) => (
-            <div className="doctor-card" key={index}>
-              <img src={doctorImg} alt={doc.name} className="doctor-img" />
-              <div className="doctor-info">
-                <h3>{doc.name}</h3>
-                <p className="specialty">{doc.specialty}</p>
-                <p className="hospital">
-                  <FaMapMarkerAlt className="location-icon" /> {doc.hospital}
-                </p>
-                <p className="expertise">
-                  <strong>Specializes in:</strong> {doc.expertise}
-                </p>
-                <div className="buttons">
-                  <button className="book-btn">Book Appointment</button>
-                  <button className="profile-btn">View Profile</button>
+      {/* Carousel */}
+           <Carousel indicators={true} controls={false} touch={true} keyboard={true}>
+        {chunkedDoctors.map((chunk, slideIdx) => (
+          <Carousel.Item key={slideIdx}>
+            <div className="cards-container">
+              {chunk.map((doc, idx) => (
+                <div className="doctor-card equal-height" key={idx}>
+                  <img src={doctorImg} alt={doc.name} className="doctor-img" />
+                  <div className="doctor-info">
+                    <h3>{doc.name}</h3>
+                    <p className="specialty">{doc.specialty}</p>
+                    <p className="hospital">
+                      <FaMapMarkerAlt className="location-icon" /> {doc.hospital}
+                    </p>
+                    <p className="expertise">
+                      <strong>Specializes in:</strong> {doc.expertise}
+                    </p>
+                    <div className="buttons">
+                      <button className="book-btn">Book Appointment</button>
+                      <button className="profile-btn">View Profile</button>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
-
-          {/* ✅ View All Button (Inline next to last photo) */}
-          <button className="view-all-btn">
-            View All <span className="arrow">→</span>
-          </button>
-        </div>
-      </div>
+          </Carousel.Item>
+        ))}
+      </Carousel>
     </div>
   );
 };
