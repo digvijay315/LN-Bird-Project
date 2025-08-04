@@ -1,13 +1,16 @@
 import React from "react";
 import "../styles/register.css";
-// import Illustration from "./Illustration";
+import image from "../assets/img 1.png";
+import logo from '../assets/image 12.png'
 
 function RegisterPage() {
+
   return (
     <div className="signup-container">
       <div className="design-left">
-        {/* <Illustration /> */}/
-        <img src="https://img.freepik.com/premium-vector/vector-form-login-landing-page-medical-hospital-template-design_272430-248.jpg" style={{width:'100'}}></img>
+        {/* <Illustration /> */}
+        {/* <img className="logo" src={logo}></img> */}
+        <img src={image}></img>
       </div>
       <div className="design-right">
         <form className="signup-form">
@@ -20,7 +23,7 @@ function RegisterPage() {
           <button type="submit">Register</button>
           <div className="login-link">
             <span>Already Registered?</span>
-            <a href="./signin.js">Login in</a>
+            <a href="signin">Login in</a>
           </div>
           <div className="or">OR</div>
           <div className="social-buttons">

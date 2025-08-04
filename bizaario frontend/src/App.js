@@ -9,6 +9,7 @@ import MedicalBoard from "./Pages/MedicalBoard";
 import NewsArticlesPage from "./Pages/Articles";
 import ContactUs from "./Pages/ContactUs";
 import RegisterPage from "./components/register";
+import SignIn from "./components/signin";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/news-articles" element={<NewsArticlesPage />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/signin" element={<SignIn />} />
       </Routes>
       <Footer />
     </Router>

@@ -29,6 +29,22 @@ body {
   background: var(--primary-blue);
 }
 
+.design-left img{
+    display: flex;
+width: 570px;
+height: 385px;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+}
+.design-left .logo
+{
+    position: absolute;
+    width: 204px;
+height: 127px;
+flex-shrink: 0;
+aspect-ratio: 204/127;
+}
 .design-right {
     
   background: var(--white);
@@ -110,6 +126,7 @@ body {
 
 .social-buttons {
     padding-left: 18%;
+    padding-bottom: 50px;
   display: flex;
   flex-direction: row;
   justify-content: left;
