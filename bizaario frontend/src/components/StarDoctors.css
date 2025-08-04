@@ -160,18 +160,6 @@
   bottom: -40px !important;
 }
 
-/* ✅ Laptops (1025px - 1366px) */
-@media (min-width: 1025px) and (max-width: 1366px) {
-  .cards-container {
-    gap: 15px;
-  }
-  .doctor-card {
-    width: 200px;
-  }
-  .view-all-btn {
-    padding: 10px 16px;
-  }
-}
 
 /* ✅ Tablets/iPad Landscape (769px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
