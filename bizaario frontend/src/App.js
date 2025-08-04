@@ -8,6 +8,7 @@ import HospitalPartners from "./Pages/HospitalPartners";
 import MedicalBoard from "./Pages/MedicalBoard";
 import NewsArticlesPage from "./Pages/Articles";
 import ContactUs from "./Pages/ContactUs";
+import RegisterPage from "./components/register";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/medical-board" element={<MedicalBoard />} />
         <Route path="/news-articles" element={<NewsArticlesPage />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
       <Footer />
     </Router>

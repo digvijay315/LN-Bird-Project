@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from '../assets/Bizzario.png'
 import '../styles/Navbar.css'
 
@@ -7,6 +7,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
+
+  const navigate=useNavigate()
 
   return (
     <nav className="navbar">
@@ -56,7 +58,7 @@ export default function Navbar() {
           <option>English US</option>
         </select>
         <button className="btn-login">Login</button>
-        <button className="btn-signup">Sign Up</button>
+        <button className="btn-signup" onClick={()=>navigate('/register')}>Sign Up</button>
       </div>
     </nav>
   );
