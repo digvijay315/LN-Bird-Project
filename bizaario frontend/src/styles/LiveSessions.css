@@ -1,15 +1,12 @@
 .live-sessions-container {
-  width: 100%;
-  max-width: 1000px;
+   position: relative;
+    padding: 30px;
+  background-color: #f5f7ff;
+  max-width: 90%;
   margin: 0 auto;
-  padding: 20px;
   border-radius: 20px;
-  background-color: #f8f9ff;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  font-family: Arial, sans-serif;
-  box-sizing: border-box;
+  margin-top: 50px;
+  height: 800px;
 }
 
 /* ---------- Header Section ---------- */
@@ -71,30 +68,31 @@
 }
 
 /* ---------- Video Section ---------- */
-.video-card {
+.video-card1 {
+  position: relative;
+    width: 1273 !important;
+  height: 613px;
   background: white;
+  /* background: red; */
   border-radius: 10px;
-  padding: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  width: 100%;
-  max-width: 820px;
-  margin: 0 auto;
 }
 
 /* ✅ Responsive Video Container */
 .video-wrapper {
   position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  width:  1273px;
+  height: 613px;
+  aspect-ratio: 1273/613;
   height: auto;
-  overflow: hidden;
   border-radius: 8px;
-  background: black;
+  /* background: black; */
+  padding-right: 70px;
 }
 
 .video-wrapper iframe,
 .video-wrapper video {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -102,10 +100,13 @@
   border: none;
   border-radius: 8px;
   object-fit: cover;
+
+
 }
 
 .video-info {
   margin-top: 10px;
+   width:  1273px;
 }
 
 .video-info h4 {

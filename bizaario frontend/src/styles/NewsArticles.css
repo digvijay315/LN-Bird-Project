@@ -1,9 +1,9 @@
 .news-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 90%;
   margin: 0 auto;
   margin-top: 50px;
-  padding: 20px;
+  padding: 30px;
   background: #f8f9ff;
   border-radius: 20px;
   box-sizing: border-box;

@@ -92,10 +92,12 @@
   padding: 10px;
   font-size: 13px;
   margin-top: 20px;
-  width: 100%;
+  width: 1500px;
+  margin-left: -80px;
 }
 .footer-bottom p{
     color: white;
+   
 }
 
 /* ✅ Responsive Design */

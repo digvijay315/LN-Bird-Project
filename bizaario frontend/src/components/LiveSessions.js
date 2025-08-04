@@ -19,7 +19,7 @@ const LiveSessions = () => {
       </div>
 
       {/* ✅ Video Section (YouTube Embed) */}
-      <div className="video-card">
+      <div className="video-card1">
         <div className="video-wrapper">
           <iframe
            width="100%"

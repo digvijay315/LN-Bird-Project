@@ -1,6 +1,6 @@
 .awards-container {
   width: 100%;
-  max-width: 1000px;
+  max-width: 90%;
   margin: 0 auto;
   margin-top: 30px;
   padding: 20px;
@@ -8,6 +8,7 @@
   border-radius: 20px;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+    padding: 30px;
 }
 
 .awards-header h2 {
@@ -24,10 +25,12 @@
 
 .awards-card {
   display: flex;
+  width: 100% !important;
   align-items: center;
-  justify-content: center;
+  /* justify-content: center; */
   margin-top: 15px;
   gap: 8px;
+
 }
 
 .arrow-btn {
@@ -42,13 +45,13 @@
 
 .award-content {
   display: flex;
-  background: #e9e9ec;
+    background-color: #f8f9ff;
   border-radius: 8px;
   overflow: hidden;
   width: 100%;
-  max-width: 850px;
+  /* max-width: 850px; */
   gap: 15px;
-  padding: 10px;
+  padding: 10px 30px;
   align-items: center;
 }
 
