@@ -3,7 +3,7 @@
   margin: 0 auto;
   margin-top: 50px;
   padding: 30px;
-  background: #f8f9ff;
+  background: white;
   border-radius: 20px;
   box-sizing: border-box;
 }
@@ -66,13 +66,16 @@
 
 /* Video Card */
 .video-card {
-  background: #fff;
+    height: 320px !important;
+  background: white;
   border-radius: 10px;
-  overflow: hidden;
+  /* overflow: hidden; */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease;
   padding: 10px;
   height: 100%;
+  width: 90%;
+  margin-left: -18px;
 }
 
 .video-card:hover {
@@ -142,4 +145,14 @@
   .text-section h2 {
     font-size: 20px;
   }
+  .video-card {
+  background: white;
+  border-radius: 10px;
+  /* overflow: hidden; */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  padding: 10px;
+  height: 100%;
+  width: 80%;
+}
 }

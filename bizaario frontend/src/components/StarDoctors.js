@@ -88,15 +88,17 @@ const StarDoctors = () => {
   }, []);
 
   const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: slidesToShow,
-    slidesToScroll: 1,
-    arrows: false,
-    adaptiveHeight: true,
-    swipeToSlide: true,
-  };
+  dots: false,
+  infinite: false,
+  speed: 400,                   // Adjusted for smooth animation
+  slidesToShow: slidesToShow,            // Show 3.5 cards
+  slidesToScroll: 0.5,
+  arrows: false,
+  swipeToSlide: true,           // Important: enables real-time swipe dragging
+  touchThreshold: 5,            // Lower = less drag needed to move
+  cssEase: "ease-in-out",       // Smooth transition easing
+};
+
 
   return (
     <div className="star-container">

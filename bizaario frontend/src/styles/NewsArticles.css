@@ -4,7 +4,7 @@
   margin: 0 auto;
   margin-top: 50px;
   padding: 30px;
-  background: #f8f9ff;
+  background: white;
   /* background-color: red; */
   border-radius: 20px;
   box-sizing: border-box;
@@ -34,7 +34,7 @@
 
 .view-all-btn-article {
   background-color: #f97316;
-  color: white;
+  /* color: white; */
   border: none;
   padding: 10px 18px;
   border-radius: 6px;
@@ -50,11 +50,13 @@
 /* ---------- Articles Grid ---------- */
 .articles-grid {
   display: grid;
+  padding-right: 40px;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
   margin-top: 20px;
   width: 100%;
   box-sizing: border-box;
+  border-radius: 8px;
 }
 
 /* 🔹 Article card fix */
@@ -135,9 +137,10 @@
   }
 
   .view-all-btn-article {
-    /* margin-top: -8px; */
+    margin-top: -20px !important;
     font-size: 12px;
     padding: 8px;
+    margin-bottom: 20px;
   }
 }
 

@@ -38,11 +38,11 @@ const EmpoweringDoctors = () => {
   }, []);
 
  const settings = {
-    dots: true,
-    infinite: true,
+    dots: false,
+    infinite: false,
     speed: 500,
     slidesToShow: slidesToShow,
-    slidesToScroll: 1,
+    slidesToScroll: 0.5,
     arrows: false,
     adaptiveHeight: true,
     swipeToSlide: true,
