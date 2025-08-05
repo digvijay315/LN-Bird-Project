@@ -1,133 +1,90 @@
-.text-section p{
-color: rgba(0, 0, 0, 0.50);
-font-family: Roboto;
-font-size: 18px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-}
 .video-slider-container {
-  position: relative;
-  padding: 30px;
-  background-color: #f5f7ff;
-  max-width: 90%;
+  width: 90%;
   margin: 0 auto;
-  border-radius: 20px;
   margin-top: 50px;
+  padding: 30px;
+  background: #f8f9ff;
+  border-radius: 20px;
+  box-sizing: border-box;
 }
 
-/* Header */
 .video-header {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
+.text-section h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.text-section p {
+  font-size: 14px;
+  color: #666;
+}
+
 .tabs-container {
-  background: #3148ca;
-  padding: 6px 8px;
-  border-radius: 8px;
-  display: flex;
-  gap: 10px;
+  margin-top: 10px;
 }
 
 .tabs {
   display: flex;
-  gap: 15px;
+  gap: 10px;
 }
 
 .tabs button {
-  background: transparent;
-  border: 1px solid #fff;
-  padding: 8px 15px;
+  padding: 6px 12px;
+  background: #d6d6ff;
+  border: none;
   border-radius: 6px;
-  cursor: pointer;
   font-weight: 500;
-  color: #faf4f4;
-  transition: 0.3s;
+  cursor: pointer;
+  color: #222;
+  transition: 0.3s ease;
 }
 
 .tabs button.active {
-  background: #fff;
-  color: #3216eb;
+  background: #5561ff;
+  color: #fff;
 }
 
-/* ✅ Video Section */
-.video-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.video-grid {
-  display: flex;
-  gap: 15px;
-  align-items: stretch;
-  flex-wrap: nowrap;
-  flex-grow: 1;
-  overflow-x: auto; /* Allow horizontal scrolling on smaller screens */
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 10px; /* Provide space for scrollbar if visible */
-}
-
-.video-grid::-webkit-scrollbar {
-  height: 8px;
-}
-
-.video-grid::-webkit-scrollbar-thumb {
-  background: rgba(49, 72, 202, 0.5);
-  border-radius: 4px;
-}
-
-.video-card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 12px;
-  text-align: left;
-  max-width: 240px;
-  min-width: 220px;
-  flex: 0 0 auto;
-  transition: transform 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  height: 280px; /* Increased height for better video display */
+/* Video Card Wrapper (to add spacing) */
+.video-card-wrapper {
+  padding: 0 10px;
   box-sizing: border-box;
 }
 
-.video-card h4 {
-  font-size: 15px;
-  font-weight: 400;
-  font-family: Roboto;
-  margin-top: 12px;
-  flex-grow: 1; /* Push author to bottom if title wraps */
+/* Slick track fix */
+.slick-list {
+  margin: 0 -10px;
 }
 
-.video-card p {
-  font-size: 14px;
-  font-weight: 600;
-  font-family: Roboto;
-  margin-top: 4px;
-  color: #333;
+/* Video Card */
+.video-card {
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+  padding: 10px;
+  height: 100%;
 }
 
 .video-card:hover {
-  transform: translateY(-6px);
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(49, 72, 202, 0.3);
+  transform: translateY(-4px);
 }
 
 .video-thumbnail {
   position: relative;
   width: 100%;
-  height: 160px; /* Increased height for thumbnail */
+  height: 220px;
   overflow: hidden;
   border-radius: 8px;
-  flex-shrink: 0;
 }
 
 .video-thumbnail img {
@@ -143,185 +100,46 @@ line-height: normal;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
-  padding: 12px 18px;
+  font-size: 24px;
+  padding: 8px 14px;
   border-radius: 50%;
-  font-size: 18px;
-}
-
-/* ✅ View All Button */
-.view-all-container-video {
-  margin-left: 20px;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-.view-all-btn-video {
-  background: #3148ca;
-  color: #fff;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: 0.3s ease-in;
-}
-
-.view-all-btn-video:hover {
-  background: #263aa5;
   cursor: pointer;
 }
 
-
-
-.carousel-indicators button {
-  background-color: #3148ca !important;
-  opacity: 0.8 !important;
-  width: 12px !important;
-  height: 12px !important;
-  border-radius: 50% !important;
-  border: none !important;
-  margin: 0 4px !important;
+/* Text below thumbnail */
+.video-card h4 {
+  font-size: 16px;
+  margin: 10px 0 4px;
+  color: #333;
 }
 
-.carousel-indicators .active {
-  background-color: #3216eb !important;
-  width: 14px !important;
-  height: 14px !important;
-  opacity: 1 !important;
+.video-card p {
+  font-size: 13px;
+  color: #666;
 }
 
-/* Adjust indicator position if needed */
-.carousel-indicators {
-  bottom: -40px !important;
+/* Slick Dots */
+.slick-dots li button:before {
+  font-size: 12px;
+  color: #3148ca;
+  opacity: 0.8;
 }
 
-
-
-
-/* ✅ Responsive */
-
-
-@media (max-width: 768px) {
-
-  .video-slider-container {
-  position: relative;
-  padding: 30px;
-  background-color: #f5f7ff;
-  max-width: 90%;
-  margin: 0 auto;
-  border-radius: 20px;
-  margin-top: 0px;
-}
-
-
-  .text-section h2
-  {
-   padding: 0;
-    align-self: stretch;
-    color: #000;
-font-family: Roboto;
-font-size: 12px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-  }
-
-  .text-section p
-  {
-    padding: 0;
-    color: rgba(0, 0, 0, 0.50);
-    font-family: Roboto;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
-  /* Ensure the flex container for the card takes full width, no gap */
-  .d-flex.justify-content-center.gap-3 {
-    gap: 0 !important;
-    justify-content: center;
-    width: 100%;
-    
-  }
-
-
-  .tabs-container {
-display: flex;
-padding: 8.59px 14.316px;
-align-items: center;
-gap: 17.179px;
-}
-
-.tabs {
-  display: flex;
-  gap: 15px;
-}
-
-.tabs button {
-  background: transparent;
-  border: 1px solid #fff;
-  padding: 8px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: #faf4f4;
-  transition: 0.3s;
-  font-family: Roboto;
-font-size: 12px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-}
-
-.tabs button.active {
-  background: #fff;
+.slick-dots li.slick-active button:before {
   color: #3216eb;
-  
+  opacity: 1;
 }
 
-
-  /* Force card to fill most of the carousel/container width */
-  .video-card {
-    min-width: 92vw;
-    max-width: 92vw;
-    width: 92vw;
-    margin: 0 auto;
-    box-sizing: border-box;
-    height: auto;
-  }
-  .video-card h4 
-  {
-    padding-left: 30px;
-    color: #000;
-
-font-family: Roboto;
-font-size: 10px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-  }
-   .video-card p
-  {
-    padding-left: 30px;
-    color: #000;
-
-font-family: Roboto;
-font-size: 8px;
-font-style: normal;
-font-weight: 600;
-line-height: normal;
-  }
-
+/* Arrows */
+.slick-prev:before,
+.slick-next:before {
+  color: #5561ff;
+  font-size: 28px;
 }
-/* @media (max-width: 480px) {
-  .video-card {
-    min-width: 96vw;
-    max-width: 96vw;
-    width: 96vw;
-  }
-} */
 
+/* Responsive */
+@media (max-width: 768px) {
+  .text-section h2 {
+    font-size: 20px;
+  }
+}

@@ -93,7 +93,7 @@ const StarDoctors = () => {
     speed: 500,
     slidesToShow: slidesToShow,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     adaptiveHeight: true,
     swipeToSlide: true,
   };
