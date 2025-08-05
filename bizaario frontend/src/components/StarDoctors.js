@@ -1,11 +1,16 @@
-import React, { useState } from "react";
-import Carousel from "react-bootstrap/Carousel";
+// StarDoctors.jsx
+import React, { useState, useEffect } from "react";
+import Slider from "react-slick";
 import "./StarDoctors.css";
 import doctorImg from "../assets/dr.dominic.jpg";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 const StarDoctors = () => {
   const [activeTab, setActiveTab] = useState("medical");
+  const [slidesToShow, setSlidesToShow] = useState(3);
 
   const doctorsData = {
     medical: [
@@ -13,7 +18,8 @@ const StarDoctors = () => {
         name: "Dr. Dominic Stonehart",
         specialty: "Cardiologist | 15+ Years Experience",
         hospital: "Fortis Hospital, Mumbai",
-        expertise: "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
+        expertise:
+          "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
       },
       {
         name: "Dr. Alex Morgan",
@@ -63,38 +69,34 @@ const StarDoctors = () => {
         name: "Dr. Dominic Stonehart",
         specialty: "Cardiologist | 15+ Years Experience",
         hospital: "Fortis Hospital, Mumbai",
-        expertise: "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
+        expertise:
+          "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
       },
     ],
   };
 
-
-  function getChunkSize() {
-    if (window.innerWidth <= 768) return 1;
-    return 3;
-  }
-  
-  // Split videos array into chunks of 1 (mobile) or 3 (desktop/tablet)
-  const [chunkSize, setChunkSize] = React.useState(getChunkSize());
-  
-  // Update chunkSize on resize
-  React.useEffect(() => {
-    function handleResize() {
-      setChunkSize(getChunkSize());
+  // Responsive slides count
+  useEffect(() => {
+    function updateSlides() {
+      if (window.innerWidth <= 600) setSlidesToShow(1);
+      else if (window.innerWidth <= 900) setSlidesToShow(2);
+      else setSlidesToShow(3);
     }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    updateSlides();
+    window.addEventListener("resize", updateSlides);
+    return () => window.removeEventListener("resize", updateSlides);
   }, []);
 
-  const chunkArray = (arr, size) => {
-    const result = [];
-    for (let i = 0; i < arr.length; i += size) {
-      result.push(arr.slice(i, i + size));
-    }
-    return result;
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: slidesToShow,
+    slidesToScroll: 1,
+    arrows: true,
+    adaptiveHeight: true,
+    swipeToSlide: true,
   };
-
-  const chunkedDoctors = chunkArray(doctorsData[activeTab], chunkSize);
 
   return (
     <div className="star-container">
@@ -116,34 +118,28 @@ const StarDoctors = () => {
         </div>
       </div>
 
-      {/* Carousel */}
-           <Carousel indicators={true} controls={false} touch={true} keyboard={true}>
-        {chunkedDoctors.map((chunk, slideIdx) => (
-          <Carousel.Item key={slideIdx}>
-            <div className="cards-container">
-              {chunk.map((doc, idx) => (
-                <div className="doctor-card equal-height" key={idx}>
-                  <img src={doctorImg} alt={doc.name} className="doctor-img" />
-                  <div className="doctor-info">
-                    <h3>{doc.name}</h3>
-                    <p className="specialty">{doc.specialty}</p>
-                    <p className="hospital">
-                      <FaMapMarkerAlt className="location-icon" /> {doc.hospital}
-                    </p>
-                    <p className="expertise">
-                      <strong>Specializes in:</strong> {doc.expertise}
-                    </p>
-                    <div className="buttons">
-                      <button className="book-btn">Book Appointment</button>
-                      <button className="profile-btn">View Profile</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+      {/* React Slick Slider */}
+      <Slider {...settings}>
+        {doctorsData[activeTab].map((doc, idx) => (
+          <div key={idx} className="doctor-card equal-height">
+            <img src={doctorImg} alt={doc.name} className="doctor-img" />
+            <div className="doctor-info">
+              <h3>{doc.name}</h3>
+              <p className="specialty">{doc.specialty}</p>
+              <p className="hospital">
+                <FaMapMarkerAlt className="location-icon" /> {doc.hospital}
+              </p>
+              <p className="expertise">
+                <strong>Specializes in:</strong> {doc.expertise}
+              </p>
+              <div className="buttons">
+                <button className="book-btn">Book Appointment</button>
+                <button className="profile-btn">View Profile</button>
+              </div>
             </div>
-          </Carousel.Item>
+          </div>
         ))}
-      </Carousel>
+      </Slider>
     </div>
   );
 };

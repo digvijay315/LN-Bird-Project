@@ -1,13 +1,16 @@
+/* Container */
 .star-container {
+  
   width: 90%;
   margin: 0 auto;
   margin-top: 50px;
   padding: 30px;
   background: #f8f9ff;
   border-radius: 20px;
+  box-sizing: border-box;
 }
 
-/* ✅ Tabs Box (Left Aligned) */
+/* Tabs Box */
 .header-row {
   display: flex;
   justify-content: flex-start;
@@ -34,6 +37,8 @@
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
+  color: #222;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .tab-btn.active {
@@ -41,25 +46,21 @@
   color: #fff;
 }
 
-/* ✅ Cards Grid + Button Inline */
-.cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  align-items: center;
-}
-
+/* Doctor Card */
 .doctor-card {
+
+  margin: 10px;
   padding: 20px;
-  height: 480px !important;
-  width: 342px;
+  height: 480px;
   border: 1px solid #ddd;
   border-radius: 8px;
-  /* overflow: hidden; */
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  box-sizing: border-box;
+ 
 }
+
 
 .doctor-card:hover {
   transform: translateY(-4px);
@@ -73,12 +74,20 @@
 }
 
 .doctor-info {
-  padding: 10px;
+  padding: 10px 0 0 0;
+}
+
+.doctor-info h3 {
+  margin: 0 0 5px;
+  font-weight: 600;
+  font-size: 20px;
+  color: #222;
 }
 
 .specialty {
   font-size: 13px;
   color: #444;
+  margin: 0 0 8px;
 }
 
 .hospital {
@@ -87,6 +96,11 @@
   display: flex;
   align-items: center;
   gap: 5px;
+  margin-bottom: 8px;
+}
+
+.location-icon {
+  color: #5561ff;
 }
 
 .expertise {
@@ -96,9 +110,9 @@
 }
 
 .buttons {
- margin-top: 30px; 
+  margin-top: 30px;
   display: flex;
-  gap: 5px;
+  gap: 8px;
 }
 
 .book-btn,
@@ -107,122 +121,62 @@
   background: #ff6b00;
   color: white;
   border: none;
-  padding: 6px;
+  padding: 8px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.book-btn:hover {
+  background: #e85a00;
 }
 
 .profile-btn {
   background: #ffa500;
 }
 
-/* ✅ View All Button (inline beside last photo) */
-.view-all-btn {
-  height: 45px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #5561ff;
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 25px;
-  cursor: pointer;
-  font-weight: 500;
-  min-width: 120px;
-  margin-left: 30px;
+.profile-btn:hover {
+  background: #e69100;
 }
 
-.view-all-btn .arrow {
-  margin-left: 5px;
+/* React Slick overrides */
+.slick-slide > div {
+  outline: none; /* Remove blue outline on click */
+    margin: 0 10px; /* 10px left and right margin between slides */
+  box-sizing: border-box;
 }
 
-.carousel-indicators button {
-  background-color: #3148ca !important;
-  opacity: 0.8 !important;
-  width: 12px !important;
-  height: 12px !important;
-  border-radius: 50% !important;
-  border: none !important;
-  margin: 0 4px !important;
+/* Dots styling */
+.slick-dots li button:before {
+  font-size: 12px;
+  color: #3148ca;
+  opacity: 0.8;
 }
 
-.carousel-indicators .active {
-  background-color: #3216eb !important;
-  width: 14px !important;
-  height: 14px !important;
-  opacity: 1 !important;
+.slick-dots li.slick-active button:before {
+  color: #3216eb;
+  opacity: 1;
 }
 
-/* Adjust indicator position if needed */
-.carousel-indicators {
-  bottom: -40px !important;
+/* Arrows styling */
+.slick-prev:before,
+.slick-next:before {
+  color: #5561ff;
+  font-size: 30px;
 }
 
-
-/* ✅ Tablets/iPad Landscape (769px - 1024px) */
-/* @media (min-width: 769px) and (max-width: 1024px) {
-  .cards-container {
-    justify-content: flex-start;
-    gap: 15px;
-  }
+/* Responsive tweaks */
+@media (max-width: 900px) {
   .doctor-card {
-    width: 180px;
-  }
-  .view-all-btn {
-    height: 40px;
-    padding: 8px 14px;
-    margin-left: 15px;
-  }
-} */
-
-/* ✅ Tablets/iPad Portrait (601px - 768px) */
-@media (max-width: 769px)  {
-  .cards-container {
-    justify-content: flex-start;
-    gap: 15px;
-  }
-  .doctor-card img
-  {
-    height: 147px;
-  }
-  .doctor-card {
-    width: 147px;
-  }
-  .doctor-info h3
-  {
-    color: #000;
-
-font-family: Roboto;
-font-size: 20px;
-font-style: normal;
-font-weight: 500;
-line-height: normal;
-  }
-  .view-all-btn {
-    height: 40px;
-    padding: 8px 14px;
-    margin-left: 15px;
+    height: auto;
   }
 }
 
-/* ✅ Mobile Devices (max-width: 600px) */
 @media (max-width: 600px) {
-  .cards-container {
-    flex-direction: column;
-    align-items: center;
-  }
   .doctor-card {
-    width: 90%;
-    max-width: 300px;
+    height: auto;
   }
-  .view-all-btn {
-    width: 70%;
-    margin-top: 15px;
-    margin-left: 0;
-    order: 2;
-    font-size: 14px;
-    height: 40px;
-  }
+ 
 }
