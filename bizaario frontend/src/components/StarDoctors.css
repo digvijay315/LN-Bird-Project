@@ -162,7 +162,7 @@
 
 
 /* ✅ Tablets/iPad Landscape (769px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
+/* @media (min-width: 769px) and (max-width: 1024px) {
   .cards-container {
     justify-content: flex-start;
     gap: 15px;
@@ -175,24 +175,35 @@
     padding: 8px 14px;
     margin-left: 15px;
   }
-}
+} */
 
 /* ✅ Tablets/iPad Portrait (601px - 768px) */
-@media (min-width: 601px) and (max-width: 768px) {
+@media (max-width: 769px)  {
   .cards-container {
-    justify-content: center;
+    justify-content: flex-start;
     gap: 15px;
-    flex-wrap: wrap;
+  }
+  .doctor-card img
+  {
+    height: 147px;
   }
   .doctor-card {
-    width: 200px;
+    width: 147px;
+  }
+  .doctor-info h3
+  {
+    color: #000;
+
+font-family: Roboto;
+font-size: 20px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
   }
   .view-all-btn {
-    width: auto;
-    margin-top: 10px;
-    margin-left: 0;
-    order: 2;
-    font-size: 14px;
+    height: 40px;
+    padding: 8px 14px;
+    margin-left: 15px;
   }
 }
 

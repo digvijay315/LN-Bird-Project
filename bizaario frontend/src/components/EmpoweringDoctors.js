@@ -22,15 +22,35 @@ const EmpoweringDoctors = () => {
     ],
   };
 
-  const chunkArray = (arr, size) => {
-    const result = [];
-    for (let i = 0; i < arr.length; i += size) {
-      result.push(arr.slice(i, i + size));
-    }
-    return result;
-  };
 
-  const videoChunks = chunkArray(videos[activeTab], 3);
+  // Utility for breakpoints
+function getChunkSize() {
+  if (window.innerWidth <= 768) return 1;
+  return 3;
+}
+
+// Split videos array into chunks of 1 (mobile) or 3 (desktop/tablet)
+const [chunkSize, setChunkSize] = React.useState(getChunkSize());
+
+// Update chunkSize on resize
+React.useEffect(() => {
+  function handleResize() {
+    setChunkSize(getChunkSize());
+  }
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+const chunkArray = (arr, size) => {
+  const result = [];
+  for (let i = 0; i < arr.length; i += size) {
+    result.push(arr.slice(i, i + size));
+  }
+  return result;
+};
+
+const videoChunks = chunkArray(videos[activeTab], chunkSize);
+
 
   return (
     <div className="video-slider-container">

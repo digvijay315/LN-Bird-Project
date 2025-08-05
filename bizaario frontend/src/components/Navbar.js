@@ -1,24 +1,16 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from '../assets/Bizzario.png'
-import '../styles/Navbar.css'
+import logo from '../assets/Bizzario.png';
+import '../styles/Navbar.css';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const currentPath = location.pathname;
-
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
   return (
     <nav className="navbar">
-      {/* Left Logo */}
-      <div className="nav-left">
-        <Link to="/">
-          <img src={logo} alt="Bizaario Care Logo" className="logo" />
-        </Link>
-      </div>
-
       {/* Hamburger Icon (Mobile) */}
       <div
         className={`hamburger ${menuOpen ? "active" : ""}`}
@@ -29,7 +21,14 @@ export default function Navbar() {
         <span></span>
       </div>
 
-      {/* Center Navigation Links */}
+      {/* Logo */}
+      <div className="nav-logo">
+        <Link to="/">
+          <img src={logo} alt="Bizaario Care Logo" className="logo" />
+        </Link>
+      </div>
+
+      {/* Navigation Links */}
       <ul className={`nav-links ${menuOpen ? "open" : ""}`}>
         <li className={currentPath === "/" ? "active" : ""}>
           <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
@@ -51,14 +50,14 @@ export default function Navbar() {
         </li>
       </ul>
 
-      {/* Right Section */}
+      {/* Right Side Buttons */}
       <div className="nav-right">
         <select className="language-select">
           <option>English India</option>
           <option>English US</option>
         </select>
-        <button className="btn-login" onClick={()=>navigate('/signin')}>Login</button>
-        <button className="btn-signup" onClick={()=>navigate('/register')}>Sign Up</button>
+        <button className="btn-login" onClick={() => navigate('/signin')}>Login</button>
+        <button className="btn-signup" onClick={() => navigate('/register')}>Sign Up</button>
       </div>
     </nav>
   );

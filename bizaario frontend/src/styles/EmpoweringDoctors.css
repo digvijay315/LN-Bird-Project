@@ -204,73 +204,124 @@ line-height: normal;
 
 
 /* ✅ Responsive */
-@media (max-width: 1200px) {
-  .video-section {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 
-  .video-grid {
-    flex-wrap: nowrap;
-    width: 100%;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 12px;
-  }
-
-  .view-all-container-video {
-    width: 100%;
-    justify-content: center;
-    margin-top: 15px;
-  }
-}
 
 @media (max-width: 768px) {
-  .video-header {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
+
+  .video-slider-container {
+  position: relative;
+  padding: 30px;
+  background-color: #f5f7ff;
+  max-width: 90%;
+  margin: 0 auto;
+  border-radius: 20px;
+  margin-top: 0px;
+}
+
+
+  .text-section h2
+  {
+   padding: 0;
+    align-self: stretch;
+    color: #000;
+font-family: Roboto;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
   }
 
-  .tabs-container {
+  .text-section p
+  {
+    padding: 0;
+    color: rgba(0, 0, 0, 0.50);
+    font-family: Roboto;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+  }
+  /* Ensure the flex container for the card takes full width, no gap */
+  .d-flex.justify-content-center.gap-3 {
+    gap: 0 !important;
     justify-content: center;
     width: 100%;
+    
   }
 
-  .video-card {
-    max-width: 180px;
-    min-width: 160px;
-    height: 260px;
-  }
 
-  .video-grid {
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 10px;
-  }
-
-  .view-all-container-video {
-    justify-content: center;
-  }
+  .tabs-container {
+display: flex;
+padding: 8.59px 14.316px;
+align-items: center;
+gap: 17.179px;
 }
 
-@media (max-width: 480px) {
-  .video-card {
-    flex: 0 0 90vw;
-    max-width: 90vw;
-    min-width: unset;
-    height: 280px;
-  }
-
-  .video-grid {
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 12px;
-  }
-
-  .tabs button {
-    padding: 6px 10px;
-    font-size: 14px;
-  }
+.tabs {
+  display: flex;
+  gap: 15px;
 }
+
+.tabs button {
+  background: transparent;
+  border: 1px solid #fff;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #faf4f4;
+  transition: 0.3s;
+  font-family: Roboto;
+font-size: 12px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.tabs button.active {
+  background: #fff;
+  color: #3216eb;
+  
+}
+
+
+  /* Force card to fill most of the carousel/container width */
+  .video-card {
+    min-width: 92vw;
+    max-width: 92vw;
+    width: 92vw;
+    margin: 0 auto;
+    box-sizing: border-box;
+    height: auto;
+  }
+  .video-card h4 
+  {
+    padding-left: 30px;
+    color: #000;
+
+font-family: Roboto;
+font-size: 10px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+  }
+   .video-card p
+  {
+    padding-left: 30px;
+    color: #000;
+
+font-family: Roboto;
+font-size: 8px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+  }
+
+}
+/* @media (max-width: 480px) {
+  .video-card {
+    min-width: 96vw;
+    max-width: 96vw;
+    width: 96vw;
+  }
+} */
+

@@ -2,6 +2,7 @@
    position: relative;
     padding: 30px;
   background-color: #f5f7ff;
+  /* background-color: red; */
   max-width: 90%;
   margin: 0 auto;
   border-radius: 20px;
@@ -72,7 +73,7 @@
   position: relative;
     width: 1273 !important;
   height: 613px;
-  background: white;
+ background-color: #f5f7ff;
   /* background: red; */
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -81,7 +82,7 @@
 /* ✅ Responsive Video Container */
 .video-wrapper {
   position: relative;
-  width:  1273px;
+  width:  1173px;
   height: 613px;
   aspect-ratio: 1273/613;
   height: auto;
@@ -97,19 +98,22 @@
   left: 0;
   width: 100%;
   height: 100%;
-  border: none;
-  border-radius: 8px;
+  /* border: none; */
+  /* border-radius: 8px; */
   object-fit: cover;
-
+padding-right: 20px;
 
 }
 
 .video-info {
   margin-top: 10px;
-   width:  1273px;
+   width:  100%;
+   background-color: #f5f7ff;
 }
 
+
 .video-info h4 {
+  
   font-size: 15px;
   font-weight: bold;
   color: #111;
@@ -126,23 +130,11 @@ p {
 }
 
 /* ---------- Responsive Design ---------- */
-@media (max-width: 1200px) {
-  .live-sessions-container {
-    padding: 18px;
-  }
-}
 
-@media (max-width: 1024px) {
-  .live-sessions-container {
-    padding: 15px;
-  }
 
-  .video-card {
-    max-width: 95%;
-  }
-}
 
-@media (max-width: 850px) {
+
+/* @media (max-width: 850px) {
   .header-section {
     flex-direction: column;
     align-items: flex-start;
@@ -159,9 +151,91 @@ p {
   .video-card {
     max-width: 100%;
   }
-}
+} */
 
 @media (max-width: 768px) {
+.live-sessions-container {
+   position: relative;
+    padding: 30px;
+  background-color: #f5f7ff;
+  /* background-color: red; */
+  max-width: 90%;
+  margin: 0 auto;
+  border-radius: 20px;
+  margin-top: 50px;
+  height: 450px;
+}
+
+.video-card1 {
+  position: relative;
+    width: 1273 !important;
+  height: 250px;
+ background-color: #f5f7ff;
+  /* background: red; */
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* ✅ Responsive Video Container */
+.video-wrapper {
+ 
+  /* background: red; */
+  position: relative;
+  width:  1173px;
+  height: 213px !important;
+  /* aspect-ratio: 1273/613; */
+  height: auto;
+  border-radius: 8px;
+  /* background: black; */
+  padding-right: 100px;
+}
+
+.video-info {
+  margin-top: 0px;
+   width:  100%;
+   background-color: #f5f7ff;
+   /* background-color: red; */
+}
+
+.video-info h4
+{
+  color: #000;
+padding: 0;
+font-family: Roboto;
+font-size: 12px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+text-align: left;
+}
+
+.video-info p
+{
+  color: #000;
+padding: 0;
+margin: 0;
+font-family: Roboto;
+font-size: 8px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-align: left;
+}
+.video-wrapper iframe,
+.video-wrapper video {
+  
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 335px;
+  height: 200px;
+  /* border: none; */
+  /* border-radius: 8px; */
+  object-fit: cover;
+padding-right: 40px;
+
+}
+
   .text-content h2 {
     font-size: 18px;
   }
@@ -178,9 +252,10 @@ p {
     padding: 7px 12px;
     font-size: 13px;
   }
+ 
 }
 
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
   .live-sessions-container {
     padding: 12px;
   }
@@ -210,10 +285,10 @@ p {
     padding: 6px 10px;
     font-size: 12px;
   }
-}
+} */
 
 /* ✅ Extra Small Devices (max 360px) */
-@media (max-width: 360px) {
+/* @media (max-width: 360px) {
   .text-content h2 {
     font-size: 14px;
   }
@@ -234,4 +309,4 @@ p {
   .video-info p {
     font-size: 11px;
   }
-}
+} */

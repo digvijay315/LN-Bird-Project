@@ -1,3 +1,4 @@
+/* Base Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -8,15 +9,16 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  overflow: hidden;
+  overflow: visible; /* ✅ allow hamburger visibility */
 }
 
-
-.logo {
-  padding-left: 70px;
+/* Logo */
+.nav-logo .logo {
   height: 60px;
+  padding-left: 10px;
 }
 
+/* Nav Links */
 .nav-links {
   list-style: none;
   display: flex;
@@ -26,7 +28,7 @@
 }
 
 .nav-links li {
-  font-family:Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   cursor: pointer;
   color: #666;
   font-weight: 700;
@@ -34,28 +36,18 @@
   transition: color 0.3s;
 }
 
-.nav-links .active {
-  color: #0056ff !important;
-}
-.nav-links li.active a {
-  color: #0056ff !important;
-}
-
-/* .nav-links li:hover,
-.nav-links .active {
-  color: #0056ff;
-} */
 .nav-links li a {
   text-decoration: none;
-  color: inherit; /* Text ka color same rakhe */
+  color: inherit;
 }
 
-/* .nav-links li a:hover {
-  color: #007bff; 
-  text-decoration: none; 
-} */
+.nav-links li.active a,
+.nav-links .active {
+  color: #0056ff !important;
+}
+
+/* Right Buttons */
 .nav-right {
-  padding-right: 50px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -87,7 +79,7 @@
   font-weight: 500;
 }
 
-/* ✅ Hamburger Icon */
+/* Hamburger Icon */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -102,7 +94,7 @@
   transition: all 0.3s ease;
 }
 
-/* Animate cross */
+/* Hamburger Active Animation */
 .hamburger.active span:nth-child(1) {
   transform: rotate(45deg) translate(5px, 5px);
 }
@@ -113,20 +105,26 @@
   transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* ✅ Responsive Design */
-@media (max-width: 992px) {
+/* ======================== */
+/* ✅ Responsive Styling */
+/* ======================== */
+@media (max-width: 768px) {
   .hamburger {
     display: flex;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2000;
   }
 
   .nav-links {
     position: absolute;
-    top: 60px;
+    top: 70px;
     left: 0;
     width: 100%;
     background: white;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     gap: 15px;
     padding: 15px 0;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -135,15 +133,16 @@
 
   .nav-links.open {
     display: flex;
+    z-index: 999;
   }
 
   .nav-right {
     display: none;
   }
-}
 
-@media (max-width: 576px) {
-  .navbar {
-    padding: 10px 20px;
+  .nav-logo .logo {
+    height: 40px;
+    padding-left: 0;
+    margin-left: 150px;
   }
 }
