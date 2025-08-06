@@ -110,11 +110,11 @@ export default function AdminAddDoctorHospital() {
                 }}
                 elevation={0}
               >
-                <img className='cardicons' src={addmedicalboardicon}></img>
+                <img className='cardicons' src={addmedicalboardicon} style={{borderRadius:"50%",border:"3px solid #DD4343"}}></img>
                 {/* <AddCircleOutlineIcon sx={{ fontSize: 42, color: '#4d7bf3', mr: 2 }} /> */}
                 <Box>
                     
-                  <Typography sx={{ color: '#4d7bf3', fontWeight: 700, fontSize: 18 }}>
+                  <Typography sx={{ color: '#4d7bf3', fontWeight: 700, fontSize: 18,marginLeft:"5px" }}>
                     Add Medical Board
                   </Typography>
                 </Box>
@@ -138,10 +138,10 @@ export default function AdminAddDoctorHospital() {
                 }}
                 elevation={0}
               >
-                 <img className='cardicons' src={addhospitalpartnersicon}></img>
+                 <img className='cardicons' src={addhospitalpartnersicon} style={{borderRadius:"50%",border:"3px solid #DD4343"}}></img>
                 {/* <AddCircleOutlineIcon sx={{ fontSize: 42, color: '#4d7bf3', mr: 2 }} /> */}
                 <Box>
-                  <Typography sx={{ color: '#4d7bf3', fontWeight: 700, fontSize: 18 }}>
+                  <Typography sx={{ color: '#4d7bf3', fontWeight: 700, fontSize: 18,marginLeft:"5px" }}>
                     Add Hospitals Partners
                   </Typography>
                 </Box>
@@ -154,7 +154,7 @@ export default function AdminAddDoctorHospital() {
           <h3>Enter Details for Active Doctor Profile</h3>
           <p>Add or update the required details for the active doctor profile to keep records accurate and complete.</p>
           </div>
-          <Fade in={open}>
+          <Fade in={open} className='doctorform'>
             <Box>
               {open && (
                 <Box
@@ -176,7 +176,7 @@ export default function AdminAddDoctorHospital() {
     background: '#fff',
     borderRadius: 3,
     boxShadow: 3,
-    width: '100%',
+    width:400,
     maxWidth: 530,
     p: { xs: 2, sm: 3, md: 5 },
     mx: 'auto',
@@ -421,22 +421,21 @@ export default function AdminAddDoctorHospital() {
     type="submit"
     sx={{ py: 1.2, fontSize: 16, fontWeight: 600, borderRadius: 2, mt: 1 }}
   >
-    Add Doctor
+    Submit
   </Button>
 </Box>
 
 
                     {/* ===== Right: Live Profile Card ===== */}
-                    <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } }}>
-                      <Card
+                    <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
+                      <Card className='rightsection'
                         sx={{
                           background: '#4d7bf3',
                           color: '#fff',
                           borderRadius: 3.5,
                           boxShadow: 6,
-                          width: '100%',
-                          maxWidth: 400,
-                          minHeight: 480,
+                          width: 550,
+                        paddingTop:"30px",
                           mx: 'auto',
                           display: 'flex',
                           flexDirection: 'column',
@@ -444,7 +443,7 @@ export default function AdminAddDoctorHospital() {
                         }}
                       >
                         <CardContent sx={{ p: 4 }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                          <Box sx={{ display: 'flex', alignItems: 'center',}}>
                             <Avatar
                             src={form.profile_pic}
                               sx={{
@@ -462,17 +461,17 @@ export default function AdminAddDoctorHospital() {
                             </Avatar>
                             <Box>
                               <Typography variant="h6" sx={{ fontWeight: 700, color: '#fff' }}>
-                                {form.firstName || 'Gaurav'} {form.lastName || 'Pandey'}
+                                {form.firstName} {form.lastName}
                               </Typography>
                               <Typography sx={{ color: '#e3eafc', fontSize: 15 }}>
-                                {form.dateOfBirth || '20/12/2025'}{' '}
-                                {form.gender && <>• {form.gender}</>}
+                                {form.dateOfBirth}{' '}
+                                {form.gender}
                               </Typography>
                             </Box>
                           </Box>
 
                           {/* Details */}
-                          <Typography variant="subtitle2" sx={{ color: '#e3eafc' }}>
+                          <Typography variant="subtitle2" sx={{ color: '#e3eafc',marginTop:"20px" }}>
                             Address
                           </Typography>
                           <Typography variant="body2" sx={{ mb: 0.5 }}>
@@ -487,12 +486,12 @@ export default function AdminAddDoctorHospital() {
                           <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
                             Phone
                           </Typography>
-                          <Typography variant="body2">{form.phone_no || '9128821832'}</Typography>
+                          <Typography variant="body2">{form.phone_no}</Typography>
 
                           <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
                             Email
                           </Typography>
-                          <Typography variant="body2">{form.email || 'gpkt@gmail.com'}</Typography>
+                          <Typography variant="body2">{form.email}</Typography>
 
                           {form.website && (
                             <>
@@ -525,8 +524,7 @@ export default function AdminAddDoctorHospital() {
                             Bio
                           </Typography>
                           <Typography variant="body2">
-                            {form.bio ||
-                              `Dr. Gaurav is an award-winning seasoned doctor with a strong commitment to excellence in the medical field. Experienced, dedicated, team-oriented, and overall with 8+ years in practice.`}
+                            {form.bio}
                           </Typography>
                         </CardContent>
                       </Card>
