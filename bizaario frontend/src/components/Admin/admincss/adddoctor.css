@@ -1,0 +1,32 @@
+.adddoctor
+{
+    margin-left: 250px;
+  margin-top: 10px;
+}
+.cardicons
+{
+    width: 57px;
+height: 57px;
+flex-shrink: 0;
+aspect-ratio: 1/1;
+}
+
+.profile-header h3{
+    padding-left: 16px;
+    margin-top: 20px;
+color: #000;
+font-family: Roboto;
+font-size: 26px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+}
+.profile-header p{
+    padding-left: 16px;
+ color: rgba(0, 0, 0, 0.50);
+font-family: Roboto;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}

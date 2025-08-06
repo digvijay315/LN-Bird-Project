@@ -1,6 +1,8 @@
 import React from "react";
 import "../styles/Articles.css";
 import { FaFilter } from "react-icons/fa";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function Articles() {
   // ✅ 3 different images
@@ -20,6 +22,7 @@ export default function Articles() {
 
   return (
     <div className="articles-page">
+      <Navbar/>
       {/* ✅ Banner Section */}
       <div className="articles-banner">
         <div className="articles-banner-overlay">
@@ -66,6 +69,7 @@ export default function Articles() {
           </div>
         ))}
       </div>
+      <Footer/>
     </div>
   );
 }

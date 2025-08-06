@@ -1,9 +1,12 @@
 import React from "react";
 import "../styles/ContactUs.css";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function ContactUs() {
   return (
     <div className="contactus-page">
+      <Navbar/>
       {/* ✅ Banner Section */}
       <div className="contactus-banner">
         <div className="contactus-banner-overlay">
@@ -123,7 +126,7 @@ export default function ContactUs() {
     </details>
   </div>
 </div>
-
+<Footer/>
     </div>
   );
 }

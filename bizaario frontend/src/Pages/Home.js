@@ -7,10 +7,13 @@ import LiveSessions from "../components/LiveSessions";
 import NewsArticles from "../components/NewsArticles";
 import AwardsCertificates from "../components/AwardsCertificates";
 import PatientTestimonials from "../components/PatientTestimonials";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function Home() {
   return (
     <div>
+      <Navbar/>
       <HeroSection />
       <EmpoweringDoctors />
       <StarDoctors />
@@ -19,6 +22,7 @@ function Home() {
       <NewsArticles />
       <AwardsCertificates />
       <PatientTestimonials />
+      <Footer/>
     </div>
   );
 }

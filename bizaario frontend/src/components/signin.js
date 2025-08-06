@@ -2,18 +2,30 @@
 import React, { useState } from "react";
 import "../styles/signin.css";
 import image from "../assets/img 1.png";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
+  const navigate=useNavigate()
   // Step 1: Track selected role in state
   const [role, setRole] = useState("admin"); // default is 'admin'
 
+  const [username,setusername]=useState("")
+  const[password,setpassword]=useState("")
   // Optionally, you can show different forms or adapt text for each role
   const getFormTitle = () => {
-    if (role === "admin") return "Admin Sign in";
+    if (role === "admin")  return "Admin Sign in";
     if (role === "user") return "User Sign in";
     if (role === "patient") return "Patient Sign in";
     return "Sign in";
   };
+
+  const login=()=>
+  {
+    if(role==="admin" && username==="admin" && password==="123")
+    {
+      navigate('/admindashboard')
+    }
+  }
 
   return (
     <div className="signin-container">
@@ -61,8 +73,8 @@ function SignIn() {
           {/* Step 3: The form updates (even just the heading here) */}
           <div className="input-group">
             <h2>{getFormTitle()}</h2>
-            <input type="text" placeholder="Username" required />
-            <input type="password" placeholder="Password" required />
+            <input type="text" placeholder="Username" required  onChange={(e)=>setusername(e.target.value)}/>
+            <input type="password" placeholder="Password" required onChange={(e)=>setpassword(e.target.value)}/>
           </div>
           <div className="options">
             <label>
@@ -71,7 +83,7 @@ function SignIn() {
             </label>
             <a href="/forgot">Forgot Password?</a>
           </div>
-          <button className="login-btn" type="submit">
+          <button className="login-btn" onClick={login}>
             Login
           </button>
           <div className="or-divider">OR</div>

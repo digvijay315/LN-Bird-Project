@@ -7,6 +7,8 @@ import team4 from "../assets/team4.png";
 import news1 from "../assets/article1.png";
 import news2 from "../assets/article2.png";
 import news3 from "../assets/article3.png";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 function AboutUs() {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -28,6 +30,7 @@ function AboutUs() {
 
   return (
     <div className="about-page">
+      <Navbar/>
       {/* ✅ Banner Section */}
       <div className="about-banner">
         <div className="banner-content">
@@ -140,6 +143,7 @@ function AboutUs() {
           })}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 }

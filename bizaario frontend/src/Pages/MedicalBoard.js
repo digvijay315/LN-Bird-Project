@@ -1,6 +1,8 @@
 import React from "react";
 import "../styles/MedicalBoard.css";
 import { FaFilter } from "react-icons/fa";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function MedicalBoard() {
   const doctors = Array(12).fill({
@@ -14,6 +16,7 @@ export default function MedicalBoard() {
 
   return (
     <div className="mb-page">
+      <Navbar/>
       {/* ✅ Banner Section */}
       <div className="mb-banner">
         <div className="mb-banner-overlay">
@@ -70,6 +73,7 @@ export default function MedicalBoard() {
           </div>
         ))}
       </div>
+      <Footer/>
     </div>
   );
 }

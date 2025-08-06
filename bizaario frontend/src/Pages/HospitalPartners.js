@@ -1,6 +1,8 @@
 import React from "react";
 import "../styles/HospitalPartners.css";
 import { FaFilter } from "react-icons/fa";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 export default function HospitalPartners() {
   const hospitals = Array(12).fill({
@@ -14,6 +16,7 @@ export default function HospitalPartners() {
 
   return (
     <div className="hospital-page">
+      <Navbar/>
       {/* ✅ Banner Section */}
       <div className="hospital-banner">
         <div className="banner-overlay">
@@ -72,6 +75,7 @@ export default function HospitalPartners() {
           </div>
         ))}
       </div>
+      <Footer/>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./Pages/Home";
@@ -10,11 +10,13 @@ import NewsArticlesPage from "./Pages/Articles";
 import ContactUs from "./Pages/ContactUs";
 import RegisterPage from "./components/register";
 import SignIn from "./components/signin";
+import Admindashboard from "./components/Admin/admindashboard";
+import AdminAddDoctorHospital from '../src/components/Admin/adddoctor'
 
 function App() {
   return (
-    <Router>
-      <Navbar />
+   
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
@@ -24,9 +26,13 @@ function App() {
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/signin" element={<SignIn />} />
+         <Route path="/admindashboard" element={<Admindashboard/>}></Route>
+        <Route path="/adddoctor" element={<AdminAddDoctorHospital/>}></Route>
       </Routes>
-      <Footer />
-    </Router>
+        
+    </BrowserRouter>
+
+   
   );
 }
 
