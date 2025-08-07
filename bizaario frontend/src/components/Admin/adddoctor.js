@@ -14,6 +14,12 @@ import '../Admin/admincss/adddoctor.css';
 import addmedicalboardicon from '../Admin/images/image 43.png'
 import addhospitalpartnersicon from '../Admin/images/image 431.png'
 import selectimageicon from '../Admin/images/Young man face avater vector illustration design _ Premium Vector 1.png'
+import api from '../../api'
+import Swal from 'sweetalert2';
+
+
+
+
 
 const initialForm = {
   profile_pic:[],
@@ -69,10 +75,30 @@ export default function AdminAddDoctorHospital() {
 };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    // For now just prevent default
+    try {
+      const resp=await api.post('/doctor/adddoctor',form)
+      if(resp.status===200)
+      {
+        Swal.fire({
+          icon:"success",
+          title:"Profile Created",
+          text:"Doctor Profile Created Successfully...",
+          showConfirmButton:true
+        })
+      }
+      
+    } catch (error) {
+      Swal.fire({
+        icon:"error",
+        title:"error ",
+        text:error.response.data.message,
+        showConfirmButton:true
+      })
+      console.log(error);
+      
+    }
   };
 
   return (
@@ -169,24 +195,25 @@ export default function AdminAddDoctorHospital() {
                   <Grid container spacing={4} sx={{ maxWidth: 1150, width: '100%' }} >
                     {/* ===== Left: FORM ===== */}
                    <Box
-  component="form"
-  onSubmit={handleSubmit}
-  autoComplete="off"
-  sx={{
-    background: '#fff',
-    borderRadius: 3,
-    boxShadow: 3,
-    width:400,
-    maxWidth: 530,
-    p: { xs: 2, sm: 3, md: 5 },
-    mx: 'auto',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 2, // spacing between inputs
-  }}
->
+                component="form"
+                onSubmit={handleSubmit}
+                autoComplete="off"
+                sx={{
+                  background: '#fff',
+                  borderRadius: 3,
+                  boxShadow: 3,
+                  minWidth:400,
+                  maxWidth: 630,
+                  p: { xs: 2, sm: 3, md: 5 },
+                  mx: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2, // spacing between inputs
+                }}
+              >
+  
 
-     <Box sx={{ position: 'relative', display: 'inline-block', width: 100, height: 100,marginLeft:"40%" }}>
+     <Box  sx={{ position: 'relative', display: 'inline-block', minWidth: 100,height: 100,marginLeft:"40%" }}>
       <Avatar
         src={form.profile_pic}
         sx={{
@@ -434,8 +461,9 @@ export default function AdminAddDoctorHospital() {
                           color: '#fff',
                           borderRadius: 3.5,
                           boxShadow: 6,
-                          width: 550,
-                        paddingTop:"30px",
+                          minWidth: 550,
+                          maxWidth:650,
+                          paddingTop:"30px",
                           mx: 'auto',
                           display: 'flex',
                           flexDirection: 'column',

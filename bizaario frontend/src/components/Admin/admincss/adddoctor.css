@@ -33,9 +33,33 @@ font-style: normal;
 font-weight: 400;
 line-height: normal;
 }
+.rightsection
+{
+    color: '#fff';
+    border-radius: 3.5;
+    box-shadow: 6;
+    width: 550;
+    padding-Top:"30px";
+    display: 'flex';
+    flex-Direction: 'column';
+    justify-Content: 'center',-;
+}
 
-@media (min-width: 1300px) {
+@media (min-width: 1500px) {
   .doctorform {
     margin-left: -200px; /* adjust this px value as needed */
+   
   }
+
+  .rightsection
+{
+    color: '#fff';
+    border-radius: 3.5;
+    box-shadow: 6;
+    width: 550;
+    padding-Top:"30px";
+    display: 'flex';
+    flex-Direction: 'column';
+    justify-Content: 'center',-;
+}
 }

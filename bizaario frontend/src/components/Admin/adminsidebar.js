@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const menuItems = [
-  { icon: dashboardicon, label: "Dashboard" },
+  { icon: dashboardicon, label: "Dashboard",path:"/admindashboard" },
   { icon: addhospitalicon, label: "Add Doctor/Hospitals",path:"/adddoctor" },
   { icon: continenticon, label: "Continent Master" },
   { icon: countrymasterlogo, label: "Country Master" },
