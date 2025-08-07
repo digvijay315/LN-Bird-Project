@@ -3,8 +3,8 @@
 
 .adddoctor
 {
-    margin-left: 250px;
-  margin-top: 10px;
+margin-left: 19.5vw;
+margin-top: 10px;
 }
 .cardicons
 {
@@ -34,4 +34,8 @@ font-weight: 400;
 line-height: normal;
 }
 
-
+@media (min-width: 1300px) {
+  .doctorform {
+    margin-left: -200px; /* adjust this px value as needed */
+  }
+}
