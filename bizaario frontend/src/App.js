@@ -12,6 +12,7 @@ import RegisterPage from "./components/register";
 import SignIn from "./components/signin";
 import Admindashboard from "./components/Admin/admindashboard";
 import AdminAddDoctorHospital from '../src/components/Admin/adddoctor'
+import Doctordashboard from "./components/Doctor/doctordashboard";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
          <Route path="/admindashboard" element={<Admindashboard/>}></Route>
         <Route path="/adddoctor" element={<AdminAddDoctorHospital/>}></Route>
+        <Route path="/doctordashboard" element={<Doctordashboard/>}></Route>
       </Routes>
         
     </BrowserRouter>

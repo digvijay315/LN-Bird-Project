@@ -48,7 +48,7 @@ const login = async (e) => {
       localStorage.setItem('token', resp.data.token);
       localStorage.setItem('user', JSON.stringify(resp.data.user));
 
-      navigate('/');
+      navigate('/doctordashboard');
 
     } catch (error) {
       const status = error.response?.status;
