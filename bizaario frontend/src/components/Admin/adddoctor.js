@@ -4,7 +4,7 @@ import {
   TextField, FormControl, InputLabel, Select, MenuItem, RadioGroup,
   FormControlLabel, Radio, Fade
 } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+// import PersonIcon from '@mui/icons-material/Person';
 import { Checkbox, FormGroup } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import {  IconButton,  Tooltip } from '@mui/material';
@@ -13,7 +13,7 @@ import Adminsidebar from './adminsidebar';
 import '../Admin/admincss/adddoctor.css';
 import addmedicalboardicon from '../Admin/images/image 43.png'
 import addhospitalpartnersicon from '../Admin/images/image 431.png'
-import selectimageicon from '../Admin/images/Young man face avater vector illustration design _ Premium Vector 1.png'
+// import selectimageicon from '../Admin/images/Young man face avater vector illustration design _ Premium Vector 1.png'
 import api from '../../api'
 import Swal from 'sweetalert2';
 
@@ -57,7 +57,7 @@ export default function AdminAddDoctorHospital() {
   };
 
  const handleChange = (e) => {
-  const { name, value, type, checked } = e.target;
+  const { name, value,  checked } = e.target;
 
   if (name === "Digital CME" || name === "Innovative Cases") {
     setForm((prev) => {
@@ -136,7 +136,7 @@ export default function AdminAddDoctorHospital() {
                 }}
                 elevation={0}
               >
-                <img className='cardicons' src={addmedicalboardicon} style={{borderRadius:"50%",border:"3px solid #DD4343"}}></img>
+                <img className='cardicons' src={addmedicalboardicon} style={{borderRadius:"50%",border:"3px solid #DD4343"}} alt=''></img>
                 {/* <AddCircleOutlineIcon sx={{ fontSize: 42, color: '#4d7bf3', mr: 2 }} /> */}
                 <Box>
                     
@@ -164,7 +164,7 @@ export default function AdminAddDoctorHospital() {
                 }}
                 elevation={0}
               >
-                 <img className='cardicons' src={addhospitalpartnersicon} style={{borderRadius:"50%",border:"3px solid #DD4343"}}></img>
+                 <img className='cardicons' src={addhospitalpartnersicon} style={{borderRadius:"50%",border:"3px solid #DD4343"}} alt=''></img>
                 {/* <AddCircleOutlineIcon sx={{ fontSize: 42, color: '#4d7bf3', mr: 2 }} /> */}
                 <Box>
                   <Typography sx={{ color: '#4d7bf3', fontWeight: 700, fontSize: 18,marginLeft:"5px" }}>

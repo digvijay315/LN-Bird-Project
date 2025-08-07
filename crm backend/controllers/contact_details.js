@@ -97,6 +97,7 @@ const add_contact = async (req, res) => {
 
     
     // Fetch contacts with pagination and sorting by createdAt descending
+    const allcontact=await addcontact.find()
     const contacts = await addcontact.find()
       .sort({ createdAt: -1 })
       .skip(skip)
@@ -112,6 +113,7 @@ const add_contact = async (req, res) => {
       total,
       page,
       totalPages: Math.ceil(total / limit),
+      allcontact:allcontact
     });
   } catch (error) {
     console.error(error);
@@ -520,46 +522,76 @@ const searchcontact=async (req, res) => {
                                                     
                                            
                                                  
-                                                    let savedContacts = [];
-                                            
-                                                    for (let contact of contacts) {
-                                                        const { 
-                                                            title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
-                                                            source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
-                                                            company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
-                                                            father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
-                                                            birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
-                                                            income, amount1, document_no, document_name, relation, lastcommunication
-                                                        } = contact;
-                                            
-                                                        let newDocumentPic = [];
-                                            
-                                                        // Check if there are files to upload
-                                                        if (req.files && req.files.length > 0) {
-                                                            for (let file of req.files) {
-                                                                const result = await cloudinary.uploader.upload(file.path);
-                                                                newDocumentPic.push(result.secure_url);
-                                                            }
-                                                        }
-                                            
-                                                        // Create a new contact object
-                                                        const newContact = new addcontact({
-                                                            title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
-                                                            source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
-                                                            company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
-                                                            father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
-                                                            birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
-                                                            income, amount1, document_no, document_name, document_pic: newDocumentPic, relation, lastcommunication
-                                                        });
-                                            
-                                                        // Save each contact
-                                                        const resp = await newContact.save();
-                                                        savedContacts.push(resp);
-                                                    }
-                                                   
-                                                    
-                                            
-                                                    res.status(200).send({ message: "Contacts saved", contacts: savedContacts });
+                                       let savedContacts = [];
+                                            let skippedContacts = [];
+                                            let duplicateCount = 0;
+
+                                            for (let contact of contacts) {
+                                              const {
+                                                title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
+                                                source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
+                                                company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
+                                                father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
+                                                birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
+                                                income, amount1, document_no, document_name, relation, lastcommunication
+                                              } = contact;
+
+                                              let newDocumentPic = [];
+
+                                              // Upload files if provided
+                                              if (req.files && req.files.length > 0) {
+                                                for (let file of req.files) {
+                                                  const result = await cloudinary.uploader.upload(file.path);
+                                                  newDocumentPic.push(result.secure_url);
+                                                }
+                                              }
+
+                                              // Check for duplicate mobile number
+                                              const validMobileNos = Array.isArray(mobile_no) ? mobile_no.filter(num => num && num.trim() !== "") : [];
+                                              if (validMobileNos.length > 0) {
+                                                const existingMobile = await addcontact.findOne({ mobile_no: { $in: validMobileNos } });
+                                                if (existingMobile) {
+                                                  duplicateCount++;
+                                                  skippedContacts.push({ reason: "Duplicate mobile_no", contact });
+                                                  continue;
+                                                }
+                                              }
+
+                                              // Check for duplicate email
+                                              const validEmails = Array.isArray(email) ? email.filter(e => e && e.trim() !== "") : [];
+                                              if (validEmails.length > 0) {
+                                                const existingEmail = await addcontact.findOne({ email: { $in: validEmails } });
+                                                if (existingEmail) {
+                                                  duplicateCount++;
+                                                  skippedContacts.push({ reason: "Duplicate email", contact });
+                                                  continue;
+                                                }
+                                              }
+
+                                              // Save contact
+                                              const newContact = new addcontact({
+                                                title, first_name, last_name, country_code, mobile_no, mobile_type, email, email_type, tags, descriptions,
+                                                source, team, owner, visible_to, profession_category, profession_subcategory, designation, company_name, country_code1,
+                                                company_phone, company_email, area, location, city, pincode, state, country, industry, company_social_media, company_url,
+                                                father_husband_name, h_no, area1, location1, city1, pincode1, state1, country1, gender, marital_status,
+                                                birth_date, anniversary_date, education, degree, school_college, loan, bank, amount, social_media, url,
+                                                income, amount1, document_no, document_name, document_pic: newDocumentPic, relation, lastcommunication
+                                              });
+
+                                              const resp = await newContact.save();
+                                              savedContacts.push(resp);
+                                            }
+
+                                            // Final response
+                                            res.status(200).send({
+                                              message: "Bulk upload completed",
+                                              totalReceived: contacts.length,
+                                              savedCount: savedContacts.length,
+                                              duplicateCount,
+                                              savedContacts,
+                                              skippedContacts,
+                                            });
+
                                             
                                                 } catch (error) {
                                                     console.log(error);

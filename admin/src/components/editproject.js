@@ -2838,13 +2838,15 @@ const checkForDuplicates = async (contacts) => {
 
     // Fetch all contacts
     const contactResponse = await api.get("viewcontact");
-    const contactList = contactResponse.data.contact; // Existing contacts
+    console.log(contactResponse);
+    
+    const contactList = contactResponse.data.allcontact; // Existing contacts
 
     // Create a mapping of mobile_no to ObjectId
     const mobileToIdMap = new Map();
     contactList.forEach(contact => {
       if (Array.isArray(contact.mobile_no)) {
-        contact.mobile_no.forEach(mobile => {
+        contact.mobile_no?.forEach(mobile => {
           const normalizedMobile = normalizeMobile(mobile);
           if (normalizedMobile) {
             mobileToIdMap.set(normalizedMobile, contact._id);

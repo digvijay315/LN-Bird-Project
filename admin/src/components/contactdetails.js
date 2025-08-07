@@ -221,11 +221,12 @@ const totalPages = Math.ceil(data.length / itemsPerPage);
     {
       try {
         const resp=await api.get(`/viewcontact?page=${page}&limit=${limit}`)
+  
         setdata(resp.data.contact)
         setcontacttotalPages(resp.data.totalPages);
         setcontactforsearch(resp.data.contact)
         const countcontact=Array.isArray(resp.data.contact) ? resp.data.contact : [resp.data.contact]
-        settotalcontact(countcontact.length)
+        settotalcontact(resp.data.total)
         setFilteredData(countcontact);
       } catch (error) {
         console.log(error);
