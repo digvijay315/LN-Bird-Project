@@ -5,8 +5,12 @@ import image from "../assets/img 1.png";
 import { useNavigate } from "react-router-dom";
 import api from '../api'
 import Swal from 'sweetalert2';
+import ChangePasswordModal from "./changepassworddoctor";
 
 function SignIn() {
+
+   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+
   const navigate=useNavigate()
   // Step 1: Track selected role in state
   const [role, setRole] = useState("admin"); // default is 'admin'
@@ -56,6 +60,9 @@ const login = async (e) => {
           title: 'Change Password Required',
           text: message,
           showConfirmButton: true
+        }).then(()=>
+        {
+         setShowChangePasswordModal(true);
         });
       } else {
         Swal.fire({
@@ -137,6 +144,11 @@ const login = async (e) => {
           <button className="login-btn" onClick={login}>
             Login
           </button>
+{
+  showChangePasswordModal ? <ChangePasswordModal/> :""
+}
+        
+
           <div className="or-divider">OR</div>
           <div className="social-row">
             <button type="button" className="g">
@@ -153,6 +165,7 @@ const login = async (e) => {
             </button>
           </div>
         </form>
+
       </div>
     </div>
   );
