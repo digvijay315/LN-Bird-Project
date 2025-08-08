@@ -191,7 +191,7 @@ unitDetails={
   const view_project=async(req,res)=>
     {
         try {
-          const resp = await addproject.find()
+          const resp = await addproject.find().select( "-add_unit")
           .populate({
               path: 'add_unit.owner_details', // Populate the 'owner_details' field inside 'add_unit'
               model: 'add_contact' // Specify the model to populate
@@ -208,7 +208,15 @@ unitDetails={
             path: 'developer_name', 
             model: 'add_developer' // Specify the model to populate
         })
-            res.status(200).send({message:"project details fetch successfully",project:resp})
+
+          const allprojectwithoutunitdetails = await addproject.find()
+            .select("-add_unit")
+            .populate({
+              path: 'developer_name',
+              model: 'add_developer'
+            });
+
+            res.status(200).send({message:"project details fetch successfully",project:resp,allprojectwithoutunitdetails})
         } catch (error) {
             console.log(error)
         }

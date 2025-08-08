@@ -1,7 +1,6 @@
 import Header1 from "./header1";
 import Sidebar1 from "./sidebar1";
 import {  useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState,useRef } from "react";
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -12,24 +11,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { ToastContainer,toast } from "react-toastify";
 import React from "react";
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import { utils, writeFile } from "xlsx";
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import {  SvgIcon } from "@mui/material";
-import EmailIcon from '@mui/icons-material/Email';
 import Tooltip from '@mui/material/Tooltip';
 import api from "../api";
 import '../css/deal.css';
-import { toWords } from 'number-to-words';
-import { CircularProgress,LinearProgress, Typography, Box } from "@mui/material";
 import Swal from "sweetalert2";
-import { useDropzone } from 'react-dropzone';
-import ReactQuill from 'react-quill';  // Import ReactQuill
-import Lottie from "lottie-react";
-import deallogo from '../icons/deal.jpg'
-import { Percent } from "@mui/icons-material";
+
 
 function Allprojects() {
 
@@ -59,7 +46,10 @@ function Allprojects() {
                         
                         try {
                           const resp=await api.get('viewproject')
-                          setcdata(resp.data.project)
+                          console.log(resp);
+                          
+                          // setcdata(resp.data.project)
+                          setcdata(resp.data.allprojectwithoutunitdetails)
                           setallprojectforsearch(resp.data.project)
                           const countproject=Array.isArray(resp.data.project) ? resp.data.project : [resp.data.project]
                           settotalproject(countproject.length)
@@ -108,8 +98,8 @@ function Allprojects() {
                       const [itemsPerPage1, setItemsPerPage1] = useState(10); // User-defined items per page
                       const indexOfLastItem1 = currentPage1 * itemsPerPage1;
                       const indexOfFirstItem1 = indexOfLastItem1 - itemsPerPage1;
-                      const currentItems2 = cdata.slice(indexOfFirstItem1, indexOfLastItem1);
-                      const totalPages1 = Math.ceil(cdata.length / itemsPerPage1);
+                      const currentItems2 = cdata?.slice(indexOfFirstItem1, indexOfLastItem1);
+                      const totalPages1 = Math.ceil(cdata?.length / itemsPerPage1);
                       
                         // Handle items per page change
                         const handleItemsPerPageChange1 = (e) => {
