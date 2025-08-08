@@ -1,14 +1,39 @@
 const adddoctormodal = require('../../modals/doctor/adddoctor')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken')
+const cloudinary=require('cloudinary').v2
+const fs=require('fs')
+const path=require('path')
 
 require('dotenv')
+
+
+
+require('dotenv').config()
+cloudinary.config({
+    cloud_name:process.env.CLOUD_NAME,
+    api_key:process.env.API_KEY,
+    api_secret:process.env.API_SECRET
+})
+
 
 const add_doctor = async (req, res) => {
     try {
     const {country,firstName,lastName,address,address2,state,city,postalCode,dateOfBirth,phone_no,
             gender,email,website,password,subscription,bio} = req.body;
    
+            const profileimage=[]
+      
+               if (req.files) {
+            // Upload files to Cloudinary and get the URLs
+            for (let file of req.files) {
+              const result = await cloudinary.uploader.upload(file.path);
+              profileimage.push(result.secure_url);  // Store the URL of the uploaded image
+              // Optionally, you could delete the file from the server after uploading (uncomment below if needed)
+              // fs.unlinkSync(file.path);
+            }
+          }
+
       const exitingprofile=await adddoctormodal.findOne({email:email})
       if(exitingprofile)
       {
@@ -19,7 +44,7 @@ const add_doctor = async (req, res) => {
 
       const new_add_doctor = new adddoctormodal({
        country,firstName,lastName,address,address2,state,city,postalCode,dateOfBirth,phone_no,
-            gender,email,website,password:hashedPassword,subscription,bio
+            gender,email,website,password:hashedPassword,subscription,bio,profile_pic:profileimage
       });
   
       // Save the deal to the database
@@ -63,9 +88,10 @@ const logindoctor = async (req, res) => {
       message: "Login successful",
       token,
       user: {
-        id: user._id,
-        email: user.email,
-        name: user.firstName,
+        // id: user._id,
+        // email: user.email,
+        // name: user.firstName,
+        user
       },
     });
 

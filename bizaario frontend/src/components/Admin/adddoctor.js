@@ -16,6 +16,7 @@ import addhospitalpartnersicon from '../Admin/images/image 431.png'
 // import selectimageicon from '../Admin/images/Young man face avater vector illustration design _ Premium Vector 1.png'
 import api from '../../api'
 import Swal from 'sweetalert2';
+import UniqueLoader from '../loader';
 
 
 
@@ -23,6 +24,7 @@ import Swal from 'sweetalert2';
 
 const initialForm = {
   profile_pic:[],
+   profile_pic_preview:[],
   country: '',
   firstName: '',
   lastName: '',
@@ -45,16 +47,23 @@ const initialForm = {
 export default function AdminAddDoctorHospital() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(initialForm);
+  const [loading, setLoading] = useState(false);
 
     const inputRef = useRef();
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imgUrl = URL.createObjectURL(file);
-      setForm({...form,profile_pic:imgUrl});
-    }
-  };
+ const handleImageChange = (e) => {
+  const files = Array.from(e.target.files);
+  if (files.length > 0) {
+    const file = files[0];
+    const previewUrl = URL.createObjectURL(file);
+    setForm({
+      ...form,
+      profile_pic: file,
+      profile_pic_preview: previewUrl,
+    });
+  }
+};
+
 
  const handleChange = (e) => {
   const { name, value,  checked } = e.target;
@@ -77,8 +86,15 @@ export default function AdminAddDoctorHospital() {
 
   const handleSubmit = async(e) => {
     e.preventDefault();
+     setLoading(true);
     try {
-      const resp=await api.post('/doctor/adddoctor',form)
+      console.log(form);
+      
+      const resp=await api.post('/doctor/adddoctor',form,{headers: {
+                                    "Content-Type": "multipart/form-data",
+                                  }
+                                }
+      )
       if(resp.status===200)
       {
         Swal.fire({
@@ -98,6 +114,9 @@ export default function AdminAddDoctorHospital() {
       })
       console.log(error);
       
+    }finally
+    {
+      setLoading(false)
     }
   };
 
@@ -105,6 +124,7 @@ export default function AdminAddDoctorHospital() {
     <>
       <Adminheader />
       <Adminsidebar />
+     
 
       <div className="adddoctor">
         <Box
@@ -215,7 +235,7 @@ export default function AdminAddDoctorHospital() {
 
      <Box  sx={{ position: 'relative', display: 'inline-block', minWidth: 100,height: 100,marginLeft:"40%" }}>
       <Avatar
-        src={form.profile_pic}
+        src={form.profile_pic_preview}
         sx={{
           width: 100,
           height: 100,
@@ -473,7 +493,7 @@ export default function AdminAddDoctorHospital() {
                         <CardContent sx={{ p: 4 }}>
                           <Box sx={{ display: 'flex', alignItems: 'center',}}>
                             <Avatar
-                            src={form.profile_pic}
+                            src={form.profile_pic_preview}
                               sx={{
                                 bgcolor: '#fff',
                                 color: '#4d7bf3',
@@ -563,6 +583,25 @@ export default function AdminAddDoctorHospital() {
             </Box>
           </Fade>
         </Box>
+
+ {loading && (
+  <div
+    style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(255, 255, 255, 0.6)',
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}
+  >
+    <UniqueLoader />
+  </div>
+)}
+
+
+
       </div>
     </>
   );

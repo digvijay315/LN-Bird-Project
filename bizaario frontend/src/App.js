@@ -31,6 +31,7 @@ function App() {
         <Route path="/adddoctor" element={<AdminAddDoctorHospital/>}></Route>
         <Route path="/doctordashboard" element={<Doctordashboard/>}></Route>
       </Routes>
+      {/* <Doctordashboard/> */}
         
     </BrowserRouter>
 

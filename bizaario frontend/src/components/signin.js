@@ -43,6 +43,9 @@ const login = async (e) => {
         title: 'Login Successful',
         text: resp.data.message || 'Welcome!',
         showConfirmButton: true,
+         customClass: {
+          confirmButton: 'my-swal-button',
+        },
       });
 
       localStorage.setItem('token', resp.data.token);
@@ -59,7 +62,10 @@ const login = async (e) => {
           icon: 'warning',
           title: 'Change Password Required',
           text: message,
-          showConfirmButton: true
+          showConfirmButton: true,
+             customClass: {
+          confirmButton: 'my-swal-button',
+        },
         }).then(()=>
         {
          setShowChangePasswordModal(true);
@@ -69,7 +75,10 @@ const login = async (e) => {
           icon: 'error',
           title: 'Login Failed',
           text: message,
-          showConfirmButton: true
+          showConfirmButton: true,
+             customClass: {
+          confirmButton: 'my-swal-button',
+        },
         });
       }
     }
@@ -78,7 +87,10 @@ const login = async (e) => {
       icon: 'error',
       title: 'Invalid Role',
       text: 'Please select a valid role',
-      showConfirmButton: true
+      showConfirmButton: true,
+         customClass: {
+          confirmButton: 'my-swal-button',
+        },
     });
   }
 };

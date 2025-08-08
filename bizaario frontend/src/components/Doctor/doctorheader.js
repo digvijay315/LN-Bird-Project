@@ -1,0 +1,111 @@
+import React from 'react'
+import { useNavigate } from 'react-router-dom';
+
+function Doctorheader() {
+
+    const navigate=useNavigate()
+
+    const doctortokens= localStorage.getItem('token');
+    const doctordetails = JSON.parse(localStorage.getItem("user"));
+
+ 
+    
+    
+
+    const SearchIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M21 21L16.514 16.506M19 10.5C19 15.194 15.194 19 10.5 19C5.806 19 2 15.194 2 10.5C2 5.806 5.806 2 10.5 2C15.194 2 19 5.806 19 10.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const BellIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const ChevronDownIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+
+
+  return (
+    <div>
+         {/* Header */}
+              <header className="bg-white shadow-lg px-6 lg:px-9 py-3 flex h-18 flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 justify-between">
+                {/* Search Bar */}
+                <div className="flex items-center w-full lg:w-auto">
+                  <div className="flex w-full lg:w-auto" style={{paddingLeft:"60%"}}>
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      className="w-80 max-w-full px-5 py-4 h-14 bg-[#E9EBFF] rounded-l-lg text-sm placeholder:text-black/50 outline-none"
+                    />
+                    <button className="px-5 py-0 h-14 bg-[#F86F03] rounded-r-lg hover:bg-[#e5630a] transition-colors">
+                      <SearchIcon />
+                    </button>
+                  </div>
+                </div>
+      
+                {/* Right Side Controls */}
+                <div className="flex items-center gap-4 lg:gap-8">
+                  {/* Language Selector */}
+                  <div className="flex items-center gap-3 px-3 py-2 border border-[#F86F03] rounded-lg cursor-pointer hover:bg-[#F86F03]/10 transition-colors">
+                    <div className="w-4 h-4 bg-[#525FE1] rounded-sm flex items-center justify-center">
+                      <span className="text-white text-xs">अ</span>
+                    </div>
+                    <span className="text-black/50 text-sm">English</span>
+                    <ChevronDownIcon />
+                  </div>
+      
+                  {/* Notifications */}
+                  <div className="flex items-center gap-4">
+                    <div className="relative cursor-pointer" aria-label="Notifications">
+                      <BellIcon />
+                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
+                        <span className="text-white text-[10px] font-normal">1</span>
+                      </div>
+                    </div>
+                    <div className="relative cursor-pointer" aria-label="Messages">
+                      <MailIcon />
+                      <div className="absolute -top-2 -right-2 w-4 h-4 bg-[#FFA41B] rounded-full flex items-center justify-center">
+                        <span className="text-white text-[10px] font-normal">5</span>
+                      </div>
+                    </div>
+                  </div>
+      
+                  {/* Divider */}
+                  <div className="w-px h-12 bg-black/20"></div>
+      
+                  {/* User Profile */}
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-12 h-12 bg-gray-300 rounded-full bg-cover bg-center"
+                      style={{
+                        backgroundImage: `url(${doctordetails.user.profile_pic})`,
+                      }}
+                      aria-label="User profile picture"
+                    ></div>
+                    <div>
+                      <div className="text-black text-sm">Hello {doctordetails.user.firstName}</div>
+                      <div className="text-black/50 text-sm">Doctor</div>
+                    </div>
+                  </div>
+                </div>
+              </header>
+    </div>
+  )
+}
+
+export default Doctorheader
