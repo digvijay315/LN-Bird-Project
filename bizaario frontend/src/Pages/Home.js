@@ -10,6 +10,7 @@ import PatientTestimonials from "../components/PatientTestimonials";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+
 function Home() {
   return (
     <div>

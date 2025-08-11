@@ -1,8 +1,8 @@
-import React, { useState ,useRef} from 'react';
+import React, { useState ,useRef, useEffect} from 'react';
 import {
   Box, Grid, Button, Typography, Card, CardContent, Avatar,
   TextField, FormControl, InputLabel, Select, MenuItem, RadioGroup,
-  FormControlLabel, Radio, Fade
+  FormControlLabel, Radio, Fade,Chip,Menu
 } from '@mui/material';
 // import PersonIcon from '@mui/icons-material/Person';
 import { Checkbox, FormGroup } from '@mui/material';
@@ -17,6 +17,8 @@ import addhospitalpartnersicon from '../Admin/images/image 431.png'
 import api from '../../api'
 import Swal from 'sweetalert2';
 import UniqueLoader from '../loader';
+import { DataGrid } from '@mui/x-data-grid';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 
@@ -24,30 +26,51 @@ import UniqueLoader from '../loader';
 
 const initialForm = {
   profile_pic:[],
-   profile_pic_preview:[],
-  country: '',
+  profile_pic_preview:[],
   firstName: '',
   lastName: '',
-  address: '',
+  address1: '',
   address2: '',
   state: '',
   city: '',
-  postalCode: '',
+  postal_code: '',
   dateOfBirth: '',
-  phone_no: '',
   gender: '',
-  email: '',
-  website: '',
   password: '',
-  confirmPassword: '',
-  subscription: [],
-  bio: ''
+  qualification:[],
+  medical_specialty :'',
+  hospital_association:[],
+  clinic_name:'',
+  clinic_address1:'',
+  clinic_address2:'',
+  clinic_state:'',
+  clinic_city:'',
+  clinic_postal_code:'',
+  clinic_geo_location:'',
+  subscription:[]
 };
 
 export default function AdminAddDoctorHospital() {
   const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
+  const[customhospitalassociation,setcustomhospitalassociation]=useState("")
+
+ const handlecustomhospitalassociationchange = (e) => {
+  setcustomhospitalassociation(e.target.value);
+};
+
+// When user confirms
+const saveCustomHospitalAssociation = () => {
+  if (customhospitalassociation.trim() !== "") {
+    setForm((prev) => ({
+      ...prev,
+      hospital_association: [customhospitalassociation],
+    }));
+  }
+};
+
 
     const inputRef = useRef();
 
@@ -65,30 +88,48 @@ export default function AdminAddDoctorHospital() {
 };
 
 
- const handleChange = (e) => {
-  const { name, value,  checked } = e.target;
+const handleChange = (e) => {
+  const { name, value, checked, type } = e.target;
 
-  if (name === "Digital CME" || name === "Innovative Cases") {
-    setForm((prev) => {
+  setForm((prev) => {
+    // If dropdown/multiple select returns an array directly
+    if (Array.isArray(value)) {
+      return { ...prev, [name]: value };
+    }
+
+    // If the state field is already an array (checkbox group)
+    if (Array.isArray(prev[name])) {
       const updated = checked
-        ? [...prev.subscription, name]
-        : prev.subscription.filter((item) => item !== name);
-      return { ...prev, subscription: updated };
-    });
-  } else {
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
+        ? [...prev[name], value] // Add
+        : prev[name].filter((item) => item !== value); // Remove
+      return { ...prev, [name]: updated };
+    }
+
+     // If this is a checkbox group for an array field
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add to array
+        : prev[name].filter((item) => item !== value); // Remove from array
+      return { ...prev, [name]: updated };
+    }
+
+    // If this is a single checkbox (boolean)
+    if (type === "checkbox") {
+      return { ...prev, [name]: checked };
+    }
+
+    // Normal single-value field
+    return { ...prev, [name]: type === "checkbox" ? checked : value };
+  });
 };
 
+
+//============================ post request of add doctor================================================
 
   const handleSubmit = async(e) => {
     e.preventDefault();
      setLoading(true);
     try {
-      console.log(form);
       
       const resp=await api.post('/doctor/adddoctor',form,{headers: {
                                     "Content-Type": "multipart/form-data",
@@ -102,7 +143,11 @@ export default function AdminAddDoctorHospital() {
           title:"Profile Created",
           text:"Doctor Profile Created Successfully...",
           showConfirmButton:true
+        }).then(()=>
+        {
+          window.location.reload()
         })
+       
       }
       
     } catch (error) {
@@ -119,6 +164,101 @@ export default function AdminAddDoctorHospital() {
       setLoading(false)
     }
   };
+
+
+  // =============================get request of all doctor=========================================
+
+  const[alldoctor,setalldoctor]=useState([])
+  const getalldoctor=async()=>
+  {
+    try {
+      const resp=await api.get('doctor/getalldoctor')
+      setalldoctor(resp.data.doctor)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(()=>
+  {
+    getalldoctor()
+
+  },[])
+
+ 
+
+  //=================================== display table===============================================
+
+   const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
+  const handleCloseMenu = () => setAnchorEl(null);
+
+  const onEdit=()=>
+  {
+    alert("edit")
+  }
+
+  const onDelete=()=>
+  {
+    alert("delete")
+  }
+
+  const columns = [
+    { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
+    { field: 'fullname', headerName: 'FUll Name', flex: 1, renderCell: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}` },
+    { field: 'medical_specialty', headerName: 'Specialty', flex: 1 },
+   
+    {
+      field: 'qualification',
+      headerName: 'Qualification',
+      flex: 1,
+      valueGetter: (params) => params.value?.join(', '),
+    },
+   
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 80,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <>
+          <IconButton onClick={handleOpenMenu}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleCloseMenu}
+          >
+            <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
+              Edit
+            </MenuItem>
+            <MenuItem onClick={() => { onDelete(params.row._id); handleCloseMenu(); }}>
+              Delete
+            </MenuItem>
+          </Menu>
+        </>
+      ),
+    },
+  ];
+
+  const rows = alldoctor.map((doc, index) => ({
+    id: doc._id || index,
+    ...doc,
+  }));
+  
+
+
+
+
+  // ===============================add hospital======================================================
+
+  const [hospital,sethospital]=useState({hospital_name:"",hospital_type:"",addressline1:"",addressline2:"",
+                                          city:"",state:"",postel_code:"",geo_location:""})
 
   return (
     <>
@@ -141,7 +281,10 @@ export default function AdminAddDoctorHospital() {
           <Grid container spacing={3} justifyContent="flex-start">
             <Grid item xs={12} sm={'auto'}>
               <Card
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                  setOpen(true)
+                  setOpen1(false)
+                }}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -169,7 +312,10 @@ export default function AdminAddDoctorHospital() {
 
               <Grid item xs={12} sm={'auto'}>
               <Card
-                // onClick={() => setOpen(true)}
+                  onClick={() => {
+                  setOpen(false)
+                  setOpen1(true)
+                }}
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
@@ -200,6 +346,10 @@ export default function AdminAddDoctorHospital() {
           <h3>Enter Details for Active Doctor Profile</h3>
           <p>Add or update the required details for the active doctor profile to keep records accurate and complete.</p>
           </div>
+
+  {/* ================================add doctor================================================ */}
+
+  
           <Fade in={open} className='doctorform'>
             <Box>
               {open && (
@@ -222,8 +372,8 @@ export default function AdminAddDoctorHospital() {
                   background: '#fff',
                   borderRadius: 3,
                   boxShadow: 3,
-                  minWidth:400,
-                  maxWidth: 630,
+                  minWidth:440,
+                  maxWidth: { xs: 630, lg: 900 },
                   p: { xs: 2, sm: 3, md: 5 },
                   mx: 'auto',
                   display: 'flex',
@@ -257,7 +407,7 @@ export default function AdminAddDoctorHospital() {
           sx={{
             position: 'absolute',
             bottom: 0,
-            right: 0,
+            right: 100,
             bgcolor: '#fff',
             border: '1px solid #ccc',
             width: 30,
@@ -273,19 +423,7 @@ export default function AdminAddDoctorHospital() {
       </Tooltip>
     </Box>
 
-  <FormControl fullWidth size="small">
-    <InputLabel>Select your country</InputLabel>
-    <Select 
-      name="country"
-      label="Select your country"
-      value={form.country}
-      onChange={handleChange}
-    >
-      <MenuItem value="India">India</MenuItem>
-      <MenuItem value="Usa">USA</MenuItem>
-      <MenuItem value="United Kingdom">UK</MenuItem>
-    </Select>
-  </FormControl>
+ 
 
   <TextField
     name="firstName"
@@ -306,9 +444,9 @@ export default function AdminAddDoctorHospital() {
   />
 
   <TextField
-    name="address"
-    label="Address"
-    value={form.address}
+    name="address1"
+    label="Address1"
+    value={form.address1}
     onChange={handleChange}
     fullWidth
     size="small"
@@ -342,9 +480,9 @@ export default function AdminAddDoctorHospital() {
   />
 
   <TextField
-    name="postalCode"
+    name="postal_code"
     label="Postal Code"
-    value={form.postalCode}
+    value={form.postal_code}
     onChange={handleChange}
     fullWidth
     size="small"
@@ -376,32 +514,9 @@ export default function AdminAddDoctorHospital() {
     </RadioGroup>
   </FormControl>
 
-  <TextField
-    name="phone_no"
-    label="Phone Number"
-    value={form.phone_no}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
+  
 
-  <TextField
-    name="email"
-    label="Email Address"
-    value={form.email}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
 
-  <TextField
-    name="website"
-    label="Website"
-    value={form.website}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
 
   <TextField
     type="password"
@@ -413,11 +528,142 @@ export default function AdminAddDoctorHospital() {
     size="small"
   />
 
+  <FormControl fullWidth size="small">
+    <InputLabel>Qualification</InputLabel>
+    <Select 
+    multiple
+      name="qualification"
+      label="Qualification"
+      value={form.qualification}
+      onChange={handleChange}
+       renderValue={(selected) => (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {selected.map((value) => (
+              <Chip key={value} label={value} />
+            ))}
+          </Box>
+        )}
+      
+    >
+      <MenuItem value="India">India</MenuItem>
+      <MenuItem value="Usa">USA</MenuItem>
+      <MenuItem value="United Kingdom">UK</MenuItem>
+      <MenuItem value="United Kingdom">Not In List</MenuItem>
+    </Select>
+  </FormControl>
+
+  <FormControl fullWidth size="small">
+    <InputLabel>Medical Specialty</InputLabel>
+    <Select 
+      name="medical_specialty"
+      label="Medical Specialty"
+      value={form.medical_specialty}
+      onChange={handleChange}
+      
+    >
+      <MenuItem value="India">India</MenuItem>
+      <MenuItem value="Usa">USA</MenuItem>
+      <MenuItem value="United Kingdom">UK</MenuItem>
+      <MenuItem value="United Kingdom">Not In List</MenuItem>
+    </Select>
+  </FormControl>
+
+   <FormControl fullWidth size="small">
+    <InputLabel>Hospital Association  </InputLabel>
+    <Select 
+      multiple
+      name="hospital_association"
+      label="Hospital Association"
+      value={form.hospital_association}
+      onChange={handleChange}
+       renderValue={(selected) => (
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {selected.map((value) => (
+              <Chip key={value} label={value} />
+            ))}
+          </Box>
+        )}
+    >
+      <MenuItem value="India">India</MenuItem>
+      <MenuItem value="Usa">USA</MenuItem>
+      <MenuItem value="United Kingdom">UK</MenuItem>
+      <MenuItem value="Not In List">Not In List</MenuItem>
+    </Select>
+
+    {form.hospital_association.includes("Not In List") && (
+        <TextField
+          fullWidth
+          size="small"
+          label="Enter your Hospital Association"
+          value={customhospitalassociation}
+          onChange={handlecustomhospitalassociationchange}
+          onBlur={saveCustomHospitalAssociation}
+          sx={{ mt: 2 }}
+        />
+      )}
+
+  </FormControl>
+
+
+<TextField
+    type="text"
+    name="clinic_name"
+    label="Clinic Name"
+    value={form.clinic_name}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+   <TextField
+    name="clinic_address1"
+    label="Address1"
+    value={form.clinic_address1}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
   <TextField
-    type="password"
-    name="confirmPassword"
-    label="Confirm Password"
-    value={form.confirmPassword}
+    name="clinic_address2"
+    label="Address 2"
+    value={form.clinic_address2}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+  <TextField
+    name="clinic_state"
+    label="State"
+    value={form.clinic_state}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+  <TextField
+    name="clinic_city"
+    label="City"
+    value={form.clinic_city}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+  <TextField
+    name="clinic_postal_code"
+    label="Postal Code"
+    value={form.clinic_postal_code}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+ 
+  <TextField
+    name="clinic_geo_location"
+    label="Geo Location"
+    value={form.clinic_geo_location}
     onChange={handleChange}
     fullWidth
     size="small"
@@ -431,7 +677,8 @@ export default function AdminAddDoctorHospital() {
         <Checkbox size="small"
           checked={form.subscription.includes('Digital CME')}
           onChange={handleChange}
-          name="Digital CME"
+          name="subscription"
+          value="Digital CME"
         />
       }
       label="Digital CME"
@@ -441,7 +688,8 @@ export default function AdminAddDoctorHospital() {
         <Checkbox size="small"
           checked={form.subscription.includes('Innovative Cases')}
           onChange={handleChange}
-          name="Innovative Cases"
+          name="subscription"
+          value="Innovative Cases"
         />
       }
       label="Innovative Cases"
@@ -450,16 +698,196 @@ export default function AdminAddDoctorHospital() {
 </FormControl>
 
 
+  
+
+  <Button
+    variant="contained"
+    color="primary"
+    fullWidth
+    type="submit"
+    sx={{ py: 1.2, fontSize: 16, fontWeight: 600, borderRadius: 2, mt: 1 }}
+  >
+    Submit
+  </Button>
+</Box>
+
+
+{/* =========================== Right: doctor table =================================== */}
+                    <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
+                       <Box
+                       className='right-section'
+                component="form"
+                autoComplete="off"
+                sx={{
+                  background: '#fff',
+                  borderRadius: 3,
+                  boxShadow: 3,
+                  minWidth:510,
+                  maxWidth: 530,
+                  p: { xs: 0, sm: 0, md: 0 },
+                  mx: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2, // spacing between inputs
+                }}
+              >
+                    
+                                      
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        rowsPerPageOptions={[5, 10, 20]}
+        disableSelectionOnClick
+        sx={{
+          borderRadius: 3.5,
+          boxShadow: 6,
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#4d7bf3',
+            color: 'black',
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      </Box>
+      
+ 
+
+                         
+                    
+                  
+                    </Grid>
+                  </Grid>
+                </Box>
+              )}
+            </Box>
+          </Fade>
+
+{/* ============================add hospital partners============================================ */}
+
+
+  <Fade in={open1} className='hospitalform'>
+            <Box>
+              {open1 && (
+                <Box
+                  sx={{
+                    mt: { xs: 3, lg: 5 },
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    width: '100%',
+                  }}
+                >
+                  <Grid container spacing={4} sx={{ maxWidth: 1150, width: '100%' }} >
+                    {/* ===== Left: FORM ===== */}
+                   <Box
+                component="form"
+                onSubmit={handleSubmit}
+                autoComplete="off"
+                sx={{
+                  background: '#fff',
+                  borderRadius: 3,
+                  boxShadow: 3,
+                  minWidth:400,
+                  maxWidth: 630,
+                  p: { xs: 2, sm: 3, md: 5 },
+                  mx: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2, // spacing between inputs
+                }}
+              >
+  
+
   <TextField
-    name="bio"
-    label="Bio"
-    value={form.bio}
+    name="hospital_name"
+    label="Hospital Name"
+    value={hospital.hospital_name}
     onChange={handleChange}
     fullWidth
-    multiline
-    rows={2}
     size="small"
   />
+
+  <FormControl fullWidth size="small">
+    <InputLabel>Hospital Type</InputLabel>
+    <Select 
+      name="hospital_type"
+      label="Hospital Type"
+      value={hospital.hospital_type}
+      onChange={handleChange}
+    >
+      <MenuItem value="India">India</MenuItem>
+      <MenuItem value="Usa">USA</MenuItem>
+      <MenuItem value="United Kingdom">UK</MenuItem>
+    </Select>
+  </FormControl>
+
+
+
+  <TextField
+    name="addressline1"
+    label="Address1"
+    value={hospital.addressline1}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+  <TextField
+    name="addressline2"
+    label="Address 2"
+    value={hospital.addressline2}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+  <FormControl fullWidth size="small">
+    <InputLabel>State</InputLabel>
+    <Select 
+      name="state"
+      label="State"
+      value={hospital.state}
+      onChange={handleChange}
+    >
+      <MenuItem value="India">India</MenuItem>
+      <MenuItem value="Usa">USA</MenuItem>
+      <MenuItem value="United Kingdom">UK</MenuItem>
+    </Select>
+  </FormControl>
+
+  <FormControl fullWidth size="small">
+    <InputLabel>City</InputLabel>
+    <Select 
+      name="city"
+      label="City"
+      value={hospital.city}
+      onChange={handleChange}
+    >
+      <MenuItem value="India">India</MenuItem>
+      <MenuItem value="Usa">USA</MenuItem>
+      <MenuItem value="United Kingdom">UK</MenuItem>
+    </Select>
+  </FormControl>
+
+  <TextField
+    name="postel_code"
+    label="Postel Code"
+    value={hospital.postel_code}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+  <TextField
+    name="geo_location"
+    label="Geo Location"
+    value={hospital.geo_location}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
 
   <Button
     variant="contained"
@@ -582,6 +1010,7 @@ export default function AdminAddDoctorHospital() {
               )}
             </Box>
           </Fade>
+
         </Box>
 
  {loading && (

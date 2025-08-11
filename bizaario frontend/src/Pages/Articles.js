@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Articles.css";
-import { FaFilter } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 export default function Articles() {
+  const [activeButton, setActiveButton] = useState("Cardiology");
+
   // ✅ 3 different images
   const images = [
     require("../assets/article1.png"),
@@ -19,6 +20,17 @@ export default function Articles() {
       "If you scroll around on your social feed elsewhere, it’s a good opportunity to stop thinking others have it all put together.",
     img: images[index % 3], // Cycles through 3 images
   }));
+
+  // ✅ Department buttons
+  const departments = [
+    "Cardiology",
+    "Orthopedics",
+    "Pediatrics",
+    "Neurology",
+    "Obstetrics & Gynecology",
+    "Otorhinolaryngology",
+    "Plastic & Reconstructive Surgery",
+  ];
 
   return (
     <div className="articles-page">
@@ -47,9 +59,19 @@ export default function Articles() {
             with better connection.
           </p>
         </div>
-        <button className="articles-filter-btn">
-          Use Filters <FaFilter style={{ marginLeft: "8px" }} />
-        </button>
+      </div>
+
+      {/* ✅ Active Button Selection */}
+      <div className="all-article-news-buttons">
+        {departments.map((dept) => (
+          <button
+            key={dept}
+            className={`article-news-buttons ${activeButton === dept ? "active" : ""}`}
+            onClick={() => setActiveButton(dept)}
+          >
+            {dept}
+          </button>
+        ))}
       </div>
 
       {/* ✅ Articles Grid */}
@@ -62,9 +84,18 @@ export default function Articles() {
               className="articles-image"
             />
             <div className="articles-info">
-              <h3>{article.title}</h3>
-              <p>{article.description}  <span style={{color:"#F86F03;"}}> ...Read More</span></p>
-             
+              {/* ✅ Title Container */}
+              <div className="article-title-container">
+                <h3>{article.title}</h3>
+              </div>
+
+              {/* ✅ Description Container with Read More link */}
+              <div className="article-description-container">
+                <p className="article-text">
+                  {article.description}
+                  <span className="readmore-link">... Read More</span>
+                </p>
+              </div>
             </div>
           </div>
         ))}

@@ -1,58 +1,72 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/NewsArticles.css";
-import article1 from "../assets/article1.png";
-import article2 from "../assets/article2.png";
-import article3 from "../assets/article3.png";
 
-const articles = [
-  {
-    id: 1,
-    img: article1,
-    title: "The trend was noticed during a survey by Bumble",
-    description:
-      "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, there can be a lot of things ranging...",
-  },
-  {
-    id: 2,
-    img: article2,
-    title: "The trend was noticed during a survey by Bumble",
-    description:
-      "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, there can be a lot of things ranging...",
-  },
-  {
-    id: 3,
-    img: article3,
-    title: "The trend was noticed during a survey by Bumble",
-    description:
-      "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, there can be a lot of things ranging...",
-  },
-];
+export default function NewsArticles() {
+  const [activeDept, setActiveDept] = useState("Cardiology");
 
-const NewsArticles = () => {
+  const images = [
+    require("../assets/article1.png"),
+    require("../assets/article2.png"),
+    require("../assets/article3.png"),
+  ];
+
+  const articles = Array.from({ length: 3 }, (_, index) => ({
+    title: "The trend was noticed during a survey by Bumble",
+    description:
+      "If you scroll around on your social feed elsewhere, it’s a good opportunity to stop thinking others have it all put together.",
+    img: images[index],
+  }));
+
+  const departments = [
+    "Cardiology",
+    "Orthopedics",
+    "Pediatrics",
+    "Neurology",
+    "Obstetrics & Gynecology",
+    "Otorhinolaryngology",
+    "Plastic & Reconstructive Surgery",
+  ];
+
   return (
-    <div className="news-container">
-      {/* Header */}
-      <div className="news-header">
-        <div className="news-text">
-          <h2>News And Articles</h2>
+    <div className="newsarticles-page">
+      {/* ✅ Header + View All */}
+      <div className="newsarticles-header-row">
+        <div className="newsarticles-header">
+          <h2>Read News & Articles</h2>
           <p>
-            Learn from leading doctors and specialists through focused,
-            digestible video content.
+            Learn from leading doctors and specialists through focused, digestible video content.
           </p>
         </div>
-        <button className="view-all-btn-article">View All</button>
+        <button className="newsarticles-viewall">View All</button>
       </div>
 
-      {/* Articles */}
-      <div className="articles-grid">
-        {articles.map((article) => (
-          <div key={article.id} className="article-card">
-            <img src={article.img} alt={article.title} />
-            <div className="article-content">
-              <h4>{article.title}</h4>
-              <p>
-                {article.description}{" "}
-                <span className="read-more">Read More</span>
+      {/* ✅ Department Buttons */}
+      <div className="newsarticles-buttons">
+        {departments.map((dept) => (
+          <button
+            key={dept}
+            className={`newsarticles-button ${activeDept === dept ? "active" : ""}`}
+            onClick={() => setActiveDept(dept)}
+          >
+            {dept}
+          </button>
+        ))}
+      </div>
+
+      {/* ✅ 3 Articles in One Line */}
+      <div className="newsarticles-row">
+        {articles.map((article, index) => (
+          <div className="newsarticles-card" key={index}>
+            <img
+              src={article.img}
+              alt={article.title}
+              className="newsarticles-img"
+            />
+            <div className="newsarticles-info">
+              <h3 className="newsarticles-title">{article.title}</h3>
+              <p className="newsarticles-description">
+                {article.description}
+                <span className="newsarticles-readmore">... Read More</span>
               </p>
             </div>
           </div>
@@ -60,6 +74,4 @@ const NewsArticles = () => {
       </div>
     </div>
   );
-};
-
-export default NewsArticles;
+}

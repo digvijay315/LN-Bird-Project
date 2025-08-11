@@ -46,7 +46,7 @@ const Admindashboard = () => (
             <span className="overview-value">{card.value}</span>
           </div>
             <div className="overview-icon">
-           <img src={card.icon}></img>
+           <img src={card.icon} alt=""></img>
           </div>
         </div>
       ))}

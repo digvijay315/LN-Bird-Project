@@ -19,24 +19,28 @@ const LiveSessions = () => {
       </div>
 
       {/* ✅ Video Section (YouTube Embed) */}
-      <div className="video-card1">
+      <div className="video-card">
         <div className="video-wrapper">
           <iframe
-           width="100%"
+            width="100%"
             height="450"
-              src="https://www.youtube.com/embed/VRGFnhOpQU0"
-               title="YouTube video player"
+            src="https://www.youtube.com/embed/VRGFnhOpQU0"
+            title="YouTube video player"
             frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-             allowFullScreen
-           ></iframe>
-
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
         </div>
-        <div className="video-info">
-          <h4>
-            Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
-          </h4>
-          <p>By Doctor Malik</p>
+
+        {/* ✅ Video Info with Button */}
+        <div className="video-info-with-button">
+          <div className="video-info">
+            <h4>
+              Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023
+            </h4>
+            <p>By Doctor Malik</p>
+          </div>
+          <button className="join-now-button">Join Now</button>
         </div>
       </div>
     </div>

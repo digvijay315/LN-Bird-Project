@@ -1,135 +1,219 @@
-.awards-container {
+.ac-wrapper {
   width: 100%;
-  max-width: 90%;
-  margin: 0 auto;
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #f8f9ff;
-  border-radius: 20px;
-  font-family: Arial, sans-serif;
+  padding: 10px 15px;
   box-sizing: border-box;
-    padding: 30px;
 }
 
-.awards-header h2 {
-  font-size: 22px;
-  font-weight: bold;
-  color: #111;
+.ac-header {
+  text-align: left;
+  margin-bottom: 30px;
+  margin-left: 100px;
 }
 
-.awards-header p {
-  font-size: 14px;
-  color: #666;
-  margin-top: 4px;
-}
-
-.awards-card {
-  display: flex;
-  width: 100% !important;
-  align-items: center;
-  /* justify-content: center; */
-  margin-top: 15px;
-  gap: 8px;
-
-}
-
-.arrow-btn {
-  background: #f97316;
-  color: white;
-  border: none;
-  font-size: 18px;
-  padding: 8px 12px;
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-.award-content {
-  display: flex;
-    background-color: #f8f9ff;
-  border-radius: 8px;
-  overflow: hidden;
-  width: 100%;
-  /* max-width: 850px; */
-  gap: 15px;
-  padding: 10px 30px;
-  align-items: center;
-}
-
-.award-image {
-  width: 250px;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 6px;
-  flex-shrink: 0;
-}
-
-.award-info {
-  flex: 1;
-}
-
-.award-info h3 {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.award-info h4 {
-  font-size: 15px;
+.ac-header h2 {
+  color: #000;
+  font-family: Roboto;
+  font-size: 36px;
+  font-style: normal;
   font-weight: 600;
-  margin: 5px 0;
+  line-height: normal;
 }
 
-.award-info p {
-  font-size: 14px;
-  color: #444;
+.ac-header p {
+  color: rgba(0, 0, 0, 0.50);
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
-.date {
-  margin: 8px 0;
-  font-weight: bold;
+.ac-card-container {
+  width: calc(100% - 100px -100px);
+  margin-left: 100px;
+  margin-right: 100px;
 }
 
-.view-link {
-  color: #2563eb;
+.ac-card {
+  display: flex;
+  padding: 18px;
+  align-items: center;
+  gap: 45px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.10);
+  flex-wrap: wrap;
+}
+
+.ac-image {
+  width: 402px;
+  height: 360px;
+  flex-shrink: 0;
+  aspect-ratio: 67/60;
+  border-radius: 5px;
+}
+
+.ac-content {
+  flex: 1;
+  min-width: 250px;
+}
+
+.ac-title {
+  color: #000;
+  font-family: Roboto;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+
+.ac-org {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 32px;
+  margin-top: 0;
+}
+
+.ac-desc {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.ac-date {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.ac-link {
+  color: #525FE1;
+  font-family: Roboto;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 32px;
   text-decoration: underline;
-  font-size: 14px;
 }
 
-/* ✅ Responsive */
-@media (max-width: 768px) {
-  .award-content {
-    flex-direction: column;
-    text-align: center;
-  }
+.ac-nav-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
 
-  .award-image {
+.ac-nav-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  background-color: #F86F03;
+  border: none;
+  border-radius: 2px;
+  color: #fff;
+}
+
+/* ---------- Responsive breakpoints ---------- */
+
+/* Large tablets and small laptops */
+@media (max-width: 1200px) {
+  .ac-card-container {
+    width: calc(100% - 60px);
+    margin-left: 30px;
+  }
+  .ac-header {
+    margin-left: 30px;
+  }
+  .ac-image {
+    width: 320px;
+    height: 280px;
+  }
+  .ac-title {
+    font-size: 34px;
+  }
+  .ac-org {
+    font-size: 24px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+  .ac-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ac-content {
+    text-align: left;
+  }
+  .ac-image {
     width: 100%;
     height: auto;
   }
-
-  .arrow-btn {
+  .ac-title {
+    font-size: 28px;
+  }
+  .ac-org {
+    font-size: 20px;
+  }
+  .ac-desc,
+  .ac-date,
+  .ac-link {
     font-size: 16px;
-    padding: 6px 10px;
+    line-height: 24px;
   }
 }
 
-@media (max-width: 480px) {
-  .awards-container {
-    padding: 10px;
+/* Large phones */
+@media (max-width: 768px) {
+  .ac-card-container {
+    width: 100%;
+    margin-left: 0;
   }
+  .ac-header {
+    margin-left: 0;
+    text-align: center;
+  }
+  .ac-card {
+    gap: 20px;
+  }
+  .ac-title {
+    font-size: 22px;
+  }
+  .ac-org {
+    font-size: 18px;
+  }
+  .ac-desc,
+  .ac-date,
+  .ac-link {
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
 
-  .award-info h3 {
+/* Small phones */
+@media (max-width: 480px) {
+  .ac-card {
+    padding: 12px;
+  }
+  .ac-title {
+    font-size: 20px;
+  }
+  .ac-org {
     font-size: 16px;
   }
-
-  .award-info h4 {
-    font-size: 14px;
-  }
-
-  .award-info p {
+  .ac-desc,
+  .ac-date,
+  .ac-link {
     font-size: 12px;
-  }
-
-  .view-link {
-    font-size: 12px;
+    line-height: 18px;
   }
 }

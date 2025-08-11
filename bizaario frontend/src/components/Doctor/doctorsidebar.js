@@ -50,11 +50,13 @@ function cn(...classes) {
         ☰
       </button>
          {/* Sidebar */}
-      <div
-        className={cn("fixed left-0 top-0 h-full w-64 bg-[#525FE1] transform transition-transform duration-300 z-40",
-          isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        )}
-      >
+     <div
+  className={cn(
+    "fixed left-0 top-0 h-full w-54 bg-[#525FE1] transform transition-transform duration-300 z-40",
+    isMobileMenuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+  )}
+>
+
         {/* Logo */}
         <div className="h-36 flex items-center justify-center bg-[#525FE1] px-4">
           <img
@@ -65,10 +67,10 @@ function cn(...classes) {
         </div>
 
         {/* Navigation */}
-        <nav className="px-6 py-2 space-y-6">
+        <nav className="px-2 py-0 space-y-6">
           <div>
             {/* <h3 className="text-white text-base font-semibold mb-4">Dashboard</h3> */}
-            <div className="space-y-4">
+            <div className="space-y-0">
               {/* Dashboard Active */}
               <div className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
                 <DashboardIcon />

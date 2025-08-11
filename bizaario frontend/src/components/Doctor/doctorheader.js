@@ -1,9 +1,25 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useState,useRef,useEffect } from 'react';
 
 function Doctorheader() {
 
     const navigate=useNavigate()
+
+    const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+   // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
 
     const doctortokens= localStorage.getItem('token');
     const doctordetails = JSON.parse(localStorage.getItem("user"));
@@ -89,18 +105,37 @@ const ChevronDownIcon = () => (
                   <div className="w-px h-12 bg-black/20"></div>
       
                   {/* User Profile */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 cursor-pointer">
                     <div
                       className="w-12 h-12 bg-gray-300 rounded-full bg-cover bg-center"
                       style={{
                         backgroundImage: `url(${doctordetails.user.profile_pic})`,
                       }}
+                       onClick={() => setIsOpen(!isOpen)}
                       aria-label="User profile picture"
                     ></div>
                     <div>
                       <div className="text-black text-sm">Hello {doctordetails.user.firstName}</div>
                       <div className="text-black/50 text-sm">Doctor</div>
                     </div>
+
+                     {/* Dropdown Menu */}
+      {isOpen && (
+        <div ref={dropdownRef} className="absolute right-6 mt-60 mb-20 w-48 bg-white shadow-lg rounded-lg border z-50">
+          <ul className="py-2">
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer ">
+              Profile
+            </li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+              Settings
+            </li>
+            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600">
+              Logout
+            </li>
+          </ul>
+        </div>
+      )}
+
                   </div>
                 </div>
               </header>

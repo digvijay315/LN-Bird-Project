@@ -12,19 +12,20 @@ import Footer from "../components/Footer";
 
 function AboutUs() {
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const [activeButton, setActiveButton] = useState("Cardiology");
 
   const newsData = [
     {
       img: news1,
-      text: "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, there can be a lot of things ranging from personality traits, values, and lifestyle choices to specific boundaries you won't compromise on.",
+      text: `If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, there can be a lot of things ranging from personality traits, values, and lifestyle choices to specific boundaries you won't compromise on.`,
     },
     {
       img: news2,
-      text: "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, these may include honesty, communication, shared values, and respect for your personal boundaries.",
+      text: `If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, these may include honesty, communication, shared values, and respect for your personal boundaries.`,
     },
     {
       img: news3,
-      text: "If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, you might think about things that truly matter to you such as trust, kindness, mutual support, and similar life goals.",
+      text: `If you ask yourself what are some of your deal-breakers, AKA non-negotiables, when it comes to dating, you might think about things that truly matter to you such as trust, kindness, mutual support, and similar life goals.`,
     },
   ];
 
@@ -33,12 +34,10 @@ function AboutUs() {
       <Navbar/>
       {/* ✅ Banner Section */}
       <div className="about-banner">
-        <div className="banner-content">
+        <div className="about-banner-content">
           <h1>About US</h1>
           <p>
-            Empowering hospitals, physicians, and patients with real-time
-            communication and clinical collaboration—because better care starts
-            with better connection.
+            Empowering hospitals, physicians, and patients with real-time communication and clinical collaboration—because better care starts with better connection.
           </p>
         </div>
       </div>
@@ -61,7 +60,7 @@ function AboutUs() {
       </div>
 
       {/* Our Mission */}
-      <div className="about-section">
+      <div className="about-section1">
         <h2>Our Mission</h2>
         <p>
           Our mission is to deliver accurate, reliable, and timely testing
@@ -102,6 +101,29 @@ function AboutUs() {
           Learn from leading doctors and specialists through focused, digestible
           video content.
         </p>
+
+        {/* ✅ Updated Button Section */}
+        <div className="news-buttons">
+          {[
+            "Cardiology",
+            "Orthopedics",
+            "Pediatrics",
+            "Neurology",
+            "Obstetrics & Gynecology",
+            "Otorhinolaryngology",
+            "Plastic & Reconstructive Surgery",
+          ].map((label) => (
+            <button
+              key={label}
+              className={`all-news-buttons ${activeButton === label ? "active" : ""}`}
+              onClick={() => setActiveButton(label)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* News Cards */}
         <div className="news-grid">
           {newsData.map((item, index) => {
             const isExpanded = expandedIndex === index;
@@ -112,9 +134,7 @@ function AboutUs() {
                 <div className="news-content">
                   <h4>The trend was noticed during a survey by Bumble</h4>
                   <p>
-                    {isExpanded
-                      ? item.text
-                      : item.text.slice(0, 100)}
+                    {isExpanded ? item.text : item.text.slice(0, 100)}
                     {!isExpanded && (
                       <>
                         {" ... "}
@@ -148,4 +168,4 @@ function AboutUs() {
   );
 }
 
-export default AboutUs;
+export default AboutUs;

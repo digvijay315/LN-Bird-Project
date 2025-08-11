@@ -47,16 +47,18 @@ line-height: normal;
 
 @media (min-width: 1500px) {
   .doctorform {
-    margin-left: -200px; /* adjust this px value as needed */
+    margin-left: -200px;
+     /* adjust this px value as needed */
    
   }
 
-  .rightsection
+ 
+  .right-section
 {
     color: '#fff';
     border-radius: 3.5;
     box-shadow: 6;
-    width: 550;
+    width:650 !important;
     padding-Top:"30px";
     display: 'flex';
     flex-Direction: 'column';

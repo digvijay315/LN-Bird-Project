@@ -1,3 +1,7 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #F6F7FF;
+}
 .mb-page {
   font-family: Arial, sans-serif;
   color: #222;
@@ -7,18 +11,20 @@
 /* ✅ Banner Section */
 .mb-banner {
   width: 100%;
-  height: 250px;
-  background-image: url("../assets/about-banner.png");
-  background-size: cover;
-  background-position: center;
+  height: 332px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   padding: 20px 50px;
+  box-sizing: border-box;
+  background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, 0.51) 100%),
+    url("../assets/about-banner2.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .mb-banner-overlay {
-  padding: 20px 30px;
+  padding: 10px 20px;
   border-radius: 8px;
   max-width: 750px;
   width: 90%;
@@ -27,190 +33,398 @@
 .mb-banner-content {
   color: #fff;
   text-align: left;
+  max-width: 90%;
+  line-height: 1.4;
+  margin-left: 90px;
 }
 
 .mb-banner-content h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
+  color: #FFF;
+  font-family: Roboto;
+  font-size: 62px;
+  font-weight: 600;
+  margin-bottom: auto;
 }
 
 .mb-banner-content p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #fff;
+  color: #FFF;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 0;
 }
 
 /* ✅ Header Section */
 .mb-header {
-  width: 90%;
-  max-width: 1100px;
-  margin: 50px auto;
+  width: 85%;
+  max-width: 1200px;
+  margin: 30px auto 10px;
   display: flex;
-  position: relative;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   gap: 15px;
   flex-wrap: wrap;
 }
 
 .mb-header-text {
   flex: 1;
-  padding-right: 120px;
   min-width: 250px;
+
 }
 
 .mb-header-text h2 {
-  font-size: 24px;
-  margin: 0;
+  color: #000;
+  font-family: Roboto;
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 .mb-header-text p {
-  font-size: 14px;
-  color: #666;
-  margin: 0;
+  color: rgba(0, 0, 0, 0.50);
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  word-wrap: break-word;
+  max-width: 70%;
+  margin-bottom: 10px;
+}
+
+/* .mb-filter-container {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: auto;
 }
 
 .mb-filter-btn {
-  position: absolute;
-  right: 0;
-  top: 5px;
-  padding: 10px 20px;
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  cursor: pointer;
   display: flex;
   align-items: center;
-  white-space: nowrap;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  background: #EEE;
+  border: 1px solid #EEE;
+  cursor: pointer;
 }
+
+.mb-filter-btn .filter-icon {
+  font-size: 16px;
+  color: #000;
+}
+
+.mb-filter-text {
+  color: #000;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 500;
+} */
+ .mb-all-news-buttons {
+  width: 100%;
+  display: flex;
+  gap: 14px;
+  margin-left: 5px;  
+  margin-bottom: 5px;  
+  margin-top: 0; 
+}
+.mb-news-buttons{
+height: 50px;
+padding: 14px 24px;
+justify-content: center;
+align-items: center;
+margin-right: 10px;
+border-radius: 80px;
+background: rgba(232, 232, 232, 1);
+display: flex;
+border: none;
+white-space: nowrap;
+
+}
+.mb-news-buttons.active {
+  background: rgba(82, 95, 225, 0.78);
+  color: white;
+}
+
+/* .mb-news-buttons:hover{
+  cursor: pointer;
+  background: rgba(82, 95, 225, 0.78);
+  color:white ;
+
+} */
 
 /* ✅ Doctors Grid */
 .mb-doctors-grid {
-  width: 95%;
+  width: 85%;
   max-width: 1200px;
   margin: 20px auto 50px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
 .mb-doctor-card {
-  background: #f9f9f9;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  overflow: hidden;
-  width: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: auto;
+  padding: 12px;
+  align-items: center;
+  background: rgba(82, 95, 225, 0.10);
+  box-sizing: border-box;
+  gap: 10px;
 }
 
 .mb-doctor-img {
   width: 100%;
-  aspect-ratio: 4 / 3;
   object-fit: cover;
-  display: block;
-  border-bottom: 2px solid #f0f0f0;
+  border-bottom: 1px solid #f0f0f0;
+  height: 249px;
+  border-radius: 5px;
+}
+.mb-doctor-img,.mb-doctor-name{
+   margin: 0;
+  padding: 0;
+  line-height: 1.0;
 }
 
 .mb-doctor-info {
   padding: 10px 15px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: -14px;
+  margin-top: 0;
 }
-
-.mb-doctor-name {
-  margin: 5px 0;
-  font-size: 18px;
-}
-
-.mb-doctor-specialty,
-.mb-doctor-address,
-.mb-doctor-hours,
-.mb-doctor-website {
-  font-size: 14px;
-  margin: 3px 0;
-  color: #555;
-}
-
-.mb-card-buttons {
-  margin-top: 12px;
+.mb-doctor-header {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  width: 100%;
-  box-sizing: border-box;
-  flex-wrap: nowrap;
+  align-items: center;
 }
 
-.mb-btn-appointment,
-.mb-btn-profile {
-  flex: 1;
-  max-width: 48%;
-  background-color: #ff6b35;
-  color: #fff;
-  padding: 10px;
+.mb-view-profile {
+color: rgba(82, 95, 225, 1);
+font-family: Roboto;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+margin-top: 10px;
+margin-right: -13px;
+}
+
+.mb-view-profile:hover {
+  color: #2a4de3;
+  cursor: pointer;
+}
+
+
+.mb-doctor-name {
+  color: #000;
+  font-family: Roboto;
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: -5px;
+  
+}
+
+.mb-doctor-specialty {
+  color: rgba(0, 0, 0, 0.75);
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.mb-doctor-address {
+  color: #000;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.mb-doctor-website {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: #000;
+  font-family: Roboto;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 25px;
+  margin-top: 0;
+}
+
+.mb-doctor-website-text {
+ color: rgba(0, 0, 0, 0.50);
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: 25px;
+}
+.mb-doctor-website-text strong {
+  color: #000;
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: 25px; /* 138.889% */
+}
+
+.mb-specialize-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.mb-doctor-website,.mb-card-buttons{
+   margin: 0;
+  padding: 0;
+  line-height: 1.0;
+}
+
+/* ✅ Buttons Section */
+.mb-card-buttons {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  padding:12px;
+  /* justify-content: center; */
+  flex-wrap: nowrap;
+  margin-top: auto;
+  margin-left:-10px;
+  margin-top: 0;
+}
+
+.mb-btn-appointment {
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  cursor: pointer;
-  white-space: nowrap;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #FFF;
+  font-family: Roboto;
+  font-size: 15px;
+  background: #F86F03;
+  
 }
-/* ✅ Responsive Design */
+.mb-btn-profile {
+  color: #F86F03;
+font-family: Roboto;
+font-size: 15px;
+font-style: normal;
+font-weight: 600;
+line-height: normal;
+border-radius: 5px;
+border: none;
+background: rgba(82, 95, 225, 0.10);
+border: 2px solid ;
+}
+.mb-btn-profile:hover{
+cursor: pointer;
+background-color: #F86F03 ;
+color: white;
+}
+
+/* ✅ Responsive Text Size */
+
+/* Tablet & smaller desktops (1024px and below) */
 @media (max-width: 1024px) {
-  .mb-doctors-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .mb-banner-content {
+    margin-left: 20px; 
+    max-width: 80%;
   }
-  .mb-banner-content h1 {
-    font-size: 30px;
-  }
-  .mb-banner-content p {
-    font-size: 14px;
+
+  .mb-header-text p {
+    max-width: 100%; 
   }
 }
 
 @media (max-width: 768px) {
   .mb-banner {
+    height: auto; 
     padding: 15px;
-    text-align: center;
     justify-content: center;
-  }
-  .mb-banner-content {
     text-align: center;
-    max-width: 95%;
   }
+
+  .mb-banner-content {
+    margin-left: 0;
+    max-width: 100%;
+    text-align: center;
+  }
+
   .mb-banner-content h1 {
-    font-size: 26px;
+    font-size: 32px !important;
+    line-height: 1.2;
   }
+
   .mb-banner-content p {
-    font-size: 14px;
+    font-size: 14px !important;
   }
+
   .mb-header {
     flex-direction: column;
     text-align: center;
-    padding-right: 0;
+    gap: 10px;
   }
-  .mb-filter-btn {
-    position: static;
-    margin-top: 10px;
-    align-self: center;
+
+  .mb-header-text {
+    flex: none;
+    width: 100%;
+  }
+
+  .mb-header-text h2 {
+    font-size: 24px !important;
+  }
+
+  .mb-header-text p {
+    font-size: 14px !important;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .mb-all-news-buttons {
+    justify-content: center;
+    margin-left: 0;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 }
 
 @media (max-width: 600px) {
   .mb-doctors-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
-  .mb-btn-appointment,
-  .mb-btn-profile {
-    max-width: 100%;
+
+  .mb-doctor-img {
+    height: 220px !important;
   }
 }
 
+/* Smallest phones (480px and below) */
 @media (max-width: 480px) {
   .mb-banner-content h1 {
-    font-size: 20px;
+    font-size: 20px !important;
   }
-  .mb-banner-content p {
-    font-size: 13px;
+
+  .mb-header-text h2 {
+    font-size: 18px !important;
+  }
+
+  .mb-doctor-name {
+    font-size: 18px !important;
+  }
+
+  .mb-btn-appointment,
+  .mb-btn-profile {
+    width: 100% !important; /* buttons full width */
+  }
+
+  .mb-card-buttons {
+    flex-wrap: wrap !important;
+    gap: 10px;
   }
 }

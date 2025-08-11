@@ -1,95 +1,77 @@
-import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
+import React, { useState } from "react";
 import "../styles/EmpoweringDoctors.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+
+// ✅ Image imports
+import image1 from "../assets/newvideo.png";
+import image2 from "../assets/newimage.png";
 
 const EmpoweringDoctors = () => {
   const [activeTab, setActiveTab] = useState("doctor");
-  const [slidesToShow, setSlidesToShow] = useState(3);
 
-  const videos = {
+  const images = {
     doctor: [
-      { id: 1, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", thumbnail: "https://i.ibb.co/tHwTTB3/video1.jpg" },
-      { id: 2, title: "Exploring Modern Medical Technologies", author: "Doctor Malik", thumbnail: "https://i.ibb.co/1rdwM1k/video2.jpg" },
-      { id: 3, title: "Navigating Patient Communication", author: "Doctor Malik", thumbnail: "https://i.ibb.co/tHwTTB3/video1.jpg" },
-      { id: 4, title: "Effective Hospital Management Tips", author: "Doctor Malik", thumbnail: "https://i.ibb.co/1rdwM1k/video2.jpg" },
-      { id: 5, title: "Doctor Wellness and Burnout Prevention", author: "Dr. Williams", thumbnail: "https://i.ibb.co/tHwTTB3/video1.jpg" }
+      { id: 1, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image1 },
+      { id: 2, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image2 },
+      { id: 3, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image1 },
+      { id: 4, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image1 },
+      { id: 5, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image2 },
+      { id: 6, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image1 },
+      { id: 7, title: "Doctor Mike hosts the AMA Tribute to the Medical School Class of 2023", author: "Doctor Malik", image: image1 },
     ],
     patients: [
-      { id: 1, title: "Patient Education on Heart Health", author: "Dr. Sarah", thumbnail: "https://i.ibb.co/1rdwM1k/video2.jpg" },
-      { id: 2, title: "Understanding Diabetes Care", author: "Dr. James", thumbnail: "https://i.ibb.co/tHwTTB3/video1.jpg" },
-      { id: 3, title: "Mental Health Awareness", author: "Dr. John", thumbnail: "https://i.ibb.co/tHwTTB3/video1.jpg" },
-      { id: 4, title: "Basics of Nutrition", author: "Dr. Lee", thumbnail: "https://i.ibb.co/1rdwM1k/video2.jpg" },
-      { id: 5, title: "Immunization Explained", author: "Dr. Kate", thumbnail: "https://i.ibb.co/1rdwM1k/video2.jpg" }
+      { id: 1, title: "Patient Education on Heart Health", author: "Dr. Sarah", image: image2 },
+      { id: 2, title: "Healthy Lifestyle Tips for Patients", author: "Dr. James", image: image1 },
+      { id: 3, title: "Diabetes Care Awareness", author: "Dr. John", image: image2 },
+      { id: 4, title: "Managing High Blood Pressure", author: "Dr. Lee", image: image1 },
+      { id: 5, title: "Diabetes Care Awareness", author: "Dr. John", image: image2 },
+      { id: 6, title: "Managing High Blood Pressure", author: "Dr. Lee", image: image1 },
+      { id: 7, title: "Diabetes Care Awareness", author: "Dr. John", image: image2 },
+     
     ],
-  };
-
-  // Handle responsiveness
-  useEffect(() => {
-    const updateSlides = () => {
-      if (window.innerWidth <= 600) setSlidesToShow(1);
-      else if (window.innerWidth <= 900) setSlidesToShow(2);
-      else setSlidesToShow(3);
-    };
-    updateSlides();
-    window.addEventListener("resize", updateSlides);
-    return () => window.removeEventListener("resize", updateSlides);
-  }, []);
-
- const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: slidesToShow,
-    slidesToScroll: 0.5,
-    arrows: false,
-    adaptiveHeight: true,
-    swipeToSlide: true,
   };
 
   return (
-    <div className="video-slider-container">
-      <div className="video-header">
-        <div className="text-section">
-          <h2>Empowering Doctors with Evidence-Based Knowledge</h2>
-          <p>
-            Learn from leading doctors and specialists through focused, digestible video content.
+    <div className="empowering-container">
+      {/* Header */}
+      <div className="empowering-header">
+        <div className="empowering-header-left">
+          <h2 className="empowering-title">
+            Empowering Doctors with Evidence-Based Knowledge
+          </h2>
+          <p className="empowering-subtitle">
+            Learn from leading doctors and specialists through focused, digestible image content.
           </p>
         </div>
+        <div className="empowering-header-right">
+         <button
+  className={`empowering-tab-button ${activeTab === "doctor" ? "active" : ""}`}
+  onClick={() => setActiveTab("doctor")}
+>
+  For Doctor
+</button>
 
-        <div className="tabs-container">
-          <div className="tabs">
-            <button
-              className={activeTab === "doctor" ? "active" : ""}
-              onClick={() => setActiveTab("doctor")}
-            >
-              For Doctor
-            </button>
-            <button
-              className={activeTab === "patients" ? "active" : ""}
-              onClick={() => setActiveTab("patients")}
-            >
-              For Patients
-            </button>
-          </div>
+<button
+  className={`empowering-tab-button1 ${activeTab === "patients" ? "active" : ""}`}
+  onClick={() => setActiveTab("patients")}
+>
+  For Patients
+</button>
+
         </div>
       </div>
 
-      <Slider {...settings}>
-        {videos[activeTab].map((video) => (
-          <div key={video.id} className="video-card-wrapper">
-            <div className="video-card">
-              <div className="video-thumbnail">
-                <img src={video.thumbnail} alt={video.title} />
-                <div className="play-btn">▶</div>
-              </div>
-              <h4>{video.title}</h4>
-              <p>By {video.author}</p>
+      {/* Image Grid (Slider) */}
+      <div className="empowering-image-slider">
+        {images[activeTab].map((img) => (
+          <div key={img.id} className="empowering-image-card">
+            <div className="empowering-image-wrapper">
+              <img src={img.image} alt={img.title} />
             </div>
+            <h4 className="empowering-image-title">{img.title}</h4>
+            <p className="empowering-image-author">By {img.author}</p>
           </div>
         ))}
-      </Slider>
+      </div>
     </div>
   );
 };

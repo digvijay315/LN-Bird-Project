@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/AwardsCertificates.css";
 import award1 from "../assets/award1.png";
 import award2 from "../assets/award2.png";
 import award3 from "../assets/award3.png";
-import Carousel from "react-bootstrap/Carousel";
 
 const awards = [
   {
@@ -12,7 +11,7 @@ const awards = [
     title: "🏅 Best Cardiologist 2022",
     organization: "Indian Medical Association",
     description:
-      "I have received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. My work continues to be honored by leading medical associations.",
+      "I have received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. His work continues to be honored by leading medical associations.",
     date: "15/05/2022",
     certificate: "#",
   },
@@ -38,10 +37,20 @@ const awards = [
   },
 ];
 
-const AwardsCertificates = () => {
+export default function AwardsCertificates() {
+  const [current, setCurrent] = useState(0);
+
+  const nextSlide = () => {
+    setCurrent((prev) => (prev === awards.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? awards.length - 1 : prev - 1));
+  };
+
   return (
-    <div className="awards-container">
-      <div className="awards-header">
+    <div className="ac-wrapper">
+      <div className="ac-header">
         <h2>Awards & Certification</h2>
         <p>
           Learn from leading doctors and specialists through focused, digestible
@@ -49,42 +58,34 @@ const AwardsCertificates = () => {
         </p>
       </div>
 
-      <Carousel
-        indicators={true}
-        controls={false}
-        interval={null}
-        className="awards-carousel"
-      >
-        {awards.map((award) => (
-          <Carousel.Item key={award.id}>
-            <div className="awards-card">
-              <div className="award-content">
-                <img
-                  src={award.image}
-                  alt={award.title}
-                  className="award-image"
-                />
-                <div className="award-info">
-                  <h3>{award.title}</h3>
-                  <h4>{award.organization}</h4>
-                  <p>{award.description}</p>
-                  <p className="date">📅 {award.date}</p>
-                  <a
-                    href={award.certificate}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="view-link"
-                  >
-                    View Certificate
-                  </a>
-                </div>
-              </div>
-            </div>
-          </Carousel.Item>
-        ))}
-      </Carousel>
+      <div className="ac-card-container">
+        <div className="ac-card">
+          <img src={awards[current].image} alt="award" className="ac-image" />
+          <div className="ac-content">
+            <h3 className="ac-title">{awards[current].title}</h3>
+            <h4 className="ac-org">{awards[current].organization}</h4>
+            <p className="ac-desc">{awards[current].description}</p>
+            <p className="ac-date">📅 {awards[current].date}</p>
+            <a
+              href={awards[current].certificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ac-link"
+            >
+              View Certificate
+            </a>
+          </div>
+        </div>
+
+        <div className="ac-nav-buttons">
+          <button className="ac-nav-btn" onClick={prevSlide}>
+            ❮
+          </button>
+          <button className="ac-nav-btn" onClick={nextSlide}>
+            ❯
+          </button>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default AwardsCertificates;
+}

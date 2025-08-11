@@ -34,8 +34,8 @@ const Adminheader = () => (
           ))
         }
       </select>
-      <img className="bellicon" src={bellicon}></img>
-      <img src={messageicon} style={{width:"37px"}}></img>
+      <img className="bellicon" src={bellicon} alt=""></img>
+      <img src={messageicon} style={{width:"37px"}} alt=""></img>
       <div className="divider"></div>
       <div className="profile">
         <img src={adminlogo} alt="User" />

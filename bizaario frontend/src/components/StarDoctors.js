@@ -1,143 +1,119 @@
-// StarDoctors.jsx
-import React, { useState, useEffect } from "react";
-import Slider from "react-slick";
-import "./StarDoctors.css";
+import React, { useState } from "react";
+import "../styles/StarDoctors.css";
 import doctorImg from "../assets/dr.dominic.jpg";
-import { FaMapMarkerAlt } from "react-icons/fa";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import { FaMapMarkerAlt, FaStethoscope } from "react-icons/fa";
 
 const StarDoctors = () => {
   const [activeTab, setActiveTab] = useState("medical");
-  const [slidesToShow, setSlidesToShow] = useState(3);
+  const [activeCategory, setActiveCategory] = useState("Cardiology");
 
-  const doctorsData = {
-    medical: [
+  const tabs = ["medical", "partners"];
+  const categories = [
+    "Cardiology",
+    "Orthopedics",
+    "Pediatrics",
+    "Neurology",
+    "Obstetrics & Gynecology",
+    "Otorhinolaryngology",
+    "Plastic & Reconstructive"
+  ];
+
+  const doctors = Array(6).fill({
+    name: "Dr. Dominic Stonehart",
+    experience: "Cardiologist | 15+ Years Experience",
+    hospital: "Fortis Hospital, Mumbai",
+    specialties:
+      "Interventional Cardiology, Heart Failure Management, Preventive Cardiology"
+  });
+
+  // ✅ Slider settings - only 3 doctors visible per screen
+  const sliderSettings = {
+    dots: true,
+    infinite: false, // stops at last slide
+    speed: 500,
+    slidesToShow: 3.5, // only 3 at a time
+    slidesToScroll: 1,
+    arrows: false, // no arrows
+    responsive: [
       {
-        name: "Dr. Dominic Stonehart",
-        specialty: "Cardiologist | 15+ Years Experience",
-        hospital: "Fortis Hospital, Mumbai",
-        expertise:
-          "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
+        breakpoint: 1024,
+        settings: { slidesToShow: 2 }
       },
       {
-        name: "Dr. Alex Morgan",
-        specialty: "Neurologist | 10+ Years Experience",
-        hospital: "Apollo Hospital, Delhi",
-        expertise: "Brain Disorders, Stroke Care, Neurosurgery Assistance",
-      },
-      {
-        name: "Dr. Sophia Anderson",
-        specialty: "Dermatologist | 9+ Years Experience",
-        hospital: "AIIMS Hospital, Lucknow",
-        expertise: "Skin Treatment, Laser Therapy, Hair Problems",
-      },
-      {
-        name: "Dr. John Matthew",
-        specialty: "ENT Specialist | 12+ Years Experience",
-        hospital: "Medanta Hospital, Gurgaon",
-        expertise: "Ear Surgery, Sinus Treatment, Hearing Problems",
-      },
-      {
-        name: "Dr. Kavita Patel",
-        specialty: "Gynecologist | 10+ Years Experience",
-        hospital: "Apollo Hospital, Pune",
-        expertise: "Pregnancy Care, Women Health, Fertility Treatment",
-      },
-    ],
-    partners: [
-      {
-        name: "Dr. Sarah Johnson",
-        specialty: "Orthopedic Surgeon | 12+ Years Experience",
-        hospital: "Max Hospital, Bangalore",
-        expertise: "Joint Replacement, Sports Injuries, Trauma Care",
-      },
-      {
-        name: "Dr. Emily Parker",
-        specialty: "Pediatrician | 8+ Years Experience",
-        hospital: "Medanta Hospital, Gurgaon",
-        expertise: "Child Healthcare, Immunization, Growth Disorders",
-      },
-      {
-        name: "Dr. Rahul Sharma",
-        specialty: "General Physician | 15+ Years Experience",
-        hospital: "Fortis Hospital, Noida",
-        expertise: "Family Medicine, Chronic Diseases, Preventive Care",
-      },
-      {
-        name: "Dr. Dominic Stonehart",
-        specialty: "Cardiologist | 15+ Years Experience",
-        hospital: "Fortis Hospital, Mumbai",
-        expertise:
-          "Interventional Cardiology, Heart Failure Management, Preventive Cardiology",
-      },
-    ],
+        breakpoint: 768,
+        settings: { slidesToShow: 1 }
+      }
+    ]
   };
 
-  // Responsive slides count
-  useEffect(() => {
-    function updateSlides() {
-      if (window.innerWidth <= 600) setSlidesToShow(1);
-      else if (window.innerWidth <= 900) setSlidesToShow(2);
-      else setSlidesToShow(3);
-    }
-    updateSlides();
-    window.addEventListener("resize", updateSlides);
-    return () => window.removeEventListener("resize", updateSlides);
-  }, []);
-
-  const settings = {
-  dots: false,
-  infinite: false,
-  speed: 400,                   // Adjusted for smooth animation
-  slidesToShow: slidesToShow,            // Show 3.5 cards
-  slidesToScroll: 0.5,
-  arrows: false,
-  swipeToSlide: true,           // Important: enables real-time swipe dragging
-  touchThreshold: 5,            // Lower = less drag needed to move
-  cssEase: "ease-in-out",       // Smooth transition easing
-};
-
-
   return (
-    <div className="star-container">
+    <div className="stardoctors-page">
       {/* Tabs */}
-      <div className="header-row">
-        <div className="tabs">
+      <div className="stardoctors-tab-buttons">
+        {tabs.map((tab) => (
           <button
-            className={`tab-btn ${activeTab === "medical" ? "active" : ""}`}
-            onClick={() => setActiveTab("medical")}
+            key={tab}
+            className={`stardoctors-tab-btn ${
+              activeTab === tab ? "active" : ""
+            }`}
+            onClick={() => setActiveTab(tab)}
           >
-            Medical Board
+            {tab === "medical" ? "Medical Board" : "Partners Hospitals"}
           </button>
-          <button
-            className={`tab-btn ${activeTab === "partners" ? "active" : ""}`}
-            onClick={() => setActiveTab("partners")}
-          >
-            Partners Hospitals
-          </button>
-        </div>
+        ))}
       </div>
 
-      {/* React Slick Slider */}
-      <Slider {...settings}>
-        {doctorsData[activeTab].map((doc, idx) => (
-          <div key={idx} className="doctor-card equal-height">
-            <img src={doctorImg} alt={doc.name} className="doctor-img" />
-            <div className="doctor-info">
-              <h3>{doc.name}</h3>
-              <p className="specialty">{doc.specialty}</p>
-              <p className="hospital">
-                <FaMapMarkerAlt className="location-icon" /> {doc.hospital}
+      {/* Categories */}
+      <div className="stardoctors-categories">
+        {categories.map((cat) => (
+          <button
+            key={cat}
+            className={`stardoctors-category-btn ${
+              activeCategory === cat ? "active" : ""
+            }`}
+            onClick={() => setActiveCategory(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      {/* Doctor Cards Slider */}
+      <Slider {...sliderSettings}>
+        {doctors.map((doc, index) => (
+          <div className="stardoctors-doctor-card" key={index}>
+            <img
+              src={doctorImg}
+              alt="Doctor"
+              className="stardoctors-doctor-img"
+            />
+            <div className="stardoctors-doctor-info">
+              <h3 className="stardoctors-doctor-name">{doc.name}</h3>
+              <span className="stardoctors-doctor-exp">{doc.experience}</span>
+              <p className="stardoctors-doctor-hospital">
+                <FaMapMarkerAlt className="stardoctors-icon" /> {doc.hospital}
               </p>
-              <p className="expertise">
-                <strong>Specializes in:</strong> {doc.expertise}
-              </p>
-              <div className="buttons">
-                <button className="book-btn">Book Appointment</button>
-                <button className="profile-btn">View Profile</button>
+              <div className="stardoctors-specializes">
+                <FaStethoscope className="stardoctors-icon" />
+                <div className="stardoctors-special-text">
+                  <strong>Specializes in:</strong> {doc.specialties}
+                </div>
               </div>
+
+              <div className="stardoctors-buttons">
+                <button className="stardoctors-btn orange">
+                  Book an Appointments
+                </button>
+                <button className="stardoctors-btn outline">
+                  Send Medical Query
+                </button>
+              </div>
+              <a href="/" className="stardoctors-view-profile">
+                View Profile
+              </a>
             </div>
           </div>
         ))}

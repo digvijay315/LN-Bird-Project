@@ -1,18 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/HospitalPartners.css";
-import { FaFilter } from "react-icons/fa";
+import { FaMapMarkerAlt, FaGlobe, FaClock } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 export default function HospitalPartners() {
+  const [activeIndex, setActiveIndex] = useState(null);
+
   const hospitals = Array(12).fill({
     name: "NovaCare Hospital",
     specialty: "Multi-specialty • Tertiary Care",
     address: "123 Health Blvd, Los Angeles, CA",
     hours: "Open 24/7",
     website: "www.novacarehealth.com",
-    img: require("../assets/hospital.png"), // hospital image for cards only
+    img: require("../assets/hospital.png"),
   });
+
+  const cityButtons = [
+    "Delhi NCR",
+    "Mumbai",
+    "Bengaluru",
+    "Noida",
+    "Delhi NCR",
+    "Mumbai",
+    "Bengaluru",
+  ];
 
   return (
     <div className="hospital-page">
@@ -20,7 +32,7 @@ export default function HospitalPartners() {
       {/* ✅ Banner Section */}
       <div className="hospital-banner">
         <div className="banner-overlay">
-          <div className="banner-content">
+          <div className="hos-banner-content">
             <h1>Hospitals Partners</h1>
             <p>
               Empowering hospitals, physicians, and patients with real-time
@@ -31,7 +43,7 @@ export default function HospitalPartners() {
         </div>
       </div>
 
-      {/* Title and Filter */}
+      {/* Title */}
       <div className="partners-header">
         <div>
           <h2>Meet Our Hospitals Partners</h2>
@@ -41,9 +53,34 @@ export default function HospitalPartners() {
             with better connection.
           </p>
         </div>
-        <button className="filter-btn">
-          Use Filters <FaFilter style={{ marginLeft: "8px", }} />
-        </button>
+      </div>
+
+      {/* ✅ Buttons + Country Select */}
+      <div className="hos-buttons-wrapper">
+        <div className="hos-all-news-buttons">
+          {cityButtons.map((city, index) => (
+            <div key={index}>
+              <button
+                className={`hos-news-buttons ${activeIndex === index ? "active" : ""}`}
+                onClick={() => setActiveIndex(index)}
+              >
+                {city}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {/* ✅ Country dropdown box */}
+        <div className="country-box">
+          <FaMapMarkerAlt className="country-icon" />
+          <select>
+            <option>Select Country</option>
+            <option>India</option>
+            <option>USA</option>
+            <option>UK</option>
+            <option>Canada</option>
+          </select>
+        </div>
       </div>
 
       {/* Hospitals Grid */}
@@ -52,13 +89,38 @@ export default function HospitalPartners() {
           <div className="hospital-card" key={index}>
             <img src={hospital.img} alt={hospital.name} />
             <div className="hospital-info">
-              <h3>{hospital.name}</h3>
-              <p>{hospital.specialty}</p>
-              <p>📍 {hospital.address}</p>
-              <p>🕒 {hospital.hours}</p>
-              <p>
-                🌐{" "}
+              {/* ✅ Hospital name + View Profile link */}
+              <div className="hos-title-row">
+                <h3>{hospital.name}</h3>
                 <a
+                  href="https://www.novacarehealth.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hos-profile-link"
+                >
+                  View Profile
+                </a>
+              </div>
+
+              <p className="hos-special">{hospital.specialty}</p>
+
+              {/* ✅ Location icon */}
+              <p className="hos-address">
+                <FaMapMarkerAlt style={{ color: "#555", marginRight: "6px" }} />
+                {hospital.address}
+              </p>
+
+              {/* ✅ Hours icon */}
+              <p className="hos-hours">
+                <FaClock style={{ color: "#555", marginRight: "6px" }} />
+                Hours: {hospital.hours}
+              </p>
+
+              {/* ✅ Website icon + link */}
+              <p className="neww">
+                <FaGlobe style={{ color: "#555", marginRight: "8px" }} />
+                <a
+                  className="hos-link"
                   href="https://www.novacarehealth.com"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -69,7 +131,7 @@ export default function HospitalPartners() {
 
               <div className="card-buttons">
                 <button className="btn-appointment">Book Appointment</button>
-                <button className="btn-profile">View Profile</button>
+                <button className="btn-profile">Send Treatment Query</button>
               </div>
             </div>
           </div>

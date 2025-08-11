@@ -1,140 +1,183 @@
-.collab-container {
-  width: 90%;
-  margin: 30px auto;
-  background: #f8f9ff;
-  padding: 20px;
-  border-radius: 20px;
+.collab-header {
+  width: 100%;
+  margin-top: 30px;
+  padding: 10px 15px;
+  box-sizing: border-box;
 }
 
-.collab-header {
-  margin-bottom: 15px;
-  display: flex;
+.collab-section {
+  text-align: left;
+  margin-left: 105px;
 }
 
 .collab-title {
-  font-size: 22px;
-  font-weight: 700;
-  margin-bottom: 5px;
+  color: #000;
+  font-family: Roboto;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 8px;
 }
 
 .collab-subtitle {
-  font-size: 14px;
-  color: #555;
+  color: rgba(0, 0, 0, 0.50);
+  font-family: Roboto;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 0;
 }
 
-.collab-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
-
+/* Tabs */
 .collab-tabs {
+  width: 100%;
   display: flex;
   gap: 10px;
+  margin-top: 36px;
+  margin-left: 2px;
 }
 
 .collab-tab-btn {
-  padding: 6px 14px;
-  background: #d6d6ff;
+  background-color: #e0e0e0;
   border: none;
-  border-radius: 6px;
+  height: 50px;
+  width: 100px;
+  padding: 8px 16px;
+  border-radius: 80px;
+  font-size: 0.9rem;
   cursor: pointer;
-  font-weight: 500;
 }
 
 .collab-tab-btn.active {
-  background: #5561ff;
+  background-color: #5d5fef;
   color: white;
 }
 
-/* ✅ Country dropdown with circular flag */
-.collab-country-select {
+/* Cards */
+.collab-cards {
+  width: calc(100% - 100px - 100px);
+  margin-left: 100px;
+  margin-right: 100px;
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 36px;
+  box-sizing: border-box;
+}
+
+.collab-card {
+  flex: 1 1 calc(33.33% - 20px);
+  width: 100%;
+  min-height: 250px;
+  color: white;
+  border-radius: 10px;
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  height: 40px;
-  margin-left: 50%;
+  padding: 20px 28px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 27px;
 }
 
-.flag-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.collab-country-select select {
-  border: none;
-  outline: none;
-  background: transparent;
-  font-weight: 500;
-  font-size: 14px;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding-right: 22px;   /* space for icon */
-  min-width: 70px;       /* ✅ ensures full word "India" is visible */
-  text-align: left;
-}
-
-.collab-dropdown-icon {
-  position: absolute;
-  right: 8px;
-  pointer-events: none;
-  font-size: 12px;
-}
-
-/* ✅ Logos full width */
-.collab-logo-wrapper {
-  width: 100%;
-}
-
-.full-width {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
+.collab-card-title {
+  width: 335.12px;
+  color: #F6F7FF;
+  font-family: Roboto;
+  font-size: 35.007px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
   margin-bottom: 20px;
 }
 
-.collab-logo-box {
-  flex: 1 1 18%;
-  max-width: 150px;
-  min-width: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.collab-card-number {
+  color: #F6F7FF;
+  font-family: Roboto;
+  font-size: 46.676px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-top: 0;
 }
 
-.collab-logo-box img {
-  max-width: 100%;
-  max-height: 50px;
-  object-fit: contain;
+.collab-card-icon {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 130px;
+  height: 130px;
+  aspect-ratio: 1/1;
 }
 
-/* ✅ Responsiveness */
-@media (max-width: 992px) {
-  .full-width {
-    justify-content: center;
+/* Specific colors */
+.collab-card-doctors {
+  border-radius: 14.586px;
+  background: #FEA500;
+}
+
+.collab-card-medical {
+  border-radius: 14.586px;
+  background: #1D8A8F;
+}
+
+.collab-card-hospitals {
+  border-radius: 14.586px;
+  background: #47B34E;
+}
+
+/* Responsive */
+
+/* Tablet view */
+@media (max-width: 1024px) {
+  .collab-section {
+    margin-left: 60px;
+  }
+  .collab-cards {
+    width: calc(100% - 60px - 60px);
+    margin-left: 60px;
+    margin-right: 60px;
     gap: 20px;
   }
+  .collab-card {
+    flex: 1 1 calc(33.33% - 15px);
+  }
+  .collab-card-title {
+    font-size: 28px;
+    width: auto;
+  }
+  .collab-card-number {
+    font-size: 38px;
+  }
 }
 
-@media (max-width: 576px) {
-  .collab-country-select {
-    margin-top: 10px;
-    width: 100%;
-    justify-content: flex-start;
+/* Mobile view */
+@media (max-width: 768px) {
+  .collab-section {
+    margin-left: 20px;
   }
-
-  .collab-logo-box {
-    flex: 1 1 45%;
+  .collab-cards {
+    width: calc(100% - 20px - 20px);
+    margin-left: 20px;
+    margin-right: 20px;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .collab-card {
+    flex: 1 1 100%;
+    min-height: auto;
+  }
+  .collab-card-title {
+    font-size: 24px;
+    width: auto;
+  }
+  .collab-card-number {
+    font-size: 32px;
+  }
+  .collab-card-icon {
+    width: 100px;
+    height: 100px;
   }
 }

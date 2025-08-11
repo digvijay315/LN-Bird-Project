@@ -19,8 +19,9 @@ cloudinary.config({
 
 const add_doctor = async (req, res) => {
     try {
-    const {country,firstName,lastName,address,address2,state,city,postalCode,dateOfBirth,phone_no,
-            gender,email,website,password,subscription,bio} = req.body;
+    const {firstName,lastName,address1,address2,state,city,postal_code,dateOfBirth,gender,password,
+        qualification,medical_specialty,hospital_association,clinic_name,clinic_address1,
+        clinic_address2,clinic_state,clinic_city,clinic_postal_code,clinic_geo_location,subscription} = req.body;
    
             const profileimage=[]
       
@@ -34,17 +35,18 @@ const add_doctor = async (req, res) => {
             }
           }
 
-      const exitingprofile=await adddoctormodal.findOne({email:email})
-      if(exitingprofile)
-      {
-        res.status(400).send({message:"This Email id already exist..."})
-        return
-      }
+      // const exitingprofile=await adddoctormodal.findOne({email:email})
+      // if(exitingprofile)
+      // {
+      //   res.status(400).send({message:"This Email id already exist..."})
+      //   return
+      // }
         const hashedPassword = await bcrypt.hash(password, 10);
 
       const new_add_doctor = new adddoctormodal({
-       country,firstName,lastName,address,address2,state,city,postalCode,dateOfBirth,phone_no,
-            gender,email,website,password:hashedPassword,subscription,bio,profile_pic:profileimage
+      firstName,lastName,address1,address2,state,city,postal_code,dateOfBirth,gender,password:hashedPassword,
+        qualification,medical_specialty,hospital_association,clinic_name,clinic_address1,
+        clinic_address2,clinic_state,clinic_city,clinic_postal_code,clinic_geo_location,subscription,profile_pic:profileimage
       });
   
       // Save the deal to the database
@@ -130,5 +132,17 @@ const changePassword = async (req, res) => {
 };
 
 
+const viewdoctor=async(req,res)=>
+{
+  try {
+    const resp=await adddoctormodal.find()
+    res.status(200).send({message:"data fetch",doctor:resp})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
 
-  module.exports={add_doctor,logindoctor,changePassword}
+
+  module.exports={add_doctor,logindoctor,changePassword,viewdoctor}

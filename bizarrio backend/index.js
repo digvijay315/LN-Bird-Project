@@ -25,6 +25,7 @@ app.get('/',(req,res)=>
     res.send("welcome to bizarrio")
 })
 app.use('/doctor',require('./routers/doctor/doctoroutes'));
+app.use('/hospital',require('./routers/hospital/hospitalroutes'));
 
 
 const server=app.listen(process.env.PORT,()=>
