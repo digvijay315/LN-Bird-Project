@@ -33,7 +33,7 @@ const add_digitalcme = async (req, res) => {
         
           
 
-      const exitingcme=await createcourse.findOne({digital_cme_id:digital_cme_id})
+      const exitingcme=await createdigitalcme.findOne({digital_cme_id:digital_cme_id})
       if(exitingcme)
       {
         res.status(400).send({message:"This cme id already exist..."})
