@@ -35,6 +35,103 @@ const DashboardIcon = () => (
   </svg>
 );
 
+const CreateCourseIcon = () => (
+  <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  xmlns="http://www.w3.org/2000/svg" >
+    <path  d="M3 4H10V20H3V4Z" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    {/* Book Right */}
+    <path 
+      d="M14 4H21V20H14V4Z" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    {/* Center Divider */}
+    <line 
+      x1="12" 
+      y1="4" 
+      x2="12" 
+      y2="20" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+    />
+    {/* Plus Sign */}
+    <line 
+      x1="8" 
+      y1="10" 
+      x2="8" 
+      y2="14" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+    />
+    <line 
+      x1="6" 
+      y1="12" 
+      x2="10" 
+      y2="12" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+    />
+  </svg>
+);
+
+const CreateDigitalCMEIcon = () => (
+  <svg 
+    width="24" 
+    height="24" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Screen/Device Shape */}
+    <rect 
+      x="3" y="5" width="14" height="14" 
+      rx="2" ry="2" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      fill="none" 
+    />
+    {/* Play Button (triangle) to represent digital media */}
+    <polygon 
+      points="9,9 15,12 9,15" 
+      fill="currentColor" 
+    />
+    {/* Plus Sign Circle */}
+    <circle 
+      cx="19" 
+      cy="7" 
+      r="3" 
+      fill="white" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+    />
+    <line 
+      x1="19" y1="5" x2="19" y2="9" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+    />
+    <line 
+      x1="17" y1="7" x2="21" y2="7" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+    />
+  </svg>
+);
+
+
+
+
+
 function cn(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -72,9 +169,19 @@ function cn(...classes) {
             {/* <h3 className="text-white text-base font-semibold mb-4">Dashboard</h3> */}
             <div className="space-y-0">
               {/* Dashboard Active */}
-              <div className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+              <div onClick={()=>navigate('/doctordashboard')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
                 <DashboardIcon />
                 <span className="text-[white] text-sm font-semibold hover:text-[blue]">Dashboard</span>
+              </div>
+
+               <div onClick={()=>navigate('/createnewcourse')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+                <CreateCourseIcon />
+                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create New Course</span>
+              </div>
+
+                <div onClick={()=>navigate('/createdigitalcme')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+                <CreateDigitalCMEIcon />
+                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create Digital CME</span>
               </div>
 
                {/* <div className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white cursor-pointer">

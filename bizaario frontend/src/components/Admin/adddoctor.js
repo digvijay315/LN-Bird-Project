@@ -1,9 +1,10 @@
 import React, { useState ,useRef, useEffect} from 'react';
 import {
-  Box, Grid, Button, Typography, Card, CardContent, Avatar,
+  Box, Grid, Button, Typography, Card, Avatar,
   TextField, FormControl, InputLabel, Select, MenuItem, RadioGroup,
-  FormControlLabel, Radio, Fade,Chip,Menu
+  FormControlLabel, Radio, Fade,Chip,Menu,InputAdornment 
 } from '@mui/material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 // import PersonIcon from '@mui/icons-material/Person';
 import { Checkbox, FormGroup } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -19,6 +20,7 @@ import Swal from 'sweetalert2';
 import UniqueLoader from '../loader';
 import { DataGrid } from '@mui/x-data-grid';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { State, City } from "country-state-city";
 
 
 
@@ -35,6 +37,7 @@ const initialForm = {
   city: '',
   postal_code: '',
   dateOfBirth: '',
+  email:'',
   gender: '',
   password: '',
   qualification:[],
@@ -56,6 +59,11 @@ export default function AdminAddDoctorHospital() {
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const[customhospitalassociation,setcustomhospitalassociation]=useState("")
+  const [showPassword, setShowPassword] = useState(false);
+
+
+     const inputRef = useRef();
+
 
  const handlecustomhospitalassociationchange = (e) => {
   setcustomhospitalassociation(e.target.value);
@@ -72,7 +80,30 @@ const saveCustomHospitalAssociation = () => {
 };
 
 
-    const inputRef = useRef();
+ 
+
+     // Function to generate 6-char random password
+  const generatePassword = () => {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    let pass = "";
+    for (let i = 0; i < 6; i++) {
+      pass += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return pass;
+  };
+
+  // Auto-generate password on mount
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, password: generatePassword() }));
+  }, []);
+
+
+    const states = State.getStatesOfCountry("IN");
+  const cities = form.state ? City.getCitiesOfState("IN", form.state) : [];
+   const cities1 = form.clinic_state ? City.getCitiesOfState("IN", form.clinic_state) : [];
+
+
 
  const handleImageChange = (e) => {
   const files = Array.from(e.target.files);
@@ -142,7 +173,10 @@ const handleChange = (e) => {
           icon:"success",
           title:"Profile Created",
           text:"Doctor Profile Created Successfully...",
-          showConfirmButton:true
+          showConfirmButton:true,
+           customClass: {
+          confirmButton: 'my-swal-button',
+        },
         }).then(()=>
         {
           window.location.reload()
@@ -155,7 +189,10 @@ const handleChange = (e) => {
         icon:"error",
         title:"error ",
         text:error.response.data.message,
-        showConfirmButton:true
+        showConfirmButton:true,
+         customClass: {
+          confirmButton: 'my-swal-button',
+        },
       })
       console.log(error);
       
@@ -215,7 +252,7 @@ const handleChange = (e) => {
       field: 'qualification',
       headerName: 'Qualification',
       flex: 1,
-      valueGetter: (params) => params.value?.join(', '),
+      renderCell: (params) => params.value?.join(', '),
     },
    
     {
@@ -257,8 +294,177 @@ const handleChange = (e) => {
 
   // ===============================add hospital======================================================
 
-  const [hospital,sethospital]=useState({hospital_name:"",hospital_type:"",addressline1:"",addressline2:"",
-                                          city:"",state:"",postel_code:"",geo_location:""})
+  const [hospital,sethospital]=useState({hospital_name:"",hospital_type:"",address1:"",address2:"",
+                                          city:"",state:"",postal_code:"",geo_location:""})
+
+
+        
+    const hstates = State.getStatesOfCountry("IN");
+  const hcities = hospital.state ? City.getCitiesOfState("IN", hospital.state) : [];
+                  
+  const handleChange1 = (e) => {
+  const { name, value, checked, type } = e.target;
+
+  sethospital((prev) => {
+    // If dropdown/multiple select returns an array directly
+    if (Array.isArray(value)) {
+      return { ...prev, [name]: value };
+    }
+
+    // If the state field is already an array (checkbox group)
+    if (Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add
+        : prev[name].filter((item) => item !== value); // Remove
+      return { ...prev, [name]: updated };
+    }
+
+     // If this is a checkbox group for an array field
+    if (type === "checkbox" && Array.isArray(prev[name])) {
+      const updated = checked
+        ? [...prev[name], value] // Add to array
+        : prev[name].filter((item) => item !== value); // Remove from array
+      return { ...prev, [name]: updated };
+    }
+
+    // If this is a single checkbox (boolean)
+    if (type === "checkbox") {
+      return { ...prev, [name]: checked };
+    }
+
+    // Normal single-value field
+    return { ...prev, [name]: type === "checkbox" ? checked : value };
+  });
+};
+
+
+//============================ post request of add hospital================================================
+
+  const hospitalhandleSubmit = async(e) => {
+    e.preventDefault();
+     setLoading(true);
+    try {
+      
+      const resp=await api.post('/hospital/addhospital',hospital)
+      if(resp.status===200)
+      {
+        Swal.fire({
+          icon:"success",
+          title:"Hosptial Added",
+          text:"Hospital Partner Added Successfully...",
+          showConfirmButton:true,
+           customClass: {
+          confirmButton: 'my-swal-button',
+        },
+        }).then(()=>
+        {
+          window.location.reload()
+        })
+       
+      }
+      
+    } catch (error) {
+      Swal.fire({
+        icon:"error",
+        title:"error ",
+        text:error.response.data.message,
+        showConfirmButton:true,
+         customClass: {
+          confirmButton: 'my-swal-button',
+        },
+      })
+      console.log(error);
+      
+    }finally
+    {
+      setLoading(false)
+    }
+  };
+
+
+  // =============================get request of all hospital=========================================
+
+  const[allhospital,setallhospital]=useState([])
+  const getallhospital=async()=>
+  {
+    try {
+      const resp=await api.get('hospital/getallhospital')
+      setallhospital(resp.data.hospital)
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(()=>
+  {
+    getallhospital()
+
+  },[])
+
+ 
+
+  //=================================== display table===============================================
+
+   const [anchorE2, setAnchorE2] = useState(null);
+
+  const handleOpenMenuhospital = (event) => setAnchorE2(event.currentTarget);
+  const handleCloseMenuhospital = () => setAnchorE2(null);
+
+  const onEdithospital=()=>
+  {
+    alert("edit")
+  }
+
+  const onDeletehospital=()=>
+  {
+    alert("delete")
+  }
+
+  const columnshospital = [
+    { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
+    { field: 'hospital_name', headerName: 'Hospital Name', flex: 1 },
+    { field: 'hospital_type', headerName: 'Type', flex: 1 },
+    { field: 'address1', headerName: 'Address', flex: 1 },
+   
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 80,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <>
+          <IconButton onClick={handleOpenMenu}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorE2={anchorE2}
+            open={Boolean(anchorE2)}
+            onClose={handleCloseMenuhospital}
+          >
+            <MenuItem onClick={() => { onEdithospital(params.row._id); handleCloseMenuhospital(); }}>
+              Edit
+            </MenuItem>
+            <MenuItem onClick={() => { onDeletehospital(params.row._id); handleCloseMenuhospital(); }}>
+              Delete
+            </MenuItem>
+          </Menu>
+        </>
+      ),
+    },
+  ];
+
+  const rowshospital = allhospital.map((doc, index) => ({
+    id: doc._id || index,
+    ...doc,
+  }));
+  
+
+
+
+
 
   return (
     <>
@@ -407,7 +613,7 @@ const handleChange = (e) => {
           sx={{
             position: 'absolute',
             bottom: 0,
-            right: 100,
+            right: 120,
             bgcolor: '#fff',
             border: '1px solid #ccc',
             width: 30,
@@ -462,22 +668,41 @@ const handleChange = (e) => {
   />
 
   <TextField
-    name="state"
-    label="State"
-    value={form.state}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
+        select
+        name="state"
+        label="State"
+        value={form.state}
+        onChange={(e) => {
+          handleChange(e);
+          setForm((prev) => ({ ...prev, city: "" })); // reset city when state changes
+        }}
+       fullWidth={false}
+        size="small"
+        sx={{ width: 360 }}
+      >
+        {states.map((s) => (
+          <MenuItem key={s.isoCode} value={s.isoCode}>
+            {s.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
-  <TextField
-    name="city"
-    label="City"
-    value={form.city}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
+   <TextField
+        select
+        name="city"
+        label="City"
+        value={form.city}
+        onChange={handleChange}
+        fullWidth
+        size="small"
+        disabled={!form.state}
+      >
+        {cities.map((c) => (
+          <MenuItem key={c.name} value={c.name}>
+            {c.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
   <TextField
     name="postal_code"
@@ -494,6 +719,15 @@ const handleChange = (e) => {
     type="date"
     InputLabelProps={{ shrink: true }}
     value={form.dateOfBirth}
+    onChange={handleChange}
+    fullWidth
+    size="small"
+  />
+
+    <TextField
+    name="email"
+    label="Email"
+    value={form.email}
     onChange={handleChange}
     fullWidth
     size="small"
@@ -519,14 +753,24 @@ const handleChange = (e) => {
 
 
   <TextField
-    type="password"
-    name="password"
-    label="Password"
-    value={form.password}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
+      type={showPassword ? "text" : "password"}
+      name="password"
+      label="Password"
+      value={form.password}
+      onChange={handleChange}
+      fullWidth
+      size="small"
+      InputProps={{
+         readOnly: true,
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
 
   <FormControl fullWidth size="small">
     <InputLabel>Qualification</InputLabel>
@@ -633,23 +877,44 @@ const handleChange = (e) => {
     size="small"
   />
 
-  <TextField
-    name="clinic_state"
-    label="State"
-    value={form.clinic_state}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
 
-  <TextField
-    name="clinic_city"
-    label="City"
-    value={form.clinic_city}
-    onChange={handleChange}
-    fullWidth
-    size="small"
-  />
+    <TextField
+        select
+        name="clinic_state"
+        label="State"
+        value={form.clinic_state}
+        onChange={(e) => {
+          handleChange(e);
+          setForm((prev) => ({ ...prev, clinic_city: "" })); // reset city when state changes
+        }}
+        fullWidth={false}
+        size="small"
+        sx={{ width: 360 }}
+      >
+        {states.map((s) => (
+          <MenuItem key={s.isoCode} value={s.isoCode}>
+            {s.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+   <TextField
+        select
+        name="clinic_city"
+        label="City"
+        value={form.clinic_city}
+        onChange={handleChange}
+        fullWidth
+        size="small"
+        disabled={!form.clinic_state}
+      >
+        {cities1.map((c) => (
+          <MenuItem key={c.name} value={c.name}>
+            {c.name}
+          </MenuItem>
+        ))}
+      </TextField>
+
 
   <TextField
     name="clinic_postal_code"
@@ -713,6 +978,7 @@ const handleChange = (e) => {
 
 
 {/* =========================== Right: doctor table =================================== */}
+                    
                     <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
                        <Box
                        className='right-section'
@@ -765,6 +1031,11 @@ const handleChange = (e) => {
 
 {/* ============================add hospital partners============================================ */}
 
+ <div className='profile-header' style={{display:open1?"block" : "none"}}>
+          <h3>Enter Details for Hospital Partner</h3>
+          <p>Add or update the required details for the active hospital profile to keep records accurate and complete.</p>
+          </div>
+
 
   <Fade in={open1} className='hospitalform'>
             <Box>
@@ -782,7 +1053,7 @@ const handleChange = (e) => {
                     {/* ===== Left: FORM ===== */}
                    <Box
                 component="form"
-                onSubmit={handleSubmit}
+                onSubmit={hospitalhandleSubmit}
                 autoComplete="off"
                 sx={{
                   background: '#fff',
@@ -803,7 +1074,7 @@ const handleChange = (e) => {
     name="hospital_name"
     label="Hospital Name"
     value={hospital.hospital_name}
-    onChange={handleChange}
+    onChange={handleChange1}
     fullWidth
     size="small"
   />
@@ -814,7 +1085,7 @@ const handleChange = (e) => {
       name="hospital_type"
       label="Hospital Type"
       value={hospital.hospital_type}
-      onChange={handleChange}
+      onChange={handleChange1}
     >
       <MenuItem value="India">India</MenuItem>
       <MenuItem value="Usa">USA</MenuItem>
@@ -825,56 +1096,65 @@ const handleChange = (e) => {
 
 
   <TextField
-    name="addressline1"
+    name="address1"
     label="Address1"
-    value={hospital.addressline1}
-    onChange={handleChange}
+    value={hospital.address1}
+    onChange={handleChange1}
     fullWidth
     size="small"
   />
 
   <TextField
-    name="addressline2"
+    name="address2"
     label="Address 2"
-    value={hospital.addressline2}
-    onChange={handleChange}
+    value={hospital.address2}
+    onChange={handleChange1}
     fullWidth
     size="small"
   />
 
-  <FormControl fullWidth size="small">
-    <InputLabel>State</InputLabel>
-    <Select 
-      name="state"
-      label="State"
-      value={hospital.state}
-      onChange={handleChange}
-    >
-      <MenuItem value="India">India</MenuItem>
-      <MenuItem value="Usa">USA</MenuItem>
-      <MenuItem value="United Kingdom">UK</MenuItem>
-    </Select>
-  </FormControl>
+  <TextField
+        select
+        name="state"
+        label="State"
+        value={hospital.state}
+        onChange={(e) => {
+          handleChange1(e);
+          sethospital((prev) => ({ ...prev, city: "" })); // reset city when state changes
+        }}
+        fullWidth={false}
+        size="small"
+        sx={{ width: 320 }}
+      >
+        {hstates.map((s) => (
+          <MenuItem key={s.isoCode} value={s.isoCode}>
+            {s.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
-  <FormControl fullWidth size="small">
-    <InputLabel>City</InputLabel>
-    <Select 
-      name="city"
-      label="City"
-      value={hospital.city}
-      onChange={handleChange}
-    >
-      <MenuItem value="India">India</MenuItem>
-      <MenuItem value="Usa">USA</MenuItem>
-      <MenuItem value="United Kingdom">UK</MenuItem>
-    </Select>
-  </FormControl>
+   <TextField
+        select
+        name="city"
+        label="City"
+        value={hospital.city}
+        onChange={handleChange1}
+        fullWidth
+        size="small"
+        disabled={!hospital.state}
+      >
+        {hcities.map((c) => (
+          <MenuItem key={c.name} value={c.name}>
+            {c.name}
+          </MenuItem>
+        ))}
+      </TextField>
 
   <TextField
-    name="postel_code"
-    label="Postel Code"
-    value={hospital.postel_code}
-    onChange={handleChange}
+    name="postal_code"
+    label="Postal Code"
+    value={hospital.postal_code}
+    onChange={handleChange1}
     fullWidth
     size="small"
   />
@@ -883,7 +1163,7 @@ const handleChange = (e) => {
     name="geo_location"
     label="Geo Location"
     value={hospital.geo_location}
-    onChange={handleChange}
+    onChange={handleChange1}
     fullWidth
     size="small"
   />
@@ -901,109 +1181,51 @@ const handleChange = (e) => {
 </Box>
 
 
-                    {/* ===== Right: Live Profile Card ===== */}
-                    <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
-                      <Card className='rightsection'
-                        sx={{
-                          background: '#4d7bf3',
-                          color: '#fff',
-                          borderRadius: 3.5,
-                          boxShadow: 6,
-                          minWidth: 550,
-                          maxWidth:650,
-                          paddingTop:"30px",
-                          mx: 'auto',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <CardContent sx={{ p: 4 }}>
-                          <Box sx={{ display: 'flex', alignItems: 'center',}}>
-                            <Avatar
-                            src={form.profile_pic_preview}
-                              sx={{
-                                bgcolor: '#fff',
-                                color: '#4d7bf3',
-                                width: 62,
-                                height: 62,
-                                mr: 2,
-                                fontSize: 38,
-                                border: '4px solid #fff',
-                                boxShadow: 2,
-                              }}
-                            >
-                            
-                            </Avatar>
-                            <Box>
-                              <Typography variant="h6" sx={{ fontWeight: 700, color: '#fff' }}>
-                                {form.firstName} {form.lastName}
-                              </Typography>
-                              <Typography sx={{ color: '#e3eafc', fontSize: 15 }}>
-                                {form.dateOfBirth}{' '}
-                                {form.gender}
-                              </Typography>
-                            </Box>
-                          </Box>
+  {/* ======================= Right: hospital talbe================================= ===== */}
+                   <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
+                       <Box
+                       className='right-section'
+                component="form"
+                autoComplete="off"
+                sx={{
+                  background: '#fff',
+                  borderRadius: 3,
+                  boxShadow: 3,
+                  minWidth:510,
+                  maxWidth: 530,
+                  p: { xs: 0, sm: 0, md: 0 },
+                  mx: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 2, // spacing between inputs
+                }}
+              >
+                    
+                                      
+      <DataGrid
+        rows={rowshospital}
+        columns={columnshospital}
+        pageSize={10}
+        rowsPerPageOptions={[5, 10, 20]}
+        disableSelectionOnClick
+        sx={{
+          borderRadius: 3.5,
+          boxShadow: 6,
+          '& .MuiDataGrid-columnHeaders': {
+            backgroundColor: '#4d7bf3',
+            color: 'black',
+            fontWeight: 'bold',
+            
+          },
+        }}
+      />
+      </Box>
+      
+ 
 
-                          {/* Details */}
-                          <Typography variant="subtitle2" sx={{ color: '#e3eafc',marginTop:"20px" }}>
-                            Address
-                          </Typography>
-                          <Typography variant="body2" sx={{ mb: 0.5 }}>
-                            <>
-                            {form.address}
-                            {form.address2}<span>{" "}</span>
-                            {form.city}, {form.state}, {form.postalCode} ,{form.country}
-                          
-                          </>
-                          </Typography>
-
-                          <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
-                            Phone
-                          </Typography>
-                          <Typography variant="body2">{form.phone_no}</Typography>
-
-                          <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
-                            Email
-                          </Typography>
-                          <Typography variant="body2">{form.email}</Typography>
-
-                          {form.website && (
-                            <>
-                              <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
-                                Website
-                              </Typography>
-                              <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-                                {form.website}
-                              </Typography>
-                            </>
-                          )}
-
-                            {form.password && (
-                            <>
-                              <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
-                                Password
-                              </Typography>
-                              <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
-                                {form.password}
-                              </Typography>
-                            </>
-                          )}
-
-                          <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
-                            Subscription
-                          </Typography>
-                          <Typography variant="body2">{form.subscription}</Typography>
-
-                          <Typography variant="subtitle2" sx={{ color: '#e3eafc', mt: 1 }}>
-                            Bio
-                          </Typography>
-                          <Typography variant="body2">
-                            {form.bio}
-                          </Typography>
-                        </CardContent>
-                      </Card>
+                         
+                    
+                  
                     </Grid>
                   </Grid>
                 </Box>

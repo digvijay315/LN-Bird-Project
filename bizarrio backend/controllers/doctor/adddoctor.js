@@ -19,7 +19,7 @@ cloudinary.config({
 
 const add_doctor = async (req, res) => {
     try {
-    const {firstName,lastName,address1,address2,state,city,postal_code,dateOfBirth,gender,password,
+    const {firstName,lastName,address1,address2,state,city,postal_code,dateOfBirth,email,gender,password,
         qualification,medical_specialty,hospital_association,clinic_name,clinic_address1,
         clinic_address2,clinic_state,clinic_city,clinic_postal_code,clinic_geo_location,subscription} = req.body;
    
@@ -35,16 +35,16 @@ const add_doctor = async (req, res) => {
             }
           }
 
-      // const exitingprofile=await adddoctormodal.findOne({email:email})
-      // if(exitingprofile)
-      // {
-      //   res.status(400).send({message:"This Email id already exist..."})
-      //   return
-      // }
+      const exitingprofile=await adddoctormodal.findOne({email:email})
+      if(exitingprofile)
+      {
+        res.status(400).send({message:"This Email id already exist..."})
+        return
+      }
         const hashedPassword = await bcrypt.hash(password, 10);
 
       const new_add_doctor = new adddoctormodal({
-      firstName,lastName,address1,address2,state,city,postal_code,dateOfBirth,gender,password:hashedPassword,
+      firstName,lastName,address1,address2,state,city,postal_code,dateOfBirth,email,gender,password:hashedPassword,
         qualification,medical_specialty,hospital_association,clinic_name,clinic_address1,
         clinic_address2,clinic_state,clinic_city,clinic_postal_code,clinic_geo_location,subscription,profile_pic:profileimage
       });

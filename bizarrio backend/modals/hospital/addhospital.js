@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 const addhospitalschema=new mongoose.Schema({
   hospital_name:{type:String},
   hospital_type: {type:String},
-  adress1: {type:String},
+  address1: {type:String},
   address2: {type:String},
   state: {type:String},
   city: {type:String},

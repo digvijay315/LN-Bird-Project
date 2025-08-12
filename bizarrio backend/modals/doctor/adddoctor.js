@@ -10,6 +10,7 @@ const adddoctorschema=new mongoose.Schema({
   city: {type:String},
   postal_code: {type:String},
   dateOfBirth: {type:String},
+  email: {type:String},
   gender: {type:String},
   password: {type:String},
   qualification:{type:Array},

@@ -1,0 +1,16 @@
+.create_course
+{
+margin-left: 19.5vw;
+margin-top: 10px;
+}
+ .coursesection {
+  padding-right: 20px;
+   
+  }
+
+@media (min-width: 1500px) {
+  .coursesection {
+   margin-left: -14.5vw;
+   
+  }
+}

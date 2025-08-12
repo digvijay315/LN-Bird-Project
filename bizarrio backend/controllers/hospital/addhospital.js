@@ -16,7 +16,7 @@ cloudinary.config({
 
 const add_hospital = async (req, res) => {
     try {
-    const {hospital_name,hospital_type,adress1,address2,state,city,postal_code,geo_location} = req.body;
+    const {hospital_name,hospital_type,address1,address2,state,city,postal_code,geo_location} = req.body;
    
          
       
@@ -30,7 +30,7 @@ const add_hospital = async (req, res) => {
   
 
       const new_add_hospital = new addhospitalmodel({
-      hospital_name,hospital_type,adress1,address2,state,city,postal_code,geo_location
+      hospital_name,hospital_type,address1,address2,state,city,postal_code,geo_location
       });
   
       // Save the deal to the database

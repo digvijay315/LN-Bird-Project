@@ -1,0 +1,16 @@
+.create_digitalcme
+{
+margin-left: 19.5vw;
+margin-top: 10px;
+}
+ .digitalcmesection {
+  padding-right: 20px;
+   
+  }
+
+@media (min-width: 1500px) {
+  .digitalcmesection {
+   margin-left: -14.5vw;
+   
+  }
+}
