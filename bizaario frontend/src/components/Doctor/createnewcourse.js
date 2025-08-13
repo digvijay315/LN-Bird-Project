@@ -83,6 +83,22 @@ useEffect(() => {
 }, []);
 
 
+   // Function to generate 6-char random courseid
+ const generateCourseId = () => {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let id = "";
+  for (let i = 0; i < 6; i++) {
+    id += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return id;
+};
+
+
+  // Auto-generate password on mount
+  useEffect(() => {
+    setcourse((prev) => ({ ...prev, course_id: generateCourseId() }));
+  }, []);
+
 
       const handleSubmit = async(e) => {
         e.preventDefault();
@@ -186,6 +202,7 @@ const[allcourse,setallcourse]=useState([])
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleCloseMenu}
+             disableScrollLock 
           >
             <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
               Edit
@@ -238,7 +255,7 @@ const[allcourse,setallcourse]=useState([])
                        sx={{
                          background: '#fff',
                          borderRadius: 3,
-                         boxShadow: 3,
+                         boxShadow: 1,
                          minWidth:440,
                          maxWidth: { xs: 630, lg: 900 },
                          p: { xs: 2, sm: 3, md: 5 },
@@ -258,6 +275,10 @@ const[allcourse,setallcourse]=useState([])
            onChange={handleChange}
            fullWidth
            size="small"
+            InputProps={{
+            readOnly: true,
+          }}
+           
          />
        
          <TextField
@@ -278,7 +299,12 @@ const[allcourse,setallcourse]=useState([])
            size="small"
          />
 
+<label htmlFor="courseImage" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+  Course Image/Poster
+</label>
+
          <input
+          id="courseImage"
         type="file"
         accept="image/*"
         name="image"
@@ -311,13 +337,13 @@ const[allcourse,setallcourse]=useState([])
                            
                            <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
                               <Box
-                              className='right-section'
+                              className='rightsection'
                        component="form"
                        autoComplete="off"
                        sx={{
                          background: '#fff',
                          borderRadius: 3,
-                         boxShadow: 3,
+                        //  boxShadow: 1,
                          minWidth:510,
                          maxWidth: 530,
                          p: { xs: 0, sm: 0, md: 0 },
@@ -330,20 +356,16 @@ const[allcourse,setallcourse]=useState([])
                            
                                              
              <DataGrid
+              className="custom-data-grid"
                rows={rows}
                columns={columns}
                pageSize={10}
-               rowsPerPageOptions={[5, 10, 20]}
+                pageSizeOptions={[]} // removes the rows per page selector
+              initialState={{
+                pagination: { paginationModel: { pageSize: 10, page: 0 } },
+              }}
                disableSelectionOnClick
-               sx={{
-                 borderRadius: 3.5,
-                 boxShadow: 6,
-                 '& .MuiDataGrid-columnHeaders': {
-                   backgroundColor: '#4d7bf3',
-                   color: 'black',
-                   fontWeight: 'bold',
-                 },
-               }}
+              
              />
              </Box>
              

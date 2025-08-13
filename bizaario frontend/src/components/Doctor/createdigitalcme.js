@@ -10,7 +10,7 @@ import '../Doctor/stylingcss/createdigitalcme.css'
 import UniqueLoader from '../loader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { DataGrid } from '@mui/x-data-grid';
-
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 function Createdigitalcme() {
@@ -30,6 +30,24 @@ function Createdigitalcme() {
                                         references:[],target_audience:[],
                                         target_geography:"",publish_date:"",valid_up_to:"",comments:""
                                         })
+
+
+                                        const generatedigitalcmeid = () => {
+                                        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                                        let id = "";
+                                        for (let i = 0; i < 6; i++) {
+                                          id += chars.charAt(Math.floor(Math.random() * chars.length));
+                                        }
+                                        return id;
+                                      };
+
+                                      useEffect(() => {
+                                    setcme((prev) => ({
+                                      ...prev,
+                                      digital_cme_id: generatedigitalcmeid(),
+                                    }));
+                                  }, []);
+
 
 
         const [inputValuemetatags, setInputValuemetatags] = useState("");
@@ -100,6 +118,15 @@ function Createdigitalcme() {
             }));
         }
         };
+
+
+        const handleDeleteImage = (index) => {
+      setcme((prev) => ({
+        ...prev,
+        image_gallary_preview: prev.image_gallary_preview.filter((_, i) => i !== index),
+        image_gallary: prev.image_gallary.filter((_, i) => i !== index),
+      }));
+    };
 
 
 
@@ -270,6 +297,7 @@ const[allcme,setallcme]=useState([])
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleCloseMenu}
+            disableScrollLock 
           >
             <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
               Edit
@@ -322,7 +350,7 @@ const[allcme,setallcme]=useState([])
                        sx={{
                          background: '#fff',
                          borderRadius: 3,
-                         boxShadow: 3,
+                         boxShadow: 1,
                          minWidth:430,
                          maxWidth: { xs: 630, lg: 900 },
                          p: { xs: 2, sm: 3, md: 5 },
@@ -341,6 +369,9 @@ const[allcme,setallcme]=useState([])
            onChange={handleChange}
            fullWidth
            size="small"
+            InputProps={{
+            readOnly: true,
+          }}
         
          />
 
@@ -353,6 +384,12 @@ const[allcme,setallcme]=useState([])
            onChange={handleChange}
            fullWidth
            size="small"
+            SelectProps={{
+            MenuProps: {
+              disablePortal: true,
+              disableScrollLock: true,
+            },
+          }}
          >
             {
                 course.map((item)=>
@@ -424,24 +461,50 @@ const[allcme,setallcme]=useState([])
         ))}
       </Box>
 
+      <label htmlFor="imagegalarry" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
+        Image Gallary
+      </label>
          <input
+         id='imagegalarry'
          multiple
         type="file"
         accept="image/*"
         name="image_gallary"
         onChange={handleImageChange}
         />
-        {
-            cme?.image_gallary_preview?.length!==0 && (
-            Array.isArray(cme.image_gallary_preview) ?
-            cme.image_gallary_preview.map((item)=>
-            (
-            <img src={item} style={{height:"100px",width:"100px"}} alt=''></img>
-            ))
-            :[]
-
-            )
-        }
+      {Array.isArray(cme?.image_gallary_preview) &&
+  cme.image_gallary_preview.length > 0 && (
+    <div>
+      {cme.image_gallary_preview.map((item, index) => (
+        <div
+          key={index}
+          style={{
+            position: "relative",
+            // display: "inline-block",
+          }}
+        >
+          <img
+            src={item}
+            alt=""
+            style={{ height: "100px", width: "100px", borderRadius: "4px", objectFit: "cover",marginTop:"2px" }}
+          />
+          <IconButton
+            size="small"
+            onClick={() => handleDeleteImage(index)}
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              backgroundColor: "rgba(255,255,255,0.7)",
+              "&:hover": { backgroundColor: "rgba(255,255,255,1)" }
+            }}
+          >
+            <DeleteIcon fontSize="small" color="error" />
+          </IconButton>
+        </div>
+      ))}
+    </div>
+  )}
        
      
              <TextField
@@ -501,6 +564,12 @@ const[allcme,setallcme]=useState([])
            onChange={handleChange}
            fullWidth
            size="small"
+            SelectProps={{
+            MenuProps: {
+              disablePortal: true,
+              disableScrollLock: true,
+            },
+          }}
          >
              {
                 course.map((item)=>
@@ -561,7 +630,7 @@ const[allcme,setallcme]=useState([])
                            
                            <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
                               <Box
-                              className='right-section'
+                              className='rightsection'
                        component="form"
                        autoComplete="off"
                        sx={{
@@ -580,20 +649,13 @@ const[allcme,setallcme]=useState([])
                            
                                              
              <DataGrid
+              className="custom-data-grid"
                rows={rows}
                columns={columns}
                pageSize={10}
                rowsPerPageOptions={[5, 10, 20]}
                disableSelectionOnClick
-               sx={{
-                 borderRadius: 3.5,
-                //  boxShadow: 6,
-                 '& .MuiDataGrid-columnHeaders': {
-                   backgroundColor: '#4d7bf3',
-                   color: 'black',
-                   fontWeight: 'bold',
-                 },
-               }}
+              
              />
              </Box>
              
