@@ -1049,7 +1049,7 @@ const handleCloseMenuhospital = () => {
                     
                     <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
                        <Box
-                       className='right-section'
+                       className='rightsection'
                 component="form"
                 autoComplete="off"
                 sx={{
@@ -1071,7 +1071,7 @@ const handleCloseMenuhospital = () => {
  className="custom-data-grid"
   rows={rows}
   columns={columns}
-  pageSizeOptions={[5, 10, 20]}
+  pageSizeOptions={[]} // removes the rows per page selector
   initialState={{
     pagination: { paginationModel: { pageSize: 10, page: 0 } },
   }}
@@ -1279,7 +1279,7 @@ const handleCloseMenuhospital = () => {
   {/* ======================= Right: hospital talbe================================= ===== */}
                    <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
                        <Box
-                       className='right-section'
+                       className='rightsection'
                 component="form"
                 autoComplete="off"
                 sx={{
@@ -1302,7 +1302,10 @@ const handleCloseMenuhospital = () => {
         rows={rowshospital}
         columns={columnshospital}
         pageSize={10}
-        rowsPerPageOptions={[5, 10, 20]}
+        pageSizeOptions={[]} // removes the rows per page selector
+        initialState={{
+          pagination: { paginationModel: { pageSize: 10, page: 0 } },
+        }}
         disableSelectionOnClick
       
       />

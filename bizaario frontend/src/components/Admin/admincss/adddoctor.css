@@ -48,8 +48,7 @@ line-height: normal;
 @media (min-width: 1500px) {
   .doctorform {
     margin-left: -200px;
-     /* adjust this px value as needed */
-   
+  
   }
 
 }
