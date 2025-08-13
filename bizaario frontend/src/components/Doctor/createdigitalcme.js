@@ -344,17 +344,6 @@ const[allcme,setallcme]=useState([])
         
          />
 
-            <TextField
-           name="user_id"
-           label="User Id"
-           value={cme.user_id}
-           onChange={handleChange}
-           fullWidth
-           size="small"
-            InputProps={{
-            readOnly: true,
-            }}
-         />
        
          <TextField
          select
@@ -578,7 +567,7 @@ const[allcme,setallcme]=useState([])
                        sx={{
                          background: '#fff',
                          borderRadius: 3,
-                         boxShadow: 3,
+                        //  boxShadow: 3,
                          minWidth:510,
                          maxWidth: 530,
                          p: { xs: 0, sm: 0, md: 0 },
@@ -598,7 +587,7 @@ const[allcme,setallcme]=useState([])
                disableSelectionOnClick
                sx={{
                  borderRadius: 3.5,
-                 boxShadow: 6,
+                //  boxShadow: 6,
                  '& .MuiDataGrid-columnHeaders': {
                    backgroundColor: '#4d7bf3',
                    color: 'black',

@@ -250,17 +250,6 @@ const[allcourse,setallcourse]=useState([])
                      >
          
        
-         <TextField
-           name="user_id"
-           label="User Id"
-           value={course.user_id}
-           onChange={handleChange}
-           fullWidth
-           size="small"
-            InputProps={{
-            readOnly: true,
-            }}
-         />
        
          <TextField
            name="course_id"

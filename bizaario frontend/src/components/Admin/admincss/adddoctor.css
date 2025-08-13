@@ -55,15 +55,5 @@ line-height: normal;
  
 
  
-  .right-section
-{
-    color: '#fff';
-    border-radius: 3.5;
-    box-shadow: 6;
-    width:650 !important;
-    padding-Top:"30px";
-    display: 'flex';
-    flex-Direction: 'column';
-    justify-Content: 'center',-;
-}
+
 }

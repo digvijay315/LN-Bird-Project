@@ -270,6 +270,10 @@ const handleChange = (e) => {
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleCloseMenu}
+           
+            disableScrollLock 
+     
+      
           >
             <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
               Edit
@@ -499,8 +503,8 @@ const handleChange = (e) => {
                   marginLeft:"16px",
                   cursor: 'pointer',borderRadius:"20px",
                   boxShadow: open ? 4 : 1,
-                //   border: open ? '2px solid #4d7bf3' : '2px solid #e3eafc',
-                  '&:hover': { boxShadow: 6, border: '2px solid #4d7bf3' },
+                  border: open ? '2px solid #4d7bf3' : '2px solid #e3eafc',
+                  // '&:hover': { boxShadow: 6, border: '2px solid #4d7bf3' },
                   mb: { xs: 2, sm: 0 },
                 }}
                 elevation={0}
@@ -530,8 +534,8 @@ const handleChange = (e) => {
                   cursor: 'pointer',
                   borderRadius:"20px",
                   boxShadow: open ? 4 : 1,
-                //   border: open ? '2px solid #4d7bf3' : '2px solid #e3eafc',
-                  '&:hover': { boxShadow: 6, border: '2px solid #4d7bf3' },
+                  border: open1 ? '2px solid #4d7bf3' : '2px solid #e3eafc',
+                  // '&:hover': { boxShadow: 6, border: '2px solid #4d7bf3' },
                   mb: { xs: 2, sm: 0 },
                 }}
                 elevation={0}
@@ -577,11 +581,12 @@ const handleChange = (e) => {
                 sx={{
                   background: '#fff',
                   borderRadius: 3,
-                  boxShadow: 3,
+                  // boxShadow: 3,
                   minWidth:440,
                   maxWidth: { xs: 630, lg: 900 },
                   p: { xs: 2, sm: 3, md: 5 },
                   mx: 'auto',
+                  
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 2, // spacing between inputs
@@ -679,6 +684,13 @@ const handleChange = (e) => {
        fullWidth={false}
         size="small"
         sx={{ width: 360 }}
+        SelectProps={{
+        MenuProps: {
+          disablePortal: true,
+          disableScrollLock: true,
+        },
+      }}
+
       >
         {states.map((s) => (
           <MenuItem key={s.isoCode} value={s.isoCode}>
@@ -696,6 +708,13 @@ const handleChange = (e) => {
         fullWidth
         size="small"
         disabled={!form.state}
+        SelectProps={{
+        MenuProps: {
+          disablePortal: true,
+          disableScrollLock: true,
+        },
+      }}
+
       >
         {cities.map((c) => (
           <MenuItem key={c.name} value={c.name}>
@@ -780,6 +799,10 @@ const handleChange = (e) => {
       label="Qualification"
       value={form.qualification}
       onChange={handleChange}
+       MenuProps={{
+      disablePortal: true,
+      disableScrollLock: true,
+    }}
        renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {selected.map((value) => (
@@ -803,6 +826,10 @@ const handleChange = (e) => {
       label="Medical Specialty"
       value={form.medical_specialty}
       onChange={handleChange}
+       MenuProps={{
+      disablePortal: true,
+      disableScrollLock: true,
+    }}
       
     >
       <MenuItem value="India">India</MenuItem>
@@ -819,6 +846,11 @@ const handleChange = (e) => {
       name="hospital_association"
       label="Hospital Association"
       value={form.hospital_association}
+       MenuProps={{
+      disablePortal: true,
+      disableScrollLock: true,
+    }}
+
       onChange={handleChange}
        renderValue={(selected) => (
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
@@ -890,6 +922,12 @@ const handleChange = (e) => {
         fullWidth={false}
         size="small"
         sx={{ width: 360 }}
+         SelectProps={{
+        MenuProps: {
+          disablePortal: true,
+          disableScrollLock: true,
+        },
+      }}
       >
         {states.map((s) => (
           <MenuItem key={s.isoCode} value={s.isoCode}>
@@ -907,6 +945,12 @@ const handleChange = (e) => {
         fullWidth
         size="small"
         disabled={!form.clinic_state}
+         SelectProps={{
+        MenuProps: {
+          disablePortal: true,
+          disableScrollLock: true,
+        },
+      }}
       >
         {cities1.map((c) => (
           <MenuItem key={c.name} value={c.name}>
@@ -987,9 +1031,9 @@ const handleChange = (e) => {
                 sx={{
                   background: '#fff',
                   borderRadius: 3,
-                  boxShadow: 3,
+                  // boxShadow: 3,
                   minWidth:510,
-                  maxWidth: 530,
+                  maxWidth: 510,
                   p: { xs: 0, sm: 0, md: 0 },
                   mx: 'auto',
                   display: 'flex',
@@ -999,22 +1043,40 @@ const handleChange = (e) => {
               >
                     
                                       
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[5, 10, 20]}
-        disableSelectionOnClick
-        sx={{
-          borderRadius: 3.5,
-          boxShadow: 6,
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: '#4d7bf3',
-            color: 'black',
-            fontWeight: 'bold',
-          },
-        }}
-      />
+<DataGrid
+  rows={rows}
+  columns={columns}
+  pageSizeOptions={[5, 10, 20]}
+  initialState={{
+    pagination: { paginationModel: { pageSize: 10, page: 0 } },
+  }}
+  disableSelectionOnClick
+  sx={{
+    height: 600,
+    borderRadius: 3.5,
+    overflowY: 'scroll', // Forces scrollbar space
+    scrollbarGutter: 'stable', // Prevents layout shift when scrollbar appears/disappears
+    '& .MuiDataGrid-columnHeaders': {
+      backgroundColor: '#4d7bf3',
+      color: 'black',
+      fontWeight: 'bold',
+    },
+  }}
+  slotProps={{
+    pagination: {
+      SelectProps: {
+        MenuProps: {
+          disableScrollLock: true, // Prevents body scroll lock
+          disablePortal: true,
+        },
+      },
+    },
+  }}
+/>
+
+
+
+
       </Box>
       
  
@@ -1037,7 +1099,7 @@ const handleChange = (e) => {
           </div>
 
 
-  <Fade in={open1} className='hospitalform'>
+  <Fade in={open1} className='doctorform'>
             <Box>
               {open1 && (
                 <Box
@@ -1058,9 +1120,9 @@ const handleChange = (e) => {
                 sx={{
                   background: '#fff',
                   borderRadius: 3,
-                  boxShadow: 3,
-                  minWidth:400,
-                  maxWidth: 630,
+                  // boxShadow: 3,
+                   minWidth:440,
+                  maxWidth: { xs: 630, lg: 900 },
                   p: { xs: 2, sm: 3, md: 5 },
                   mx: 'auto',
                   display: 'flex',
@@ -1085,6 +1147,10 @@ const handleChange = (e) => {
       name="hospital_type"
       label="Hospital Type"
       value={hospital.hospital_type}
+      MenuProps={{
+        disablePortal: true,
+        disableScrollLock: true,
+      }}
       onChange={handleChange1}
     >
       <MenuItem value="India">India</MenuItem>
@@ -1118,13 +1184,20 @@ const handleChange = (e) => {
         name="state"
         label="State"
         value={hospital.state}
+        SelectProps={{
+        MenuProps: {
+          disablePortal: true,
+          disableScrollLock: true,
+        },
+      }}
+
         onChange={(e) => {
           handleChange1(e);
           sethospital((prev) => ({ ...prev, city: "" })); // reset city when state changes
         }}
         fullWidth={false}
         size="small"
-        sx={{ width: 320 }}
+        sx={{ width: 360 }}
       >
         {hstates.map((s) => (
           <MenuItem key={s.isoCode} value={s.isoCode}>
@@ -1142,6 +1215,13 @@ const handleChange = (e) => {
         fullWidth
         size="small"
         disabled={!hospital.state}
+        SelectProps={{
+        MenuProps: {
+          disablePortal: true,
+          disableScrollLock: true,
+        },
+      }}
+
       >
         {hcities.map((c) => (
           <MenuItem key={c.name} value={c.name}>
@@ -1190,7 +1270,7 @@ const handleChange = (e) => {
                 sx={{
                   background: '#fff',
                   borderRadius: 3,
-                  boxShadow: 3,
+                  // boxShadow: 3,
                   minWidth:510,
                   maxWidth: 530,
                   p: { xs: 0, sm: 0, md: 0 },
@@ -1210,7 +1290,7 @@ const handleChange = (e) => {
         disableSelectionOnClick
         sx={{
           borderRadius: 3.5,
-          boxShadow: 6,
+          // boxShadow: 6,
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: '#4d7bf3',
             color: 'black',

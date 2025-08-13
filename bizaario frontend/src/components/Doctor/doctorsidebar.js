@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function Doctorsidebar() {
 
@@ -129,6 +130,25 @@ const CreateDigitalCMEIcon = () => (
 );
 
 
+const logout=()=>
+{
+
+  localStorage.removeItem("token")
+  localStorage.removeItem("user")
+            Swal.fire({
+                icon:"success",
+                title:"Logout",
+                text:"Logout Successfully...",
+                showConfirmButton:true,
+                 customClass: {
+                confirmButton: 'my-swal-button',
+              },
+              }).then(()=>
+              {
+                window.location.reload()
+              })
+  navigate('/')
+}
 
 
 
@@ -203,7 +223,7 @@ function cn(...classes) {
 
         {/* Logout Button */}
         <div className="absolute bottom-8 left-6 right-6">
-          <button onClick={(()=>navigate('/'))} className="w-full flex items-center justify-center gap-3 py-3 px-6 bg-[#F86F03] rounded-lg hover:bg-[#e5630a] transition-colors">
+          <button onClick={logout} className="w-full flex items-center justify-center gap-3 py-3 px-6 bg-[#F86F03] rounded-lg hover:bg-[#e5630a] transition-colors">
             <LogoutIcon />
             <span className="text-white text-base font-bold">Logout</span>
           </button>
