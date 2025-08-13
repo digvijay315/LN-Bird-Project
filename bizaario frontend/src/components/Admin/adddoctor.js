@@ -411,10 +411,19 @@ const handleChange = (e) => {
 
   //=================================== display table===============================================
 
-   const [anchorE2, setAnchorE2] = useState(null);
+const [menuAnchor, setMenuAnchor] = useState(null);
+const [menuRowId, setMenuRowId] = useState(null);
 
-  const handleOpenMenuhospital = (event) => setAnchorE2(event.currentTarget);
-  const handleCloseMenuhospital = () => setAnchorE2(null);
+const handleOpenMenuhospital = (event, rowId) => {
+  setMenuAnchor(event.currentTarget);
+  setMenuRowId(rowId);
+};
+
+const handleCloseMenuhospital = () => {
+  setMenuAnchor(null);
+  setMenuRowId(null);
+};
+
 
   const onEdithospital=()=>
   {
@@ -432,32 +441,47 @@ const handleChange = (e) => {
     { field: 'hospital_type', headerName: 'Type', flex: 1 },
     { field: 'address1', headerName: 'Address', flex: 1 },
    
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <>
-          <IconButton onClick={handleOpenMenu}>
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            anchorE2={anchorE2}
-            open={Boolean(anchorE2)}
-            onClose={handleCloseMenuhospital}
+   {
+  field: 'actions',
+  headerName: 'Actions',
+  width: 80,
+  sortable: false,
+  filterable: false,
+  renderCell: (params) => (
+    <>
+      <IconButton onClick={(e) => handleOpenMenuhospital(e, params.row._id)}>
+        <MoreVertIcon />
+      </IconButton>
+
+      {menuRowId === params.row._id && (
+        <Menu
+          anchorEl={menuAnchor}
+          open={Boolean(menuAnchor)}
+          onClose={handleCloseMenuhospital}
+          disableScrollLock
+        >
+          <MenuItem
+            onClick={() => {
+              onEdithospital(params.row._id);
+              handleCloseMenuhospital();
+            }}
           >
-            <MenuItem onClick={() => { onEdithospital(params.row._id); handleCloseMenuhospital(); }}>
-              Edit
-            </MenuItem>
-            <MenuItem onClick={() => { onDeletehospital(params.row._id); handleCloseMenuhospital(); }}>
-              Delete
-            </MenuItem>
-          </Menu>
-        </>
-      ),
-    },
+            Edit
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              onDeletehospital(params.row._id);
+              handleCloseMenuhospital();
+            }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
+      )}
+    </>
+  ),
+}
+
   ];
 
   const rowshospital = allhospital.map((doc, index) => ({
