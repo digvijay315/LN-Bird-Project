@@ -244,8 +244,8 @@ const handleChange = (e) => {
   }
 
   const columns = [
-    { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
-    { field: 'fullname', headerName: 'FUll Name', flex: 1, renderCell: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}` },
+    { field: 'sno', headerName: 'S.No.', flex: 0.3,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
+    { field: 'fullname', headerName: 'Name', flex: 1, renderCell: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}` },
     { field: 'medical_specialty', headerName: 'Specialty', flex: 1 },
    
     {
@@ -1068,6 +1068,7 @@ const handleCloseMenuhospital = () => {
                     
                                       
 <DataGrid
+ className="custom-data-grid"
   rows={rows}
   columns={columns}
   pageSizeOptions={[5, 10, 20]}
@@ -1075,17 +1076,7 @@ const handleCloseMenuhospital = () => {
     pagination: { paginationModel: { pageSize: 10, page: 0 } },
   }}
   disableSelectionOnClick
-  sx={{
-    height: 600,
-    borderRadius: 3.5,
-    overflowY: 'scroll', // Forces scrollbar space
-    scrollbarGutter: 'stable', // Prevents layout shift when scrollbar appears/disappears
-    '& .MuiDataGrid-columnHeaders': {
-      backgroundColor: '#4d7bf3',
-      color: 'black',
-      fontWeight: 'bold',
-    },
-  }}
+ 
   slotProps={{
     pagination: {
       SelectProps: {
@@ -1307,21 +1298,13 @@ const handleCloseMenuhospital = () => {
                     
                                       
       <DataGrid
+       className="custom-data-grid"
         rows={rowshospital}
         columns={columnshospital}
         pageSize={10}
         rowsPerPageOptions={[5, 10, 20]}
         disableSelectionOnClick
-        sx={{
-          borderRadius: 3.5,
-          // boxShadow: 6,
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: '#4d7bf3',
-            color: 'black',
-            fontWeight: 'bold',
-            
-          },
-        }}
+      
       />
       </Box>
       
