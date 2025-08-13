@@ -15,6 +15,7 @@ import AdminAddDoctorHospital from '../src/components/Admin/adddoctor'
 import Doctordashboard from "./components/Doctor/doctordashboard";
 import Createnewcourse from "./components/Doctor/createnewcourse";
 import Createdigitalcme from "./components/Doctor/createdigitalcme";
+import Createdititalcmequestionbank from "./components/Doctor/createdigitalcmequestionbank";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/doctordashboard" element={<Doctordashboard/>}></Route>
         <Route path="/createnewcourse" element={<Createnewcourse/>}></Route>
         <Route path="/createdigitalcme" element={<Createdigitalcme/>}></Route>
+        <Route path="/createdigitalcmequestionbank" element={<Createdititalcmequestionbank/>}></Route>
       </Routes>
       {/* <Doctordashboard/> */}
         

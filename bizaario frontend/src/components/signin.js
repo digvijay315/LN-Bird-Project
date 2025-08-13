@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import api from '../api'
 import Swal from 'sweetalert2';
 import ChangePasswordModal from "./changepassworddoctor";
+import logo from "../assets/image 12 (1).png"; 
 
 function SignIn() {
 
@@ -28,12 +29,12 @@ function SignIn() {
 const login = async (e) => {
   e.preventDefault();
 
-  if (role === 'admin' && email === 'admin' && password === '123') {
+  if (email === 'admin' && password === '123') {
     navigate('/admindashboard');
     return;
   }
 
-  if (role === 'doctor') {
+
     try {
       const resp = await api.post('doctor/login', { email, password });
 
@@ -82,30 +83,30 @@ const login = async (e) => {
         });
       }
     }
-  } else {
-    Swal.fire({
-      icon: 'error',
-      title: 'Invalid Role',
-      text: 'Please select a valid role',
-      showConfirmButton: true,
-         customClass: {
-          confirmButton: 'my-swal-button',
-        },
-    });
-  }
+
 };
 
 
 
   return (
     <div className="signin-container">
+      <div className="visual-side" style={{ display: "flex", flexDirection: "column", }}>
+      <div className="visual-side">
+        <img
+          src={logo}
+          style={{ width: "80%",height:"50%", }}
+          alt="Logo"
+        />
+      </div>
       <div className="visual-side">
         <img
           src={image}
-          style={{ width: "100%" }}
+          style={{ width: "600px",height:"100%", }}
           alt=""
         />
       </div>
+    </div>
+
 
       <div className="form-side">
         <form className="signin-form">
@@ -116,7 +117,7 @@ const login = async (e) => {
           </div>
           
           {/* Step 2: Add active class based on selected role */}
-          <div className="role-tabs">
+          {/* <div className="role-tabs">
             <button
               type="button"
               className={role === "admin" ? "active" : ""}
@@ -138,17 +139,17 @@ const login = async (e) => {
             >
               Patient
             </button>
-          </div>
+          </div> */}
 
           {/* Step 3: The form updates (even just the heading here) */}
           <div className="input-group">
-            <h2>{getFormTitle()}</h2>
+            <h2>Sign In</h2>
             <input type="text" placeholder="Username" required  onChange={(e)=>setemail(e.target.value)}/>
             <input type="password" placeholder="Password" required onChange={(e)=>setpassword(e.target.value)}/>
           </div>
           <div className="options">
             <label>
-              <input type="checkbox" />
+              <input type="checkbox" style={{marginRight:"10px",transform: "scale(1.5)",accentColor: "#4d7bf3"}} />
               Remember me
             </label>
             <a href="/forgot">Forgot Password?</a>
@@ -161,7 +162,7 @@ const login = async (e) => {
 }
         
 
-          <div className="or-divider">OR</div>
+          {/* <div className="or-divider">OR</div>
           <div className="social-row">
             <button type="button" className="g">
               G
@@ -175,7 +176,7 @@ const login = async (e) => {
             <button type="button" className="in">
               in
             </button>
-          </div>
+          </div> */}
         </form>
 
       </div>
