@@ -121,19 +121,52 @@ const ChevronDownIcon = () => (
 
                      {/* Dropdown Menu */}
       {isOpen && (
-        <div ref={dropdownRef} className="absolute right-6 mt-60 mb-20 w-48 bg-white shadow-lg rounded-lg border z-50">
-          <ul className="py-2">
-            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer ">
-              Profile
-            </li>
-            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-              Settings
-            </li>
-            <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600">
-              Logout
-            </li>
-          </ul>
-        </div>
+       <div
+  ref={dropdownRef}
+  className="absolute right-6 mt-60 w-48 bg-white shadow-xl rounded-xl border border-gray-200 z-50 transform origin-top-right transition-all duration-200 ease-out scale-95 hover:scale-100"
+>
+  <ul className="py-2">
+    <li onClick={()=>navigate('/editdoctorprofile')} className="px-0 py-2 flex items-center gap-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150">
+      <svg
+        className="w-5 h-5 text-blue-500"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M5.121 17.804A9.937 9.937 0 0112 15c2.21 0 4.21.721 5.879 1.927M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      Profile
+    </li>
+
+    <li className="px-0 py-3 flex items-center gap-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150">
+      <svg
+        className="w-5 h-5 text-green-500"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M10.325 4.317a1 1 0 011.35-.936l.123.048 1.56.624a8.018 8.018 0 014.69 7.58 8.018 8.018 0 01-4.69 7.58l-1.56.624a1 1 0 01-1.348-.915V4.31z" />
+      </svg>
+      Settings
+    </li>
+
+    <li className="px-0 py-3 flex items-center gap-3 hover:bg-red-50 cursor-pointer transition-colors duration-150 text-red-600">
+      <svg
+        className="w-5 h-5 text-red-500"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        viewBox="0 0 24 24"
+      >
+        <path d="M17 16l4-4m0 0l-4-4m4 4H7" />
+      </svg>
+      Logout
+    </li>
+  </ul>
+</div>
+
       )}
 
                   </div>

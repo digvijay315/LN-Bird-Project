@@ -27,6 +27,7 @@ import NewsAndArticles from "./components/newsarticals";
 import Awards from "./components/awards";
 import Testimonial from "./components/testimonial";
 import Createsubadmin from "./components/Doctor/createsubadmin";
+import { Editdoctorprofile } from "./components/Doctor/editprofile";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="/createdigitalcme" element={<Createdigitalcme/>}></Route>
         <Route path="/createdigitalcmequestionbank" element={<Createdititalcmequestionbank/>}></Route> 
         <Route path="/createsubadmin" element={<Createsubadmin/>}></Route> 
+        <Route path="/editdoctorprofile" element={<Editdoctorprofile/>}></Route> 
       </Routes>
       {/* <Doctordashboard/> */}
       
