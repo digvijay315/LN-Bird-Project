@@ -77,5 +77,18 @@ const viewcoursebyuserid=async(req,res)=>
   }
 }
 
+const delete_course=async(req,res)=>
+{
+  try {
+    const _id=req.params._id
+    const resp=await createcourse.findByIdAndDelete(_id)
+    res.status(200).send({message:"course deleted",cme:resp})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
 
-  module.exports={add_course,viewcourse,viewcoursebyuserid}
+
+  module.exports={add_course,viewcourse,viewcoursebyuserid,delete_course}

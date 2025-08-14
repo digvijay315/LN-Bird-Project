@@ -35,6 +35,16 @@ body, html {
   border: none
 }
 
+.my-swal-cancel-button
+{
+    background-color: red !important;
+  color: white !important;
+  padding: 8px 20px;
+  border-radius: 4px;
+  border: none
+
+}
+
 
 @tailwind base;
 @tailwind components;

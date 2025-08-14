@@ -209,6 +209,11 @@ function cn(...classes) {
                 <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create Question Bank</span>
               </div>
 
+                <div onClick={()=>navigate('/createsubadmin')} className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white hover:text-[blue] cursor-pointer">
+                <CreateCourseIcon />
+                <span className="text-[white] text-sm font-semibold hover:text-[blue]">Create Sub-Admin</span>
+              </div>
+
                {/* <div className="flex items-center gap-3 px-3 py-3  rounded-lg hover:bg-white cursor-pointer">
                 <DashboardIcon />
                 <span className="text-[black] text-sm font-semibold">Dashboard</span>

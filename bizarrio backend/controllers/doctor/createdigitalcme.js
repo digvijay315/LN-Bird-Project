@@ -69,6 +69,20 @@ const viewcme=async(req,res)=>
 }
 
 
+const delete_digitalcme=async(req,res)=>
+{
+  try {
+    const _id=req.params._id
+    const resp=await createdigitalcme.findByIdAndDelete(_id)
+    res.status(200).send({message:"cme deleted",cme:resp})
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
 
 
-  module.exports={add_digitalcme,viewcme}
+
+
+  module.exports={add_digitalcme,viewcme,delete_digitalcme}

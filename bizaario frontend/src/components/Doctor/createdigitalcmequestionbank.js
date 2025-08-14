@@ -21,6 +21,7 @@ import { State, City } from "country-state-city";
 import Doctorheader from './doctorheader';
 import Doctorsidebar from './doctorsidebar';
 import DeleteIcon from "@mui/icons-material/Delete";
+import '../Doctor/stylingcss/createdigitalcmequestionbank.css'
 
 
 
@@ -194,16 +195,35 @@ const handleChange = (e) => {
     });
   };
 
-  console.log(questionbank);
+ 
+  const[alldigitalcme,setalldigitalcme]=useState([])
+    const getalldigitalcme=async()=>
+    {
+      try {
+        const resp=await api.get(`doctor/getcme`)
+        setalldigitalcme(resp.data.cme)
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
   
-//============================ post request of add doctor================================================
+    useEffect(()=>
+    {
+      getalldigitalcme()
+  
+    },[])
+
+  
+//============================ post request of add question bank================================================
 
   const handleSubmit = async(e) => {
     e.preventDefault();
      setLoading(true);
     try {
       
-      const resp=await api.post('/doctor/adddoctor',questionbank,{headers: {
+      const resp=await api.post('/doctor/createdigitalcmequestionbank',questionbank,{headers: {
                                     "Content-Type": "multipart/form-data",
                                   }
                                 }
@@ -212,8 +232,8 @@ const handleChange = (e) => {
       {
         Swal.fire({
           icon:"success",
-          title:"Profile Created",
-          text:"Doctor Profile Created Successfully...",
+          title:"Question Created",
+          text:"Question Created Successfully...",
           showConfirmButton:true,
            customClass: {
           confirmButton: 'my-swal-button',
@@ -244,14 +264,14 @@ const handleChange = (e) => {
   };
 
 
-  // =============================get request of all doctor=========================================
+  // =============================get request of all question bank=========================================
 
-  const[alldoctor,setalldoctor]=useState([])
+  const[allquestion,setallquestion]=useState([])
   const getalldoctor=async()=>
   {
     try {
-      const resp=await api.get('doctor/getalldoctor')
-      setalldoctor(resp.data.doctor)
+      const resp=await api.get('doctor/getdigitalcmequestionbank')
+      setallquestion(resp.data.questionbank)
       
     } catch (error) {
       console.log(error);
@@ -269,66 +289,146 @@ const handleChange = (e) => {
 
   //=================================== display table===============================================
 
-   const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
-  const handleCloseMenu = () => setAnchorEl(null);
+ const [anchorEl, setAnchorEl] = useState(null);
+ const [selectedRowId, setSelectedRowId] = useState(null);
+ 
+ const handleOpenMenu = (event, id) => {
+   setAnchorEl(event.currentTarget);
+   setSelectedRowId(id); // store the current row id
+ };
+ 
+ const handleCloseMenu = () => {
+   setAnchorEl(null);
+   setSelectedRowId(null);
+ };
 
   const onEdit=()=>
   {
     alert("edit")
   }
 
-  const onDelete=()=>
+const onDelete=async(id)=>
   {
-    alert("delete")
+    try {
+
+         const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "This action will permanently delete the Sub-Admin.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'my-swal-button',
+                cancelButton: 'my-swal-cancel-button'
+            }
+            });
+
+        if (confirmResult.isConfirmed) {
+        const resp=await api.delete(`doctor/deletequestion/${id}`)
+         if(resp.status===200)
+          {
+            Swal.fire({
+              icon:"success",
+              title:"Question Deleted",
+              text:"Question  Deleted Successfully...",
+              showConfirmButton:true,
+               customClass: {
+              confirmButton: 'my-swal-button',
+            },
+            }).then(()=>
+            {
+              window.location.reload()
+            })
+           
+          }
+        }
+        
+    } catch (error) {
+         Swal.fire({
+            icon:"error",
+            title:"error ",
+            text:error.response.data.message,
+            showConfirmButton:true,
+             customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          })
+          console.log(error);
+          
+        
+    }
   }
 
   const columns = [
     { field: 'sno', headerName: 'S.No.', flex: 0.3,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
-    { field: 'fullname', headerName: 'Name', flex: 1, renderCell: (params) => `${params.row.firstName || ''} ${params.row.lastName || ''}` },
-    { field: 'medical_specialty', headerName: 'Specialty', flex: 1 },
+    { field: 'question_id', headerName: 'Question Id', flex: 1 },
+    { field: 'question_type', headerName: 'Question Type', flex: 1 },
    
     {
-      field: 'qualification',
-      headerName: 'Qualification',
+      field: 'references',
+      headerName: 'References',
       flex: 1,
       renderCell: (params) => params.value?.join(', '),
     },
    
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <>
-          <IconButton onClick={handleOpenMenu}>
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
-           
-            disableScrollLock 
-     
-      
-          >
-            <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
-              Edit
-            </MenuItem>
-            <MenuItem onClick={() => { onDelete(params.row._id); handleCloseMenu(); }}>
-              Delete
-            </MenuItem>
-          </Menu>
-        </>
-      ),
-    },
+   {
+  field: 'actions',
+  headerName: 'Actions',
+  width: 100,
+  sortable: false,
+  filterable: false,
+  renderCell: (params) => (
+    <>
+      <IconButton 
+        onClick={(event) => handleOpenMenu(event, params.row._id)} 
+        size="small"
+        sx={{
+          backgroundColor: '#f5f5f5',
+          '&:hover': { backgroundColor: '#e0e0e0' },
+        }}
+      >
+        <MoreVertIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl) && selectedRowId === params.row._id}
+        onClose={handleCloseMenu}
+        disableScrollLock
+        PaperProps={{
+          elevation: 4,
+          sx: {
+            borderRadius: 2,
+            minWidth: 160,
+            bgcolor: 'background.paper',
+            '& .MuiMenuItem-root': {
+              gap: 1,
+              fontSize: '0.9rem',
+              px: 2,
+              py: 1,
+              '&:hover': {
+                bgcolor: 'primary.light',
+                color: 'white',
+              },
+            }
+          }
+        }}
+      >
+        <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
+          <EditIcon fontSize="small" /> Edit
+        </MenuItem>
+        <MenuItem onClick={() => { onDelete(selectedRowId); handleCloseMenu(); }}>
+          <DeleteIcon fontSize="small" color="error" /> Delete
+        </MenuItem>
+      </Menu>
+    </>
+  ),
+}
   ];
 
-  const rows = alldoctor.map((doc, index) => ({
+  const rows = allquestion.map((doc, index) => ({
     id: doc._id || index,
     ...doc,
   }));
@@ -342,20 +442,8 @@ const handleChange = (e) => {
       <Doctorsidebar />
      
 
-      <div className="adddoctor">
-        <Box
-          sx={{
-            minHeight: '100vh',
-            background: '#f7f8fa',
-            width: '100%',
-            pt: { xs: 3, md: 5 },
-            pb: 4,
-            px: { xs: 1, sm: 2 },
-          }}
-        >
-    
-       
-
+      <div className="create-question-bank">
+      
           {/* ============== FORM & PROFILE AREA ============== */}
         <div className='profile-header' style={{display:open?"block" : "none"}}>
           <h3>Enter Details for Question Bank</h3>
@@ -365,7 +453,7 @@ const handleChange = (e) => {
   {/* ================================add doctor================================================ */}
 
   
-          <Fade in={open} className='doctorform'>
+          <Fade in={open} className='question-bank-section'>
             <Box>
                 <Box
                   sx={{
@@ -385,7 +473,7 @@ const handleChange = (e) => {
                 sx={{
                   background: '#fff',
                   borderRadius: 3,
-                  // boxShadow: 3,
+                  boxShadow: 1,
                   minWidth:440,
                   maxWidth: { xs: 630, lg: 900 },
                   p: { xs: 2, sm: 3, md: 5 },
@@ -399,13 +487,31 @@ const handleChange = (e) => {
   
 
   <TextField
+  select
     name="digital_cme_id"
     label="Digital Cme Id"
     value={questionbank.digital_cme_id}
     onChange={handleChange}
     fullWidth
     size="small"
-  />
+    SelectProps={{
+    MenuProps: {
+      disablePortal: true,
+      disableScrollLock: true,
+    },
+  }}
+  >
+
+     {
+                    alldigitalcme.map((item)=>
+                    (
+                        <MenuItem key={item.digital_cme_id} value={item.digital_cme_id}>
+                                    {item.digital_cme_id}
+                        </MenuItem>
+                    ))
+                }
+
+    </TextField>
 
   <TextField
     name="question_id"
@@ -649,7 +755,7 @@ const handleChange = (e) => {
           </Fade>
 
 
-        </Box>
+       
 
  {loading && (
   <div

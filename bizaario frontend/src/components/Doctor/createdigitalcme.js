@@ -11,6 +11,7 @@ import UniqueLoader from '../loader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { DataGrid } from '@mui/x-data-grid';
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
 
 
 function Createdigitalcme() {
@@ -262,19 +263,76 @@ const[allcme,setallcme]=useState([])
 
   },[])
 
- const [anchorEl, setAnchorEl] = useState(null);
+const [anchorEl, setAnchorEl] = useState(null);
+const [selectedRowId, setSelectedRowId] = useState(null);
 
-  const handleOpenMenu = (event) => setAnchorEl(event.currentTarget);
-  const handleCloseMenu = () => setAnchorEl(null);
+const handleOpenMenu = (event, id) => {
+  setAnchorEl(event.currentTarget);
+  setSelectedRowId(id); // store the current row id
+};
+
+const handleCloseMenu = () => {
+  setAnchorEl(null);
+  setSelectedRowId(null);
+};
 
   const onEdit=()=>
   {
     alert("edit")
   }
 
-  const onDelete=()=>
+  const onDelete=async(id)=>
   {
-    alert("delete")
+    try {
+
+         const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "This action will permanently delete the Sub-Admin.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "Cancel",
+            reverseButtons: true,
+            customClass: {
+                confirmButton: 'my-swal-button',
+                cancelButton: 'my-swal-cancel-button'
+            }
+            });
+
+        if (confirmResult.isConfirmed) {
+        const resp=await api.delete(`doctor/deletecme/${id}`)
+         if(resp.status===200)
+          {
+            Swal.fire({
+              icon:"success",
+              title:"Cme Deleted",
+              text:"Cme Deleted Successfully...",
+              showConfirmButton:true,
+               customClass: {
+              confirmButton: 'my-swal-button',
+            },
+            }).then(()=>
+            {
+              window.location.reload()
+            })
+           
+          }
+        }
+        
+    } catch (error) {
+         Swal.fire({
+            icon:"error",
+            title:"error ",
+            text:error.response.data.message,
+            showConfirmButton:true,
+             customClass: {
+              confirmButton: 'my-swal-button',
+            },
+          })
+          console.log(error);
+          
+        
+    }
   }
 
   const columns = [
@@ -282,33 +340,59 @@ const[allcme,setallcme]=useState([])
     { field: 'digital_cme_id', headerName: 'CME Id', flex: 1 },
     { field: 'cme_title', headerName: 'Cme Title', flex: 1 },
      { field: 'target_audience', headerName: 'Target Audience', flex: 1,renderCell: (params) => params.value?.join(', '), },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <>
-          <IconButton onClick={handleOpenMenu}>
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleCloseMenu}
-            disableScrollLock 
-          >
-            <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
-              Edit
-            </MenuItem>
-            <MenuItem onClick={() => { onDelete(params.row._id); handleCloseMenu(); }}>
-              Delete
-            </MenuItem>
-          </Menu>
-        </>
-      ),
-    },
+     {
+  field: 'actions',
+  headerName: 'Actions',
+  width: 100,
+  sortable: false,
+  filterable: false,
+  renderCell: (params) => (
+    <>
+      <IconButton 
+        onClick={(event) => handleOpenMenu(event, params.row._id)} 
+        size="small"
+        sx={{
+          backgroundColor: '#f5f5f5',
+          '&:hover': { backgroundColor: '#e0e0e0' },
+        }}
+      >
+        <MoreVertIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl) && selectedRowId === params.row._id}
+        onClose={handleCloseMenu}
+        disableScrollLock
+        PaperProps={{
+          elevation: 4,
+          sx: {
+            borderRadius: 2,
+            minWidth: 160,
+            bgcolor: 'background.paper',
+            '& .MuiMenuItem-root': {
+              gap: 1,
+              fontSize: '0.9rem',
+              px: 2,
+              py: 1,
+              '&:hover': {
+                bgcolor: 'primary.light',
+                color: 'white',
+              },
+            }
+          }
+        }}
+      >
+        <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
+          <EditIcon fontSize="small" /> Edit
+        </MenuItem>
+        <MenuItem onClick={() => { onDelete(selectedRowId); handleCloseMenu(); }}>
+          <DeleteIcon fontSize="small" color="error" /> Delete
+        </MenuItem>
+      </Menu>
+    </>
+  ),
+}
   ];
 
   const rows = allcme.map((doc, index) => ({
@@ -653,7 +737,10 @@ const[allcme,setallcme]=useState([])
                rows={rows}
                columns={columns}
                pageSize={10}
-               rowsPerPageOptions={[5, 10, 20]}
+               pageSizeOptions={[]} // removes the rows per page selector
+                initialState={{
+                  pagination: { paginationModel: { pageSize: 10, page: 0 } },
+                }}
                disableSelectionOnClick
               
              />

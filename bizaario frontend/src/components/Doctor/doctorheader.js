@@ -59,7 +59,7 @@ const ChevronDownIcon = () => (
   return (
     <div>
          {/* Header */}
-              <header className="bg-white shadow-lg px-6 lg:px-9 py-3 flex h-18 flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 justify-between">
+              <header className="bg-white shadow-sm px-6 lg:px-9 py-3 flex h-18 flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-0 justify-between">
                 {/* Search Bar */}
                 <div className="flex items-center w-full lg:w-auto">
                   <div className="flex w-full lg:w-auto" style={{paddingLeft:"60%"}}>

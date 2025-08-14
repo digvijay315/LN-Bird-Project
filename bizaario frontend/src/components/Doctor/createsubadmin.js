@@ -2,10 +2,11 @@ import React, { useEffect } from 'react'
 import { useState,useRef } from 'react';
 import Doctorheader from './doctorheader'
 import Doctorsidebar from './doctorsidebar'
-import {Box, Grid, Button, TextField,Menu,MenuItem,IconButton} from '@mui/material';
+import {Box, Grid, Button, TextField,Menu,MenuItem,IconButton,FormControl,Typography,FormGroup,
+        FormControlLabel,Checkbox, Chip,} from '@mui/material';
 import api from '../../api'
 import Swal from 'sweetalert2';
-import '../Doctor/stylingcss/createnewcourse.css'
+import '../Doctor/stylingcss/subadmin.css'
 import UniqueLoader from '../loader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { DataGrid } from '@mui/x-data-grid';
@@ -13,8 +14,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
 
 
-
-function Createnewcourse() {
+function Createsubadmin() {
 
       const doctordetails = JSON.parse(localStorage.getItem("user"));
   
@@ -25,28 +25,31 @@ function Createnewcourse() {
      
 // =============================crete course code=============================================
 
-       const [course,setcourse]=useState({user_id:"",course_id:"",course_title:"",description:"",
-                                               course_image:[],course_image_preview:[]})
+       const [subadmin,setsubadmin]=useState({name:"",phone_no:"",designation:"",email:"",
+                                        password:""})
 
 
-         const handleImageChange = (e) => {
-            const files = Array.from(e.target.files);
-            if (files.length > 0) {
-                const file = files[0];
-                const previewUrl = URL.createObjectURL(file);
-                setcourse({
-                ...course,
-                course_image: file,
-                course_image_preview: previewUrl,
-                });
-            }
-            };
+                            const generatePassword = () => {
+                                const chars =
+                                "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+                                let pass = "";
+                                for (let i = 0; i < 6; i++) {
+                                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+                                }
+                                return pass;
+                            };
+
+                            // Auto-generate password on mount
+                            useEffect(() => {
+                                setsubadmin((prev) => ({ ...prev, password: generatePassword() }));
+                            }, []);
+
 
 
 const handleChange = (e) => {
   const { name, value, checked, type } = e.target;
 
-  setcourse((prev) => {
+  setsubadmin((prev) => {
     // If dropdown/multiple select returns an array directly
     if (Array.isArray(value)) {
       return { ...prev, [name]: value };
@@ -78,28 +81,10 @@ const handleChange = (e) => {
   });
 };
 
-useEffect(() => {
-  if (doctordetails) {
-    setcourse(prev => ({ ...prev, user_id: doctordetails?.user?._id }));
-  }
-}, []);
 
 
-   // Function to generate 6-char random courseid
- const generateCourseId = () => {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-  for (let i = 0; i < 6; i++) {
-    id += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return id;
-};
 
 
-  // Auto-generate password on mount
-  useEffect(() => {
-    setcourse((prev) => ({ ...prev, course_id: generateCourseId() }));
-  }, []);
 
 
       const handleSubmit = async(e) => {
@@ -107,17 +92,13 @@ useEffect(() => {
          setLoading(true);
         try {
           
-          const resp=await api.post('/doctor/createcourse',course,{headers: {
-                                        "Content-Type": "multipart/form-data",
-                                      }
-                                    }
-          )
+          const resp=await api.post('/doctor/createsubadmin',subadmin)
           if(resp.status===200)
           {
             Swal.fire({
               icon:"success",
-              title:"Course Created",
-              text:"New Course Created Successfully...",
+              title:"Sub-Admin Created",
+              text:"New Sub Admin Created Successfully...",
               showConfirmButton:true,
                customClass: {
               confirmButton: 'my-swal-button',
@@ -151,12 +132,12 @@ useEffect(() => {
 // ==========================view course and display it in table=======================================
 
 
-const[allcourse,setallcourse]=useState([])
-  const getallcourse=async()=>
+const[allsubadmin,setallsubadmin]=useState([])
+  const getallsubadmin=async()=>
   {
     try {
-      const resp=await api.get('doctor/getcourse')
-      setallcourse(resp.data.course)
+      const resp=await api.get('doctor/getsubadmindetails')
+      setallsubadmin(resp.data.subadmin)
       
     } catch (error) {
       console.log(error);
@@ -166,22 +147,22 @@ const[allcourse,setallcourse]=useState([])
 
   useEffect(()=>
   {
-    getallcourse()
+     getallsubadmin()
 
   },[])
 
- const [anchorEl, setAnchorEl] = useState(null);
- const [selectedRowId, setSelectedRowId] = useState(null);
- 
- const handleOpenMenu = (event, id) => {
-   setAnchorEl(event.currentTarget);
-   setSelectedRowId(id); // store the current row id
- };
- 
- const handleCloseMenu = () => {
-   setAnchorEl(null);
-   setSelectedRowId(null);
- };
+const [anchorEl, setAnchorEl] = useState(null);
+const [selectedRowId, setSelectedRowId] = useState(null);
+
+const handleOpenMenu = (event, id) => {
+  setAnchorEl(event.currentTarget);
+  setSelectedRowId(id); // store the current row id
+};
+
+const handleCloseMenu = () => {
+  setAnchorEl(null);
+  setSelectedRowId(null);
+};
 
   const onEdit=()=>
   {
@@ -207,13 +188,13 @@ const[allcourse,setallcourse]=useState([])
             });
 
         if (confirmResult.isConfirmed) {
-        const resp=await api.delete(`doctor/deletecourse/${id}`)
+        const resp=await api.delete(`doctor/deletesubadmin/${id}`)
          if(resp.status===200)
           {
             Swal.fire({
               icon:"success",
-              title:"Course Deleted",
-              text:"Course Deleted Successfully...",
+              title:"Sub-Admin Deleted",
+              text:"Sub Admin Deleted Successfully...",
               showConfirmButton:true,
                customClass: {
               confirmButton: 'my-swal-button',
@@ -244,25 +225,35 @@ const[allcourse,setallcourse]=useState([])
 
   const columns = [
     { field: 'sno', headerName: 'S.No.', flex: 0.2,renderCell: (params) => params.api.getAllRowIds().indexOf(params.id) + 1},
-    { field: 'course_id', headerName: 'Course Id', flex: 1 },
-    { field: 'course_title', headerName: 'Course Title', flex: 1 },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 80,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <>
-          <IconButton onClick={(event) => handleOpenMenu(event, params.row._id)}>
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl) && selectedRowId === params.row._id}
-            onClose={handleCloseMenu}
-             disableScrollLock 
-               PaperProps={{
+    { field: 'name', headerName: 'Name', flex: 1 },
+    { field: 'phone_no', headerName: 'Phone No.', flex: 1 },
+    { field: 'email', headerName: 'Email', flex: 1 },
+    { field: 'password', headerName: 'Password', flex: 1 },
+ {
+  field: 'actions',
+  headerName: 'Actions',
+  width: 100,
+  sortable: false,
+  filterable: false,
+  renderCell: (params) => (
+    <>
+      <IconButton 
+       onClick={(event) => handleOpenMenu(event, params.row._id)} 
+        size="small"
+        sx={{
+          backgroundColor: '#f5f5f5',
+          '&:hover': { backgroundColor: '#e0e0e0' },
+        }}
+      >
+        <MoreVertIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl) && selectedRowId === params.row._id}
+        onClose={handleCloseMenu}
+        disableScrollLock
+        PaperProps={{
           elevation: 4,
           sx: {
             borderRadius: 2,
@@ -280,20 +271,21 @@ const[allcourse,setallcourse]=useState([])
             }
           }
         }}
-          >
-            <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
-               <EditIcon fontSize="small" /> Edit
-            </MenuItem>
-            <MenuItem onClick={() => { onDelete(selectedRowId); handleCloseMenu(); }}>
-               <DeleteIcon fontSize="small" color="error" /> Delete
-            </MenuItem>
-          </Menu>
-        </>
-      ),
-    },
+      >
+        <MenuItem onClick={() => { onEdit(params.row._id); handleCloseMenu(); }}>
+          <EditIcon fontSize="small" /> Edit
+        </MenuItem>
+        <MenuItem onClick={() => { onDelete(selectedRowId); handleCloseMenu(); }}>
+          <DeleteIcon fontSize="small" color="error" /> Delete
+        </MenuItem>
+      </Menu>
+    </>
+  ),
+}
+
   ];
 
-  const rows = allcourse.map((doc, index) => ({
+  const rows = allsubadmin.map((doc, index) => ({
     id: doc._id || index,
     ...doc,
   }));
@@ -305,15 +297,15 @@ const[allcourse,setallcourse]=useState([])
         <Doctorheader/>
         <Doctorsidebar/>
        
-           <div className='create_course'>
+           <div className='create_subadmin'>
          <div className='profile-header'>
-                 <h3>Enter Details for Create New Course</h3>
-                 <p>Add or update the required details for the active course to keep records accurate and complete.</p>
+                 <h3>Enter Details for Create New Sub-Admin</h3>
+                 <p>Add or update the required details for the sub-admin to keep records accurate and complete.</p>
                  </div>
        
          {/* ================================add doctor================================================ */}
        
-         <div className='coursesection'>
+         <div className='subadminsection'>
                        <Box
                          sx={{
                            mt: { xs: 3, lg: 5 },
@@ -333,7 +325,7 @@ const[allcourse,setallcourse]=useState([])
                          background: '#fff',
                          borderRadius: 3,
                          boxShadow: 1,
-                         minWidth:440,
+                         minWidth:430,
                          maxWidth: { xs: 630, lg: 900 },
                          p: { xs: 2, sm: 3, md: 5 },
                          mx: 'auto',
@@ -344,58 +336,53 @@ const[allcourse,setallcourse]=useState([])
                      >
          
        
+         <TextField
+           name="name"
+           label="Name"
+           value={subadmin.name}
+           onChange={handleChange}
+           fullWidth
+           size="small"
+         />
+
+         <TextField
+           name="phone_no"
+           label="Phone Number"
+           value={subadmin.phone_no}
+           onChange={handleChange}
+           fullWidth
+           size="small"
+         />
        
          <TextField
-           name="course_id"
-           label="Course Id"
-           value={course.course_id}
+           name="designation"
+           label="Designation"
+           value={subadmin.designation}
+           onChange={handleChange}
+           fullWidth
+           size="small"
+         />
+
+        <TextField
+           name="email"
+           label="Email Id"
+           value={subadmin.email}
+           onChange={handleChange}
+           fullWidth
+           size="small"
+         />
+
+           <TextField
+           name="password"
+           label="Password"
+           value={subadmin.password}
            onChange={handleChange}
            fullWidth
            size="small"
             InputProps={{
             readOnly: true,
           }}
-           
          />
-       
-         <TextField
-           name="course_title"
-           label="Course Title"
-           value={course.course_title}
-           onChange={handleChange}
-           fullWidth
-           size="small"
-         />
-       
-         <TextField
-           name="description"
-           label="Description"
-           value={course.description}
-           onChange={handleChange}
-           fullWidth
-           size="small"
-         />
-
-<label htmlFor="courseImage" style={{ display: "block", marginBottom: "8px", fontWeight: "bold" }}>
-  Course Image/Poster
-</label>
-
-         <input
-          id="courseImage"
-        type="file"
-        accept="image/*"
-        name="image"
-        onChange={handleImageChange}
-        />
-        {
-            course.course_image_preview.length!==0 && (
-
-            <img src={course.course_image_preview} style={{height:"100px",width:"100px"}} alt=''></img>
-
-            )
-        }
-       
-       
         
        
          <Button
@@ -410,7 +397,7 @@ const[allcourse,setallcourse]=useState([])
        </Box>
        
        
-       {/* =========================== Right: doctor table =================================== */}
+       {/* =========================== Right: subadmin table =================================== */}
                            
                            <Grid item xs={12} md={5} sx={{ mt: { xs: 3, md: 0 } } }>
                               <Box
@@ -420,7 +407,7 @@ const[allcourse,setallcourse]=useState([])
                        sx={{
                          background: '#fff',
                          borderRadius: 3,
-                        //  boxShadow: 1,
+                        //  boxShadow: 3,
                          minWidth:510,
                          maxWidth: 530,
                          p: { xs: 0, sm: 0, md: 0 },
@@ -438,9 +425,9 @@ const[allcourse,setallcourse]=useState([])
                columns={columns}
                pageSize={10}
                 pageSizeOptions={[]} // removes the rows per page selector
-              initialState={{
-                pagination: { paginationModel: { pageSize: 10, page: 0 } },
-              }}
+                initialState={{
+                    pagination: { paginationModel: { pageSize: 10, page: 0 } },
+                }}
                disableSelectionOnClick
               
              />
@@ -479,4 +466,4 @@ const[allcourse,setallcourse]=useState([])
   )
 }
 
-export default Createnewcourse
+export default Createsubadmin
