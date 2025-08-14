@@ -54,13 +54,13 @@ const Admindashboard = () => (
     <h3 className="doctors-title">Doctor List</h3>
     <div className="table-responsive">
       <table className="doctors-table">
-        <thead>
-          <tr>
-            <th>Doctor Name</th>
-            <th>Phone Number</th>
-            <th>Speciality</th>
-            <th>Hospital</th>
-            <th>Action</th>
+        <thead >
+          <tr style={{backgroundColor:"#525FE1"}}>
+            <th style={{backgroundColor:"#525FE1",color:"white",fontWeight:"normal"}}>Doctor Name</th>
+            <th style={{backgroundColor:"#525FE1",color:"white",fontWeight:"normal"}}>Phone Number</th>
+            <th style={{backgroundColor:"#525FE1",color:"white",fontWeight:"normal"}}>Speciality</th>
+            <th style={{backgroundColor:"#525FE1",color:"white",fontWeight:"normal"}}>Hospital</th>
+            <th style={{backgroundColor:"#525FE1",color:"white",fontWeight:"normal"}}>Action</th>
           </tr>
         </thead>
         <tbody>

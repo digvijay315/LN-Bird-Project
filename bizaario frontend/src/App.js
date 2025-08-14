@@ -16,13 +16,23 @@ import Doctordashboard from "./components/Doctor/doctordashboard";
 import Createnewcourse from "./components/Doctor/createnewcourse";
 import Createdigitalcme from "./components/Doctor/createdigitalcme";
 import Createdititalcmequestionbank from "./components/Doctor/createdigitalcmequestionbank";
+import HeroSection from "./components/HeroSection";
+import Empowering from "./components/empowring";
+import MedicalBoardPartnerHospitals from "./components/medicalboardpartnerhospital";
+import CardiologyTabContent from "./medical-board/CardiologyTabContent";
+import InterCollabs from "./components/intercollabs";
+import LiveSessions from "./components/LiveSessions";
+import Livesession from "./components/livesession";
+import NewsAndArticles from "./components/newsarticals";
+import Awards from "./components/awards";
+import Testimonial from "./components/testimonial";
 
 function App() {
   return (
    
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/hospital-partners" element={<HospitalPartners />} />
         <Route path="/medical-board" element={<MedicalBoard />} />
@@ -35,9 +45,10 @@ function App() {
         <Route path="/doctordashboard" element={<Doctordashboard/>}></Route>
         <Route path="/createnewcourse" element={<Createnewcourse/>}></Route>
         <Route path="/createdigitalcme" element={<Createdigitalcme/>}></Route>
-        <Route path="/createdigitalcmequestionbank" element={<Createdititalcmequestionbank/>}></Route>
+        <Route path="/createdigitalcmequestionbank" element={<Createdititalcmequestionbank/>}></Route> 
       </Routes>
       {/* <Doctordashboard/> */}
+      
         
     </BrowserRouter>
 

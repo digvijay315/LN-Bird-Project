@@ -10,6 +10,8 @@
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
+  padding: 12px 8px;
+  /* padding-bottom: ; */
 }
 
 .sidebar-header {
@@ -52,13 +54,24 @@ margin-left: 20px;
     line-height: normal;
   cursor: pointer;
   transition: background 0.2s;
+  /* margin-left: 20px; */
 }
 
 .sidebar-menu li:hover,
 .sidebar-menu li.active {
   background: #fff;
+  /* width: 80%; */
+  border-radius: 8px;
+  /* margin-left: 20px; */
   color: #373fa4;
-  border-left: 5px solid #faa13b;
+  /* border-left: 5px solid #faa13b; */
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li img {
+
+  color: #373fa4;
+
 }
 
 .sidebar-menu i {

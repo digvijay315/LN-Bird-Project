@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 // For Bootstrap JS features like carousel controls, ensure Bootstrap JS and its dependencies are included. With React, you might need react-bootstrap or manually add Bootstrap JS.
 
 

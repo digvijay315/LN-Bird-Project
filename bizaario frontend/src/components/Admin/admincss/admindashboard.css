@@ -37,7 +37,7 @@
 }
 
 .dashboard-title {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   margin: 0 0 18px 0;
   letter-spacing: .2px;
@@ -46,7 +46,7 @@
 .overview-cards {
   display: flex;
   flex-wrap: wrap;
-  gap: 18px;
+  gap: 34px;
   margin-bottom: 36px;
   
 }
@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   min-width: 210px;
-    flex: 0 0 200px; /* fixed width for all cards */
+  flex: 0 0 200px; /* fixed width for all cards */
   box-sizing: border-box;
   max-width: 260px;
   border-radius: 12px;
@@ -73,8 +73,8 @@
   font-size: 34px;
   /* background: rgba(255,255,255,0.15); */
   border-radius: 50%;
-  width: 54px;
-  height: 54px;
+  width: 84px;
+  height: 84px;
   display: flex;
   align-items: center;
   justify-content: center;
