@@ -232,7 +232,7 @@ function cn(...classes) {
         </nav>
 
         {/* Logout Button */}
-        <div className="absolute bottom-8 left-6 right-6">
+        <div className="absolute bottom-2 left-6 right-6">
           <button onClick={logout} className="w-full flex items-center justify-center gap-3 py-3 px-6 bg-[#F86F03] rounded-lg hover:bg-[#e5630a] transition-colors">
             <LogoutIcon />
             <span className="text-white text-base font-bold">Logout</span>
