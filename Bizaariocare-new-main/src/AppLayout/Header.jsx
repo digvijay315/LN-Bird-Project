@@ -73,7 +73,7 @@ const Header = () => {
                 <li><a className="dropdown-item" href="/">Hindi</a></li>
               </ul>
             </div>
-            <a href="https://ln-bird-project-6sul-phqgl9zm1.vercel.app/signin" target='_blank' className="btn nav-btn-style">Login</a>
+            <a href="https://ln-bird-project-6sul-phqgl9zm1.vercel.app/signin"  className="btn nav-btn-style">Login</a>
             <a href="https://ln-bird-project-6sul-phqgl9zm1.vercel.app/register" className="btn nav-btn-style2">Sign Up</a>
           </div>
         </div>
