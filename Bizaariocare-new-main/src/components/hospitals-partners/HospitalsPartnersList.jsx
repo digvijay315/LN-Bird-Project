@@ -8,9 +8,10 @@ const HospitalsPartnersList = () => {
   return (
       <>
         {hospitalPartnerData.map((item) => {
-                    return ( 
-                        <div className="col-lg-4 col-md-6 col-12 mb-4">
-                            <div className="cardiology-card" key={item.id}>
+            return ( 
+                        
+                        <div className="col-lg-4 col-md-6 col-12 mb-4" key={item.id}>
+                            <div className="cardiology-card" >
                                 <img src={item.image} alt="doctor" className="img-fluid" />
                                 <div className='d-flex justify-content-between pt-4'>
                                     <div>

@@ -13,8 +13,7 @@ import AwardsSlider from '../components/awards-certification/AwardsSlider'
 import Testimonial from '../components/Testimonial'
 import MedicalBoardPartnerHospitals from '../components/MedicalBoardPartnerHospitals'
 import DoctorAppointmentTable from '../UI/DoctorAppointmentTable'
-import Spacer from '../components/spacer'
-import SpacerComp from '../components/spacer'
+
 import BookingAppointment from '../UI/BookingAppointment'
 
 
@@ -32,7 +31,6 @@ const Home = () => {
       <NewsAndArticles />
       <Awards />
       <Testimonial />
-      {/* <SpacerComp/> */}
       {/* <DoctorAppointmentTable /> */}
       {/* <BookingAppointment/> */}
        {/* <New /> */}

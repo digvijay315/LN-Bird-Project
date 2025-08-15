@@ -12,7 +12,9 @@ import dominic3 from '../assets/images/dominic1.png';
 import dominic4 from '../assets/images/dominic1.png';
 import news1 from '../assets/images/news1.png';
 import awardImage1 from  '../assets/images/award.png'
-import novacare1 from  '../assets/images/novacare.png'
+import novacare1 from '../assets/images/novacare.png'
+
+import testmonialImage1 from '../assets/images/testmonial1.png'
 
 export const sliderArray = [
     {
@@ -293,5 +295,28 @@ export const awardsCertfication = [
         dsc: 'I has received multiple awards for excellence in cardiology and patient care, including recognition for clinical innovation and compassionate service. His work continues to be honored by leading medical associations.',
         date: '15/05/2022',
         crtLink: '' 
+  },
+  ]
+export const testmonialData = [
+     {
+        id: 1,
+        image: testmonialImage1,
+        review: "Dr. Stonehart is not only a great cardiologist but also a kind human being. He explained my condition clearly, eased my fears, and guided me through successful treatment.",
+        testmonialUser:'Sarah Thomas', 
+        location: 'Mumbai' 
+  },
+     {
+        id: 2,
+        image: testmonialImage1,
+        review: "Dr. Stonehart is not only a great cardiologist but also a kind human being. He explained my condition clearly, eased my fears, and guided me through successful treatment.",
+        testmonialUser:'Sarah Thomas', 
+        location: 'Mumbai' 
+  },
+     {
+        id: 3,
+        image: testmonialImage1,
+        review: "Dr. Stonehart is not only a great cardiologist but also a kind human being. He explained my condition clearly, eased my fears, and guided me through successful treatment.",
+        testmonialUser:'Sarah Thomas', 
+        location: 'Mumbai' 
   },
   ]

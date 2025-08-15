@@ -38,7 +38,7 @@ const NewsAndArticles = () => {
             </p>
           </div>
           <div>
-            <button className="btn common-btn-dark" onClick={()=> setActiveCategory("all")}
+            <button className="btn common-btn-dark mb-3 mb-lg-0" onClick={()=> setActiveCategory("all")}
               >
               View All
             </button>

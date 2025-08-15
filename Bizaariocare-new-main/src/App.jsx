@@ -13,6 +13,7 @@ import {
 import MedicalBoardPage from './pages/MedicalBoardPage';
 import NewsArticles from './pages/NewsArticles';
 import ContactUs from './pages/ContactUs';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 
 
@@ -46,6 +47,10 @@ export default function App() {
         {
           path: '/contact',
           element: <ContactUs />
+        },
+        {
+          path: '/privacy-policy',
+          element: <PrivacyPolicy />
         },
 
       ]

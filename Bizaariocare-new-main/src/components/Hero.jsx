@@ -10,7 +10,7 @@ const Hero = () => {
 const options = {
 dots: true,
 nav: false,
-autoplay: true,
+autoplay: false,
 mouseDrag: false,
 smartSpeed: 1000,
 animateOut: "fadeOut",

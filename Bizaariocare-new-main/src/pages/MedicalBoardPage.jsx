@@ -38,7 +38,8 @@ const MedicalBoardPage = () => {
                     <p className='light-color'>Empowering hospitals, physicians, and patients with real-time communication and clinical collaboration—because better care starts with better connection.</p>
                 </div>
                   </div>
-                <div className="row"> 
+                  <div className="row"> 
+                      <div className="col-12">
                     <div className=" medical-tab-buttons mb-4">  
                         <button className={`cutom-tab-style ${activeTab==='tab1' ? 'activeTab' : 'gray-btn-style' }`} onClick={()=>
                         setActiveTab('tab1')}>
@@ -75,7 +76,7 @@ const MedicalBoardPage = () => {
                         Otorhinolaryngology
                     </button> 
                     </div>  
-                    
+                    </div>
                 </div>
                 <div > 
                   <div style={{padding:0}}>{renderContent()}</div>

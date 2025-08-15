@@ -10,7 +10,7 @@ const InternationalTab1 = () => {
                     <div className="col-md-4 col-12 mb-3 mb-md-0">
                         <div className="stats-card1 stats-card  text-white  ">
                             <div>
-                                <div className="mb-1 stats-title">Doctors</div>
+                                <div className="mb-1 stats-title">Doctors </div>
                                 <div className='d-flex  justify-content-between'>
                                     <div> 
                                         <h3 className="fw-bold stats-value">20k</h3>

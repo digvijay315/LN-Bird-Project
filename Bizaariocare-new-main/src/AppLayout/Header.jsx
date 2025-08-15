@@ -3,21 +3,14 @@ import { Link, NavLink } from 'react-router'
 import langIcon from '../assets/images/icons/language.svg';
 import Logo from '../assets/images/logo1.png'; 
 //  import home from '../assets/css/home..module.css'; 
+import { AiOutlineMenu } from "react-icons/ai";
+import { IoMdClose } from "react-icons/io";
 
 const Header = () => {
+
+  const [expanded, setExpanded] = useState(false);
+   const handleClose = () => setExpanded(false);
   const [scrollDown, setScrollDown] = useState(false);
-  // const [menuStatus, setMenuStatus] = useState(true);
-  // const myDivRef = useRef(null);
-
-  // console.log(myDivRef)
-
-  // function menuStatusFn() {
-  //   setMenuStatus(!menuStatus) 
-  // }
-
-  //  useEffect(() => {
-  //   myDivRef.current.style.classList.add('class-one'); 
-  // }, []);
 
   window.onscroll = function() {
     if (this.scrollY > 10) {
@@ -30,16 +23,11 @@ const Header = () => {
     <>
       <nav className={`navbar navbar-expand-xl navbar-light bg-white shadow-sm  main-navbar ${scrollDown==true?'headerfix': ''}`  } id='mainNavbar'>
       <div className="container">
-        
-          {/* Logo */}
           <div className="brand">
              <a className="navbar-brand d-flex align-items-center" href="/">
-          <img src={Logo} alt="Logo"  className="me-4" />
-       
-        </a>
-          </div>
-       
-
+              <img src={Logo} alt="Logo"  className="me-4" /> 
+            </a>
+          </div> 
         {/* Toggle button for mobile */}
         <button
           className="navbar-toggler"
@@ -47,38 +35,25 @@ const Header = () => {
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
           aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
+          aria-expanded={expanded ? "true" : "false"}
+            aria-label="Toggle navigation"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded? <IoMdClose />:  <AiOutlineMenu />}
+            {/* <span className="navbar-toggler-icon"></span> */}
+         
+       
         </button>
 
         {/* Menu */}
-        <div className= {`collapse navbar-collapse `} id="navbarNav">
-          {/* Center links */}
+          <div className={`collapse navbar-collapse ${expanded ? "show" : ""}`} id="navbarNav">
           <ul className="navbar-nav mx-auto">
-            <li > 
-                <NavLink to="/"  className='nav-link '>Home</NavLink>
-            </li>
-            <li className="nav-item">
-         
-                <NavLink to="/about" className='nav-link '>About</NavLink>
-            </li>
-            <li className="nav-item">
-               
-                <NavLink to="/partners" className='nav-link '>Hospital Partners</NavLink>
-            </li>
-            <li className="nav-item">
-              
-                <NavLink to="/medical-board"  className='nav-link '>Medical Board</NavLink>
-            </li>
-            <li className="nav-item"> 
-                <NavLink to="/news-articles"  className='nav-link '>News & Articles</NavLink>
-            </li>
-            <li className="nav-item">
-                
-                <NavLink to="/contact"  className='nav-link '>Contact Us</NavLink>
-            </li>
+            <li><NavLink onClick={handleClose} to="/"  className='nav-link ' >Home</NavLink></li>
+            <li className="nav-item">  <NavLink onClick={handleClose} to="/about" className='nav-link '>About</NavLink> </li>
+            <li className="nav-item">  <NavLink onClick={handleClose} to="/partners" className='nav-link '>Hospital Partners</NavLink> </li>
+            <li className="nav-item"> <NavLink onClick={handleClose} to="/medical-board"  className='nav-link '>Medical Board</NavLink>  </li>
+            <li className="nav-item">   <NavLink onClick={handleClose} to="/news-articles"  className='nav-link '>News & Articles</NavLink>  </li>
+            <li className="nav-item"> <NavLink onClick={handleClose} to="/contact"  className='nav-link '>Contact Us</NavLink> </li>
           </ul>
 
           {/* Right buttons */}
@@ -98,11 +73,7 @@ const Header = () => {
                 <li><a className="dropdown-item" href="/">Hindi</a></li>
               </ul>
             </div>
-
-            {/* Login */}
-            <a href="https://bizaariocare.com/signin" className="btn nav-btn-style">Login</a>
-
-            {/* Sign Up */}
+            <a href="https://bizaariocare.com/signin" target='_blank' className="btn nav-btn-style">Login</a>
             <a href="/signup" className="btn nav-btn-style2">Sign Up</a>
           </div>
         </div>

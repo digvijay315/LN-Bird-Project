@@ -1,10 +1,6 @@
 
-import aboutBanner from '../assets/images/about/banner.png'
-
 import Aboutstyles from '../assets/css/about.module.css';
 const CommonBanner = ({bannerData}) => {
-    // console.log(bannerData)
-    console.log(bannerData.title)
   return (
       <>
               <section className={Aboutstyles.aboutBanner} style={{backgroundImage: `url(${bannerData.banner})`}}>

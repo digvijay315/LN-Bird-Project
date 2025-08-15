@@ -40,6 +40,7 @@ const NewsArticles = () => {
                         </div>
                     </div>
                     <div className="row">
+                        <div className="col-12"> 
                         <div className=" medical-tab-buttons mb-4">
                             <button className={`cutom-tab-style ${activeTab === 'tab1' ? 'activeTab' : 'gray-btn-style'}`} onClick={() =>
                                 setActiveTab('tab1')}>
@@ -75,7 +76,8 @@ const NewsArticles = () => {
                             >
                                 Otorhinolaryngology
                             </button>
-                        </div> 
+                            </div>
+                        </div>    
                     </div>
                    
                     <div style={{ padding: '15px', backgroundColor: '#dedfe6', borderRadius:'10px 10px 0 0'}} >{renderContent()}</div>
