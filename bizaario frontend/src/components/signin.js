@@ -113,7 +113,7 @@ const login = async (e) => {
           <h2>Welcome to Company</h2>
           <div className="nav-links">
             <span>Need an account?</span>
-            <a href="/signup">Sign Up</a>
+            <a href="/register">Sign Up</a>
           </div>
           
           {/* Step 2: Add active class based on selected role */}

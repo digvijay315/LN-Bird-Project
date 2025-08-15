@@ -43,7 +43,7 @@ export default function Navbar() {
           <option>English US</option>
         </select>
         <button className="btn-login" onClick={()=>navigate('/signin')}>Login</button>
-        <button className="btn-signup">Sign Up</button>
+        <button className="btn-signup" onClick={()=>navigate('/register')}>Sign Up</button>
       </div>
     </nav>
   );
