@@ -10,6 +10,12 @@
   color: #232552;
   position: relative;
 }
+
+.doctors-table th,
+.doctors-table td {
+  padding-left: 50px !important; /* bigger horizontal gap */
+}
+
 .action-button
 {
   display: flex;
@@ -229,3 +235,5 @@ margin-top: 30px;
     padding: 0;
   }
 }
+
+

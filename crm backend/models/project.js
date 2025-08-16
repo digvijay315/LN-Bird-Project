@@ -90,7 +90,7 @@ const blockSchema = new mongoose.Schema({
     document_Date: {type: Array},
     linkded_contact: {type: Array},
     image: {type: Array}
-  })
+  },{ timestamps: true })
   
 const priceschema = new mongoose.Schema({
   block:{type:String},

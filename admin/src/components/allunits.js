@@ -30,6 +30,7 @@ import ReactQuill from 'react-quill';  // Import ReactQuill
 import Lottie from "lottie-react";
 import deallogo from '../icons/deal.jpg'
 import { FeedRounded } from "@mui/icons-material";
+import UniqueLoader from '../components/loader'
 
 function Allunits() {
 
@@ -413,12 +414,18 @@ function Allunits() {
 
 // ==========================================project code start======================================================================
 
+               const[totalinventories,settotalinventories]=useState(0)
+                  const [totalResidential, setTotalResidential] = useState(0);
+                  const [totalcommercial, settotalcommercial] = useState(0);
+                  const [totalagriculture, settotalagriculture] = useState(0);
+                  const [totalindustrial, settotalindustrial] = useState(0);
+                  const [totalinstitutional, settotalinstitutional] = useState(0);
 
                   React.useEffect(()=>{fetchcdata()},[])
 
                   const[allprojectforsearch,setallprojectforsearch]=useState([])
                   const[cdata,setcdata]=useState([]);
-                  const [flattenedUnits, setFlattenedUnits] = useState([]);
+                  const [flattenedUnits,setFlattenedUnits] = useState([]);
                  
                   
                   const[allunitsforsearch,setallunitsforsearch]=useState([])
@@ -450,20 +457,20 @@ function Allunits() {
                       const totalunderconstrctionproject=resp.data.project.filter(item=>item.status==='Under Construction').length
                       settotalunderconstrction(totalunderconstrctionproject)
                       
-                      const flattened = [];
-                        resp.data.project.forEach((project) => {
-                          if (Array.isArray(project.add_unit)) {
-                            // Flatten the add_unit array for each project
-                            const units = project.add_unit.flatMap((unitArray) => unitArray);
-                            flattened.push(...units);  // Add flattened units to the array
-                          } else {
-                            console.error('add_unit is not an array or is undefined');
-                          }
-                        });
+                      // const flattened = [];
+                      //   resp.data.project.forEach((project) => {
+                      //     if (Array.isArray(project.add_unit)) {
+                      //       // Flatten the add_unit array for each project
+                      //       const units = project.add_unit.flatMap((unitArray) => unitArray);
+                      //       flattened.push(...units);  // Add flattened units to the array
+                      //     } else {
+                      //       console.error('add_unit is not an array or is undefined');
+                      //     }
+                      //   });
 
                         // Now update the flattenedUnits state with the flattened array
-                        setFlattenedUnits(flattened);
-                        setallunitsforsearch(flattened)
+                        // setFlattenedUnits(flattened);
+                        // setallunitsforsearch(flattened)
                 
                       // Log the flattened units
                     
@@ -472,6 +479,7 @@ function Allunits() {
                     }
                   
                   }
+               
                 
                   
       const [allcitis,setallcitis]=useState([])
@@ -586,16 +594,11 @@ function Allunits() {
                   },[flattenedUnits])
   
                   
-                  const[totalinventories,settotalinventories]=useState(0)
-                  const [totalResidential, setTotalResidential] = useState(0);
-                  const [totalcommercial, settotalcommercial] = useState(0);
-                  const [totalagriculture, settotalagriculture] = useState(0);
-                  const [totalindustrial, settotalindustrial] = useState(0);
-                  const [totalinstitutional, settotalinstitutional] = useState(0);
+                 
                   useEffect(()=>
                   {
                     const tinventories=flattenedUnits.length
-                    settotalinventories(tinventories)
+                    // settotalinventories(tinventories)
 
                     const residentialCount = flattenedUnits.filter(unit => unit.category === 'Residential').length;
                     setTotalResidential(residentialCount);
@@ -775,9 +778,7 @@ function Allunits() {
                     );
                   };
 
-                 
-
-
+           
                   
                   
 
@@ -861,6 +862,9 @@ function Allunits() {
 
   //========================================= units code start =======================================================================
 
+
+  const [loading, setLoading] = useState(false);
+
                   const allunitColumns = [
                   
                     { id: 'sno', name: '#' },
@@ -925,7 +929,7 @@ function Allunits() {
                   const indexOfLastItem2 = currentPage2 * itemsPerPage2;
                   const indexOfFirstItem2 = indexOfLastItem2 - itemsPerPage2;
                
-                  const totalPages2 = Math.ceil(flattenedUnits.length / itemsPerPage2);
+                  const totalPages2 = Math.ceil(totalinventories / itemsPerPage2);
                   
                 const extractUnitNumber = (value) => {
                 if (!value) return 0;
@@ -1013,6 +1017,29 @@ function Allunits() {
                     );
                   };
 
+
+                        
+                    const fetchunitsdata=async(page,limit)=>
+                  {
+                    setLoading(true)
+                    try {
+                       const resp1=await api.get(`viewallunits?page=${page}&limit=${limit}`)
+                       settotalinventories(resp1.data.total)
+                       setFlattenedUnits(resp1.data.units)
+                    } catch (error) {
+                      console.log(error);
+                    }finally
+                    {
+                      setLoading(false)
+                    }
+                  
+                  }
+
+ useEffect(() => {
+    fetchunitsdata(currentPage2, itemsPerPage2);
+
+  
+  }, [currentPage2, itemsPerPage2]);
 
           
  // ===================================search deal via search box start========================================================
@@ -5213,7 +5240,7 @@ const excelSerialToDateString = (serial) => {
               </TableHead>
               <tbody>
                 {
-             [...currentItems3]
+             [...flattenedUnits]
               .sort((a, b) => extractUnitNumber(a.unit_no) - extractUnitNumber(b.unit_no))
               .map ((item, index) => (
                   <StyledTableRow key={index}>
@@ -6885,6 +6912,21 @@ const excelSerialToDateString = (serial) => {
 
 
 <ToastContainer/>
+  {loading && (
+                  <div
+                    style={{
+                      position: 'fixed',
+                      inset: 0,
+                      background: 'rgba(255, 255, 255, 0.6)',
+                      zIndex: 9999,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <UniqueLoader />
+                  </div>
+                )}
     </div>
   )
 }

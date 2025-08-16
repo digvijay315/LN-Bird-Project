@@ -222,6 +222,77 @@ unitDetails={
             console.log(error)
         }
     }
+
+    const view_units = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+ 
+    
+    
+
+    const units = await addproject.aggregate([
+      { $unwind: "$add_unit" },
+
+      // populate owner_details
+      {
+        $lookup: {
+          from: "add_contact", // MongoDB collection name (check your model)
+          localField: "add_unit.owner_details",
+          foreignField: "_id",
+          as: "add_unit.owner_details"
+        }
+      },
+
+      // populate associated_contact
+      {
+        $lookup: {
+          from: "add_contact",
+          localField: "add_unit.associated_contact",
+          foreignField: "_id",
+          as: "add_unit.associated_contact"
+        }
+      },
+
+      // populate previousowner_details
+      {
+        $lookup: {
+          from: "add_contact",
+          localField: "add_unit.previousowner_details",
+          foreignField: "_id",
+          as: "add_unit.previousowner_details"
+        }
+      },
+
+      // { $sort: { "add_unit.createdAt": -1 } },
+
+      {
+        $facet: {
+          metadata: [{ $count: "total" }],
+          data: [{ $skip: skip }, { $limit: limit }]
+        }
+      }
+    ],{ allowDiskUse: true });
+
+    const total = units[0]?.metadata[0]?.total || 0;
+    const totalPages = Math.ceil(total / limit);
+
+    res.status(200).json({
+      message: "Units fetched successfully",
+      units: units[0].data.map(u => u.add_unit), // only unit data with populated contacts
+      total,
+      page,
+      totalPages
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
     const view_project_Byid=async(req,res)=>
       {
           try {
@@ -1143,4 +1214,5 @@ unitDetails={
               
 
    module.exports={createProject,view_project,view_projectbyname,view_projectbycityname,remove_project,view_project_Byid,
-    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit,delete_projectforinventories,update_projectforinventoriesbulk}
+    update_project,view_projectforinventories,update_projectforinventories,update_projectaddunit,
+    delete_projectforinventories,update_projectforinventoriesbulk,view_units}
